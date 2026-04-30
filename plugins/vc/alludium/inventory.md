@@ -1,6 +1,6 @@
 # Alludium VC Inventory
 
-**Version**: 0.1.0  
+**Version**: 0.1.0
 **Status**: Phase 1 candidate
 
 This inventory describes the current public VC plugin/pack seed. It intentionally includes only the surfaces ready for first extraction.

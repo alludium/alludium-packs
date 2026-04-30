@@ -10,8 +10,9 @@ from typing import Any
 import yaml
 
 
-ROOT = Path(__file__).resolve().parents[1]
 THIS_FILE = Path(__file__).resolve()
+ROOT = THIS_FILE.parents[1]
+REPO_ROOT = THIS_FILE.parents[3]
 SECRET_PATTERNS = [
     re.compile(pattern, re.IGNORECASE)
     for pattern in [
@@ -153,7 +154,7 @@ def validate_no_obvious_secrets() -> None:
 
 
 def validate_no_public_readiness_leakage() -> None:
-    for path in ROOT.rglob("*"):
+    for path in REPO_ROOT.rglob("*"):
         if not path.is_file() or ".git" in path.parts or path.resolve() == THIS_FILE:
             continue
         if path.suffix.lower() in {".png", ".jpg", ".jpeg", ".gif", ".svg"}:
@@ -161,7 +162,7 @@ def validate_no_public_readiness_leakage() -> None:
         body = path.read_text(encoding="utf-8", errors="ignore")
         for label, pattern in PUBLIC_READINESS_PATTERNS:
             if pattern.search(body):
-                fail(f"Public-readiness leak ({label}) found in {path.relative_to(ROOT)}")
+                fail(f"Public-readiness leak ({label}) found in {path.relative_to(REPO_ROOT)}")
 
 
 def main() -> None:
