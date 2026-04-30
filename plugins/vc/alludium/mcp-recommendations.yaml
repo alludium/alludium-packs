@@ -1,0 +1,64 @@
+schemaVersion: "0.1"
+status: advisory
+description: >
+  VC-relevant MCP server recommendations for Alludium workspaces. These entries
+  identify the platform MCPs that VC templates mention or rely on conceptually.
+  They are not yet installable plugin MCP definitions.
+recommendations:
+  - externalId: affinity-mcp-server
+    name: Affinity CRM
+    category: CRM
+    use: Deal pipeline, CRM context, company/deal records, and relationship context.
+    credentialBoundary: user_or_workspace_connection
+  - externalId: harmonic-mcp-oauth
+    name: Harmonic
+    category: Company Intelligence
+    use: Company enrichment and market/company intelligence.
+    credentialBoundary: user_or_workspace_connection
+  - externalId: dealroom-mcp
+    name: Dealroom
+    category: Private Market Data
+    use: Financing, investor, and private-market context when connected.
+    credentialBoundary: user_or_workspace_connection
+  - externalId: exa-mcp-hosted
+    name: Exa Search
+    category: Web Research
+    use: Public web, company, people, and deeper research workflows.
+    credentialBoundary: platform_or_workspace_connection
+  - externalId: firecrawl-mcp-hosted
+    name: Firecrawl
+    category: Web Extraction
+    use: First-party website extraction and page-level evidence gathering.
+    credentialBoundary: platform_or_workspace_connection
+  - externalId: brave-search-mcp
+    name: Brave Search
+    category: Web Search
+    use: Broad public web search fallback.
+    credentialBoundary: platform_or_workspace_connection
+  - externalId: serpapi-mcp
+    name: SerpAPI Search
+    category: Web Search
+    use: Broad public web search fallback where configured.
+    credentialBoundary: platform_or_workspace_connection
+  - externalId: granola-mcp
+    name: Granola
+    category: Meeting Notes
+    use: Meeting transcript and notes context when connected.
+    credentialBoundary: user_or_workspace_connection
+  - externalId: otter-mcp-oauth
+    name: Otter AI
+    category: Meeting Notes
+    use: Meeting transcript context when connected.
+    credentialBoundary: user_or_workspace_connection
+  - externalId: fireflies-mcp-oauth
+    name: Fireflies
+    category: Meeting Notes
+    use: Meeting transcript context when connected.
+    credentialBoundary: user_or_workspace_connection
+boundaries:
+  secretsAllowed: false
+  installableByPlugin: false
+  notes: >
+    Do not copy platform-owned secrets or environment values into this public
+    repo. Platform ingestion should map these recommendations to configured
+    Alludium providers and connection templates.

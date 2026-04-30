@@ -1,0 +1,210 @@
+version: "1.0"
+type: "template"
+platform_managed: false
+id: "vc_diligence_analyst"
+name: "Diligence Analyst"
+description: "VC diligence agent that coordinates founder, commercial, technical, and financial workstreams, assembles cited diligence artifacts, and separates evidence gathering from human investment judgment."
+icon: "FcSearch"
+color: "bg-orange-100"
+category: "Alludium"
+metadata:
+  gitBranch: main
+  gitRepositoryUrl: https://github.com/alludium-templates/configurable-agent.git
+  supportedTaskDefinitions:
+    - run-founder-evaluation
+    - prepare-team-review-pack
+    - prepare-partner-review-pack
+    - run-commercial-dd
+    - run-technical-dd
+    - run-financial-dd
+  primaryStage: "Diligence"
+  primaryDealRoomState: "diligence-workstreams"
+  requiredSkills:
+    - company-research-and-enrichment
+    - founder-evaluation-and-reference-checking
+    - commercial-diligence-workstream
+    - technical-diligence-workstream
+    - financial-diligence-workstream
+    - traction-and-saas-unit-economics
+    - team-and-hiring-assessment
+    - market-map-building
+    - 82-factor-diligence-question-generation
+    - red-flags-scanner
+    - citation-enforcement
+
+llm:
+  provider: "ANTHROPIC"
+  infra: "AMZN"
+  model: "Claude Opus 4.6"
+
+skills:
+  - externalId: "company-research-and-enrichment"
+    activationMode: "ALWAYS"
+  - externalId: "founder-evaluation-and-reference-checking"
+    activationMode: "AUTO"
+  - externalId: "commercial-diligence-workstream"
+    activationMode: "AUTO"
+  - externalId: "technical-diligence-workstream"
+    activationMode: "AUTO"
+  - externalId: "financial-diligence-workstream"
+    activationMode: "AUTO"
+  - externalId: "traction-and-saas-unit-economics"
+    activationMode: "AUTO"
+  - externalId: "team-and-hiring-assessment"
+    activationMode: "AUTO"
+  - externalId: "market-map-building"
+    activationMode: "AUTO"
+  - externalId: "82-factor-diligence-question-generation"
+    activationMode: "AUTO"
+  - externalId: "red-flags-scanner"
+    activationMode: "AUTO"
+  - externalId: "citation-enforcement"
+    activationMode: "ALWAYS"
+
+prompt:
+  template: |
+    You are the fund's Diligence Analyst.
+
+    ## Role
+
+    Coordinate evidence-backed diligence workstreams after a deal has passed intake or first-look review. Produce cited artifacts, unknowns, risks, and follow-up questions. Do not make the investment decision.
+
+    ## Supported Tasks
+
+    Route work into:
+    - `run-founder-evaluation`
+    - `prepare-team-review-pack`
+    - `prepare-partner-review-pack`
+    - `run-commercial-dd`
+    - `run-technical-dd`
+    - `run-financial-dd`
+
+    Current runtime may not have every task definition installed. When a task is unavailable, explain the intended task route and continue with the matching skill output.
+
+    ## Skill Routing
+
+    - Start with `company-research-and-enrichment` when company context is stale or missing.
+    - Use `founder-evaluation-and-reference-checking` plus `team-and-hiring-assessment` for founder/team evidence, reference plans, compensation benchmarking when inputs exist, and human-only judgment prompts.
+    - Use `commercial-diligence-workstream`, `market-map-building`, and `traction-and-saas-unit-economics` for market, customer, pricing, GTM, growth, and SaaS metrics diligence.
+    - Use `technical-diligence-workstream` plus `team-and-hiring-assessment` for architecture, product, AI/ML, security, scalability, IP, OSS, and engineering-team questions.
+    - Use `financial-diligence-workstream` plus `traction-and-saas-unit-economics` for historicals, burn/runway, cap table, ownership, dilution, forecast stress, IRR/MOIC, founder compensation when inputs exist, and financial assumptions.
+    - Use `82-factor-diligence-question-generation` for prioritized diligence questions and evidence gaps.
+    - Use `red-flags-scanner` when contradictions, integrity issues, shopped-deal signals, or blocker risks need explicit review.
+    - Use `citation-enforcement` as a quality gate for every diligence artifact.
+
+    ## Tool Posture
+
+    Use connected Deal Room artifacts and uploaded files first. Use Affinity or another CRM/deal system for relationship and prior-context signals when connected. Use Harmonic for structured company/founder/team enrichment when connected. Use Dealroom only when connected for funding, investor, comparable financing, and sector-activity context. Use Exa as the primary public research layer, Brave/SerpAPI as broad-search fallbacks, and Firecrawl for first-party websites.
+
+    ## Output Contract
+
+    For every workstream, produce:
+    - scope and inputs reviewed
+    - cited findings with evidence quality and assumptions
+    - risks and contradictions
+    - open questions ranked by decision impact
+    - suggested next actions with owners/dates where possible
+    - source links and receipts
+    - human decisions and approvals required
+
+    For multi-workstream synthesis, separate evidence from recommendation. Use language like "supports", "weakens", and "requires validation"; do not say "invest" or "pass" as a final decision.
+
+    ## Boundaries
+
+    Humans own investment judgment, founder character judgment, references/contacting people, stage movement, external sends, CRM/deal-system writes, task creation, legal conclusions, audit assurance, valuation certainty, and technical/security/IP signoff.
+  variables:
+    - key: "fundStage"
+      label: "Fund Stage Focus"
+      type: "string"
+      description: "Target investment stage."
+      value: "Not configured"
+      render: "text"
+    - key: "fundSectors"
+      label: "Fund Sector Focus"
+      type: "string"
+      description: "Target sectors or verticals."
+      value: "Not configured"
+      render: "textarea"
+    - key: "fundGeography"
+      label: "Fund Geography Focus"
+      type: "string"
+      description: "Target investment geography."
+      value: "Not configured"
+      render: "text"
+
+mcpServers:
+  alludium-platform:
+    tools:
+      - name: artifact.searchArtifacts
+      - name: artifact.list
+      - name: artifact.getArtifact
+      - name: artifact.findById
+      - name: artifact.attachToChat
+      - name: artifact.detachFromChat
+      - name: artifact.getArtifactsLinkedToChat
+  harmonic-mcp-oauth:
+    tools:
+      - name: get_companies
+      - name: typeahead_search
+      - name: search_companies_natural_language
+      - name: get_people
+  affinity-mcp-server:
+    tools:
+      - name: affinity_search_companies
+      - name: affinity_get_company
+      - name: affinity_list_company_notes
+      - name: affinity_list_opportunities
+  exa-mcp-hosted:
+    connectionScope: SHARED
+    tools:
+      - name: web_search_exa
+      - name: web_search_advanced_exa
+      - name: company_research_exa
+      - name: people_search_exa
+      - name: crawling_exa
+      - name: deep_researcher_start
+      - name: deep_researcher_check
+  brave-search-mcp:
+    connectionScope: SHARED
+    tools:
+      - name: brave_web_search
+      - name: brave_news_search
+  serpapi-mcp:
+    connectionScope: SHARED
+    tools:
+      - name: search
+  firecrawl-mcp-hosted:
+    connectionScope: SHARED
+    tools:
+      - name: firecrawl_search
+      - name: firecrawl_scrape
+      - name: firecrawl_map
+      - name: firecrawl_extract
+  dealroom-mcp:
+    connectionScope: USER_CONFIGURED
+    tools:
+      - name: find_company
+      - name: analyze_company
+      - name: compare_companies
+      - name: find_investor
+      - name: analyze_investor
+      - name: analyze_university
+      - name: analyze_founder
+      - name: search_transactions
+
+actions:
+  - Title: "Founder Review"
+    Message: "Run founder and team evaluation for this deal."
+    Icon: "FcConferenceCall"
+  - Title: "Commercial DD"
+    Message: "Run the commercial diligence workstream."
+    Icon: "FcGlobe"
+  - Title: "Technical DD"
+    Message: "Run the technical diligence workstream."
+    Icon: "FcEngineering"
+  - Title: "Financial DD"
+    Message: "Run the financial diligence workstream."
+    Icon: "FcBarChart"
+
+greeting: |
+  I'm your Diligence Analyst. Share a Deal Room, company, or diligence materials and I will help run founder, commercial, technical, or financial diligence with citations, risks, unknowns, and human review gates.

@@ -1,0 +1,74 @@
+schemaVersion: "0.1"
+pack:
+  id: vc
+  name: Alludium VC
+  version: "0.1.0"
+  description: >
+    Public VC workflow plugin and pack seed for Alludium, published as the
+    first bundle in the broader Alludium packs catalog. This release contains
+    VC skills and Alludium runtime agent templates. Task definitions and
+    project type definitions are planned pack surfaces, but are not included
+    in this first extraction.
+  publisher: Alludium
+  license: Apache-2.0
+  repository: https://github.com/alludium/alludium-packs
+compatibility:
+  minPlatformVersion: null
+  pluginFormats:
+    - claude-plugin
+    - codex-plugin
+surfaces:
+  skills:
+    path: skills
+    ids:
+      - 82-factor-diligence-question-generation
+      - citation-enforcement
+      - closing-coordination-and-cp-tracking
+      - commercial-diligence-workstream
+      - company-research-and-enrichment
+      - deal-room-setup-and-source-ingestion
+      - financial-diligence-workstream
+      - founder-evaluation-and-reference-checking
+      - founder-materials-request
+      - founder-outreach-and-intro-paths
+      - ic-memo-assembly
+      - ic-risk-checklist-and-decision-log
+      - market-map-building
+      - meeting-prep-and-summary
+      - pipeline-health-and-crm-hygiene
+      - pitch-deck-explainer
+      - portfolio-onboarding-and-100-day-plan
+      - red-flags-scanner
+      - team-and-hiring-assessment
+      - technical-diligence-workstream
+      - ten-factor-evaluation
+      - traction-and-saas-unit-economics
+      - vc-task-and-next-step-generation
+  alludiumAgentTemplates:
+    path: alludium/agent-templates
+    ids:
+      - vc_dealflow_concierge
+      - vc_diligence_analyst
+      - vc_first_look_analyst
+      - vc_ic_prep_producer
+      - vc_legal_compliance_desk
+      - vc_meeting_operator
+      - vc_origination_scout
+      - vc_pipeline_autopilot
+  mcpServers:
+    path: .mcp.json
+    status: placeholder
+  alludiumMcpRecommendations:
+    path: alludium/mcp-recommendations.yaml
+    status: advisory
+  taskDefinitionTemplates:
+    status: deferred
+    reason: Task-definition loading and pack activation are still stabilizing in the platform repo.
+  projectTypes:
+    status: deferred
+    reason: VC Deal Room project type belongs in the later pack activation surface.
+boundaries:
+  publicSafe: true
+  secretsAllowed: false
+  internalOnlySkillsAllowed: false
+  activationModel: available-not-automatically-installed

@@ -1,0 +1,168 @@
+version: "1.0"
+type: "template"
+platform_managed: false
+id: "vc_pipeline_autopilot"
+name: "Pipeline Autopilot"
+description: "VC pipeline hygiene agent that prepares pipeline digests, identifies stale deals, suggests stage changes, drafts internal nudges, and proposes CRM/deal-system and next-step updates for approval."
+icon: "FcFlowChart"
+color: "bg-blue-100"
+category: "Alludium"
+metadata:
+  gitBranch: main
+  gitRepositoryUrl: https://github.com/alludium-templates/configurable-agent.git
+  supportedTaskDefinitions:
+    - evaluate-investment-opportunity
+    - prepare-deal-flow-agenda
+  primaryStage: "Pipeline"
+  primaryDealRoomState: "pipeline-review"
+  requiredSkills:
+    - pipeline-health-and-crm-hygiene
+    - vc-task-and-next-step-generation
+    - company-research-and-enrichment
+    - citation-enforcement
+
+llm:
+  provider: "ANTHROPIC"
+  infra: "AMZN"
+  model: "Claude Opus 4.6"
+
+skills:
+  - externalId: "pipeline-health-and-crm-hygiene"
+    activationMode: "ALWAYS"
+  - externalId: "vc-task-and-next-step-generation"
+    activationMode: "ALWAYS"
+  - externalId: "company-research-and-enrichment"
+    activationMode: "AUTO"
+  - externalId: "citation-enforcement"
+    activationMode: "ALWAYS"
+
+prompt:
+  template: |
+    You are the fund's Pipeline Autopilot.
+
+    ## Role
+
+    Keep the active deal pipeline accurate, current, and actionable. Produce pipeline digests, stale-deal reviews, stage-change suggestions, internal nudges, CRM/deal-system patch suggestions, and specific next-step drafts.
+
+    You do not screen new deals, run diligence, contact founders, make investment decisions, move stages, update CRM/deal-system fields, or create tasks without explicit approval and connected tools.
+
+    ## Supported Tasks
+
+    Route work into:
+    - `evaluate-investment-opportunity`
+    - `prepare-deal-flow-agenda`
+    - stale-deal review workflows
+    - next-step generation workflows
+    - CRM/deal-system hygiene workflows
+
+    Current runtime may not have every task definition installed. When a task is unavailable, explain the intended task route and continue with the matching skill output.
+
+    ## Skill Routing
+
+    - Use `pipeline-health-and-crm-hygiene` for pipeline snapshot review, stage readiness, stale deals, CRM/deal-system patch suggestions, and weekly digest.
+    - Use `vc-task-and-next-step-generation` for owner/date/action suggestions and draft task-system entries.
+    - Use `company-research-and-enrichment` only when deal context is missing or needs targeted refresh.
+    - Use `citation-enforcement` for recommendations, stage suggestions, and digest claims.
+
+    ## Tool Posture
+
+    Start with the connected CRM/deal-system or a supplied pipeline snapshot. Affinity is the preferred design-partner example, but Salesforce, HubSpot, Attio, Airtable, Notion, or a spreadsheet/snapshot can serve the same role. Use Exa selectively for deal-status signals that could affect urgency or stage movement. Use Brave/SerpAPI as broad-search fallback. Use Dealroom only when connected for financing and market-activity context. Do not run external research for every deal by default.
+
+    ## Output Contract
+
+    Produce:
+    - pipeline snapshot assumptions and missing data
+    - weekly digest or focused deal review
+    - stale deals and internal nudge drafts
+    - stage-change recommendations with cited evidence
+    - CRM/deal-system patch suggestions, never completed writes
+    - next-step suggestions with owner, due date, source, and rationale
+    - risks, confidence/evidence quality, open questions, approvals required, and receipts
+
+    ## Boundaries
+
+    Humans own stage movement, archiving, investment priority, external communications, CRM/deal-system writes, and task creation. If no CRM/deal-system data or supplied pipeline snapshot is available, stop and ask for one rather than fabricating state.
+  variables:
+    - key: "staleThresholds"
+      label: "Stale Deal Thresholds"
+      type: "string"
+      description: "Default days without meaningful activity before a deal is flagged by stage."
+      value: |
+        | Stage | Days Without Activity |
+        |-------|----------------------|
+        | Origination | 7 |
+        | Screening | 10 |
+        | Evaluation | 14 |
+        | Decision | 7 |
+        | Negotiation | 10 |
+        | DD | 21 |
+        | Closing | 14 |
+      render: "textarea"
+    - key: "stageExitCriteria"
+      label: "Stage Exit Criteria"
+      type: "string"
+      description: "Default stage readiness heuristics."
+      value: |
+        Use workspace-specific criteria when available. Otherwise assess whether current evidence supports advance, hold, regress, or archive-review and cite the evidence behind the recommendation.
+      render: "textarea"
+
+mcpServers:
+  alludium-platform:
+    tools:
+      - name: artifact.searchArtifacts
+      - name: artifact.list
+      - name: artifact.getArtifact
+      - name: artifact.findById
+      - name: artifact.attachToChat
+      - name: artifact.detachFromChat
+      - name: artifact.getArtifactsLinkedToChat
+  affinity-mcp-server:
+    tools:
+      - name: affinity_list_opportunities
+      - name: affinity_get_opportunity
+      - name: affinity_get_field_values
+      - name: affinity_get_field_value_changes
+      - name: affinity_list_opportunity_notes
+      - name: affinity_search_companies
+      - name: affinity_get_company
+  exa-mcp-hosted:
+    connectionScope: SHARED
+    tools:
+      - name: web_search_exa
+      - name: web_search_advanced_exa
+      - name: company_research_exa
+      - name: crawling_exa
+  brave-search-mcp:
+    connectionScope: SHARED
+    tools:
+      - name: brave_web_search
+      - name: brave_news_search
+  serpapi-mcp:
+    connectionScope: SHARED
+    tools:
+      - name: search
+  dealroom-mcp:
+    connectionScope: USER_CONFIGURED
+    tools:
+      - name: find_company
+      - name: analyze_company
+      - name: compare_companies
+      - name: find_investor
+      - name: analyze_investor
+      - name: analyze_university
+      - name: analyze_founder
+      - name: search_transactions
+
+actions:
+  - Title: "Pipeline Digest"
+    Message: "Prepare a pipeline digest with stale deals, stage suggestions, and next actions."
+    Icon: "FcFlowChart"
+  - Title: "Stale Deals"
+    Message: "Review stale deals and draft internal owner nudges."
+    Icon: "FcClock"
+  - Title: "Next Steps"
+    Message: "Generate owner-assigned next steps for selected deals."
+    Icon: "FcTodoList"
+
+greeting: |
+  I'm your Pipeline Autopilot. Share a connected pipeline, export, or deal list and I will prepare a cited pipeline digest, stage suggestions, stale-deal nudges, and next-step drafts for approval.

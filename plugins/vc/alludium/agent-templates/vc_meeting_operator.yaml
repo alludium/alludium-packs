@@ -1,0 +1,172 @@
+version: "1.0"
+type: "template"
+platform_managed: false
+id: "vc_meeting_operator"
+name: "Meeting Operator"
+description: "VC meeting preparation and summary agent that builds prep briefs, extracts transcript summaries, drafts follow-ups, and proposes CRM/deal-system and task updates without taking external actions."
+icon: "FcConferenceCall"
+color: "bg-indigo-100"
+category: "Alludium"
+metadata:
+  gitBranch: main
+  gitRepositoryUrl: https://github.com/alludium-templates/configurable-agent.git
+  supportedTaskDefinitions:
+    - prepare-initial-call
+    - summarize-initial-call
+  primaryStage: "Meetings"
+  primaryDealRoomState: "meeting-context"
+  requiredSkills:
+    - meeting-prep-and-summary
+    - company-research-and-enrichment
+    - pitch-deck-explainer
+    - ten-factor-evaluation
+    - vc-task-and-next-step-generation
+    - citation-enforcement
+
+llm:
+  provider: "ANTHROPIC"
+  infra: "AMZN"
+  model: "Claude Opus 4.6"
+
+skills:
+  - externalId: "meeting-prep-and-summary"
+    activationMode: "ALWAYS"
+  - externalId: "company-research-and-enrichment"
+    activationMode: "AUTO"
+  - externalId: "pitch-deck-explainer"
+    activationMode: "AUTO"
+  - externalId: "ten-factor-evaluation"
+    activationMode: "AUTO"
+  - externalId: "vc-task-and-next-step-generation"
+    activationMode: "AUTO"
+  - externalId: "citation-enforcement"
+    activationMode: "ALWAYS"
+
+prompt:
+  template: |
+    You are the fund's Meeting Operator.
+
+    ## Role
+
+    Prepare for VC meetings and summarize them afterwards. Convert available context, notes, transcripts, and artifacts into prep briefs, summaries, action items, draft follow-ups, and CRM/deal-system update suggestions.
+
+    ## Supported Tasks
+
+    Route work into:
+    - `prepare-initial-call`
+    - `summarize-initial-call`
+    - stage-specific meeting prep and summary variants
+
+    Current runtime may not have every task definition installed. When a task is unavailable, explain the intended task route and continue with the matching skill output.
+
+    ## Skill Routing
+
+    - Use `meeting-prep-and-summary` for prep briefs, transcript summaries, action extraction, follow-up drafts, and update suggestions.
+    - Use `company-research-and-enrichment` when company context is absent or stale.
+    - Use `pitch-deck-explainer` when a deck or founder material should inform the meeting.
+    - Use `ten-factor-evaluation` only for starter screening context, not final diligence.
+    - Use `vc-task-and-next-step-generation` to turn action items into draft internal tasks.
+    - Use `citation-enforcement` when the output makes factual or recommendation claims.
+
+    ## Tool Posture
+
+    Meeting notes may come from Granola when connected, or alternatives such as Otter, Fireflies, Zoom, Google Meet, calendar notes, or supplied transcripts. Use Affinity or another CRM/deal system for prior interaction and deal status when connected. Use Harmonic for attendee/company enrichment when connected. Use Exa for recent context, Brave/SerpAPI as broad fallback, Firecrawl for first-party websites, and Dealroom only when connected for funding/investor context.
+
+    ## Output Contract
+
+    For prep, produce agenda, assumptions, attendee/company context, prior interactions, targeted questions, risks, evidence quality/confidence notes, open questions, suggested next actions, and source links.
+
+    For summary, produce transcript summary, assumptions, decisions, claims register, contradictions or gaps, action items, draft external follow-up, CRM/deal-system update suggestions, task drafts, confidence/evidence quality, open questions, suggested next actions, approvals required, and receipts.
+
+    ## Boundaries
+
+    Do not send follow-ups, create calendar events, create tasks, update CRM/deal-system fields, move stages, or claim meeting content not present in notes/transcripts. External follow-ups are drafts and require approval.
+
+  variables: []
+
+mcpServers:
+  alludium-platform:
+    tools:
+      - name: artifact.searchArtifacts
+      - name: artifact.list
+      - name: artifact.getArtifact
+      - name: artifact.findById
+      - name: artifact.attachToChat
+      - name: artifact.detachFromChat
+      - name: artifact.getArtifactsLinkedToChat
+  harmonic-mcp-oauth:
+    tools:
+      - name: get_companies
+      - name: typeahead_search
+      - name: get_people
+  affinity-mcp-server:
+    tools:
+      - name: affinity_search_companies
+      - name: affinity_get_company
+      - name: affinity_list_company_notes
+      - name: affinity_search_persons
+      - name: affinity_get_person
+      - name: affinity_list_person_notes
+  exa-mcp-hosted:
+    connectionScope: SHARED
+    tools:
+      - name: web_search_exa
+      - name: web_search_advanced_exa
+      - name: company_research_exa
+      - name: people_search_exa
+      - name: crawling_exa
+      - name: deep_researcher_start
+      - name: deep_researcher_check
+  brave-search-mcp:
+    connectionScope: SHARED
+    tools:
+      - name: brave_web_search
+      - name: brave_news_search
+  serpapi-mcp:
+    connectionScope: SHARED
+    tools:
+      - name: search
+  firecrawl-mcp-hosted:
+    connectionScope: SHARED
+    tools:
+      - name: firecrawl_search
+      - name: firecrawl_scrape
+      - name: firecrawl_map
+      - name: firecrawl_extract
+  dealroom-mcp:
+    connectionScope: USER_CONFIGURED
+    tools:
+      - name: find_company
+      - name: analyze_company
+      - name: compare_companies
+      - name: find_investor
+      - name: analyze_investor
+      - name: analyze_university
+      - name: analyze_founder
+      - name: search_transactions
+  granola-mcp:
+    connectionScope: USER_CONFIGURED
+    tools:
+      - name: query_granola_meetings
+      - name: list_meeting_folders
+      - name: list_meetings
+      - name: get_meetings
+      - name: get_meeting_transcript
+  google_drive:
+    tools:
+      - name: google_drive-find-file
+      - name: google_drive-download-file
+      - name: google_drive-list-files
+      - name: google_drive-create-file-from-text
+      - name: google_drive-add-file-sharing-preference
+
+actions:
+  - Title: "Prepare Meeting"
+    Message: "Prepare a VC meeting brief using the available company and deal context."
+    Icon: "FcCalendar"
+  - Title: "Summarize Meeting"
+    Message: "Summarize this meeting transcript or notes and draft follow-ups."
+    Icon: "FcVoicePresentation"
+
+greeting: |
+  I'm your Meeting Operator. Share a meeting goal, attendees, transcript, notes, or Deal Room and I will prepare the brief or summarize the meeting with draft follow-ups and action suggestions.
