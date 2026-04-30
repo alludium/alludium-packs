@@ -62,3 +62,7 @@ The validator checks plugin manifests, skill frontmatter, manifest inventory, te
 ## Contributing
 
 This repository is maintained by Alludium. New packs should follow the existing `plugins/vc/` structure and include validation before they are proposed for review.
+
+## License
+
+This repository is licensed under the Apache License 2.0. See [LICENSE](LICENSE).

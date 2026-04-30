@@ -11,6 +11,7 @@ import yaml
 
 
 ROOT = Path(__file__).resolve().parents[1]
+THIS_FILE = Path(__file__).resolve()
 SECRET_PATTERNS = [
     re.compile(pattern, re.IGNORECASE)
     for pattern in [
@@ -18,6 +19,20 @@ SECRET_PATTERNS = [
         r"secret\s*[:=]\s*['\"][^'\"]+['\"]",
         r"token\s*[:=]\s*['\"][^'\"]+['\"]",
         r"-----BEGIN (?:RSA |EC |OPENSSH |)PRIVATE KEY-----",
+    ]
+]
+PUBLIC_READINESS_PATTERNS = [
+    (
+        "legacy SVV naming",
+        re.compile(pattern, re.IGNORECASE),
+    )
+    for pattern in [
+        r"\bSVV\b",
+        r"Sure Valley",
+        r"\bsvv_",
+        r"alludium-vc",
+        r"/Users/",
+        r"craft-ai-agents",
     ]
 ]
 
@@ -137,6 +152,18 @@ def validate_no_obvious_secrets() -> None:
                 fail(f"Potential secret-like value found in {path.relative_to(ROOT)}")
 
 
+def validate_no_public_readiness_leakage() -> None:
+    for path in ROOT.rglob("*"):
+        if not path.is_file() or ".git" in path.parts or path.resolve() == THIS_FILE:
+            continue
+        if path.suffix.lower() in {".png", ".jpg", ".jpeg", ".gif", ".svg"}:
+            continue
+        body = path.read_text(encoding="utf-8", errors="ignore")
+        for label, pattern in PUBLIC_READINESS_PATTERNS:
+            if pattern.search(body):
+                fail(f"Public-readiness leak ({label}) found in {path.relative_to(ROOT)}")
+
+
 def main() -> None:
     validate_plugin_manifest(ROOT / ".codex-plugin" / "plugin.json")
     validate_plugin_manifest(ROOT / ".claude-plugin" / "plugin.json")
@@ -155,6 +182,7 @@ def main() -> None:
         fail(f"Missing Alludium MCP recommendations file: {recommendations_path}")
     read_yaml(ROOT / recommendations_path)
     validate_no_obvious_secrets()
+    validate_no_public_readiness_leakage()
 
     print(
         "Validated vc pack: "

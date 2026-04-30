@@ -39,6 +39,7 @@ Review notes:
 
 - This is a template-required inventory, not a complete public-capability taxonomy.
 - Broader reusable skills can move into another public plugin later if they do not belong in the VC vertical.
+- `brand_monitoring_analysis` and `people_company_research_brief` were considered during planning but are intentionally deferred because no current `vc_*` agent template references them.
 - No `internalOnly: true` skills are included.
 
 ---
