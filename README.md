@@ -14,9 +14,11 @@ The repository is intentionally broader than the first VC use case. It is expect
 
 ## Plugin vs Pack
 
-A plugin is the agent-tooling distribution shape. It carries skills and MCP-friendly metadata in a structure that Claude Code and Codex-style tooling can understand.
+A plugin is the agent-tooling distribution shape. It carries skills, agent definitions, and MCP-friendly metadata in a structure that Claude Code and Codex-style tooling can understand.
 
 A pack is the Alludium product/runtime concept. It can include one or more plugins plus Alludium-specific assets such as runtime agent templates, task definitions, project type definitions, activation metadata, provenance, and rollback semantics.
+
+In this repository, each pack directory is also a valid plugin root. Standard plugin surfaces live at the pack root; Alludium-only runtime surfaces live under `alludium/`.
 
 The first VC bundle is plugin-shaped and pack-aware. Task definitions and project type definitions are intentionally deferred until the platform activation and task-loading seams are ready.
 
@@ -42,10 +44,11 @@ Within a pack:
 
 - `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` describe the plugin for agent tooling.
 - `skills/` contains public skills in Markdown.
-- `.mcp.json` is reserved for plugin-compatible MCP server definitions.
+- `agents/` is reserved for future plugin-native Claude/Codex agent definitions.
+- `.mcp.json` contains plugin-compatible MCP server definitions using public-safe credential placeholders.
 - `alludium/manifest.yaml` describes the Alludium pack surface.
 - `alludium/agent-templates/` contains Alludium runtime agent templates.
-- `alludium/mcp-recommendations.yaml` records recommended MCP integrations where full plugin ingestion is not ready yet.
+- `alludium/mcp-recommendations.yaml` records Alludium platform mapping guidance for those MCP integrations.
 - `scripts/validate_pack.py` validates the pack before publishing.
 
 ## Validation

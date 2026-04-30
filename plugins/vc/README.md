@@ -8,9 +8,9 @@ This first release contains the surfaces that are ready to externalize:
 
 - Claude/Codex-style skills in `skills/`
 - Alludium runtime agent templates in `alludium/agent-templates/`
-- Alludium MCP recommendations in `alludium/mcp-recommendations.yaml`
+- VC-relevant MCP server definitions in `.mcp.json`
+- Alludium platform mapping guidance for MCPs in `alludium/mcp-recommendations.yaml`
 - a pack-aware Alludium manifest in `alludium/manifest.yaml`
-- an MCP manifest placeholder in `.mcp.json`
 
 Task definitions and project type definitions are intentionally deferred. They belong in the larger Alludium pack shape, but the platform task-loading and workspace-activation seams should settle before those become installable assets from this repo.
 
@@ -21,8 +21,8 @@ Task definitions and project type definitions are intentionally deferred. They b
 | Skills | `skills/` | 23 public workflow skills used by the VC agent templates |
 | Agent templates | `alludium/agent-templates/` | 8 Alludium runtime templates using the `vc_*` baseline |
 | Pack manifest | `alludium/manifest.yaml` | Alludium-specific inventory, boundaries, and future pack surfaces |
-| MCP recommendations | `alludium/mcp-recommendations.yaml` | Advisory list of useful VC integrations |
-| Plugin MCP manifest | `.mcp.json` | Empty placeholder until plugin MCP ingestion and platform MCP ingestion are reconciled |
+| Plugin MCP manifest | `.mcp.json` | Public-safe MCP definitions for VC research, CRM, meeting, and market-intelligence tools |
+| MCP platform mapping | `alludium/mcp-recommendations.yaml` | Alludium mapping guidance for platform-managed or workspace-managed connections |
 | Validation | `scripts/validate_pack.py` | Local and CI validation for manifests, skills, references, and obvious secrets |
 
 ## Repository Shape
@@ -46,11 +46,15 @@ alludium-packs/
 
 ## Plugin vs Pack
 
-The plugin surface is for agent tooling that already understands skills and MCP manifests.
+The plugin surface is for agent tooling that already understands skills, agent definitions, and MCP manifests.
+
+The VC pack directory is also the plugin root. Standard plugin concepts live at the pack root. Alludium-only runtime concepts live under `alludium/`.
 
 The Alludium pack surface is the product/runtime extension point. It tracks Alludium agent templates today and is expected to grow later to include task definitions, project types, workspace activation metadata, provenance, and rollback/deactivation semantics.
 
-The `.mcp.json` file is intentionally empty in this first scaffold. VC-relevant MCPs are listed as Alludium recommendations until the standard plugin MCP manifest contract and Alludium platform MCP ingestion contract are reconciled.
+The top-level `agents/` directory is reserved for future plugin-native Claude/Codex agent definitions. The current `alludium/agent-templates/` files are Alludium runtime YAML templates, so they intentionally remain under the Alludium extension surface until a deliberate adapter or generated native-agent format exists.
+
+The `.mcp.json` file lists VC-relevant MCP servers using public-safe user/workspace credential placeholders. When the same pack is ingested into Alludium, `alludium/mcp-recommendations.yaml` tells the platform which entries can map to managed platform defaults or workspace connections.
 
 Template `metadata.gitRepositoryUrl` values currently point at the configurable-agent implementation repository. They are runtime implementation metadata, not this pack's source provenance. Pack source provenance should be recorded separately by the platform when ingesting a tagged release.
 

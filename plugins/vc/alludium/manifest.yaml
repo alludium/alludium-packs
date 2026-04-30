@@ -57,10 +57,10 @@ surfaces:
       - vc_pipeline_autopilot
   mcpServers:
     path: .mcp.json
-    status: placeholder
+    status: installable-plugin-definitions
   alludiumMcpRecommendations:
     path: alludium/mcp-recommendations.yaml
-    status: advisory
+    status: platform-mapping
   taskDefinitionTemplates:
     status: deferred
     reason: Task-definition loading and pack activation are still stabilizing in the platform repo.

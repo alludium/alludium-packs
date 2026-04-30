@@ -63,11 +63,11 @@ Review notes:
 
 ---
 
-## MCP Recommendations
+## MCP Definitions And Platform Mapping
 
-The first scaffold includes advisory Alludium MCP recommendations in `alludium/mcp-recommendations.yaml`.
+The first scaffold includes public-safe plugin MCP definitions in `.mcp.json` and Alludium platform mapping guidance in `alludium/mcp-recommendations.yaml`.
 
-Included recommendation IDs:
+Included MCP IDs:
 
 - `affinity-mcp-server`
 - `harmonic-mcp-oauth`
@@ -76,14 +76,21 @@ Included recommendation IDs:
 - `firecrawl-mcp-hosted`
 - `brave-search-mcp`
 - `serpapi-mcp`
+- `tavily-mcp-hosted`
+- `perplexity-mcp`
+- `brightdata-mcp-hosted`
+- `meltwater-mcp`
 - `granola-mcp`
 - `otter-mcp-oauth`
 - `fireflies-mcp-oauth`
 
 Review notes:
 
-- These are not yet installable plugin MCP definitions.
-- `.mcp.json` remains an empty placeholder until the Claude/Codex plugin MCP contract and Alludium platform MCP ingestion contract are reconciled.
+- `.mcp.json` uses user/workspace credential placeholders, not Alludium platform secrets.
+- `alludium/mcp-recommendations.yaml` records how Alludium can map the same external IDs to platform defaults or workspace connections when the pack is ingested.
+- Alludium template references to `alludium-platform`, `google_drive`, and `linkedin` are tracked as platform-only/template-only integrations rather than plugin MCP definitions.
+- Pipedream-provided integrations are intentionally excluded from this first pack scaffold.
+- `alludium-docs-mcp` and `xero-mcp-server` exist in platform MCP config but are intentionally excluded because they are not part of the first VC workflow surface.
 - No secrets, tokens, or environment-specific values should be copied into this public repo.
 
 ---

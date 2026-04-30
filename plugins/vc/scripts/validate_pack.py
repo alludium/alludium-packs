@@ -141,6 +141,58 @@ def validate_templates(manifest: dict[str, Any], skill_ids: set[str]) -> None:
                 fail(f"Template {template_id} references missing skill {external_id}")
 
 
+def validate_mcp_definitions(manifest: dict[str, Any], recommendations: dict[str, Any]) -> None:
+    mcp_manifest = read_json(ROOT / manifest["surfaces"]["mcpServers"]["path"])
+    mcp_servers = mcp_manifest.get("mcpServers")
+    if not isinstance(mcp_servers, dict) or not mcp_servers:
+        fail(".mcp.json must define at least one MCP server")
+
+    for server_id, server in mcp_servers.items():
+        if not isinstance(server, dict):
+            fail(f".mcp.json server {server_id} must be an object")
+        has_command = isinstance(server.get("command"), str)
+        has_url = isinstance(server.get("url"), str)
+        if has_command == has_url:
+            fail(f".mcp.json server {server_id} must define exactly one of command or url")
+
+    recommendation_ids = {
+        item.get("externalId")
+        for item in recommendations.get("recommendations", [])
+        if isinstance(item, dict)
+    }
+    if None in recommendation_ids:
+        fail("All MCP recommendations must include externalId")
+
+    missing_from_plugin = recommendation_ids - set(mcp_servers)
+    if missing_from_plugin:
+        fail(f"MCP recommendations missing from .mcp.json: {sorted(missing_from_plugin)}")
+
+    platform_only_ids = {
+        item.get("externalId")
+        for item in recommendations.get("platformOnlyTemplateIntegrations", [])
+        if isinstance(item, dict)
+    }
+    if None in platform_only_ids:
+        fail("All platform-only template integrations must include externalId")
+
+    template_mcp_ids: set[str] = set()
+    template_ids = manifest["surfaces"]["alludiumAgentTemplates"]["ids"]
+    for template_id in template_ids:
+        template = read_yaml(ROOT / "alludium" / "agent-templates" / f"{template_id}.yaml")
+        template_mcp_ids.update((template.get("mcpServers") or {}).keys())
+
+    allowed_template_mcp_ids = recommendation_ids | platform_only_ids
+    missing_from_recommendations = template_mcp_ids - allowed_template_mcp_ids
+    if missing_from_recommendations:
+        fail(f"Template MCP references missing from MCP mapping: {sorted(missing_from_recommendations)}")
+
+    missing_from_plugin = template_mcp_ids - set(mcp_servers)
+    if missing_from_plugin:
+        unexpected_missing = missing_from_plugin - platform_only_ids
+        if unexpected_missing:
+            fail(f"Template MCP references missing from .mcp.json: {sorted(unexpected_missing)}")
+
+
 def validate_no_obvious_secrets() -> None:
     for path in ROOT.rglob("*"):
         if not path.is_file() or ".git" in path.parts:
@@ -181,7 +233,10 @@ def main() -> None:
     recommendations_path = manifest["surfaces"]["alludiumMcpRecommendations"]["path"]
     if not (ROOT / recommendations_path).exists():
         fail(f"Missing Alludium MCP recommendations file: {recommendations_path}")
-    read_yaml(ROOT / recommendations_path)
+    recommendations = read_yaml(ROOT / recommendations_path)
+    if not isinstance(recommendations, dict):
+        fail(f"{recommendations_path} must be an object")
+    validate_mcp_definitions(manifest, recommendations)
     validate_no_obvious_secrets()
     validate_no_public_readiness_leakage()
 
