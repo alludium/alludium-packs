@@ -1,8 +1,10 @@
 # Alludium VC
 
-Public VC workflow plugin and pack seed for Alludium. This is the first bundle inside the broader `alludium-packs` catalog, not a standalone VC-only repository.
+Public VC workflow plugin and pack seed for [Alludium](https://www.alludium.ai).
 
-This plugin starts with the surfaces that are ready to externalize:
+Alludium VC packages reusable venture capital workflows for sourcing, screening, diligence, investment committee preparation, closing, and portfolio onboarding. It is the first bundle inside the broader `alludium-packs` catalog, not a standalone VC-only repository.
+
+This first release contains the surfaces that are ready to externalize:
 
 - Claude/Codex-style skills in `skills/`
 - Alludium runtime agent templates in `alludium/agent-templates/`
@@ -12,7 +14,18 @@ This plugin starts with the surfaces that are ready to externalize:
 
 Task definitions and project type definitions are intentionally deferred. They belong in the larger Alludium pack shape, but the platform task-loading and workspace-activation seams should settle before those become installable assets from this repo.
 
-## Shape
+## Contents
+
+| Surface | Path | Notes |
+| --- | --- | --- |
+| Skills | `skills/` | 23 public workflow skills used by the VC agent templates |
+| Agent templates | `alludium/agent-templates/` | 8 Alludium runtime templates using the `vc_*` baseline |
+| Pack manifest | `alludium/manifest.yaml` | Alludium-specific inventory, boundaries, and future pack surfaces |
+| MCP recommendations | `alludium/mcp-recommendations.yaml` | Advisory list of useful VC integrations |
+| Plugin MCP manifest | `.mcp.json` | Empty placeholder until plugin MCP ingestion and platform MCP ingestion are reconciled |
+| Validation | `scripts/validate_pack.py` | Local and CI validation for manifests, skills, references, and obvious secrets |
+
+## Repository Shape
 
 ```text
 alludium-packs/
