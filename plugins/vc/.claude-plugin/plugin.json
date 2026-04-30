@@ -1,0 +1,22 @@
+{
+  "name": "vc",
+  "version": "0.1.0",
+  "description": "VC workflow skills and Alludium agent templates for venture sourcing, screening, diligence, IC preparation, closing, and portfolio onboarding.",
+  "author": {
+    "name": "Alludium",
+    "email": "hello@alludium.ai",
+    "url": "https://github.com/alludium"
+  },
+  "homepage": "https://github.com/alludium/alludium-packs/tree/main/plugins/vc",
+  "repository": "https://github.com/alludium/alludium-packs",
+  "license": "Apache-2.0",
+  "keywords": [
+    "venture-capital",
+    "vc",
+    "diligence",
+    "agentic-workflows",
+    "alludium"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}

@@ -1,0 +1,128 @@
+schemaVersion: "0.2"
+status: platform-mapping
+description: >
+  VC-relevant MCP server definitions and Alludium platform mapping guidance.
+  The plugin-level `.mcp.json` is safe for public reuse and uses user/workspace
+  supplied credentials. When this pack is ingested into Alludium, the platform
+  may map these external IDs to configured managed providers or workspace
+  connections instead of requiring the plugin placeholders directly.
+recommendations:
+  - externalId: affinity-mcp-server
+    name: Affinity CRM
+    category: CRM
+    use: Deal pipeline, CRM context, company/deal records, relationship context, and outreach history.
+    pluginCredentialBoundary: user_or_workspace_api_key
+    alludiumPlatformMapping: workspace_connection
+    platformDefaultAvailable: false
+  - externalId: harmonic-mcp-oauth
+    name: Harmonic
+    category: Company Intelligence
+    use: Company enrichment, founder profiles, market intelligence, and sourcing context.
+    pluginCredentialBoundary: user_or_workspace_oauth
+    alludiumPlatformMapping: workspace_connection
+    platformDefaultAvailable: false
+  - externalId: dealroom-mcp
+    name: Dealroom
+    category: Private Market Data
+    use: Financing, investor, funding-round, and private-market context.
+    pluginCredentialBoundary: user_or_workspace_api_key
+    alludiumPlatformMapping: workspace_connection
+    platformDefaultAvailable: false
+  - externalId: exa-mcp-hosted
+    name: Exa Search
+    category: Web Research
+    use: Public web, company, people, code, and deeper research workflows.
+    pluginCredentialBoundary: user_or_workspace_api_key
+    alludiumPlatformMapping: platform_or_workspace_connection
+    platformDefaultAvailable: true
+  - externalId: firecrawl-mcp-hosted
+    name: Firecrawl
+    category: Web Extraction
+    use: First-party website extraction, website mapping, page evidence, and source-material gathering.
+    pluginCredentialBoundary: user_or_workspace_api_key
+    alludiumPlatformMapping: platform_or_workspace_connection
+    platformDefaultAvailable: true
+  - externalId: brave-search-mcp
+    name: Brave Search
+    category: Web Search
+    use: Broad public web and news search fallback.
+    pluginCredentialBoundary: user_or_workspace_api_key
+    alludiumPlatformMapping: platform_or_workspace_connection
+    platformDefaultAvailable: true
+  - externalId: serpapi-mcp
+    name: SerpAPI Search
+    category: Web Search
+    use: Broad search fallback across Google, Bing, YouTube, and other search surfaces.
+    pluginCredentialBoundary: user_or_workspace_api_key
+    alludiumPlatformMapping: platform_or_workspace_connection
+    platformDefaultAvailable: true
+  - externalId: tavily-mcp-hosted
+    name: Tavily Search
+    category: Web Search
+    use: Web search and extraction when a workspace prefers Tavily-backed research.
+    pluginCredentialBoundary: user_or_workspace_api_key
+    alludiumPlatformMapping: workspace_connection
+    platformDefaultAvailable: false
+  - externalId: perplexity-mcp
+    name: Perplexity
+    category: Web Research
+    use: Search, reasoning, and deep research workflows where Perplexity is connected.
+    pluginCredentialBoundary: user_or_workspace_api_key
+    alludiumPlatformMapping: workspace_connection
+    platformDefaultAvailable: false
+  - externalId: brightdata-mcp-hosted
+    name: Bright Data
+    category: Web Extraction
+    use: Real-time web access, search, and scraping where a workspace has Bright Data access.
+    pluginCredentialBoundary: user_or_workspace_api_key
+    alludiumPlatformMapping: workspace_connection
+    platformDefaultAvailable: false
+  - externalId: meltwater-mcp
+    name: Meltwater
+    category: Media Intelligence
+    use: News, media monitoring, and market-signal intelligence where a workspace has Meltwater access.
+    pluginCredentialBoundary: user_or_workspace_api_key
+    alludiumPlatformMapping: workspace_connection
+    platformDefaultAvailable: false
+  - externalId: granola-mcp
+    name: Granola
+    category: Meeting Notes
+    use: Meeting transcript and notes context when connected.
+    pluginCredentialBoundary: user_or_workspace_oauth
+    alludiumPlatformMapping: workspace_connection
+    platformDefaultAvailable: false
+  - externalId: otter-mcp-oauth
+    name: Otter AI
+    category: Meeting Notes
+    use: Meeting transcript context when connected.
+    pluginCredentialBoundary: user_or_workspace_oauth
+    alludiumPlatformMapping: workspace_connection
+    platformDefaultAvailable: false
+  - externalId: fireflies-mcp-oauth
+    name: Fireflies
+    category: Meeting Notes
+    use: Meeting transcript, summary, contact, and user-data context when connected.
+    pluginCredentialBoundary: user_or_workspace_oauth
+    alludiumPlatformMapping: workspace_connection
+    platformDefaultAvailable: false
+excludedPlatformMcps:
+  - externalId: alludium-docs-mcp
+    reason: Platform documentation MCP is useful for Alludium users but is not part of the VC workflow pack.
+  - externalId: xero-mcp-server
+    reason: Accounting workflows are not part of the first VC pack surface.
+platformOnlyTemplateIntegrations:
+  - externalId: alludium-platform
+    reason: Alludium artifact and runtime tools are platform-owned, not public plugin MCP definitions.
+  - externalId: google_drive
+    reason: Google Drive access is provided through the Alludium/agent connector surface, not the VC plugin MCP manifest.
+  - externalId: linkedin
+    reason: LinkedIn access is provided through the Alludium/agent connector surface, not the VC plugin MCP manifest.
+boundaries:
+  secretsAllowed: false
+  pluginDefinitionsUseAlludiumSecrets: false
+  pipedreamProvidedIntegrationsIncluded: false
+  notes: >
+    Do not copy platform-owned secrets or environment values into this public
+    repo. Public plugin definitions should use user/workspace credential
+    placeholders. Alludium ingestion can map the same external IDs to managed
+    platform defaults where the platform owns a safe default connection.

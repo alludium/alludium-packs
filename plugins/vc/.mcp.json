@@ -1,0 +1,71 @@
+{
+  "mcpServers": {
+    "affinity-mcp-server": {
+      "command": "affinity-mcp",
+      "args": [],
+      "env": {
+        "AFFINITY_API_KEY": "${input:affinity_api_key}"
+      }
+    },
+    "harmonic-mcp-oauth": {
+      "url": "https://mcp.api.harmonic.ai"
+    },
+    "dealroom-mcp": {
+      "url": "https://mcp.dealroom.co/mcp",
+      "headers": {
+        "Authorization": "Bearer ${input:dealroom_api_key}"
+      }
+    },
+    "exa-mcp-hosted": {
+      "url": "https://mcp.exa.ai/mcp?exaApiKey=${input:exa_api_key}&tools=web_search_exa,web_search_advanced_exa,get_code_context_exa,crawling_exa,company_research_exa,people_search_exa,deep_researcher_start,deep_researcher_check"
+    },
+    "firecrawl-mcp-hosted": {
+      "url": "https://mcp.firecrawl.dev/v2/mcp",
+      "headers": {
+        "Authorization": "Bearer ${input:firecrawl_api_key}"
+      }
+    },
+    "brave-search-mcp": {
+      "command": "brave-search-mcp-server",
+      "args": [],
+      "env": {
+        "BRAVE_API_KEY": "${input:brave_api_key}"
+      }
+    },
+    "serpapi-mcp": {
+      "url": "https://mcp.serpapi.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${input:serpapi_api_key}"
+      }
+    },
+    "tavily-mcp-hosted": {
+      "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=${input:tavily_api_key}"
+    },
+    "perplexity-mcp": {
+      "command": "npx",
+      "args": ["-yq", "@perplexity-ai/mcp-server"],
+      "env": {
+        "PERPLEXITY_API_KEY": "${input:perplexity_api_key}",
+        "PERPLEXITY_TIMEOUT_MS": "300000"
+      }
+    },
+    "brightdata-mcp-hosted": {
+      "url": "https://mcp.brightdata.com/mcp?token=${input:brightdata_api_token}"
+    },
+    "meltwater-mcp": {
+      "url": "https://api.meltwater.com/mcp",
+      "headers": {
+        "apikey": "${input:meltwater_api_key}"
+      }
+    },
+    "granola-mcp": {
+      "url": "https://mcp.granola.ai/mcp"
+    },
+    "otter-mcp-oauth": {
+      "url": "https://mcp.otter.ai/mcp"
+    },
+    "fireflies-mcp-oauth": {
+      "url": "https://api.fireflies.ai/mcp"
+    }
+  }
+}

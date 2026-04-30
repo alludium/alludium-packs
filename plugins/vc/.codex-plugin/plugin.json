@@ -1,0 +1,44 @@
+{
+  "name": "vc",
+  "version": "0.1.0",
+  "description": "VC workflow skills and Alludium agent templates for venture sourcing, screening, diligence, IC preparation, closing, and portfolio onboarding.",
+  "author": {
+    "name": "Alludium",
+    "email": "hello@alludium.ai",
+    "url": "https://github.com/alludium"
+  },
+  "homepage": "https://github.com/alludium/alludium-packs/tree/main/plugins/vc",
+  "repository": "https://github.com/alludium/alludium-packs",
+  "license": "Apache-2.0",
+  "keywords": [
+    "venture-capital",
+    "vc",
+    "diligence",
+    "agentic-workflows",
+    "alludium"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Alludium VC",
+    "shortDescription": "VC workflow skills and agent templates",
+    "longDescription": "A public Alludium VC plugin containing venture workflow skills and Alludium runtime agent-template definitions for sourcing, screening, diligence, IC preparation, closing, and portfolio onboarding.",
+    "developerName": "Alludium",
+    "category": "Business",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/alludium/alludium-packs/tree/main/plugins/vc",
+    "privacyPolicyURL": "https://www.alludium.ai/privacy",
+    "termsOfServiceURL": "https://www.alludium.ai/terms",
+    "defaultPrompt": [
+      "Screen this VC opportunity.",
+      "Prepare diligence questions for this deal.",
+      "Draft an IC memo outline from these materials."
+    ],
+    "brandColor": "#2563EB",
+    "screenshots": []
+  }
+}

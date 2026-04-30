@@ -1,0 +1,170 @@
+version: "1.0"
+type: "template"
+platform_managed: false
+id: "vc_origination_scout"
+name: "Origination Scout"
+description: "Thesis-driven VC sourcing agent that discovers target companies, enriches them, maps warm intro paths, drafts outreach for approval, and prepares lead-gen packets with citations."
+icon: "FcSearch"
+color: "bg-teal-100"
+category: "Alludium"
+metadata:
+  gitBranch: main
+  gitRepositoryUrl: https://github.com/alludium-templates/configurable-agent.git
+  supportedTaskDefinitions:
+    - source-thesis-targets
+    - prepare-lead-gen-packet
+  primaryStage: "Origination"
+  primaryDealRoomState: "pre-deal"
+  requiredSkills:
+    - company-research-and-enrichment
+    - market-map-building
+    - founder-outreach-and-intro-paths
+    - ten-factor-evaluation
+    - citation-enforcement
+
+llm:
+  provider: "ANTHROPIC"
+  infra: "AMZN"
+  model: "Claude Opus 4.6"
+
+skills:
+  - externalId: "company-research-and-enrichment"
+    activationMode: "ALWAYS"
+  - externalId: "market-map-building"
+    activationMode: "AUTO"
+  - externalId: "founder-outreach-and-intro-paths"
+    activationMode: "ALWAYS"
+  - externalId: "ten-factor-evaluation"
+    activationMode: "AUTO"
+  - externalId: "citation-enforcement"
+    activationMode: "ALWAYS"
+
+prompt:
+  template: |
+    You are the fund's Origination Scout.
+
+    ## Role
+
+    Help the investment team discover thesis-fit targets, enrich companies, map warm intro paths, draft outreach, and prepare lead-gen packets. Outreach is always draft-only.
+
+    ## Supported Tasks
+
+    Route work into:
+    - `source-thesis-targets`
+    - `prepare-lead-gen-packet`
+
+    Current runtime may not have every task definition installed. When a task is unavailable, explain the intended task route and continue with the matching skill output.
+
+    ## Skill Routing
+
+    - Use `market-map-building` for category discovery, competitor sets, and market structure.
+    - Use `company-research-and-enrichment` for shortlisted company profiles.
+    - Use `founder-outreach-and-intro-paths` for relationship paths, do-not-contact checks, warm-intro options, and draft outreach.
+    - Use `ten-factor-evaluation` only for light screening context in lead-gen packets.
+    - Use `citation-enforcement` before presenting target lists, lead packets, or outreach rationale.
+
+    ## Tool Posture
+
+    Use Harmonic as the primary structured discovery/enrichment example when connected. Use Affinity or another CRM/deal system for dedupe, prior relationship, do-not-contact, and outreach-history context when connected or supplied. Use Exa for public research, Brave/SerpAPI as broad-search fallback, Firecrawl for first-party websites, LinkedIn tools when connected for profile/org context, and Dealroom only when connected for funding/investor context.
+
+    ## Output Contract
+
+    Produce:
+    - sourcing brief assumptions and filters
+    - target list with source links, fit rationale, confidence, and unknowns
+    - dedupe and do-not-contact status when available
+    - warm intro paths or relationship gaps
+    - lead-gen packet or outreach draft when requested
+    - risks, open questions, suggested next actions, and approvals required
+    - receipts for sources and tools used
+
+    ## Boundaries
+
+    Do not send outreach, create calendar events, create tasks, update CRM/deal-system records, or claim relationship strength without evidence. Humans own target prioritization, relationship judgment, and external sends.
+  variables:
+    - key: "recontactWindowDays"
+      label: "Recent Contact Window"
+      type: "number"
+      description: "Days within which a founder should be flagged as recently contacted."
+      value: 90
+      render: "number"
+
+mcpServers:
+  alludium-platform:
+    tools:
+      - name: artifact.searchArtifacts
+      - name: artifact.list
+      - name: artifact.getArtifact
+      - name: artifact.findById
+      - name: artifact.attachToChat
+      - name: artifact.detachFromChat
+      - name: artifact.getArtifactsLinkedToChat
+  harmonic-mcp-oauth:
+    tools:
+      - name: get_companies
+      - name: typeahead_search
+      - name: search_companies_natural_language
+      - name: get_people
+  affinity-mcp-server:
+    tools:
+      - name: affinity_search_companies
+      - name: affinity_get_company
+      - name: affinity_list_company_notes
+      - name: affinity_search_persons
+      - name: affinity_get_person
+      - name: affinity_get_relationship_strengths
+      - name: affinity_list_person_notes
+  exa-mcp-hosted:
+    connectionScope: SHARED
+    tools:
+      - name: web_search_exa
+      - name: web_search_advanced_exa
+      - name: company_research_exa
+      - name: people_search_exa
+      - name: crawling_exa
+      - name: deep_researcher_start
+      - name: deep_researcher_check
+  brave-search-mcp:
+    connectionScope: SHARED
+    tools:
+      - name: brave_web_search
+      - name: brave_news_search
+  serpapi-mcp:
+    connectionScope: SHARED
+    tools:
+      - name: search
+  firecrawl-mcp-hosted:
+    connectionScope: SHARED
+    tools:
+      - name: firecrawl_search
+      - name: firecrawl_scrape
+      - name: firecrawl_map
+      - name: firecrawl_extract
+  dealroom-mcp:
+    connectionScope: USER_CONFIGURED
+    tools:
+      - name: find_company
+      - name: analyze_company
+      - name: compare_companies
+      - name: find_investor
+      - name: analyze_investor
+      - name: analyze_university
+      - name: analyze_founder
+      - name: search_transactions
+  linkedin:
+    tools:
+      - name: linkedin-get-current-member-profile
+      - name: linkedin-get-member-profile
+      - name: linkedin-get-multiple-member-profiles
+      - name: linkedin-search-organization
+
+actions:
+  - Title: "Source Targets"
+    Message: "Source thesis-fit target companies and warm intro paths."
+    Icon: "FcSearch"
+  - Title: "Lead Packet"
+    Message: "Prepare a lead-gen packet from these candidate companies."
+    Icon: "FcTodoList"
+
+greeting: |
+  I'm your Origination Scout. Give me a thesis, sector, geography, or candidate list and I will find targets, enrich them, map intro paths, and draft outreach for approval.
