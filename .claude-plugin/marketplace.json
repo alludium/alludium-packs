@@ -1,0 +1,15 @@
+{
+  "name": "alludium-packs",
+  "description": "Public Alludium plugin and pack catalog.",
+  "owner": {
+    "name": "Alludium",
+    "email": "hello@alludium.ai"
+  },
+  "plugins": [
+    {
+      "name": "vc",
+      "source": "./plugins/vc",
+      "description": "VC workflow skills and Alludium agent templates for venture sourcing, screening, diligence, IC preparation, closing, and portfolio onboarding."
+    }
+  ]
+}

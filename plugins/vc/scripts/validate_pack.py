@@ -84,6 +84,32 @@ def validate_plugin_manifest(path: Path) -> None:
         fail(f"{path.relative_to(ROOT)} mcpServers path must be ./.mcp.json")
 
 
+def validate_marketplace_manifest() -> None:
+    path = REPO_ROOT / ".claude-plugin" / "marketplace.json"
+    if not path.exists():
+        fail("Missing Claude marketplace manifest: .claude-plugin/marketplace.json")
+
+    marketplace = read_json(path)
+    if marketplace.get("name") != "alludium-packs":
+        fail(".claude-plugin/marketplace.json name must be alludium-packs")
+    if not isinstance(marketplace.get("owner"), dict) or not marketplace["owner"].get("name"):
+        fail(".claude-plugin/marketplace.json must declare owner.name")
+
+    plugins = marketplace.get("plugins")
+    if not isinstance(plugins, list):
+        fail(".claude-plugin/marketplace.json plugins must be an array")
+
+    vc_entries = [entry for entry in plugins if isinstance(entry, dict) and entry.get("name") == "vc"]
+    if len(vc_entries) != 1:
+        fail(".claude-plugin/marketplace.json must include exactly one vc plugin entry")
+
+    vc_entry = vc_entries[0]
+    if vc_entry.get("source") != "./plugins/vc":
+        fail(".claude-plugin/marketplace.json vc source must be ./plugins/vc")
+    if not (REPO_ROOT / "plugins" / "vc" / ".claude-plugin" / "plugin.json").exists():
+        fail("Claude marketplace vc source is missing .claude-plugin/plugin.json")
+
+
 def validate_skills(manifest: dict[str, Any]) -> set[str]:
     skill_ids = manifest["surfaces"]["skills"]["ids"]
     if len(skill_ids) != len(set(skill_ids)):
@@ -218,6 +244,7 @@ def validate_no_public_readiness_leakage() -> None:
 
 
 def main() -> None:
+    validate_marketplace_manifest()
     validate_plugin_manifest(ROOT / ".codex-plugin" / "plugin.json")
     validate_plugin_manifest(ROOT / ".claude-plugin" / "plugin.json")
     read_json(ROOT / ".mcp.json")

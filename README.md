@@ -12,6 +12,17 @@ The repository is intentionally broader than the first VC use case. It is expect
 | --- | --- | --- | --- |
 | Alludium VC | `plugins/vc/` | Draft review | VC workflow skills, Alludium runtime agent templates, MCP recommendations, and pack metadata |
 
+## Claude Code Marketplace
+
+This repository is also a Claude Code plugin marketplace. Add the repository root as the marketplace source:
+
+```bash
+/plugin marketplace add alludium/alludium-packs
+/plugin install vc@alludium-packs
+```
+
+In the Claude UI, use the repository URL `https://github.com/alludium/alludium-packs`. Do not use a GitHub `blob/` URL or the `plugins/vc/` subdirectory URL; Claude Code expects to find `.claude-plugin/marketplace.json` at the marketplace repository root.
+
 ## Plugin vs Pack
 
 A plugin is the agent-tooling distribution shape. It carries skills, agent definitions, and MCP-friendly metadata in a structure that Claude Code and Codex-style tooling can understand.
@@ -28,6 +39,8 @@ Each pack lives under `plugins/<pack-id>/`:
 
 ```text
 alludium-packs/
+├── .claude-plugin/
+│   └── marketplace.json
 ├── plugins/
 │   └── vc/
 │       ├── .claude-plugin/
@@ -42,6 +55,7 @@ alludium-packs/
 
 Within a pack:
 
+- The root `.claude-plugin/marketplace.json` lists the Claude Code-installable plugins in this repository.
 - `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` describe the plugin for agent tooling.
 - `skills/` contains public skills in Markdown.
 - `agents/` is reserved for future plugin-native Claude/Codex agent definitions.
