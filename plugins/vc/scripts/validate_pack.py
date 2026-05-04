@@ -36,6 +36,11 @@ PUBLIC_READINESS_PATTERNS = [
         r"craft-ai-agents",
     ]
 ]
+EXPECTED_WORKSPACE_VARIABLE_BINDINGS = {
+    "fundStage": "vc.fundStage",
+    "fundSectors": "vc.fundSectors",
+    "fundGeography": "vc.fundGeography",
+}
 
 
 def fail(message: str) -> None:
@@ -132,6 +137,37 @@ def validate_templates(manifest: dict[str, Any], skill_ids: set[str]) -> None:
             fail(f"Agent template must be an object: {template_path.relative_to(ROOT)}")
         if template.get("id") != template_id:
             fail(f"Agent template file/id mismatch for {template_id}")
+        if not isinstance(template.get("platform_managed"), bool):
+            fail(f"Agent template {template_id} must explicitly declare platform_managed")
+
+        prompt = template.get("prompt") or {}
+        variables = prompt.get("variables") or []
+        if variables and not isinstance(variables, list):
+            fail(f"Agent template {template_id} prompt.variables must be a list")
+        for variable in variables:
+            if not isinstance(variable, dict):
+                fail(f"Agent template {template_id} prompt variable entries must be objects")
+            key = variable.get("key")
+            binding = variable.get("binding")
+            expected_path = EXPECTED_WORKSPACE_VARIABLE_BINDINGS.get(key)
+            if expected_path is None:
+                if binding is not None:
+                    fail(
+                        f"Template {template_id} variable {key} has unexpected workspace binding"
+                    )
+                continue
+            if not isinstance(binding, dict):
+                fail(f"Template {template_id} variable {key} must bind to {expected_path}")
+            if binding.get("source") != "workspace.variable":
+                fail(f"Template {template_id} variable {key} binding source must be workspace.variable")
+            if binding.get("path") != expected_path:
+                fail(f"Template {template_id} variable {key} binding path must be {expected_path}")
+            if binding.get("fallback") != "Not configured":
+                fail(f"Template {template_id} variable {key} binding fallback must be Not configured")
+            if binding.get("overridePolicy") != "workspace_admin_only":
+                fail(
+                    f"Template {template_id} variable {key} binding overridePolicy must be workspace_admin_only"
+                )
 
         for skill in template.get("skills", []):
             external_id = skill.get("externalId") if isinstance(skill, dict) else None
