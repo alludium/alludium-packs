@@ -114,18 +114,33 @@ prompt:
       description: "Target investment stage."
       value: "Not configured"
       render: "text"
+      binding:
+        source: "workspace.variable"
+        path: "vc.fundStage"
+        fallback: "Not configured"
+        overridePolicy: "workspace_admin_only"
     - key: "fundSectors"
       label: "Fund Sector Focus"
       type: "string"
       description: "Target sectors or verticals."
       value: "Not configured"
       render: "textarea"
+      binding:
+        source: "workspace.variable"
+        path: "vc.fundSectors"
+        fallback: "Not configured"
+        overridePolicy: "workspace_admin_only"
     - key: "fundGeography"
       label: "Fund Geography Focus"
       type: "string"
       description: "Target investment geography."
       value: "Not configured"
       render: "text"
+      binding:
+        source: "workspace.variable"
+        path: "vc.fundGeography"
+        fallback: "Not configured"
+        overridePolicy: "workspace_admin_only"
 
 mcpServers:
   alludium-platform:
