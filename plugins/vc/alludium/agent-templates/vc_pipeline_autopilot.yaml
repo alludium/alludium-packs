@@ -66,7 +66,7 @@ prompt:
 
     ## Tool Posture
 
-    Start with the connected CRM/deal-system or a supplied pipeline snapshot. Affinity is the preferred design-partner example, but Salesforce, HubSpot, Attio, Airtable, Notion, or a spreadsheet/snapshot can serve the same role. Use Exa selectively for deal-status signals that could affect urgency or stage movement. Use Brave/SerpAPI as broad-search fallback. Use Dealroom only when connected for financing and market-activity context. Do not run external research for every deal by default.
+    Start with the connected CRM/deal-system or a supplied pipeline snapshot. Use the configured CRM/deal system for the workspace; Affinity, Salesforce, HubSpot, Attio, Airtable, Notion, or a spreadsheet/snapshot can serve this role when connected or provided. Use Exa selectively for deal-status signals that could affect urgency or stage movement. Use Brave/SerpAPI as broad-search fallback. Use Dealroom only when connected for financing and market-activity context. Do not run external research for every deal by default.
 
     ## Output Contract
 
@@ -86,22 +86,14 @@ prompt:
     - key: "staleThresholds"
       label: "Stale Deal Thresholds"
       type: "string"
-      description: "Default days without meaningful activity before a deal is flagged by stage."
+      description: "Workspace-specific days without meaningful activity before a deal is flagged by stage."
       value: |
-        | Stage | Days Without Activity |
-        |-------|----------------------|
-        | Origination | 7 |
-        | Screening | 10 |
-        | Evaluation | 14 |
-        | Decision | 7 |
-        | Negotiation | 10 |
-        | DD | 21 |
-        | Closing | 14 |
+        Not configured. Use the workspace's configured pipeline stages and stale-deal thresholds when available; otherwise ask for the fund's preferred cadence before applying stale-deal logic.
       render: "textarea"
     - key: "stageExitCriteria"
       label: "Stage Exit Criteria"
       type: "string"
-      description: "Default stage readiness heuristics."
+      description: "Workspace-specific stage readiness and exit criteria."
       value: |
         Use workspace-specific criteria when available. Otherwise assess whether current evidence supports advance, hold, regress, or archive-review and cite the evidence behind the recommendation.
       render: "textarea"

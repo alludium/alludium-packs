@@ -55,19 +55,14 @@ evidence that supports it and a clear before/after comparison.
 
 ## Pipeline Stages
 
-Use this as the platform's default working stage model for VC pipeline hygiene.
-Treat it as an operating convention, not immutable source doctrine:
-
-1. **Origination** — deal sourced, initial contact made
-2. **Screening** — inbound triaged, 10-Factor screen underway or complete
-3. **Evaluation** — diligence in progress, artifacts being produced
-4. **Decision** — IC review, memo circulated, decision pending
-5. **Negotiation** — term sheet discussion, structuring
-6. **DD (Due Diligence)** — formal legal/financial/technical DD
-7. **Closing** — documents executing, funds transferring
+Use the workspace's configured CRM/deal-system stage model. Do not recast deals into a
+fixed platform taxonomy unless the user explicitly provides that mapping. If no stage
+model is configured or supplied, ask for the fund's current stage names, stage order, and
+exit criteria before assessing stage readiness.
 
 Every active deal in the connected CRM/deal system or supplied pipeline snapshot should
-sit in exactly one stage. Movement between stages requires evidence documented below.
+sit in exactly one configured stage. Movement between stages requires evidence documented
+below.
 
 ## Minimum Inputs
 
@@ -100,16 +95,17 @@ against the requirements for the current and adjacent stages.
 
 ### Stage Advancement Criteria
 
-A deal should advance when evidence satisfies the exit criteria for its current stage:
+A deal should advance when evidence satisfies the workspace-configured exit criteria for
+its current stage. If exit criteria are not configured, ask for them before recommending
+stage movement. If the user asks for a provisional assessment, label the criteria as
+assumptions and base them on supplied fund policy, recent team decisions, CRM notes, and
+deal artifacts.
 
-| From        | To          | Required Evidence                                                                |
-| ----------- | ----------- | -------------------------------------------------------------------------------- |
-| Origination | Screening   | Intro received and classified, founder materials on file                         |
-| Screening   | Evaluation  | 10-Factor evaluation complete, key unknowns documented, team decision to proceed |
-| Evaluation  | Decision    | Diligence pack substantially complete, key unknowns documented, IC memo drafted  |
-| Decision    | Negotiation | IC decision to proceed, terms discussed, principal assigned                      |
-| Negotiation | DD          | Term sheet signed or agreed in principle                                         |
-| DD          | Closing     | DD complete, no blocking findings, legal docs in final form                      |
+When reporting stage recommendations, preserve the workspace's stage names exactly:
+
+| From                       | To                      | Required Evidence                              |
+| -------------------------- | ----------------------- | ---------------------------------------------- |
+| [Current configured stage] | [Next configured stage] | [Evidence satisfying configured exit criteria] |
 
 ### Hold Signals
 
@@ -250,18 +246,11 @@ different periods of inactivity.
 
 ### Stale Thresholds by Stage
 
-These are reasonable default operating thresholds for the platform. They should be
-calibrated from a firm's historical pipeline data when that data is available:
-
-| Stage       | Days Without Activity | Rationale                                                                        |
-| ----------- | --------------------- | -------------------------------------------------------------------------------- |
-| Origination | 7                     | Early deals lose momentum fast; if no response in a week, nudge or deprioritize  |
-| Screening   | 10                    | Materials should arrive quickly; 10 days suggests founder disengagement          |
-| Evaluation  | 14                    | Diligence has multiple workstreams; 2 weeks without any movement is a signal     |
-| Decision    | 7                     | IC-ready deals should move to decision quickly; delays suggest cold feet         |
-| Negotiation | 10                    | Active negotiation should have regular touchpoints                               |
-| DD          | 21                    | Formal DD has longer cycles (legal review, data rooms); 3 weeks is the threshold |
-| Closing     | 14                    | Closing should be mechanical; 2 weeks of silence is unusual                      |
+Use the workspace's configured stage names and stale-deal thresholds when available.
+If no thresholds are configured or supplied, ask for the firm's preferred pipeline cadence
+before applying stale-deal logic. If the user asks for a provisional pass anyway, label
+thresholds as assumptions and tie them to the fund's mandate, stage model, deal velocity,
+and current operating cadence rather than treating any default table as policy.
 
 ### Stale Deal Output
 
@@ -296,7 +285,7 @@ for Monday pipeline meetings.
 
 ## Pipeline Summary
 - Active deals: [N]
-- Stage distribution: Origination [N] | Screening [N] | Evaluation [N] | Decision [N] | Negotiation [N] | DD [N] | Closing [N]
+- Stage distribution: [Configured Stage A] [N] | [Configured Stage B] [N] | [Configured Stage C] [N]
 - Deals moved this week: [N]
 - Stale deals: [N] ([N] very stale, [N] likely dead)
 - CRM updates suggested: [N]
@@ -307,7 +296,7 @@ for Monday pipeline meetings.
 
 | Deal | From | To | Key Evidence |
 |------|------|----|-------------|
-| [Company] | Screening | Evaluation | 10-Factor complete, score 3.8/5 |
+| [Company] | [Current configured stage] | [Recommended configured stage] | [Evidence satisfying configured exit criteria] |
 
 ## Deals Needing Attention
 
@@ -341,17 +330,17 @@ missing CRM fields, pipeline concentration risk, etc.]
 
 Use tools to gather evidence. Do not ask the user for information that tools can provide.
 
-| Tool / Source                  | When to Use                                                                                                                                                                                                                                                        |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| CRM/deal system                | Pipeline snapshot, stages, owners, activity dates, notes, and field values. Affinity is the preferred design-partner example; Salesforce, HubSpot, Attio, Airtable, Notion, or a supplied spreadsheet/snapshot can serve the same role when connected or provided. |
-| Exa                            | Company news that affects deal status — competitor funding, leadership changes, regulatory shifts, and product launches.                                                                                                                                           |
-| Brave / SerpAPI                | Public-search fallback for current news, source triangulation, and hard-to-find public signals.                                                                                                                                                                    |
-| Dealroom / private-market data | Competitive financing context, sector funding trends, comparable financings, and market timing signals when connected.                                                                                                                                             |
+| Tool / Source                  | When to Use                                                                                                                                                                                                                                                                |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CRM/deal system                | Pipeline snapshot, stages, owners, activity dates, notes, and field values. Use the workspace's configured CRM/deal system; Affinity, Salesforce, HubSpot, Attio, Airtable, Notion, or a supplied spreadsheet/snapshot can serve the same role when connected or provided. |
+| Exa                            | Company news that affects deal status — competitor funding, leadership changes, regulatory shifts, and product launches.                                                                                                                                                   |
+| Brave / SerpAPI                | Public-search fallback for current news, source triangulation, and hard-to-find public signals.                                                                                                                                                                            |
+| Dealroom / private-market data | Competitive financing context, sector funding trends, comparable financings, and market timing signals when connected.                                                                                                                                                     |
 
 ### Tool Sequencing
 
 1. Always start with the CRM/deal-system snapshot or supplied pipeline snapshot to get the current pipeline state.
-2. Run Exa, Brave, or SerpAPI searches for deals in Evaluation or later stages where external signals matter.
+2. Run Exa, Brave, or SerpAPI searches for deals in configured later-stage, high-priority, or decision-sensitive states where external signals matter.
 3. Use Dealroom when financing or market activity context would change a stage recommendation or urgency.
 
 Do not run Exa or Dealroom checks for every deal — focus on deals where external context
@@ -374,9 +363,10 @@ structured financing context was not checked.
 - Do not fabricate activity dates or invent evidence.
 - If CRM/deal-system data is incomplete or access is limited, say so explicitly rather than
   working from partial data without disclosure.
-- Stale thresholds are defaults. If the firm has customized thresholds, use those instead.
-- Do not recommend archiving deals in Negotiation or later stages without flagging the
-  seniority of the decision (partner-level).
+- Stale thresholds must come from the workspace, supplied fund policy, or clearly labeled
+  assumptions. Do not treat any platform-default cadence as fund policy.
+- Do not recommend archiving deals in configured late-stage, high-priority, or
+  decision-sensitive states without flagging the seniority of the decision.
 
 ---
 
@@ -384,7 +374,7 @@ structured financing context was not checked.
 
 This skill works well with:
 
-- `ten-factor-evaluation` — screening scores feed stage assessment at the Screening stage
+- `ten-factor-evaluation` — screening scores can feed stage assessment where the workspace's stage model uses a screening-style step
 - `meeting-prep-and-summary` — meeting outputs are primary evidence for stage moves and CRM patches
 - `company-research-and-enrichment` — enrichment data fills CRM gaps and informs next steps
 - `vc-task-and-next-step-generation` — use when pipeline, meeting, IC, diligence, or

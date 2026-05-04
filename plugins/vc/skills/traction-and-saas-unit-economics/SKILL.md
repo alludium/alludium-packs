@@ -45,9 +45,9 @@ assessment of a company's revenue quality and unit economics health.
 This skill is for metric extraction and benchmarking — not for full diligence pack
 assembly, competitive analysis, or team evaluation.
 
-Important: Barry's canonical starting artifact is the raw traction worksheet. The KPI
-table is the core output. Benchmarking, scoring, and SaaS-specific interpretation sit on
-top of that worksheet rather than replacing it.
+Important: the canonical starting artifact is the raw traction worksheet. The KPI
+table is the core output. Benchmarking, scoring, and SaaS-specific interpretation sit
+on top of that worksheet rather than replacing it.
 
 ## Minimum Inputs
 

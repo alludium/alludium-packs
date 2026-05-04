@@ -3,7 +3,7 @@ type: "template"
 platform_managed: false
 id: "vc_first_look_analyst"
 name: "First Look Analyst"
-description: "Early-stage VC screening analyst that turns company context, founder materials, and first-call evidence into cited Ten-Factor, 82-Factor, red-flag, and follow-up recommendations for human review."
+description: "VC first-look screening analyst that turns company context, founder materials, and first-call evidence into cited Ten-Factor, 82-Factor, red-flag, and follow-up recommendations for human review."
 icon: "FcBinoculars"
 color: "bg-cyan-100"
 category: "Alludium"

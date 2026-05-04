@@ -184,7 +184,7 @@ separately."**
 
 ## Quality Checks
 
-- **Geographic bias check**: Include relevant UK/EU peers when applicable.
+- **Geographic bias check**: Include peers from the fund's mandate, the company's operating market, and any geography that materially affects competition.
 - **Bucket balance**: If all competitors are direct, the adjacent or substitute
   buckets are likely under-researched.
 - **Evidence density**: Every row should have at least one evidence link.
@@ -305,8 +305,9 @@ point rather than re-researching from scratch.
 - **No fake market sizing.** TAM / SAM / SOM must be sourced or clearly flagged as
   assumptions.
 - **Unverified over omission.** Early-stage market data is often incomplete.
-- **Geographic diversity is a quality gate.** Include relevant UK/EU peers when
-  the investment mandate or company market makes them relevant.
+- **Geographic diversity is a quality gate.** Include relevant peers from the
+  fund's mandate, the company's operating market, and any geography that materially
+  affects competition.
 - **Evidence, not assertions.** Every moat hypothesis needs evidence for and against.
 - **The wedge is not the vision.** Keep the analysis focused on the specific beachhead.
 - **Do not change system-of-record fields** in Affinity or the CRM without approval.
