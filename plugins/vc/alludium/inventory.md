@@ -1,9 +1,9 @@
 # Alludium VC Inventory
 
-**Version**: 0.2.0
+**Version**: 0.2.1
 **Status**: Draft task-template expansion
 
-This inventory describes the current public VC plugin/pack seed plus the draft task-template expansion. Version `0.1.0` contains VC skills, Alludium runtime agent templates, public-safe MCP definitions, and Alludium MCP recommendations. Version `0.2.0` adds VC task-definition templates as the next pack surface.
+This inventory describes the current public VC plugin/pack seed plus the draft task-template expansion. Version `0.1.0` contains VC skills, Alludium runtime agent templates, public-safe MCP definitions, and Alludium MCP recommendations. Version `0.2.1` adds VC task-definition templates as the next pack surface and declares the platform capability/project-type dependencies required to ingest them safely.
 
 ---
 
@@ -98,6 +98,8 @@ Review notes:
 
 - Task templates remain unavailable to the platform until the paired platform PR teaches external pack ingest to stage and apply this surface.
 - The task-template catalog preserves the current platform `vc-workflows` pack metadata, vertical key, template IDs, and template versions.
+- The task-template surface requires platform capability `external-task-definition-template-ingest`.
+- All task templates advertise `vc_deal_room` as a supported project type; that project type is currently declared as a platform-local dependency, not as an included pack surface.
 
 ---
 
@@ -137,7 +139,7 @@ Review notes:
 
 Task definitions:
 
-- included in draft `v0.2.0`
+- included in draft `v0.2.1`
 - path: `alludium/task-definition-templates/`
 
 Project types:
