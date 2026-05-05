@@ -4,7 +4,7 @@ Public VC workflow plugin and pack seed for [Alludium](https://www.alludium.ai).
 
 Alludium VC packages reusable venture capital workflows for sourcing, screening, diligence, investment committee preparation, closing, and portfolio onboarding. It is the first bundle inside the broader `alludium-packs` catalog, not a standalone VC-only repository.
 
-The published `v0.1.0` release contains skills, Alludium runtime agent templates, MCP definitions, and Alludium MCP mapping guidance. The current draft `v0.2.1` pack surface adds VC task-definition templates for the paired platform ingest work.
+The published `v0.1.0` release contains skills, Alludium runtime agent templates, MCP definitions, and Alludium MCP mapping guidance. The current draft `v0.2.2` pack surface adds VC task-definition templates for the paired platform ingest work and advertises both the canonical `venture_capital` vertical key and the legacy `vc` alias.
 
 The current draft pack surface contains:
 
@@ -19,15 +19,15 @@ Project type definitions remain intentionally deferred. The VC task-definition t
 
 ## Contents
 
-| Surface | Path | Notes |
-| --- | --- | --- |
-| Skills | `skills/` | 23 public workflow skills used by the VC agent templates |
-| Agent templates | `alludium/agent-templates/` | 8 Alludium runtime templates using the `vc_*` baseline |
-| Task definition templates | `alludium/task-definition-templates/` | 26 VC workflow task templates and catalog metadata |
-| Pack manifest | `alludium/manifest.yaml` | Alludium-specific inventory, boundaries, and future pack surfaces |
-| Plugin MCP manifest | `.mcp.json` | Public-safe MCP definitions for VC research, CRM, meeting, and market-intelligence tools |
-| MCP platform mapping | `alludium/mcp-recommendations.yaml` | Alludium mapping guidance for platform-managed or workspace-managed connections |
-| Validation | `scripts/validate_pack.py` | Local and CI validation for manifests, skills, references, and obvious secrets |
+| Surface                   | Path                                  | Notes                                                                                    |
+| ------------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Skills                    | `skills/`                             | 23 public workflow skills used by the VC agent templates                                 |
+| Agent templates           | `alludium/agent-templates/`           | 8 Alludium runtime templates using the `vc_*` baseline                                   |
+| Task definition templates | `alludium/task-definition-templates/` | 26 VC workflow task templates and catalog metadata                                       |
+| Pack manifest             | `alludium/manifest.yaml`              | Alludium-specific inventory, boundaries, and future pack surfaces                        |
+| Plugin MCP manifest       | `.mcp.json`                           | Public-safe MCP definitions for VC research, CRM, meeting, and market-intelligence tools |
+| MCP platform mapping      | `alludium/mcp-recommendations.yaml`   | Alludium mapping guidance for platform-managed or workspace-managed connections          |
+| Validation                | `scripts/validate_pack.py`            | Local and CI validation for manifests, skills, references, and obvious secrets           |
 
 ## Repository Shape
 
