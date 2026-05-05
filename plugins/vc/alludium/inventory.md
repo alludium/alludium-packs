@@ -1,9 +1,9 @@
 # Alludium VC Inventory
 
-**Version**: 0.1.0
-**Status**: Phase 1 candidate
+**Version**: 0.2.0
+**Status**: Draft task-template expansion
 
-This inventory describes the current public VC plugin/pack seed. It intentionally includes only the surfaces ready for first extraction.
+This inventory describes the current public VC plugin/pack seed plus the draft task-template expansion. Version `0.1.0` contains VC skills, Alludium runtime agent templates, public-safe MCP definitions, and Alludium MCP recommendations. Version `0.2.0` adds VC task-definition templates as the next pack surface.
 
 ---
 
@@ -63,6 +63,44 @@ Review notes:
 
 ---
 
+## Included Task Definition Templates
+
+These templates are included because the platform VC workspace pack currently references them as installable VC workflow templates.
+
+- `vc.create_deal_room`
+- `vc.create_ic_memo`
+- `vc.evaluate_investment_opportunity`
+- `vc.generate_82_factor_questions`
+- `vc.manage_closing_checklist`
+- `vc.prepare_deal_flow_agenda`
+- `vc.prepare_ic_agenda`
+- `vc.prepare_initial_call`
+- `vc.prepare_lead_gen_packet`
+- `vc.prepare_partner_review_pack`
+- `vc.prepare_portfolio_onboarding`
+- `vc.prepare_team_review_pack`
+- `vc.record_ic_decision`
+- `vc.request_founder_materials`
+- `vc.review_ic_memo`
+- `vc.review_term_sheet`
+- `vc.run_commercial_dd`
+- `vc.run_financial_dd`
+- `vc.run_follow_up_evaluation`
+- `vc.run_founder_evaluation`
+- `vc.run_technical_dd`
+- `vc.run_ten_factor_screen`
+- `vc.screen_inbound_opportunity`
+- `vc.source_thesis_targets`
+- `vc.summarize_initial_call`
+- `vc.verify_conditions_precedent`
+
+Review notes:
+
+- Task templates remain unavailable to the platform until the paired platform PR teaches external pack ingest to stage and apply this surface.
+- The task-template catalog preserves the current platform `vc-workflows` pack metadata, vertical key, template IDs, and template versions.
+
+---
+
 ## MCP Definitions And Platform Mapping
 
 The first scaffold includes public-safe plugin MCP definitions in `.mcp.json` and Alludium platform mapping guidance in `alludium/mcp-recommendations.yaml`.
@@ -99,8 +137,8 @@ Review notes:
 
 Task definitions:
 
-- deferred until task-definition source loading and pack activation are stable
-- expected future path: `alludium/task-definition-templates/`
+- included in draft `v0.2.0`
+- path: `alludium/task-definition-templates/`
 
 Project types:
 

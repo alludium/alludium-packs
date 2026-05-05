@@ -1,0 +1,218 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.source_thesis_targets
+version: 1.0.2
+title: Source Thesis Targets
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - discovery
+  - sourcing
+definition:
+  name: Source Thesis Targets
+  slug: source-thesis-targets
+  description: Source Thesis Targets for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: lead_gen
+    taskFamily: pipeline
+    requiredSkills:
+      - company-research-and-enrichment
+      - founder-outreach-and-intro-paths
+      - citation-enforcement
+    plannedRequiredSkills:
+      - company-research-and-enrichment
+      - founder-outreach-and-intro-paths
+      - citation-enforcement
+    plannedRecommendedAgentTemplate: vc_origination_scout
+    recommendedAgentTemplate: vc_origination_scout
+    supportedProjectTypes:
+      - vc_deal_room
+    sourceAnchors:
+      - source: investment-management-process-slides
+        anchor: slide-8
+        note: Dual pipeline
+      - source: investment-management-process-slides
+        anchor: slide-9
+        note: Screening model
+      - source: investment-management-process-slides
+        anchor: slide-10
+        note: Discovery AI map
+      - source: investment-management-process-slides
+        anchor: slide-37
+        note: Benchmark references
+      - source: investment-management-process-slides
+        anchor: slide-38
+        note: Process summary
+      - source: atomic-agents
+        anchor: worksheet-atomic-agents
+        note: Spreadsheet rows 17-25
+    instructions:
+      executionInstructions: Research thesis-aligned companies for the requested thesis area, geography, stage focus, and market filters; return target companies, fit rationale, source links, warm intro paths, and confidence notes. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it.
+      missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
+      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
+      completionCriteria:
+        - Required input gaps are resolved or listed as assumptions/open questions.
+        - Material conclusions include source links or are labeled as human judgment calls.
+        - Next actions identify owner, dependency, and required human approval point.
+    humanDecisionPoints:
+      - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
+      - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+    orchestration:
+      parentTaskPolicy: none
+      suggestedChildTasks: []
+    workspaceConfiguredMethodologySkills:
+      - skill: market-map-building
+        note: Use only when the workspace explicitly configures this market mapping method.
+fields:
+  input:
+    - key: thesis_area
+      name: Thesis Area
+      fieldType: string
+      required: true
+      position: 0
+      config: {}
+    - key: geography
+      name: Geography
+      fieldType: string
+      required: true
+      position: 1
+      config: {}
+    - key: stage_focus
+      name: Stage Focus
+      fieldType: string
+      required: false
+      position: 2
+      config: {}
+    - key: market_filters
+      name: Market Filters
+      fieldType: json
+      required: false
+      position: 3
+      config: {}
+  context:
+    - key: deal_room_url
+      name: Deal Room Url
+      fieldType: string
+      required: false
+      position: 0
+      config: {}
+    - key: prior_task_outputs
+      name: Prior Task Outputs
+      fieldType: json
+      required: false
+      position: 1
+      config: {}
+    - key: source_artifacts
+      name: Source Artifacts
+      fieldType: json
+      required: false
+      position: 2
+      config: {}
+    - key: open_questions
+      name: Open Questions
+      fieldType: json
+      required: false
+      position: 3
+      config: {}
+  output:
+    - key: target_company_list
+      name: Target Company List
+      fieldType: json
+      required: false
+      position: 0
+      config: {}
+    - key: fit_rationale
+      name: Fit Rationale
+      fieldType: string
+      required: false
+      position: 1
+      config: {}
+    - key: source_links
+      name: Source Links
+      fieldType: string
+      required: false
+      position: 2
+      config: {}
+    - key: warm_intro_paths
+      name: Warm Intro Paths
+      fieldType: string
+      required: false
+      position: 3
+      config: {}
+    - key: confidence_notes
+      name: Confidence Notes
+      fieldType: richtext
+      required: false
+      position: 4
+      config:
+        rows: 5
+    - key: summary
+      name: Summary
+      fieldType: richtext
+      required: false
+      position: 5
+      config:
+        rows: 5
+    - key: recommendation
+      name: Recommendation
+      fieldType: string
+      required: false
+      position: 6
+      config: {}
+    - key: assumptions
+      name: Assumptions
+      fieldType: string
+      required: false
+      position: 7
+      config: {}
+    - key: evidence_quality
+      name: Evidence Quality
+      fieldType: json
+      required: false
+      position: 8
+      config: {}
+    - key: open_questions
+      name: Open Questions
+      fieldType: json
+      required: false
+      position: 9
+      config: {}
+    - key: risks
+      name: Risks
+      fieldType: json
+      required: false
+      position: 10
+      config: {}
+    - key: human_decision_points
+      name: Human Decision Points
+      fieldType: string
+      required: false
+      position: 11
+      config: {}
+    - key: next_actions
+      name: Next Actions
+      fieldType: json
+      required: false
+      position: 12
+      config: {}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc-workflows
+      taskKind: source_thesis_targets
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    maxAgentTurnsPerPass: 6
+    requiresHumanConfirmationToComplete: true
+    preferredMode: research
+    preferredAgentType: vc_origination_scout
+ui:
+  renderer: generic
+  surfaceKey: null
+  frameRef: null

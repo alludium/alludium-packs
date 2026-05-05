@@ -41,6 +41,12 @@ EXPECTED_WORKSPACE_VARIABLE_BINDINGS = {
     "fundSectors": "vc.fundSectors",
     "fundGeography": "vc.fundGeography",
 }
+TASK_TEMPLATE_REQUIRED_SKILL_REFERENCE_FIELDS = ["requiredSkills", "plannedRequiredSkills"]
+TASK_TEMPLATE_AGENT_TEMPLATE_REFERENCE_FIELDS = [
+    "recommendedAgentTemplate",
+    "plannedRecommendedAgentTemplate",
+    "preferredAgentType",
+]
 
 
 def fail(message: str) -> None:
@@ -177,6 +183,205 @@ def validate_templates(manifest: dict[str, Any], skill_ids: set[str]) -> None:
                 fail(f"Template {template_id} references missing skill {external_id}")
 
 
+def require_string_list(value: Any, context: str) -> list[str]:
+    if value is None:
+        return []
+    if not isinstance(value, list) or not all(isinstance(item, str) for item in value):
+        fail(f"{context} must be a list of strings")
+    return value
+
+
+def normalize_workspace_methodology_skills(value: Any, context: str) -> list[str]:
+    if value is None:
+        return []
+    if not isinstance(value, list):
+        fail(f"{context} must be a list")
+
+    skills: list[str] = []
+    for item in value:
+        if isinstance(item, str):
+            skills.append(item)
+            continue
+        if isinstance(item, dict) and isinstance(item.get("skill"), str):
+            skills.append(item["skill"])
+            continue
+        fail(f"{context} entries must be strings or objects with a skill string")
+    return skills
+
+
+def validate_task_template_reference_list(
+    template_id: str,
+    field_name: str,
+    values: list[str],
+    allowed_ids: set[str],
+    allowed_label: str,
+) -> None:
+    missing = sorted(set(values) - allowed_ids)
+    if missing:
+        fail(
+            f"Task template {template_id} {field_name} references missing {allowed_label}: {missing}"
+        )
+
+
+def validate_task_template_file(
+    path: Path,
+    expected_pack: dict[str, Any],
+    skill_ids: set[str],
+    agent_template_ids: set[str],
+) -> str:
+    template = read_yaml(path)
+    relative_path = path.relative_to(ROOT)
+    if not isinstance(template, dict):
+        fail(f"Task definition template must be an object: {relative_path}")
+    if template.get("kind") != "task-definition-template":
+        fail(f"{relative_path} is not a task-definition-template")
+
+    template_id = template.get("id")
+    if not isinstance(template_id, str) or not template_id:
+        fail(f"{relative_path} is missing id")
+    if not isinstance(template.get("version"), str) or not template.get("version"):
+        fail(f"Task template {template_id} is missing version")
+
+    definition = template.get("definition")
+    if not isinstance(definition, dict):
+        fail(f"Task template {template_id} definition must be an object")
+    if not isinstance(definition.get("name"), str) or not definition.get("name"):
+        fail(f"Task template {template_id} is missing definition.name")
+    if not isinstance(definition.get("slug"), str) or not definition.get("slug"):
+        fail(f"Task template {template_id} is missing definition.slug")
+
+    definition_json = definition.get("definitionJson")
+    if definition_json is None:
+        definition_json = {}
+    if not isinstance(definition_json, dict):
+        fail(f"Task template {template_id} definition.definitionJson must be an object")
+
+    for field_name in TASK_TEMPLATE_REQUIRED_SKILL_REFERENCE_FIELDS:
+        values = require_string_list(
+            definition_json.get(field_name),
+            f"Task template {template_id} definitionJson.{field_name}",
+        )
+        validate_task_template_reference_list(
+            template_id,
+            field_name,
+            values,
+            skill_ids,
+            "skills",
+        )
+    validate_task_template_reference_list(
+        template_id,
+        "workspaceConfiguredMethodologySkills",
+        normalize_workspace_methodology_skills(
+            definition_json.get("workspaceConfiguredMethodologySkills"),
+            f"Task template {template_id} definitionJson.workspaceConfiguredMethodologySkills",
+        ),
+        skill_ids,
+        "skills",
+    )
+
+    for field_name in TASK_TEMPLATE_AGENT_TEMPLATE_REFERENCE_FIELDS:
+        value = definition_json.get(field_name)
+        if value is None:
+            runtime = template.get("runtime") or {}
+            if isinstance(runtime, dict):
+                execution_profile = runtime.get("executionProfile") or {}
+                if isinstance(execution_profile, dict):
+                    value = execution_profile.get(field_name)
+        if value is None:
+            continue
+        if not isinstance(value, str):
+            fail(f"Task template {template_id} {field_name} must be a string")
+        if value not in agent_template_ids:
+            fail(f"Task template {template_id} {field_name} references missing agent template {value}")
+
+    pack_vertical_keys = expected_pack.get("verticalKeys") or []
+    if expected_pack.get("availability") == "vertical" and not pack_vertical_keys:
+        fail(f"Task template pack {expected_pack.get('id')} must declare verticalKeys")
+
+    return template_id
+
+
+def validate_task_definition_templates(
+    manifest: dict[str, Any],
+    skill_ids: set[str],
+    agent_template_ids: set[str],
+) -> None:
+    surface = manifest["surfaces"].get("taskDefinitionTemplates")
+    if not isinstance(surface, dict):
+        fail("Manifest must declare surfaces.taskDefinitionTemplates")
+    surface_path = surface.get("path")
+    if not isinstance(surface_path, str) or not surface_path:
+        fail("surfaces.taskDefinitionTemplates.path must be declared")
+    manifest_template_ids = surface.get("ids")
+    if not isinstance(manifest_template_ids, list) or not all(
+        isinstance(item, str) for item in manifest_template_ids
+    ):
+        fail("surfaces.taskDefinitionTemplates.ids must be a list of strings")
+    if len(manifest_template_ids) != len(set(manifest_template_ids)):
+        fail("Duplicate task-definition-template IDs in alludium/manifest.yaml")
+
+    task_root = ROOT / surface_path
+    resolved_task_root = task_root.resolve()
+    catalog_path = task_root / "catalog.v1.json"
+    if not catalog_path.exists():
+        fail(f"Missing task definition template catalog: {catalog_path.relative_to(ROOT)}")
+    catalog = read_json(catalog_path)
+    if not isinstance(catalog, dict):
+        fail(f"{catalog_path.relative_to(ROOT)} must be an object")
+    if catalog.get("kind") != "task-definition-template-catalog":
+        fail(f"{catalog_path.relative_to(ROOT)} kind must be task-definition-template-catalog")
+
+    discovered_ids: list[str] = []
+    discovered_paths: set[Path] = set()
+    for pack in catalog.get("packs") or []:
+        if not isinstance(pack, dict):
+            fail("Task definition template catalog packs must be objects")
+        templates = pack.get("templates") or []
+        if not isinstance(templates, list):
+            fail(f"Task definition template catalog pack {pack.get('id')} templates must be a list")
+        for entry in templates:
+            relative_template_path = entry if isinstance(entry, str) else entry.get("path")
+            if not isinstance(relative_template_path, str) or not relative_template_path:
+                fail(f"Task definition template catalog pack {pack.get('id')} has an invalid entry")
+            template_path = task_root / relative_template_path
+            resolved_template_path = template_path.resolve()
+            try:
+                resolved_template_path.relative_to(resolved_task_root)
+            except ValueError:
+                fail(
+                    "Task definition template catalog path escapes task-template surface: "
+                    f"{relative_template_path}"
+                )
+            if not template_path.exists():
+                fail(f"Task definition template catalog references missing file {relative_template_path}")
+            discovered_paths.add(resolved_template_path)
+            discovered_ids.append(
+                validate_task_template_file(
+                    resolved_template_path,
+                    pack,
+                    skill_ids,
+                    agent_template_ids,
+                )
+            )
+
+    if len(discovered_ids) != len(set(discovered_ids)):
+        fail("Duplicate task-definition-template IDs in catalog files")
+    if set(discovered_ids) != set(manifest_template_ids):
+        fail(
+            "Manifest task-definition-template IDs do not match catalog files: "
+            f"manifest_only={sorted(set(manifest_template_ids) - set(discovered_ids))}, "
+            f"catalog_only={sorted(set(discovered_ids) - set(manifest_template_ids))}"
+        )
+
+    actual_yaml_paths = {path.resolve() for path in task_root.glob("**/*.yaml")}
+    extra_yaml_paths = actual_yaml_paths - discovered_paths
+    if extra_yaml_paths:
+        fail(
+            "Task definition template files present on disk but missing from catalog: "
+            f"{sorted(str(path.relative_to(task_root)) for path in extra_yaml_paths)}"
+        )
+
+
 def validate_mcp_definitions(manifest: dict[str, Any], recommendations: dict[str, Any]) -> None:
     mcp_manifest = read_json(ROOT / manifest["surfaces"]["mcpServers"]["path"])
     mcp_servers = mcp_manifest.get("mcpServers")
@@ -233,6 +438,8 @@ def validate_no_obvious_secrets() -> None:
     for path in ROOT.rglob("*"):
         if not path.is_file() or ".git" in path.parts:
             continue
+        if "__pycache__" in path.parts or path.suffix == ".pyc":
+            continue
         if path.suffix.lower() in {".png", ".jpg", ".jpeg", ".gif", ".svg"}:
             continue
         body = path.read_text(encoding="utf-8", errors="ignore")
@@ -244,6 +451,8 @@ def validate_no_obvious_secrets() -> None:
 def validate_no_public_readiness_leakage() -> None:
     for path in REPO_ROOT.rglob("*"):
         if not path.is_file() or ".git" in path.parts or path.resolve() == THIS_FILE:
+            continue
+        if "__pycache__" in path.parts or path.suffix == ".pyc":
             continue
         if path.suffix.lower() in {".png", ".jpg", ".jpeg", ".gif", ".svg"}:
             continue
@@ -266,6 +475,8 @@ def main() -> None:
 
     skill_ids = validate_skills(manifest)
     validate_templates(manifest, skill_ids)
+    agent_template_ids = set(manifest["surfaces"]["alludiumAgentTemplates"]["ids"])
+    validate_task_definition_templates(manifest, skill_ids, agent_template_ids)
     recommendations_path = manifest["surfaces"]["alludiumMcpRecommendations"]["path"]
     if not (ROOT / recommendations_path).exists():
         fail(f"Missing Alludium MCP recommendations file: {recommendations_path}")
@@ -279,7 +490,8 @@ def main() -> None:
     print(
         "Validated vc pack: "
         f"{len(skill_ids)} skills, "
-        f"{len(manifest['surfaces']['alludiumAgentTemplates']['ids'])} agent templates"
+        f"{len(manifest['surfaces']['alludiumAgentTemplates']['ids'])} agent templates, "
+        f"{len(manifest['surfaces']['taskDefinitionTemplates']['ids'])} task definition templates"
     )
 
 

@@ -1,0 +1,42 @@
+{
+  "apiVersion": "alludium/v1alpha1",
+  "generatedAt": "2026-05-05",
+  "kind": "task-definition-template-catalog",
+  "packs": [
+    {
+      "availability": "vertical",
+      "description": "Domain-specific templates for venture capital workflows.",
+      "id": "vc-workflows",
+      "templates": [
+        "vc-workflows/evaluate-investment-opportunity.yaml",
+        "vc-workflows/source-thesis-targets.yaml",
+        "vc-workflows/prepare-lead-gen-packet.yaml",
+        "vc-workflows/prepare-deal-flow-agenda.yaml",
+        "vc-workflows/screen-inbound-opportunity.yaml",
+        "vc-workflows/create-deal-room.yaml",
+        "vc-workflows/request-founder-materials.yaml",
+        "vc-workflows/prepare-initial-call.yaml",
+        "vc-workflows/summarize-initial-call.yaml",
+        "vc-workflows/run-ten-factor-screen.yaml",
+        "vc-workflows/run-follow-up-evaluation.yaml",
+        "vc-workflows/generate-82-factor-questions.yaml",
+        "vc-workflows/run-founder-evaluation.yaml",
+        "vc-workflows/prepare-team-review-pack.yaml",
+        "vc-workflows/prepare-partner-review-pack.yaml",
+        "vc-workflows/run-commercial-dd.yaml",
+        "vc-workflows/run-technical-dd.yaml",
+        "vc-workflows/run-financial-dd.yaml",
+        "vc-workflows/create-ic-memo.yaml",
+        "vc-workflows/review-ic-memo.yaml",
+        "vc-workflows/prepare-ic-agenda.yaml",
+        "vc-workflows/record-ic-decision.yaml",
+        "vc-workflows/review-term-sheet.yaml",
+        "vc-workflows/manage-closing-checklist.yaml",
+        "vc-workflows/verify-conditions-precedent.yaml",
+        "vc-workflows/prepare-portfolio-onboarding.yaml"
+      ],
+      "title": "VC Workflows",
+      "verticalKeys": ["vc"]
+    }
+  ]
+}

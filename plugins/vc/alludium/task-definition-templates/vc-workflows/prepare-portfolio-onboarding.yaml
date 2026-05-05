@@ -1,0 +1,225 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.prepare_portfolio_onboarding
+version: 1.0.1
+title: Prepare Portfolio Onboarding
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - portfolio
+  - onboarding
+definition:
+  name: Prepare Portfolio Onboarding
+  slug: prepare-portfolio-onboarding
+  description: Prepare Portfolio Onboarding for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: portfolio_onboarding
+    taskFamily: onboarding
+    requiredSkills:
+      - citation-enforcement
+    plannedRequiredSkills:
+      - portfolio-onboarding-and-100-day-plan
+      - citation-enforcement
+    plannedRecommendedAgentTemplate: vc_legal_compliance_desk
+    recommendedAgentTemplate: vc_legal_compliance_desk
+    supportedProjectTypes:
+      - vc_deal_room
+    sourceAnchors:
+      - source: investment-management-process-slides
+        anchor: slide-31
+        note: Closing process
+      - source: investment-management-process-slides
+        anchor: slide-32
+        note: Term sheet/legal execution
+      - source: investment-management-process-slides
+        anchor: slide-33
+        note: Closing AI map
+      - source: investment-management-process-slides
+        anchor: slide-41
+        note: Historic/post-investment risks
+    instructions:
+      executionInstructions: Prepare the portfolio handoff with board setup notes, reporting cadence, 100-day plan, milestones, support request intake, and owner assignments. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval.
+      missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
+      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
+      completionCriteria:
+        - Required input gaps are resolved or listed as assumptions/open questions.
+        - Material conclusions include source links or are labeled as human judgment calls.
+        - Next actions identify owner, dependency, and required human approval point.
+    humanDecisionPoints:
+      - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
+      - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+    orchestration:
+      parentTaskPolicy: none
+      suggestedChildTasks: []
+fields:
+  input:
+    - key: closing_summary
+      name: Closing Summary
+      fieldType: richtext
+      required: true
+      position: 0
+      config:
+        rows: 5
+    - key: investment_terms
+      name: Investment Terms
+      fieldType: json
+      required: true
+      position: 1
+      config: {}
+    - key: board_rep
+      name: Board Rep
+      fieldType: string
+      required: false
+      position: 2
+      config: {}
+    - key: reporting_requirements
+      name: Reporting Requirements
+      fieldType: json
+      required: false
+      position: 3
+      config: {}
+    - key: milestone_inputs
+      name: Milestone Inputs
+      fieldType: string
+      required: false
+      position: 4
+      config: {}
+  context:
+    - key: deal_room_url
+      name: Deal Room Url
+      fieldType: string
+      required: false
+      position: 0
+      config: {}
+    - key: prior_task_outputs
+      name: Prior Task Outputs
+      fieldType: json
+      required: false
+      position: 1
+      config: {}
+    - key: source_artifacts
+      name: Source Artifacts
+      fieldType: json
+      required: false
+      position: 2
+      config: {}
+    - key: open_questions
+      name: Open Questions
+      fieldType: json
+      required: false
+      position: 3
+      config: {}
+  output:
+    - key: board_setup_notes
+      name: Board Setup Notes
+      fieldType: richtext
+      required: false
+      position: 0
+      config:
+        rows: 5
+    - key: reporting_cadence
+      name: Reporting Cadence
+      fieldType: string
+      required: false
+      position: 1
+      config: {}
+    - key: hundred_day_plan
+      name: Hundred Day Plan
+      fieldType: string
+      required: false
+      position: 2
+      config: {}
+    - key: milestones
+      name: Milestones
+      fieldType: json
+      required: false
+      position: 3
+      config: {}
+    - key: support_request_intake
+      name: Support Request Intake
+      fieldType: string
+      required: false
+      position: 4
+      config: {}
+    - key: owner_assignments
+      name: Owner Assignments
+      fieldType: string
+      required: false
+      position: 5
+      config: {}
+    - key: summary
+      name: Summary
+      fieldType: richtext
+      required: false
+      position: 6
+      config:
+        rows: 5
+    - key: recommendation
+      name: Recommendation
+      fieldType: string
+      required: false
+      position: 7
+      config: {}
+    - key: source_links
+      name: Source Links
+      fieldType: string
+      required: false
+      position: 8
+      config: {}
+    - key: assumptions
+      name: Assumptions
+      fieldType: string
+      required: false
+      position: 9
+      config: {}
+    - key: evidence_quality
+      name: Evidence Quality
+      fieldType: json
+      required: false
+      position: 10
+      config: {}
+    - key: open_questions
+      name: Open Questions
+      fieldType: json
+      required: false
+      position: 11
+      config: {}
+    - key: risks
+      name: Risks
+      fieldType: json
+      required: false
+      position: 12
+      config: {}
+    - key: human_decision_points
+      name: Human Decision Points
+      fieldType: string
+      required: false
+      position: 13
+      config: {}
+    - key: next_actions
+      name: Next Actions
+      fieldType: json
+      required: false
+      position: 14
+      config: {}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc-workflows
+      taskKind: prepare_portfolio_onboarding
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    maxAgentTurnsPerPass: 6
+    requiresHumanConfirmationToComplete: true
+    preferredMode: guided_execution
+    preferredAgentType: vc_legal_compliance_desk
+ui:
+  renderer: generic
+  surfaceKey: null
+  frameRef: null

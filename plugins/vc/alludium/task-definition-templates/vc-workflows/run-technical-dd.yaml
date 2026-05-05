@@ -1,0 +1,225 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.run_technical_dd
+version: 1.0.1
+title: Run Technical DD
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - diligence
+  - technical
+definition:
+  name: Run Technical DD
+  slug: run-technical-dd
+  description: Run Technical DD for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: technical_dd
+    taskFamily: diligence
+    requiredSkills:
+      - team-and-hiring-assessment
+      - red-flags-scanner
+      - citation-enforcement
+    plannedRequiredSkills:
+      - technical-diligence-workstream
+      - team-and-hiring-assessment
+      - red-flags-scanner
+      - citation-enforcement
+    plannedRecommendedAgentTemplate: vc_diligence_analyst
+    recommendedAgentTemplate: vc_diligence_analyst
+    supportedProjectTypes:
+      - vc_deal_room
+    sourceAnchors:
+      - source: investment-management-process-slides
+        anchor: slide-22
+        note: DD workstreams
+      - source: investment-management-process-slides
+        anchor: slide-24
+        note: Technical DD AI map
+      - source: investment-management-process-slides
+        anchor: slide-40
+        note: DD timeline
+    instructions:
+      executionInstructions: Run technical diligence covering architecture, product, engineering team, IP and licensing, AI/ML risks, scalability, security, and technical scorecard. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval.
+      missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
+      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
+      completionCriteria:
+        - Required input gaps are resolved or listed as assumptions/open questions.
+        - Material conclusions include source links or are labeled as human judgment calls.
+        - Next actions identify owner, dependency, and required human approval point.
+    humanDecisionPoints:
+      - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
+      - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+    orchestration:
+      parentTaskPolicy: none
+      suggestedChildTasks: []
+fields:
+  input:
+    - key: architecture_docs
+      name: Architecture Docs
+      fieldType: string
+      required: true
+      position: 0
+      config: {}
+    - key: repo_or_code_access
+      name: Repo Or Code Access
+      fieldType: string
+      required: true
+      position: 1
+      config: {}
+    - key: product_roadmap
+      name: Product Roadmap
+      fieldType: string
+      required: false
+      position: 2
+      config: {}
+    - key: ip_patent_materials
+      name: Ip Patent Materials
+      fieldType: string
+      required: false
+      position: 3
+      config: {}
+    - key: engineering_team_materials
+      name: Engineering Team Materials
+      fieldType: string
+      required: false
+      position: 4
+      config: {}
+  context:
+    - key: deal_room_url
+      name: Deal Room Url
+      fieldType: string
+      required: false
+      position: 0
+      config: {}
+    - key: prior_task_outputs
+      name: Prior Task Outputs
+      fieldType: json
+      required: false
+      position: 1
+      config: {}
+    - key: source_artifacts
+      name: Source Artifacts
+      fieldType: json
+      required: false
+      position: 2
+      config: {}
+    - key: open_questions
+      name: Open Questions
+      fieldType: json
+      required: false
+      position: 3
+      config: {}
+  output:
+    - key: architecture_product_summary
+      name: Architecture Product Summary
+      fieldType: richtext
+      required: false
+      position: 0
+      config:
+        rows: 5
+    - key: technical_team_assessment
+      name: Technical Team Assessment
+      fieldType: string
+      required: false
+      position: 1
+      config: {}
+    - key: oss_licensing_ip_checks
+      name: Oss Licensing Ip Checks
+      fieldType: string
+      required: false
+      position: 2
+      config: {}
+    - key: ai_ml_risk_assessment
+      name: Ai Ml Risk Assessment
+      fieldType: string
+      required: false
+      position: 3
+      config: {}
+    - key: scalability_security_concerns
+      name: Scalability Security Concerns
+      fieldType: string
+      required: false
+      position: 4
+      config: {}
+    - key: technical_scorecard
+      name: Technical Scorecard
+      fieldType: string
+      required: false
+      position: 5
+      config: {}
+    - key: summary
+      name: Summary
+      fieldType: richtext
+      required: false
+      position: 6
+      config:
+        rows: 5
+    - key: recommendation
+      name: Recommendation
+      fieldType: string
+      required: false
+      position: 7
+      config: {}
+    - key: source_links
+      name: Source Links
+      fieldType: string
+      required: false
+      position: 8
+      config: {}
+    - key: assumptions
+      name: Assumptions
+      fieldType: string
+      required: false
+      position: 9
+      config: {}
+    - key: evidence_quality
+      name: Evidence Quality
+      fieldType: json
+      required: false
+      position: 10
+      config: {}
+    - key: open_questions
+      name: Open Questions
+      fieldType: json
+      required: false
+      position: 11
+      config: {}
+    - key: risks
+      name: Risks
+      fieldType: json
+      required: false
+      position: 12
+      config: {}
+    - key: human_decision_points
+      name: Human Decision Points
+      fieldType: string
+      required: false
+      position: 13
+      config: {}
+    - key: next_actions
+      name: Next Actions
+      fieldType: json
+      required: false
+      position: 14
+      config: {}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc-workflows
+      taskKind: run_technical_dd
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    maxAgentTurnsPerPass: 8
+    requiresHumanConfirmationToComplete: true
+    preferredMode: guided_execution
+    preferredAgentType: vc_diligence_analyst
+ui:
+  renderer: generic
+  surfaceKey: null
+  frameRef: null

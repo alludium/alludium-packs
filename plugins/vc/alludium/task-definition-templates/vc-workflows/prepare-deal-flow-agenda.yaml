@@ -1,0 +1,206 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.prepare_deal_flow_agenda
+version: 1.0.2
+title: Prepare Deal Flow Agenda
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - discovery
+  - pipeline
+definition:
+  name: Prepare Deal Flow Agenda
+  slug: prepare-deal-flow-agenda
+  description: Prepare Deal Flow Agenda for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: deal_flow
+    taskFamily: pipeline
+    requiredSkills:
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-task-and-next-step-generation
+      - citation-enforcement
+    plannedRecommendedAgentTemplate: vc_pipeline_autopilot
+    recommendedAgentTemplate: vc_pipeline_autopilot
+    supportedProjectTypes:
+      - vc_deal_room
+    sourceAnchors:
+      - source: investment-management-process-slides
+        anchor: slide-8
+        note: Deal flow pipeline
+      - source: investment-management-process-slides
+        anchor: slide-10
+        note: Discovery AI map
+      - source: investment-management-process-slides
+        anchor: slide-39
+        note: Decision hierarchy
+    instructions:
+      executionInstructions: Prepare the deal-flow agenda from the pipeline snapshot; identify stale deals, new deals, stage-change candidates, and the seven-day action plan. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it.
+      missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
+      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
+      completionCriteria:
+        - Required input gaps are resolved or listed as assumptions/open questions.
+        - Material conclusions include source links or are labeled as human judgment calls.
+        - Next actions identify owner, dependency, and required human approval point.
+    humanDecisionPoints:
+      - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
+      - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+    orchestration:
+      parentTaskPolicy: none
+      suggestedChildTasks: []
+    workspaceConfiguredMethodologySkills:
+      - skill: pipeline-health-and-crm-hygiene
+        note: Use only when the workspace CRM/stage model matches the skill assumptions.
+fields:
+  input:
+    - key: pipeline_snapshot
+      name: Pipeline Snapshot
+      fieldType: json
+      required: true
+      position: 0
+      config: {}
+    - key: meeting_date
+      name: Meeting Date
+      fieldType: string
+      required: true
+      position: 1
+      config: {}
+    - key: stale_deal_threshold
+      name: Stale Deal Threshold
+      fieldType: string
+      required: false
+      position: 2
+      config: {}
+  context:
+    - key: deal_room_url
+      name: Deal Room Url
+      fieldType: string
+      required: false
+      position: 0
+      config: {}
+    - key: prior_task_outputs
+      name: Prior Task Outputs
+      fieldType: json
+      required: false
+      position: 1
+      config: {}
+    - key: source_artifacts
+      name: Source Artifacts
+      fieldType: json
+      required: false
+      position: 2
+      config: {}
+    - key: open_questions
+      name: Open Questions
+      fieldType: json
+      required: false
+      position: 3
+      config: {}
+  output:
+    - key: agenda
+      name: Agenda
+      fieldType: richtext
+      required: false
+      position: 0
+      config:
+        rows: 5
+    - key: stale_deal_list
+      name: Stale Deal List
+      fieldType: json
+      required: false
+      position: 1
+      config: {}
+    - key: new_deal_list
+      name: New Deal List
+      fieldType: json
+      required: false
+      position: 2
+      config: {}
+    - key: stage_change_candidates
+      name: Stage Change Candidates
+      fieldType: string
+      required: false
+      position: 3
+      config: {}
+    - key: seven_day_action_plan
+      name: Seven Day Action Plan
+      fieldType: string
+      required: false
+      position: 4
+      config: {}
+    - key: summary
+      name: Summary
+      fieldType: richtext
+      required: false
+      position: 5
+      config:
+        rows: 5
+    - key: recommendation
+      name: Recommendation
+      fieldType: string
+      required: false
+      position: 6
+      config: {}
+    - key: source_links
+      name: Source Links
+      fieldType: string
+      required: false
+      position: 7
+      config: {}
+    - key: assumptions
+      name: Assumptions
+      fieldType: string
+      required: false
+      position: 8
+      config: {}
+    - key: evidence_quality
+      name: Evidence Quality
+      fieldType: json
+      required: false
+      position: 9
+      config: {}
+    - key: open_questions
+      name: Open Questions
+      fieldType: json
+      required: false
+      position: 10
+      config: {}
+    - key: risks
+      name: Risks
+      fieldType: json
+      required: false
+      position: 11
+      config: {}
+    - key: human_decision_points
+      name: Human Decision Points
+      fieldType: string
+      required: false
+      position: 12
+      config: {}
+    - key: next_actions
+      name: Next Actions
+      fieldType: json
+      required: false
+      position: 13
+      config: {}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc-workflows
+      taskKind: prepare_deal_flow_agenda
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    maxAgentTurnsPerPass: 6
+    requiresHumanConfirmationToComplete: true
+    preferredMode: research
+    preferredAgentType: vc_pipeline_autopilot
+ui:
+  renderer: generic
+  surfaceKey: null
+  frameRef: null

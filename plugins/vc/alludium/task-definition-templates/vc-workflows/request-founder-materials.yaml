@@ -1,0 +1,209 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.request_founder_materials
+version: 1.0.1
+title: Request Founder Materials
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - intake
+  - founder-materials
+definition:
+  name: Request Founder Materials
+  slug: request-founder-materials
+  description: Request Founder Materials for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: screening
+    taskFamily: deal_room
+    requiredSkills:
+      - citation-enforcement
+    plannedRequiredSkills:
+      - founder-materials-request
+      - citation-enforcement
+    plannedRecommendedAgentTemplate: vc_dealflow_concierge
+    recommendedAgentTemplate: vc_dealflow_concierge
+    supportedProjectTypes:
+      - vc_deal_room
+    sourceAnchors:
+      - source: investment-management-process-slides
+        anchor: slide-15
+        note: Follow-up stage
+      - source: investment-management-process-slides
+        anchor: slide-16
+        note: Follow-up AI map
+      - source: atomic-agents
+        anchor: worksheet-atomic-agents
+        note: Spreadsheet row 16
+    instructions:
+      executionInstructions: Prepare the missing-materials checklist, founder-friendly request draft, share instructions, and due-date recommendation for human approval before sending. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval.
+      missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
+      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
+      completionCriteria:
+        - Required input gaps are resolved or listed as assumptions/open questions.
+        - Material conclusions include source links or are labeled as human judgment calls.
+        - Next actions identify owner, dependency, and required human approval point.
+    humanDecisionPoints:
+      - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
+      - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+    orchestration:
+      parentTaskPolicy: none
+      suggestedChildTasks: []
+fields:
+  input:
+    - key: company_name
+      name: Company Name
+      fieldType: string
+      required: true
+      position: 0
+      config: {}
+    - key: missing_materials
+      name: Missing Materials
+      fieldType: string
+      required: true
+      position: 1
+      config: {}
+    - key: founder_contact
+      name: Founder Contact
+      fieldType: string
+      required: false
+      position: 2
+      config: {}
+    - key: due_date
+      name: Due Date
+      fieldType: string
+      required: false
+      position: 3
+      config: {}
+  context:
+    - key: deal_room_url
+      name: Deal Room Url
+      fieldType: string
+      required: false
+      position: 0
+      config: {}
+    - key: prior_task_outputs
+      name: Prior Task Outputs
+      fieldType: json
+      required: false
+      position: 1
+      config: {}
+    - key: source_artifacts
+      name: Source Artifacts
+      fieldType: json
+      required: false
+      position: 2
+      config: {}
+    - key: open_questions
+      name: Open Questions
+      fieldType: json
+      required: false
+      position: 3
+      config: {}
+  output:
+    - key: materials_request_checklist
+      name: Materials Request Checklist
+      fieldType: json
+      required: false
+      position: 0
+      config: {}
+    - key: draft_external_message
+      name: Draft External Message
+      fieldType: richtext
+      required: false
+      position: 1
+      config:
+        rows: 5
+    - key: share_instructions
+      name: Share Instructions
+      fieldType: string
+      required: false
+      position: 2
+      config: {}
+    - key: due_date_recommendation
+      name: Due Date Recommendation
+      fieldType: string
+      required: false
+      position: 3
+      config: {}
+    - key: approval_required
+      name: Approval Required
+      fieldType: string
+      required: false
+      position: 4
+      config: {}
+    - key: summary
+      name: Summary
+      fieldType: richtext
+      required: false
+      position: 5
+      config:
+        rows: 5
+    - key: recommendation
+      name: Recommendation
+      fieldType: string
+      required: false
+      position: 6
+      config: {}
+    - key: source_links
+      name: Source Links
+      fieldType: string
+      required: false
+      position: 7
+      config: {}
+    - key: assumptions
+      name: Assumptions
+      fieldType: string
+      required: false
+      position: 8
+      config: {}
+    - key: evidence_quality
+      name: Evidence Quality
+      fieldType: json
+      required: false
+      position: 9
+      config: {}
+    - key: open_questions
+      name: Open Questions
+      fieldType: json
+      required: false
+      position: 10
+      config: {}
+    - key: risks
+      name: Risks
+      fieldType: json
+      required: false
+      position: 11
+      config: {}
+    - key: human_decision_points
+      name: Human Decision Points
+      fieldType: string
+      required: false
+      position: 12
+      config: {}
+    - key: next_actions
+      name: Next Actions
+      fieldType: json
+      required: false
+      position: 13
+      config: {}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc-workflows
+      taskKind: request_founder_materials
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    maxAgentTurnsPerPass: 6
+    requiresHumanConfirmationToComplete: true
+    preferredMode: guided_execution
+    preferredAgentType: vc_dealflow_concierge
+ui:
+  renderer: generic
+  surfaceKey: null
+  frameRef: null
