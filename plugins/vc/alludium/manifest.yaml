@@ -2,13 +2,13 @@ schemaVersion: "0.1"
 pack:
   id: vc
   name: Alludium VC
-  version: "0.1.0"
+  version: "0.2.0"
   description: >
     Public VC workflow plugin and pack seed for Alludium, published as the
     first bundle in the broader Alludium packs catalog. This release contains
-    VC skills and Alludium runtime agent templates. Task definitions and
-    project type definitions are planned pack surfaces, but are not included
-    in this first extraction.
+    VC skills, Alludium runtime agent templates, and VC task-definition
+    templates. Project type definitions are a planned pack surface, but are
+    not included in this extraction.
   publisher: Alludium
   license: Apache-2.0
   repository: https://github.com/alludium/alludium-packs
@@ -62,8 +62,34 @@ surfaces:
     path: alludium/mcp-recommendations.yaml
     status: platform-mapping
   taskDefinitionTemplates:
-    status: deferred
-    reason: Task-definition loading and pack activation are still stabilizing in the platform repo.
+    path: alludium/task-definition-templates
+    ids:
+      - vc.evaluate_investment_opportunity
+      - vc.source_thesis_targets
+      - vc.prepare_lead_gen_packet
+      - vc.prepare_deal_flow_agenda
+      - vc.screen_inbound_opportunity
+      - vc.create_deal_room
+      - vc.request_founder_materials
+      - vc.prepare_initial_call
+      - vc.summarize_initial_call
+      - vc.run_ten_factor_screen
+      - vc.run_follow_up_evaluation
+      - vc.generate_82_factor_questions
+      - vc.run_founder_evaluation
+      - vc.prepare_team_review_pack
+      - vc.prepare_partner_review_pack
+      - vc.run_commercial_dd
+      - vc.run_technical_dd
+      - vc.run_financial_dd
+      - vc.create_ic_memo
+      - vc.review_ic_memo
+      - vc.prepare_ic_agenda
+      - vc.record_ic_decision
+      - vc.review_term_sheet
+      - vc.manage_closing_checklist
+      - vc.verify_conditions_precedent
+      - vc.prepare_portfolio_onboarding
   projectTypes:
     status: deferred
     reason: VC Deal Room project type belongs in the later pack activation surface.

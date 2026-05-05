@@ -1,0 +1,232 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.screen_inbound_opportunity
+version: 1.0.2
+title: Screen Inbound Opportunity
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - intake
+  - screening
+definition:
+  name: Screen Inbound Opportunity
+  slug: screen-inbound-opportunity
+  description: Screen Inbound Opportunity for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: screening
+    taskFamily: screening
+    requiredSkills:
+      - company-research-and-enrichment
+      - red-flags-scanner
+      - citation-enforcement
+    plannedRequiredSkills:
+      - pitch-deck-explainer
+      - company-research-and-enrichment
+      - red-flags-scanner
+      - citation-enforcement
+    plannedRecommendedAgentTemplate: vc_dealflow_concierge
+    recommendedAgentTemplate: vc_dealflow_concierge
+    supportedProjectTypes:
+      - vc_deal_room
+    sourceAnchors:
+      - source: investment-management-process-slides
+        anchor: slide-9
+        note: Screening criteria
+      - source: investment-management-process-slides
+        anchor: slide-13
+        note: Initial call stage
+      - source: investment-management-process-slides
+        anchor: slide-14
+        note: Initial call AI map
+      - source: digital-worker-suite-index
+        anchor: keyword-page-map
+        note: Dealflow source material
+      - source: atomic-agents
+        anchor: worksheet-atomic-agents
+        note: Spreadsheet rows 14, 22, 23
+      - source: investment-management-process-slides
+        anchor: slide-10
+        note: Discovery AI map
+    instructions:
+      executionInstructions: Screen the inbound company against fund thesis and available deck or intro context; return fit recommendation, 10-Factor summary, gaps, red flags, pass feedback draft, and next actions. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it.
+      missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
+      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
+      completionCriteria:
+        - Required input gaps are resolved or listed as assumptions/open questions.
+        - Material conclusions include source links or are labeled as human judgment calls.
+        - Next actions identify owner, dependency, and required human approval point.
+    humanDecisionPoints:
+      - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
+      - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+    orchestration:
+      parentTaskPolicy: none
+      suggestedChildTasks: []
+    workspaceConfiguredMethodologySkills:
+      - skill: ten-factor-evaluation
+        note: Use only when the workspace explicitly configures this screening framework.
+fields:
+  input:
+    - key: company_name
+      name: Company Name
+      fieldType: string
+      required: true
+      position: 0
+      config: {}
+    - key: source_thread_url
+      name: Source Thread Url
+      fieldType: string
+      required: true
+      position: 1
+      config: {}
+    - key: pitch_deck_url
+      name: Pitch Deck Url
+      fieldType: string
+      required: false
+      position: 2
+      config: {}
+    - key: referrer
+      name: Referrer
+      fieldType: string
+      required: false
+      position: 3
+      config: {}
+    - key: fund_thesis_context
+      name: Fund Thesis Context
+      fieldType: richtext
+      required: false
+      position: 4
+      config:
+        rows: 5
+  context:
+    - key: deal_room_url
+      name: Deal Room Url
+      fieldType: string
+      required: false
+      position: 0
+      config: {}
+    - key: prior_task_outputs
+      name: Prior Task Outputs
+      fieldType: json
+      required: false
+      position: 1
+      config: {}
+    - key: source_artifacts
+      name: Source Artifacts
+      fieldType: json
+      required: false
+      position: 2
+      config: {}
+    - key: open_questions
+      name: Open Questions
+      fieldType: json
+      required: false
+      position: 3
+      config: {}
+  output:
+    - key: fit_recommendation
+      name: Fit Recommendation
+      fieldType: string
+      required: false
+      position: 0
+      config: {}
+    - key: initial_ten_factor_summary
+      name: Initial Ten Factor Summary
+      fieldType: richtext
+      required: false
+      position: 1
+      config:
+        rows: 5
+    - key: missing_information
+      name: Missing Information
+      fieldType: string
+      required: false
+      position: 2
+      config: {}
+    - key: red_flags
+      name: Red Flags
+      fieldType: string
+      required: false
+      position: 3
+      config: {}
+    - key: pass_feedback_draft
+      name: Pass Feedback Draft
+      fieldType: string
+      required: false
+      position: 4
+      config: {}
+    - key: next_actions
+      name: Next Actions
+      fieldType: json
+      required: false
+      position: 5
+      config: {}
+    - key: summary
+      name: Summary
+      fieldType: richtext
+      required: false
+      position: 6
+      config:
+        rows: 5
+    - key: recommendation
+      name: Recommendation
+      fieldType: string
+      required: false
+      position: 7
+      config: {}
+    - key: source_links
+      name: Source Links
+      fieldType: string
+      required: false
+      position: 8
+      config: {}
+    - key: assumptions
+      name: Assumptions
+      fieldType: string
+      required: false
+      position: 9
+      config: {}
+    - key: evidence_quality
+      name: Evidence Quality
+      fieldType: json
+      required: false
+      position: 10
+      config: {}
+    - key: open_questions
+      name: Open Questions
+      fieldType: json
+      required: false
+      position: 11
+      config: {}
+    - key: risks
+      name: Risks
+      fieldType: json
+      required: false
+      position: 12
+      config: {}
+    - key: human_decision_points
+      name: Human Decision Points
+      fieldType: string
+      required: false
+      position: 13
+      config: {}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc-workflows
+      taskKind: screen_inbound_opportunity
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    maxAgentTurnsPerPass: 6
+    requiresHumanConfirmationToComplete: true
+    preferredMode: guided_execution
+    preferredAgentType: vc_dealflow_concierge
+ui:
+  renderer: generic
+  surfaceKey: null
+  frameRef: null

@@ -8,11 +8,12 @@ This first release contains the surfaces that are ready to externalize:
 
 - Claude/Codex-style skills in `skills/`
 - Alludium runtime agent templates in `alludium/agent-templates/`
+- VC task-definition templates in `alludium/task-definition-templates/`
 - VC-relevant MCP server definitions in `.mcp.json`
 - Alludium platform mapping guidance for MCPs in `alludium/mcp-recommendations.yaml`
 - a pack-aware Alludium manifest in `alludium/manifest.yaml`
 
-Task definitions and project type definitions are intentionally deferred. They belong in the larger Alludium pack shape, but the platform task-loading and workspace-activation seams should settle before those become installable assets from this repo.
+Project type definitions remain intentionally deferred. They belong in the larger Alludium pack shape, but the platform workspace-activation seam should settle before those become installable assets from this repo.
 
 ## Contents
 
@@ -20,6 +21,7 @@ Task definitions and project type definitions are intentionally deferred. They b
 | --- | --- | --- |
 | Skills | `skills/` | 23 public workflow skills used by the VC agent templates |
 | Agent templates | `alludium/agent-templates/` | 8 Alludium runtime templates using the `vc_*` baseline |
+| Task definition templates | `alludium/task-definition-templates/` | 26 VC workflow task templates and catalog metadata |
 | Pack manifest | `alludium/manifest.yaml` | Alludium-specific inventory, boundaries, and future pack surfaces |
 | Plugin MCP manifest | `.mcp.json` | Public-safe MCP definitions for VC research, CRM, meeting, and market-intelligence tools |
 | MCP platform mapping | `alludium/mcp-recommendations.yaml` | Alludium mapping guidance for platform-managed or workspace-managed connections |
@@ -40,7 +42,8 @@ alludium-packs/
         ├── alludium/
         │   ├── manifest.yaml
         │   ├── mcp-recommendations.yaml
-        │   └── agent-templates/
+        │   ├── agent-templates/
+        │   └── task-definition-templates/
         └── scripts/
 ```
 
@@ -50,7 +53,7 @@ The plugin surface is for agent tooling that already understands skills, agent d
 
 The VC pack directory is also the plugin root. Standard plugin concepts live at the pack root. Alludium-only runtime concepts live under `alludium/`.
 
-The Alludium pack surface is the product/runtime extension point. It tracks Alludium agent templates today and is expected to grow later to include task definitions, project types, workspace activation metadata, provenance, and rollback/deactivation semantics.
+The Alludium pack surface is the product/runtime extension point. It tracks Alludium agent templates and task-definition templates today and is expected to grow later to include project types, workspace activation metadata, provenance, and rollback/deactivation semantics.
 
 The top-level `agents/` directory is reserved for future plugin-native Claude/Codex agent definitions. The current `alludium/agent-templates/` files are Alludium runtime YAML templates, so they intentionally remain under the Alludium extension surface until a deliberate adapter or generated native-agent format exists.
 
@@ -60,7 +63,7 @@ Template `metadata.gitRepositoryUrl` values currently point at the configurable-
 
 ## Inventory
 
-See [alludium/inventory.md](alludium/inventory.md) for the current skill, template, MCP recommendation, and deferred pack-surface inventory.
+See [alludium/inventory.md](alludium/inventory.md) for the current skill, template, task-template, MCP recommendation, and deferred pack-surface inventory.
 
 ## Validation
 
@@ -79,4 +82,5 @@ The validator checks:
 - skill directory names match frontmatter IDs
 - public skills do not set `internalOnly: true`
 - Alludium agent-template skill references resolve to included skills
+- task-template skill and agent-template references resolve to manifest-declared surfaces
 - obvious secret-bearing values are not present

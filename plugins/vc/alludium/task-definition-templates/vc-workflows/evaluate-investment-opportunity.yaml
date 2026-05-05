@@ -1,0 +1,246 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.evaluate_investment_opportunity
+version: 1.0.2
+title: Evaluate Investment Opportunity
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - pipeline
+  - orchestration
+definition:
+  name: Evaluate Investment Opportunity
+  slug: evaluate-investment-opportunity
+  description: Evaluate Investment Opportunity for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: deal_flow
+    taskFamily: pipeline
+    requiredSkills:
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-task-and-next-step-generation
+      - citation-enforcement
+    plannedRecommendedAgentTemplate: vc_pipeline_autopilot
+    recommendedAgentTemplate: vc_pipeline_autopilot
+    supportedProjectTypes:
+      - vc_deal_room
+    sourceAnchors:
+      - source: investment-management-process-slides
+        anchor: slide-12
+        note: Assessment stages
+      - source: investment-management-process-slides
+        anchor: slide-34
+        note: Human and AI role split
+      - source: investment-management-process-slides
+        anchor: slide-38
+        note: Process summary
+      - source: investment-management-process-slides
+        anchor: slide-39
+        note: Decision hierarchy
+      - source: digital-worker-suite-index
+        anchor: page-4
+        note: Source assumptions
+      - source: investment-management-process-slides
+        anchor: slide-40
+        note: DD timeline
+      - source: digital-worker-suite-index
+        anchor: page-5
+        note: Source systems
+      - source: digital-worker-suite-index
+        anchor: page-6
+        note: Source workflow context
+      - source: digital-worker-suite-index
+        anchor: page-7
+        note: Workflow vision
+    instructions:
+      executionInstructions: Summarize the current opportunity state, identify missing inputs, recommend stage movement, and list next task suggestions using the workspace configured stage graph; do not create tasks automatically. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it.
+      missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
+      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
+      completionCriteria:
+        - Required input gaps are resolved or listed as assumptions/open questions.
+        - Material conclusions include source links or are labeled as human judgment calls.
+        - Next actions identify owner, dependency, and required human approval point.
+    humanDecisionPoints:
+      - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
+      - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+    orchestration:
+      mode: manual_suggestion
+      parentTaskPolicy: suggest_next_stage
+      stageGraphSource: workspace_configuration
+      defaultSuggestedTaskPool:
+        - screen-inbound-opportunity
+        - prepare-lead-gen-packet
+        - prepare-deal-flow-agenda
+        - create-deal-room
+        - request-founder-materials
+        - prepare-initial-call
+        - summarize-initial-call
+        - run-ten-factor-screen
+        - run-follow-up-evaluation
+        - generate-82-factor-questions
+        - run-founder-evaluation
+        - prepare-team-review-pack
+        - prepare-partner-review-pack
+        - run-commercial-dd
+        - run-technical-dd
+        - run-financial-dd
+        - create-ic-memo
+        - review-ic-memo
+        - prepare-ic-agenda
+        - record-ic-decision
+        - review-term-sheet
+        - manage-closing-checklist
+        - verify-conditions-precedent
+        - prepare-portfolio-onboarding
+      humanApprovalRequiredBeforeChildTaskCreation: true
+      deferredRuntimePolicyMode: true
+      deferredRuntimePolicyRequirements:
+        - childTaskPolicies
+        - projections
+        - mutations
+        - supported creation triggers
+        - task engine tests
+    workspaceConfiguredMethodologySkills:
+      - skill: pipeline-health-and-crm-hygiene
+        note: Use only when the workspace CRM/stage model matches the skill assumptions.
+fields:
+  input:
+    - key: company_name
+      name: Company Name
+      fieldType: string
+      required: true
+      position: 0
+      config: {}
+    - key: current_stage
+      name: Current Stage
+      fieldType: string
+      required: true
+      position: 1
+      config: {}
+    - key: deal_room_url
+      name: Deal Room Url
+      fieldType: string
+      required: false
+      position: 2
+      config: {}
+    - key: prior_task_outputs
+      name: Prior Task Outputs
+      fieldType: json
+      required: false
+      position: 3
+      config: {}
+  context:
+    - key: source_artifacts
+      name: Source Artifacts
+      fieldType: json
+      required: false
+      position: 0
+      config: {}
+    - key: open_questions
+      name: Open Questions
+      fieldType: json
+      required: false
+      position: 1
+      config: {}
+  output:
+    - key: stage_summary
+      name: Stage Summary
+      fieldType: richtext
+      required: false
+      position: 0
+      config:
+        rows: 5
+    - key: missing_inputs
+      name: Missing Inputs
+      fieldType: string
+      required: false
+      position: 1
+      config: {}
+    - key: stage_transition_recommendation
+      name: Stage Transition Recommendation
+      fieldType: string
+      required: false
+      position: 2
+      config: {}
+    - key: next_stage_task_suggestions
+      name: Next Stage Task Suggestions
+      fieldType: string
+      required: false
+      position: 3
+      config: {}
+    - key: source_links
+      name: Source Links
+      fieldType: string
+      required: false
+      position: 4
+      config: {}
+    - key: summary
+      name: Summary
+      fieldType: richtext
+      required: false
+      position: 5
+      config:
+        rows: 5
+    - key: recommendation
+      name: Recommendation
+      fieldType: string
+      required: false
+      position: 6
+      config: {}
+    - key: assumptions
+      name: Assumptions
+      fieldType: string
+      required: false
+      position: 7
+      config: {}
+    - key: evidence_quality
+      name: Evidence Quality
+      fieldType: json
+      required: false
+      position: 8
+      config: {}
+    - key: open_questions
+      name: Open Questions
+      fieldType: json
+      required: false
+      position: 9
+      config: {}
+    - key: risks
+      name: Risks
+      fieldType: json
+      required: false
+      position: 10
+      config: {}
+    - key: human_decision_points
+      name: Human Decision Points
+      fieldType: string
+      required: false
+      position: 11
+      config: {}
+    - key: next_actions
+      name: Next Actions
+      fieldType: json
+      required: false
+      position: 12
+      config: {}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc-workflows
+      taskKind: evaluate_investment_opportunity
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    maxAgentTurnsPerPass: 6
+    requiresHumanConfirmationToComplete: true
+    preferredMode: research
+    preferredAgentType: vc_pipeline_autopilot
+ui:
+  renderer: generic
+  surfaceKey: null
+  frameRef: null

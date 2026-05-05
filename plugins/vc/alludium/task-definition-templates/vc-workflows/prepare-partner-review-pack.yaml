@@ -1,0 +1,210 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.prepare_partner_review_pack
+version: 1.0.2
+title: Prepare Partner Review Pack
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - partner-review
+  - diligence
+definition:
+  name: Prepare Partner Review Pack
+  slug: prepare-partner-review-pack
+  description: Prepare Partner Review Pack for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: partner_review
+    taskFamily: diligence
+    requiredSkills:
+      - ic-memo-assembly
+      - citation-enforcement
+    plannedRequiredSkills:
+      - ic-memo-assembly
+      - citation-enforcement
+    plannedRecommendedAgentTemplate: vc_diligence_analyst
+    recommendedAgentTemplate: vc_diligence_analyst
+    supportedProjectTypes:
+      - vc_deal_room
+    sourceAnchors:
+      - source: investment-management-process-slides
+        anchor: slide-19
+        note: Team/partner review stage
+      - source: investment-management-process-slides
+        anchor: slide-20
+        note: Team/partner review AI map
+      - source: investment-management-process-slides
+        anchor: slide-39
+        note: Decision hierarchy
+      - source: investment-management-process-slides
+        anchor: slide-34
+        note: Roles
+    instructions:
+      executionInstructions: Prepare the Partner Review pack with investment thesis, strategic fit, proposed DD scope, workstream owners, key risks, and decision ask. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it.
+      missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
+      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
+      completionCriteria:
+        - Required input gaps are resolved or listed as assumptions/open questions.
+        - Material conclusions include source links or are labeled as human judgment calls.
+        - Next actions identify owner, dependency, and required human approval point.
+    humanDecisionPoints:
+      - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
+      - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+    orchestration:
+      parentTaskPolicy: none
+      suggestedChildTasks: []
+    workspaceConfiguredMethodologySkills:
+      - skill: market-map-building
+        note: Use only when the workspace explicitly configures this market mapping method.
+fields:
+  input:
+    - key: team_review_pack
+      name: Team Review Pack
+      fieldType: json
+      required: true
+      position: 0
+      config: {}
+    - key: open_questions
+      name: Open Questions
+      fieldType: json
+      required: true
+      position: 1
+      config: {}
+    - key: proposed_dd_scope
+      name: Proposed Dd Scope
+      fieldType: string
+      required: false
+      position: 2
+      config: {}
+  context:
+    - key: deal_room_url
+      name: Deal Room Url
+      fieldType: string
+      required: false
+      position: 0
+      config: {}
+    - key: prior_task_outputs
+      name: Prior Task Outputs
+      fieldType: json
+      required: false
+      position: 1
+      config: {}
+    - key: source_artifacts
+      name: Source Artifacts
+      fieldType: json
+      required: false
+      position: 2
+      config: {}
+  output:
+    - key: investment_thesis_summary
+      name: Investment Thesis Summary
+      fieldType: richtext
+      required: false
+      position: 0
+      config:
+        rows: 5
+    - key: strategic_fit
+      name: Strategic Fit
+      fieldType: string
+      required: false
+      position: 1
+      config: {}
+    - key: proposed_dd_scope
+      name: Proposed Dd Scope
+      fieldType: string
+      required: false
+      position: 2
+      config: {}
+    - key: workstream_owners
+      name: Workstream Owners
+      fieldType: json
+      required: false
+      position: 3
+      config: {}
+    - key: key_risks
+      name: Key Risks
+      fieldType: json
+      required: false
+      position: 4
+      config: {}
+    - key: decision_ask
+      name: Decision Ask
+      fieldType: string
+      required: false
+      position: 5
+      config: {}
+    - key: summary
+      name: Summary
+      fieldType: richtext
+      required: false
+      position: 6
+      config:
+        rows: 5
+    - key: recommendation
+      name: Recommendation
+      fieldType: string
+      required: false
+      position: 7
+      config: {}
+    - key: source_links
+      name: Source Links
+      fieldType: string
+      required: false
+      position: 8
+      config: {}
+    - key: assumptions
+      name: Assumptions
+      fieldType: string
+      required: false
+      position: 9
+      config: {}
+    - key: evidence_quality
+      name: Evidence Quality
+      fieldType: json
+      required: false
+      position: 10
+      config: {}
+    - key: open_questions
+      name: Open Questions
+      fieldType: json
+      required: false
+      position: 11
+      config: {}
+    - key: risks
+      name: Risks
+      fieldType: json
+      required: false
+      position: 12
+      config: {}
+    - key: human_decision_points
+      name: Human Decision Points
+      fieldType: string
+      required: false
+      position: 13
+      config: {}
+    - key: next_actions
+      name: Next Actions
+      fieldType: json
+      required: false
+      position: 14
+      config: {}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc-workflows
+      taskKind: prepare_partner_review_pack
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    maxAgentTurnsPerPass: 6
+    requiresHumanConfirmationToComplete: true
+    preferredMode: guided_execution
+    preferredAgentType: vc_diligence_analyst
+ui:
+  renderer: generic
+  surfaceKey: null
+  frameRef: null

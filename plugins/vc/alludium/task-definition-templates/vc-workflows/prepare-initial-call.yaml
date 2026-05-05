@@ -1,0 +1,217 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.prepare_initial_call
+version: 1.0.2
+title: Prepare Initial Call
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - initial-call
+  - meeting
+definition:
+  name: Prepare Initial Call
+  slug: prepare-initial-call
+  description: Prepare Initial Call for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: initial_call
+    taskFamily: meeting
+    requiredSkills:
+      - meeting-prep-and-summary
+      - company-research-and-enrichment
+      - citation-enforcement
+    plannedRequiredSkills:
+      - meeting-prep-and-summary
+      - company-research-and-enrichment
+      - pitch-deck-explainer
+      - citation-enforcement
+    plannedRecommendedAgentTemplate: vc_meeting_operator
+    recommendedAgentTemplate: vc_meeting_operator
+    supportedProjectTypes:
+      - vc_deal_room
+    sourceAnchors:
+      - source: investment-management-process-slides
+        anchor: slide-13
+        note: Initial call stage
+      - source: investment-management-process-slides
+        anchor: slide-14
+        note: Initial call AI map
+      - source: atomic-agents
+        anchor: worksheet-atomic-agents
+        note: Spreadsheet row 15
+    instructions:
+      executionInstructions: Prepare the first-call brief, founder and company summary, competitor and funding activity, starter 10-Factor scorecard, and questions by topic. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it.
+      missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
+      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
+      completionCriteria:
+        - Required input gaps are resolved or listed as assumptions/open questions.
+        - Material conclusions include source links or are labeled as human judgment calls.
+        - Next actions identify owner, dependency, and required human approval point.
+    humanDecisionPoints:
+      - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
+      - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+    orchestration:
+      parentTaskPolicy: none
+      suggestedChildTasks: []
+    workspaceConfiguredMethodologySkills:
+      - skill: ten-factor-evaluation
+        note: Use only when the workspace explicitly configures this screening framework.
+fields:
+  input:
+    - key: company_name
+      name: Company Name
+      fieldType: string
+      required: true
+      position: 0
+      config: {}
+    - key: pitch_deck_url
+      name: Pitch Deck Url
+      fieldType: string
+      required: true
+      position: 1
+      config: {}
+    - key: founder_names
+      name: Founder Names
+      fieldType: string
+      required: false
+      position: 2
+      config: {}
+    - key: meeting_datetime
+      name: Meeting Datetime
+      fieldType: string
+      required: false
+      position: 3
+      config: {}
+    - key: deal_room_url
+      name: Deal Room Url
+      fieldType: string
+      required: false
+      position: 4
+      config: {}
+  context:
+    - key: prior_task_outputs
+      name: Prior Task Outputs
+      fieldType: json
+      required: false
+      position: 0
+      config: {}
+    - key: source_artifacts
+      name: Source Artifacts
+      fieldType: json
+      required: false
+      position: 1
+      config: {}
+    - key: open_questions
+      name: Open Questions
+      fieldType: json
+      required: false
+      position: 2
+      config: {}
+  output:
+    - key: pre_call_brief
+      name: Pre Call Brief
+      fieldType: richtext
+      required: false
+      position: 0
+      config:
+        rows: 5
+    - key: founder_company_summary
+      name: Founder Company Summary
+      fieldType: richtext
+      required: false
+      position: 1
+      config:
+        rows: 5
+    - key: competitor_funding_activity
+      name: Competitor Funding Activity
+      fieldType: string
+      required: false
+      position: 2
+      config: {}
+    - key: starter_ten_factor_scorecard
+      name: Starter Ten Factor Scorecard
+      fieldType: string
+      required: false
+      position: 3
+      config: {}
+    - key: questions_by_topic
+      name: Questions By Topic
+      fieldType: json
+      required: false
+      position: 4
+      config: {}
+    - key: summary
+      name: Summary
+      fieldType: richtext
+      required: false
+      position: 5
+      config:
+        rows: 5
+    - key: recommendation
+      name: Recommendation
+      fieldType: string
+      required: false
+      position: 6
+      config: {}
+    - key: source_links
+      name: Source Links
+      fieldType: string
+      required: false
+      position: 7
+      config: {}
+    - key: assumptions
+      name: Assumptions
+      fieldType: string
+      required: false
+      position: 8
+      config: {}
+    - key: evidence_quality
+      name: Evidence Quality
+      fieldType: json
+      required: false
+      position: 9
+      config: {}
+    - key: open_questions
+      name: Open Questions
+      fieldType: json
+      required: false
+      position: 10
+      config: {}
+    - key: risks
+      name: Risks
+      fieldType: json
+      required: false
+      position: 11
+      config: {}
+    - key: human_decision_points
+      name: Human Decision Points
+      fieldType: string
+      required: false
+      position: 12
+      config: {}
+    - key: next_actions
+      name: Next Actions
+      fieldType: json
+      required: false
+      position: 13
+      config: {}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc-workflows
+      taskKind: prepare_initial_call
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    maxAgentTurnsPerPass: 6
+    requiresHumanConfirmationToComplete: true
+    preferredMode: guided_execution
+    preferredAgentType: vc_meeting_operator
+ui:
+  renderer: generic
+  surfaceKey: null
+  frameRef: null
