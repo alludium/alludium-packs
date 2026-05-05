@@ -250,7 +250,9 @@ def validate_task_template_file(
     if not isinstance(definition.get("slug"), str) or not definition.get("slug"):
         fail(f"Task template {template_id} is missing definition.slug")
 
-    definition_json = definition.get("definitionJson") or {}
+    definition_json = definition.get("definitionJson")
+    if definition_json is None:
+        definition_json = {}
     if not isinstance(definition_json, dict):
         fail(f"Task template {template_id} definition.definitionJson must be an object")
 
@@ -319,6 +321,7 @@ def validate_task_definition_templates(
         fail("Duplicate task-definition-template IDs in alludium/manifest.yaml")
 
     task_root = ROOT / surface_path
+    resolved_task_root = task_root.resolve()
     catalog_path = task_root / "catalog.v1.json"
     if not catalog_path.exists():
         fail(f"Missing task definition template catalog: {catalog_path.relative_to(ROOT)}")
@@ -341,11 +344,24 @@ def validate_task_definition_templates(
             if not isinstance(relative_template_path, str) or not relative_template_path:
                 fail(f"Task definition template catalog pack {pack.get('id')} has an invalid entry")
             template_path = task_root / relative_template_path
+            resolved_template_path = template_path.resolve()
+            try:
+                resolved_template_path.relative_to(resolved_task_root)
+            except ValueError:
+                fail(
+                    "Task definition template catalog path escapes task-template surface: "
+                    f"{relative_template_path}"
+                )
             if not template_path.exists():
                 fail(f"Task definition template catalog references missing file {relative_template_path}")
-            discovered_paths.add(template_path)
+            discovered_paths.add(resolved_template_path)
             discovered_ids.append(
-                validate_task_template_file(template_path, pack, skill_ids, agent_template_ids)
+                validate_task_template_file(
+                    resolved_template_path,
+                    pack,
+                    skill_ids,
+                    agent_template_ids,
+                )
             )
 
     if len(discovered_ids) != len(set(discovered_ids)):
@@ -357,7 +373,7 @@ def validate_task_definition_templates(
             f"catalog_only={sorted(set(discovered_ids) - set(manifest_template_ids))}"
         )
 
-    actual_yaml_paths = set(task_root.glob("**/*.yaml"))
+    actual_yaml_paths = {path.resolve() for path in task_root.glob("**/*.yaml")}
     extra_yaml_paths = actual_yaml_paths - discovered_paths
     if extra_yaml_paths:
         fail(
