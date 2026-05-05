@@ -1,9 +1,9 @@
 # Alludium VC Inventory
 
 **Version**: 0.1.0
-**Status**: Phase 1 candidate
+**Status**: Published baseline
 
-This inventory describes the current public VC plugin/pack seed. It intentionally includes only the surfaces ready for first extraction.
+This inventory describes the current public VC plugin/pack seed tagged as `v0.1.0`. It intentionally includes only the surfaces ready for first extraction: VC skills, Alludium runtime agent templates, public-safe MCP definitions, and Alludium MCP recommendations.
 
 ---
 
@@ -99,7 +99,7 @@ Review notes:
 
 Task definitions:
 
-- deferred until task-definition source loading and pack activation are stable
+- deferred from `v0.1.0`; planned as the next pack surface now that platform task-template work has landed
 - expected future path: `alludium/task-definition-templates/`
 
 Project types:
