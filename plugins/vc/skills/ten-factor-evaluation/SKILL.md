@@ -51,7 +51,7 @@ Keep this distinction explicit:
 
 - the underlying Ten-Factor checklist is qualitative
 - it does not define a native numeric scoring rubric
-- Barry's later operating material introduces a practical scorecard format with
+- the platform operating convention introduces a practical scorecard format with
   score, rationale, evidence, unknowns, roll-up, and recommendation
 
 So when this skill uses a `1-5 or N/A` score, treat that as the operating convention for the
