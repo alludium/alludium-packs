@@ -47,6 +47,7 @@ TASK_TEMPLATE_AGENT_TEMPLATE_REFERENCE_FIELDS = [
     "plannedRecommendedAgentTemplate",
     "preferredAgentType",
 ]
+TASK_TEMPLATE_PLATFORM_CAPABILITY = "external-task-definition-template-ingest"
 
 
 def fail(message: str) -> None:
@@ -223,11 +224,54 @@ def validate_task_template_reference_list(
         )
 
 
+def validate_task_template_platform_ingest_contract(surface: dict[str, Any]) -> None:
+    platform_ingest = surface.get("platformIngest")
+    if not isinstance(platform_ingest, dict):
+        fail("surfaces.taskDefinitionTemplates.platformIngest must be declared")
+    if platform_ingest.get("requiresCapability") != TASK_TEMPLATE_PLATFORM_CAPABILITY:
+        fail(
+            "surfaces.taskDefinitionTemplates.platformIngest.requiresCapability must be "
+            f"{TASK_TEMPLATE_PLATFORM_CAPABILITY}"
+        )
+    if not isinstance(platform_ingest.get("minimumPlatformVersion"), str):
+        fail("surfaces.taskDefinitionTemplates.platformIngest.minimumPlatformVersion must be declared")
+    if not isinstance(platform_ingest.get("status"), str):
+        fail("surfaces.taskDefinitionTemplates.platformIngest.status must be declared")
+
+
+def get_declared_project_type_dependencies(manifest: dict[str, Any]) -> set[str]:
+    dependencies = manifest.get("dependencies") or {}
+    if not isinstance(dependencies, dict):
+        fail("Manifest dependencies must be an object when declared")
+    project_type_dependencies = dependencies.get("projectTypes") or []
+    if not isinstance(project_type_dependencies, list):
+        fail("Manifest dependencies.projectTypes must be a list when declared")
+
+    declared: set[str] = set()
+    for dependency in project_type_dependencies:
+        if not isinstance(dependency, dict):
+            fail("Manifest dependencies.projectTypes entries must be objects")
+        dependency_id = dependency.get("id")
+        if not isinstance(dependency_id, str) or not dependency_id:
+            fail("Manifest dependencies.projectTypes entries must declare id")
+        declared.add(dependency_id)
+
+    project_type_surface = manifest["surfaces"].get("projectTypes") or {}
+    included_ids = project_type_surface.get("ids") if isinstance(project_type_surface, dict) else None
+    if included_ids is not None:
+        if not isinstance(included_ids, list) or not all(isinstance(item, str) for item in included_ids):
+            fail("surfaces.projectTypes.ids must be a list of strings when declared")
+        declared.update(included_ids)
+
+    return declared
+
+
 def validate_task_template_file(
     path: Path,
     expected_pack: dict[str, Any],
     skill_ids: set[str],
     agent_template_ids: set[str],
+    declared_project_type_ids: set[str],
 ) -> str:
     template = read_yaml(path)
     relative_path = path.relative_to(ROOT)
@@ -294,6 +338,18 @@ def validate_task_template_file(
         if value not in agent_template_ids:
             fail(f"Task template {template_id} {field_name} references missing agent template {value}")
 
+    supported_project_types = require_string_list(
+        definition_json.get("supportedProjectTypes"),
+        f"Task template {template_id} definitionJson.supportedProjectTypes",
+    )
+    validate_task_template_reference_list(
+        template_id,
+        "supportedProjectTypes",
+        supported_project_types,
+        declared_project_type_ids,
+        "declared project type dependencies",
+    )
+
     pack_vertical_keys = expected_pack.get("verticalKeys") or []
     if expected_pack.get("availability") == "vertical" and not pack_vertical_keys:
         fail(f"Task template pack {expected_pack.get('id')} must declare verticalKeys")
@@ -319,6 +375,8 @@ def validate_task_definition_templates(
         fail("surfaces.taskDefinitionTemplates.ids must be a list of strings")
     if len(manifest_template_ids) != len(set(manifest_template_ids)):
         fail("Duplicate task-definition-template IDs in alludium/manifest.yaml")
+    validate_task_template_platform_ingest_contract(surface)
+    declared_project_type_ids = get_declared_project_type_dependencies(manifest)
 
     task_root = ROOT / surface_path
     resolved_task_root = task_root.resolve()
@@ -361,6 +419,7 @@ def validate_task_definition_templates(
                     pack,
                     skill_ids,
                     agent_template_ids,
+                    declared_project_type_ids,
                 )
             )
 
