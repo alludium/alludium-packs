@@ -10,7 +10,7 @@ The repository is intentionally broader than the first VC use case. It is expect
 
 | Pack | Path | Status | Contents |
 | --- | --- | --- | --- |
-| Alludium VC | `plugins/vc/` | Draft project-type expansion | VC workflow skills, Alludium runtime agent templates, VC task-definition templates, VC Deal Room project type, MCP recommendations, and pack metadata |
+| Alludium VC | `plugins/vc/` | Draft project-type and metadata expansion | VC workflow skills, Alludium runtime agent templates, VC task-definition templates, VC Deal Room project type, workspace variable declarations, application recommendations, and pack metadata |
 
 ## Plugin vs Pack
 
@@ -20,7 +20,7 @@ A pack is the Alludium product/runtime concept. It can include one or more plugi
 
 In this repository, each pack directory is also a valid plugin root. Standard plugin surfaces live at the pack root; Alludium-only runtime surfaces live under `alludium/`.
 
-The first VC bundle is plugin-shaped and pack-aware. VC task-definition templates and the VC Deal Room project type now live in the public pack as draft surfaces. The project-type surface still requires the paired platform ingest work before it can become the runtime source of truth.
+The first VC bundle is plugin-shaped and pack-aware. VC task-definition templates, the VC Deal Room project type, workspace variable declarations, and application recommendations now live in the public pack as draft surfaces. The project-type and metadata surfaces still require the paired platform ingest work before they can become the runtime source of truth.
 
 ## Repository Shape
 
@@ -50,7 +50,8 @@ Within a pack:
 - `alludium/agent-templates/` contains Alludium runtime agent templates.
 - `alludium/task-definition-templates/` contains portable VC task-definition templates.
 - `alludium/project-types/` contains portable project type definitions.
-- `alludium/mcp-recommendations.yaml` records Alludium platform mapping guidance for those MCP integrations.
+- `alludium/mcp-recommendations.yaml` records Alludium platform mapping guidance and application recommendations for those MCP integrations.
+- `alludium/workspace-variables.yaml` declares public-safe workspace variables without workspace-specific values.
 - `scripts/validate_pack.py` validates the pack before publishing.
 
 ## Validation

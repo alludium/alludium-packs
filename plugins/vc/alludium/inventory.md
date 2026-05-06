@@ -1,9 +1,9 @@
 # Alludium VC Inventory
 
-**Version**: 0.3.0
-**Status**: Draft project-type expansion
+**Version**: 0.3.1
+**Status**: Draft project-type and metadata expansion
 
-This inventory describes the current public VC plugin/pack seed plus the draft project-type expansion. Version `0.1.0` contains VC skills, Alludium runtime agent templates, public-safe MCP definitions, and Alludium MCP recommendations. Version `0.2.2` adds VC task-definition templates and advertises both the canonical `venture_capital` vertical key and legacy `vc` alias. Version `0.3.0` adds the VC Deal Room project type as a first-class pack surface for the paired platform ingest work.
+This inventory describes the current public VC plugin/pack seed plus the draft project-type and metadata expansion. Version `0.1.0` contains VC skills, Alludium runtime agent templates, public-safe MCP definitions, and Alludium MCP recommendations. Version `0.2.2` adds VC task-definition templates and advertises both the canonical `venture_capital` vertical key and legacy `vc` alias. Version `0.3.0` adds the VC Deal Room project type as a first-class pack surface. Version `0.3.1` adds workspace variable declarations and application recommendation metadata for the paired platform ingest work.
 
 ---
 
@@ -119,7 +119,7 @@ Review notes:
 
 ## MCP Definitions And Platform Mapping
 
-The first scaffold includes public-safe plugin MCP definitions in `.mcp.json` and Alludium platform mapping guidance in `alludium/mcp-recommendations.yaml`.
+The first scaffold includes public-safe plugin MCP definitions in `.mcp.json` and VC application recommendations in `alludium/mcp-recommendations.yaml`. Recommendation entries that correspond to plugin MCP definitions carry `externalMcpId` references so the platform bridge does not need a second application recommendation source.
 
 Included MCP IDs:
 
@@ -146,6 +146,25 @@ Review notes:
 - Pipedream-provided integrations are intentionally excluded from this first pack scaffold.
 - `alludium-docs-mcp` and `xero-mcp-server` exist in platform MCP config but are intentionally excluded because they are not part of the first VC workflow surface.
 - No secrets, tokens, or environment-specific values should be copied into this public repo.
+
+---
+
+## Workspace Variable Declarations
+
+The VC pack declares public-safe workspace variable definitions in `alludium/workspace-variables.yaml`.
+
+Included workspace variables:
+
+- `vc.fundStage`
+- `vc.fundSectors`
+- `vc.fundGeography`
+- `vc.fundThesis`
+- `vc.scoringFramework`
+
+Review notes:
+
+- These declarations define workspace-owned facts only; they do not contain firm-specific values.
+- Platform ingestion should attach pack provenance while leaving variable values owned by the workspace variable substrate.
 
 ---
 

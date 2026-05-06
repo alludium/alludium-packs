@@ -1,0 +1,67 @@
+schemaVersion: "0.1"
+status: platform-workspace-variable-declarations
+description: >
+  VC workspace variable declarations that are safe for public pack ownership.
+  These definitions describe workspace-owned facts only. They do not contain
+  firm-specific values, credentials, or copied runtime state.
+workspaceVariables:
+  - namespace: vc
+    key: fundStage
+    label: Fund Stage Focus
+    description: Target investment stages for thesis-fit screening and diligence context.
+    valueType: string
+    renderMetadata:
+      render: text
+      placeholder: Seed, Series A, growth, or stage-agnostic.
+    validationMetadata:
+      maxLength: 240
+    requirement: recommended
+    sensitivity: standard
+  - namespace: vc
+    key: fundSectors
+    label: Fund Sector Focus
+    description: Target sectors, verticals, or themes used for thesis-fit screening.
+    valueType: string
+    renderMetadata:
+      render: textarea
+      placeholder: AI infrastructure, fintech, climate, healthcare, or other thesis areas.
+    validationMetadata:
+      maxLength: 2000
+    requirement: recommended
+    sensitivity: standard
+  - namespace: vc
+    key: fundGeography
+    label: Fund Geography Focus
+    description: Target investment geographies or market focus for fund-fit context.
+    valueType: string
+    renderMetadata:
+      render: text
+      placeholder: US, Europe, UK, global, or specific regional focus.
+    validationMetadata:
+      maxLength: 240
+    requirement: recommended
+    sensitivity: standard
+  - namespace: vc
+    key: fundThesis
+    label: Fund Thesis
+    description: Workspace-level investment thesis used for thesis-fit screening, lead generation, and review-pack context.
+    valueType: string
+    renderMetadata:
+      render: textarea
+      placeholder: Summarize the fund thesis, ideal company profile, investment edge, and explicit exclusions.
+    validationMetadata:
+      maxLength: 4000
+    requirement: recommended
+    sensitivity: standard
+  - namespace: vc
+    key: scoringFramework
+    label: Fund Scoring Framework
+    description: Workspace-level scoring or evaluation framework names and rubric notes used when screening and diligence workflows ask for configured methodology.
+    valueType: string
+    renderMetadata:
+      render: textarea
+      placeholder: Describe the active screening or diligence framework, such as 10-Factor, 82-Factor, custom scorecard criteria, or when each method applies.
+    validationMetadata:
+      maxLength: 4000
+    requirement: recommended
+    sensitivity: standard
