@@ -368,13 +368,16 @@ def validate_application_recommendations(
         "alludiumMcpRecommendations",
         "file",
     )
+    app_surface = recommendations
     if app_surface_path != mcp_surface_path:
-        fail("Application recommendations must share the Alludium MCP recommendation surface")
+        app_surface = read_yaml(app_surface_path)
+        if not isinstance(app_surface, dict):
+            fail(f"{app_surface_path.relative_to(ROOT)} must be an object")
 
-    if "applicationRecommendations" in recommendations:
+    if "applicationRecommendations" in app_surface:
         fail("Use a single recommendations list; applicationRecommendations must not be declared")
 
-    application_recommendations = recommendations.get("recommendations")
+    application_recommendations = app_surface.get("recommendations")
     if not isinstance(application_recommendations, list) or not application_recommendations:
         fail("recommendations must be a non-empty list")
 
@@ -387,62 +390,70 @@ def validate_application_recommendations(
     for recommendation in application_recommendations:
         if not isinstance(recommendation, dict):
             fail("recommendations entries must be objects")
-        recommendation_id = recommendation.get("id")
+        if "id" in recommendation or "title" in recommendation or "externalMcpId" in recommendation:
+            fail(
+                "Application recommendations must use the integrated MCP mapping contract "
+                "(externalId/name/applicationRecommendation), not id/title/externalMcpId"
+            )
+        recommendation_id = recommendation.get("externalId")
         if not isinstance(recommendation_id, str) or not recommendation_id:
-            fail("recommendations entries must declare id")
+            fail("recommendations entries must declare externalId")
         if recommendation_id in ids:
-            fail(f"Duplicate application recommendation id: {recommendation_id}")
+            fail(f"Duplicate recommendation externalId: {recommendation_id}")
         ids.add(recommendation_id)
 
-        for field_name in ["title", "description"]:
+        for field_name in ["name", "use"]:
             if not isinstance(recommendation.get(field_name), str) or not recommendation.get(
                 field_name
             ):
                 fail(f"Application recommendation {recommendation_id} must declare {field_name}")
+        if not isinstance(recommendation.get("category"), str) or not recommendation.get("category"):
+            fail(f"Application recommendation {recommendation_id} must declare category")
         status = recommendation.get("status", "available")
         if status not in APPLICATION_RECOMMENDATION_STATUSES:
             fail(f"Application recommendation {recommendation_id} has invalid status")
-        if recommendation.get("recommendationStatus") not in APPLICATION_RECOMMENDATION_LEVELS:
+
+        recommendation_status = recommendation.get("recommendationStatus")
+        recommendation_metadata = recommendation.get("applicationRecommendation")
+        if recommendation_status is None and recommendation_metadata is None:
+            continue
+        if recommendation_status not in APPLICATION_RECOMMENDATION_LEVELS:
             fail(f"Application recommendation {recommendation_id} has invalid recommendationStatus")
+        if not isinstance(recommendation_metadata, dict):
+            fail(
+                f"Application recommendation {recommendation_id} must declare "
+                "applicationRecommendation"
+            )
         if status in {"future", "missing"} and not isinstance(recommendation.get("reason"), str):
             fail(f"Application recommendation {recommendation_id} must explain unavailable status")
 
-        metadata = recommendation.get("metadata")
-        if not isinstance(metadata, dict):
-            fail(f"Application recommendation {recommendation_id} must declare metadata")
         for metadata_field in [
             "pickerGroup",
             "systemCategory",
             "authorizationBoundary",
             "evidenceRequirement",
         ]:
-            if not isinstance(metadata.get(metadata_field), str) or not metadata.get(metadata_field):
+            if not isinstance(recommendation_metadata.get(metadata_field), str) or not recommendation_metadata.get(metadata_field):
                 fail(
                     f"Application recommendation {recommendation_id} metadata must declare "
                     f"{metadata_field}"
                 )
-        if "unlocks" in metadata:
+        if "unlocks" in recommendation_metadata:
             require_string_list(
-                metadata.get("unlocks"),
-                f"Application recommendation {recommendation_id} metadata.unlocks",
+                recommendation_metadata.get("unlocks"),
+                f"Application recommendation {recommendation_id} applicationRecommendation.unlocks",
             )
-        if "alternatives" in metadata:
+        if "alternatives" in recommendation_metadata:
             require_string_list(
-                metadata.get("alternatives"),
-                f"Application recommendation {recommendation_id} metadata.alternatives",
+                recommendation_metadata.get("alternatives"),
+                f"Application recommendation {recommendation_id} applicationRecommendation.alternatives",
             )
 
-        external_mcp_id = recommendation.get("externalMcpId")
-        if external_mcp_id is not None:
-            if not isinstance(external_mcp_id, str) or not external_mcp_id:
-                fail(
-                    f"Application recommendation {recommendation_id} externalMcpId must be a string"
-                )
-            if external_mcp_id not in mcp_servers:
-                fail(
-                    f"Application recommendation {recommendation_id} externalMcpId "
-                    f"is missing from .mcp.json: {external_mcp_id}"
-                )
+        if status == "available" and recommendation_id not in mcp_servers:
+            fail(
+                f"Application recommendation {recommendation_id} is available but missing "
+                "from .mcp.json"
+            )
 
 
 def normalize_workspace_methodology_skills(value: Any, context: str) -> list[str]:
@@ -514,6 +525,7 @@ def field_map(template_id: str, section_name: str, fields: Any) -> dict[str, dic
         fail(f"Task template {template_id} fields.{section_name} must be a list")
 
     mapped: dict[str, dict[str, Any]] = {}
+    positions: dict[int, str] = {}
     for field in fields:
         if not isinstance(field, dict):
             fail(f"Task template {template_id} fields.{section_name} entries must be objects")
@@ -522,6 +534,19 @@ def field_map(template_id: str, section_name: str, fields: Any) -> dict[str, dic
             fail(f"Task template {template_id} fields.{section_name} entries must declare key")
         if key in mapped:
             fail(f"Task template {template_id} fields.{section_name} has duplicate key {key}")
+        position = field.get("position")
+        if not isinstance(position, int) or isinstance(position, bool):
+            fail(
+                f"Task template {template_id} fields.{section_name}.{key} must declare "
+                "an integer position"
+            )
+        duplicate_key = positions.get(position)
+        if duplicate_key is not None:
+            fail(
+                f"Task template {template_id} fields.{section_name} has duplicate "
+                f"position {position}: {duplicate_key}, {key}"
+            )
+        positions[position] = key
         mapped[key] = field
     return mapped
 
@@ -1055,16 +1080,46 @@ def validate_mcp_definitions(manifest: dict[str, Any], recommendations: dict[str
         if has_command == has_url:
             fail(f".mcp.json server {server_id} must define exactly one of command or url")
 
-    recommendation_ids = {
-        item.get("externalMcpId")
-        for item in recommendations.get("recommendations", [])
-        if isinstance(item, dict) and item.get("externalMcpId") is not None
-    }
+    if recommendations.get("status") != "platform-mapping":
+        fail("alludiumMcpRecommendations must declare status: platform-mapping")
 
-    missing_from_plugin = recommendation_ids - set(mcp_servers)
+    recommendation_entries = recommendations.get("recommendations")
+    if not isinstance(recommendation_entries, list) or not recommendation_entries:
+        fail("alludiumMcpRecommendations must declare a non-empty recommendations list")
+
+    recommendation_ids: set[str] = set()
+    for item in recommendation_entries:
+        if not isinstance(item, dict):
+            fail("All MCP recommendation entries must be objects")
+        if "id" in item or "title" in item or "externalMcpId" in item or "metadata" in item:
+            fail(
+                "MCP recommendations must use externalId/name/use plus optional "
+                "applicationRecommendation metadata"
+            )
+        external_id = item.get("externalId")
+        if not isinstance(external_id, str) or not external_id:
+            fail("All MCP recommendation entries must declare externalId")
+        if external_id in recommendation_ids:
+            fail(f"Duplicate MCP recommendation externalId: {external_id}")
+        recommendation_ids.add(external_id)
+        if external_id not in mcp_servers:
+            continue
+        for field_name in [
+            "name",
+            "category",
+            "use",
+            "pluginCredentialBoundary",
+            "alludiumPlatformMapping",
+        ]:
+            if not isinstance(item.get(field_name), str) or not item.get(field_name):
+                fail(f"MCP recommendation {external_id} must declare {field_name}")
+        if not isinstance(item.get("platformDefaultAvailable"), bool):
+            fail(f"MCP recommendation {external_id} must declare platformDefaultAvailable")
+
+    missing_from_plugin = set(mcp_servers) - recommendation_ids
     if missing_from_plugin:
         fail(
-            "Application recommendation externalMcpId missing from .mcp.json: "
+            ".mcp.json servers missing from MCP recommendations: "
             f"{sorted(missing_from_plugin)}"
         )
 

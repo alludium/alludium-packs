@@ -119,7 +119,7 @@ Review notes:
 
 ## MCP Definitions And Platform Mapping
 
-The first scaffold includes public-safe plugin MCP definitions in `.mcp.json` and VC application recommendations in `alludium/mcp-recommendations.yaml`. Recommendation entries that correspond to plugin MCP definitions carry `externalMcpId` references so the platform bridge does not need a second application recommendation source.
+The first scaffold includes public-safe plugin MCP definitions in `.mcp.json` and VC application recommendations in `alludium/mcp-recommendations.yaml`. The recommendations file remains the MCP platform-mapping surface: records use `externalId`, `name`, and the mapping fields (`pluginCredentialBoundary`, `alludiumPlatformMapping`, `platformDefaultAvailable`) for MCP-backed entries. Records that should also appear in the application picker add `recommendationStatus` and an `applicationRecommendation` metadata block on the same record so there is no second source of truth.
 
 Included MCP IDs:
 

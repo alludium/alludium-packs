@@ -73,7 +73,7 @@ fields:
       name: IC Agenda
       fieldType: file
       required: true
-      position: 2
+      position: 1
       config: {}
     - key: ic_memo
       name: Ic Memo
@@ -136,92 +136,92 @@ fields:
       name: Review Findings
       fieldType: string
       required: false
-      position: 1
+      position: 2
       config: {}
     - key: citation_gaps
       name: Citation Gaps
       fieldType: string
       required: false
-      position: 2
+      position: 3
       config: {}
     - key: assumption_gaps
       name: Assumption Gaps
       fieldType: string
       required: false
-      position: 3
+      position: 4
       config: {}
     - key: unresolved_risks
       name: Unresolved Risks
       fieldType: json
       required: false
-      position: 4
+      position: 5
       config: {}
     - key: decision_readiness
       name: Decision Readiness
       fieldType: string
       required: false
-      position: 5
+      position: 6
       config: {}
     - key: required_changes
       name: Required Changes
       fieldType: string
       required: false
-      position: 6
+      position: 7
       config: {}
     - key: summary
       name: Summary
       fieldType: richtext
       required: false
-      position: 7
+      position: 8
       config:
         rows: 5
     - key: recommendation
       name: Recommendation
       fieldType: string
       required: false
-      position: 8
+      position: 9
       config: {}
     - key: source_links
       name: Source Links
       fieldType: string
       required: false
-      position: 9
+      position: 10
       config: {}
     - key: assumptions
       name: Assumptions
       fieldType: string
       required: false
-      position: 10
+      position: 11
       config: {}
     - key: evidence_quality
       name: Evidence Quality
       fieldType: json
       required: false
-      position: 11
+      position: 12
       config: {}
     - key: open_questions
       name: Open Questions
       fieldType: json
       required: false
-      position: 12
+      position: 13
       config: {}
     - key: risks
       name: Risks
       fieldType: json
       required: false
-      position: 13
+      position: 14
       config: {}
     - key: human_decision_points
       name: Human Decision Points
       fieldType: string
       required: false
-      position: 14
+      position: 15
       config: {}
     - key: next_actions
       name: Next Actions
       fieldType: json
       required: false
-      position: 15
+      position: 16
       config: {}
 runtime:
   defaultExecutionContext:

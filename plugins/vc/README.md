@@ -31,7 +31,7 @@ Task-template workspace eligibility is controlled by catalog-level `verticalKeys
 | Project types             | `alludium/project-types/`             | VC Deal Room project type catalog and definition                                         |
 | Pack manifest             | `alludium/manifest.yaml`              | Alludium-specific inventory, boundaries, and future pack surfaces                        |
 | Plugin MCP manifest       | `.mcp.json`                           | Public-safe MCP definitions for VC research, CRM, meeting, and market-intelligence tools |
-| Application recommendations | `alludium/mcp-recommendations.yaml` | VC application recommendations with optional `externalMcpId` references to `.mcp.json`   |
+| Application recommendations | `alludium/mcp-recommendations.yaml` | VC application recommendations nested on the same `externalId`/`name` records as MCP mapping |
 | Workspace variable declarations | `alludium/workspace-variables.yaml` | Public-safe VC workspace variable definitions without firm-specific values               |
 | Validation                | `scripts/validate_pack.py`            | Local and CI validation for manifests, skills, references, and obvious secrets           |
 
