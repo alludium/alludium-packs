@@ -41,6 +41,12 @@ EXPECTED_WORKSPACE_VARIABLE_BINDINGS = {
     "fundSectors": "vc.fundSectors",
     "fundGeography": "vc.fundGeography",
 }
+WORKSPACE_VARIABLE_VALUE_TYPES = {"string", "number", "boolean", "object", "array"}
+WORKSPACE_VARIABLE_RENDER_TYPES = {"text", "textarea", "select", "checkbox", "number"}
+WORKSPACE_VARIABLE_REQUIREMENT_LEVELS = {"optional", "recommended", "required"}
+WORKSPACE_VARIABLE_SENSITIVITY_LEVELS = {"standard", "sensitive"}
+APPLICATION_RECOMMENDATION_STATUSES = {"available", "future", "missing"}
+APPLICATION_RECOMMENDATION_LEVELS = {"required", "recommended", "optional"}
 TASK_TEMPLATE_REQUIRED_SKILL_REFERENCE_FIELDS = ["requiredSkills", "plannedRequiredSkills"]
 TASK_TEMPLATE_AGENT_TEMPLATE_REFERENCE_FIELDS = [
     "recommendedAgentTemplate",
@@ -193,6 +199,176 @@ def require_string_list(value: Any, context: str) -> list[str]:
     if not isinstance(value, list) or not all(isinstance(item, str) for item in value):
         fail(f"{context} must be a list of strings")
     return value
+
+
+def resolve_manifest_surface_path(
+    manifest: dict[str, Any],
+    surface_key: str,
+    expected_kind: str,
+) -> Path:
+    surface = manifest["surfaces"].get(surface_key)
+    if not isinstance(surface, dict):
+        fail(f"Manifest must declare surfaces.{surface_key}")
+    surface_path = surface.get("path")
+    if not isinstance(surface_path, str) or not surface_path:
+        fail(f"surfaces.{surface_key}.path must be declared")
+
+    resolved = (ROOT / surface_path).resolve()
+    try:
+        resolved.relative_to(ROOT.resolve())
+    except ValueError:
+        fail(f"surfaces.{surface_key}.path must resolve inside the pack root")
+
+    if expected_kind == "file" and not resolved.is_file():
+        fail(f"surfaces.{surface_key}.path must reference an existing file: {surface_path}")
+    if expected_kind == "directory" and not resolved.is_dir():
+        fail(f"surfaces.{surface_key}.path must reference an existing directory: {surface_path}")
+
+    return resolved
+
+
+def validate_workspace_variables(manifest: dict[str, Any]) -> set[str]:
+    variables_path = resolve_manifest_surface_path(manifest, "workspaceVariables", "file")
+    surface = read_yaml(variables_path)
+    if not isinstance(surface, dict):
+        fail(f"{variables_path.relative_to(ROOT)} must be an object")
+    if not isinstance(surface.get("schemaVersion"), str):
+        fail(f"{variables_path.relative_to(ROOT)} must declare schemaVersion")
+    if surface.get("status") != "platform-workspace-variable-declarations":
+        fail(
+            f"{variables_path.relative_to(ROOT)} status must be "
+            "platform-workspace-variable-declarations"
+        )
+
+    variables = surface.get("workspaceVariables")
+    if not isinstance(variables, list) or not variables:
+        fail(f"{variables_path.relative_to(ROOT)} workspaceVariables must be a non-empty list")
+
+    keys: set[str] = set()
+    for variable in variables:
+        if not isinstance(variable, dict):
+            fail(f"{variables_path.relative_to(ROOT)} workspaceVariables entries must be objects")
+
+        namespace = variable.get("namespace")
+        key = variable.get("key")
+        if not isinstance(namespace, str) or not namespace:
+            fail("Workspace variables must declare namespace")
+        if not isinstance(key, str) or not key:
+            fail("Workspace variables must declare key")
+        variable_key = f"{namespace}.{key}"
+        if variable_key in keys:
+            fail(f"Duplicate workspace variable declaration: {variable_key}")
+        keys.add(variable_key)
+
+        for field_name in ["label", "description"]:
+            if not isinstance(variable.get(field_name), str) or not variable.get(field_name):
+                fail(f"Workspace variable {variable_key} must declare {field_name}")
+        if variable.get("valueType") not in WORKSPACE_VARIABLE_VALUE_TYPES:
+            fail(f"Workspace variable {variable_key} has invalid valueType")
+        render_metadata = variable.get("renderMetadata")
+        if not isinstance(render_metadata, dict):
+            fail(f"Workspace variable {variable_key} must declare renderMetadata")
+        if render_metadata.get("render") not in WORKSPACE_VARIABLE_RENDER_TYPES:
+            fail(f"Workspace variable {variable_key} has invalid renderMetadata.render")
+        if variable.get("requirement") not in WORKSPACE_VARIABLE_REQUIREMENT_LEVELS:
+            fail(f"Workspace variable {variable_key} has invalid requirement")
+        if variable.get("sensitivity") not in WORKSPACE_VARIABLE_SENSITIVITY_LEVELS:
+            fail(f"Workspace variable {variable_key} has invalid sensitivity")
+        if "defaultValue" in variable:
+            fail(f"Public workspace variable {variable_key} must not declare defaultValue")
+
+    return keys
+
+
+def validate_application_recommendations(
+    manifest: dict[str, Any],
+    recommendations: dict[str, Any],
+) -> None:
+    app_surface_path = resolve_manifest_surface_path(
+        manifest,
+        "alludiumApplicationRecommendations",
+        "file",
+    )
+    mcp_surface_path = resolve_manifest_surface_path(
+        manifest,
+        "alludiumMcpRecommendations",
+        "file",
+    )
+    if app_surface_path != mcp_surface_path:
+        fail("Application recommendations must share the Alludium MCP recommendation surface")
+
+    if "applicationRecommendations" in recommendations:
+        fail("Use a single recommendations list; applicationRecommendations must not be declared")
+
+    application_recommendations = recommendations.get("recommendations")
+    if not isinstance(application_recommendations, list) or not application_recommendations:
+        fail("recommendations must be a non-empty list")
+
+    mcp_manifest = read_json(ROOT / manifest["surfaces"]["mcpServers"]["path"])
+    mcp_servers = mcp_manifest.get("mcpServers")
+    if not isinstance(mcp_servers, dict):
+        fail(".mcp.json must define mcpServers")
+
+    ids: set[str] = set()
+    for recommendation in application_recommendations:
+        if not isinstance(recommendation, dict):
+            fail("recommendations entries must be objects")
+        recommendation_id = recommendation.get("id")
+        if not isinstance(recommendation_id, str) or not recommendation_id:
+            fail("recommendations entries must declare id")
+        if recommendation_id in ids:
+            fail(f"Duplicate application recommendation id: {recommendation_id}")
+        ids.add(recommendation_id)
+
+        for field_name in ["title", "description"]:
+            if not isinstance(recommendation.get(field_name), str) or not recommendation.get(
+                field_name
+            ):
+                fail(f"Application recommendation {recommendation_id} must declare {field_name}")
+        status = recommendation.get("status", "available")
+        if status not in APPLICATION_RECOMMENDATION_STATUSES:
+            fail(f"Application recommendation {recommendation_id} has invalid status")
+        if recommendation.get("recommendationStatus") not in APPLICATION_RECOMMENDATION_LEVELS:
+            fail(f"Application recommendation {recommendation_id} has invalid recommendationStatus")
+        if status in {"future", "missing"} and not isinstance(recommendation.get("reason"), str):
+            fail(f"Application recommendation {recommendation_id} must explain unavailable status")
+
+        metadata = recommendation.get("metadata")
+        if not isinstance(metadata, dict):
+            fail(f"Application recommendation {recommendation_id} must declare metadata")
+        for metadata_field in [
+            "pickerGroup",
+            "systemCategory",
+            "authorizationBoundary",
+            "evidenceRequirement",
+        ]:
+            if not isinstance(metadata.get(metadata_field), str) or not metadata.get(metadata_field):
+                fail(
+                    f"Application recommendation {recommendation_id} metadata must declare "
+                    f"{metadata_field}"
+                )
+        if "unlocks" in metadata:
+            require_string_list(
+                metadata.get("unlocks"),
+                f"Application recommendation {recommendation_id} metadata.unlocks",
+            )
+        if "alternatives" in metadata:
+            require_string_list(
+                metadata.get("alternatives"),
+                f"Application recommendation {recommendation_id} metadata.alternatives",
+            )
+
+        external_mcp_id = recommendation.get("externalMcpId")
+        if external_mcp_id is not None:
+            if not isinstance(external_mcp_id, str) or not external_mcp_id:
+                fail(
+                    f"Application recommendation {recommendation_id} externalMcpId must be a string"
+                )
+            if external_mcp_id not in mcp_servers:
+                fail(
+                    f"Application recommendation {recommendation_id} externalMcpId "
+                    f"is missing from .mcp.json: {external_mcp_id}"
+                )
 
 
 def normalize_workspace_methodology_skills(value: Any, context: str) -> list[str]:
@@ -650,16 +826,17 @@ def validate_mcp_definitions(manifest: dict[str, Any], recommendations: dict[str
             fail(f".mcp.json server {server_id} must define exactly one of command or url")
 
     recommendation_ids = {
-        item.get("externalId")
+        item.get("externalMcpId")
         for item in recommendations.get("recommendations", [])
-        if isinstance(item, dict)
+        if isinstance(item, dict) and item.get("externalMcpId") is not None
     }
-    if None in recommendation_ids:
-        fail("All MCP recommendations must include externalId")
 
     missing_from_plugin = recommendation_ids - set(mcp_servers)
     if missing_from_plugin:
-        fail(f"MCP recommendations missing from .mcp.json: {sorted(missing_from_plugin)}")
+        fail(
+            "Application recommendation externalMcpId missing from .mcp.json: "
+            f"{sorted(missing_from_plugin)}"
+        )
 
     platform_only_ids = {
         item.get("externalId")
@@ -674,11 +851,6 @@ def validate_mcp_definitions(manifest: dict[str, Any], recommendations: dict[str
     for template_id in template_ids:
         template = read_yaml(ROOT / "alludium" / "agent-templates" / f"{template_id}.yaml")
         template_mcp_ids.update((template.get("mcpServers") or {}).keys())
-
-    allowed_template_mcp_ids = recommendation_ids | platform_only_ids
-    missing_from_recommendations = template_mcp_ids - allowed_template_mcp_ids
-    if missing_from_recommendations:
-        fail(f"Template MCP references missing from MCP mapping: {sorted(missing_from_recommendations)}")
 
     missing_from_plugin = template_mcp_ids - set(mcp_servers)
     if missing_from_plugin:
@@ -738,6 +910,8 @@ def main() -> None:
     if not isinstance(recommendations, dict):
         fail(f"{recommendations_path} must be an object")
     validate_mcp_definitions(manifest, recommendations)
+    validate_workspace_variables(manifest)
+    validate_application_recommendations(manifest, recommendations)
     validate_no_obvious_secrets()
     validate_no_public_readiness_leakage()
 
