@@ -98,6 +98,7 @@ Review notes:
 
 - Task templates remain unavailable to the platform until the paired platform PR teaches external pack ingest to stage and apply this surface.
 - The task-template catalog preserves the current platform `vc-workflows` pack metadata, template IDs, and template versions while advertising both supported vertical keys: `venture_capital` and `vc`.
+- Platform eligibility is driven by catalog `verticalKeys`, which the platform loader persists to `task_definitions.vertical_keys`; the per-template `definitionJson.vertical: vc` field remains legacy workflow metadata and is not used for workspace eligibility checks.
 - The task-template surface requires platform capability `external-task-definition-template-ingest`.
 - All task templates advertise `vc_deal_room` as a supported project type; that project type is currently declared as a platform-local dependency, not as an included pack surface.
 

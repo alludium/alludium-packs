@@ -17,6 +17,8 @@ The current draft pack surface contains:
 
 Project type definitions remain intentionally deferred. The VC task-definition templates advertise `vc_deal_room` as a supported project type, but that project type is a declared platform-local dependency until the later project-type pack surface lands.
 
+Task-template workspace eligibility is controlled by catalog-level `verticalKeys`. Individual template `definitionJson.vertical` values remain legacy workflow metadata, so the `v0.2.2` compatibility fix is intentionally made in `alludium/task-definition-templates/catalog.v1.json`.
+
 ## Contents
 
 | Surface                   | Path                                  | Notes                                                                                    |
