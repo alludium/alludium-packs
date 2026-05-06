@@ -48,7 +48,9 @@ TASK_TEMPLATE_AGENT_TEMPLATE_REFERENCE_FIELDS = [
     "preferredAgentType",
 ]
 TASK_TEMPLATE_PLATFORM_CAPABILITY = "external-task-definition-template-ingest"
+PROJECT_TYPE_PLATFORM_CAPABILITY = "external-project-type-ingest"
 EXPECTED_VC_TASK_TEMPLATE_VERTICAL_KEYS = ["venture_capital", "vc"]
+PROJECT_TYPE_FIELD_KINDS = {"date", "enum", "member", "number", "text"}
 
 
 def fail(message: str) -> None:
@@ -240,6 +242,21 @@ def validate_task_template_platform_ingest_contract(surface: dict[str, Any]) -> 
         fail("surfaces.taskDefinitionTemplates.platformIngest.status must be declared")
 
 
+def validate_project_type_platform_ingest_contract(surface: dict[str, Any]) -> None:
+    platform_ingest = surface.get("platformIngest")
+    if not isinstance(platform_ingest, dict):
+        fail("surfaces.projectTypes.platformIngest must be declared")
+    if platform_ingest.get("requiresCapability") != PROJECT_TYPE_PLATFORM_CAPABILITY:
+        fail(
+            "surfaces.projectTypes.platformIngest.requiresCapability must be "
+            f"{PROJECT_TYPE_PLATFORM_CAPABILITY}"
+        )
+    if not isinstance(platform_ingest.get("minimumPlatformVersion"), str):
+        fail("surfaces.projectTypes.platformIngest.minimumPlatformVersion must be declared")
+    if not isinstance(platform_ingest.get("status"), str):
+        fail("surfaces.projectTypes.platformIngest.status must be declared")
+
+
 def get_declared_project_type_dependencies(manifest: dict[str, Any]) -> set[str]:
     dependencies = manifest.get("dependencies") or {}
     if not isinstance(dependencies, dict):
@@ -265,6 +282,201 @@ def get_declared_project_type_dependencies(manifest: dict[str, Any]) -> set[str]
         declared.update(included_ids)
 
     return declared
+
+
+def validate_project_type_field(project_type_id: str, field: Any) -> tuple[str, str]:
+    if not isinstance(field, dict):
+        fail(f"Project type {project_type_id} fieldsSchema entries must be objects")
+    field_id = field.get("id")
+    if not isinstance(field_id, str) or not field_id:
+        fail(f"Project type {project_type_id} field is missing id")
+    field_key = field.get("key")
+    if not isinstance(field_key, str) or not field_key:
+        fail(f"Project type {project_type_id} field {field_id} is missing key")
+    if not isinstance(field.get("label"), str) or not field.get("label"):
+        fail(f"Project type {project_type_id} field {field_key} is missing label")
+    field_kind = field.get("kind")
+    if field_kind not in PROJECT_TYPE_FIELD_KINDS:
+        fail(
+            f"Project type {project_type_id} field {field_key} kind must be one of "
+            f"{sorted(PROJECT_TYPE_FIELD_KINDS)}"
+        )
+    if not isinstance(field.get("required"), bool):
+        fail(f"Project type {project_type_id} field {field_key} must declare required as a boolean")
+    if field_kind == "enum":
+        options = field.get("options")
+        if not isinstance(options, list) or not options:
+            fail(f"Project type {project_type_id} enum field {field_key} must declare options")
+        option_values: list[str] = []
+        for option in options:
+            if not isinstance(option, dict):
+                fail(f"Project type {project_type_id} enum field {field_key} options must be objects")
+            option_value = option.get("value")
+            if not isinstance(option_value, str) or not option_value:
+                fail(f"Project type {project_type_id} enum field {field_key} option is missing value")
+            if not isinstance(option.get("label"), str) or not option.get("label"):
+                fail(f"Project type {project_type_id} enum field {field_key} option is missing label")
+            option_values.append(option_value)
+        if len(option_values) != len(set(option_values)):
+            fail(f"Project type {project_type_id} enum field {field_key} has duplicate option values")
+    return field_id, field_key
+
+
+def validate_project_type_file(path: Path, expected_id: str) -> str:
+    project_type = read_json(path)
+    relative_path = path.relative_to(ROOT)
+    if not isinstance(project_type, dict):
+        fail(f"Project type must be an object: {relative_path}")
+    if project_type.get("kind") != "project-type":
+        fail(f"{relative_path} kind must be project-type")
+    if project_type.get("apiVersion") != "alludium/v1alpha1":
+        fail(f"{relative_path} apiVersion must be alludium/v1alpha1")
+
+    project_type_id = project_type.get("key")
+    if project_type_id != expected_id:
+        fail(f"Project type file/id mismatch: expected {expected_id}, found {project_type_id}")
+    if not isinstance(project_type.get("name"), str) or not project_type.get("name"):
+        fail(f"Project type {expected_id} is missing name")
+    if not isinstance(project_type.get("description"), str) or not project_type.get("description"):
+        fail(f"Project type {expected_id} is missing description")
+
+    initial_version = project_type.get("initialVersion")
+    if not isinstance(initial_version, dict):
+        fail(f"Project type {expected_id} initialVersion must be an object")
+    if not isinstance(initial_version.get("version"), str) or not initial_version.get("version"):
+        fail(f"Project type {expected_id} initialVersion.version must be declared")
+    fields_schema = initial_version.get("fieldsSchema")
+    if not isinstance(fields_schema, list) or not fields_schema:
+        fail(f"Project type {expected_id} initialVersion.fieldsSchema must be a non-empty list")
+    field_ids: list[str] = []
+    field_keys: list[str] = []
+    for field in fields_schema:
+        field_id, field_key = validate_project_type_field(expected_id, field)
+        field_ids.append(field_id)
+        field_keys.append(field_key)
+    if len(field_ids) != len(set(field_ids)):
+        fail(f"Project type {expected_id} has duplicate field ids")
+    if len(field_keys) != len(set(field_keys)):
+        fail(f"Project type {expected_id} has duplicate field keys")
+
+    if not isinstance(initial_version.get("instructionTemplate"), str) or not initial_version.get(
+        "instructionTemplate"
+    ):
+        fail(f"Project type {expected_id} initialVersion.instructionTemplate must be declared")
+
+    lifecycle_states = require_string_list(
+        initial_version.get("lifecycleStates"),
+        f"Project type {expected_id} initialVersion.lifecycleStates",
+    )
+    if not lifecycle_states:
+        fail(f"Project type {expected_id} initialVersion.lifecycleStates must not be empty")
+    if len(lifecycle_states) != len(set(lifecycle_states)):
+        fail(f"Project type {expected_id} has duplicate lifecycle states")
+
+    lifecycle_transitions = initial_version.get("lifecycleTransitions")
+    if not isinstance(lifecycle_transitions, list) or not lifecycle_transitions:
+        fail(f"Project type {expected_id} initialVersion.lifecycleTransitions must be a non-empty list")
+    transition_pairs: list[tuple[str, str]] = []
+    lifecycle_state_set = set(lifecycle_states)
+    for transition in lifecycle_transitions:
+        if not isinstance(transition, dict):
+            fail(f"Project type {expected_id} lifecycle transitions must be objects")
+        from_state = transition.get("from")
+        to_state = transition.get("to")
+        if not isinstance(from_state, str) or not isinstance(to_state, str):
+            fail(f"Project type {expected_id} lifecycle transitions must declare from/to strings")
+        if from_state not in lifecycle_state_set:
+            fail(f"Project type {expected_id} transition from unknown state {from_state}")
+        if to_state not in lifecycle_state_set:
+            fail(f"Project type {expected_id} transition to unknown state {to_state}")
+        transition_pairs.append((from_state, to_state))
+    if len(transition_pairs) != len(set(transition_pairs)):
+        fail(f"Project type {expected_id} has duplicate lifecycle transitions")
+
+    return expected_id
+
+
+def validate_project_types(manifest: dict[str, Any]) -> set[str]:
+    surface = manifest["surfaces"].get("projectTypes")
+    if not isinstance(surface, dict):
+        fail("Manifest must declare surfaces.projectTypes")
+    surface_path = surface.get("path")
+    if not isinstance(surface_path, str) or not surface_path:
+        fail("surfaces.projectTypes.path must be declared")
+    manifest_project_type_ids = surface.get("ids")
+    if not isinstance(manifest_project_type_ids, list) or not all(
+        isinstance(item, str) for item in manifest_project_type_ids
+    ):
+        fail("surfaces.projectTypes.ids must be a list of strings")
+    if len(manifest_project_type_ids) != len(set(manifest_project_type_ids)):
+        fail("Duplicate project type IDs in alludium/manifest.yaml")
+    validate_project_type_platform_ingest_contract(surface)
+
+    project_type_root = ROOT / surface_path
+    resolved_project_type_root = project_type_root.resolve()
+    try:
+        resolved_project_type_root.relative_to(ROOT.resolve())
+    except ValueError:
+        fail(f"surfaces.projectTypes.path must resolve inside the pack root: {surface_path}")
+    catalog_path = project_type_root / "catalog.v1.json"
+    if not catalog_path.exists():
+        fail(f"Missing project type catalog: {catalog_path.relative_to(ROOT)}")
+    catalog = read_json(catalog_path)
+    if not isinstance(catalog, dict):
+        fail(f"{catalog_path.relative_to(ROOT)} must be an object")
+    if catalog.get("kind") != "project-type-catalog":
+        fail(f"{catalog_path.relative_to(ROOT)} kind must be project-type-catalog")
+    if catalog.get("apiVersion") != "alludium/v1alpha1":
+        fail(f"{catalog_path.relative_to(ROOT)} apiVersion must be alludium/v1alpha1")
+
+    discovered_ids: list[str] = []
+    discovered_paths: set[Path] = set()
+    catalog_entries = catalog.get("projectTypes")
+    if not isinstance(catalog_entries, list) or not catalog_entries:
+        fail(f"{catalog_path.relative_to(ROOT)} projectTypes must be a non-empty list")
+    for entry in catalog_entries:
+        if not isinstance(entry, dict):
+            fail("Project type catalog entries must be objects")
+        project_type_id = entry.get("id")
+        relative_project_type_path = entry.get("path")
+        if not isinstance(project_type_id, str) or not project_type_id:
+            fail("Project type catalog entries must declare id")
+        if not isinstance(relative_project_type_path, str) or not relative_project_type_path:
+            fail(f"Project type catalog entry {project_type_id} must declare path")
+        project_type_path = project_type_root / relative_project_type_path
+        resolved_project_type_path = project_type_path.resolve()
+        try:
+            resolved_project_type_path.relative_to(resolved_project_type_root)
+        except ValueError:
+            fail(
+                "Project type catalog path escapes project-type surface: "
+                f"{relative_project_type_path}"
+            )
+        if not project_type_path.exists():
+            fail(f"Project type catalog references missing file {relative_project_type_path}")
+        discovered_paths.add(resolved_project_type_path)
+        discovered_ids.append(validate_project_type_file(resolved_project_type_path, project_type_id))
+
+    if len(discovered_ids) != len(set(discovered_ids)):
+        fail("Duplicate project type IDs in catalog files")
+    if set(discovered_ids) != set(manifest_project_type_ids):
+        fail(
+            "Manifest project type IDs do not match catalog files: "
+            f"manifest_only={sorted(set(manifest_project_type_ids) - set(discovered_ids))}, "
+            f"catalog_only={sorted(set(discovered_ids) - set(manifest_project_type_ids))}"
+        )
+
+    actual_json_paths = {
+        path.resolve() for path in project_type_root.glob("**/*.json") if path.name != "catalog.v1.json"
+    }
+    extra_json_paths = actual_json_paths - discovered_paths
+    if extra_json_paths:
+        fail(
+            "Project type files present on disk but missing from catalog: "
+            f"{sorted(str(path.relative_to(project_type_root)) for path in extra_json_paths)}"
+        )
+
+    return set(discovered_ids)
 
 
 def validate_task_template_file(
@@ -544,6 +756,7 @@ def main() -> None:
     skill_ids = validate_skills(manifest)
     validate_templates(manifest, skill_ids)
     agent_template_ids = set(manifest["surfaces"]["alludiumAgentTemplates"]["ids"])
+    project_type_ids = validate_project_types(manifest)
     validate_task_definition_templates(manifest, skill_ids, agent_template_ids)
     recommendations_path = manifest["surfaces"]["alludiumMcpRecommendations"]["path"]
     if not (ROOT / recommendations_path).exists():
@@ -559,7 +772,8 @@ def main() -> None:
         "Validated vc pack: "
         f"{len(skill_ids)} skills, "
         f"{len(manifest['surfaces']['alludiumAgentTemplates']['ids'])} agent templates, "
-        f"{len(manifest['surfaces']['taskDefinitionTemplates']['ids'])} task definition templates"
+        f"{len(manifest['surfaces']['taskDefinitionTemplates']['ids'])} task definition templates, "
+        f"{len(project_type_ids)} project types"
     )
 
 

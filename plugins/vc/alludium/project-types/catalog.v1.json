@@ -1,0 +1,10 @@
+{
+  "apiVersion": "alludium/v1alpha1",
+  "kind": "project-type-catalog",
+  "projectTypes": [
+    {
+      "id": "vc_deal_room",
+      "path": "vc_deal_room.json"
+    }
+  ]
+}

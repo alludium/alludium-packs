@@ -1,0 +1,445 @@
+{
+  "kind": "project-type",
+  "apiVersion": "alludium/v1alpha1",
+  "key": "vc_deal_room",
+  "name": "VC Deal Room",
+  "description": "Project context for one venture investment opportunity from sourcing through portfolio handoff.",
+  "initialVersion": {
+    "version": "1.0.0",
+    "fieldsSchema": [
+      {
+        "id": "field-company-name",
+        "key": "company_name",
+        "label": "Company Name",
+        "kind": "text",
+        "required": true,
+        "placeholder": "Acme AI"
+      },
+      {
+        "id": "field-company-domain",
+        "key": "company_domain",
+        "label": "Company Domain",
+        "kind": "text",
+        "required": false,
+        "description": "Company website or primary domain when known.",
+        "placeholder": "acme.ai"
+      },
+      {
+        "id": "field-deal-source",
+        "key": "deal_source",
+        "label": "Deal Source",
+        "kind": "enum",
+        "required": false,
+        "description": "How this opportunity entered the pipeline.",
+        "options": [
+          {
+            "value": "inbound",
+            "label": "Inbound"
+          },
+          {
+            "value": "outbound",
+            "label": "Outbound"
+          },
+          {
+            "value": "referral",
+            "label": "Referral"
+          },
+          {
+            "value": "thesis",
+            "label": "Thesis"
+          },
+          {
+            "value": "portfolio_intro",
+            "label": "Portfolio Intro"
+          },
+          {
+            "value": "event",
+            "label": "Event"
+          },
+          {
+            "value": "other",
+            "label": "Other"
+          }
+        ]
+      },
+      {
+        "id": "field-source-owner",
+        "key": "source_owner",
+        "label": "Source Owner",
+        "kind": "member",
+        "required": false,
+        "description": "Team member who owns the source relationship."
+      },
+      {
+        "id": "field-lead-partner",
+        "key": "lead_partner",
+        "label": "Lead Partner",
+        "kind": "member",
+        "required": false,
+        "description": "Investment lead for this opportunity."
+      },
+      {
+        "id": "field-investment-stage",
+        "key": "investment_stage",
+        "label": "Investment Stage",
+        "kind": "enum",
+        "required": false,
+        "options": [
+          {
+            "value": "pre_seed",
+            "label": "Pre-seed"
+          },
+          {
+            "value": "seed",
+            "label": "Seed"
+          },
+          {
+            "value": "series_a",
+            "label": "Series A"
+          },
+          {
+            "value": "series_b",
+            "label": "Series B"
+          },
+          {
+            "value": "growth",
+            "label": "Growth"
+          },
+          {
+            "value": "unknown",
+            "label": "Unknown"
+          }
+        ]
+      },
+      {
+        "id": "field-sector",
+        "key": "sector",
+        "label": "Sector",
+        "kind": "text",
+        "required": false,
+        "placeholder": "AI infrastructure"
+      },
+      {
+        "id": "field-geography",
+        "key": "geography",
+        "label": "Geography",
+        "kind": "text",
+        "required": false,
+        "placeholder": "US, UK, EU"
+      },
+      {
+        "id": "field-round",
+        "key": "round",
+        "label": "Round",
+        "kind": "text",
+        "required": false,
+        "placeholder": "Seed extension"
+      },
+      {
+        "id": "field-target-check-size",
+        "key": "target_check_size",
+        "label": "Target Check Size",
+        "kind": "number",
+        "required": false,
+        "description": "Use the fund's default currency."
+      },
+      {
+        "id": "field-affinity-record-url",
+        "key": "affinity_record_url",
+        "label": "Affinity Record URL",
+        "kind": "text",
+        "required": false,
+        "description": "Manual CRM link when Affinity is not connected.",
+        "placeholder": "https://app.affinity.co/..."
+      },
+      {
+        "id": "field-drive-deal-room-url",
+        "key": "drive_deal_room_url",
+        "label": "Drive Deal Room URL",
+        "kind": "text",
+        "required": false,
+        "description": "Manual Drive or document-room link.",
+        "placeholder": "https://drive.google.com/..."
+      },
+      {
+        "id": "field-deck-url",
+        "key": "deck_url",
+        "label": "Deck URL",
+        "kind": "text",
+        "required": false,
+        "description": "Current pitch deck or founder materials link."
+      },
+      {
+        "id": "field-meeting-transcript-urls",
+        "key": "meeting_transcript_urls",
+        "label": "Meeting Transcript URLs",
+        "kind": "text",
+        "required": false,
+        "description": "Comma-separated transcript links until multivalue fields are available."
+      },
+      {
+        "id": "field-current-decision",
+        "key": "current_decision",
+        "label": "Current Decision",
+        "kind": "enum",
+        "required": false,
+        "options": [
+          {
+            "value": "continue",
+            "label": "Continue"
+          },
+          {
+            "value": "pass",
+            "label": "Pass"
+          },
+          {
+            "value": "further_work",
+            "label": "Further Work"
+          },
+          {
+            "value": "term_sheet",
+            "label": "Term Sheet"
+          },
+          {
+            "value": "invested",
+            "label": "Invested"
+          }
+        ]
+      },
+      {
+        "id": "field-next-decision-date",
+        "key": "next_decision_date",
+        "label": "Next Decision Date",
+        "kind": "date",
+        "required": false
+      },
+      {
+        "id": "field-confidentiality-level",
+        "key": "confidentiality_level",
+        "label": "Confidentiality Level",
+        "kind": "enum",
+        "required": false,
+        "options": [
+          {
+            "value": "normal",
+            "label": "Normal"
+          },
+          {
+            "value": "sensitive",
+            "label": "Sensitive"
+          },
+          {
+            "value": "highly_sensitive",
+            "label": "Highly Sensitive"
+          }
+        ]
+      }
+    ],
+    "instructionTemplate": "This project is a VC Deal Room for one investment opportunity. Treat source links, decks, transcripts, CRM references, and task outputs as evidence that should stay attached to the Deal Room when supported. Ask for manual links or files when integrations are missing. External sends, CRM writes, Drive changes, investment decisions, and legal decisions require explicit human approval.",
+    "lifecycleStates": [
+      "lead_gen",
+      "deal_flow",
+      "screening",
+      "initial_call",
+      "follow_up",
+      "founder_evaluation",
+      "team_review",
+      "partner_review",
+      "commercial_dd",
+      "technical_dd",
+      "financial_dd",
+      "investment_committee",
+      "term_sheet",
+      "legal_review",
+      "legal_diligence",
+      "final_dd",
+      "signing",
+      "portfolio_onboarding",
+      "invested",
+      "passed",
+      "archived"
+    ],
+    "lifecycleTransitions": [
+      {
+        "from": "lead_gen",
+        "to": "deal_flow"
+      },
+      {
+        "from": "deal_flow",
+        "to": "screening"
+      },
+      {
+        "from": "screening",
+        "to": "initial_call"
+      },
+      {
+        "from": "screening",
+        "to": "passed"
+      },
+      {
+        "from": "initial_call",
+        "to": "follow_up"
+      },
+      {
+        "from": "initial_call",
+        "to": "passed"
+      },
+      {
+        "from": "follow_up",
+        "to": "founder_evaluation"
+      },
+      {
+        "from": "follow_up",
+        "to": "team_review"
+      },
+      {
+        "from": "follow_up",
+        "to": "passed"
+      },
+      {
+        "from": "founder_evaluation",
+        "to": "team_review"
+      },
+      {
+        "from": "team_review",
+        "to": "partner_review"
+      },
+      {
+        "from": "partner_review",
+        "to": "commercial_dd"
+      },
+      {
+        "from": "partner_review",
+        "to": "technical_dd"
+      },
+      {
+        "from": "partner_review",
+        "to": "financial_dd"
+      },
+      {
+        "from": "partner_review",
+        "to": "passed"
+      },
+      {
+        "from": "commercial_dd",
+        "to": "investment_committee"
+      },
+      {
+        "from": "technical_dd",
+        "to": "investment_committee"
+      },
+      {
+        "from": "financial_dd",
+        "to": "investment_committee"
+      },
+      {
+        "from": "investment_committee",
+        "to": "term_sheet"
+      },
+      {
+        "from": "investment_committee",
+        "to": "passed"
+      },
+      {
+        "from": "investment_committee",
+        "to": "follow_up"
+      },
+      {
+        "from": "term_sheet",
+        "to": "legal_review"
+      },
+      {
+        "from": "legal_review",
+        "to": "legal_diligence"
+      },
+      {
+        "from": "legal_diligence",
+        "to": "final_dd"
+      },
+      {
+        "from": "final_dd",
+        "to": "signing"
+      },
+      {
+        "from": "signing",
+        "to": "portfolio_onboarding"
+      },
+      {
+        "from": "portfolio_onboarding",
+        "to": "invested"
+      },
+      {
+        "from": "lead_gen",
+        "to": "archived"
+      },
+      {
+        "from": "deal_flow",
+        "to": "archived"
+      },
+      {
+        "from": "screening",
+        "to": "archived"
+      },
+      {
+        "from": "initial_call",
+        "to": "archived"
+      },
+      {
+        "from": "follow_up",
+        "to": "archived"
+      },
+      {
+        "from": "founder_evaluation",
+        "to": "archived"
+      },
+      {
+        "from": "team_review",
+        "to": "archived"
+      },
+      {
+        "from": "partner_review",
+        "to": "archived"
+      },
+      {
+        "from": "commercial_dd",
+        "to": "archived"
+      },
+      {
+        "from": "technical_dd",
+        "to": "archived"
+      },
+      {
+        "from": "financial_dd",
+        "to": "archived"
+      },
+      {
+        "from": "investment_committee",
+        "to": "archived"
+      },
+      {
+        "from": "term_sheet",
+        "to": "archived"
+      },
+      {
+        "from": "legal_review",
+        "to": "archived"
+      },
+      {
+        "from": "legal_diligence",
+        "to": "archived"
+      },
+      {
+        "from": "final_dd",
+        "to": "archived"
+      },
+      {
+        "from": "signing",
+        "to": "archived"
+      },
+      {
+        "from": "portfolio_onboarding",
+        "to": "archived"
+      }
+    ]
+  }
+}

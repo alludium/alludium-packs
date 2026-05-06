@@ -2,13 +2,12 @@ schemaVersion: "0.1"
 pack:
   id: vc
   name: Alludium VC
-  version: "0.2.2"
+  version: "0.3.0"
   description: >
     Public VC workflow plugin and pack seed for Alludium, published as the
     first bundle in the broader Alludium packs catalog. This release contains
-    VC skills, Alludium runtime agent templates, and VC task-definition
-    templates. Project type definitions are a planned pack surface, but are
-    not included in this extraction.
+    VC skills, Alludium runtime agent templates, VC task-definition templates,
+    and the VC Deal Room project type definition.
   publisher: Alludium
   license: Apache-2.0
   repository: https://github.com/alludium/alludium-packs
@@ -100,18 +99,18 @@ surfaces:
       - vc.verify_conditions_precedent
       - vc.prepare_portfolio_onboarding
   projectTypes:
-    status: deferred
-    reason: VC Deal Room project type belongs in the later pack activation surface.
-dependencies:
-  projectTypes:
-    - id: vc_deal_room
-      status: platform-local
-      requiredBy:
-        - taskDefinitionTemplates
-      reason: >
-        VC task-definition templates advertise vc_deal_room as a supported
-        project type. The project type remains platform-local until the future
-        project-type pack surface is implemented.
+    path: alludium/project-types
+    platformIngest:
+      status: requires-platform-support
+      requiresCapability: external-project-type-ingest
+      minimumPlatformVersion: "0.3.0"
+      note: >
+        Platform versions without external project-type ingest support should
+        ignore this surface and continue using platform-local project types.
+        Use this surface only with a platform release that declares external
+        project-type ingest support.
+    ids:
+      - vc_deal_room
 boundaries:
   publicSafe: true
   secretsAllowed: false

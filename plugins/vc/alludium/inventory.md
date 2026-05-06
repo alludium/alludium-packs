@@ -1,9 +1,9 @@
 # Alludium VC Inventory
 
-**Version**: 0.2.2
-**Status**: Draft task-template expansion
+**Version**: 0.3.0
+**Status**: Draft project-type expansion
 
-This inventory describes the current public VC plugin/pack seed plus the draft task-template expansion. Version `0.1.0` contains VC skills, Alludium runtime agent templates, public-safe MCP definitions, and Alludium MCP recommendations. Version `0.2.2` adds VC task-definition templates as the next pack surface, advertises both the canonical `venture_capital` vertical key and legacy `vc` alias, and declares the platform capability/project-type dependencies required to ingest them safely.
+This inventory describes the current public VC plugin/pack seed plus the draft project-type expansion. Version `0.1.0` contains VC skills, Alludium runtime agent templates, public-safe MCP definitions, and Alludium MCP recommendations. Version `0.2.2` adds VC task-definition templates and advertises both the canonical `venture_capital` vertical key and legacy `vc` alias. Version `0.3.0` adds the VC Deal Room project type as a first-class pack surface for the paired platform ingest work.
 
 ---
 
@@ -100,7 +100,20 @@ Review notes:
 - The task-template catalog preserves the current platform `vc-workflows` pack metadata, template IDs, and template versions while advertising both supported vertical keys: `venture_capital` and `vc`.
 - Platform eligibility is driven by catalog `verticalKeys`, which the platform loader persists to `task_definitions.vertical_keys`; the per-template `definitionJson.vertical: vc` field remains legacy workflow metadata and is not used for workspace eligibility checks.
 - The task-template surface requires platform capability `external-task-definition-template-ingest`.
-- All task templates advertise `vc_deal_room` as a supported project type; that project type is currently declared as a platform-local dependency, not as an included pack surface.
+- All task templates advertise `vc_deal_room` as a supported project type; that project type is now included in this pack's `projectTypes` surface.
+
+---
+
+## Included Project Types
+
+- `vc_deal_room`
+
+Review notes:
+
+- `vc_deal_room` is copied from the current platform-local project type definition and keeps version `1.0.0`.
+- The definition includes VC Deal Room fields, the instruction template, lifecycle states, and lifecycle transitions.
+- The project-type surface requires platform capability `external-project-type-ingest`.
+- Task auto-fire, lifecycle-stage triggers, and task input mappings are not encoded in the project type surface. Those remain task-orchestration and Workspace Setup concerns.
 
 ---
 
@@ -135,18 +148,6 @@ Review notes:
 - No secrets, tokens, or environment-specific values should be copied into this public repo.
 
 ---
-
-## Deferred Pack Surfaces
-
-Task definitions:
-
-- included in draft `v0.2.2`
-- path: `alludium/task-definition-templates/`
-
-Project types:
-
-- deferred until VC Deal Room activation semantics are designed
-- expected future path: `alludium/project-types/`
 
 Workspace activation:
 
