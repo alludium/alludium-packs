@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_commercial_dd
-version: 1.0.2
+version: 1.0.3
 title: Run Commercial DD
 category: Venture Capital
 visibility: workspace
@@ -45,7 +45,7 @@ definition:
         anchor: worksheet-atomic-agents
         note: Spreadsheet rows 18-23, 25
     instructions:
-      executionInstructions: Run commercial diligence covering market sizing, competition, customer references where applicable, business-model-appropriate traction and economics, GTM/pricing where applicable, and commercial risks. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it.
+      executionInstructions: Run commercial diligence covering market sizing, competition, customer references where applicable, business-model-appropriate traction and economics, GTM/pricing where applicable, and commercial risks. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update durable project file artifacts named Commercial DD Report, Market Analysis, and Customer Reference Summary, and attach them to the required output fields `commercial_dd_artifact_id`, `market_analysis_artifact_id`, and `customer_reference_summary_artifact_id`.
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
@@ -127,103 +127,121 @@ fields:
       position: 3
       config: {}
   output:
+    - key: commercial_dd_artifact_id
+      name: Commercial DD Report
+      fieldType: file
+      required: true
+      position: 0
+      config: {}
+    - key: market_analysis_artifact_id
+      name: Market Analysis
+      fieldType: file
+      required: true
+      position: 1
+      config: {}
+    - key: customer_reference_summary_artifact_id
+      name: Customer Reference Summary
+      fieldType: file
+      required: true
+      position: 2
+      config: {}
     - key: tam_sam_som_assessment
       name: Tam Sam Som Assessment
       fieldType: string
       required: false
-      position: 0
+      position: 3
       config: {}
     - key: competitive_landscape
       name: Competitive Landscape
       fieldType: string
       required: false
-      position: 1
+      position: 4
       config: {}
     - key: customer_reference_plan
       name: Customer Reference Plan
       fieldType: string
       required: false
-      position: 2
+      position: 5
       config: {}
     - key: reference_summaries
       name: Reference Summaries
       fieldType: string
       required: false
-      position: 3
+      position: 6
       config: {}
     - key: retention_or_repeat_usage_notes
       name: Retention Or Repeat Usage Notes
       fieldType: richtext
       required: false
-      position: 4
+      position: 7
       config:
         rows: 5
     - key: gtm_and_business_model_assessment
       name: GTM And Business Model Assessment
       fieldType: string
       required: false
-      position: 5
+      position: 8
       config: {}
     - key: commercial_risks
       name: Commercial Risks
       fieldType: json
       required: false
-      position: 6
+      position: 9
       config: {}
     - key: summary
       name: Summary
       fieldType: richtext
       required: false
-      position: 7
+      position: 10
       config:
         rows: 5
     - key: recommendation
       name: Recommendation
       fieldType: string
       required: false
-      position: 8
+      position: 11
       config: {}
     - key: source_links
       name: Source Links
       fieldType: string
       required: false
-      position: 9
+      position: 12
       config: {}
     - key: assumptions
       name: Assumptions
       fieldType: string
       required: false
-      position: 10
+      position: 13
       config: {}
     - key: evidence_quality
       name: Evidence Quality
       fieldType: json
       required: false
-      position: 11
+      position: 14
       config: {}
     - key: open_questions
       name: Open Questions
       fieldType: json
       required: false
-      position: 12
+      position: 15
       config: {}
     - key: risks
       name: Risks
       fieldType: json
       required: false
-      position: 13
+      position: 16
       config: {}
     - key: human_decision_points
       name: Human Decision Points
       fieldType: string
       required: false
-      position: 14
+      position: 17
       config: {}
     - key: next_actions
       name: Next Actions
       fieldType: json
       required: false
-      position: 15
+      position: 18
       config: {}
 runtime:
   defaultExecutionContext:

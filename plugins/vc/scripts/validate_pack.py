@@ -41,6 +41,12 @@ EXPECTED_WORKSPACE_VARIABLE_BINDINGS = {
     "fundSectors": "vc.fundSectors",
     "fundGeography": "vc.fundGeography",
 }
+WORKSPACE_VARIABLE_VALUE_TYPES = {"string", "number", "boolean", "object", "array"}
+WORKSPACE_VARIABLE_RENDER_TYPES = {"text", "textarea", "select", "checkbox", "number"}
+WORKSPACE_VARIABLE_REQUIREMENT_LEVELS = {"optional", "recommended", "required"}
+WORKSPACE_VARIABLE_SENSITIVITY_LEVELS = {"standard", "sensitive"}
+APPLICATION_RECOMMENDATION_STATUSES = {"available", "future", "missing"}
+APPLICATION_RECOMMENDATION_LEVELS = {"required", "recommended", "optional"}
 TASK_TEMPLATE_REQUIRED_SKILL_REFERENCE_FIELDS = ["requiredSkills", "plannedRequiredSkills"]
 TASK_TEMPLATE_AGENT_TEMPLATE_REFERENCE_FIELDS = [
     "recommendedAgentTemplate",
@@ -51,6 +57,80 @@ TASK_TEMPLATE_PLATFORM_CAPABILITY = "external-task-definition-template-ingest"
 PROJECT_TYPE_PLATFORM_CAPABILITY = "external-project-type-ingest"
 EXPECTED_VC_TASK_TEMPLATE_VERTICAL_KEYS = ["venture_capital", "vc"]
 PROJECT_TYPE_FIELD_KINDS = {"date", "enum", "member", "number", "text"}
+ARTIFACT_FIELD_KEY_PATTERN = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+)*_artifact_id$")
+VC_ARTIFACT_OUTPUTS = {
+    "source-thesis-targets": ["thesis_target_list_artifact_id"],
+    "prepare-lead-gen-packet": ["lead_generation_packet_artifact_id"],
+    "screen-inbound-opportunity": ["first_look_scorecard_artifact_id"],
+    "request-founder-materials": ["founder_materials_request_artifact_id"],
+    "prepare-initial-call": ["initial_call_brief_artifact_id"],
+    "summarize-initial-call": ["customer_insights_artifact_id"],
+    "run-ten-factor-screen": ["ten_factor_scorecard_artifact_id"],
+    "generate-82-factor-questions": ["eighty_two_factor_questions_artifact_id"],
+    "run-founder-evaluation": ["founder_evaluation_artifact_id"],
+    "prepare-team-review-pack": ["team_review_pack_artifact_id"],
+    "prepare-partner-review-pack": ["partner_review_pack_artifact_id"],
+    "run-commercial-dd": [
+        "commercial_dd_artifact_id",
+        "market_analysis_artifact_id",
+        "customer_reference_summary_artifact_id",
+    ],
+    "run-financial-dd": [
+        "financial_dd_artifact_id",
+        "unit_economics_artifact_id",
+    ],
+    "run-technical-dd": ["technical_dd_artifact_id"],
+    "create-ic-memo": ["investment_memo_artifact_id"],
+    "review-ic-memo": ["ic_memo_review_artifact_id"],
+    "prepare-ic-agenda": ["ic_agenda_artifact_id"],
+    "record-ic-decision": ["ic_decision_record_artifact_id"],
+    "review-term-sheet": ["term_sheet_review_artifact_id"],
+    "manage-closing-checklist": ["closing_checklist_artifact_id"],
+    "verify-conditions-precedent": ["conditions_precedent_verification_artifact_id"],
+    "prepare-portfolio-onboarding": ["portfolio_onboarding_plan_artifact_id"],
+}
+VC_ARTIFACT_INPUTS = {
+    "prepare-team-review-pack": [
+        "commercial_dd_artifact_id",
+        "financial_dd_artifact_id",
+        "founder_evaluation_artifact_id",
+        "technical_dd_artifact_id",
+        "eighty_two_factor_questions_artifact_id",
+    ],
+    "prepare-partner-review-pack": [
+        "commercial_dd_artifact_id",
+        "financial_dd_artifact_id",
+        "founder_evaluation_artifact_id",
+        "technical_dd_artifact_id",
+        "eighty_two_factor_questions_artifact_id",
+        "team_review_pack_artifact_id",
+    ],
+    "create-ic-memo": [
+        "commercial_dd_artifact_id",
+        "financial_dd_artifact_id",
+        "founder_evaluation_artifact_id",
+        "technical_dd_artifact_id",
+        "eighty_two_factor_questions_artifact_id",
+        "team_review_pack_artifact_id",
+        "partner_review_pack_artifact_id",
+    ],
+    "prepare-ic-agenda": ["investment_memo_artifact_id"],
+    "review-ic-memo": ["investment_memo_artifact_id", "ic_agenda_artifact_id"],
+    "record-ic-decision": [
+        "investment_memo_artifact_id",
+        "ic_agenda_artifact_id",
+    ],
+    "manage-closing-checklist": [
+        "ic_decision_record_artifact_id",
+        "term_sheet_review_artifact_id",
+    ],
+    "verify-conditions-precedent": ["closing_checklist_artifact_id"],
+    "prepare-portfolio-onboarding": [
+        "ic_decision_record_artifact_id",
+        "closing_checklist_artifact_id",
+        "conditions_precedent_verification_artifact_id",
+    ],
+}
 
 
 def fail(message: str) -> None:
@@ -195,6 +275,187 @@ def require_string_list(value: Any, context: str) -> list[str]:
     return value
 
 
+def resolve_manifest_surface_path(
+    manifest: dict[str, Any],
+    surface_key: str,
+    expected_kind: str,
+) -> Path:
+    surface = manifest["surfaces"].get(surface_key)
+    if not isinstance(surface, dict):
+        fail(f"Manifest must declare surfaces.{surface_key}")
+    surface_path = surface.get("path")
+    if not isinstance(surface_path, str) or not surface_path:
+        fail(f"surfaces.{surface_key}.path must be declared")
+
+    resolved = (ROOT / surface_path).resolve()
+    try:
+        resolved.relative_to(ROOT.resolve())
+    except ValueError:
+        fail(f"surfaces.{surface_key}.path must resolve inside the pack root")
+
+    if expected_kind == "file" and not resolved.is_file():
+        fail(f"surfaces.{surface_key}.path must reference an existing file: {surface_path}")
+    if expected_kind == "directory" and not resolved.is_dir():
+        fail(f"surfaces.{surface_key}.path must reference an existing directory: {surface_path}")
+
+    return resolved
+
+
+def validate_workspace_variables(manifest: dict[str, Any]) -> set[str]:
+    variables_path = resolve_manifest_surface_path(manifest, "workspaceVariables", "file")
+    surface = read_yaml(variables_path)
+    if not isinstance(surface, dict):
+        fail(f"{variables_path.relative_to(ROOT)} must be an object")
+    if not isinstance(surface.get("schemaVersion"), str):
+        fail(f"{variables_path.relative_to(ROOT)} must declare schemaVersion")
+    if surface.get("status") != "platform-workspace-variable-declarations":
+        fail(
+            f"{variables_path.relative_to(ROOT)} status must be "
+            "platform-workspace-variable-declarations"
+        )
+
+    variables = surface.get("workspaceVariables")
+    if not isinstance(variables, list) or not variables:
+        fail(f"{variables_path.relative_to(ROOT)} workspaceVariables must be a non-empty list")
+
+    keys: set[str] = set()
+    for variable in variables:
+        if not isinstance(variable, dict):
+            fail(f"{variables_path.relative_to(ROOT)} workspaceVariables entries must be objects")
+
+        namespace = variable.get("namespace")
+        key = variable.get("key")
+        if not isinstance(namespace, str) or not namespace:
+            fail("Workspace variables must declare namespace")
+        if not isinstance(key, str) or not key:
+            fail("Workspace variables must declare key")
+        variable_key = f"{namespace}.{key}"
+        if variable_key in keys:
+            fail(f"Duplicate workspace variable declaration: {variable_key}")
+        keys.add(variable_key)
+
+        for field_name in ["label", "description"]:
+            if not isinstance(variable.get(field_name), str) or not variable.get(field_name):
+                fail(f"Workspace variable {variable_key} must declare {field_name}")
+        if variable.get("valueType") not in WORKSPACE_VARIABLE_VALUE_TYPES:
+            fail(f"Workspace variable {variable_key} has invalid valueType")
+        render_metadata = variable.get("renderMetadata")
+        if not isinstance(render_metadata, dict):
+            fail(f"Workspace variable {variable_key} must declare renderMetadata")
+        if render_metadata.get("render") not in WORKSPACE_VARIABLE_RENDER_TYPES:
+            fail(f"Workspace variable {variable_key} has invalid renderMetadata.render")
+        if variable.get("requirement") not in WORKSPACE_VARIABLE_REQUIREMENT_LEVELS:
+            fail(f"Workspace variable {variable_key} has invalid requirement")
+        if variable.get("sensitivity") not in WORKSPACE_VARIABLE_SENSITIVITY_LEVELS:
+            fail(f"Workspace variable {variable_key} has invalid sensitivity")
+        if "defaultValue" in variable:
+            fail(f"Public workspace variable {variable_key} must not declare defaultValue")
+
+    return keys
+
+
+def validate_application_recommendations(
+    manifest: dict[str, Any],
+    recommendations: dict[str, Any],
+) -> None:
+    app_surface_path = resolve_manifest_surface_path(
+        manifest,
+        "alludiumApplicationRecommendations",
+        "file",
+    )
+    mcp_surface_path = resolve_manifest_surface_path(
+        manifest,
+        "alludiumMcpRecommendations",
+        "file",
+    )
+    app_surface = recommendations
+    if app_surface_path != mcp_surface_path:
+        app_surface = read_yaml(app_surface_path)
+        if not isinstance(app_surface, dict):
+            fail(f"{app_surface_path.relative_to(ROOT)} must be an object")
+
+    if "applicationRecommendations" in app_surface:
+        fail("Use a single recommendations list; applicationRecommendations must not be declared")
+
+    application_recommendations = app_surface.get("recommendations")
+    if not isinstance(application_recommendations, list) or not application_recommendations:
+        fail("recommendations must be a non-empty list")
+
+    mcp_manifest = read_json(ROOT / manifest["surfaces"]["mcpServers"]["path"])
+    mcp_servers = mcp_manifest.get("mcpServers")
+    if not isinstance(mcp_servers, dict):
+        fail(".mcp.json must define mcpServers")
+
+    ids: set[str] = set()
+    for recommendation in application_recommendations:
+        if not isinstance(recommendation, dict):
+            fail("recommendations entries must be objects")
+        if "id" in recommendation or "title" in recommendation or "externalMcpId" in recommendation:
+            fail(
+                "Application recommendations must use the integrated MCP mapping contract "
+                "(externalId/name/applicationRecommendation), not id/title/externalMcpId"
+            )
+        recommendation_id = recommendation.get("externalId")
+        if not isinstance(recommendation_id, str) or not recommendation_id:
+            fail("recommendations entries must declare externalId")
+        if recommendation_id in ids:
+            fail(f"Duplicate recommendation externalId: {recommendation_id}")
+        ids.add(recommendation_id)
+
+        for field_name in ["name", "use"]:
+            if not isinstance(recommendation.get(field_name), str) or not recommendation.get(
+                field_name
+            ):
+                fail(f"Application recommendation {recommendation_id} must declare {field_name}")
+        if not isinstance(recommendation.get("category"), str) or not recommendation.get("category"):
+            fail(f"Application recommendation {recommendation_id} must declare category")
+        status = recommendation.get("status", "available")
+        if status not in APPLICATION_RECOMMENDATION_STATUSES:
+            fail(f"Application recommendation {recommendation_id} has invalid status")
+
+        recommendation_status = recommendation.get("recommendationStatus")
+        recommendation_metadata = recommendation.get("applicationRecommendation")
+        if recommendation_status is None and recommendation_metadata is None:
+            continue
+        if recommendation_status not in APPLICATION_RECOMMENDATION_LEVELS:
+            fail(f"Application recommendation {recommendation_id} has invalid recommendationStatus")
+        if not isinstance(recommendation_metadata, dict):
+            fail(
+                f"Application recommendation {recommendation_id} must declare "
+                "applicationRecommendation"
+            )
+        if status in {"future", "missing"} and not isinstance(recommendation.get("reason"), str):
+            fail(f"Application recommendation {recommendation_id} must explain unavailable status")
+
+        for metadata_field in [
+            "pickerGroup",
+            "systemCategory",
+            "authorizationBoundary",
+            "evidenceRequirement",
+        ]:
+            if not isinstance(recommendation_metadata.get(metadata_field), str) or not recommendation_metadata.get(metadata_field):
+                fail(
+                    f"Application recommendation {recommendation_id} metadata must declare "
+                    f"{metadata_field}"
+                )
+        if "unlocks" in recommendation_metadata:
+            require_string_list(
+                recommendation_metadata.get("unlocks"),
+                f"Application recommendation {recommendation_id} applicationRecommendation.unlocks",
+            )
+        if "alternatives" in recommendation_metadata:
+            require_string_list(
+                recommendation_metadata.get("alternatives"),
+                f"Application recommendation {recommendation_id} applicationRecommendation.alternatives",
+            )
+
+        if status == "available" and recommendation_id not in mcp_servers:
+            fail(
+                f"Application recommendation {recommendation_id} is available but missing "
+                "from .mcp.json"
+            )
+
+
 def normalize_workspace_methodology_skills(value: Any, context: str) -> list[str]:
     if value is None:
         return []
@@ -257,6 +518,89 @@ def validate_project_type_platform_ingest_contract(surface: dict[str, Any]) -> N
         fail("surfaces.projectTypes.platformIngest.status must be declared")
 
 
+def field_map(template_id: str, section_name: str, fields: Any) -> dict[str, dict[str, Any]]:
+    if fields is None:
+        return {}
+    if not isinstance(fields, list):
+        fail(f"Task template {template_id} fields.{section_name} must be a list")
+
+    mapped: dict[str, dict[str, Any]] = {}
+    positions: dict[int, str] = {}
+    for field in fields:
+        if not isinstance(field, dict):
+            fail(f"Task template {template_id} fields.{section_name} entries must be objects")
+        key = field.get("key")
+        if not isinstance(key, str) or not key:
+            fail(f"Task template {template_id} fields.{section_name} entries must declare key")
+        if key in mapped:
+            fail(f"Task template {template_id} fields.{section_name} has duplicate key {key}")
+        position = field.get("position")
+        if not isinstance(position, int) or isinstance(position, bool):
+            fail(
+                f"Task template {template_id} fields.{section_name}.{key} must declare "
+                "an integer position"
+            )
+        duplicate_key = positions.get(position)
+        if duplicate_key is not None:
+            fail(
+                f"Task template {template_id} fields.{section_name} has duplicate "
+                f"position {position}: {duplicate_key}, {key}"
+            )
+        positions[position] = key
+        mapped[key] = field
+    return mapped
+
+
+def validate_artifact_field_shape(
+    template_id: str,
+    section_name: str,
+    field: dict[str, Any],
+) -> None:
+    key = field["key"]
+    is_artifact_key = key.endswith("_artifact_id")
+    is_file_field = field.get("fieldType") == "file"
+    if not is_artifact_key and not is_file_field:
+        return
+    if not ARTIFACT_FIELD_KEY_PATTERN.match(key):
+        fail(
+            f"Task template {template_id} fields.{section_name}.{key} must match "
+            f"{ARTIFACT_FIELD_KEY_PATTERN.pattern}"
+        )
+    if field.get("fieldType") != "file":
+        fail(f"Task template {template_id} fields.{section_name}.{key} must use fieldType: file")
+    if field.get("required") is not True:
+        fail(f"Task template {template_id} fields.{section_name}.{key} must set required: true")
+
+
+def validate_required_artifact_fields(
+    template_id: str,
+    slug: str,
+    fields: dict[str, Any],
+) -> None:
+    input_fields = field_map(template_id, "input", fields.get("input"))
+    context_fields = field_map(template_id, "context", fields.get("context"))
+    output_fields = field_map(template_id, "output", fields.get("output"))
+    for section_name, mapped_fields in [
+        ("input", input_fields),
+        ("context", context_fields),
+        ("output", output_fields),
+    ]:
+        for field in mapped_fields.values():
+            validate_artifact_field_shape(template_id, section_name, field)
+
+    for key in VC_ARTIFACT_INPUTS.get(slug, []):
+        field = input_fields.get(key)
+        if field is None:
+            fail(f"Task template {template_id} ({slug}) is missing required artifact input {key}")
+        validate_artifact_field_shape(template_id, "input", field)
+
+    for key in VC_ARTIFACT_OUTPUTS.get(slug, []):
+        field = output_fields.get(key)
+        if field is None:
+            fail(f"Task template {template_id} ({slug}) is missing required artifact output {key}")
+        validate_artifact_field_shape(template_id, "output", field)
+
+
 def validate_project_type_field(project_type_id: str, field: Any) -> tuple[str, str]:
     if not isinstance(field, dict):
         fail(f"Project type {project_type_id} fieldsSchema entries must be objects")
@@ -293,6 +637,84 @@ def validate_project_type_field(project_type_id: str, field: Any) -> tuple[str, 
         if len(option_values) != len(set(option_values)):
             fail(f"Project type {project_type_id} enum field {field_key} has duplicate option values")
     return field_id, field_key
+
+
+def validate_vc_deal_room_command_view(project_type_id: str, initial_version: dict[str, Any]) -> None:
+    command_view = initial_version.get("commandView")
+    if not isinstance(command_view, dict):
+        fail(f"Project type {project_type_id} initialVersion.commandView must be declared")
+
+    for field_name in [
+        "key",
+        "typeLabel",
+        "collectionLabel",
+        "overviewTitle",
+        "overviewAriaLabel",
+        "overviewFallback",
+        "executionTitle",
+    ]:
+        if not isinstance(command_view.get(field_name), str) or not command_view.get(field_name):
+            fail(f"Project type {project_type_id} commandView.{field_name} must be declared")
+
+    stage_groups = command_view.get("stageGroups")
+    if not isinstance(stage_groups, list) or not stage_groups:
+        fail(f"Project type {project_type_id} commandView.stageGroups must be a non-empty list")
+    lifecycle_states = set(require_string_list(
+        initial_version.get("lifecycleStates"),
+        f"Project type {project_type_id} initialVersion.lifecycleStates",
+    ))
+    for stage_group in stage_groups:
+        if not isinstance(stage_group, dict):
+            fail(f"Project type {project_type_id} commandView.stageGroups entries must be objects")
+        for field_name in ["key", "label"]:
+            if not isinstance(stage_group.get(field_name), str) or not stage_group.get(field_name):
+                fail(f"Project type {project_type_id} commandView.stageGroups entries must declare {field_name}")
+        states = require_string_list(
+            stage_group.get("states"),
+            f"Project type {project_type_id} commandView.stageGroups.{stage_group['key']}.states",
+        )
+        unknown_states = sorted(set(states) - lifecycle_states)
+        if unknown_states:
+            fail(
+                f"Project type {project_type_id} commandView stage group "
+                f"{stage_group['key']} references unknown lifecycle states: {unknown_states}"
+            )
+
+    output_slots = command_view.get("outputSlots")
+    if not isinstance(output_slots, list) or not output_slots:
+        fail(f"Project type {project_type_id} commandView.outputSlots must be a non-empty list")
+    for output_slot in output_slots:
+        if not isinstance(output_slot, dict):
+            fail(f"Project type {project_type_id} commandView.outputSlots entries must be objects")
+        for field_name in ["key", "title", "description"]:
+            if not isinstance(output_slot.get(field_name), str) or not output_slot.get(field_name):
+                fail(f"Project type {project_type_id} commandView.outputSlots entries must declare {field_name}")
+        artifact_outputs = output_slot.get("artifactOutputs")
+        if not isinstance(artifact_outputs, list) or not artifact_outputs:
+            fail(
+                f"Project type {project_type_id} commandView.outputSlots.{output_slot['key']} "
+                "must declare artifactOutputs"
+            )
+        for artifact_output in artifact_outputs:
+            if not isinstance(artifact_output, dict):
+                fail(
+                    f"Project type {project_type_id} commandView.outputSlots."
+                    f"{output_slot['key']}.artifactOutputs entries must be objects"
+                )
+            for field_name in ["key", "title", "producerTaskDefinitionSlug", "outputFieldKey"]:
+                if not isinstance(artifact_output.get(field_name), str) or not artifact_output.get(field_name):
+                    fail(
+                        f"Project type {project_type_id} commandView output artifact "
+                        f"for {output_slot['key']} must declare {field_name}"
+                    )
+            if artifact_output["outputFieldKey"] not in VC_ARTIFACT_OUTPUTS.get(
+                artifact_output["producerTaskDefinitionSlug"],
+                [],
+            ):
+                fail(
+                    f"Project type {project_type_id} commandView output artifact "
+                    f"{artifact_output['key']} references an undeclared producer output field"
+                )
 
 
 def validate_project_type_file(path: Path, expected_id: str) -> str:
@@ -365,6 +787,9 @@ def validate_project_type_file(path: Path, expected_id: str) -> str:
         transition_pairs.append((from_state, to_state))
     if len(transition_pairs) != len(set(transition_pairs)):
         fail(f"Project type {expected_id} has duplicate lifecycle transitions")
+
+    if expected_id == "vc_deal_room":
+        validate_vc_deal_room_command_view(expected_id, initial_version)
 
     return expected_id
 
@@ -479,6 +904,7 @@ def validate_task_template_file(
         fail(f"Task template {template_id} is missing definition.name")
     if not isinstance(definition.get("slug"), str) or not definition.get("slug"):
         fail(f"Task template {template_id} is missing definition.slug")
+    slug = definition["slug"]
 
     definition_json = definition.get("definitionJson")
     if definition_json is None:
@@ -535,6 +961,11 @@ def validate_task_template_file(
         project_type_ids,
         "included project types",
     )
+
+    fields = template.get("fields") or {}
+    if not isinstance(fields, dict):
+        fail(f"Task template {template_id} fields must be an object when declared")
+    validate_required_artifact_fields(template_id, slug, fields)
 
     pack_vertical_keys = expected_pack.get("verticalKeys") or []
     if expected_pack.get("availability") == "vertical" and not pack_vertical_keys:
@@ -649,17 +1080,48 @@ def validate_mcp_definitions(manifest: dict[str, Any], recommendations: dict[str
         if has_command == has_url:
             fail(f".mcp.json server {server_id} must define exactly one of command or url")
 
-    recommendation_ids = {
-        item.get("externalId")
-        for item in recommendations.get("recommendations", [])
-        if isinstance(item, dict)
-    }
-    if None in recommendation_ids:
-        fail("All MCP recommendations must include externalId")
+    if recommendations.get("status") != "platform-mapping":
+        fail("alludiumMcpRecommendations must declare status: platform-mapping")
 
-    missing_from_plugin = recommendation_ids - set(mcp_servers)
+    recommendation_entries = recommendations.get("recommendations")
+    if not isinstance(recommendation_entries, list) or not recommendation_entries:
+        fail("alludiumMcpRecommendations must declare a non-empty recommendations list")
+
+    recommendation_ids: set[str] = set()
+    for item in recommendation_entries:
+        if not isinstance(item, dict):
+            fail("All MCP recommendation entries must be objects")
+        if "id" in item or "title" in item or "externalMcpId" in item or "metadata" in item:
+            fail(
+                "MCP recommendations must use externalId/name/use plus optional "
+                "applicationRecommendation metadata"
+            )
+        external_id = item.get("externalId")
+        if not isinstance(external_id, str) or not external_id:
+            fail("All MCP recommendation entries must declare externalId")
+        if external_id in recommendation_ids:
+            fail(f"Duplicate MCP recommendation externalId: {external_id}")
+        recommendation_ids.add(external_id)
+        if external_id not in mcp_servers:
+            continue
+        for field_name in [
+            "name",
+            "category",
+            "use",
+            "pluginCredentialBoundary",
+            "alludiumPlatformMapping",
+        ]:
+            if not isinstance(item.get(field_name), str) or not item.get(field_name):
+                fail(f"MCP recommendation {external_id} must declare {field_name}")
+        if not isinstance(item.get("platformDefaultAvailable"), bool):
+            fail(f"MCP recommendation {external_id} must declare platformDefaultAvailable")
+
+    missing_from_plugin = set(mcp_servers) - recommendation_ids
     if missing_from_plugin:
-        fail(f"MCP recommendations missing from .mcp.json: {sorted(missing_from_plugin)}")
+        fail(
+            ".mcp.json servers missing from MCP recommendations: "
+            f"{sorted(missing_from_plugin)}"
+        )
 
     platform_only_ids = {
         item.get("externalId")
@@ -674,11 +1136,6 @@ def validate_mcp_definitions(manifest: dict[str, Any], recommendations: dict[str
     for template_id in template_ids:
         template = read_yaml(ROOT / "alludium" / "agent-templates" / f"{template_id}.yaml")
         template_mcp_ids.update((template.get("mcpServers") or {}).keys())
-
-    allowed_template_mcp_ids = recommendation_ids | platform_only_ids
-    missing_from_recommendations = template_mcp_ids - allowed_template_mcp_ids
-    if missing_from_recommendations:
-        fail(f"Template MCP references missing from MCP mapping: {sorted(missing_from_recommendations)}")
 
     missing_from_plugin = template_mcp_ids - set(mcp_servers)
     if missing_from_plugin:
@@ -738,6 +1195,8 @@ def main() -> None:
     if not isinstance(recommendations, dict):
         fail(f"{recommendations_path} must be an object")
     validate_mcp_definitions(manifest, recommendations)
+    validate_workspace_variables(manifest)
+    validate_application_recommendations(manifest, recommendations)
     validate_no_obvious_secrets()
     validate_no_public_readiness_leakage()
 

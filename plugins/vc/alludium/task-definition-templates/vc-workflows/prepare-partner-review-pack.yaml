@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_partner_review_pack
-version: 1.0.2
+version: 1.0.4
 title: Prepare Partner Review Pack
 category: Venture Capital
 visibility: workspace
@@ -43,7 +43,7 @@ definition:
         anchor: slide-34
         note: Roles
     instructions:
-      executionInstructions: Prepare the Partner Review pack with investment thesis, strategic fit, proposed DD scope, workstream owners, key risks, and decision ask. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it.
+      executionInstructions: Prepare the Partner Review pack with investment thesis, strategic fit, proposed DD scope, workstream owners, key risks, and decision ask. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Use the required input file artifacts `commercial_dd_artifact_id`, `financial_dd_artifact_id`, `founder_evaluation_artifact_id`, `technical_dd_artifact_id`, and `eighty_two_factor_questions_artifact_id` as the review subjects for the partner review pack. Use the required input file artifact `team_review_pack_artifact_id` as the team review pack being escalated to partner review. Create or update a durable project file artifact named Partner Review Pack and attach it to the required output field `partner_review_pack_artifact_id`.
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
@@ -61,23 +61,59 @@ definition:
         note: Use only when the workspace explicitly configures this market mapping method.
 fields:
   input:
+    - key: team_review_pack_artifact_id
+      name: Team Review Pack
+      fieldType: file
+      required: true
+      position: 0
+      config: {}
+    - key: commercial_dd_artifact_id
+      name: Commercial DD Report
+      fieldType: file
+      required: true
+      position: 1
+      config: {}
+    - key: financial_dd_artifact_id
+      name: Financial DD Report
+      fieldType: file
+      required: true
+      position: 2
+      config: {}
+    - key: founder_evaluation_artifact_id
+      name: Founder Evaluation
+      fieldType: file
+      required: true
+      position: 3
+      config: {}
+    - key: technical_dd_artifact_id
+      name: Technical DD Report
+      fieldType: file
+      required: true
+      position: 4
+      config: {}
+    - key: eighty_two_factor_questions_artifact_id
+      name: 82-Factor Question Set
+      fieldType: file
+      required: true
+      position: 5
+      config: {}
     - key: team_review_pack
       name: Team Review Pack
       fieldType: json
       required: true
-      position: 0
+      position: 6
       config: {}
     - key: open_questions
       name: Open Questions
       fieldType: json
       required: true
-      position: 1
+      position: 7
       config: {}
     - key: proposed_dd_scope
       name: Proposed Dd Scope
       fieldType: string
       required: false
-      position: 2
+      position: 8
       config: {}
   context:
     - key: deal_room_url
@@ -99,97 +135,103 @@ fields:
       position: 2
       config: {}
   output:
+    - key: partner_review_pack_artifact_id
+      name: Partner Review Pack
+      fieldType: file
+      required: true
+      position: 0
+      config: {}
     - key: investment_thesis_summary
       name: Investment Thesis Summary
       fieldType: richtext
       required: false
-      position: 0
+      position: 1
       config:
         rows: 5
     - key: strategic_fit
       name: Strategic Fit
       fieldType: string
       required: false
-      position: 1
+      position: 2
       config: {}
     - key: proposed_dd_scope
       name: Proposed Dd Scope
       fieldType: string
       required: false
-      position: 2
+      position: 3
       config: {}
     - key: workstream_owners
       name: Workstream Owners
       fieldType: json
       required: false
-      position: 3
+      position: 4
       config: {}
     - key: key_risks
       name: Key Risks
       fieldType: json
       required: false
-      position: 4
+      position: 5
       config: {}
     - key: decision_ask
       name: Decision Ask
       fieldType: string
       required: false
-      position: 5
+      position: 6
       config: {}
     - key: summary
       name: Summary
       fieldType: richtext
       required: false
-      position: 6
+      position: 7
       config:
         rows: 5
     - key: recommendation
       name: Recommendation
       fieldType: string
       required: false
-      position: 7
+      position: 8
       config: {}
     - key: source_links
       name: Source Links
       fieldType: string
       required: false
-      position: 8
+      position: 9
       config: {}
     - key: assumptions
       name: Assumptions
       fieldType: string
       required: false
-      position: 9
+      position: 10
       config: {}
     - key: evidence_quality
       name: Evidence Quality
       fieldType: json
       required: false
-      position: 10
+      position: 11
       config: {}
     - key: open_questions
       name: Open Questions
       fieldType: json
       required: false
-      position: 11
+      position: 12
       config: {}
     - key: risks
       name: Risks
       fieldType: json
       required: false
-      position: 12
+      position: 13
       config: {}
     - key: human_decision_points
       name: Human Decision Points
       fieldType: string
       required: false
-      position: 13
+      position: 14
       config: {}
     - key: next_actions
       name: Next Actions
       fieldType: json
       required: false
-      position: 14
+      position: 15
       config: {}
 runtime:
   defaultExecutionContext:

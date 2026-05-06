@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_team_review_pack
-version: 1.0.2
+version: 1.0.4
 title: Prepare Team Review Pack
 category: Venture Capital
 visibility: workspace
@@ -43,7 +43,7 @@ definition:
         anchor: slide-34
         note: Roles
     instructions:
-      executionInstructions: Assemble the Team Review pack from prior stage outputs, evidence summary, 10-Factor and 82-Factor summaries, founder risks, and stage-gate recommendation. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it.
+      executionInstructions: Assemble the Team Review pack from prior stage outputs, evidence summary, 10-Factor and 82-Factor summaries, founder risks, and stage-gate recommendation. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Use the required input file artifacts `commercial_dd_artifact_id`, `financial_dd_artifact_id`, `founder_evaluation_artifact_id`, `technical_dd_artifact_id`, and `eighty_two_factor_questions_artifact_id` as the review subjects for the team review pack. Create or update a durable project file artifact named Team Review Pack and attach it to the required output field `team_review_pack_artifact_id`.
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
@@ -61,31 +61,61 @@ definition:
         note: Use only when the workspace explicitly configures this diligence framework.
 fields:
   input:
+    - key: commercial_dd_artifact_id
+      name: Commercial DD Report
+      fieldType: file
+      required: true
+      position: 0
+      config: {}
+    - key: financial_dd_artifact_id
+      name: Financial DD Report
+      fieldType: file
+      required: true
+      position: 1
+      config: {}
+    - key: founder_evaluation_artifact_id
+      name: Founder Evaluation
+      fieldType: file
+      required: true
+      position: 2
+      config: {}
+    - key: technical_dd_artifact_id
+      name: Technical DD Report
+      fieldType: file
+      required: true
+      position: 3
+      config: {}
+    - key: eighty_two_factor_questions_artifact_id
+      name: 82-Factor Question Set
+      fieldType: file
+      required: true
+      position: 4
+      config: {}
     - key: prior_task_outputs
       name: Prior Task Outputs
       fieldType: json
       required: true
-      position: 0
+      position: 5
       config: {}
     - key: ten_factor_summary
       name: Ten Factor Summary
       fieldType: richtext
       required: true
-      position: 1
+      position: 6
       config:
         rows: 5
     - key: eighty_two_factor_summary
       name: Eighty Two Factor Summary
       fieldType: richtext
       required: false
-      position: 2
+      position: 7
       config:
         rows: 5
     - key: founder_risk_assessment
       name: Founder Risk Assessment
       fieldType: string
       required: false
-      position: 3
+      position: 8
       config: {}
   context:
     - key: deal_room_url
@@ -107,93 +137,99 @@ fields:
       position: 2
       config: {}
   output:
+    - key: team_review_pack_artifact_id
+      name: Team Review Pack
+      fieldType: file
+      required: true
+      position: 0
+      config: {}
     - key: company_snapshot
       name: Company Snapshot
       fieldType: json
       required: false
-      position: 0
+      position: 1
       config: {}
     - key: evidence_summary
       name: Evidence Summary
       fieldType: richtext
       required: false
-      position: 1
+      position: 2
       config:
         rows: 5
     - key: ten_and_82_factor_summary
       name: Ten And 82 Factor Summary
       fieldType: richtext
       required: false
-      position: 2
+      position: 3
       config:
         rows: 5
     - key: founder_risk_summary
       name: Founder Risk Summary
       fieldType: richtext
       required: false
-      position: 3
+      position: 4
       config:
         rows: 5
     - key: stage_gate_recommendation
       name: Stage Gate Recommendation
       fieldType: string
       required: false
-      position: 4
+      position: 5
       config: {}
     - key: summary
       name: Summary
       fieldType: richtext
       required: false
-      position: 5
+      position: 6
       config:
         rows: 5
     - key: recommendation
       name: Recommendation
       fieldType: string
       required: false
-      position: 6
+      position: 7
       config: {}
     - key: source_links
       name: Source Links
       fieldType: string
       required: false
-      position: 7
+      position: 8
       config: {}
     - key: assumptions
       name: Assumptions
       fieldType: string
       required: false
-      position: 8
+      position: 9
       config: {}
     - key: evidence_quality
       name: Evidence Quality
       fieldType: json
       required: false
-      position: 9
+      position: 10
       config: {}
     - key: open_questions
       name: Open Questions
       fieldType: json
       required: false
-      position: 10
+      position: 11
       config: {}
     - key: risks
       name: Risks
       fieldType: json
       required: false
-      position: 11
+      position: 12
       config: {}
     - key: human_decision_points
       name: Human Decision Points
       fieldType: string
       required: false
-      position: 12
+      position: 13
       config: {}
     - key: next_actions
       name: Next Actions
       fieldType: json
       required: false
-      position: 13
+      position: 14
       config: {}
 runtime:
   defaultExecutionContext:

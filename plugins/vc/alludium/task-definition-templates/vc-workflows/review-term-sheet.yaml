@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.review_term_sheet
-version: 1.0.1
+version: 1.0.2
 title: Review Term Sheet
 category: Venture Capital
 visibility: workspace
@@ -41,7 +41,7 @@ definition:
         anchor: worksheet-atomic-agents
         note: Spreadsheet rows 61, 64, 66-67
     instructions:
-      executionInstructions: Review the term sheet for business deviations, red flags, and counsel review questions without providing legal advice. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval.
+      executionInstructions: Review the term sheet for business deviations, red flags, and counsel review questions without providing legal advice. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a durable project file artifact named Term Sheet Review and attach it to the required output field `term_sheet_review_artifact_id`.
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
@@ -111,21 +111,30 @@ fields:
       position: 3
       config: {}
   output:
+    - key: term_sheet_review_artifact_id
+      name: Term Sheet Review
+      fieldType: file
+      required: true
+      position: 0
+      config: {}
     - key: term_summary
       name: Term Summary
       fieldType: richtext
       required: false
-      position: 0
+      position: 1
       config:
         rows: 5
     - key: deviation_table
       name: Deviation Table
       fieldType: string
+      required: false
+      position: 2
+      config: {}
     - key: review_focus
       name: Review Focus
       fieldType: multiselect
       required: false
-      position: 1
+      position: 3
       config:
         options:
           - economics
@@ -137,13 +146,13 @@ fields:
       name: Deal Room URL
       fieldType: string
       required: false
-      position: 2
+      position: 4
       config: {}
     - key: recommendation
       name: Recommendation
       fieldType: select
       required: false
-      position: 0
+      position: 5
       config:
         options:
           - approve
@@ -153,74 +162,74 @@ fields:
       name: Review Notes
       fieldType: richtext
       required: false
-      position: 1
+      position: 6
       config: {}
     - key: red_flags
       name: Red Flags
       fieldType: string
       required: false
-      position: 2
+      position: 7
       config: {}
     - key: counsel_review_questions
       name: Counsel Review Questions
       fieldType: json
       required: false
-      position: 3
+      position: 8
       config: {}
     - key: approval_required
       name: Approval Required
       fieldType: string
       required: false
-      position: 4
+      position: 9
       config: {}
     - key: summary
       name: Summary
       fieldType: richtext
       required: false
-      position: 5
+      position: 10
       config:
         rows: 5
     - key: source_links
       name: Source Links
       fieldType: string
       required: false
-      position: 7
+      position: 11
       config: {}
     - key: assumptions
       name: Assumptions
       fieldType: string
       required: false
-      position: 8
+      position: 12
       config: {}
     - key: evidence_quality
       name: Evidence Quality
       fieldType: json
       required: false
-      position: 9
+      position: 13
       config: {}
     - key: open_questions
       name: Open Questions
       fieldType: json
       required: false
-      position: 10
+      position: 14
       config: {}
     - key: risks
       name: Risks
       fieldType: json
       required: false
-      position: 11
+      position: 15
       config: {}
     - key: human_decision_points
       name: Human Decision Points
       fieldType: string
       required: false
-      position: 12
+      position: 16
       config: {}
     - key: next_actions
       name: Next Actions
       fieldType: json
       required: false
-      position: 13
+      position: 17
       config: {}
 runtime:
   defaultExecutionContext:

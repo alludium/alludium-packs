@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.create_ic_memo
-version: 1.0.1
+version: 1.0.3
 title: Create IC Memo
 category: Venture Capital
 visibility: workspace
@@ -59,7 +59,7 @@ definition:
         anchor: slide-40
         note: DD timeline
     instructions:
-      executionInstructions: Assemble the IC memo and pack checklist from stage outputs, DD summaries, founder risks, term-sheet inputs, source artifacts, unresolved risks, assumptions, and citation coverage. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval.
+      executionInstructions: Assemble the IC memo and pack checklist from stage outputs, DD summaries, founder risks, term-sheet inputs, source artifacts, unresolved risks, assumptions, and citation coverage. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required diligence input file artifacts `commercial_dd_artifact_id`, `financial_dd_artifact_id`, `founder_evaluation_artifact_id`, `technical_dd_artifact_id`, and `eighty_two_factor_questions_artifact_id` as source artifacts for the IC memo. Create or update a durable project file artifact named Investment Memo and attach it to the required output field `investment_memo_artifact_id`. Use the required input file artifacts `team_review_pack_artifact_id` and `partner_review_pack_artifact_id` as the review-pack sources for the IC memo.
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
@@ -78,35 +78,77 @@ definition:
 
 fields:
   input:
+    - key: team_review_pack_artifact_id
+      name: Team Review Pack
+      fieldType: file
+      required: true
+      position: 0
+      config: {}
+    - key: partner_review_pack_artifact_id
+      name: Partner Review Pack
+      fieldType: file
+      required: true
+      position: 1
+      config: {}
+    - key: commercial_dd_artifact_id
+      name: Commercial DD Report
+      fieldType: file
+      required: true
+      position: 2
+      config: {}
+    - key: financial_dd_artifact_id
+      name: Financial DD Report
+      fieldType: file
+      required: true
+      position: 3
+      config: {}
+    - key: founder_evaluation_artifact_id
+      name: Founder Evaluation
+      fieldType: file
+      required: true
+      position: 4
+      config: {}
+    - key: technical_dd_artifact_id
+      name: Technical DD Report
+      fieldType: file
+      required: true
+      position: 5
+      config: {}
+    - key: eighty_two_factor_questions_artifact_id
+      name: 82-Factor Question Set
+      fieldType: file
+      required: true
+      position: 6
+      config: {}
     - key: stage_outputs
       name: Stage Outputs
       fieldType: json
       required: true
-      position: 0
+      position: 7
       config: {}
     - key: dd_summaries
       name: Dd Summaries
       fieldType: string
       required: true
-      position: 1
+      position: 8
       config: {}
     - key: founder_risk_assessment
       name: Founder Risk Assessment
       fieldType: string
       required: false
-      position: 2
+      position: 9
       config: {}
     - key: term_sheet_inputs
       name: Term Sheet Inputs
       fieldType: string
       required: false
-      position: 3
+      position: 10
       config: {}
     - key: source_artifacts
       name: Source Artifacts
       fieldType: json
       required: false
-      position: 4
+      position: 11
       config: {}
   context:
     - key: deal_room_url
@@ -128,91 +170,97 @@ fields:
       position: 2
       config: {}
   output:
+    - key: investment_memo_artifact_id
+      name: Investment Memo
+      fieldType: file
+      required: true
+      position: 0
+      config: {}
     - key: investment_memo
       name: Investment Memo
       fieldType: richtext
       required: false
-      position: 0
+      position: 1
       config:
         rows: 5
     - key: ic_pack_checklist
       name: Ic Pack Checklist
       fieldType: json
       required: false
-      position: 1
+      position: 2
       config: {}
     - key: decision_ask
       name: Decision Ask
       fieldType: string
       required: false
-      position: 2
+      position: 3
       config: {}
     - key: unresolved_risks
       name: Unresolved Risks
       fieldType: json
       required: false
-      position: 3
+      position: 4
       config: {}
     - key: assumptions
       name: Assumptions
       fieldType: string
       required: false
-      position: 4
+      position: 5
       config: {}
     - key: citation_coverage
       name: Citation Coverage
       fieldType: string
       required: false
-      position: 5
+      position: 6
       config: {}
     - key: summary
       name: Summary
       fieldType: richtext
       required: false
-      position: 6
+      position: 7
       config:
         rows: 5
     - key: recommendation
       name: Recommendation
       fieldType: string
       required: false
-      position: 7
+      position: 8
       config: {}
     - key: source_links
       name: Source Links
       fieldType: string
       required: false
-      position: 8
+      position: 9
       config: {}
     - key: evidence_quality
       name: Evidence Quality
       fieldType: json
       required: false
-      position: 9
+      position: 10
       config: {}
     - key: open_questions
       name: Open Questions
       fieldType: json
       required: false
-      position: 10
+      position: 11
       config: {}
     - key: risks
       name: Risks
       fieldType: json
       required: false
-      position: 11
+      position: 12
       config: {}
     - key: human_decision_points
       name: Human Decision Points
       fieldType: string
       required: false
-      position: 12
+      position: 13
       config: {}
     - key: next_actions
       name: Next Actions
       fieldType: json
       required: false
-      position: 13
+      position: 14
       config: {}
 runtime:
   defaultExecutionContext:

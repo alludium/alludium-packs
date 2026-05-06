@@ -1,11 +1,14 @@
-schemaVersion: "0.2"
+schemaVersion: "0.3"
 status: platform-mapping
 description: >
-  VC-relevant MCP server definitions and Alludium platform mapping guidance.
-  The plugin-level `.mcp.json` is safe for public reuse and uses user/workspace
-  supplied credentials. When this pack is ingested into Alludium, the platform
-  may map these external IDs to configured managed providers or workspace
-  connections instead of requiring the plugin placeholders directly.
+  VC-relevant MCP server definitions, Alludium platform mapping guidance, and
+  application recommendation metadata. The plugin-level `.mcp.json` is safe for
+  public reuse and uses user/workspace supplied credentials. When this pack is
+  ingested into Alludium, the platform may map these external IDs to configured
+  managed providers or workspace connections instead of requiring the plugin
+  placeholders directly. Records with `recommendationStatus` also appear in the
+  platform application picker; those records use the same `externalId` and
+  `name` fields as the MCP mapping contract.
 recommendations:
   - externalId: affinity-mcp-server
     name: Affinity CRM
@@ -14,6 +17,16 @@ recommendations:
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: workspace_connection
     platformDefaultAvailable: false
+    recommendationStatus: recommended
+    applicationRecommendation:
+      pickerGroup: CRM and Deal Tracking
+      systemCategory: Relationship CRM
+      unlocks:
+        - Relationship-aware company and founder context
+        - Pipeline stage and opportunity review
+        - CRM hygiene recommendations for review
+      authorizationBoundary: Selecting Affinity only records that the firm uses it; OAuth or API authorization is still required before any data can be read.
+      evidenceRequirement: User confirmation or an authorized Affinity connection.
   - externalId: harmonic-mcp-oauth
     name: Harmonic
     category: Company Intelligence
@@ -21,6 +34,16 @@ recommendations:
     pluginCredentialBoundary: user_or_workspace_oauth
     alludiumPlatformMapping: workspace_connection
     platformDefaultAvailable: false
+    recommendationStatus: recommended
+    applicationRecommendation:
+      pickerGroup: Private-Market Data
+      systemCategory: Company Enrichment
+      unlocks:
+        - Company enrichment for sourcing and screening
+        - Market-map and lead-list research
+        - First-look company evidence
+      authorizationBoundary: Selecting Harmonic does not grant data access; a user must authorize the Harmonic connection before agents can query it.
+      evidenceRequirement: User confirmation, provider evidence, or an authorized Harmonic connection.
   - externalId: dealroom-mcp
     name: Dealroom
     category: Private Market Data
@@ -28,6 +51,16 @@ recommendations:
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: workspace_connection
     platformDefaultAvailable: false
+    recommendationStatus: optional
+    applicationRecommendation:
+      pickerGroup: Private-Market Data
+      systemCategory: Market Intelligence
+      unlocks:
+        - Comparable-company and financing context
+        - Sector activity research
+        - Diligence evidence for Deal Rooms
+      authorizationBoundary: Selecting Dealroom does not grant access; connection authorization is required before Dealroom data can be used.
+      evidenceRequirement: User confirmation, provider evidence, or an authorized Dealroom connection.
   - externalId: exa-mcp-hosted
     name: Exa Search
     category: Web Research
@@ -91,6 +124,20 @@ recommendations:
     pluginCredentialBoundary: user_or_workspace_oauth
     alludiumPlatformMapping: workspace_connection
     platformDefaultAvailable: false
+    recommendationStatus: optional
+    applicationRecommendation:
+      pickerGroup: Meetings and Transcripts
+      systemCategory: Meeting Notes
+      unlocks:
+        - Meeting transcript and note context
+        - Founder follow-up drafts for review
+        - IC and partner meeting summaries
+      authorizationBoundary: Selecting Granola does not grant transcript access; a user must authorize Granola before meeting content can be read.
+      evidenceRequirement: User confirmation or an authorized Granola connection.
+      alternatives:
+        - Fireflies
+        - Zoom
+        - Google Meet
   - externalId: otter-mcp-oauth
     name: Otter AI
     category: Meeting Notes
@@ -105,6 +152,245 @@ recommendations:
     pluginCredentialBoundary: user_or_workspace_oauth
     alludiumPlatformMapping: workspace_connection
     platformDefaultAvailable: false
+    recommendationStatus: optional
+    applicationRecommendation:
+      pickerGroup: Meetings and Transcripts
+      systemCategory: Meeting Transcripts
+      unlocks:
+        - Transcript search and summary context
+        - Founder and diligence call follow-ups
+        - Meeting-derived task recommendations
+      authorizationBoundary: Selecting Fireflies does not grant transcript access; a user must authorize Fireflies before meeting content can be read.
+      evidenceRequirement: User confirmation or an authorized Fireflies connection.
+      alternatives:
+        - Granola
+        - Zoom
+        - Google Meet
+  - externalId: crunchbase
+    name: Crunchbase
+    category: Private Market Data
+    status: future
+    use: Private-market data source for company, funding, investor, and competitive context.
+    recommendationStatus: optional
+    reason: No Crunchbase application or MCP server config exists yet.
+    applicationRecommendation:
+      pickerGroup: Private-Market Data
+      systemCategory: Company Data
+      unlocks:
+        - Company and funding history context
+        - Investor and competitor research
+        - Sourcing list enrichment when a connection exists
+      authorizationBoundary: Selecting Crunchbase is preference capture only until a supported connector exists.
+      evidenceRequirement: User confirmation or future connector availability.
+      alternatives:
+        - PitchBook
+  - externalId: pitchbook
+    name: PitchBook
+    category: Private Market Data
+    status: future
+    use: Private-market data source for company, financing, investor, and comparable-company research.
+    recommendationStatus: optional
+    reason: No PitchBook application or MCP server config exists yet.
+    applicationRecommendation:
+      pickerGroup: Private-Market Data
+      systemCategory: Company Data
+      unlocks:
+        - Financing and investor context
+        - Comparable-company research
+        - Diligence and sourcing enrichment when a connector exists
+      authorizationBoundary: Selecting PitchBook is preference capture only until a supported connector exists.
+      evidenceRequirement: User confirmation or future connector availability.
+      alternatives:
+        - Crunchbase
+  - externalId: attio
+    name: Attio
+    category: CRM
+    status: future
+    use: CRM or deal-tracking system alternative for firm pipeline and relationship workflows.
+    recommendationStatus: optional
+    reason: No Attio application or MCP server config exists yet.
+    applicationRecommendation:
+      pickerGroup: CRM and Deal Tracking
+      systemCategory: CRM
+      unlocks:
+        - Deal and contact source-of-truth awareness
+        - CRM update suggestions for review
+        - Pipeline workflow recommendations
+      authorizationBoundary: Selecting Attio only records that the firm uses it; no CRM records are read or written without a future authorized connector.
+      evidenceRequirement: User confirmation or future connector availability.
+      alternatives:
+        - Salesforce
+        - HubSpot
+        - Airtable
+        - Notion
+  - externalId: salesforce
+    name: Salesforce
+    category: CRM
+    status: future
+    use: CRM or deal-tracking system alternative for firm pipeline and relationship workflows.
+    recommendationStatus: optional
+    reason: No Salesforce MCP server config exists yet.
+    applicationRecommendation:
+      pickerGroup: CRM and Deal Tracking
+      systemCategory: CRM
+      unlocks:
+        - Pipeline and contact source-of-truth awareness
+        - Reviewable CRM update suggestions
+        - Handoff planning for deal and portfolio workflows
+      authorizationBoundary: Selecting Salesforce only records that the firm uses it; no CRM records are read or written without a future authorized connector.
+      evidenceRequirement: User confirmation or future connector availability.
+      alternatives:
+        - Affinity
+        - Attio
+        - HubSpot
+  - externalId: hubspot
+    name: HubSpot
+    category: CRM
+    status: future
+    use: CRM or deal-tracking alternative for pipeline, relationship, and founder communication workflows.
+    recommendationStatus: optional
+    reason: No HubSpot MCP server config exists yet.
+    applicationRecommendation:
+      pickerGroup: CRM and Deal Tracking
+      systemCategory: CRM
+      unlocks:
+        - Contact and company source-of-truth awareness
+        - Reviewable CRM update suggestions
+        - Founder follow-up context when a connector exists
+      authorizationBoundary: Selecting HubSpot only records that the firm uses it; no CRM records are read or written without a future authorized connector.
+      evidenceRequirement: User confirmation or future connector availability.
+      alternatives:
+        - Affinity
+        - Salesforce
+        - Attio
+  - externalId: airtable
+    name: Airtable
+    category: Deal Tracking
+    status: future
+    use: Lightweight deal-tracking or operating-table system used by some firms instead of a dedicated CRM.
+    recommendationStatus: optional
+    reason: No Airtable application or MCP server config exists yet.
+    applicationRecommendation:
+      pickerGroup: CRM and Deal Tracking
+      systemCategory: Deal Tracking
+      unlocks:
+        - Deal-tracking source-of-truth awareness
+        - Manual pipeline mapping prompts
+        - Reviewable setup plan for future connectors
+      authorizationBoundary: Selecting Airtable only records that the firm uses it; no records are read or written without a future authorized connector.
+      evidenceRequirement: User confirmation or future connector availability.
+      alternatives:
+        - Notion
+        - Attio
+  - externalId: notion
+    name: Notion
+    category: Docs and Workspace
+    status: future
+    use: Lightweight deal-tracking, memo, knowledge-base, or operating-document workspace.
+    recommendationStatus: optional
+    reason: No Notion MCP server config exists yet.
+    applicationRecommendation:
+      pickerGroup: Docs and Workspace
+      systemCategory: Workspace Docs
+      unlocks:
+        - Workspace document source awareness
+        - Manual Deal Room and memo handoff prompts
+        - Reviewable setup plan for future connectors
+      authorizationBoundary: Selecting Notion only records that the firm uses it; no pages or databases are read or written without a future authorized connector.
+      evidenceRequirement: User confirmation or future connector availability.
+      alternatives:
+        - Airtable
+        - Google Drive
+  - externalId: google_drive
+    name: Google Drive and Docs
+    category: Document Storage
+    status: future
+    use: Shared documents, founder materials, diligence files, memos, and meeting notes.
+    recommendationStatus: recommended
+    reason: Google Drive tools exist on VC agent templates, but no workspace asset-pack application connector is registered yet.
+    applicationRecommendation:
+      pickerGroup: Docs and Workspace
+      systemCategory: Document Storage
+      unlocks:
+        - Founder material and diligence file context
+        - IC memo and Deal Room document handoffs
+        - Meeting-note and artifact review workflows
+      authorizationBoundary: Selecting Google Drive only records that the firm uses it; Drive files are not read or written unless a user authorizes a supported connection.
+      evidenceRequirement: User confirmation, file evidence, or future connector availability.
+      alternatives:
+        - Notion
+  - externalId: slack
+    name: Slack
+    category: Collaboration
+    status: future
+    use: Team communication workspace for deal routing, approvals, and collaboration context.
+    recommendationStatus: recommended
+    reason: No Slack MCP server config exists yet.
+    applicationRecommendation:
+      pickerGroup: Collaboration
+      systemCategory: Team Communication
+      unlocks:
+        - Collaboration-channel awareness
+        - Reviewable notification and handoff planning
+        - Future deal and IC workflow routing
+      authorizationBoundary: Selecting Slack only records that the firm uses it; channels and messages are not read or written without a future authorized connector.
+      evidenceRequirement: User confirmation or future connector availability.
+  - externalId: linkedin
+    name: LinkedIn
+    category: Relationship Intelligence
+    status: future
+    use: Professional network context for founder research, warm intro paths, and relationship mapping.
+    recommendationStatus: optional
+    reason: LinkedIn tools exist on VC agent templates, but no workspace asset-pack application connector is registered yet.
+    applicationRecommendation:
+      pickerGroup: Relationship Intelligence
+      systemCategory: Professional Network
+      unlocks:
+        - Founder and investor profile context
+        - Warm-intro path research
+        - Relationship-map enrichment when authorized
+      authorizationBoundary: Selecting LinkedIn only records that the firm uses it; LinkedIn data access still requires an authorized connector.
+      evidenceRequirement: User confirmation or future connector availability.
+  - externalId: zoom
+    name: Zoom
+    category: Meetings and Transcripts
+    status: future
+    use: Meeting platform for founder calls, diligence calls, and partner meetings.
+    recommendationStatus: optional
+    reason: No Zoom MCP server config exists yet.
+    applicationRecommendation:
+      pickerGroup: Meetings and Transcripts
+      systemCategory: Video Meetings
+      unlocks:
+        - Meeting-system awareness for setup planning
+        - Transcript-source prompts when paired with a transcript tool
+        - Follow-up workflow recommendations
+      authorizationBoundary: Selecting Zoom only records that the firm uses it; no meetings or transcripts are read without a future authorized connector.
+      evidenceRequirement: User confirmation or future connector availability.
+      alternatives:
+        - Google Meet
+        - Granola
+        - Fireflies
+  - externalId: google_meet
+    name: Google Meet
+    category: Meetings and Transcripts
+    status: future
+    use: Meeting platform for founder calls, diligence calls, and partner meetings.
+    recommendationStatus: optional
+    reason: No Google Meet MCP server config exists yet.
+    applicationRecommendation:
+      pickerGroup: Meetings and Transcripts
+      systemCategory: Video Meetings
+      unlocks:
+        - Meeting-system awareness for setup planning
+        - Transcript-source prompts when paired with a transcript tool
+        - Follow-up workflow recommendations
+      authorizationBoundary: Selecting Google Meet only records that the firm uses it; no meetings or transcripts are read without a future authorized connector.
+      evidenceRequirement: User confirmation or future connector availability.
+      alternatives:
+        - Zoom
+        - Granola
+        - Fireflies
 excludedPlatformMcps:
   - externalId: alludium-docs-mcp
     reason: Platform documentation MCP is useful for Alludium users but is not part of the VC workflow pack.
