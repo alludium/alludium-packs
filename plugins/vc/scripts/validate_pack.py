@@ -49,6 +49,80 @@ TASK_TEMPLATE_AGENT_TEMPLATE_REFERENCE_FIELDS = [
 ]
 TASK_TEMPLATE_PLATFORM_CAPABILITY = "external-task-definition-template-ingest"
 EXPECTED_VC_TASK_TEMPLATE_VERTICAL_KEYS = ["venture_capital", "vc"]
+ARTIFACT_FIELD_KEY_PATTERN = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+)*_artifact_id$")
+VC_ARTIFACT_OUTPUTS = {
+    "source-thesis-targets": ["thesis_target_list_artifact_id"],
+    "prepare-lead-gen-packet": ["lead_generation_packet_artifact_id"],
+    "screen-inbound-opportunity": ["first_look_scorecard_artifact_id"],
+    "request-founder-materials": ["founder_materials_request_artifact_id"],
+    "prepare-initial-call": ["initial_call_brief_artifact_id"],
+    "summarize-initial-call": ["customer_insights_artifact_id"],
+    "run-ten-factor-screen": ["ten_factor_scorecard_artifact_id"],
+    "generate-82-factor-questions": ["eighty_two_factor_questions_artifact_id"],
+    "run-founder-evaluation": ["founder_evaluation_artifact_id"],
+    "prepare-team-review-pack": ["team_review_pack_artifact_id"],
+    "prepare-partner-review-pack": ["partner_review_pack_artifact_id"],
+    "run-commercial-dd": [
+        "commercial_dd_artifact_id",
+        "market_analysis_artifact_id",
+        "customer_reference_summary_artifact_id",
+    ],
+    "run-financial-dd": [
+        "financial_dd_artifact_id",
+        "unit_economics_artifact_id",
+    ],
+    "run-technical-dd": ["technical_dd_artifact_id"],
+    "create-ic-memo": ["investment_memo_artifact_id"],
+    "review-ic-memo": ["ic_memo_review_artifact_id"],
+    "prepare-ic-agenda": ["ic_agenda_artifact_id"],
+    "record-ic-decision": ["ic_decision_record_artifact_id"],
+    "review-term-sheet": ["term_sheet_review_artifact_id"],
+    "manage-closing-checklist": ["closing_checklist_artifact_id"],
+    "verify-conditions-precedent": ["conditions_precedent_verification_artifact_id"],
+    "prepare-portfolio-onboarding": ["portfolio_onboarding_plan_artifact_id"],
+}
+VC_ARTIFACT_INPUTS = {
+    "prepare-team-review-pack": [
+        "commercial_dd_artifact_id",
+        "financial_dd_artifact_id",
+        "founder_evaluation_artifact_id",
+        "technical_dd_artifact_id",
+        "eighty_two_factor_questions_artifact_id",
+    ],
+    "prepare-partner-review-pack": [
+        "commercial_dd_artifact_id",
+        "financial_dd_artifact_id",
+        "founder_evaluation_artifact_id",
+        "technical_dd_artifact_id",
+        "eighty_two_factor_questions_artifact_id",
+        "team_review_pack_artifact_id",
+    ],
+    "create-ic-memo": [
+        "commercial_dd_artifact_id",
+        "financial_dd_artifact_id",
+        "founder_evaluation_artifact_id",
+        "technical_dd_artifact_id",
+        "eighty_two_factor_questions_artifact_id",
+        "team_review_pack_artifact_id",
+        "partner_review_pack_artifact_id",
+    ],
+    "prepare-ic-agenda": ["investment_memo_artifact_id"],
+    "review-ic-memo": ["investment_memo_artifact_id", "ic_agenda_artifact_id"],
+    "record-ic-decision": [
+        "investment_memo_artifact_id",
+        "ic_agenda_artifact_id",
+    ],
+    "manage-closing-checklist": [
+        "ic_decision_record_artifact_id",
+        "term_sheet_review_artifact_id",
+    ],
+    "verify-conditions-precedent": ["closing_checklist_artifact_id"],
+    "prepare-portfolio-onboarding": [
+        "ic_decision_record_artifact_id",
+        "closing_checklist_artifact_id",
+        "conditions_precedent_verification_artifact_id",
+    ],
+}
 
 
 def fail(message: str) -> None:
@@ -240,6 +314,75 @@ def validate_task_template_platform_ingest_contract(surface: dict[str, Any]) -> 
         fail("surfaces.taskDefinitionTemplates.platformIngest.status must be declared")
 
 
+def field_map(template_id: str, section_name: str, fields: Any) -> dict[str, dict[str, Any]]:
+    if fields is None:
+        return {}
+    if not isinstance(fields, list):
+        fail(f"Task template {template_id} fields.{section_name} must be a list")
+
+    mapped: dict[str, dict[str, Any]] = {}
+    for field in fields:
+        if not isinstance(field, dict):
+            fail(f"Task template {template_id} fields.{section_name} entries must be objects")
+        key = field.get("key")
+        if not isinstance(key, str) or not key:
+            fail(f"Task template {template_id} fields.{section_name} entries must declare key")
+        if key in mapped:
+            fail(f"Task template {template_id} fields.{section_name} has duplicate key {key}")
+        mapped[key] = field
+    return mapped
+
+
+def validate_artifact_field_shape(
+    template_id: str,
+    section_name: str,
+    field: dict[str, Any],
+) -> None:
+    key = field["key"]
+    is_artifact_key = key.endswith("_artifact_id")
+    is_file_field = field.get("fieldType") == "file"
+    if not is_artifact_key and not is_file_field:
+        return
+    if not ARTIFACT_FIELD_KEY_PATTERN.match(key):
+        fail(
+            f"Task template {template_id} fields.{section_name}.{key} must match "
+            f"{ARTIFACT_FIELD_KEY_PATTERN.pattern}"
+        )
+    if field.get("fieldType") != "file":
+        fail(f"Task template {template_id} fields.{section_name}.{key} must use fieldType: file")
+    if field.get("required") is not True:
+        fail(f"Task template {template_id} fields.{section_name}.{key} must set required: true")
+
+
+def validate_required_artifact_fields(
+    template_id: str,
+    slug: str,
+    fields: dict[str, Any],
+) -> None:
+    input_fields = field_map(template_id, "input", fields.get("input"))
+    context_fields = field_map(template_id, "context", fields.get("context"))
+    output_fields = field_map(template_id, "output", fields.get("output"))
+    for section_name, mapped_fields in [
+        ("input", input_fields),
+        ("context", context_fields),
+        ("output", output_fields),
+    ]:
+        for field in mapped_fields.values():
+            validate_artifact_field_shape(template_id, section_name, field)
+
+    for key in VC_ARTIFACT_INPUTS.get(slug, []):
+        field = input_fields.get(key)
+        if field is None:
+            fail(f"Task template {template_id} ({slug}) is missing required artifact input {key}")
+        validate_artifact_field_shape(template_id, "input", field)
+
+    for key in VC_ARTIFACT_OUTPUTS.get(slug, []):
+        field = output_fields.get(key)
+        if field is None:
+            fail(f"Task template {template_id} ({slug}) is missing required artifact output {key}")
+        validate_artifact_field_shape(template_id, "output", field)
+
+
 def get_declared_project_type_dependencies(manifest: dict[str, Any]) -> set[str]:
     dependencies = manifest.get("dependencies") or {}
     if not isinstance(dependencies, dict):
@@ -294,6 +437,7 @@ def validate_task_template_file(
         fail(f"Task template {template_id} is missing definition.name")
     if not isinstance(definition.get("slug"), str) or not definition.get("slug"):
         fail(f"Task template {template_id} is missing definition.slug")
+    slug = definition["slug"]
 
     definition_json = definition.get("definitionJson")
     if definition_json is None:
@@ -350,6 +494,11 @@ def validate_task_template_file(
         declared_project_type_ids,
         "declared project type dependencies",
     )
+
+    fields = template.get("fields") or {}
+    if not isinstance(fields, dict):
+        fail(f"Task template {template_id} fields must be an object when declared")
+    validate_required_artifact_fields(template_id, slug, fields)
 
     pack_vertical_keys = expected_pack.get("verticalKeys") or []
     if expected_pack.get("availability") == "vertical" and not pack_vertical_keys:

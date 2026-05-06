@@ -89,4 +89,5 @@ The validator checks:
 - public skills do not set `internalOnly: true`
 - Alludium agent-template skill references resolve to included skills
 - task-template skill and agent-template references resolve to manifest-declared surfaces
+- VC task artifact output/input fields are present, required, file-backed, and semantically named
 - obvious secret-bearing values are not present
