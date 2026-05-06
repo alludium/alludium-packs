@@ -4,18 +4,19 @@ Public VC workflow plugin and pack seed for [Alludium](https://www.alludium.ai).
 
 Alludium VC packages reusable venture capital workflows for sourcing, screening, diligence, investment committee preparation, closing, and portfolio onboarding. It is the first bundle inside the broader `alludium-packs` catalog, not a standalone VC-only repository.
 
-The published `v0.1.0` release contains skills, Alludium runtime agent templates, MCP definitions, and Alludium MCP mapping guidance. The current draft `v0.2.2` pack surface adds VC task-definition templates for the paired platform ingest work and advertises both the canonical `venture_capital` vertical key and the legacy `vc` alias.
+The published `v0.1.0` release contains skills, Alludium runtime agent templates, MCP definitions, and Alludium MCP mapping guidance. The current draft `v0.3.0` pack surface includes VC task-definition templates, advertises both the canonical `venture_capital` vertical key and the legacy `vc` alias, and adds the VC Deal Room project type for the paired platform ingest work.
 
 The current draft pack surface contains:
 
 - Claude/Codex-style skills in `skills/`
 - Alludium runtime agent templates in `alludium/agent-templates/`
 - VC task-definition templates in `alludium/task-definition-templates/`
+- VC Deal Room project type definition in `alludium/project-types/`
 - VC-relevant MCP server definitions in `.mcp.json`
 - Alludium platform mapping guidance for MCPs in `alludium/mcp-recommendations.yaml`
 - a pack-aware Alludium manifest in `alludium/manifest.yaml`
 
-Project type definitions remain intentionally deferred. The VC task-definition templates advertise `vc_deal_room` as a supported project type, but that project type is a declared platform-local dependency until the later project-type pack surface lands.
+The VC task-definition templates advertise `vc_deal_room` as a supported project type. The draft `v0.3.0` surface includes that project type definition, but it still requires a paired platform release with `external-project-type-ingest` support before it can be used as the runtime source of truth.
 
 Task-template workspace eligibility is controlled by catalog-level `verticalKeys`. Individual template `definitionJson.vertical` values remain legacy workflow metadata, so the `v0.2.2` compatibility fix is intentionally made in `alludium/task-definition-templates/catalog.v1.json`.
 
@@ -26,6 +27,7 @@ Task-template workspace eligibility is controlled by catalog-level `verticalKeys
 | Skills                    | `skills/`                             | 23 public workflow skills used by the VC agent templates                                 |
 | Agent templates           | `alludium/agent-templates/`           | 8 Alludium runtime templates using the `vc_*` baseline                                   |
 | Task definition templates | `alludium/task-definition-templates/` | 26 VC workflow task templates and catalog metadata                                       |
+| Project types             | `alludium/project-types/`             | VC Deal Room project type catalog and definition                                         |
 | Pack manifest             | `alludium/manifest.yaml`              | Alludium-specific inventory, boundaries, and future pack surfaces                        |
 | Plugin MCP manifest       | `.mcp.json`                           | Public-safe MCP definitions for VC research, CRM, meeting, and market-intelligence tools |
 | MCP platform mapping      | `alludium/mcp-recommendations.yaml`   | Alludium mapping guidance for platform-managed or workspace-managed connections          |
@@ -47,7 +49,8 @@ alludium-packs/
         │   ├── manifest.yaml
         │   ├── mcp-recommendations.yaml
         │   ├── agent-templates/
-        │   └── task-definition-templates/
+        │   ├── task-definition-templates/
+        │   └── project-types/
         └── scripts/
 ```
 
@@ -57,9 +60,11 @@ The plugin surface is for agent tooling that already understands skills, agent d
 
 The VC pack directory is also the plugin root. Standard plugin concepts live at the pack root. Alludium-only runtime concepts live under `alludium/`.
 
-The Alludium pack surface is the product/runtime extension point. It tracks Alludium agent templates and task-definition templates today and is expected to grow later to include project types, workspace activation metadata, provenance, and rollback/deactivation semantics.
+The Alludium pack surface is the product/runtime extension point. It tracks Alludium agent templates, task-definition templates, and project types today and is expected to grow later to include workspace activation metadata, provenance, and rollback/deactivation semantics.
 
 The task-definition-template surface requires platform support for `external-task-definition-template-ingest`. Platform versions that only understand external pack skills and Alludium agent templates can ingest the older surfaces but will ignore task templates.
+
+The project-type surface requires platform support for `external-project-type-ingest`. Platform versions without that capability should continue using platform-local project types until the paired platform cutover lands.
 
 The top-level `agents/` directory is reserved for future plugin-native Claude/Codex agent definitions. The current `alludium/agent-templates/` files are Alludium runtime YAML templates, so they intentionally remain under the Alludium extension surface until a deliberate adapter or generated native-agent format exists.
 
