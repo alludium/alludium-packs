@@ -4,7 +4,7 @@ Public VC workflow plugin and pack seed for [Alludium](https://www.alludium.ai).
 
 Alludium VC packages reusable venture capital workflows for sourcing, screening, diligence, investment committee preparation, closing, and portfolio onboarding. It is the first bundle inside the broader `alludium-packs` catalog, not a standalone VC-only repository.
 
-The published `v0.1.0` release contains skills, Alludium runtime agent templates, MCP definitions, and Alludium MCP mapping guidance. The current draft `v0.3.0` pack surface includes VC task-definition templates, advertises both the canonical `venture_capital` vertical key and the legacy `vc` alias, and adds the VC Deal Room project type for the paired platform ingest work.
+The published `v0.1.0` release contains skills, Alludium runtime agent templates, MCP definitions, and Alludium MCP mapping guidance. The current draft `v0.3.1` pack surface includes VC task-definition templates, advertises both the canonical `venture_capital` vertical key and the legacy `vc` alias, and adds the VC Deal Room project type for the paired platform ingest work.
 
 The current draft pack surface contains:
 
@@ -16,7 +16,7 @@ The current draft pack surface contains:
 - Alludium platform mapping guidance for MCPs in `alludium/mcp-recommendations.yaml`
 - a pack-aware Alludium manifest in `alludium/manifest.yaml`
 
-The VC task-definition templates advertise `vc_deal_room` as a supported project type. The draft `v0.3.0` surface includes that project type definition, but it still requires a paired platform release with `external-project-type-ingest` support before it can be used as the runtime source of truth.
+The VC task-definition templates advertise `vc_deal_room` as a supported project type. The draft `v0.3.1` surface includes that project type definition, but it still requires a paired platform release with `external-project-type-ingest` support before it can be used as the runtime source of truth.
 
 Task-template workspace eligibility is controlled by catalog-level `verticalKeys`. Individual template `definitionJson.vertical` values remain legacy workflow metadata, so the `v0.2.2` compatibility fix is intentionally made in `alludium/task-definition-templates/catalog.v1.json`.
 
