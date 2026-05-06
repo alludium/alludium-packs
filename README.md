@@ -63,7 +63,7 @@ python3 -m pip install -r plugins/vc/requirements.txt
 python3 plugins/vc/scripts/validate_pack.py
 ```
 
-The validator checks plugin manifests, skill frontmatter, manifest inventory, agent-template references, task-template references, project-type references, and obvious secret-bearing values.
+The validator checks plugin manifests, skill frontmatter, manifest inventory, agent-template references, task-template references, project-type references, VC task artifact file-field contracts, workspace variables, application recommendations, and obvious secret-bearing values.
 
 ## Contributing
 
