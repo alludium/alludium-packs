@@ -1,9 +1,9 @@
 # Alludium VC Inventory
 
-**Version**: 0.3.0
+**Version**: 0.3.1
 **Status**: Draft project-type expansion
 
-This inventory describes the current public VC plugin/pack seed plus the draft project-type expansion. Version `0.1.0` contains VC skills, Alludium runtime agent templates, public-safe MCP definitions, and Alludium MCP recommendations. Version `0.2.2` adds VC task-definition templates and advertises both the canonical `venture_capital` vertical key and legacy `vc` alias. Version `0.3.0` adds the VC Deal Room project type as a first-class pack surface for the paired platform ingest work.
+This inventory describes the current public VC plugin/pack seed plus the draft project-type expansion. Version `0.1.0` contains VC skills, Alludium runtime agent templates, public-safe MCP definitions, and Alludium MCP recommendations. Version `0.2.2` adds VC task-definition templates and advertises both the canonical `venture_capital` vertical key and legacy `vc` alias. Version `0.3.0` adds the VC Deal Room project type as a first-class pack surface for the paired platform ingest work. Version `0.3.1` adds the VC Deal Room command-view metadata used by the project command center.
 
 ---
 

@@ -2,7 +2,7 @@ schemaVersion: "0.1"
 pack:
   id: vc
   name: Alludium VC
-  version: "0.3.0"
+  version: "0.3.1"
   description: >
     Public VC workflow plugin and pack seed for Alludium, published as the
     first bundle in the broader Alludium packs catalog. This release contains

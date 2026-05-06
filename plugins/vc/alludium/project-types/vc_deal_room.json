@@ -440,6 +440,560 @@
         "from": "portfolio_onboarding",
         "to": "archived"
       }
-    ]
+    ],
+    "commandView": {
+      "key": "vc-deal-room",
+      "typeLabel": "VC Deal Room",
+      "collectionLabel": "Deals",
+      "overviewTitle": "Deal overview",
+      "overviewAriaLabel": "Open deal data",
+      "overviewFallback": "Add thesis signal and deal context in Data.",
+      "executionTitle": "Alludium is executing",
+      "activityHealthLabel": "Teams aligned",
+      "activityHealthValue": "On track",
+      "stageGroups": [
+        {
+          "key": "screening",
+          "label": "Screening",
+          "states": [
+            "lead_gen",
+            "deal_flow",
+            "screening",
+            "initial_call",
+            "follow_up",
+            "founder_evaluation",
+            "team_review",
+            "partner_review"
+          ]
+        },
+        {
+          "key": "diligence",
+          "label": "Diligence",
+          "states": [
+            "commercial_dd",
+            "technical_dd",
+            "financial_dd"
+          ]
+        },
+        {
+          "key": "ic_prep",
+          "label": "IC Prep",
+          "states": [
+            "investment_committee"
+          ]
+        },
+        {
+          "key": "decision",
+          "label": "Decision",
+          "states": [
+            "term_sheet",
+            "legal_review",
+            "legal_diligence",
+            "final_dd",
+            "signing",
+            "portfolio_onboarding",
+            "invested",
+            "passed",
+            "archived"
+          ]
+        }
+      ],
+      "fallbackAgents": [
+        {
+          "id": "vc_first_look_analyst",
+          "name": "First Look Analyst",
+          "description": "Screening and first-look scorecards"
+        },
+        {
+          "id": "vc_diligence_analyst",
+          "name": "Diligence Analyst",
+          "description": "Commercial, technical, and financial diligence"
+        },
+        {
+          "id": "vc_ic_prep_producer",
+          "name": "IC Prep Producer",
+          "description": "IC memo and committee pack assembly"
+        },
+        {
+          "id": "vc_legal_compliance_desk",
+          "name": "Legal & Compliance Desk",
+          "description": "Closing, CP tracking, and legal coordination"
+        }
+      ],
+      "outputSlots": [
+        {
+          "key": "thesis_target_list",
+          "title": "Thesis target list",
+          "description": "Target companies, fit rationale, sources, and intro paths",
+          "artifactOutputs": [
+            {
+              "key": "thesis_target_list",
+              "title": "Thesis target list",
+              "producerTaskDefinitionSlug": "source-thesis-targets",
+              "outputFieldKey": "thesis_target_list_artifact_id"
+            }
+          ]
+        },
+        {
+          "key": "lead_generation_packet",
+          "title": "Lead generation packet",
+          "description": "Company snapshots, discussion points, and proposed next actions",
+          "artifactOutputs": [
+            {
+              "key": "lead_generation_packet",
+              "title": "Lead generation packet",
+              "producerTaskDefinitionSlug": "prepare-lead-gen-packet",
+              "outputFieldKey": "lead_generation_packet_artifact_id"
+            }
+          ]
+        },
+        {
+          "key": "first_look_scorecard",
+          "title": "First-look scorecard",
+          "description": "Inbound fit recommendation, gaps, red flags, and next actions",
+          "artifactOutputs": [
+            {
+              "key": "first_look_scorecard",
+              "title": "First-look scorecard",
+              "producerTaskDefinitionSlug": "screen-inbound-opportunity",
+              "outputFieldKey": "first_look_scorecard_artifact_id"
+            }
+          ]
+        },
+        {
+          "key": "ten_factor_scorecard",
+          "title": "10-factor scorecard",
+          "description": "Structured 10-factor scoring and human review prompts",
+          "artifactOutputs": [
+            {
+              "key": "ten_factor_scorecard",
+              "title": "10-factor scorecard",
+              "producerTaskDefinitionSlug": "run-ten-factor-screen",
+              "outputFieldKey": "ten_factor_scorecard_artifact_id"
+            }
+          ]
+        },
+        {
+          "key": "founder_materials_request",
+          "title": "Founder materials request",
+          "description": "Materials checklist, draft message, due date, and approval requirement",
+          "artifactOutputs": [
+            {
+              "key": "founder_materials_request",
+              "title": "Founder materials request",
+              "producerTaskDefinitionSlug": "request-founder-materials",
+              "outputFieldKey": "founder_materials_request_artifact_id"
+            }
+          ]
+        },
+        {
+          "key": "initial_call_brief",
+          "title": "Initial call brief",
+          "description": "Founder and company briefing, competitor activity, and call questions",
+          "artifactOutputs": [
+            {
+              "key": "initial_call_brief",
+              "title": "Initial call brief",
+              "producerTaskDefinitionSlug": "prepare-initial-call",
+              "outputFieldKey": "initial_call_brief_artifact_id"
+            }
+          ]
+        },
+        {
+          "key": "customer_insights",
+          "title": "Customer insights summary",
+          "description": "Call summary, claims, gaps, action items, and follow-up recommendation",
+          "artifactOutputs": [
+            {
+              "key": "customer_insights",
+              "title": "Customer insights summary",
+              "producerTaskDefinitionSlug": "summarize-initial-call",
+              "outputFieldKey": "customer_insights_artifact_id"
+            }
+          ]
+        },
+        {
+          "key": "commercial_dd",
+          "title": "Commercial DD report",
+          "description": "Market, competition, GTM, customer evidence, and commercial risk",
+          "artifactOutputs": [
+            {
+              "key": "commercial_dd",
+              "title": "Commercial DD report",
+              "producerTaskDefinitionSlug": "run-commercial-dd",
+              "outputFieldKey": "commercial_dd_artifact_id",
+              "reviewTaskDefinitionSlugs": [
+                "prepare-team-review-pack",
+                "prepare-partner-review-pack",
+                "create-ic-memo"
+              ],
+              "reviewInputFieldKeys": [
+                "commercial_dd_artifact_id"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "market_analysis",
+          "title": "Market analysis",
+          "description": "Market size, growth, segmentation, and competitive landscape",
+          "artifactOutputs": [
+            {
+              "key": "market_analysis",
+              "title": "Market analysis",
+              "producerTaskDefinitionSlug": "run-commercial-dd",
+              "outputFieldKey": "market_analysis_artifact_id"
+            }
+          ]
+        },
+        {
+          "key": "customer_reference_summary",
+          "title": "Customer reference summary",
+          "description": "Customer reference plan, interview summaries, and adoption evidence",
+          "artifactOutputs": [
+            {
+              "key": "customer_reference_summary",
+              "title": "Customer reference summary",
+              "producerTaskDefinitionSlug": "run-commercial-dd",
+              "outputFieldKey": "customer_reference_summary_artifact_id"
+            }
+          ]
+        },
+        {
+          "key": "financial_dd",
+          "title": "Financial DD report",
+          "description": "Historicals, runway, cap table, forecast, and financial risks",
+          "artifactOutputs": [
+            {
+              "key": "financial_dd",
+              "title": "Financial DD report",
+              "producerTaskDefinitionSlug": "run-financial-dd",
+              "outputFieldKey": "financial_dd_artifact_id",
+              "reviewTaskDefinitionSlugs": [
+                "prepare-team-review-pack",
+                "prepare-partner-review-pack",
+                "create-ic-memo"
+              ],
+              "reviewInputFieldKeys": [
+                "financial_dd_artifact_id"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unit_economics",
+          "title": "Unit economics analysis",
+          "description": "Business model economics, traction, forecast, and scenario analysis",
+          "artifactOutputs": [
+            {
+              "key": "unit_economics",
+              "title": "Unit economics analysis",
+              "producerTaskDefinitionSlug": "run-financial-dd",
+              "outputFieldKey": "unit_economics_artifact_id"
+            }
+          ]
+        },
+        {
+          "key": "founder_evaluation",
+          "title": "Founder evaluation",
+          "description": "Founder dossier, references, risk assessment, and stop signals",
+          "artifactOutputs": [
+            {
+              "key": "founder_evaluation",
+              "title": "Founder evaluation",
+              "producerTaskDefinitionSlug": "run-founder-evaluation",
+              "outputFieldKey": "founder_evaluation_artifact_id",
+              "reviewTaskDefinitionSlugs": [
+                "prepare-team-review-pack",
+                "prepare-partner-review-pack",
+                "create-ic-memo"
+              ],
+              "reviewInputFieldKeys": [
+                "founder_evaluation_artifact_id"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "technical_dd",
+          "title": "Technical DD report",
+          "description": "Architecture, team, IP, AI/ML risks, scalability, and security",
+          "artifactOutputs": [
+            {
+              "key": "technical_dd",
+              "title": "Technical DD report",
+              "producerTaskDefinitionSlug": "run-technical-dd",
+              "outputFieldKey": "technical_dd_artifact_id",
+              "reviewTaskDefinitionSlugs": [
+                "prepare-team-review-pack",
+                "prepare-partner-review-pack",
+                "create-ic-memo"
+              ],
+              "reviewInputFieldKeys": [
+                "technical_dd_artifact_id"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "eighty_two_factor_questions",
+          "title": "82-factor question set",
+          "description": "Prioritized diligence questions with rationale, owners, and urgency",
+          "artifactOutputs": [
+            {
+              "key": "eighty_two_factor_questions",
+              "title": "82-factor question set",
+              "producerTaskDefinitionSlug": "generate-82-factor-questions",
+              "outputFieldKey": "eighty_two_factor_questions_artifact_id",
+              "reviewTaskDefinitionSlugs": [
+                "prepare-team-review-pack",
+                "prepare-partner-review-pack",
+                "create-ic-memo"
+              ],
+              "reviewInputFieldKeys": [
+                "eighty_two_factor_questions_artifact_id"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "team_review_pack",
+          "title": "Team review pack",
+          "description": "Team-stage evidence, factor summaries, founder risk, and stage-gate ask",
+          "artifactOutputs": [
+            {
+              "key": "team_review_pack",
+              "title": "Team review pack",
+              "producerTaskDefinitionSlug": "prepare-team-review-pack",
+              "outputFieldKey": "team_review_pack_artifact_id",
+              "reviewTaskDefinitionSlugs": [
+                "prepare-partner-review-pack",
+                "create-ic-memo"
+              ],
+              "reviewInputFieldKeys": [
+                "team_review_pack_artifact_id"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "partner_review_pack",
+          "title": "Partner review pack",
+          "description": "Investment thesis, strategic fit, DD scope, owners, and decision ask",
+          "artifactOutputs": [
+            {
+              "key": "partner_review_pack",
+              "title": "Partner review pack",
+              "producerTaskDefinitionSlug": "prepare-partner-review-pack",
+              "outputFieldKey": "partner_review_pack_artifact_id",
+              "reviewTaskDefinitionSlugs": [
+                "create-ic-memo"
+              ],
+              "reviewInputFieldKeys": [
+                "partner_review_pack_artifact_id"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "investment_memo",
+          "title": "Investment memo",
+          "description": "IC memo, decision ask, unresolved risks, and citation coverage",
+          "artifactOutputs": [
+            {
+              "key": "investment_memo",
+              "title": "Investment memo",
+              "producerTaskDefinitionSlug": "create-ic-memo",
+              "outputFieldKey": "investment_memo_artifact_id",
+              "reviewTaskDefinitionSlugs": [
+                "prepare-ic-agenda",
+                "review-ic-memo",
+                "record-ic-decision"
+              ],
+              "reviewInputFieldKeys": [
+                "investment_memo_artifact_id"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "ic_agenda",
+          "title": "IC agenda",
+          "description": "Committee agenda, pack checklist, debate topics, and pre-read needs",
+          "artifactOutputs": [
+            {
+              "key": "ic_agenda",
+              "title": "IC agenda",
+              "producerTaskDefinitionSlug": "prepare-ic-agenda",
+              "outputFieldKey": "ic_agenda_artifact_id",
+              "reviewTaskDefinitionSlugs": [
+                "review-ic-memo",
+                "record-ic-decision"
+              ],
+              "reviewInputFieldKeys": [
+                "ic_agenda_artifact_id"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "ic_memo_review",
+          "title": "IC memo review",
+          "description": "Review findings, citation gaps, required changes, and readiness",
+          "artifactOutputs": [
+            {
+              "key": "ic_memo_review",
+              "title": "IC memo review",
+              "producerTaskDefinitionSlug": "review-ic-memo",
+              "outputFieldKey": "ic_memo_review_artifact_id"
+            }
+          ]
+        },
+        {
+          "key": "ic_decision_record",
+          "title": "IC decision record",
+          "description": "Decision outcome, objections, conditions, and post-IC action items",
+          "artifactOutputs": [
+            {
+              "key": "ic_decision_record",
+              "title": "IC decision record",
+              "producerTaskDefinitionSlug": "record-ic-decision",
+              "outputFieldKey": "ic_decision_record_artifact_id",
+              "reviewTaskDefinitionSlugs": [
+                "manage-closing-checklist",
+                "prepare-portfolio-onboarding"
+              ],
+              "reviewInputFieldKeys": [
+                "ic_decision_record_artifact_id"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "term_sheet_review",
+          "title": "Term sheet review",
+          "description": "Term summary, deviations, red flags, and counsel review questions",
+          "artifactOutputs": [
+            {
+              "key": "term_sheet_review",
+              "title": "Term sheet review",
+              "producerTaskDefinitionSlug": "review-term-sheet",
+              "outputFieldKey": "term_sheet_review_artifact_id",
+              "reviewTaskDefinitionSlugs": [
+                "manage-closing-checklist"
+              ],
+              "reviewInputFieldKeys": [
+                "term_sheet_review_artifact_id"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "closing_checklist",
+          "title": "Closing checklist",
+          "description": "Closing status, owners, due dates, blockers, and onboarding readiness",
+          "artifactOutputs": [
+            {
+              "key": "closing_checklist",
+              "title": "Closing checklist",
+              "producerTaskDefinitionSlug": "manage-closing-checklist",
+              "outputFieldKey": "closing_checklist_artifact_id",
+              "reviewTaskDefinitionSlugs": [
+                "verify-conditions-precedent",
+                "prepare-portfolio-onboarding"
+              ],
+              "reviewInputFieldKeys": [
+                "closing_checklist_artifact_id"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "conditions_precedent_verification",
+          "title": "Conditions precedent verification",
+          "description": "CP evidence mapping, missing items, blocker severity, and signing readiness",
+          "artifactOutputs": [
+            {
+              "key": "conditions_precedent_verification",
+              "title": "Conditions precedent verification",
+              "producerTaskDefinitionSlug": "verify-conditions-precedent",
+              "outputFieldKey": "conditions_precedent_verification_artifact_id",
+              "reviewTaskDefinitionSlugs": [
+                "prepare-portfolio-onboarding"
+              ],
+              "reviewInputFieldKeys": [
+                "conditions_precedent_verification_artifact_id"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "portfolio_onboarding_plan",
+          "title": "Portfolio onboarding plan",
+          "description": "Board setup, reporting cadence, 100-day plan, milestones, and owners",
+          "artifactOutputs": [
+            {
+              "key": "portfolio_onboarding_plan",
+              "title": "Portfolio onboarding plan",
+              "producerTaskDefinitionSlug": "prepare-portfolio-onboarding",
+              "outputFieldKey": "portfolio_onboarding_plan_artifact_id"
+            }
+          ]
+        }
+      ],
+      "summaryFields": [
+        {
+          "key": "target_check_size",
+          "label": "Check size",
+          "fieldKey": "target_check_size",
+          "format": "money"
+        },
+        {
+          "key": "investment_stage",
+          "label": "Stage",
+          "fieldKey": "investment_stage",
+          "format": "projectState"
+        },
+        {
+          "key": "sector",
+          "label": "Sector",
+          "fieldKey": "sector"
+        },
+        {
+          "key": "geography",
+          "label": "Geography",
+          "fieldKey": "geography"
+        }
+      ],
+      "primarySummaryField": {
+        "key": "round",
+        "label": "Round",
+        "fieldKey": "round"
+      },
+      "secondarySummaryField": {
+        "key": "signal",
+        "label": "Signal",
+        "contextKey": "signal"
+      },
+      "scoreField": {
+        "key": "score",
+        "label": "Score",
+        "contextKey": "score"
+      },
+      "badgeFields": [
+        {
+          "key": "company_domain",
+          "label": "Domain",
+          "fieldKey": "company_domain"
+        },
+        {
+          "key": "decision",
+          "label": "Decision",
+          "fieldKey": "current_decision",
+          "contextKey": "recommendation",
+          "format": "projectState"
+        }
+      ]
+    }
   }
 }
