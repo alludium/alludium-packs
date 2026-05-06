@@ -1,9 +1,9 @@
 # Alludium VC Inventory
 
-**Version**: 0.2.1
+**Version**: 0.2.2
 **Status**: Draft task-template expansion
 
-This inventory describes the current public VC plugin/pack seed plus the draft task-template expansion. Version `0.1.0` contains VC skills, Alludium runtime agent templates, public-safe MCP definitions, and Alludium MCP recommendations. Version `0.2.1` adds VC task-definition templates as the next pack surface and declares the platform capability/project-type dependencies required to ingest them safely.
+This inventory describes the current public VC plugin/pack seed plus the draft task-template expansion. Version `0.1.0` contains VC skills, Alludium runtime agent templates, public-safe MCP definitions, and Alludium MCP recommendations. Version `0.2.2` adds VC task-definition templates as the next pack surface, advertises both the canonical `venture_capital` vertical key and legacy `vc` alias, and declares the platform capability/project-type dependencies required to ingest them safely.
 
 ---
 
@@ -97,7 +97,8 @@ These templates are included because the platform VC workspace pack currently re
 Review notes:
 
 - Task templates remain unavailable to the platform until the paired platform PR teaches external pack ingest to stage and apply this surface.
-- The task-template catalog preserves the current platform `vc-workflows` pack metadata, vertical key, template IDs, and template versions.
+- The task-template catalog preserves the current platform `vc-workflows` pack metadata, template IDs, and template versions while advertising both supported vertical keys: `venture_capital` and `vc`.
+- Platform eligibility is driven by catalog `verticalKeys`, which the platform loader persists to `task_definitions.vertical_keys`; the per-template `definitionJson.vertical: vc` field remains legacy workflow metadata and is not used for workspace eligibility checks.
 - The task-template surface requires platform capability `external-task-definition-template-ingest`.
 - All task templates advertise `vc_deal_room` as a supported project type; that project type is currently declared as a platform-local dependency, not as an included pack surface.
 
@@ -139,7 +140,7 @@ Review notes:
 
 Task definitions:
 
-- included in draft `v0.2.1`
+- included in draft `v0.2.2`
 - path: `alludium/task-definition-templates/`
 
 Project types:

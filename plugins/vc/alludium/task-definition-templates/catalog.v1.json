@@ -36,7 +36,7 @@
         "vc-workflows/prepare-portfolio-onboarding.yaml"
       ],
       "title": "VC Workflows",
-      "verticalKeys": ["vc"]
+      "verticalKeys": ["venture_capital", "vc"]
     }
   ]
 }

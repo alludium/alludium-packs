@@ -48,6 +48,7 @@ TASK_TEMPLATE_AGENT_TEMPLATE_REFERENCE_FIELDS = [
     "preferredAgentType",
 ]
 TASK_TEMPLATE_PLATFORM_CAPABILITY = "external-task-definition-template-ingest"
+EXPECTED_VC_TASK_TEMPLATE_VERTICAL_KEYS = ["venture_capital", "vc"]
 
 
 def fail(message: str) -> None:
@@ -394,6 +395,14 @@ def validate_task_definition_templates(
     for pack in catalog.get("packs") or []:
         if not isinstance(pack, dict):
             fail("Task definition template catalog packs must be objects")
+        if (
+            pack.get("id") == "vc-workflows"
+            and pack.get("verticalKeys") != EXPECTED_VC_TASK_TEMPLATE_VERTICAL_KEYS
+        ):
+            fail(
+                "Task definition template catalog pack vc-workflows verticalKeys must be "
+                f"{EXPECTED_VC_TASK_TEMPLATE_VERTICAL_KEYS}"
+            )
         templates = pack.get("templates") or []
         if not isinstance(templates, list):
             fail(f"Task definition template catalog pack {pack.get('id')} templates must be a list")
