@@ -257,33 +257,6 @@ def validate_project_type_platform_ingest_contract(surface: dict[str, Any]) -> N
         fail("surfaces.projectTypes.platformIngest.status must be declared")
 
 
-def get_declared_project_type_dependencies(manifest: dict[str, Any]) -> set[str]:
-    dependencies = manifest.get("dependencies") or {}
-    if not isinstance(dependencies, dict):
-        fail("Manifest dependencies must be an object when declared")
-    project_type_dependencies = dependencies.get("projectTypes") or []
-    if not isinstance(project_type_dependencies, list):
-        fail("Manifest dependencies.projectTypes must be a list when declared")
-
-    declared: set[str] = set()
-    for dependency in project_type_dependencies:
-        if not isinstance(dependency, dict):
-            fail("Manifest dependencies.projectTypes entries must be objects")
-        dependency_id = dependency.get("id")
-        if not isinstance(dependency_id, str) or not dependency_id:
-            fail("Manifest dependencies.projectTypes entries must declare id")
-        declared.add(dependency_id)
-
-    project_type_surface = manifest["surfaces"].get("projectTypes") or {}
-    included_ids = project_type_surface.get("ids") if isinstance(project_type_surface, dict) else None
-    if included_ids is not None:
-        if not isinstance(included_ids, list) or not all(isinstance(item, str) for item in included_ids):
-            fail("surfaces.projectTypes.ids must be a list of strings when declared")
-        declared.update(included_ids)
-
-    return declared
-
-
 def validate_project_type_field(project_type_id: str, field: Any) -> tuple[str, str]:
     if not isinstance(field, dict):
         fail(f"Project type {project_type_id} fieldsSchema entries must be objects")
@@ -484,7 +457,7 @@ def validate_task_template_file(
     expected_pack: dict[str, Any],
     skill_ids: set[str],
     agent_template_ids: set[str],
-    declared_project_type_ids: set[str],
+    project_type_ids: set[str],
 ) -> str:
     template = read_yaml(path)
     relative_path = path.relative_to(ROOT)
@@ -559,8 +532,8 @@ def validate_task_template_file(
         template_id,
         "supportedProjectTypes",
         supported_project_types,
-        declared_project_type_ids,
-        "declared project type dependencies",
+        project_type_ids,
+        "included project types",
     )
 
     pack_vertical_keys = expected_pack.get("verticalKeys") or []
@@ -574,6 +547,7 @@ def validate_task_definition_templates(
     manifest: dict[str, Any],
     skill_ids: set[str],
     agent_template_ids: set[str],
+    project_type_ids: set[str],
 ) -> None:
     surface = manifest["surfaces"].get("taskDefinitionTemplates")
     if not isinstance(surface, dict):
@@ -589,7 +563,6 @@ def validate_task_definition_templates(
     if len(manifest_template_ids) != len(set(manifest_template_ids)):
         fail("Duplicate task-definition-template IDs in alludium/manifest.yaml")
     validate_task_template_platform_ingest_contract(surface)
-    declared_project_type_ids = get_declared_project_type_dependencies(manifest)
 
     task_root = ROOT / surface_path
     resolved_task_root = task_root.resolve()
@@ -640,7 +613,7 @@ def validate_task_definition_templates(
                     pack,
                     skill_ids,
                     agent_template_ids,
-                    declared_project_type_ids,
+                    project_type_ids,
                 )
             )
 
@@ -757,7 +730,7 @@ def main() -> None:
     validate_templates(manifest, skill_ids)
     agent_template_ids = set(manifest["surfaces"]["alludiumAgentTemplates"]["ids"])
     project_type_ids = validate_project_types(manifest)
-    validate_task_definition_templates(manifest, skill_ids, agent_template_ids)
+    validate_task_definition_templates(manifest, skill_ids, agent_template_ids, project_type_ids)
     recommendations_path = manifest["surfaces"]["alludiumMcpRecommendations"]["path"]
     if not (ROOT / recommendations_path).exists():
         fail(f"Missing Alludium MCP recommendations file: {recommendations_path}")
