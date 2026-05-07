@@ -126,17 +126,14 @@ VC_ARTIFACT_OUTPUTS = {
 VC_ARTIFACT_INPUTS = {
     "screen-inbound-opportunity": ["pitch_deck_artifact_id"],
     "prepare-initial-call": ["pitch_deck_artifact_id"],
-    "summarize-initial-call": ["meeting_transcript_artifact_id"],
+    "summarize-initial-call": ["meeting_record_artifact_ids"],
     "run-follow-up-evaluation": [
         "first_look_scorecard_artifact_id",
         "customer_insights_artifact_id",
     ],
     "run-ten-factor-screen": ["pitch_deck_artifact_id"],
-    "run-financial-dd": [
-        "financial_statements_artifact_id",
-        "forecast_model_artifact_id",
-    ],
-    "run-technical-dd": ["architecture_docs_artifact_id"],
+    "run-financial-dd": ["financial_source_artifact_ids"],
+    "run-technical-dd": ["technical_source_artifact_ids"],
     "prepare-team-review-pack": [
         "commercial_dd_artifact_id",
         "financial_dd_artifact_id",
@@ -170,12 +167,11 @@ VC_ARTIFACT_INPUTS = {
     "manage-closing-checklist": [
         "ic_decision_record_artifact_id",
         "term_sheet_review_artifact_id",
-        "closing_workplan_artifact_id",
+        "closing_source_artifact_ids",
     ],
     "verify-conditions-precedent": [
         "closing_checklist_artifact_id",
-        "cp_checklist_artifact_id",
-        "evidence_bundle_artifact_id",
+        "closing_source_artifact_ids",
     ],
     "review-term-sheet": ["term_sheet_artifact_id"],
     "prepare-portfolio-onboarding": [

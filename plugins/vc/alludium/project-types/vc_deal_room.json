@@ -204,12 +204,12 @@
         "description": "Compact list of founder-provided material artifact IDs."
       },
       {
-        "id": "field-meeting-transcript-artifact-id",
-        "key": "meeting_transcript_artifact_id",
-        "label": "Meeting Transcript Artifact ID",
+        "id": "field-meeting-record-artifact-ids",
+        "key": "meeting_record_artifact_ids",
+        "label": "Meeting Record Artifact IDs",
         "kind": "text",
         "required": false,
-        "description": "Uploaded initial-call transcript artifact."
+        "description": "Compact list of meeting transcript, summary, recording export, notes, or meeting-source artifact IDs."
       },
       {
         "id": "field-meeting-notes-artifact-id",
@@ -533,28 +533,20 @@
         "description": "Explicit approved source/access reference for technical diligence."
       },
       {
-        "id": "field-financial-statements-artifact-id",
-        "key": "financial_statements_artifact_id",
-        "label": "Financial Statements Artifact ID",
+        "id": "field-financial-source-artifact-ids",
+        "key": "financial_source_artifact_ids",
+        "label": "Financial Source Artifact IDs",
         "kind": "text",
         "required": false,
-        "description": "Primary financial statements artifact for financial diligence."
+        "description": "Compact list of financial diligence source artifacts, such as statements, forecasts, cap tables, data-room exports, and supporting models."
       },
       {
-        "id": "field-architecture-docs-artifact-id",
-        "key": "architecture_docs_artifact_id",
-        "label": "Architecture Docs Artifact ID",
+        "id": "field-technical-source-artifact-ids",
+        "key": "technical_source_artifact_ids",
+        "label": "Technical Source Artifact IDs",
         "kind": "text",
         "required": false,
-        "description": "Primary architecture documentation artifact for technical diligence."
-      },
-      {
-        "id": "field-forecast-model-artifact-id",
-        "key": "forecast_model_artifact_id",
-        "label": "Forecast Model Artifact ID",
-        "kind": "text",
-        "required": false,
-        "description": "Forecast model artifact for financial diligence."
+        "description": "Compact list of technical diligence source artifacts, such as architecture docs, API docs, security materials, product docs, repository exports, or technical data-room files."
       },
       {
         "id": "field-cap-table-artifact-id",
@@ -581,36 +573,28 @@
         "description": "Customer/user evidence artifacts for commercial diligence."
       },
       {
-        "id": "field-term-sheet-artifact-id",
-        "key": "term_sheet_artifact_id",
-        "label": "Term Sheet Artifact ID",
+        "id": "field-current-term-sheet-artifact-id",
+        "key": "current_term_sheet_artifact_id",
+        "label": "Current Term Sheet Artifact ID",
         "kind": "text",
         "required": false,
-        "description": "Uploaded term sheet artifact used for term review and closing tasks."
+        "description": "Selected term sheet artifact version for the next term-sheet review task."
       },
       {
-        "id": "field-closing-workplan-artifact-id",
-        "key": "closing_workplan_artifact_id",
-        "label": "Closing Workplan Artifact ID",
+        "id": "field-term-sheet-artifact-ids",
+        "key": "term_sheet_artifact_ids",
+        "label": "Term Sheet Artifact IDs",
         "kind": "text",
         "required": false,
-        "description": "Closing workplan artifact used by closing checklist tasks."
+        "description": "Compact ordered list of term sheet artifact versions associated with this deal."
       },
       {
-        "id": "field-cp-checklist-artifact-id",
-        "key": "cp_checklist_artifact_id",
-        "label": "CP Checklist Artifact ID",
+        "id": "field-closing-source-artifact-ids",
+        "key": "closing_source_artifact_ids",
+        "label": "Closing Source Artifact IDs",
         "kind": "text",
         "required": false,
-        "description": "Conditions precedent checklist artifact used for CP verification."
-      },
-      {
-        "id": "field-evidence-bundle-artifact-id",
-        "key": "evidence_bundle_artifact_id",
-        "label": "Evidence Bundle Artifact ID",
-        "kind": "text",
-        "required": false,
-        "description": "Evidence bundle artifact used for closing and CP verification."
+        "description": "Compact list of closing source artifacts, such as workplans, legal docs, counsel notes, CP lists, signed docs, and evidence files."
       },
       {
         "id": "field-ic-decision-outcome",
@@ -1852,9 +1836,9 @@
         "lifecycleStage": "assessment",
         "inputMappings": [
           {
-            "taskField": "meeting_transcript_artifact_id",
+            "taskField": "meeting_record_artifact_ids",
             "source": "project.field",
-            "sourcePath": "meeting_transcript_artifact_id",
+            "sourcePath": "meeting_record_artifact_ids",
             "requiredForActivation": true
           },
           {
@@ -1932,15 +1916,9 @@
         "lifecycleStage": "diligence",
         "inputMappings": [
           {
-            "taskField": "financial_statements_artifact_id",
+            "taskField": "financial_source_artifact_ids",
             "source": "project.field",
-            "sourcePath": "financial_statements_artifact_id",
-            "requiredForActivation": true
-          },
-          {
-            "taskField": "forecast_model_artifact_id",
-            "source": "project.field",
-            "sourcePath": "forecast_model_artifact_id",
+            "sourcePath": "financial_source_artifact_ids",
             "requiredForActivation": true
           }
         ],
@@ -2000,9 +1978,9 @@
         "lifecycleStage": "diligence",
         "inputMappings": [
           {
-            "taskField": "architecture_docs_artifact_id",
+            "taskField": "technical_source_artifact_ids",
             "source": "project.field",
-            "sourcePath": "architecture_docs_artifact_id",
+            "sourcePath": "technical_source_artifact_ids",
             "requiredForActivation": true
           },
           {
@@ -2374,7 +2352,7 @@
           {
             "taskField": "term_sheet_artifact_id",
             "source": "project.field",
-            "sourcePath": "term_sheet_artifact_id",
+            "sourcePath": "current_term_sheet_artifact_id",
             "requiredForActivation": true
           }
         ],
@@ -2412,9 +2390,9 @@
             "requiredForActivation": true
           },
           {
-            "taskField": "closing_workplan_artifact_id",
+            "taskField": "closing_source_artifact_ids",
             "source": "project.field",
-            "sourcePath": "closing_workplan_artifact_id",
+            "sourcePath": "closing_source_artifact_ids",
             "requiredForActivation": true
           }
         ],
@@ -2446,15 +2424,9 @@
             "requiredForActivation": true
           },
           {
-            "taskField": "cp_checklist_artifact_id",
+            "taskField": "closing_source_artifact_ids",
             "source": "project.field",
-            "sourcePath": "cp_checklist_artifact_id",
-            "requiredForActivation": true
-          },
-          {
-            "taskField": "evidence_bundle_artifact_id",
-            "source": "project.field",
-            "sourcePath": "evidence_bundle_artifact_id",
+            "sourcePath": "closing_source_artifact_ids",
             "requiredForActivation": true
           }
         ],

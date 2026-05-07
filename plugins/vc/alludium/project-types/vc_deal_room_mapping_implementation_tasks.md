@@ -24,6 +24,8 @@ This checklist turns `vc_deal_room_task_io_audit.md` into implementation slices.
 - [x] Move task `definitionJson.stage` values onto the collapsed stage model.
 - [x] Replace `pitch_deck_url` with `pitch_deck_artifact_id` in assessment tasks.
 - [x] Replace transcript/material/document free-text inputs with artifact-reference inputs where the task needs platform files.
+- [x] Replace source-material inputs that naturally have multiple files or versions with compact `*_artifact_ids` collection fields for meetings, financial DD, technical DD, and closing evidence.
+- [x] Split term-sheet source state into `current_term_sheet_artifact_id` for the selected review target and `term_sheet_artifact_ids` for the compact version list.
 - [x] Remove `prior_task_outputs` from inputs and context.
 - [x] Remove broad context fields unless a task has a specific runtime-only reason to receive them.
 - [x] Remove `create-deal-room`; project creation belongs to the platform/project API rather than a VC Deal Room workflow task.

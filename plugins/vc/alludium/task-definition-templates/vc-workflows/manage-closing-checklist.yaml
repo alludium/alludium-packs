@@ -43,7 +43,7 @@ definition:
         anchor: worksheet-atomic-agents
         note: Spreadsheet row 62
     instructions:
-      executionInstructions: Track closing workplan owners, due dates, blockers, daily status, and onboarding readiness for human close-readiness review. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifacts `ic_decision_record_artifact_id` and `term_sheet_review_artifact_id` as the decision and terms sources for the closing checklist. Create or update a durable project file artifact named Closing Checklist and attach it to the required output field `closing_checklist_artifact_id`.
+      executionInstructions: Track closing workplan owners, due dates, blockers, daily status, and onboarding readiness for human close-readiness review. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifacts `ic_decision_record_artifact_id` and `term_sheet_review_artifact_id` as the decision and terms sources, and use `closing_source_artifact_ids` for legal documents, workplans, counsel notes, CP lists, signed documents, and evidence files. Create or update a durable project file artifact named Closing Checklist and attach it to the required output field `closing_checklist_artifact_id`.
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
@@ -70,9 +70,9 @@ fields:
       required: true
       position: 1
       config: {}
-    - key: closing_workplan_artifact_id
-      name: Closing Workplan Artifact
-      fieldType: file
+    - key: closing_source_artifact_ids
+      name: Closing Source Artifact IDs
+      fieldType: string
       required: true
       position: 2
       config: {}

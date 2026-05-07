@@ -408,11 +408,11 @@ Current stage: `initial_call`
 
 Recommended stage/bucket: `assessment`
 
-Assessment: core assessment task after an initial call. It should consume a transcript artifact/reference and produce a customer insights summary artifact. A raw transcript URL is less ideal than an uploaded transcript/notes artifact.
+Assessment: core assessment task after a meeting record is available. It should consume a compact list of meeting record artifacts or exports, such as transcripts, summaries, notes, recording exports, or meeting-source artifacts, and produce a customer insights summary artifact. Calendar/meeting automation may create those source records before this task runs.
 
 | Field | Current Section | Classification | Recommendation |
 | --- | --- | --- | --- |
-| `meeting_transcript_url` | input | Bad shape or source reference | Prefer `meeting_transcript_artifact_id`; keep URL only as optional source reference. |
+| `meeting_record_artifact_ids` | input | Artifact collection input | Prefer compact artifact IDs for transcripts, summaries, notes, recording exports, or meeting-source artifacts. |
 | `meeting_notes` | input | Artifact input or task-local input | Prefer uploaded notes artifact or task-local notes. |
 | `company_name` | input | Project input | Keep. |
 | `deal_room_url` | input | Optional project input | Should not be required unless a real dependency exists. |
@@ -425,7 +425,7 @@ Assessment: core assessment task after an initial call. It should consume a tran
 
 Recommended template changes:
 
-- Replace required `meeting_transcript_url` with required `meeting_transcript_artifact_id` where possible.
+- Replace single transcript input with `meeting_record_artifact_ids` so meeting automation can provide transcripts, summaries, notes, or recording exports.
 - Make `deal_room_url` optional unless there is a hard runtime dependency.
 - Remove context fields.
 - Keep only `customer_insights_artifact_id` as required output.
@@ -461,7 +461,7 @@ Adopt these changes before rebuilding the project schema:
 1. Assessment is the right Deal Room home for first-look, thesis context, initial call, ten-factor screen, call summary, founder material request, and manual investment-opportunity evaluation.
 2. `source-thesis-targets` remains available in Deal Room assessment, but optional and reusable with future Origination.
 3. `pitch_deck_url` should become `pitch_deck_artifact_id` in assessment tasks.
-4. Transcript/meeting source URLs should move toward artifact IDs, especially `meeting_transcript_artifact_id`.
+4. Transcript/meeting source URLs should move toward compact meeting record artifact collections, especially `meeting_record_artifact_ids`.
 5. Assessment project data should keep identity/source/material references and artifact IDs, not duplicate scorecard details, claims registers, action lists, red flags, or next actions.
 6. No assessment task should rely on `prior_task_outputs`.
 7. Broad context fields should be removed; task-local ask-question history remains context.
@@ -584,7 +584,7 @@ Assessment: strong diligence workstream. Current required inputs are strings for
 
 | Field | Current Section | Classification | Recommendation |
 | --- | --- | --- | --- |
-| `architecture_docs` | input | Artifact input | Replace with `architecture_docs_artifact_ids` or source artifact refs. |
+| `technical_source_artifact_ids` | input | Artifact collection input | Use a compact list covering architecture docs, API docs, security materials, product docs, repo exports, and technical data-room files. |
 | `repo_or_code_access` | input | Source/access reference | Keep explicit and permission-bound; may not be a file artifact. |
 | `product_roadmap`, `ip_patent_materials`, `engineering_team_materials` | input | Artifact inputs | Prefer uploaded artifacts/source references. |
 | context fields | context | Context/bad shape | Remove broad context fields. |
@@ -608,12 +608,9 @@ Assessment: strong diligence workstream. Financial materials should be artifact 
 
 | Field | Current Section | Classification | Recommendation |
 | --- | --- | --- | --- |
-| `financial_statements` | input | Artifact input | Replace with financial statement artifact IDs. |
+| `financial_source_artifact_ids` | input | Artifact collection input | Use a compact list covering statements, forecasts, cap tables, data-room exports, supporting models, and other financial source files. |
 | `business_model` | input | Project input or artifact-derived input | Same as commercial DD; avoid duplicating if already captured. |
-| `forecast_model` | input | Artifact input | Replace with forecast model artifact ID. |
-| `cap_table` | input | Artifact input | Replace with cap table artifact ID. |
-| `bank_statement_evidence` | input | Artifact input | Replace JSON with evidence artifact IDs. |
-| `use_of_funds_plan` | input | Artifact input | Prefer uploaded/source artifact. |
+| `cap_table`, `bank_statement_evidence`, `use_of_funds_plan` | input | Artifact-derived or task-local inputs | Prefer financial source artifacts; keep compact overrides only when needed. |
 | context fields | context | Context/bad shape | Remove broad context fields. |
 | `financial_dd_artifact_id`, `unit_economics_artifact_id` | output | Artifact outputs | Keep. |
 | detailed financial outputs | output | Artifact content | Fold into financial artifacts. |
@@ -622,7 +619,7 @@ Assessment: strong diligence workstream. Financial materials should be artifact 
 Recommended template changes:
 
 - Move stage to `diligence`.
-- Replace financial source fields with artifact references.
+- Replace singular financial source fields with `financial_source_artifact_ids`.
 - Keep the two file outputs if the command view wants separate cards.
 
 ### Diligence Decisions
@@ -829,7 +826,7 @@ Assessment: strong artifact task. The output shape is right at the file level, b
 
 | Field | Current Section | Classification | Recommendation |
 | --- | --- | --- | --- |
-| `term_sheet` | input | Bad shape | Replace with `term_sheet_artifact_id` or explicit source file reference. |
+| `term_sheet_artifact_id` | input | Selected artifact input | Keep as the task's selected term sheet version. In project data, source it from `current_term_sheet_artifact_id`; keep `term_sheet_artifact_ids` as the compact ordered version list. |
 | `deal_terms` | input | Artifact-derived or task-local input | Prefer extracted metadata from the term sheet artifact; keep task-local override only if needed. |
 | `standard_terms_reference` | input | Artifact/source input or methodology config | Use a standard terms artifact/reference or pack methodology guidance, not project schema by default. |
 | `counsel_notes` | input | Task-local or artifact input | Keep optional; prefer counsel notes artifact/ref if reused. |
@@ -843,7 +840,7 @@ Assessment: strong artifact task. The output shape is right at the file level, b
 Recommended template changes:
 
 - Keep stage as `term_sheet`.
-- Replace required `term_sheet` string with required `term_sheet_artifact_id`.
+- Replace required `term_sheet` string with required selected artifact input `term_sheet_artifact_id`; project data should distinguish `current_term_sheet_artifact_id` from `term_sheet_artifact_ids`.
 - Remove required `deal_terms` unless there is a clear extracted-metadata workflow.
 - Remove broad context fields and output `deal_room_url`.
 - Keep only `term_sheet_review_artifact_id` as required artifact output, with optional compact reviewed approval state.
@@ -860,7 +857,7 @@ Assessment: strong artifact task and a core closing action. It already consumes 
 | --- | --- | --- | --- |
 | `ic_decision_record_artifact_id` | input | Artifact input | Keep required. |
 | `term_sheet_review_artifact_id` | input | Artifact input | Keep required. |
-| `closing_workplan` | input | Artifact input or task-local input | Prefer closing plan/source artifact; avoid required project field. |
+| `closing_source_artifact_ids` | input | Artifact collection input | Prefer a compact list of closing workplans, legal docs, counsel notes, CP lists, signed docs, and evidence files. |
 | `legal_document_status` | input | Project state or artifact content | Keep only compact current status if useful; otherwise keep in closing checklist artifact. |
 | `owners`, `deadlines`, `blockers` | input | Artifact content or task-local input | Do not promote broad JSON fields into project schema by default. |
 | context fields | context | Context/bad shape | Remove broad context fields. |
@@ -874,7 +871,7 @@ Recommended template changes:
 
 - Move stage to `closing`.
 - Keep required file inputs from IC decision and term sheet review.
-- Replace `closing_workplan` with `closing_workplan_artifact_id` if the workplan is an external/source document, or make it task-local.
+- Replace single closing workplan input with `closing_source_artifact_ids`.
 - Keep only `closing_checklist_artifact_id` as required artifact output.
 - Promote only reviewed `closing_status`, `onboarding_readiness`, and possibly compact active blocker state.
 
@@ -889,8 +886,7 @@ Assessment: strong artifact task. It should verify conditions against source evi
 | Field | Current Section | Classification | Recommendation |
 | --- | --- | --- | --- |
 | `closing_checklist_artifact_id` | input | Artifact input | Keep required. |
-| `cp_checklist` | input | Artifact-derived or artifact input | Prefer checklist content from `closing_checklist_artifact_id`, or use `cp_checklist_artifact_id` if separate. |
-| `evidence_links` | input | Artifact/source input | Replace broad JSON with explicit evidence artifact/source refs where possible. |
+| `closing_source_artifact_ids` | input | Artifact collection input | Use a compact list of CP lists, counsel notes, legal docs, signed documents, and evidence files alongside the produced closing checklist. |
 | `counsel_requirements` | input | Artifact/source input | Prefer counsel requirements artifact/ref if reused. |
 | `closing_status` | input | Project state input | Keep optional compact state if useful. |
 | context fields | context | Context/bad shape | Remove broad context fields. |
@@ -903,7 +899,7 @@ Recommended template changes:
 
 - Move stage to `closing`.
 - Keep `closing_checklist_artifact_id` as required file input.
-- Remove required `cp_checklist`/`evidence_links` JSON unless converted to explicit artifact/source refs.
+- Remove required `cp_checklist`/`evidence_links` JSON and use `closing_source_artifact_ids` for source evidence.
 - Keep only `conditions_precedent_verification_artifact_id` as required artifact output.
 - Promote only compact reviewed readiness/blocker state.
 
@@ -944,7 +940,7 @@ Adopt these changes before rebuilding the project schema:
 
 1. `term_sheet` remains a distinct stage; checklist, CP verification, signing, and portfolio handoff collapse into `closing`.
 2. Portfolio onboarding should be a closing-stage handoff task in the six-stage model, with the option to split into a separate stage later.
-3. Term sheets, closing workplans, CP checklists, evidence links, counsel requirements, and investment terms should be artifact/source references where possible, not required pasted text/JSON.
+3. Term sheets, closing workplans, CP checklists, evidence links, counsel requirements, and investment terms should be artifact/source references where possible, not required pasted text/JSON. Use collection-style source fields where multiple versions or evidence files are expected.
 4. Required file outputs should remain first-class project artifact references: term sheet review, closing checklist, CP verification, and portfolio onboarding plan.
 5. Only compact reviewed state should update project data: term approval state, closing status, close readiness, active blocker state, onboarding readiness, and terminal outcome.
 6. Detailed deviation tables, counsel questions, owner/due-date tables, blockers, evidence mappings, missing items, milestones, reporting plans, and handoff plans should live in artifacts.

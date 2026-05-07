@@ -42,7 +42,7 @@ definition:
         anchor: worksheet-atomic-agents
         note: Spreadsheet rows 62, 68-69
     instructions:
-      executionInstructions: Map conditions precedent to evidence, identify missing items and blocker severity, and prepare counsel review recommendation and signing readiness. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifact `closing_checklist_artifact_id` as the closing checklist subject for conditions-precedent verification. Create or update a durable project file artifact named Conditions Precedent Verification and attach it to the required output field `conditions_precedent_verification_artifact_id`.
+      executionInstructions: Map conditions precedent to available closing evidence, identify missing items and blocker severity, and prepare counsel review recommendation and signing readiness. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifact `closing_checklist_artifact_id` as the closing checklist subject, and use `closing_source_artifact_ids` for legal documents, counsel notes, CP lists, signed documents, and evidence files. Create or update a durable project file artifact named Conditions Precedent Verification and attach it to the required output field `conditions_precedent_verification_artifact_id`.
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
@@ -63,29 +63,23 @@ fields:
       required: true
       position: 0
       config: {}
-    - key: cp_checklist_artifact_id
-      name: CP Checklist Artifact
-      fieldType: file
+    - key: closing_source_artifact_ids
+      name: Closing Source Artifact IDs
+      fieldType: string
       required: true
       position: 1
-      config: {}
-    - key: evidence_bundle_artifact_id
-      name: Evidence Bundle Artifact
-      fieldType: file
-      required: true
-      position: 2
       config: {}
     - key: counsel_requirements
       name: Counsel Requirements
       fieldType: json
       required: false
-      position: 3
+      position: 2
       config: {}
     - key: closing_status
       name: Closing Status
       fieldType: string
       required: false
-      position: 4
+      position: 3
       config: {}
 
   output:
