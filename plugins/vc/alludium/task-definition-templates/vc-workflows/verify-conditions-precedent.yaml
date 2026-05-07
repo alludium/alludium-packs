@@ -17,7 +17,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: final_dd
+    stage: closing
     taskFamily: closing
     requiredSkills:
       - citation-enforcement

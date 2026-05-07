@@ -17,7 +17,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: financial_dd
+    stage: diligence
     taskFamily: diligence
     requiredSkills:
       - citation-enforcement

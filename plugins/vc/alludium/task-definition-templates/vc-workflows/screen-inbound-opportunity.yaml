@@ -17,7 +17,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: screening
+    stage: assessment
     taskFamily: screening
     requiredSkills:
       - company-research-and-enrichment
@@ -82,10 +82,10 @@ fields:
       required: true
       position: 1
       config: {}
-    - key: pitch_deck_url
-      name: Pitch Deck Url
-      fieldType: string
-      required: false
+    - key: pitch_deck_artifact_id
+      name: Pitch Deck Artifact
+      fieldType: file
+      required: true
       position: 2
       config: {}
     - key: referrer

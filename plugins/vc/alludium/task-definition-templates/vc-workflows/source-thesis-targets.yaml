@@ -17,7 +17,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: lead_gen
+    stage: assessment
     taskFamily: pipeline
     requiredSkills:
       - company-research-and-enrichment

@@ -17,7 +17,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: screening
+    stage: intake
     taskFamily: deal_room
     requiredSkills:
       - citation-enforcement

@@ -17,7 +17,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: founder_evaluation
+    stage: diligence
     taskFamily: diligence
     requiredSkills:
       - team-and-hiring-assessment

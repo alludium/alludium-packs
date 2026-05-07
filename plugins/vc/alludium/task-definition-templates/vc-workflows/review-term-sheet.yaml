@@ -60,9 +60,9 @@ definition:
 
 fields:
   input:
-    - key: term_sheet
-      name: Term Sheet
-      fieldType: string
+    - key: term_sheet_artifact_id
+      name: Term Sheet Artifact
+      fieldType: file
       required: true
       position: 0
       config: {}

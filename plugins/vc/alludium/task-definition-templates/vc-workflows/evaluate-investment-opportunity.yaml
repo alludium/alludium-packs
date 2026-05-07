@@ -17,7 +17,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: deal_flow
+    stage: assessment
     taskFamily: pipeline
     requiredSkills:
       - citation-enforcement

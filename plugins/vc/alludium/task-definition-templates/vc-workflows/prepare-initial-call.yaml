@@ -17,7 +17,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: initial_call
+    stage: assessment
     taskFamily: meeting
     requiredSkills:
       - meeting-prep-and-summary
@@ -67,9 +67,9 @@ fields:
       required: true
       position: 0
       config: {}
-    - key: pitch_deck_url
-      name: Pitch Deck Url
-      fieldType: string
+    - key: pitch_deck_artifact_id
+      name: Pitch Deck Artifact
+      fieldType: file
       required: true
       position: 1
       config: {}

@@ -17,7 +17,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: portfolio_onboarding
+    stage: closing
     taskFamily: onboarding
     requiredSkills:
       - citation-enforcement

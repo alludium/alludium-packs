@@ -17,7 +17,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: team_review
+    stage: review
     taskFamily: diligence
     requiredSkills:
       - ic-memo-assembly

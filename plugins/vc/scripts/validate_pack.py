@@ -57,6 +57,15 @@ TASK_TEMPLATE_PLATFORM_CAPABILITY = "external-task-definition-template-ingest"
 PROJECT_TYPE_PLATFORM_CAPABILITY = "external-project-type-ingest"
 EXPECTED_VC_TASK_TEMPLATE_VERTICAL_KEYS = ["venture_capital", "vc"]
 PROJECT_TYPE_FIELD_KINDS = {"date", "enum", "member", "number", "text"}
+VC_DEAL_ROOM_LIFECYCLE_STAGES = {
+    "intake",
+    "assessment",
+    "diligence",
+    "review",
+    "term_sheet",
+    "closing",
+}
+VC_DEAL_ROOM_REPLACED_TASK_FIELDS = {"pitch_deck_url", "meeting_transcript_url"}
 ARTIFACT_FIELD_KEY_PATTERN = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+)*_artifact_id$")
 VC_ARTIFACT_OUTPUTS = {
     "source-thesis-targets": ["thesis_target_list_artifact_id"],
@@ -90,6 +99,10 @@ VC_ARTIFACT_OUTPUTS = {
     "prepare-portfolio-onboarding": ["portfolio_onboarding_plan_artifact_id"],
 }
 VC_ARTIFACT_INPUTS = {
+    "screen-inbound-opportunity": ["pitch_deck_artifact_id"],
+    "prepare-initial-call": ["pitch_deck_artifact_id"],
+    "summarize-initial-call": ["meeting_transcript_artifact_id"],
+    "run-ten-factor-screen": ["pitch_deck_artifact_id"],
     "prepare-team-review-pack": [
         "commercial_dd_artifact_id",
         "financial_dd_artifact_id",
@@ -125,6 +138,7 @@ VC_ARTIFACT_INPUTS = {
         "term_sheet_review_artifact_id",
     ],
     "verify-conditions-precedent": ["closing_checklist_artifact_id"],
+    "review-term-sheet": ["term_sheet_artifact_id"],
     "prepare-portfolio-onboarding": [
         "ic_decision_record_artifact_id",
         "closing_checklist_artifact_id",
@@ -601,6 +615,32 @@ def validate_required_artifact_fields(
         validate_artifact_field_shape(template_id, "output", field)
 
 
+def validate_vc_deal_room_task_template_shape(
+    template_id: str,
+    slug: str,
+    definition_json: dict[str, Any],
+    fields: dict[str, Any],
+    supported_project_types: list[str],
+) -> None:
+    if "vc_deal_room" not in supported_project_types:
+        return
+
+    stage = definition_json.get("stage")
+    if stage not in VC_DEAL_ROOM_LIFECYCLE_STAGES:
+        fail(
+            f"Task template {template_id} ({slug}) definitionJson.stage must be one of "
+            f"{sorted(VC_DEAL_ROOM_LIFECYCLE_STAGES)} for vc_deal_room"
+        )
+
+    for section_name in ["input", "context", "output"]:
+        for field_key in field_map(template_id, section_name, fields.get(section_name)):
+            if field_key in VC_DEAL_ROOM_REPLACED_TASK_FIELDS:
+                fail(
+                    f"Task template {template_id} ({slug}) fields.{section_name}.{field_key} "
+                    "must use the artifact-backed replacement field"
+                )
+
+
 def validate_project_type_field(project_type_id: str, field: Any) -> tuple[str, str]:
     if not isinstance(field, dict):
         fail(f"Project type {project_type_id} fieldsSchema entries must be objects")
@@ -966,6 +1006,13 @@ def validate_task_template_file(
     if not isinstance(fields, dict):
         fail(f"Task template {template_id} fields must be an object when declared")
     validate_required_artifact_fields(template_id, slug, fields)
+    validate_vc_deal_room_task_template_shape(
+        template_id,
+        slug,
+        definition_json,
+        fields,
+        supported_project_types,
+    )
 
     pack_vertical_keys = expected_pack.get("verticalKeys") or []
     if expected_pack.get("availability") == "vertical" and not pack_vertical_keys:

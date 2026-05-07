@@ -17,7 +17,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: investment_committee
+    stage: review
     taskFamily: ic
     requiredSkills:
       - meeting-prep-and-summary

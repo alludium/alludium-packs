@@ -57,10 +57,62 @@
             "label": "Event"
           },
           {
+            "value": "crm",
+            "label": "CRM"
+          },
+          {
             "value": "other",
             "label": "Other"
           }
         ]
+      },
+      {
+        "id": "field-source-system",
+        "key": "source_system",
+        "label": "Source System",
+        "kind": "text",
+        "required": false,
+        "description": "System or channel that produced the original opportunity record."
+      },
+      {
+        "id": "field-source-object-id",
+        "key": "source_object_id",
+        "label": "Source Object ID",
+        "kind": "text",
+        "required": false,
+        "description": "Stable upstream identifier for the source opportunity record."
+      },
+      {
+        "id": "field-source-object-url",
+        "key": "source_object_url",
+        "label": "Source Object URL",
+        "kind": "text",
+        "required": false,
+        "description": "Canonical URL for the upstream source object."
+      },
+      {
+        "id": "field-source-record-url-template",
+        "key": "source_record_url_template",
+        "label": "Source Record URL Template",
+        "kind": "text",
+        "required": false,
+        "description": "Optional URL template for source records from the same system."
+      },
+      {
+        "id": "field-connected-systems",
+        "key": "connected_systems",
+        "label": "Connected Systems",
+        "kind": "text",
+        "required": false,
+        "description": "Systems known to touch this company or opportunity, kept compact until structured project fields exist."
+      },
+      {
+        "id": "field-matching-signals",
+        "key": "matching_signals",
+        "label": "Matching Signals",
+        "kind": "text",
+        "required": false,
+        "description": "Compact matching signals such as external IDs, domains, email domains, or source object IDs."
       },
       {
         "id": "field-source-owner",
@@ -79,69 +131,28 @@
         "description": "Investment lead for this opportunity."
       },
       {
-        "id": "field-investment-stage",
-        "key": "investment_stage",
-        "label": "Investment Stage",
-        "kind": "enum",
-        "required": false,
-        "options": [
-          {
-            "value": "pre_seed",
-            "label": "Pre-seed"
-          },
-          {
-            "value": "seed",
-            "label": "Seed"
-          },
-          {
-            "value": "series_a",
-            "label": "Series A"
-          },
-          {
-            "value": "series_b",
-            "label": "Series B"
-          },
-          {
-            "value": "growth",
-            "label": "Growth"
-          },
-          {
-            "value": "unknown",
-            "label": "Unknown"
-          }
-        ]
-      },
-      {
-        "id": "field-sector",
-        "key": "sector",
-        "label": "Sector",
+        "id": "field-referrer",
+        "key": "referrer",
+        "label": "Referrer",
         "kind": "text",
         "required": false,
-        "placeholder": "AI infrastructure"
+        "description": "Person or organization that referred the opportunity, when known."
       },
       {
-        "id": "field-geography",
-        "key": "geography",
-        "label": "Geography",
+        "id": "field-crm-provider",
+        "key": "crm_provider",
+        "label": "CRM Provider",
         "kind": "text",
         "required": false,
-        "placeholder": "US, UK, EU"
+        "description": "CRM or relationship system for the source record."
       },
       {
-        "id": "field-round",
-        "key": "round",
-        "label": "Round",
+        "id": "field-crm-record-url",
+        "key": "crm_record_url",
+        "label": "CRM Record URL",
         "kind": "text",
         "required": false,
-        "placeholder": "Seed extension"
-      },
-      {
-        "id": "field-target-check-size",
-        "key": "target_check_size",
-        "label": "Target Check Size",
-        "kind": "number",
-        "required": false,
-        "description": "Use the fund's default currency."
+        "description": "Manual CRM record link when a CRM is not connected."
       },
       {
         "id": "field-affinity-record-url",
@@ -149,8 +160,72 @@
         "label": "Affinity Record URL",
         "kind": "text",
         "required": false,
-        "description": "Manual CRM link when Affinity is not connected.",
+        "description": "Affinity-compatible CRM record link retained for older surfaces.",
         "placeholder": "https://app.affinity.co/..."
+      },
+      {
+        "id": "field-pitch-deck-artifact-id",
+        "key": "pitch_deck_artifact_id",
+        "label": "Pitch Deck Artifact ID",
+        "kind": "text",
+        "required": false,
+        "description": "Uploaded pitch deck artifact used by assessment tasks."
+      },
+      {
+        "id": "field-source-thread-url",
+        "key": "source_thread_url",
+        "label": "Source Thread URL",
+        "kind": "text",
+        "required": false,
+        "description": "Email, Slack, or intro thread URL that explains the opportunity source."
+      },
+      {
+        "id": "field-source-thread-artifact-id",
+        "key": "source_thread_artifact_id",
+        "label": "Source Thread Artifact ID",
+        "kind": "text",
+        "required": false,
+        "description": "Uploaded source thread artifact when available."
+      },
+      {
+        "id": "field-source-material-artifact-ids",
+        "key": "source_material_artifact_ids",
+        "label": "Source Material Artifact IDs",
+        "kind": "text",
+        "required": false,
+        "description": "Compact list of source material artifact IDs attached to the Deal Room."
+      },
+      {
+        "id": "field-founder-materials-artifact-ids",
+        "key": "founder_materials_artifact_ids",
+        "label": "Founder Materials Artifact IDs",
+        "kind": "text",
+        "required": false,
+        "description": "Compact list of founder-provided material artifact IDs."
+      },
+      {
+        "id": "field-meeting-transcript-artifact-id",
+        "key": "meeting_transcript_artifact_id",
+        "label": "Meeting Transcript Artifact ID",
+        "kind": "text",
+        "required": false,
+        "description": "Uploaded initial-call transcript artifact."
+      },
+      {
+        "id": "field-meeting-notes-artifact-id",
+        "key": "meeting_notes_artifact_id",
+        "label": "Meeting Notes Artifact ID",
+        "kind": "text",
+        "required": false,
+        "description": "Uploaded or generated meeting notes artifact."
+      },
+      {
+        "id": "field-deal-room-url",
+        "key": "deal_room_url",
+        "label": "Deal Room URL",
+        "kind": "text",
+        "required": false,
+        "description": "Canonical project deal-room URL when a manual link is needed."
       },
       {
         "id": "field-drive-deal-room-url",
@@ -162,20 +237,60 @@
         "placeholder": "https://drive.google.com/..."
       },
       {
-        "id": "field-deck-url",
-        "key": "deck_url",
-        "label": "Deck URL",
-        "kind": "text",
+        "id": "field-investment-stage",
+        "key": "investment_stage",
+        "label": "Investment Stage",
+        "kind": "enum",
         "required": false,
-        "description": "Current pitch deck or founder materials link."
+        "description": "Collapsed investment workflow stage for the Deal Room.",
+        "options": [
+          {
+            "value": "intake",
+            "label": "Intake"
+          },
+          {
+            "value": "assessment",
+            "label": "Assessment"
+          },
+          {
+            "value": "diligence",
+            "label": "Diligence"
+          },
+          {
+            "value": "review",
+            "label": "Review"
+          },
+          {
+            "value": "term_sheet",
+            "label": "Term Sheet"
+          },
+          {
+            "value": "closing",
+            "label": "Closing"
+          }
+        ]
       },
       {
-        "id": "field-meeting-transcript-urls",
-        "key": "meeting_transcript_urls",
-        "label": "Meeting Transcript URLs",
-        "kind": "text",
+        "id": "field-project-outcome",
+        "key": "project_outcome",
+        "label": "Project Outcome",
+        "kind": "enum",
         "required": false,
-        "description": "Comma-separated transcript links until multivalue fields are available."
+        "description": "Terminal outcome when the Deal Room leaves active workflow.",
+        "options": [
+          {
+            "value": "invested",
+            "label": "Invested"
+          },
+          {
+            "value": "passed",
+            "label": "Passed"
+          },
+          {
+            "value": "archived",
+            "label": "Archived"
+          }
+        ]
       },
       {
         "id": "field-current-decision",
@@ -183,26 +298,87 @@
         "label": "Current Decision",
         "kind": "enum",
         "required": false,
+        "description": "Current reviewed decision state for this deal.",
         "options": [
           {
-            "value": "continue",
-            "label": "Continue"
+            "value": "undecided",
+            "label": "Undecided"
+          },
+          {
+            "value": "watch",
+            "label": "Watch"
+          },
+          {
+            "value": "follow_up",
+            "label": "Follow Up"
+          },
+          {
+            "value": "advance",
+            "label": "Advance"
           },
           {
             "value": "pass",
             "label": "Pass"
           },
           {
-            "value": "further_work",
-            "label": "Further Work"
+            "value": "invest",
+            "label": "Invest"
+          }
+        ]
+      },
+      {
+        "id": "field-review-state",
+        "key": "review_state",
+        "label": "Review State",
+        "kind": "enum",
+        "required": false,
+        "description": "Current human review state for the active stage.",
+        "options": [
+          {
+            "value": "not_started",
+            "label": "Not Started"
           },
           {
-            "value": "term_sheet",
-            "label": "Term Sheet"
+            "value": "in_progress",
+            "label": "In Progress"
           },
           {
-            "value": "invested",
-            "label": "Invested"
+            "value": "ready_for_review",
+            "label": "Ready For Review"
+          },
+          {
+            "value": "approved",
+            "label": "Approved"
+          },
+          {
+            "value": "changes_requested",
+            "label": "Changes Requested"
+          }
+        ]
+      },
+      {
+        "id": "field-approval-state",
+        "key": "approval_state",
+        "label": "Approval State",
+        "kind": "enum",
+        "required": false,
+        "description": "Current approval state for decisions or external actions.",
+        "options": [
+          {
+            "value": "not_required",
+            "label": "Not Required"
+          },
+          {
+            "value": "pending",
+            "label": "Pending"
+          },
+          {
+            "value": "approved",
+            "label": "Approved"
+          },
+          {
+            "value": "rejected",
+            "label": "Rejected"
           }
         ]
       },
@@ -211,7 +387,32 @@
         "key": "next_decision_date",
         "label": "Next Decision Date",
         "kind": "date",
-        "required": false
+        "required": false,
+        "description": "Next expected decision or review date."
+      },
+      {
+        "id": "field-decision-ask",
+        "key": "decision_ask",
+        "label": "Decision Ask",
+        "kind": "text",
+        "required": false,
+        "description": "Compact reviewed ask for the next investment decision."
+      },
+      {
+        "id": "field-missing-materials",
+        "key": "missing_materials",
+        "label": "Missing Materials",
+        "kind": "text",
+        "required": false,
+        "description": "Compact list of active missing materials; detailed requests belong in artifacts."
+      },
+      {
+        "id": "field-active-blockers",
+        "key": "active_blockers",
+        "label": "Active Blockers",
+        "kind": "text",
+        "required": false,
+        "description": "Compact active blockers that require human attention."
       },
       {
         "id": "field-confidentiality-level",
@@ -219,201 +420,628 @@
         "label": "Confidentiality Level",
         "kind": "enum",
         "required": false,
+        "description": "Confidentiality level for this opportunity.",
         "options": [
           {
-            "value": "normal",
-            "label": "Normal"
+            "value": "standard",
+            "label": "Standard"
           },
           {
-            "value": "sensitive",
-            "label": "Sensitive"
+            "value": "restricted",
+            "label": "Restricted"
           },
           {
-            "value": "highly_sensitive",
-            "label": "Highly Sensitive"
+            "value": "partner_only",
+            "label": "Partner Only"
           }
         ]
+      },
+      {
+        "id": "field-sector",
+        "key": "sector",
+        "label": "Sector",
+        "kind": "text",
+        "required": false,
+        "description": "Primary sector or vertical."
+      },
+      {
+        "id": "field-geography",
+        "key": "geography",
+        "label": "Geography",
+        "kind": "text",
+        "required": false,
+        "description": "Primary company geography or market geography."
+      },
+      {
+        "id": "field-round",
+        "key": "round",
+        "label": "Round",
+        "kind": "text",
+        "required": false,
+        "description": "Financing round under consideration."
+      },
+      {
+        "id": "field-target-check-size",
+        "key": "target_check_size",
+        "label": "Target Check Size",
+        "kind": "number",
+        "required": false,
+        "description": "Use the fund's default currency."
+      },
+      {
+        "id": "field-thesis-area",
+        "key": "thesis_area",
+        "label": "Thesis Area",
+        "kind": "text",
+        "required": false,
+        "description": "Thesis area used for source or fit assessment."
+      },
+      {
+        "id": "field-fund-thesis-context",
+        "key": "fund_thesis_context",
+        "label": "Fund Thesis Context",
+        "kind": "text",
+        "required": false,
+        "description": "Compact fund or partner thesis context for assessment tasks."
+      },
+      {
+        "id": "field-founder-names",
+        "key": "founder_names",
+        "label": "Founder Names",
+        "kind": "text",
+        "required": false,
+        "description": "Founder names when known."
+      },
+      {
+        "id": "field-founder-profiles",
+        "key": "founder_profiles",
+        "label": "Founder Profiles",
+        "kind": "text",
+        "required": false,
+        "description": "Founder profile links or compact identity references."
+      },
+      {
+        "id": "field-meeting-date",
+        "key": "meeting_date",
+        "label": "Meeting Date",
+        "kind": "date",
+        "required": false,
+        "description": "Next or primary meeting date for active assessment."
+      },
+      {
+        "id": "field-business-model",
+        "key": "business_model",
+        "label": "Business Model",
+        "kind": "text",
+        "required": false,
+        "description": "Compact business model descriptor when needed across diligence tasks."
+      },
+      {
+        "id": "field-priority-workstreams",
+        "key": "priority_workstreams",
+        "label": "Priority Workstreams",
+        "kind": "text",
+        "required": false,
+        "description": "Compact diligence workstream priorities; detailed plans belong in artifacts."
+      },
+      {
+        "id": "field-repo-or-code-access",
+        "key": "repo_or_code_access",
+        "label": "Repo Or Code Access",
+        "kind": "text",
+        "required": false,
+        "description": "Explicit approved source/access reference for technical diligence."
+      },
+      {
+        "id": "field-financial-statement-artifact-ids",
+        "key": "financial_statement_artifact_ids",
+        "label": "Financial Statement Artifact IDs",
+        "kind": "text",
+        "required": false,
+        "description": "Financial statement artifacts for financial diligence."
+      },
+      {
+        "id": "field-forecast-model-artifact-id",
+        "key": "forecast_model_artifact_id",
+        "label": "Forecast Model Artifact ID",
+        "kind": "text",
+        "required": false,
+        "description": "Forecast model artifact for financial diligence."
+      },
+      {
+        "id": "field-cap-table-artifact-id",
+        "key": "cap_table_artifact_id",
+        "label": "Cap Table Artifact ID",
+        "kind": "text",
+        "required": false,
+        "description": "Cap table artifact for founder or financial diligence."
+      },
+      {
+        "id": "field-architecture-docs-artifact-ids",
+        "key": "architecture_docs_artifact_ids",
+        "label": "Architecture Docs Artifact IDs",
+        "kind": "text",
+        "required": false,
+        "description": "Architecture/source artifacts for technical diligence."
+      },
+      {
+        "id": "field-market-source-artifact-ids",
+        "key": "market_source_artifact_ids",
+        "label": "Market Source Artifact IDs",
+        "kind": "text",
+        "required": false,
+        "description": "Market-source artifacts for commercial diligence."
+      },
+      {
+        "id": "field-customer-evidence-artifact-ids",
+        "key": "customer_evidence_artifact_ids",
+        "label": "Customer Evidence Artifact IDs",
+        "kind": "text",
+        "required": false,
+        "description": "Customer/user evidence artifacts for commercial diligence."
+      },
+      {
+        "id": "field-term-sheet-artifact-id",
+        "key": "term_sheet_artifact_id",
+        "label": "Term Sheet Artifact ID",
+        "kind": "text",
+        "required": false,
+        "description": "Uploaded term sheet artifact used for term review and closing tasks."
+      },
+      {
+        "id": "field-ic-decision-outcome",
+        "key": "ic_decision_outcome",
+        "label": "IC Decision Outcome",
+        "kind": "enum",
+        "required": false,
+        "description": "Reviewed investment committee decision outcome.",
+        "options": [
+          {
+            "value": "pending",
+            "label": "Pending"
+          },
+          {
+            "value": "pass",
+            "label": "Pass"
+          },
+          {
+            "value": "follow_up",
+            "label": "Follow Up"
+          },
+          {
+            "value": "approve_term_sheet",
+            "label": "Approve Term Sheet"
+          },
+          {
+            "value": "invest",
+            "label": "Invest"
+          }
+        ]
+      },
+      {
+        "id": "field-term-approval-state",
+        "key": "term_approval_state",
+        "label": "Term Approval State",
+        "kind": "enum",
+        "required": false,
+        "description": "Reviewed term-sheet approval state.",
+        "options": [
+          {
+            "value": "not_started",
+            "label": "Not Started"
+          },
+          {
+            "value": "under_review",
+            "label": "Under Review"
+          },
+          {
+            "value": "approved",
+            "label": "Approved"
+          },
+          {
+            "value": "changes_requested",
+            "label": "Changes Requested"
+          },
+          {
+            "value": "rejected",
+            "label": "Rejected"
+          }
+        ]
+      },
+      {
+        "id": "field-closing-status",
+        "key": "closing_status",
+        "label": "Closing Status",
+        "kind": "enum",
+        "required": false,
+        "description": "Compact closing status.",
+        "options": [
+          {
+            "value": "not_started",
+            "label": "Not Started"
+          },
+          {
+            "value": "in_progress",
+            "label": "In Progress"
+          },
+          {
+            "value": "blocked",
+            "label": "Blocked"
+          },
+          {
+            "value": "ready_to_sign",
+            "label": "Ready To Sign"
+          },
+          {
+            "value": "signed",
+            "label": "Signed"
+          }
+        ]
+      },
+      {
+        "id": "field-close-readiness",
+        "key": "close_readiness",
+        "label": "Close Readiness",
+        "kind": "enum",
+        "required": false,
+        "description": "Reviewed close-readiness state.",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Unknown"
+          },
+          {
+            "value": "not_ready",
+            "label": "Not Ready"
+          },
+          {
+            "value": "blocked",
+            "label": "Blocked"
+          },
+          {
+            "value": "ready",
+            "label": "Ready"
+          }
+        ]
+      },
+      {
+        "id": "field-active-conditions",
+        "key": "active_conditions",
+        "label": "Active Conditions",
+        "kind": "text",
+        "required": false,
+        "description": "Compact active IC or closing conditions; detailed evidence lives in artifacts."
+      },
+      {
+        "id": "field-onboarding-readiness",
+        "key": "onboarding_readiness",
+        "label": "Onboarding Readiness",
+        "kind": "enum",
+        "required": false,
+        "description": "Portfolio onboarding readiness for closing handoff.",
+        "options": [
+          {
+            "value": "not_started",
+            "label": "Not Started"
+          },
+          {
+            "value": "blocked",
+            "label": "Blocked"
+          },
+          {
+            "value": "ready",
+            "label": "Ready"
+          },
+          {
+            "value": "complete",
+            "label": "Complete"
+          }
+        ]
+      },
+      {
+        "id": "field-board-rep",
+        "key": "board_rep",
+        "label": "Board Rep",
+        "kind": "text",
+        "required": false,
+        "description": "Board representative when known or approved."
+      },
+      {
+        "id": "field-reporting-cadence",
+        "key": "reporting_cadence",
+        "label": "Reporting Cadence",
+        "kind": "text",
+        "required": false,
+        "description": "Compact reporting cadence after investment approval."
+      },
+      {
+        "id": "field-thesis-target-list-artifact-id",
+        "key": "thesis_target_list_artifact_id",
+        "label": "Thesis target list",
+        "kind": "text",
+        "required": false,
+        "description": "Thesis target list artifact produced by source-thesis-targets."
+      },
+      {
+        "id": "field-lead-generation-packet-artifact-id",
+        "key": "lead_generation_packet_artifact_id",
+        "label": "Lead generation packet",
+        "kind": "text",
+        "required": false,
+        "description": "Lead generation packet artifact produced by prepare-lead-gen-packet."
+      },
+      {
+        "id": "field-first-look-scorecard-artifact-id",
+        "key": "first_look_scorecard_artifact_id",
+        "label": "First-look scorecard",
+        "kind": "text",
+        "required": false,
+        "description": "First-look scorecard artifact produced by screen-inbound-opportunity."
+      },
+      {
+        "id": "field-ten-factor-scorecard-artifact-id",
+        "key": "ten_factor_scorecard_artifact_id",
+        "label": "10-factor scorecard",
+        "kind": "text",
+        "required": false,
+        "description": "10-factor scorecard artifact produced by run-ten-factor-screen."
+      },
+      {
+        "id": "field-founder-materials-request-artifact-id",
+        "key": "founder_materials_request_artifact_id",
+        "label": "Founder materials request",
+        "kind": "text",
+        "required": false,
+        "description": "Founder materials request artifact produced by request-founder-materials."
+      },
+      {
+        "id": "field-initial-call-brief-artifact-id",
+        "key": "initial_call_brief_artifact_id",
+        "label": "Initial call brief",
+        "kind": "text",
+        "required": false,
+        "description": "Initial call brief artifact produced by prepare-initial-call."
+      },
+      {
+        "id": "field-customer-insights-artifact-id",
+        "key": "customer_insights_artifact_id",
+        "label": "Customer insights summary",
+        "kind": "text",
+        "required": false,
+        "description": "Customer insights summary artifact produced by summarize-initial-call."
+      },
+      {
+        "id": "field-commercial-dd-artifact-id",
+        "key": "commercial_dd_artifact_id",
+        "label": "Commercial DD report",
+        "kind": "text",
+        "required": false,
+        "description": "Commercial DD report artifact produced by run-commercial-dd."
+      },
+      {
+        "id": "field-market-analysis-artifact-id",
+        "key": "market_analysis_artifact_id",
+        "label": "Market analysis",
+        "kind": "text",
+        "required": false,
+        "description": "Market analysis artifact produced by run-commercial-dd."
+      },
+      {
+        "id": "field-customer-reference-summary-artifact-id",
+        "key": "customer_reference_summary_artifact_id",
+        "label": "Customer reference summary",
+        "kind": "text",
+        "required": false,
+        "description": "Customer reference summary artifact produced by run-commercial-dd."
+      },
+      {
+        "id": "field-financial-dd-artifact-id",
+        "key": "financial_dd_artifact_id",
+        "label": "Financial DD report",
+        "kind": "text",
+        "required": false,
+        "description": "Financial DD report artifact produced by run-financial-dd."
+      },
+      {
+        "id": "field-unit-economics-artifact-id",
+        "key": "unit_economics_artifact_id",
+        "label": "Unit economics analysis",
+        "kind": "text",
+        "required": false,
+        "description": "Unit economics analysis artifact produced by run-financial-dd."
+      },
+      {
+        "id": "field-founder-evaluation-artifact-id",
+        "key": "founder_evaluation_artifact_id",
+        "label": "Founder evaluation",
+        "kind": "text",
+        "required": false,
+        "description": "Founder evaluation artifact produced by run-founder-evaluation."
+      },
+      {
+        "id": "field-technical-dd-artifact-id",
+        "key": "technical_dd_artifact_id",
+        "label": "Technical DD report",
+        "kind": "text",
+        "required": false,
+        "description": "Technical DD report artifact produced by run-technical-dd."
+      },
+      {
+        "id": "field-eighty-two-factor-questions-artifact-id",
+        "key": "eighty_two_factor_questions_artifact_id",
+        "label": "82-factor question set",
+        "kind": "text",
+        "required": false,
+        "description": "82-factor question set artifact produced by generate-82-factor-questions."
+      },
+      {
+        "id": "field-team-review-pack-artifact-id",
+        "key": "team_review_pack_artifact_id",
+        "label": "Team review pack",
+        "kind": "text",
+        "required": false,
+        "description": "Team review pack artifact produced by prepare-team-review-pack."
+      },
+      {
+        "id": "field-partner-review-pack-artifact-id",
+        "key": "partner_review_pack_artifact_id",
+        "label": "Partner review pack",
+        "kind": "text",
+        "required": false,
+        "description": "Partner review pack artifact produced by prepare-partner-review-pack."
+      },
+      {
+        "id": "field-investment-memo-artifact-id",
+        "key": "investment_memo_artifact_id",
+        "label": "Investment memo",
+        "kind": "text",
+        "required": false,
+        "description": "Investment memo artifact produced by create-ic-memo."
+      },
+      {
+        "id": "field-ic-agenda-artifact-id",
+        "key": "ic_agenda_artifact_id",
+        "label": "IC agenda",
+        "kind": "text",
+        "required": false,
+        "description": "IC agenda artifact produced by prepare-ic-agenda."
+      },
+      {
+        "id": "field-ic-memo-review-artifact-id",
+        "key": "ic_memo_review_artifact_id",
+        "label": "IC memo review",
+        "kind": "text",
+        "required": false,
+        "description": "IC memo review artifact produced by review-ic-memo."
+      },
+      {
+        "id": "field-ic-decision-record-artifact-id",
+        "key": "ic_decision_record_artifact_id",
+        "label": "IC decision record",
+        "kind": "text",
+        "required": false,
+        "description": "IC decision record artifact produced by record-ic-decision."
+      },
+      {
+        "id": "field-term-sheet-review-artifact-id",
+        "key": "term_sheet_review_artifact_id",
+        "label": "Term sheet review",
+        "kind": "text",
+        "required": false,
+        "description": "Term sheet review artifact produced by review-term-sheet."
+      },
+      {
+        "id": "field-closing-checklist-artifact-id",
+        "key": "closing_checklist_artifact_id",
+        "label": "Closing checklist",
+        "kind": "text",
+        "required": false,
+        "description": "Closing checklist artifact produced by manage-closing-checklist."
+      },
+      {
+        "id": "field-conditions-precedent-verification-artifact-id",
+        "key": "conditions_precedent_verification_artifact_id",
+        "label": "Conditions precedent verification",
+        "kind": "text",
+        "required": false,
+        "description": "Conditions precedent verification artifact produced by verify-conditions-precedent."
+      },
+      {
+        "id": "field-portfolio-onboarding-plan-artifact-id",
+        "key": "portfolio_onboarding_plan_artifact_id",
+        "label": "Portfolio onboarding plan",
+        "kind": "text",
+        "required": false,
+        "description": "Portfolio onboarding plan artifact produced by prepare-portfolio-onboarding."
       }
     ],
     "instructionTemplate": "This project is a VC Deal Room for one investment opportunity. Treat source links, decks, transcripts, CRM references, and task outputs as evidence that should stay attached to the Deal Room when supported. Ask for manual links or files when integrations are missing. External sends, CRM writes, Drive changes, investment decisions, and legal decisions require explicit human approval.",
     "lifecycleStates": [
-      "lead_gen",
-      "deal_flow",
-      "screening",
-      "initial_call",
-      "follow_up",
-      "founder_evaluation",
-      "team_review",
-      "partner_review",
-      "commercial_dd",
-      "technical_dd",
-      "financial_dd",
-      "investment_committee",
+      "intake",
+      "assessment",
+      "diligence",
+      "review",
       "term_sheet",
-      "legal_review",
-      "legal_diligence",
-      "final_dd",
-      "signing",
-      "portfolio_onboarding",
+      "closing",
       "invested",
       "passed",
       "archived"
     ],
     "lifecycleTransitions": [
       {
-        "from": "lead_gen",
-        "to": "deal_flow"
+        "from": "intake",
+        "to": "assessment"
       },
       {
-        "from": "deal_flow",
-        "to": "screening"
+        "from": "assessment",
+        "to": "diligence"
       },
       {
-        "from": "screening",
-        "to": "initial_call"
+        "from": "assessment",
+        "to": "review"
       },
       {
-        "from": "screening",
+        "from": "assessment",
         "to": "passed"
       },
       {
-        "from": "initial_call",
-        "to": "follow_up"
+        "from": "diligence",
+        "to": "review"
       },
       {
-        "from": "initial_call",
+        "from": "diligence",
+        "to": "assessment"
+      },
+      {
+        "from": "diligence",
         "to": "passed"
       },
       {
-        "from": "follow_up",
-        "to": "founder_evaluation"
-      },
-      {
-        "from": "follow_up",
-        "to": "team_review"
-      },
-      {
-        "from": "follow_up",
-        "to": "passed"
-      },
-      {
-        "from": "founder_evaluation",
-        "to": "team_review"
-      },
-      {
-        "from": "team_review",
-        "to": "partner_review"
-      },
-      {
-        "from": "partner_review",
-        "to": "commercial_dd"
-      },
-      {
-        "from": "partner_review",
-        "to": "technical_dd"
-      },
-      {
-        "from": "partner_review",
-        "to": "financial_dd"
-      },
-      {
-        "from": "partner_review",
-        "to": "passed"
-      },
-      {
-        "from": "commercial_dd",
-        "to": "investment_committee"
-      },
-      {
-        "from": "technical_dd",
-        "to": "investment_committee"
-      },
-      {
-        "from": "financial_dd",
-        "to": "investment_committee"
-      },
-      {
-        "from": "investment_committee",
+        "from": "review",
         "to": "term_sheet"
       },
       {
-        "from": "investment_committee",
+        "from": "review",
+        "to": "diligence"
+      },
+      {
+        "from": "review",
         "to": "passed"
       },
       {
-        "from": "investment_committee",
-        "to": "follow_up"
+        "from": "term_sheet",
+        "to": "closing"
       },
       {
         "from": "term_sheet",
-        "to": "legal_review"
+        "to": "review"
       },
       {
-        "from": "legal_review",
-        "to": "legal_diligence"
+        "from": "term_sheet",
+        "to": "passed"
       },
       {
-        "from": "legal_diligence",
-        "to": "final_dd"
-      },
-      {
-        "from": "final_dd",
-        "to": "signing"
-      },
-      {
-        "from": "signing",
-        "to": "portfolio_onboarding"
-      },
-      {
-        "from": "portfolio_onboarding",
+        "from": "closing",
         "to": "invested"
       },
       {
-        "from": "lead_gen",
+        "from": "closing",
+        "to": "term_sheet"
+      },
+      {
+        "from": "intake",
         "to": "archived"
       },
       {
-        "from": "deal_flow",
+        "from": "assessment",
         "to": "archived"
       },
       {
-        "from": "screening",
+        "from": "diligence",
         "to": "archived"
       },
       {
-        "from": "initial_call",
-        "to": "archived"
-      },
-      {
-        "from": "follow_up",
-        "to": "archived"
-      },
-      {
-        "from": "founder_evaluation",
-        "to": "archived"
-      },
-      {
-        "from": "team_review",
-        "to": "archived"
-      },
-      {
-        "from": "partner_review",
-        "to": "archived"
-      },
-      {
-        "from": "commercial_dd",
-        "to": "archived"
-      },
-      {
-        "from": "technical_dd",
-        "to": "archived"
-      },
-      {
-        "from": "financial_dd",
-        "to": "archived"
-      },
-      {
-        "from": "investment_committee",
+        "from": "review",
         "to": "archived"
       },
       {
@@ -421,23 +1049,7 @@
         "to": "archived"
       },
       {
-        "from": "legal_review",
-        "to": "archived"
-      },
-      {
-        "from": "legal_diligence",
-        "to": "archived"
-      },
-      {
-        "from": "final_dd",
-        "to": "archived"
-      },
-      {
-        "from": "signing",
-        "to": "archived"
-      },
-      {
-        "from": "portfolio_onboarding",
+        "from": "closing",
         "to": "archived"
       }
     ],
@@ -453,45 +1065,51 @@
       "activityHealthValue": "On track",
       "stageGroups": [
         {
-          "key": "screening",
-          "label": "Screening",
+          "key": "intake",
+          "label": "Intake",
           "states": [
-            "lead_gen",
-            "deal_flow",
-            "screening",
-            "initial_call",
-            "follow_up",
-            "founder_evaluation",
-            "team_review",
-            "partner_review"
+            "intake"
+          ]
+        },
+        {
+          "key": "assessment",
+          "label": "Assessment",
+          "states": [
+            "assessment"
           ]
         },
         {
           "key": "diligence",
           "label": "Diligence",
           "states": [
-            "commercial_dd",
-            "technical_dd",
-            "financial_dd"
+            "diligence"
           ]
         },
         {
-          "key": "ic_prep",
-          "label": "IC Prep",
+          "key": "review",
+          "label": "Review",
           "states": [
-            "investment_committee"
+            "review"
           ]
         },
         {
-          "key": "decision",
-          "label": "Decision",
+          "key": "term_sheet",
+          "label": "Term Sheet",
           "states": [
-            "term_sheet",
-            "legal_review",
-            "legal_diligence",
-            "final_dd",
-            "signing",
-            "portfolio_onboarding",
+            "term_sheet"
+          ]
+        },
+        {
+          "key": "closing",
+          "label": "Closing",
+          "states": [
+            "closing"
+          ]
+        },
+        {
+          "key": "outcomes",
+          "label": "Outcomes",
+          "states": [
             "invested",
             "passed",
             "archived"
@@ -991,6 +1609,12 @@
           "label": "Decision",
           "fieldKey": "current_decision",
           "contextKey": "recommendation",
+          "format": "projectState"
+        },
+        {
+          "key": "outcome",
+          "label": "Outcome",
+          "fieldKey": "project_outcome",
           "format": "projectState"
         }
       ]

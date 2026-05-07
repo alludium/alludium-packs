@@ -17,7 +17,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: follow_up
+    stage: diligence
     taskFamily: diligence
     requiredSkills:
       - citation-enforcement
