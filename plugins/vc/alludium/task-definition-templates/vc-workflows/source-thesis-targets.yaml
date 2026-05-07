@@ -93,31 +93,7 @@ fields:
       required: false
       position: 3
       config: {}
-  context:
-    - key: deal_room_url
-      name: Deal Room Url
-      fieldType: string
-      required: false
-      position: 0
-      config: {}
-    - key: prior_task_outputs
-      name: Prior Task Outputs
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
-    - key: source_artifacts
-      name: Source Artifacts
-      fieldType: json
-      required: false
-      position: 2
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: false
-      position: 3
-      config: {}
+
   output:
     - key: thesis_target_list_artifact_id
       name: Thesis Target List

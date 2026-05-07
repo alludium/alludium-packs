@@ -91,25 +91,7 @@ fields:
       required: false
       position: 4
       config: {}
-  context:
-    - key: prior_task_outputs
-      name: Prior Task Outputs
-      fieldType: json
-      required: false
-      position: 0
-      config: {}
-    - key: source_artifacts
-      name: Source Artifacts
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: false
-      position: 2
-      config: {}
+
   output:
     - key: initial_call_brief_artifact_id
       name: Initial Call Brief

@@ -65,55 +65,7 @@ fields:
       required: true
       position: 0
       config: {}
-    - key: ic_pack
-      name: Ic Pack
-      fieldType: json
-      required: true
-      position: 1
-      config: {}
-    - key: decision_ask
-      name: Decision Ask
-      fieldType: string
-      required: true
-      position: 2
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: false
-      position: 3
-      config: {}
-    - key: attendees
-      name: Attendees
-      fieldType: string
-      required: false
-      position: 4
-      config: {}
-    - key: meeting_datetime
-      name: Meeting Datetime
-      fieldType: string
-      required: false
-      position: 5
-      config: {}
-  context:
-    - key: deal_room_url
-      name: Deal Room Url
-      fieldType: string
-      required: false
-      position: 0
-      config: {}
-    - key: prior_task_outputs
-      name: Prior Task Outputs
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
-    - key: source_artifacts
-      name: Source Artifacts
-      fieldType: json
-      required: false
-      position: 2
-      config: {}
+
   output:
     - key: ic_agenda_artifact_id
       name: IC Agenda

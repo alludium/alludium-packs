@@ -97,43 +97,7 @@ fields:
       required: true
       position: 5
       config: {}
-    - key: team_review_pack
-      name: Team Review Pack
-      fieldType: json
-      required: true
-      position: 6
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: true
-      position: 7
-      config: {}
-    - key: proposed_dd_scope
-      name: Proposed Dd Scope
-      fieldType: string
-      required: false
-      position: 8
-      config: {}
-  context:
-    - key: deal_room_url
-      name: Deal Room Url
-      fieldType: string
-      required: false
-      position: 0
-      config: {}
-    - key: prior_task_outputs
-      name: Prior Task Outputs
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
-    - key: source_artifacts
-      name: Source Artifacts
-      fieldType: json
-      required: false
-      position: 2
-      config: {}
+
   output:
     - key: partner_review_pack_artifact_id
       name: Partner Review Pack

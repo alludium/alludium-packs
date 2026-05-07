@@ -111,11 +111,11 @@ Review notes:
 Review notes:
 
 - `vc_deal_room` is copied from the current platform-local project type definition and keeps version `1.0.0`.
-- The definition includes VC Deal Room fields, the instruction template, lifecycle states, and lifecycle transitions.
+- The definition includes VC Deal Room fields, the instruction template, collapsed lifecycle states, lifecycle transitions, command-view metadata, and conservative artifact-output `projectTaskMappings`.
 - `project-types/vc_deal_room_task_io_audit.md` records the task-by-task review that should guide the next schema and project-task mapping rewrite.
 - `project-types/vc_deal_room_mapping_implementation_tasks.md` tracks the implementation slices that turn the audit into pack config and validation changes.
 - The project-type surface requires platform capability `external-project-type-ingest`.
-- Task auto-fire, lifecycle-stage triggers, and task input mappings are not encoded in the project type surface. Those remain task-orchestration and Workspace Setup concerns.
+- Task auto-fire and lifecycle-stage triggers are not enabled. The current mappings are declarative, manual-review artifact-output mappings only; task input mappings remain a follow-up slice.
 
 ---
 

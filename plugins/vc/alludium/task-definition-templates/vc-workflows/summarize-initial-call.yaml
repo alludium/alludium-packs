@@ -78,25 +78,7 @@ fields:
       required: true
       position: 3
       config: {}
-  context:
-    - key: prior_task_outputs
-      name: Prior Task Outputs
-      fieldType: json
-      required: false
-      position: 0
-      config: {}
-    - key: source_artifacts
-      name: Source Artifacts
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: false
-      position: 2
-      config: {}
+
   output:
     - key: customer_insights_artifact_id
       name: Customer Insights Summary

@@ -1618,6 +1618,488 @@
           "format": "projectState"
         }
       ]
-    }
+    },
+    "projectTaskMappings": [
+      {
+        "id": "map-source-thesis-targets",
+        "taskDefinitionTemplateId": "vc.source_thesis_targets",
+        "taskDefinitionSlug": "source-thesis-targets",
+        "lifecycleStage": "assessment",
+        "inputMappings": [],
+        "outputMappings": [
+          {
+            "taskField": "thesis_target_list_artifact_id",
+            "target": "project.field",
+            "targetPath": "thesis_target_list_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-prepare-lead-gen-packet",
+        "taskDefinitionTemplateId": "vc.prepare_lead_gen_packet",
+        "taskDefinitionSlug": "prepare-lead-gen-packet",
+        "lifecycleStage": "assessment",
+        "inputMappings": [],
+        "outputMappings": [
+          {
+            "taskField": "lead_generation_packet_artifact_id",
+            "target": "project.field",
+            "targetPath": "lead_generation_packet_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-screen-inbound-opportunity",
+        "taskDefinitionTemplateId": "vc.screen_inbound_opportunity",
+        "taskDefinitionSlug": "screen-inbound-opportunity",
+        "lifecycleStage": "assessment",
+        "inputMappings": [],
+        "outputMappings": [
+          {
+            "taskField": "first_look_scorecard_artifact_id",
+            "target": "project.field",
+            "targetPath": "first_look_scorecard_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-run-ten-factor-screen",
+        "taskDefinitionTemplateId": "vc.run_ten_factor_screen",
+        "taskDefinitionSlug": "run-ten-factor-screen",
+        "lifecycleStage": "assessment",
+        "inputMappings": [],
+        "outputMappings": [
+          {
+            "taskField": "ten_factor_scorecard_artifact_id",
+            "target": "project.field",
+            "targetPath": "ten_factor_scorecard_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-request-founder-materials",
+        "taskDefinitionTemplateId": "vc.request_founder_materials",
+        "taskDefinitionSlug": "request-founder-materials",
+        "lifecycleStage": "assessment",
+        "inputMappings": [],
+        "outputMappings": [
+          {
+            "taskField": "founder_materials_request_artifact_id",
+            "target": "project.field",
+            "targetPath": "founder_materials_request_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-prepare-initial-call",
+        "taskDefinitionTemplateId": "vc.prepare_initial_call",
+        "taskDefinitionSlug": "prepare-initial-call",
+        "lifecycleStage": "assessment",
+        "inputMappings": [],
+        "outputMappings": [
+          {
+            "taskField": "initial_call_brief_artifact_id",
+            "target": "project.field",
+            "targetPath": "initial_call_brief_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-summarize-initial-call",
+        "taskDefinitionTemplateId": "vc.summarize_initial_call",
+        "taskDefinitionSlug": "summarize-initial-call",
+        "lifecycleStage": "assessment",
+        "inputMappings": [],
+        "outputMappings": [
+          {
+            "taskField": "customer_insights_artifact_id",
+            "target": "project.field",
+            "targetPath": "customer_insights_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-run-commercial-dd",
+        "taskDefinitionTemplateId": "vc.run_commercial_dd",
+        "taskDefinitionSlug": "run-commercial-dd",
+        "lifecycleStage": "diligence",
+        "inputMappings": [],
+        "outputMappings": [
+          {
+            "taskField": "commercial_dd_artifact_id",
+            "target": "project.field",
+            "targetPath": "commercial_dd_artifact_id",
+            "requiredForCompletion": true
+          },
+          {
+            "taskField": "market_analysis_artifact_id",
+            "target": "project.field",
+            "targetPath": "market_analysis_artifact_id",
+            "requiredForCompletion": true
+          },
+          {
+            "taskField": "customer_reference_summary_artifact_id",
+            "target": "project.field",
+            "targetPath": "customer_reference_summary_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-run-financial-dd",
+        "taskDefinitionTemplateId": "vc.run_financial_dd",
+        "taskDefinitionSlug": "run-financial-dd",
+        "lifecycleStage": "diligence",
+        "inputMappings": [],
+        "outputMappings": [
+          {
+            "taskField": "financial_dd_artifact_id",
+            "target": "project.field",
+            "targetPath": "financial_dd_artifact_id",
+            "requiredForCompletion": true
+          },
+          {
+            "taskField": "unit_economics_artifact_id",
+            "target": "project.field",
+            "targetPath": "unit_economics_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-run-founder-evaluation",
+        "taskDefinitionTemplateId": "vc.run_founder_evaluation",
+        "taskDefinitionSlug": "run-founder-evaluation",
+        "lifecycleStage": "diligence",
+        "inputMappings": [],
+        "outputMappings": [
+          {
+            "taskField": "founder_evaluation_artifact_id",
+            "target": "project.field",
+            "targetPath": "founder_evaluation_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-run-technical-dd",
+        "taskDefinitionTemplateId": "vc.run_technical_dd",
+        "taskDefinitionSlug": "run-technical-dd",
+        "lifecycleStage": "diligence",
+        "inputMappings": [],
+        "outputMappings": [
+          {
+            "taskField": "technical_dd_artifact_id",
+            "target": "project.field",
+            "targetPath": "technical_dd_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-generate-82-factor-questions",
+        "taskDefinitionTemplateId": "vc.generate_82_factor_questions",
+        "taskDefinitionSlug": "generate-82-factor-questions",
+        "lifecycleStage": "diligence",
+        "inputMappings": [],
+        "outputMappings": [
+          {
+            "taskField": "eighty_two_factor_questions_artifact_id",
+            "target": "project.field",
+            "targetPath": "eighty_two_factor_questions_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-prepare-team-review-pack",
+        "taskDefinitionTemplateId": "vc.prepare_team_review_pack",
+        "taskDefinitionSlug": "prepare-team-review-pack",
+        "lifecycleStage": "review",
+        "inputMappings": [],
+        "outputMappings": [
+          {
+            "taskField": "team_review_pack_artifact_id",
+            "target": "project.field",
+            "targetPath": "team_review_pack_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-prepare-partner-review-pack",
+        "taskDefinitionTemplateId": "vc.prepare_partner_review_pack",
+        "taskDefinitionSlug": "prepare-partner-review-pack",
+        "lifecycleStage": "review",
+        "inputMappings": [],
+        "outputMappings": [
+          {
+            "taskField": "partner_review_pack_artifact_id",
+            "target": "project.field",
+            "targetPath": "partner_review_pack_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-create-ic-memo",
+        "taskDefinitionTemplateId": "vc.create_ic_memo",
+        "taskDefinitionSlug": "create-ic-memo",
+        "lifecycleStage": "review",
+        "inputMappings": [],
+        "outputMappings": [
+          {
+            "taskField": "investment_memo_artifact_id",
+            "target": "project.field",
+            "targetPath": "investment_memo_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-prepare-ic-agenda",
+        "taskDefinitionTemplateId": "vc.prepare_ic_agenda",
+        "taskDefinitionSlug": "prepare-ic-agenda",
+        "lifecycleStage": "review",
+        "inputMappings": [],
+        "outputMappings": [
+          {
+            "taskField": "ic_agenda_artifact_id",
+            "target": "project.field",
+            "targetPath": "ic_agenda_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-review-ic-memo",
+        "taskDefinitionTemplateId": "vc.review_ic_memo",
+        "taskDefinitionSlug": "review-ic-memo",
+        "lifecycleStage": "review",
+        "inputMappings": [],
+        "outputMappings": [
+          {
+            "taskField": "ic_memo_review_artifact_id",
+            "target": "project.field",
+            "targetPath": "ic_memo_review_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-record-ic-decision",
+        "taskDefinitionTemplateId": "vc.record_ic_decision",
+        "taskDefinitionSlug": "record-ic-decision",
+        "lifecycleStage": "review",
+        "inputMappings": [],
+        "outputMappings": [
+          {
+            "taskField": "ic_decision_record_artifact_id",
+            "target": "project.field",
+            "targetPath": "ic_decision_record_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-review-term-sheet",
+        "taskDefinitionTemplateId": "vc.review_term_sheet",
+        "taskDefinitionSlug": "review-term-sheet",
+        "lifecycleStage": "term_sheet",
+        "inputMappings": [],
+        "outputMappings": [
+          {
+            "taskField": "term_sheet_review_artifact_id",
+            "target": "project.field",
+            "targetPath": "term_sheet_review_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-manage-closing-checklist",
+        "taskDefinitionTemplateId": "vc.manage_closing_checklist",
+        "taskDefinitionSlug": "manage-closing-checklist",
+        "lifecycleStage": "closing",
+        "inputMappings": [],
+        "outputMappings": [
+          {
+            "taskField": "closing_checklist_artifact_id",
+            "target": "project.field",
+            "targetPath": "closing_checklist_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-verify-conditions-precedent",
+        "taskDefinitionTemplateId": "vc.verify_conditions_precedent",
+        "taskDefinitionSlug": "verify-conditions-precedent",
+        "lifecycleStage": "closing",
+        "inputMappings": [],
+        "outputMappings": [
+          {
+            "taskField": "conditions_precedent_verification_artifact_id",
+            "target": "project.field",
+            "targetPath": "conditions_precedent_verification_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-prepare-portfolio-onboarding",
+        "taskDefinitionTemplateId": "vc.prepare_portfolio_onboarding",
+        "taskDefinitionSlug": "prepare-portfolio-onboarding",
+        "lifecycleStage": "closing",
+        "inputMappings": [],
+        "outputMappings": [
+          {
+            "taskField": "portfolio_onboarding_plan_artifact_id",
+            "target": "project.field",
+            "targetPath": "portfolio_onboarding_plan_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      }
+    ]
   }
 }

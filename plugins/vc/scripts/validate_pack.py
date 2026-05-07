@@ -57,6 +57,8 @@ TASK_TEMPLATE_PLATFORM_CAPABILITY = "external-task-definition-template-ingest"
 PROJECT_TYPE_PLATFORM_CAPABILITY = "external-project-type-ingest"
 EXPECTED_VC_TASK_TEMPLATE_VERTICAL_KEYS = ["venture_capital", "vc"]
 PROJECT_TYPE_FIELD_KINDS = {"date", "enum", "member", "number", "text"}
+PROJECT_TASK_MAPPING_TARGETS = {"project.field", "project.state"}
+PROJECT_TASK_ACTIVATION_MODES = {"manual", "manual_review", "auto_start"}
 VC_DEAL_ROOM_LIFECYCLE_STAGES = {
     "intake",
     "assessment",
@@ -66,6 +68,22 @@ VC_DEAL_ROOM_LIFECYCLE_STAGES = {
     "closing",
 }
 VC_DEAL_ROOM_REPLACED_TASK_FIELDS = {"pitch_deck_url", "meeting_transcript_url"}
+VC_DEAL_ROOM_FORBIDDEN_TASK_FIELDS = {
+    "prior_task_outputs",
+    "team_review_pack",
+    "stage_outputs",
+    "dd_summaries",
+    "ic_memo",
+    "ic_pack",
+    "closing_summary",
+    "investment_terms",
+}
+VC_DEAL_ROOM_FORBIDDEN_CONTEXT_FIELDS = {
+    "deal_room_url",
+    "source_artifacts",
+    "open_questions",
+    "prior_task_outputs",
+}
 ARTIFACT_FIELD_KEY_PATTERN = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+)*_artifact_id$")
 VC_ARTIFACT_OUTPUTS = {
     "source-thesis-targets": ["thesis_target_list_artifact_id"],
@@ -634,11 +652,23 @@ def validate_vc_deal_room_task_template_shape(
 
     for section_name in ["input", "context", "output"]:
         for field_key in field_map(template_id, section_name, fields.get(section_name)):
+            if field_key in VC_DEAL_ROOM_FORBIDDEN_TASK_FIELDS:
+                fail(
+                    f"Task template {template_id} ({slug}) fields.{section_name}.{field_key} "
+                    "must be replaced by explicit task fields or artifacts"
+                )
             if field_key in VC_DEAL_ROOM_REPLACED_TASK_FIELDS:
                 fail(
                     f"Task template {template_id} ({slug}) fields.{section_name}.{field_key} "
                     "must use the artifact-backed replacement field"
                 )
+
+    for field_key in field_map(template_id, "context", fields.get("context")):
+        if field_key in VC_DEAL_ROOM_FORBIDDEN_CONTEXT_FIELDS:
+            fail(
+                f"Task template {template_id} ({slug}) fields.context.{field_key} "
+                "must be modeled as an explicit input/output or left to runtime task Q&A context"
+            )
 
 
 def validate_project_type_field(project_type_id: str, field: Any) -> tuple[str, str]:
@@ -1113,6 +1143,174 @@ def validate_task_definition_templates(
         )
 
 
+def load_task_template_contracts() -> dict[str, dict[str, Any]]:
+    contracts: dict[str, dict[str, Any]] = {}
+    for path in (ROOT / "alludium" / "task-definition-templates").glob("**/*.yaml"):
+        template = read_yaml(path)
+        if not isinstance(template, dict):
+            continue
+        template_id = template.get("id")
+        definition = template.get("definition") or {}
+        slug = definition.get("slug")
+        fields = template.get("fields") or {}
+        if not isinstance(template_id, str) or not isinstance(slug, str):
+            continue
+        contracts[slug] = {
+            "id": template_id,
+            "fields": {
+                "input": field_map(template_id, "input", fields.get("input")),
+                "context": field_map(template_id, "context", fields.get("context")),
+                "output": field_map(template_id, "output", fields.get("output")),
+            },
+        }
+    return contracts
+
+
+def require_mapping_list(value: Any, context: str) -> list[dict[str, Any]]:
+    if value is None:
+        return []
+    if not isinstance(value, list):
+        fail(f"{context} must be a list")
+    for entry in value:
+        if not isinstance(entry, dict):
+            fail(f"{context} entries must be objects")
+    return value
+
+
+def validate_project_task_mapping_contracts() -> None:
+    project_type = read_json(ROOT / "alludium" / "project-types" / "vc_deal_room.json")
+    initial_version = project_type.get("initialVersion") or {}
+    project_type_id = project_type.get("key", "vc_deal_room")
+    project_field_keys = {
+        field["key"]
+        for field in initial_version.get("fieldsSchema", [])
+        if isinstance(field, dict) and isinstance(field.get("key"), str)
+    }
+    lifecycle_states = set(require_string_list(
+        initial_version.get("lifecycleStates"),
+        f"Project type {project_type_id} initialVersion.lifecycleStates",
+    ))
+    task_contracts = load_task_template_contracts()
+    mappings = require_mapping_list(
+        initial_version.get("projectTaskMappings"),
+        f"Project type {project_type_id} initialVersion.projectTaskMappings",
+    )
+    if not mappings:
+        fail(f"Project type {project_type_id} must declare projectTaskMappings")
+
+    mapping_ids: list[str] = []
+    mapped_outputs_by_slug: dict[str, set[str]] = {}
+    for mapping in mappings:
+        mapping_id = mapping.get("id")
+        if not isinstance(mapping_id, str) or not mapping_id:
+            fail(f"Project type {project_type_id} projectTaskMappings entries must declare id")
+        mapping_ids.append(mapping_id)
+
+        slug = mapping.get("taskDefinitionSlug")
+        template_id = mapping.get("taskDefinitionTemplateId")
+        if not isinstance(slug, str) or not slug:
+            fail(f"Project type {project_type_id} mapping {mapping_id} must declare taskDefinitionSlug")
+        if not isinstance(template_id, str) or not template_id:
+            fail(f"Project type {project_type_id} mapping {mapping_id} must declare taskDefinitionTemplateId")
+        task_contract = task_contracts.get(slug)
+        if task_contract is None:
+            fail(f"Project type {project_type_id} mapping {mapping_id} references unknown task {slug}")
+        if task_contract["id"] != template_id:
+            fail(
+                f"Project type {project_type_id} mapping {mapping_id} references template id "
+                f"{template_id}, but {slug} has id {task_contract['id']}"
+            )
+
+        lifecycle_stage = mapping.get("lifecycleStage")
+        if lifecycle_stage not in lifecycle_states:
+            fail(
+                f"Project type {project_type_id} mapping {mapping_id} references unknown "
+                f"lifecycleStage {lifecycle_stage}"
+            )
+        if lifecycle_stage in {"invested", "passed", "archived"}:
+            fail(f"Project type {project_type_id} mapping {mapping_id} must not target terminal outcome stage")
+
+        if require_mapping_list(
+            mapping.get("contextMappings"),
+            f"Project type {project_type_id} mapping {mapping_id}.contextMappings",
+        ):
+            fail(f"Project type {project_type_id} mapping {mapping_id} must not declare contextMappings")
+
+        for section_name in ["inputMappings", "outputMappings"]:
+            for entry in require_mapping_list(
+                mapping.get(section_name),
+                f"Project type {project_type_id} mapping {mapping_id}.{section_name}",
+            ):
+                task_field = entry.get("taskField")
+                if not isinstance(task_field, str) or not task_field:
+                    fail(f"Project type {project_type_id} mapping {mapping_id}.{section_name} entry must declare taskField")
+                field_section = "input" if section_name == "inputMappings" else "output"
+                if task_field not in task_contract["fields"][field_section]:
+                    fail(
+                        f"Project type {project_type_id} mapping {mapping_id}.{section_name}.{task_field} "
+                        f"references an unknown task {field_section} field"
+                    )
+                target = entry.get("target")
+                if section_name == "outputMappings":
+                    if target not in PROJECT_TASK_MAPPING_TARGETS:
+                        fail(
+                            f"Project type {project_type_id} mapping {mapping_id}.outputMappings.{task_field} "
+                            f"target must be one of {sorted(PROJECT_TASK_MAPPING_TARGETS)}"
+                        )
+                    target_path = entry.get("targetPath")
+                    if target == "project.field" and target_path not in project_field_keys:
+                        fail(
+                            f"Project type {project_type_id} mapping {mapping_id}.outputMappings.{task_field} "
+                            f"targetPath references unknown project field {target_path}"
+                        )
+                    if "requiredForCompletion" in entry and not isinstance(entry["requiredForCompletion"], bool):
+                        fail(
+                            f"Project type {project_type_id} mapping {mapping_id}.outputMappings.{task_field} "
+                            "requiredForCompletion must be a boolean"
+                        )
+                    mapped_outputs_by_slug.setdefault(slug, set()).add(task_field)
+
+        activation_policy = mapping.get("activationPolicy")
+        if not isinstance(activation_policy, dict):
+            fail(f"Project type {project_type_id} mapping {mapping_id} must declare activationPolicy")
+        if activation_policy.get("mode") not in PROJECT_TASK_ACTIVATION_MODES:
+            fail(
+                f"Project type {project_type_id} mapping {mapping_id} activationPolicy.mode "
+                f"must be one of {sorted(PROJECT_TASK_ACTIVATION_MODES)}"
+            )
+        if activation_policy.get("mode") != "manual_review":
+            fail(f"Project type {project_type_id} mapping {mapping_id} must use manual_review activation")
+        if activation_policy.get("autoStartWhenRequiredInputsAvailable") is not False:
+            fail(
+                f"Project type {project_type_id} mapping {mapping_id} must set "
+                "autoStartWhenRequiredInputsAvailable: false"
+            )
+        if activation_policy.get("requiresHumanApproval") is not True:
+            fail(f"Project type {project_type_id} mapping {mapping_id} must set requiresHumanApproval: true")
+        if activation_policy.get("createTaskWhenLifecycleStageEntered") is not False:
+            fail(
+                f"Project type {project_type_id} mapping {mapping_id} must set "
+                "createTaskWhenLifecycleStageEntered: false"
+            )
+
+    if len(mapping_ids) != len(set(mapping_ids)):
+        fail(f"Project type {project_type_id} has duplicate projectTaskMappings ids")
+
+    for slug, artifact_fields in VC_ARTIFACT_OUTPUTS.items():
+        missing_project_fields = sorted(set(artifact_fields) - project_field_keys)
+        if missing_project_fields:
+            fail(
+                f"Project type {project_type_id} is missing artifact index fields for {slug}: "
+                f"{missing_project_fields}"
+            )
+        missing_mappings = sorted(set(artifact_fields) - mapped_outputs_by_slug.get(slug, set()))
+        if missing_mappings:
+            fail(
+                f"Project type {project_type_id} projectTaskMappings for {slug} are missing "
+                f"artifact output mappings: {missing_mappings}"
+            )
+
+
 def validate_mcp_definitions(manifest: dict[str, Any], recommendations: dict[str, Any]) -> None:
     mcp_manifest = read_json(ROOT / manifest["surfaces"]["mcpServers"]["path"])
     mcp_servers = mcp_manifest.get("mcpServers")
@@ -1235,6 +1433,7 @@ def main() -> None:
     agent_template_ids = set(manifest["surfaces"]["alludiumAgentTemplates"]["ids"])
     project_type_ids = validate_project_types(manifest)
     validate_task_definition_templates(manifest, skill_ids, agent_template_ids, project_type_ids)
+    validate_project_task_mapping_contracts()
     recommendations_path = manifest["surfaces"]["alludiumMcpRecommendations"]["path"]
     if not (ROOT / recommendations_path).exists():
         fail(f"Missing Alludium MCP recommendations file: {recommendations_path}")

@@ -24,25 +24,25 @@ This checklist turns `vc_deal_room_task_io_audit.md` into implementation slices.
 - [x] Move task `definitionJson.stage` values onto the collapsed stage model.
 - [x] Replace `pitch_deck_url` with `pitch_deck_artifact_id` in assessment tasks.
 - [ ] Replace transcript/material/document free-text inputs with artifact-reference inputs where the task needs platform files. Initial pass covers meeting transcript and term sheet; diligence and closing source materials remain.
-- [ ] Remove `prior_task_outputs` from inputs and context.
-- [ ] Remove broad context fields unless a task has a specific runtime-only reason to receive them.
+- [x] Remove `prior_task_outputs` from inputs and context.
+- [x] Remove broad context fields unless a task has a specific runtime-only reason to receive them.
 - [ ] Fold detailed structured outputs into the primary file artifact where a required file output exists.
 - [ ] Decide whether `run-follow-up-evaluation`, `prepare-lead-gen-packet`, and `prepare-deal-flow-agenda` remain Deal Room mapped tasks or move to optional/pipeline-only use.
 
 ## Slice 3: Project Task Mappings
 
-- [ ] Add `projectTaskMappings` to `vc_deal_room.json` after task field shapes are updated.
+- [x] Add `projectTaskMappings` to `vc_deal_room.json` after task field shapes are updated.
 - [ ] Map required task inputs from durable project fields or explicit artifact fields only.
-- [ ] Map required file outputs back to artifact-index project fields.
+- [x] Map required file outputs back to artifact-index project fields.
 - [ ] Promote only compact reviewed state outputs, such as decision outcome, closing status, readiness, and terminal outcome.
-- [ ] Use manual-review activation and keep auto-start disabled.
+- [x] Use manual-review activation and keep auto-start disabled.
 
 ## Slice 4: Validation
 
-- [ ] Validate task mappings reference real project fields and real task fields.
-- [ ] Enforce manual-review activation for public pack mappings.
+- [x] Validate task mappings reference real project fields and real task fields.
+- [x] Enforce manual-review activation for public pack mappings.
 - [x] Reject unknown lifecycle stages in task templates and command-view stage groups.
-- [ ] Add guardrails against `prior_task_outputs` and broad context mappings returning in VC Deal Room templates.
+- [x] Add guardrails against `prior_task_outputs` and broad context mappings returning in VC Deal Room templates.
 - [x] Keep existing artifact file-field validation passing.
 
 ## Slice 5: Review And Handoff
