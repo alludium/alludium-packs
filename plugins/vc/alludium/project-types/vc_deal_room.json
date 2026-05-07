@@ -1174,7 +1174,8 @@
               "producerTaskDefinitionSlug": "source-thesis-targets",
               "outputFieldKey": "thesis_target_list_artifact_id"
             }
-          ]
+          ],
+          "stageKey": "assessment"
         },
         {
           "key": "first_look_scorecard",
@@ -1187,7 +1188,8 @@
               "producerTaskDefinitionSlug": "screen-inbound-opportunity",
               "outputFieldKey": "first_look_scorecard_artifact_id"
             }
-          ]
+          ],
+          "stageKey": "assessment"
         },
         {
           "key": "ten_factor_scorecard",
@@ -1200,7 +1202,8 @@
               "producerTaskDefinitionSlug": "run-ten-factor-screen",
               "outputFieldKey": "ten_factor_scorecard_artifact_id"
             }
-          ]
+          ],
+          "stageKey": "assessment"
         },
         {
           "key": "founder_materials_request",
@@ -1213,7 +1216,8 @@
               "producerTaskDefinitionSlug": "request-founder-materials",
               "outputFieldKey": "founder_materials_request_artifact_id"
             }
-          ]
+          ],
+          "stageKey": "assessment"
         },
         {
           "key": "initial_call_brief",
@@ -1226,7 +1230,8 @@
               "producerTaskDefinitionSlug": "prepare-initial-call",
               "outputFieldKey": "initial_call_brief_artifact_id"
             }
-          ]
+          ],
+          "stageKey": "assessment"
         },
         {
           "key": "customer_insights",
@@ -1239,7 +1244,22 @@
               "producerTaskDefinitionSlug": "summarize-initial-call",
               "outputFieldKey": "customer_insights_artifact_id"
             }
-          ]
+          ],
+          "stageKey": "assessment"
+        },
+        {
+          "key": "follow_up_evaluation",
+          "title": "Follow-up evaluation",
+          "description": "Document requests, competitive landscape, early risks, and readiness recommendation",
+          "artifactOutputs": [
+            {
+              "key": "follow_up_evaluation",
+              "title": "Follow-up evaluation",
+              "producerTaskDefinitionSlug": "run-follow-up-evaluation",
+              "outputFieldKey": "follow_up_evaluation_artifact_id"
+            }
+          ],
+          "stageKey": "assessment"
         },
         {
           "key": "commercial_dd",
@@ -1260,7 +1280,8 @@
                 "commercial_dd_artifact_id"
               ]
             }
-          ]
+          ],
+          "stageKey": "diligence"
         },
         {
           "key": "market_analysis",
@@ -1273,7 +1294,8 @@
               "producerTaskDefinitionSlug": "run-commercial-dd",
               "outputFieldKey": "market_analysis_artifact_id"
             }
-          ]
+          ],
+          "stageKey": "diligence"
         },
         {
           "key": "customer_reference_summary",
@@ -1286,7 +1308,8 @@
               "producerTaskDefinitionSlug": "run-commercial-dd",
               "outputFieldKey": "customer_reference_summary_artifact_id"
             }
-          ]
+          ],
+          "stageKey": "diligence"
         },
         {
           "key": "financial_dd",
@@ -1307,7 +1330,8 @@
                 "financial_dd_artifact_id"
               ]
             }
-          ]
+          ],
+          "stageKey": "diligence"
         },
         {
           "key": "unit_economics",
@@ -1320,7 +1344,8 @@
               "producerTaskDefinitionSlug": "run-financial-dd",
               "outputFieldKey": "unit_economics_artifact_id"
             }
-          ]
+          ],
+          "stageKey": "diligence"
         },
         {
           "key": "founder_evaluation",
@@ -1341,7 +1366,8 @@
                 "founder_evaluation_artifact_id"
               ]
             }
-          ]
+          ],
+          "stageKey": "diligence"
         },
         {
           "key": "technical_dd",
@@ -1362,20 +1388,8 @@
                 "technical_dd_artifact_id"
               ]
             }
-          ]
-        },
-        {
-          "key": "follow_up_evaluation",
-          "title": "Follow-up evaluation",
-          "description": "Document requests, competitive landscape, early risks, and readiness recommendation",
-          "artifactOutputs": [
-            {
-              "key": "follow_up_evaluation",
-              "title": "Follow-up evaluation",
-              "producerTaskDefinitionSlug": "run-follow-up-evaluation",
-              "outputFieldKey": "follow_up_evaluation_artifact_id"
-            }
-          ]
+          ],
+          "stageKey": "diligence"
         },
         {
           "key": "eighty_two_factor_questions",
@@ -1396,7 +1410,8 @@
                 "eighty_two_factor_questions_artifact_id"
               ]
             }
-          ]
+          ],
+          "stageKey": "diligence"
         },
         {
           "key": "team_review_pack",
@@ -1416,7 +1431,8 @@
                 "team_review_pack_artifact_id"
               ]
             }
-          ]
+          ],
+          "stageKey": "review"
         },
         {
           "key": "partner_review_pack",
@@ -1435,7 +1451,8 @@
                 "partner_review_pack_artifact_id"
               ]
             }
-          ]
+          ],
+          "stageKey": "review"
         },
         {
           "key": "investment_memo",
@@ -1456,7 +1473,8 @@
                 "investment_memo_artifact_id"
               ]
             }
-          ]
+          ],
+          "stageKey": "review"
         },
         {
           "key": "ic_agenda",
@@ -1476,7 +1494,8 @@
                 "ic_agenda_artifact_id"
               ]
             }
-          ]
+          ],
+          "stageKey": "review"
         },
         {
           "key": "ic_memo_review",
@@ -1489,7 +1508,8 @@
               "producerTaskDefinitionSlug": "review-ic-memo",
               "outputFieldKey": "ic_memo_review_artifact_id"
             }
-          ]
+          ],
+          "stageKey": "review"
         },
         {
           "key": "ic_decision_record",
@@ -1509,7 +1529,8 @@
                 "ic_decision_record_artifact_id"
               ]
             }
-          ]
+          ],
+          "stageKey": "review"
         },
         {
           "key": "term_sheet_review",
@@ -1528,7 +1549,8 @@
                 "term_sheet_review_artifact_id"
               ]
             }
-          ]
+          ],
+          "stageKey": "term_sheet"
         },
         {
           "key": "closing_checklist",
@@ -1548,7 +1570,8 @@
                 "closing_checklist_artifact_id"
               ]
             }
-          ]
+          ],
+          "stageKey": "closing"
         },
         {
           "key": "conditions_precedent_verification",
@@ -1567,7 +1590,8 @@
                 "conditions_precedent_verification_artifact_id"
               ]
             }
-          ]
+          ],
+          "stageKey": "closing"
         },
         {
           "key": "portfolio_onboarding_plan",
@@ -1580,7 +1604,8 @@
               "producerTaskDefinitionSlug": "prepare-portfolio-onboarding",
               "outputFieldKey": "portfolio_onboarding_plan_artifact_id"
             }
-          ]
+          ],
+          "stageKey": "closing"
         }
       ],
       "summaryFields": [

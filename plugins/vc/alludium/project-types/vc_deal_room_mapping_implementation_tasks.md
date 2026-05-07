@@ -26,6 +26,8 @@ This checklist turns `vc_deal_room_task_io_audit.md` into implementation slices.
 - [x] Replace transcript/material/document free-text inputs with artifact-reference inputs where the task needs platform files.
 - [x] Remove `prior_task_outputs` from inputs and context.
 - [x] Remove broad context fields unless a task has a specific runtime-only reason to receive them.
+- [x] Remove `create-deal-room`; project creation belongs to the platform/project API rather than a VC Deal Room workflow task.
+- [x] Rename and reframe `evaluate-investment-opportunity` as `review-opportunity-status`, with a required stage snapshot and explicit artifact references instead of broad prior outputs.
 - [ ] Fold detailed structured outputs into the primary file artifact where a required file output exists. `run-follow-up-evaluation` now uses a primary file artifact; broader output cleanup remains.
 - [x] Decide whether `run-follow-up-evaluation`, `prepare-lead-gen-packet`, and `prepare-deal-flow-agenda` remain Deal Room mapped tasks or move to optional/pipeline-only use. `run-follow-up-evaluation` remains mapped as an assessment artifact; `prepare-lead-gen-packet` and `prepare-deal-flow-agenda` remain pack tasks but are not mapped into the single-deal artifact index.
 
@@ -34,6 +36,7 @@ This checklist turns `vc_deal_room_task_io_audit.md` into implementation slices.
 - [x] Add `projectTaskMappings` to `vc_deal_room.json` after task field shapes are updated.
 - [x] Map required task inputs from durable project fields or explicit artifact fields only.
 - [x] Map required file outputs back to artifact-index project fields.
+- [x] Group command-view artifact output slots by collapsed project stage with `stageKey`.
 - [ ] Promote only compact reviewed state outputs, such as decision outcome, closing status, readiness, and terminal outcome.
 - [x] Use manual-review activation and keep auto-start disabled.
 
@@ -42,6 +45,7 @@ This checklist turns `vc_deal_room_task_io_audit.md` into implementation slices.
 - [x] Validate task mappings reference real project fields and real task fields.
 - [x] Enforce manual-review activation for public pack mappings.
 - [x] Reject unknown lifecycle stages in task templates and command-view stage groups.
+- [x] Validate command-view artifact output slot `stageKey` values against active stage groups.
 - [x] Add guardrails against `prior_task_outputs` and broad context mappings returning in VC Deal Room templates.
 - [x] Keep existing artifact file-field validation passing.
 

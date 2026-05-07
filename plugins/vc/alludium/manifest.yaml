@@ -79,12 +79,11 @@ surfaces:
         platform release that declares external task-definition-template ingest
         support.
     ids:
-      - vc.evaluate_investment_opportunity
+      - vc.review_opportunity_status
       - vc.source_thesis_targets
       - vc.prepare_lead_gen_packet
       - vc.prepare_deal_flow_agenda
       - vc.screen_inbound_opportunity
-      - vc.create_deal_room
       - vc.request_founder_materials
       - vc.prepare_initial_call
       - vc.summarize_initial_call

@@ -754,12 +754,16 @@ def validate_vc_deal_room_command_view(project_type_id: str, initial_version: di
         initial_version.get("lifecycleStates"),
         f"Project type {project_type_id} initialVersion.lifecycleStates",
     ))
+    stage_group_keys: set[str] = set()
     for stage_group in stage_groups:
         if not isinstance(stage_group, dict):
             fail(f"Project type {project_type_id} commandView.stageGroups entries must be objects")
         for field_name in ["key", "label"]:
             if not isinstance(stage_group.get(field_name), str) or not stage_group.get(field_name):
                 fail(f"Project type {project_type_id} commandView.stageGroups entries must declare {field_name}")
+        if stage_group["key"] in stage_group_keys:
+            fail(f"Project type {project_type_id} commandView.stageGroups has duplicate key {stage_group['key']}")
+        stage_group_keys.add(stage_group["key"])
         states = require_string_list(
             stage_group.get("states"),
             f"Project type {project_type_id} commandView.stageGroups.{stage_group['key']}.states",
@@ -780,6 +784,22 @@ def validate_vc_deal_room_command_view(project_type_id: str, initial_version: di
         for field_name in ["key", "title", "description"]:
             if not isinstance(output_slot.get(field_name), str) or not output_slot.get(field_name):
                 fail(f"Project type {project_type_id} commandView.outputSlots entries must declare {field_name}")
+        stage_key = output_slot.get("stageKey")
+        if not isinstance(stage_key, str) or not stage_key:
+            fail(
+                f"Project type {project_type_id} commandView.outputSlots."
+                f"{output_slot['key']} must declare stageKey"
+            )
+        if stage_key not in stage_group_keys:
+            fail(
+                f"Project type {project_type_id} commandView.outputSlots."
+                f"{output_slot['key']} references unknown stageKey {stage_key}"
+            )
+        if stage_key == "outcomes":
+            fail(
+                f"Project type {project_type_id} commandView.outputSlots."
+                f"{output_slot['key']} must reference an active workflow stage, not outcomes"
+            )
         artifact_outputs = output_slot.get("artifactOutputs")
         if not isinstance(artifact_outputs, list) or not artifact_outputs:
             fail(

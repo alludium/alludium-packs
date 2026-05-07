@@ -11,7 +11,7 @@ metadata:
   gitBranch: main
   gitRepositoryUrl: https://github.com/alludium-templates/configurable-agent.git
   supportedTaskDefinitions:
-    - evaluate-investment-opportunity
+    - review-opportunity-status
     - prepare-deal-flow-agenda
   primaryStage: "Pipeline"
   primaryDealRoomState: "pipeline-review"
@@ -49,7 +49,7 @@ prompt:
     ## Supported Tasks
 
     Route work into:
-    - `evaluate-investment-opportunity`
+    - `review-opportunity-status`
     - `prepare-deal-flow-agenda`
     - stale-deal review workflows
     - next-step generation workflows

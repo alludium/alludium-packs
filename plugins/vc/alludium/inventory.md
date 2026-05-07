@@ -67,9 +67,7 @@ Review notes:
 
 These templates are included because the platform VC workspace pack currently references them as installable VC workflow templates.
 
-- `vc.create_deal_room`
 - `vc.create_ic_memo`
-- `vc.evaluate_investment_opportunity`
 - `vc.generate_82_factor_questions`
 - `vc.manage_closing_checklist`
 - `vc.prepare_deal_flow_agenda`
@@ -81,6 +79,7 @@ These templates are included because the platform VC workspace pack currently re
 - `vc.prepare_team_review_pack`
 - `vc.record_ic_decision`
 - `vc.request_founder_materials`
+- `vc.review_opportunity_status`
 - `vc.review_ic_memo`
 - `vc.review_term_sheet`
 - `vc.run_commercial_dd`

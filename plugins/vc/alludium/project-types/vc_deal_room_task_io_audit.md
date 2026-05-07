@@ -59,8 +59,8 @@ This is the strongest candidate if we want a clean, VC-readable control flow:
 
 | Proposed Stage | Purpose | Current States Folded In | Candidate Tasks |
 | --- | --- | --- | --- |
-| `intake` | Capture deal identity, source, materials, and initial setup. | setup/admin parts of `screening` | `create-deal-room` |
-| `assessment` | Decide whether the opportunity merits deeper work. | `lead_gen`, `deal_flow`, `screening`, `initial_call`, `follow_up` | `screen-inbound-opportunity`, `source-thesis-targets`, `prepare-initial-call`, `summarize-initial-call`, `run-ten-factor-screen`, `run-follow-up-evaluation`, `request-founder-materials`, `evaluate-investment-opportunity` |
+| `intake` | Capture deal identity, source, and uploaded materials. | setup/admin parts of `screening` | Platform project creation, then `screen-inbound-opportunity` when enough source material exists |
+| `assessment` | Decide whether the opportunity merits deeper work. | `lead_gen`, `deal_flow`, `screening`, `initial_call`, `follow_up` | `screen-inbound-opportunity`, `source-thesis-targets`, `prepare-initial-call`, `summarize-initial-call`, `run-ten-factor-screen`, `run-follow-up-evaluation`, `request-founder-materials`, `review-opportunity-status` |
 | `diligence` | Run focused commercial, technical, financial, founder, and question-set workstreams. | `founder_evaluation`, `commercial_dd`, `technical_dd`, `financial_dd` | `generate-82-factor-questions`, `run-founder-evaluation`, `run-commercial-dd`, `run-technical-dd`, `run-financial-dd` |
 | `review` | Assemble internal review packs and committee materials, then record the decision. | `team_review`, `partner_review`, `investment_committee` | `prepare-team-review-pack`, `prepare-partner-review-pack`, `create-ic-memo`, `prepare-ic-agenda`, `review-ic-memo`, `record-ic-decision` |
 | `term_sheet` | Review terms and negotiate/approve terms before closing. | `term_sheet`, early legal review | `review-term-sheet` |
@@ -117,8 +117,7 @@ Task activation should not require one lifecycle state per task. Instead:
 | Stage workflow | assessment | `source-thesis-targets` | `thesis_area`, `geography` | `thesis_target_list_artifact_id` | Reusable assessment/origination task. Keep available in Deal Room when thesis work helps assess the opportunity, but do not make it mandatory for every deal. Keep `thesis_area`, `geography`, maybe `stage_focus` as project inputs when relevant. Move target list, fit rationale, intro paths, source links, assumptions, risks, and next actions into the artifact. No `prior_task_outputs` context. |
 | Stage workflow | lead_gen | `prepare-lead-gen-packet` | `candidate_companies`, `meeting_date` | `lead_generation_packet_artifact_id` | Likely pipeline/meeting-level rather than single Deal Room task. `candidate_companies` is not a single-deal project field. Consider whether this belongs to a pipeline project type or remains task-local. Artifact should carry packet details. |
 | Stage workflow | deal_flow | `prepare-deal-flow-agenda` | `pipeline_snapshot`, `meeting_date` | none | This is not a single-deal artifact today and may belong outside VC Deal Room. Consider moving to pipeline/admin bucket or giving it a file output such as `deal_flow_agenda_artifact_id`. `pipeline_snapshot` should not be a single deal field. |
-| Stage workflow | deal_flow | `evaluate-investment-opportunity` | `company_name`, `current_stage` | none | This task is mostly stage routing. If retained, outputs should become task-local recommendation or explicit project state only after review. Remove `prior_task_outputs`; pass named artifacts if needed. |
-| Project/admin | screening | `create-deal-room` | `company_name` | none | Admin/setup task. Keep out of stage artifact chain unless it creates a setup artifact. Inputs are project identity/source refs. Outputs like folder plan/source index should probably be a setup artifact or task-local, with only `deal_room_url` promoted if human-approved. |
+| Stage workflow | deal_flow | `review-opportunity-status` | `company_name`, `investment_stage`, `stage_snapshot` | none | Manual status/control helper. It should consume a current stage snapshot and optional named artifact IDs, then return task-local recommendations. It should not create a formal evaluation memo or drive project state automatically. |
 | Stage workflow | screening | `screen-inbound-opportunity` | `company_name`, `source_thread_url` | `first_look_scorecard_artifact_id` | Strong artifact task. Project inputs: company/source thread/uploaded pitch deck artifact/referrer/thesis context. Replace optional `pitch_deck_url` with `pitch_deck_artifact_id` or source artifact refs. Artifact should hold fit recommendation, missing info, red flags, pass draft, evidence quality, and next actions. Project state may receive a reviewed recommendation/status only. |
 | Project/admin | screening | `request-founder-materials` | `company_name`, `missing_materials` | `founder_materials_request_artifact_id` | Founder-facing/request task. Keep draft message and checklist in artifact. Project may track due date and approval state, but avoid making checklist/open questions durable fields by default. |
 | Stage workflow | initial_call | `prepare-initial-call` | `company_name`, `pitch_deck_url` | `initial_call_brief_artifact_id` | Strong artifact task, but input shape should change. Replace required `pitch_deck_url` with required `pitch_deck_artifact_id`; source URL can live as artifact metadata or optional source reference. Brief content and question lists should live in artifact. |
@@ -154,7 +153,7 @@ These are the first issues to fix before rebuilding the schema:
 
 ## Proposed Next Audit Order
 
-1. Admin and pipeline boundary: `create-deal-room`, `prepare-deal-flow-agenda`, `prepare-lead-gen-packet`.
+1. Admin and pipeline boundary: platform project creation, `prepare-deal-flow-agenda`, `prepare-lead-gen-packet`, and `review-opportunity-status`.
 2. Screening and initial call: `screen-inbound-opportunity`, `request-founder-materials`, `prepare-initial-call`, `run-ten-factor-screen`, `summarize-initial-call`.
 3. Follow-up and diligence: `run-follow-up-evaluation`, `generate-82-factor-questions`, `run-founder-evaluation`, commercial/technical/financial DD.
 4. Review and IC: team review, partner review, IC memo, IC agenda, IC memo review, IC decision.
@@ -164,39 +163,9 @@ These are the first issues to fix before rebuilding the schema:
 
 This bucket clarifies what belongs inside a single VC Deal Room versus what belongs to broader pipeline or workspace operations. The main decision is that a Deal Room should represent one opportunity. Pipeline-wide packets and agendas may still be useful pack tasks, but they should not force single-deal project schema fields.
 
-### `create-deal-room`
+### Platform Project Creation
 
-Current stage: `screening`
-
-Recommended stage/bucket: `intake` plus project/admin bucket
-
-Assessment: keep, but reshape as a setup/reference task. It should not be a command-center artifact producer for the investment workflow, and it should not create folders or mutate external systems without approval. If it produces substantial setup guidance, that should be a setup-plan artifact, not many small structured outputs.
-
-| Field | Current Section | Classification | Recommendation |
-| --- | --- | --- | --- |
-| `company_name` | input | Project input | Keep as durable identity field. |
-| `crm_record_url` | input | Project input | Keep as source reference field, ideally paired with provider and source object ID. |
-| `crm_provider` | input | Project input | Keep, but consider generic `source_system`/`crm_provider` consistency. |
-| `source_artifacts` | input | Artifact input | Replace JSON with explicit source artifact IDs or uploaded-source references. |
-| `desired_folder_root` | input | Task-local input | Keep task-local; do not promote to project schema unless workspace setup requires it. |
-| `deal_room_url` | context | Project input if needed | Move to optional input when an existing deal room link is relevant. Do not pass as broad context. |
-| `prior_task_outputs` | context | Bad shape | Remove. |
-| `open_questions` | context | Context only | Do not prefill from project. Runtime Q&A belongs in task context. |
-| `deal_room_fields` | output | Task-local or artifact content | Fold into setup-plan artifact or remove. |
-| `artifact_checklist` | output | Artifact content | Fold into setup-plan artifact. |
-| `source_index` | output | Artifact content | Fold into setup-plan artifact or source-material artifact index. |
-| `drive_folder_plan` | output | Artifact content | Fold into setup-plan artifact; external folder changes require approval. |
-| `manual_deal_room_link` | output | Project state output | May update `deal_room_url` after review/approval. |
-| `next_stage_task_recommendations` | output | Task-local output | Keep on task or in setup artifact; do not map to project data. |
-| generic outputs such as `summary`, `recommendation`, `source_links`, `assumptions`, `evidence_quality`, `risks`, `human_decision_points`, `next_actions` | output | Artifact content or task-local output | Remove as separately mapped project outputs. |
-
-Recommended template changes:
-
-- Move `definitionJson.stage` to `intake` when the new stage model lands.
-- Remove `context` fields.
-- Replace `source_artifacts` JSON with explicit source artifact/reference input naming.
-- Consider adding `deal_room_setup_plan_artifact_id` as an optional or required file output if setup guidance remains substantial.
-- Keep only `manual_deal_room_link` as a possible project update, and only with human approval.
+`create-deal-room` has been removed from the VC Deal Room pack task templates. Creating the Deal Room is platform/project API behavior, not investment workflow work for an agent task. Follow-on setup guidance can be handled by intake tasks that consume source material and produce reviewable artifacts, without implying that the agent creates projects, folders, or external records.
 
 ### `source-thesis-targets`
 
@@ -284,7 +253,7 @@ Recommended template changes:
 
 Adopt these changes before rebuilding the project schema:
 
-1. `create-deal-room` stays in VC Deal Room, but as `intake`/admin setup with minimal project updates.
+1. `create-deal-room` is removed from VC Deal Room task templates; project creation belongs to the platform.
 2. `source-thesis-targets` can stay as optional Deal Room assessment work, with artifact-only output mapping. It is also reusable for a future Origination project type.
 3. `prepare-lead-gen-packet` and `prepare-deal-flow-agenda` should not be default mapped Deal Room tasks.
 4. The project schema should not include `candidate_companies`, `pipeline_snapshot`, or `prior_task_outputs`.
@@ -461,28 +430,28 @@ Recommended template changes:
 - Remove context fields.
 - Keep only `customer_insights_artifact_id` as required output.
 
-### `evaluate-investment-opportunity`
+### `review-opportunity-status`
 
 Current stage: `deal_flow`
 
 Recommended stage/bucket: assessment control/review helper, not default artifact producer
 
-Assessment: this task is an orchestration/recommendation task rather than a stage artifact producer. It can be useful as a manual review helper that summarizes current state and suggests next tasks, but it should not be the way task outputs are routed through the project.
+Assessment: this task is an orchestration/recommendation task rather than a stage artifact producer. It can be useful as a manual review helper that summarizes current state and suggests next tasks, but it should not be the way task outputs are routed through the project and it should not sound like a formal investment evaluation document.
 
 | Field | Current Section | Classification | Recommendation |
 | --- | --- | --- | --- |
 | `company_name` | input | Project input | Keep. |
-| `current_stage` | input | Project state input | Keep, but align with collapsed stage model. |
-| `deal_room_url` | input | Optional project input | Keep optional if needed. |
-| `prior_task_outputs` | input | Bad shape | Replace with explicit artifact IDs or remove. |
+| `investment_stage` | input | Project state input | Keep aligned with collapsed stage model. |
+| `stage_snapshot` | input | Task-local/project snapshot input | Required. Supply the current stage data snapshot or concise stage status payload. |
+| `relevant_artifact_ids` | input | Artifact input | Optional explicit artifact references. |
 | context fields | context | Context/bad shape | Remove broad context fields. |
-| `stage_summary`, `missing_inputs`, `stage_transition_recommendation`, `next_stage_task_suggestions` | output | Task-local or project state output after review | Keep task-local by default; only reviewed transition/status should update project state. |
+| `stage_summary`, `missing_inputs`, `stage_transition_recommendation`, `next_task_suggestions` | output | Task-local or project state output after review | Keep task-local by default; only reviewed transition/status should update project state. |
 | generic outputs | output | Artifact content or task-local output | Remove as separate mapped project outputs. |
 
 Recommended template changes:
 
 - Keep as manual/review helper, not automatic stage trigger.
-- Remove `prior_task_outputs`.
+- Remove `prior_task_outputs`; pass explicit relevant artifact IDs instead.
 - Consider whether this task should produce an artifact such as `assessment_recommendation_artifact_id`; otherwise keep outputs task-local.
 
 ### Assessment Decisions
