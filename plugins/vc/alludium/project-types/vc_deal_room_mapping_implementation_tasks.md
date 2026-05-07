@@ -26,8 +26,8 @@ This checklist turns `vc_deal_room_task_io_audit.md` into implementation slices.
 - [x] Replace transcript/material/document free-text inputs with artifact-reference inputs where the task needs platform files.
 - [x] Remove `prior_task_outputs` from inputs and context.
 - [x] Remove broad context fields unless a task has a specific runtime-only reason to receive them.
-- [ ] Fold detailed structured outputs into the primary file artifact where a required file output exists.
-- [ ] Decide whether `run-follow-up-evaluation`, `prepare-lead-gen-packet`, and `prepare-deal-flow-agenda` remain Deal Room mapped tasks or move to optional/pipeline-only use. `prepare-lead-gen-packet` is no longer mapped into the Deal Room artifact index; the other two remain unmapped.
+- [ ] Fold detailed structured outputs into the primary file artifact where a required file output exists. `run-follow-up-evaluation` now uses a primary file artifact; broader output cleanup remains.
+- [x] Decide whether `run-follow-up-evaluation`, `prepare-lead-gen-packet`, and `prepare-deal-flow-agenda` remain Deal Room mapped tasks or move to optional/pipeline-only use. `run-follow-up-evaluation` remains mapped as an assessment artifact; `prepare-lead-gen-packet` and `prepare-deal-flow-agenda` remain pack tasks but are not mapped into the single-deal artifact index.
 
 ## Slice 3: Project Task Mappings
 

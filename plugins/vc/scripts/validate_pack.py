@@ -98,6 +98,7 @@ VC_ARTIFACT_OUTPUTS = {
     "request-founder-materials": ["founder_materials_request_artifact_id"],
     "prepare-initial-call": ["initial_call_brief_artifact_id"],
     "summarize-initial-call": ["customer_insights_artifact_id"],
+    "run-follow-up-evaluation": ["follow_up_evaluation_artifact_id"],
     "run-ten-factor-screen": ["ten_factor_scorecard_artifact_id"],
     "generate-82-factor-questions": ["eighty_two_factor_questions_artifact_id"],
     "run-founder-evaluation": ["founder_evaluation_artifact_id"],
@@ -126,6 +127,10 @@ VC_ARTIFACT_INPUTS = {
     "screen-inbound-opportunity": ["pitch_deck_artifact_id"],
     "prepare-initial-call": ["pitch_deck_artifact_id"],
     "summarize-initial-call": ["meeting_transcript_artifact_id"],
+    "run-follow-up-evaluation": [
+        "first_look_scorecard_artifact_id",
+        "customer_insights_artifact_id",
+    ],
     "run-ten-factor-screen": ["pitch_deck_artifact_id"],
     "run-financial-dd": [
         "financial_statements_artifact_id",

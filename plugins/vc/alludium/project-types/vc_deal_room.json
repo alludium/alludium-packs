@@ -883,6 +883,14 @@
         "description": "Technical DD report artifact produced by run-technical-dd."
       },
       {
+        "id": "field-follow-up-evaluation-artifact-id",
+        "key": "follow_up_evaluation_artifact_id",
+        "label": "Follow-Up Evaluation",
+        "kind": "text",
+        "required": false,
+        "description": "Follow-up evaluation artifact produced by run-follow-up-evaluation."
+      },
+      {
         "id": "field-eighty-two-factor-questions-artifact-id",
         "key": "eighty_two_factor_questions_artifact_id",
         "label": "82-factor question set",
@@ -1353,6 +1361,19 @@
               "reviewInputFieldKeys": [
                 "technical_dd_artifact_id"
               ]
+            }
+          ]
+        },
+        {
+          "key": "follow_up_evaluation",
+          "title": "Follow-up evaluation",
+          "description": "Document requests, competitive landscape, early risks, and readiness recommendation",
+          "artifactOutputs": [
+            {
+              "key": "follow_up_evaluation",
+              "title": "Follow-up evaluation",
+              "producerTaskDefinitionSlug": "run-follow-up-evaluation",
+              "outputFieldKey": "follow_up_evaluation_artifact_id"
             }
           ]
         },
@@ -1971,6 +1992,46 @@
             "taskField": "technical_dd_artifact_id",
             "target": "project.field",
             "targetPath": "technical_dd_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-run-follow-up-evaluation",
+        "taskDefinitionTemplateId": "vc.run_follow_up_evaluation",
+        "taskDefinitionSlug": "run-follow-up-evaluation",
+        "lifecycleStage": "assessment",
+        "inputMappings": [
+          {
+            "taskField": "company_name",
+            "source": "project.field",
+            "sourcePath": "company_name",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "first_look_scorecard_artifact_id",
+            "source": "project.field",
+            "sourcePath": "first_look_scorecard_artifact_id",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "customer_insights_artifact_id",
+            "source": "project.field",
+            "sourcePath": "customer_insights_artifact_id",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "follow_up_evaluation_artifact_id",
+            "target": "project.field",
+            "targetPath": "follow_up_evaluation_artifact_id",
             "requiredForCompletion": true
           }
         ],
