@@ -98,3 +98,11 @@ The validator checks:
 - task-template skill and agent-template references resolve to manifest-declared surfaces
 - VC task artifact output/input fields are present, required, file-backed, and semantically named
 - obvious secret-bearing values are not present
+
+CI also runs:
+
+```bash
+python3 scripts/validate_release_contract.py
+```
+
+The release-contract validator compares the PR against `origin/main` and the latest remote `vX.Y.Z` tag, rejects backwards or same-version release-content changes, rejects reused remote tags for changed release content, and verifies versioned docs mention the current manifest version. Local runs also consider staged, unstaged, and untracked release-content files, so run it from a clean worktree for CI-like behavior.
