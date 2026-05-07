@@ -63,9 +63,9 @@ definition:
         note: Use only for SaaS deals or workspaces that select this metric pack.
 fields:
   input:
-    - key: financial_statements
-      name: Financial Statements
-      fieldType: string
+    - key: financial_statements_artifact_id
+      name: Financial Statements Artifact
+      fieldType: file
       required: true
       position: 0
       config: {}
@@ -75,9 +75,9 @@ fields:
       required: false
       position: 1
       config: {}
-    - key: forecast_model
-      name: Forecast Model
-      fieldType: string
+    - key: forecast_model_artifact_id
+      name: Forecast Model Artifact
+      fieldType: file
       required: true
       position: 2
       config: {}

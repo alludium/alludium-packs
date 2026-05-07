@@ -58,9 +58,9 @@ definition:
       suggestedChildTasks: []
 fields:
   input:
-    - key: architecture_docs
-      name: Architecture Docs
-      fieldType: string
+    - key: architecture_docs_artifact_id
+      name: Architecture Docs Artifact
+      fieldType: file
       required: true
       position: 0
       config: {}

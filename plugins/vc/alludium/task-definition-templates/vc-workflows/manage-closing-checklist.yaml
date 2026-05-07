@@ -70,9 +70,9 @@ fields:
       required: true
       position: 1
       config: {}
-    - key: closing_workplan
-      name: Closing Workplan
-      fieldType: string
+    - key: closing_workplan_artifact_id
+      name: Closing Workplan Artifact
+      fieldType: file
       required: true
       position: 2
       config: {}

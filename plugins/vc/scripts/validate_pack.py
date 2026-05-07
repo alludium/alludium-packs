@@ -57,6 +57,7 @@ TASK_TEMPLATE_PLATFORM_CAPABILITY = "external-task-definition-template-ingest"
 PROJECT_TYPE_PLATFORM_CAPABILITY = "external-project-type-ingest"
 EXPECTED_VC_TASK_TEMPLATE_VERTICAL_KEYS = ["venture_capital", "vc"]
 PROJECT_TYPE_FIELD_KINDS = {"date", "enum", "member", "number", "text"}
+PROJECT_TASK_MAPPING_SOURCES = {"constant", "project.field", "project.id", "project.state"}
 PROJECT_TASK_MAPPING_TARGETS = {"project.field", "project.state"}
 PROJECT_TASK_ACTIVATION_MODES = {"manual", "manual_review", "auto_start"}
 VC_DEAL_ROOM_LIFECYCLE_STAGES = {
@@ -77,6 +78,12 @@ VC_DEAL_ROOM_FORBIDDEN_TASK_FIELDS = {
     "ic_pack",
     "closing_summary",
     "investment_terms",
+    "architecture_docs",
+    "financial_statements",
+    "forecast_model",
+    "closing_workplan",
+    "cp_checklist",
+    "evidence_links",
 }
 VC_DEAL_ROOM_FORBIDDEN_CONTEXT_FIELDS = {
     "deal_room_url",
@@ -87,7 +94,6 @@ VC_DEAL_ROOM_FORBIDDEN_CONTEXT_FIELDS = {
 ARTIFACT_FIELD_KEY_PATTERN = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+)*_artifact_id$")
 VC_ARTIFACT_OUTPUTS = {
     "source-thesis-targets": ["thesis_target_list_artifact_id"],
-    "prepare-lead-gen-packet": ["lead_generation_packet_artifact_id"],
     "screen-inbound-opportunity": ["first_look_scorecard_artifact_id"],
     "request-founder-materials": ["founder_materials_request_artifact_id"],
     "prepare-initial-call": ["initial_call_brief_artifact_id"],
@@ -121,6 +127,11 @@ VC_ARTIFACT_INPUTS = {
     "prepare-initial-call": ["pitch_deck_artifact_id"],
     "summarize-initial-call": ["meeting_transcript_artifact_id"],
     "run-ten-factor-screen": ["pitch_deck_artifact_id"],
+    "run-financial-dd": [
+        "financial_statements_artifact_id",
+        "forecast_model_artifact_id",
+    ],
+    "run-technical-dd": ["architecture_docs_artifact_id"],
     "prepare-team-review-pack": [
         "commercial_dd_artifact_id",
         "financial_dd_artifact_id",
@@ -154,8 +165,13 @@ VC_ARTIFACT_INPUTS = {
     "manage-closing-checklist": [
         "ic_decision_record_artifact_id",
         "term_sheet_review_artifact_id",
+        "closing_workplan_artifact_id",
     ],
-    "verify-conditions-precedent": ["closing_checklist_artifact_id"],
+    "verify-conditions-precedent": [
+        "closing_checklist_artifact_id",
+        "cp_checklist_artifact_id",
+        "evidence_bundle_artifact_id",
+    ],
     "review-term-sheet": ["term_sheet_artifact_id"],
     "prepare-portfolio-onboarding": [
         "ic_decision_record_artifact_id",
@@ -1250,6 +1266,30 @@ def validate_project_task_mapping_contracts() -> None:
                         f"Project type {project_type_id} mapping {mapping_id}.{section_name}.{task_field} "
                         f"references an unknown task {field_section} field"
                     )
+                if section_name == "inputMappings":
+                    source = entry.get("source")
+                    if source not in PROJECT_TASK_MAPPING_SOURCES:
+                        fail(
+                            f"Project type {project_type_id} mapping {mapping_id}.inputMappings.{task_field} "
+                            f"source must be one of {sorted(PROJECT_TASK_MAPPING_SOURCES)}"
+                        )
+                    source_path = entry.get("sourcePath")
+                    if source == "project.field" and source_path not in project_field_keys:
+                        fail(
+                            f"Project type {project_type_id} mapping {mapping_id}.inputMappings.{task_field} "
+                            f"sourcePath references unknown project field {source_path}"
+                        )
+                    if source == "constant" and "constantValue" not in entry:
+                        fail(
+                            f"Project type {project_type_id} mapping {mapping_id}.inputMappings.{task_field} "
+                            "must declare constantValue for source constant"
+                        )
+                    if "requiredForActivation" in entry and not isinstance(entry["requiredForActivation"], bool):
+                        fail(
+                            f"Project type {project_type_id} mapping {mapping_id}.inputMappings.{task_field} "
+                            "requiredForActivation must be a boolean"
+                        )
+                    continue
                 target = entry.get("target")
                 if section_name == "outputMappings":
                     if target not in PROJECT_TASK_MAPPING_TARGETS:

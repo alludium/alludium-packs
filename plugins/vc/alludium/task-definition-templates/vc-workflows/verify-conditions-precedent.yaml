@@ -63,15 +63,15 @@ fields:
       required: true
       position: 0
       config: {}
-    - key: cp_checklist
-      name: Cp Checklist
-      fieldType: json
+    - key: cp_checklist_artifact_id
+      name: CP Checklist Artifact
+      fieldType: file
       required: true
       position: 1
       config: {}
-    - key: evidence_links
-      name: Evidence Links
-      fieldType: json
+    - key: evidence_bundle_artifact_id
+      name: Evidence Bundle Artifact
+      fieldType: file
       required: true
       position: 2
       config: {}
