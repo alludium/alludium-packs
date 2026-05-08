@@ -1,4 +1,4 @@
-version: "1.0"
+version: "1.0.1"
 type: "template"
 platform_managed: false
 id: "vc_pipeline_autopilot"

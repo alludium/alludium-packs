@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.generate_82_factor_questions
-version: 1.0.3
+version: 1.0.4
 title: Generate 82-Factor Questions
 category: Venture Capital
 visibility: workspace

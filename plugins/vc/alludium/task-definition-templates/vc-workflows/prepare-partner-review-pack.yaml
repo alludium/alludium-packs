@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_partner_review_pack
-version: 1.0.4
+version: 1.0.5
 title: Prepare Partner Review Pack
 category: Venture Capital
 visibility: workspace

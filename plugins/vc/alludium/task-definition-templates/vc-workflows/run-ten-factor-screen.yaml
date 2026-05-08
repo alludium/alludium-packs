@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_ten_factor_screen
-version: 1.0.3
+version: 1.0.4
 title: Run 10-Factor Screen
 category: Venture Capital
 visibility: workspace

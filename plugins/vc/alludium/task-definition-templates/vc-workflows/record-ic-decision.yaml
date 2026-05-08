@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.record_ic_decision
-version: 1.0.3
+version: 1.0.4
 title: Record IC Decision
 category: Venture Capital
 visibility: workspace

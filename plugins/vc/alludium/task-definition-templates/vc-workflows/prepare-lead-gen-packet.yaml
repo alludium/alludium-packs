@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_lead_gen_packet
-version: 1.0.3
+version: 1.0.4
 title: Prepare Lead Gen Packet
 category: Venture Capital
 visibility: workspace

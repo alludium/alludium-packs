@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.review_term_sheet
-version: 1.0.2
+version: 1.0.3
 title: Review Term Sheet
 category: Venture Capital
 visibility: workspace

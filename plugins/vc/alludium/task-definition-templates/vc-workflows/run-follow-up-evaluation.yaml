@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_follow_up_evaluation
-version: 1.0.2
+version: 1.0.3
 title: Run Follow-Up Evaluation
 category: Venture Capital
 visibility: workspace

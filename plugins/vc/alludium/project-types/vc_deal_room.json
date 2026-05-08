@@ -5,7 +5,7 @@
   "name": "VC Deal Room",
   "description": "Project context for one venture investment opportunity from sourcing through portfolio handoff.",
   "initialVersion": {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "fieldsSchema": [
       {
         "id": "field-company-name",
