@@ -47,7 +47,7 @@ WORKSPACE_VARIABLE_REQUIREMENT_LEVELS = {"optional", "recommended", "required"}
 WORKSPACE_VARIABLE_SENSITIVITY_LEVELS = {"standard", "sensitive"}
 APPLICATION_RECOMMENDATION_STATUSES = {"available", "future", "missing"}
 APPLICATION_RECOMMENDATION_LEVELS = {"required", "recommended", "optional"}
-APPLICATION_ONLY_AVAILABLE_EXTERNAL_IDS = {"slack_v2"}
+APPLICATION_ONLY_AVAILABLE_EXTERNAL_IDS = {"google_drive", "notion", "slack_v2"}
 INTEGRATION_ENTITY_ROLES = {
     "document",
     "message_or_conversation",
@@ -61,8 +61,8 @@ INTEGRATION_ENTITY_ROLES = {
     "custom",
 }
 INTEGRATION_TASK_ACTION_KINDS = {"discovery", "sync_read", "sync_write"}
-# This first integration-management slice intentionally asserts the two
-# application-specific surfaces it introduces. The generic schema validation
+# Integration-management releases intentionally assert the application-specific
+# surfaces they introduce. The generic schema validation
 # below still applies to any future recommendation-level actions; add entries
 # here only when a pack release promises exact action coverage for an app.
 EXPECTED_RECOMMENDATION_ACTIONS = {
@@ -75,6 +75,20 @@ EXPECTED_RECOMMENDATION_ACTIONS = {
         "discovery": ("vc.slack_discovery", "vc-slack-discovery"),
         "sync_read": ("vc.slack_sync_read", "vc-slack-sync-read"),
         "sync_write": ("vc.slack_sync_write", "vc-slack-sync-write"),
+    },
+    "google_drive": {
+        "discovery": ("vc.google_drive_discovery", "vc-google-drive-discovery"),
+        "sync_read": ("vc.google_drive_sync_read", "vc-google-drive-sync-read"),
+        "sync_write": ("vc.google_drive_sync_write", "vc-google-drive-sync-write"),
+    },
+    "notion": {
+        "discovery": ("vc.notion_discovery", "vc-notion-discovery"),
+        "sync_read": ("vc.notion_sync_read", "vc-notion-sync-read"),
+        "sync_write": ("vc.notion_sync_write", "vc-notion-sync-write"),
+    },
+    "harmonic-mcp-oauth": {
+        "discovery": ("vc.harmonic_discovery", "vc-harmonic-discovery"),
+        "sync_read": ("vc.harmonic_sync_read", "vc-harmonic-sync-read"),
     },
 }
 TASK_TEMPLATE_REQUIRED_SKILL_REFERENCE_FIELDS = ["requiredSkills", "plannedRequiredSkills"]

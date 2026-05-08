@@ -61,6 +61,18 @@ recommendations:
         - First-look company evidence
       authorizationBoundary: Selecting Harmonic does not grant data access; a user must authorize the Harmonic connection before agents can query it.
       evidenceRequirement: User confirmation, provider evidence, or an authorized Harmonic connection.
+    entityRoles:
+      - organization
+      - person
+    actions:
+      - kind: discovery
+        label: Explore Harmonic saved searches and source scopes
+        taskDefinitionTemplateId: vc.harmonic_discovery
+        skillId: vc-harmonic-discovery
+      - kind: sync_read
+        label: Preview Harmonic search results for sourcing context
+        taskDefinitionTemplateId: vc.harmonic_sync_read
+        skillId: vc-harmonic-sync-read
   - externalId: dealroom-mcp
     name: Dealroom
     category: Private Market Data
@@ -302,40 +314,73 @@ recommendations:
   - externalId: notion
     name: Notion
     category: Docs and Workspace
-    status: future
     use: Lightweight deal-tracking, memo, knowledge-base, or operating-document workspace.
     recommendationStatus: optional
-    reason: No Notion MCP server config exists yet.
+    pluginCredentialBoundary: user_or_workspace_oauth
+    alludiumPlatformMapping: workspace_connection
+    platformDefaultAvailable: false
     applicationRecommendation:
       pickerGroup: Docs and Workspace
       systemCategory: Workspace Docs
       unlocks:
-        - Workspace document source awareness
-        - Manual Deal Room and memo handoff prompts
-        - Reviewable setup plan for future connectors
-      authorizationBoundary: Selecting Notion only records that the firm uses it; no pages or databases are read or written without a future authorized connector.
-      evidenceRequirement: User confirmation or future connector availability.
+        - Workspace document and database source awareness
+        - Deal Room, memo, and knowledge-base context previews
+        - Reviewable page and database update proposals
+      authorizationBoundary: Selecting Notion only records that the firm uses it; pages and databases are not read or written without an authorized Notion connection and approved scope.
+      evidenceRequirement: User confirmation, workspace evidence, or an authorized Notion connection.
       alternatives:
         - Airtable
         - Google Drive
+    entityRoles:
+      - document
+      - project
+    actions:
+      - kind: discovery
+        label: Explore Notion pages and databases
+        taskDefinitionTemplateId: vc.notion_discovery
+        skillId: vc-notion-discovery
+      - kind: sync_read
+        label: Preview selected Notion page and database context
+        taskDefinitionTemplateId: vc.notion_sync_read
+        skillId: vc-notion-sync-read
+      - kind: sync_write
+        label: Draft Notion update proposals
+        taskDefinitionTemplateId: vc.notion_sync_write
+        skillId: vc-notion-sync-write
   - externalId: google_drive
     name: Google Drive and Docs
     category: Document Storage
-    status: future
     use: Shared documents, founder materials, diligence files, memos, and meeting notes.
     recommendationStatus: recommended
-    reason: Google Drive tools exist on VC agent templates, but no workspace asset-pack application connector is registered yet.
+    pluginCredentialBoundary: user_or_workspace_oauth
+    alludiumPlatformMapping: workspace_connection
+    platformDefaultAvailable: false
     applicationRecommendation:
       pickerGroup: Docs and Workspace
       systemCategory: Document Storage
       unlocks:
         - Founder material and diligence file context
         - IC memo and Deal Room document handoffs
-        - Meeting-note and artifact review workflows
-      authorizationBoundary: Selecting Google Drive only records that the firm uses it; Drive files are not read or written unless a user authorizes a supported connection.
-      evidenceRequirement: User confirmation, file evidence, or future connector availability.
+        - Reviewable file, folder, and source-scope previews
+      authorizationBoundary: Selecting Google Drive only records that the firm uses it; Drive files are not read or written unless a user authorizes a supported connection and approves folder or file scope.
+      evidenceRequirement: User confirmation, file evidence, or an authorized Google Drive connection.
       alternatives:
         - Notion
+    entityRoles:
+      - document
+    actions:
+      - kind: discovery
+        label: Explore Google Drive folders and files
+        taskDefinitionTemplateId: vc.google_drive_discovery
+        skillId: vc-google-drive-discovery
+      - kind: sync_read
+        label: Preview selected Google Drive context
+        taskDefinitionTemplateId: vc.google_drive_sync_read
+        skillId: vc-google-drive-sync-read
+      - kind: sync_write
+        label: Draft Google Drive file proposals
+        taskDefinitionTemplateId: vc.google_drive_sync_write
+        skillId: vc-google-drive-sync-write
   - externalId: slack_v2
     name: Slack
     category: Collaboration

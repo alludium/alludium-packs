@@ -1,0 +1,65 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.harmonic_discovery
+version: 0.1.0
+title: Explore Harmonic Source Scopes
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - harmonic
+  - discovery
+definition:
+  name: Explore Harmonic Source Scopes
+  slug: harmonic-discovery
+  description: Discover Harmonic saved searches, daily searches, and source scope before selected VC sourcing context reads.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    taskFamily: integration_discovery
+    requiredSkills:
+      - vc-harmonic-discovery
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-harmonic-discovery
+      - citation-enforcement
+    recommendedAgentTemplate: vc_origination_scout
+    plannedRecommendedAgentTemplate: vc_origination_scout
+    supportedProjectTypes:
+      - vc_deal_room
+    supportedProjectScopes:
+      - project_management
+    instructions:
+      executionInstructions: Use the connected `harmonic-mcp-oauth` application only after tool discovery has produced live tool rows. The current local platform catalog has the Harmonic OAuth application and connection template but no trusted Harmonic tool external IDs, so report missing tool discovery explicitly if no tools are available. When tools are discovered, enumerate saved searches, daily searches, or comparable source scopes and ask the user to choose the sourcing scope before any read-sync task.
+      missingInputPolicy: If Harmonic is not authorized or has no discovered tools, report the setup gap and ask for authorization/tool discovery or a supplied saved-search inventory.
+      externalActionPolicy: Discovery only. Do not process company results, mark search results as seen, update saved searches, export contacts, enrich records, or write back to Harmonic.
+      completionCriteria:
+        - Available Harmonic saved searches or source scopes are listed when tools exist.
+        - The report explicitly states whether trusted Harmonic tool IDs were discovered.
+        - User choices needed before result processing are explicit.
+    humanDecisionPoints:
+      - Choose saved search, daily search, or source scope before sync read.
+      - Approve whether net-new result processing is in scope.
+fields:
+  input:
+    - key: discovery_goal
+      name: Discovery Goal
+      fieldType: string
+      required: true
+      position: 0
+      config: {}
+  output:
+    - key: harmonic_discovery_report
+      name: Harmonic Discovery Report
+      fieldType: richtext
+      required: false
+      position: 0
+      config:
+        rows: 8
+    - key: source_scope_questions
+      name: Source Scope Questions
+      fieldType: json
+      required: false
+      position: 1
+      config: {}

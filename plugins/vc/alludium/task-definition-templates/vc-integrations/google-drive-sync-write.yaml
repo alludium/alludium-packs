@@ -1,0 +1,59 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.google_drive_sync_write
+version: 0.1.0
+title: Draft Google Drive File Proposals
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - google-drive
+  - sync-write
+definition:
+  name: Draft Google Drive File Proposals
+  slug: google-drive-sync-write
+  description: Draft reviewable Google Drive file or comment proposals from VC task outputs without performing broad Drive mutations.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    taskFamily: integration_sync_write
+    requiredSkills:
+      - vc-google-drive-sync-write
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-google-drive-sync-write
+      - citation-enforcement
+    recommendedAgentTemplate: vc_pipeline_autopilot
+    plannedRecommendedAgentTemplate: vc_pipeline_autopilot
+    supportedProjectTypes:
+      - vc_deal_room
+    supportedProjectScopes:
+      - project_management
+    instructions:
+      executionInstructions: Draft Google Drive proposals only. Each proposal must include the target folder or file ID, intended action, source evidence, owner approval, and a clear statement that no Drive write has been performed. Reference available write surfaces such as `google_drive-add-comment`, `google_drive-reply-to-comment`, `google_drive-create-file-from-text`, or `google_drive-upload-file` only as later approved execution candidates; this task must not execute them.
+      missingInputPolicy: Ask for the source artifact, target Drive location, proposed file/comment content, and approval owner before drafting.
+      externalActionPolicy: Draft only. Do not create files, upload files, create folders, copy files, share files, move files, delete files, trash files, update metadata, resolve access proposals, or change permissions.
+      completionCriteria:
+        - Every proposal is evidence-backed and approval-gated.
+        - The output clearly states no Google Drive writes were performed.
+        - Any broad file, sharing, deletion, move, or permission request is rejected or routed to a separate human-admin process.
+    humanDecisionPoints:
+      - Approve exact target, file/comment content, and action before any future execution.
+      - Approve whether a Drive write is appropriate at all for the workflow.
+fields:
+  input:
+    - key: drive_write_source
+      name: Drive Write Source
+      fieldType: json
+      required: true
+      position: 0
+      config: {}
+  output:
+    - key: google_drive_write_proposals
+      name: Google Drive Write Proposals
+      fieldType: richtext
+      required: false
+      position: 0
+      config:
+        rows: 8

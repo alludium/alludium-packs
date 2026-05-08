@@ -1,9 +1,9 @@
 # Alludium VC Inventory
 
-**Version**: 0.3.5
+**Version**: 0.3.6
 **Status**: Draft project-type and metadata expansion
 
-This inventory describes the current public VC plugin/pack seed plus the draft project-type and metadata expansion. Version numbers track pack release slices that need platform alignment, so this history only lists versions that introduced durable pack-surface changes. Version `0.1.0` contains VC skills, Alludium runtime agent templates, public-safe MCP definitions, and Alludium MCP recommendations. Version `0.2.2` adds VC task-definition templates and advertises both the canonical `venture_capital` vertical key and legacy `vc` alias. Version `0.3.0` adds the VC Deal Room project type as a first-class pack surface. Version `0.3.1` adds the VC Deal Room command-view metadata used by the project command center. Version `0.3.2` adds workspace variable declarations and application recommendation metadata for the paired platform ingest work. Version `0.3.4` aligns agent Deal Room states with the collapsed lifecycle and tightens required task-input mappings. Version `0.3.5` adds compact Affinity and Slack management-action metadata plus focused integration-specific discovery and sync task templates and skills.
+This inventory describes the current public VC plugin/pack seed plus the draft project-type and metadata expansion. Version numbers track pack release slices that need platform alignment, so this history only lists versions that introduced durable pack-surface changes. Version `0.1.0` contains VC skills, Alludium runtime agent templates, public-safe MCP definitions, and Alludium MCP recommendations. Version `0.2.2` adds VC task-definition templates and advertises both the canonical `venture_capital` vertical key and legacy `vc` alias. Version `0.3.0` adds the VC Deal Room project type as a first-class pack surface. Version `0.3.1` adds the VC Deal Room command-view metadata used by the project command center. Version `0.3.2` adds workspace variable declarations and application recommendation metadata for the paired platform ingest work. Version `0.3.4` aligns agent Deal Room states with the collapsed lifecycle and tightens required task-input mappings. Version `0.3.5` adds compact Affinity and Slack management-action metadata plus focused integration-specific discovery and sync task templates and skills. Version `0.3.6` extends the same integration-management surface to Google Drive, Notion, and Harmonic, with Harmonic limited to discovery/read-preview until trusted tool rows exist.
 
 ---
 
@@ -40,6 +40,14 @@ These skills are included because the current `vc_*` Alludium agent templates re
 - `vc-slack-discovery`
 - `vc-slack-sync-read`
 - `vc-slack-sync-write`
+- `vc-google-drive-discovery`
+- `vc-google-drive-sync-read`
+- `vc-google-drive-sync-write`
+- `vc-notion-discovery`
+- `vc-notion-sync-read`
+- `vc-notion-sync-write`
+- `vc-harmonic-discovery`
+- `vc-harmonic-sync-read`
 
 Review notes:
 
@@ -104,6 +112,14 @@ These templates are included because the platform VC workspace pack currently re
 - `vc.slack_discovery`
 - `vc.slack_sync_read`
 - `vc.slack_sync_write`
+- `vc.google_drive_discovery`
+- `vc.google_drive_sync_read`
+- `vc.google_drive_sync_write`
+- `vc.notion_discovery`
+- `vc.notion_sync_read`
+- `vc.notion_sync_write`
+- `vc.harmonic_discovery`
+- `vc.harmonic_sync_read`
 
 Review notes:
 
@@ -113,7 +129,7 @@ Review notes:
 - The task-template surface requires platform capability `external-task-definition-template-ingest`.
 - All task templates advertise `vc_deal_room` as a supported project type; that project type is now included in this pack's `projectTypes` surface.
 - Task templates without `supportedProjectScopes` are single-project `project_instance` tasks. Templates with `project_management` scope support pipeline, admin, or project-type management work and keep outputs on the task or future management surface unless an explicit management mapping is introduced.
-- The integration templates are application-specific `project_management` tasks. They describe Affinity and Slack tool use, discovery scope, preview/import behavior, and write-proposal boundaries without binding to a single Deal Room lifecycle stage, while the recommendation metadata only maps which management actions exist for each application.
+- The integration templates are application-specific `project_management` tasks. They describe Affinity, Slack, Google Drive, Notion, and Harmonic tool use, discovery scope, preview/import behavior, and write-proposal boundaries without binding to a single Deal Room lifecycle stage, while the recommendation metadata only maps which management actions exist for each application.
 
 ---
 
@@ -151,21 +167,29 @@ Included MCP IDs:
 - `otter-mcp-oauth`
 - `fireflies-mcp-oauth`
 
-Application-only integration IDs used by standardized task associations:
+Application-only integration IDs used by standardized recommendation actions:
 
 - `slack_v2`
+- `google_drive`
+- `notion`
 
 Standardized management actions:
 
 - `affinity-mcp-server`: declares `discovery`, `sync_read`, and `sync_write` actions directly on the Affinity recommendation record. Discovery enumerates lists, stages, and counts after authorization; read sync is preview/import oriented; write sync is proposal-only unless the platform approval model is present.
 - `slack_v2`: declares `discovery`, `sync_read`, and `sync_write` actions directly on the Slack recommendation record. Discovery enumerates workspaces/channels and classifies channel purpose; read sync is limited to selected channel/thread context; write sync is limited to approved notifications and handoffs.
+- `google_drive`: declares `discovery`, `sync_read`, and `sync_write` actions directly on the Google Drive recommendation record. Discovery enumerates shared drives, folders, files, and source scopes after authorization; read sync previews selected file/folder context before attachment or import; write sync is proposal-only and excludes broad file creation, sharing, deletion, moving, and permission changes.
+- `notion`: declares `discovery`, `sync_read`, and `sync_write` actions directly on the Notion recommendation record. Discovery enumerates/searches pages and databases after authorization; read sync previews selected page/database content; write sync is proposal-only and excludes broad page/database mutation unless a separate explicit approval workflow exists.
+- `harmonic-mcp-oauth`: declares `discovery` and `sync_read` actions directly on the Harmonic recommendation record. The local platform catalog currently has an active Harmonic OAuth application template but zero trusted Harmonic tool rows, so the task templates and skills explicitly report the tool-discovery gap. No `sync_write` action is declared because no current write/update surface is trusted.
 
 Review notes:
 
 - `.mcp.json` uses user/workspace credential placeholders, not Alludium platform secrets.
 - `alludium/mcp-recommendations.yaml` records how Alludium can map the same external IDs to platform defaults or workspace connections when the pack is ingested.
 - Slack uses the platform application external ID `slack_v2`, not the informal `slack` label, because pack recommendation keys must match `applications.external_id`.
+- Google Drive uses the platform application external ID `google_drive` and current Pipedream tool IDs such as `google_drive-search-shared-drives`, `google_drive-list-files`, `google_drive-get-file-by-id`, and `google_drive-download-file`.
+- Notion uses the platform application external ID `notion` and current Pipedream tool IDs such as `notion-search`, `notion-retrieve-page`, `notion-retrieve-block`, `notion-retrieve-database-schema`, `notion-retrieve-database-content`, and `notion-query-database`.
 - Affinity currently has the application record `affinity-mcp-server`; connection-backed tool discovery is still required before live tool rows can be relied on in this pack.
+- Harmonic currently has the application record `harmonic-mcp-oauth` and an active OAuth connection template, but no live tool rows in the local platform catalog; Harmonic task templates must report that gap until tool discovery after authorization succeeds.
 - Alludium template references to `alludium-platform`, `google_drive`, and `linkedin` are tracked as platform-only/template-only integrations rather than plugin MCP definitions.
 - Pipedream-provided integrations remain excluded from `.mcp.json`; Slack is represented as application-only recommendation metadata keyed by `slack_v2`.
 - `alludium-docs-mcp` and `xero-mcp-server` exist in platform MCP config but are intentionally excluded because they are not part of the first VC workflow surface.

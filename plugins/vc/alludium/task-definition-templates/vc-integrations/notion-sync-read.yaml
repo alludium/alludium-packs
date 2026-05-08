@@ -1,0 +1,65 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.notion_sync_read
+version: 0.1.0
+title: Preview Notion Context
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - notion
+  - sync-read
+definition:
+  name: Preview Notion Context
+  slug: notion-sync-read
+  description: Preview selected Notion page, block, property, and database content before attaching it to VC Deal Room tasks.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    taskFamily: integration_sync_read
+    requiredSkills:
+      - vc-notion-sync-read
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-notion-sync-read
+      - citation-enforcement
+    recommendedAgentTemplate: vc_pipeline_autopilot
+    plannedRecommendedAgentTemplate: vc_pipeline_autopilot
+    supportedProjectTypes:
+      - vc_deal_room
+    supportedProjectScopes:
+      - project_management
+    instructions:
+      executionInstructions: Build a Notion read preview from the approved page or database scope. Use `notion-retrieve-page`, `notion-retrieve-block`, `notion-retrieve-page-property-item`, `notion-retrieve-database-schema`, `notion-retrieve-database-content`, and `notion-query-database` only inside the selected scope. Summarize proposed target mapping as Deal Room setup context, task context, artifact input, or human reference before any attachment or import.
+      missingInputPolicy: Ask for approved page or database scope before reading content.
+      externalActionPolicy: Read preview only. Do not attach, import, create pages, create databases, update pages, update databases, append blocks, delete blocks, duplicate pages, upload files, or create comments without a separate approval path.
+      completionCriteria:
+        - Preview names source page, block, database, or row IDs and sensitivity caveats.
+        - Relevant content is summarized with source provenance.
+        - Attachment or import approval remains separate from the preview.
+    humanDecisionPoints:
+      - Approve selected page, block, database, and row context before attaching it to project or task state.
+      - Approve duplicate handling and target mapping.
+fields:
+  input:
+    - key: selected_notion_scope
+      name: Selected Notion Scope
+      fieldType: json
+      required: true
+      position: 0
+      config: {}
+  output:
+    - key: notion_context_preview
+      name: Notion Context Preview
+      fieldType: richtext
+      required: false
+      position: 0
+      config:
+        rows: 8
+    - key: target_context_mapping
+      name: Target Context Mapping
+      fieldType: json
+      required: false
+      position: 1
+      config: {}

@@ -1,0 +1,59 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.notion_sync_write
+version: 0.1.0
+title: Draft Notion Update Proposals
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - notion
+  - sync-write
+definition:
+  name: Draft Notion Update Proposals
+  slug: notion-sync-write
+  description: Draft reviewable Notion page, database, or comment proposals from VC task outputs without performing broad workspace mutation.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    taskFamily: integration_sync_write
+    requiredSkills:
+      - vc-notion-sync-write
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-notion-sync-write
+      - citation-enforcement
+    recommendedAgentTemplate: vc_pipeline_autopilot
+    plannedRecommendedAgentTemplate: vc_pipeline_autopilot
+    supportedProjectTypes:
+      - vc_deal_room
+    supportedProjectScopes:
+      - project_management
+    instructions:
+      executionInstructions: Draft Notion update proposals only. Each proposal must include the target page, database, block, or row ID, before/after summary when known, proposed content, source evidence, owner approval, and a clear statement that no Notion write has been performed. Reference available write surfaces such as `notion-create-comment`, `notion-append-block`, `notion-update-page`, or `notion-update-database` only as later approved execution candidates; this task must not execute them.
+      missingInputPolicy: Ask for the source artifact, target Notion object, proposed content, and approval owner before drafting.
+      externalActionPolicy: Draft only. Do not create pages, create databases, update pages, update databases, append blocks, delete blocks, duplicate pages, upload files, or create comments.
+      completionCriteria:
+        - Every proposal is evidence-backed and approval-gated.
+        - The output clearly states no Notion writes were performed.
+        - Broad page/database mutation remains outside this task unless a separate explicit approval workflow exists.
+    humanDecisionPoints:
+      - Approve exact target object and proposed content before any future execution.
+      - Approve whether a Notion write is appropriate at all for the workflow.
+fields:
+  input:
+    - key: notion_write_source
+      name: Notion Write Source
+      fieldType: json
+      required: true
+      position: 0
+      config: {}
+  output:
+    - key: notion_update_proposals
+      name: Notion Update Proposals
+      fieldType: richtext
+      required: false
+      position: 0
+      config:
+        rows: 8
