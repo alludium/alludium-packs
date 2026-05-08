@@ -5,7 +5,7 @@
   "name": "VC Deal Room",
   "description": "Project context for one venture investment opportunity from sourcing through portfolio handoff.",
   "initialVersion": {
-    "version": "1.0.1",
+    "version": "1.0.2",
     "fieldsSchema": [
       {
         "id": "field-company-name",
@@ -501,6 +501,14 @@
         "description": "Founder profile links or compact identity references."
       },
       {
+        "id": "field-known-claims",
+        "key": "known_claims",
+        "label": "Known Claims",
+        "kind": "text",
+        "required": false,
+        "description": "Known company claims to test or convert into diligence questions."
+      },
+      {
         "id": "field-meeting-date",
         "key": "meeting_date",
         "label": "Meeting Date",
@@ -589,12 +597,28 @@
         "description": "Compact ordered list of term sheet artifact versions associated with this deal."
       },
       {
+        "id": "field-deal-terms",
+        "key": "deal_terms",
+        "label": "Deal Terms",
+        "kind": "text",
+        "required": false,
+        "description": "Current proposed investment terms to review against the term sheet artifact."
+      },
+      {
         "id": "field-closing-source-artifact-ids",
         "key": "closing_source_artifact_ids",
         "label": "Closing Source Artifact IDs",
         "kind": "text",
         "required": false,
         "description": "Compact list of closing source artifacts, such as workplans, legal docs, counsel notes, CP lists, signed docs, and evidence files."
+      },
+      {
+        "id": "field-legal-document-status",
+        "key": "legal_document_status",
+        "label": "Legal Document Status",
+        "kind": "text",
+        "required": false,
+        "description": "Current legal document status or counsel-provided closing workplan summary."
       },
       {
         "id": "field-ic-decision-outcome",
@@ -929,6 +953,22 @@
         "kind": "text",
         "required": false,
         "description": "IC decision record artifact produced by record-ic-decision."
+      },
+      {
+        "id": "field-ic-transcript-or-notes",
+        "key": "ic_transcript_or_notes",
+        "label": "IC Transcript Or Notes",
+        "kind": "text",
+        "required": false,
+        "description": "Investment committee transcript, notes, or meeting record summary used to record the decision."
+      },
+      {
+        "id": "field-decision-options",
+        "key": "decision_options",
+        "label": "Decision Options",
+        "kind": "text",
+        "required": false,
+        "description": "Decision options considered by the investment committee."
       },
       {
         "id": "field-term-sheet-review-artifact-id",
@@ -1963,6 +2003,12 @@
             "source": "project.field",
             "sourcePath": "founder_names",
             "requiredForActivation": true
+          },
+          {
+            "taskField": "linkedin_profiles",
+            "source": "project.field",
+            "sourcePath": "founder_profiles",
+            "requiredForActivation": true
           }
         ],
         "outputMappings": [
@@ -2067,6 +2113,12 @@
             "taskField": "company_name",
             "source": "project.field",
             "sourcePath": "company_name",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "known_claims",
+            "source": "project.field",
+            "sourcePath": "known_claims",
             "requiredForActivation": true
           }
         ],
@@ -2344,6 +2396,18 @@
             "source": "project.field",
             "sourcePath": "ic_agenda_artifact_id",
             "requiredForActivation": true
+          },
+          {
+            "taskField": "ic_transcript_or_notes",
+            "source": "project.field",
+            "sourcePath": "ic_transcript_or_notes",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "decision_options",
+            "source": "project.field",
+            "sourcePath": "decision_options",
+            "requiredForActivation": true
           }
         ],
         "outputMappings": [
@@ -2372,6 +2436,12 @@
             "taskField": "term_sheet_artifact_id",
             "source": "project.field",
             "sourcePath": "current_term_sheet_artifact_id",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "deal_terms",
+            "source": "project.field",
+            "sourcePath": "deal_terms",
             "requiredForActivation": true
           }
         ],
@@ -2413,6 +2483,12 @@
             "taskField": "closing_source_artifact_ids",
             "source": "project.field",
             "sourcePath": "closing_source_artifact_ids",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "legal_document_status",
+            "source": "project.field",
+            "sourcePath": "legal_document_status",
             "requiredForActivation": true
           }
         ],

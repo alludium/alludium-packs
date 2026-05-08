@@ -207,6 +207,15 @@ def read_json(path: Path) -> Any:
         fail(f"Failed to parse JSON {path.relative_to(ROOT)}: {exc}")
 
 
+def load_vc_deal_room_lifecycle_states() -> set[str]:
+    project_type = read_json(ROOT / "alludium" / "project-types" / "vc_deal_room.json")
+    initial_version = project_type.get("initialVersion") or {}
+    return set(require_string_list(
+        initial_version.get("lifecycleStates"),
+        "Project type vc_deal_room initialVersion.lifecycleStates",
+    ))
+
+
 def parse_frontmatter(path: Path) -> dict[str, Any]:
     body = path.read_text(encoding="utf-8").replace("\r\n", "\n")
     if not body.startswith("---\n"):
@@ -270,6 +279,7 @@ def validate_templates(manifest: dict[str, Any], skill_ids: set[str]) -> None:
     if len(template_ids) != len(set(template_ids)):
         fail("Duplicate Alludium agent-template IDs in alludium/manifest.yaml")
 
+    vc_deal_room_lifecycle_states = load_vc_deal_room_lifecycle_states()
     for template_id in template_ids:
         template_path = ROOT / "alludium" / "agent-templates" / f"{template_id}.yaml"
         if not template_path.exists():
@@ -282,6 +292,18 @@ def validate_templates(manifest: dict[str, Any], skill_ids: set[str]) -> None:
             fail(f"Agent template file/id mismatch for {template_id}")
         if not isinstance(template.get("platform_managed"), bool):
             fail(f"Agent template {template_id} must explicitly declare platform_managed")
+        metadata = template.get("metadata") or {}
+        if not isinstance(metadata, dict):
+            fail(f"Agent template {template_id} metadata must be an object when declared")
+        primary_deal_room_state = metadata.get("primaryDealRoomState")
+        if (
+            primary_deal_room_state is not None
+            and primary_deal_room_state not in vc_deal_room_lifecycle_states
+        ):
+            fail(
+                f"Agent template {template_id} primaryDealRoomState must be one of "
+                f"{sorted(vc_deal_room_lifecycle_states)}"
+            )
 
         prompt = template.get("prompt") or {}
         variables = prompt.get("variables") or []
@@ -1377,6 +1399,7 @@ def validate_project_task_mapping_contracts() -> None:
         ):
             fail(f"Project type {project_type_id} mapping {mapping_id} must not declare contextMappings")
 
+        mapped_input_fields: set[str] = set()
         for section_name in ["inputMappings", "outputMappings"]:
             for entry in require_mapping_list(
                 mapping.get(section_name),
@@ -1392,6 +1415,7 @@ def validate_project_task_mapping_contracts() -> None:
                         f"references an unknown task {field_section} field"
                     )
                 if section_name == "inputMappings":
+                    mapped_input_fields.add(task_field)
                     source = entry.get("source")
                     if source not in PROJECT_TASK_MAPPING_SOURCES:
                         fail(
@@ -1435,6 +1459,19 @@ def validate_project_task_mapping_contracts() -> None:
                         )
                     if project_scope == DEFAULT_PROJECT_SCOPE:
                         mapped_outputs_by_slug.setdefault(slug, set()).add(task_field)
+
+        if project_scope == DEFAULT_PROJECT_SCOPE:
+            required_input_fields = {
+                field_key
+                for field_key, field in task_contract["fields"]["input"].items()
+                if field.get("required") is True
+            }
+            missing_required_inputs = sorted(required_input_fields - mapped_input_fields)
+            if missing_required_inputs:
+                fail(
+                    f"Project type {project_type_id} mapping {mapping_id} is missing "
+                    f"required task input mappings: {missing_required_inputs}"
+                )
 
         activation_policy = mapping.get("activationPolicy")
         if not isinstance(activation_policy, dict):

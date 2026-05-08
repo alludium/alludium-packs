@@ -1,4 +1,4 @@
-version: "1.0"
+version: "1.0.1"
 type: "template"
 platform_managed: false
 id: "vc_first_look_analyst"
@@ -15,7 +15,7 @@ metadata:
     - run-follow-up-evaluation
     - generate-82-factor-questions
   primaryStage: "Assessment"
-  primaryDealRoomState: "first-look"
+  primaryDealRoomState: "assessment"
   requiredSkills:
     - company-research-and-enrichment
     - ten-factor-evaluation

@@ -1,4 +1,4 @@
-version: "1.0.1"
+version: "1.0.2"
 type: "template"
 platform_managed: false
 id: "vc_dealflow_concierge"
@@ -15,7 +15,7 @@ metadata:
     - request-founder-materials
     - prepare-initial-call
   primaryStage: "Intake"
-  primaryDealRoomState: "source-intake"
+  primaryDealRoomState: "intake"
   requiredSkills:
     - company-research-and-enrichment
     - pitch-deck-explainer

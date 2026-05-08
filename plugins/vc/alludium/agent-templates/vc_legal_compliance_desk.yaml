@@ -1,4 +1,4 @@
-version: "1.0"
+version: "1.0.1"
 type: "template"
 platform_managed: false
 id: "vc_legal_compliance_desk"
@@ -18,7 +18,7 @@ metadata:
   installedTaskTemplateIds:
     - vc.review_term_sheet
   primaryStage: "Closing"
-  primaryDealRoomState: "closing-readiness"
+  primaryDealRoomState: "closing"
   requiredSkills:
     - closing-coordination-and-cp-tracking
     - vc-task-and-next-step-generation

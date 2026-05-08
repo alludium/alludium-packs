@@ -1,9 +1,9 @@
 # Alludium VC Inventory
 
-**Version**: 0.3.2
+**Version**: 0.3.4
 **Status**: Draft project-type and metadata expansion
 
-This inventory describes the current public VC plugin/pack seed plus the draft project-type and metadata expansion. Version `0.1.0` contains VC skills, Alludium runtime agent templates, public-safe MCP definitions, and Alludium MCP recommendations. Version `0.2.2` adds VC task-definition templates and advertises both the canonical `venture_capital` vertical key and legacy `vc` alias. Version `0.3.0` adds the VC Deal Room project type as a first-class pack surface. Version `0.3.1` adds the VC Deal Room command-view metadata used by the project command center. Version `0.3.2` adds workspace variable declarations and application recommendation metadata for the paired platform ingest work.
+This inventory describes the current public VC plugin/pack seed plus the draft project-type and metadata expansion. Version `0.1.0` contains VC skills, Alludium runtime agent templates, public-safe MCP definitions, and Alludium MCP recommendations. Version `0.2.2` adds VC task-definition templates and advertises both the canonical `venture_capital` vertical key and legacy `vc` alias. Version `0.3.0` adds the VC Deal Room project type as a first-class pack surface. Version `0.3.1` adds the VC Deal Room command-view metadata used by the project command center. Version `0.3.2` adds workspace variable declarations and application recommendation metadata for the paired platform ingest work. Version `0.3.4` aligns agent Deal Room states with the collapsed lifecycle and tightens required task-input mappings.
 
 ---
 
@@ -110,7 +110,7 @@ Review notes:
 
 Review notes:
 
-- `vc_deal_room` is copied from the current platform-local project type definition and keeps version `1.0.0`.
+- `vc_deal_room` is copied from the current platform-local project type definition and keeps version `1.0.2`.
 - The definition includes VC Deal Room fields, the instruction template, collapsed lifecycle states, lifecycle transitions, command-view metadata, and conservative `projectTaskMappings`.
 - The project-type surface requires platform capability `external-project-type-ingest`.
 - Task auto-fire and lifecycle-stage triggers are not enabled. The current mappings are declarative, manual-review mappings for direct project-backed inputs and required artifact outputs.
