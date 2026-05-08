@@ -47,6 +47,36 @@ WORKSPACE_VARIABLE_REQUIREMENT_LEVELS = {"optional", "recommended", "required"}
 WORKSPACE_VARIABLE_SENSITIVITY_LEVELS = {"standard", "sensitive"}
 APPLICATION_RECOMMENDATION_STATUSES = {"available", "future", "missing"}
 APPLICATION_RECOMMENDATION_LEVELS = {"required", "recommended", "optional"}
+APPLICATION_ONLY_AVAILABLE_EXTERNAL_IDS = {"slack_v2"}
+INTEGRATION_ENTITY_ROLES = {
+    "document",
+    "message_or_conversation",
+    "organization",
+    "person",
+    "project",
+    "repository",
+    "task_or_issue",
+    "opportunity",
+    "account",
+    "custom",
+}
+INTEGRATION_TASK_ACTION_KINDS = {"discovery", "sync_read", "sync_write"}
+# This first integration-management slice intentionally asserts the two
+# application-specific surfaces it introduces. The generic schema validation
+# below still applies to any future recommendation-level actions; add entries
+# here only when a pack release promises exact action coverage for an app.
+EXPECTED_RECOMMENDATION_ACTIONS = {
+    "affinity-mcp-server": {
+        "discovery": ("vc.affinity_discovery", "vc-affinity-discovery"),
+        "sync_read": ("vc.affinity_sync_read", "vc-affinity-sync-read"),
+        "sync_write": ("vc.affinity_sync_write", "vc-affinity-sync-write"),
+    },
+    "slack_v2": {
+        "discovery": ("vc.slack_discovery", "vc-slack-discovery"),
+        "sync_read": ("vc.slack_sync_read", "vc-slack-sync-read"),
+        "sync_write": ("vc.slack_sync_write", "vc-slack-sync-write"),
+    },
+}
 TASK_TEMPLATE_REQUIRED_SKILL_REFERENCE_FIELDS = ["requiredSkills", "plannedRequiredSkills"]
 TASK_TEMPLATE_AGENT_TEMPLATE_REFERENCE_FIELDS = [
     "recommendedAgentTemplate",
@@ -524,11 +554,146 @@ def validate_application_recommendations(
                 f"Application recommendation {recommendation_id} applicationRecommendation.alternatives",
             )
 
-        if status == "available" and recommendation_id not in mcp_servers:
+        if (
+            status == "available"
+            and recommendation_id not in mcp_servers
+            and recommendation_id not in APPLICATION_ONLY_AVAILABLE_EXTERNAL_IDS
+        ):
             fail(
                 f"Application recommendation {recommendation_id} is available but missing "
                 "from .mcp.json"
             )
+
+
+def require_mapping(value: Any, context: str) -> dict[str, Any]:
+    if not isinstance(value, dict):
+        fail(f"{context} must be an object")
+    return value
+
+
+def require_enum(value: Any, allowed: set[str], context: str) -> str:
+    if value not in allowed:
+        fail(f"{context} must be one of {sorted(allowed)}")
+    return value
+
+
+def validate_recommendation_action(
+    recommendation_id: str,
+    action: Any,
+    task_template_ids: set[str],
+    skill_ids: set[str],
+) -> None:
+    action_obj = require_mapping(action, f"Application recommendation {recommendation_id} action")
+    action_kind = require_enum(
+        action_obj.get("kind"),
+        INTEGRATION_TASK_ACTION_KINDS,
+        f"Application recommendation {recommendation_id} action.kind",
+    )
+    if not isinstance(action_obj.get("label"), str) or not action_obj["label"]:
+        fail(f"Application recommendation {recommendation_id} action {action_kind} must declare label")
+
+    task_template_id = action_obj.get("taskDefinitionTemplateId")
+    if not isinstance(task_template_id, str) or not task_template_id:
+        fail(
+            f"Application recommendation {recommendation_id} action {action_kind} "
+            "must declare taskDefinitionTemplateId"
+        )
+    if task_template_id not in task_template_ids:
+        fail(
+            f"Application recommendation {recommendation_id} action {action_kind} references "
+            f"missing task template {task_template_id}"
+        )
+
+    skill_id = action_obj.get("skillId")
+    if not isinstance(skill_id, str) or not skill_id:
+        fail(
+            f"Application recommendation {recommendation_id} action {action_kind} "
+            "must declare skillId"
+        )
+    if skill_id not in skill_ids:
+        fail(
+            f"Application recommendation {recommendation_id} action {action_kind} references "
+            f"missing skill {skill_id}"
+        )
+
+    expected_actions = EXPECTED_RECOMMENDATION_ACTIONS.get(recommendation_id)
+    if expected_actions is None:
+        return
+    expected = expected_actions.get(action_kind)
+    if expected is None:
+        return
+    expected_template_id, expected_skill_id = expected
+    if task_template_id != expected_template_id:
+        fail(
+            f"Application recommendation {recommendation_id} action {action_kind} "
+            f"must reference task template {expected_template_id}"
+        )
+    if skill_id != expected_skill_id:
+        fail(
+            f"Application recommendation {recommendation_id} action {action_kind} "
+            f"must reference skill {expected_skill_id}"
+        )
+
+
+def validate_recommendation_management_actions(
+    recommendations: dict[str, Any],
+    task_template_ids: set[str],
+    skill_ids: set[str],
+) -> None:
+    if "integrationTaskAssociations" in recommendations:
+        fail("Use recommendation-level entityRoles/actions; integrationTaskAssociations is not supported")
+
+    found_expected_ids: set[str] = set()
+    for recommendation in recommendations.get("recommendations") or []:
+        if not isinstance(recommendation, dict):
+            continue
+        recommendation_id = recommendation.get("externalId")
+        if not isinstance(recommendation_id, str) or not recommendation_id:
+            continue
+
+        entity_roles = require_string_list(
+            recommendation.get("entityRoles"),
+            f"Application recommendation {recommendation_id}.entityRoles",
+        )
+        for entity_role in entity_roles:
+            require_enum(
+                entity_role,
+                INTEGRATION_ENTITY_ROLES,
+                f"Application recommendation {recommendation_id}.entityRoles",
+            )
+
+        actions = recommendation.get("actions")
+        if actions is None:
+            continue
+        if not isinstance(actions, list) or not actions:
+            fail(f"Application recommendation {recommendation_id}.actions must be a non-empty list")
+        if not entity_roles:
+            fail(f"Application recommendation {recommendation_id} with actions must declare entityRoles")
+
+        action_kinds: set[str] = set()
+        for action in actions:
+            validate_recommendation_action(
+                recommendation_id,
+                action,
+                task_template_ids,
+                skill_ids,
+            )
+            action_kinds.add(action["kind"])
+
+        expected_actions = EXPECTED_RECOMMENDATION_ACTIONS.get(recommendation_id)
+        if expected_actions is None:
+            continue
+        found_expected_ids.add(recommendation_id)
+        missing_action_kinds = sorted(set(expected_actions) - action_kinds)
+        if missing_action_kinds:
+            fail(
+                f"Application recommendation {recommendation_id} is missing management actions: "
+                f"{missing_action_kinds}"
+            )
+
+    missing_recommendations = sorted(set(EXPECTED_RECOMMENDATION_ACTIONS) - found_expected_ids)
+    if missing_recommendations:
+        fail(f"Missing recommendation-level management actions for {missing_recommendations}")
 
 
 def normalize_workspace_methodology_skills(value: Any, context: str) -> list[str]:
@@ -737,16 +902,18 @@ def validate_vc_deal_room_task_template_shape(
     definition_json: dict[str, Any],
     fields: dict[str, Any],
     supported_project_types: list[str],
+    supported_project_scopes: list[str],
 ) -> None:
     if "vc_deal_room" not in supported_project_types:
         return
 
-    stage = definition_json.get("stage")
-    if stage not in VC_DEAL_ROOM_LIFECYCLE_STAGES:
-        fail(
-            f"Task template {template_id} ({slug}) definitionJson.stage must be one of "
-            f"{sorted(VC_DEAL_ROOM_LIFECYCLE_STAGES)} for vc_deal_room"
-        )
+    if DEFAULT_PROJECT_SCOPE in supported_project_scopes:
+        stage = definition_json.get("stage")
+        if stage not in VC_DEAL_ROOM_LIFECYCLE_STAGES:
+            fail(
+                f"Task template {template_id} ({slug}) definitionJson.stage must be one of "
+                f"{sorted(VC_DEAL_ROOM_LIFECYCLE_STAGES)} for vc_deal_room project_instance tasks"
+            )
 
     for section_name in ["input", "context", "output"]:
         for field_key in field_map(template_id, section_name, fields.get(section_name)):
@@ -1171,6 +1338,7 @@ def validate_task_template_file(
         definition_json,
         fields,
         supported_project_types,
+        supported_project_scopes,
     )
 
     pack_vertical_keys = expected_pack.get("verticalKeys") or []
@@ -1648,6 +1816,11 @@ def main() -> None:
     validate_mcp_definitions(manifest, recommendations)
     validate_workspace_variables(manifest)
     validate_application_recommendations(manifest, recommendations)
+    validate_recommendation_management_actions(
+        recommendations,
+        set(manifest["surfaces"]["taskDefinitionTemplates"]["ids"]),
+        skill_ids,
+    )
     validate_no_obvious_secrets()
     validate_no_public_readiness_leakage()
 

@@ -1,9 +1,9 @@
 # Alludium VC Inventory
 
-**Version**: 0.3.4
+**Version**: 0.3.5
 **Status**: Draft project-type and metadata expansion
 
-This inventory describes the current public VC plugin/pack seed plus the draft project-type and metadata expansion. Version `0.1.0` contains VC skills, Alludium runtime agent templates, public-safe MCP definitions, and Alludium MCP recommendations. Version `0.2.2` adds VC task-definition templates and advertises both the canonical `venture_capital` vertical key and legacy `vc` alias. Version `0.3.0` adds the VC Deal Room project type as a first-class pack surface. Version `0.3.1` adds the VC Deal Room command-view metadata used by the project command center. Version `0.3.2` adds workspace variable declarations and application recommendation metadata for the paired platform ingest work. Version `0.3.4` aligns agent Deal Room states with the collapsed lifecycle and tightens required task-input mappings.
+This inventory describes the current public VC plugin/pack seed plus the draft project-type and metadata expansion. Version numbers track pack release slices that need platform alignment, so this history only lists versions that introduced durable pack-surface changes. Version `0.1.0` contains VC skills, Alludium runtime agent templates, public-safe MCP definitions, and Alludium MCP recommendations. Version `0.2.2` adds VC task-definition templates and advertises both the canonical `venture_capital` vertical key and legacy `vc` alias. Version `0.3.0` adds the VC Deal Room project type as a first-class pack surface. Version `0.3.1` adds the VC Deal Room command-view metadata used by the project command center. Version `0.3.2` adds workspace variable declarations and application recommendation metadata for the paired platform ingest work. Version `0.3.4` aligns agent Deal Room states with the collapsed lifecycle and tightens required task-input mappings. Version `0.3.5` adds compact Affinity and Slack management-action metadata plus focused integration-specific discovery and sync task templates and skills.
 
 ---
 
@@ -34,6 +34,12 @@ These skills are included because the current `vc_*` Alludium agent templates re
 - `ten-factor-evaluation`
 - `traction-and-saas-unit-economics`
 - `vc-task-and-next-step-generation`
+- `vc-affinity-discovery`
+- `vc-affinity-sync-read`
+- `vc-affinity-sync-write`
+- `vc-slack-discovery`
+- `vc-slack-sync-read`
+- `vc-slack-sync-write`
 
 Review notes:
 
@@ -92,6 +98,12 @@ These templates are included because the platform VC workspace pack currently re
 - `vc.source_thesis_targets`
 - `vc.summarize_initial_call`
 - `vc.verify_conditions_precedent`
+- `vc.affinity_discovery`
+- `vc.affinity_sync_read`
+- `vc.affinity_sync_write`
+- `vc.slack_discovery`
+- `vc.slack_sync_read`
+- `vc.slack_sync_write`
 
 Review notes:
 
@@ -101,6 +113,7 @@ Review notes:
 - The task-template surface requires platform capability `external-task-definition-template-ingest`.
 - All task templates advertise `vc_deal_room` as a supported project type; that project type is now included in this pack's `projectTypes` surface.
 - Task templates without `supportedProjectScopes` are single-project `project_instance` tasks. Templates with `project_management` scope support pipeline, admin, or project-type management work and keep outputs on the task or future management surface unless an explicit management mapping is introduced.
+- The integration templates are application-specific `project_management` tasks. They describe Affinity and Slack tool use, discovery scope, preview/import behavior, and write-proposal boundaries without binding to a single Deal Room lifecycle stage, while the recommendation metadata only maps which management actions exist for each application.
 
 ---
 
@@ -119,7 +132,7 @@ Review notes:
 
 ## MCP Definitions And Platform Mapping
 
-The first scaffold includes public-safe plugin MCP definitions in `.mcp.json` and VC application recommendations in `alludium/mcp-recommendations.yaml`. The recommendations file remains the MCP platform-mapping surface: records use `externalId`, `name`, and the mapping fields (`pluginCredentialBoundary`, `alludiumPlatformMapping`, `platformDefaultAvailable`) for MCP-backed entries. Records that should also appear in the application picker add `recommendationStatus` and an `applicationRecommendation` metadata block on the same record so there is no second source of truth.
+The first scaffold includes public-safe plugin MCP definitions in `.mcp.json` and VC application recommendations in `alludium/mcp-recommendations.yaml`. The recommendations file remains the platform-mapping surface: records use `externalId`, `name`, and the mapping fields (`pluginCredentialBoundary`, `alludiumPlatformMapping`, `platformDefaultAvailable`) for MCP-backed entries. Records that should also appear in the application picker add `recommendationStatus` and an `applicationRecommendation` metadata block on the same record so there is no second source of truth.
 
 Included MCP IDs:
 
@@ -138,12 +151,23 @@ Included MCP IDs:
 - `otter-mcp-oauth`
 - `fireflies-mcp-oauth`
 
+Application-only integration IDs used by standardized task associations:
+
+- `slack_v2`
+
+Standardized management actions:
+
+- `affinity-mcp-server`: declares `discovery`, `sync_read`, and `sync_write` actions directly on the Affinity recommendation record. Discovery enumerates lists, stages, and counts after authorization; read sync is preview/import oriented; write sync is proposal-only unless the platform approval model is present.
+- `slack_v2`: declares `discovery`, `sync_read`, and `sync_write` actions directly on the Slack recommendation record. Discovery enumerates workspaces/channels and classifies channel purpose; read sync is limited to selected channel/thread context; write sync is limited to approved notifications and handoffs.
+
 Review notes:
 
 - `.mcp.json` uses user/workspace credential placeholders, not Alludium platform secrets.
 - `alludium/mcp-recommendations.yaml` records how Alludium can map the same external IDs to platform defaults or workspace connections when the pack is ingested.
+- Slack uses the platform application external ID `slack_v2`, not the informal `slack` label, because pack recommendation keys must match `applications.external_id`.
+- Affinity currently has the application record `affinity-mcp-server`; connection-backed tool discovery is still required before live tool rows can be relied on in this pack.
 - Alludium template references to `alludium-platform`, `google_drive`, and `linkedin` are tracked as platform-only/template-only integrations rather than plugin MCP definitions.
-- Pipedream-provided integrations are intentionally excluded from this first pack scaffold.
+- Pipedream-provided integrations remain excluded from `.mcp.json`; Slack is represented as application-only recommendation metadata keyed by `slack_v2`.
 - `alludium-docs-mcp` and `xero-mcp-server` exist in platform MCP config but are intentionally excluded because they are not part of the first VC workflow surface.
 - No secrets, tokens, or environment-specific values should be copied into this public repo.
 

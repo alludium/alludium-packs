@@ -4,7 +4,7 @@ Public VC workflow plugin and pack seed for [Alludium](https://www.alludium.ai).
 
 Alludium VC packages reusable venture capital workflows for sourcing, screening, diligence, investment committee preparation, closing, and portfolio onboarding. It is the first bundle inside the broader `alludium-packs` catalog, not a standalone VC-only repository.
 
-The published `v0.1.0` release contains skills, Alludium runtime agent templates, MCP definitions, and Alludium MCP mapping guidance. The current draft `v0.3.2` pack surface includes VC task-definition templates, advertises both the canonical `venture_capital` vertical key and the legacy `vc` alias, adds the VC Deal Room project type and command-view metadata, and declares workspace-variable plus application-recommendation metadata for the paired platform ingest work.
+The current draft `v0.3.5` pack surface includes skills, Alludium runtime agent templates, MCP definitions, VC task-definition templates, both the canonical `venture_capital` vertical key and the legacy `vc` alias, the VC Deal Room project type and command-view metadata, workspace-variable declarations, application-recommendation metadata, collapsed Deal Room lifecycle mappings, required task-input mappings, and compact Affinity/Slack management actions for discovery and sync surfaces.
 
 The current draft pack surface contains:
 
@@ -17,7 +17,7 @@ The current draft pack surface contains:
 - Alludium workspace variable declarations in `alludium/workspace-variables.yaml`
 - a pack-aware Alludium manifest in `alludium/manifest.yaml`
 
-The VC task-definition templates advertise `vc_deal_room` as a supported project type. The draft `v0.3.2` surface includes that project type definition, but it still requires a paired platform release with `external-project-type-ingest` support before it can be used as the runtime source of truth.
+The VC task-definition templates advertise `vc_deal_room` as a supported project type. The draft `v0.3.5` surface includes that project type definition, but it still requires paired platform ingest support before it can be used as the runtime source of truth.
 
 Task-template workspace eligibility is controlled by catalog-level `verticalKeys`. Individual template `definitionJson.vertical` values remain legacy workflow metadata, so the `v0.2.2` compatibility fix is intentionally made in `alludium/task-definition-templates/catalog.v1.json`.
 
@@ -25,9 +25,9 @@ Task-template workspace eligibility is controlled by catalog-level `verticalKeys
 
 | Surface                   | Path                                  | Notes                                                                                    |
 | ------------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------- |
-| Skills                    | `skills/`                             | 23 public workflow skills used by the VC agent templates                                 |
+| Skills                    | `skills/`                             | 29 public workflow and integration-management skills used by the VC pack                 |
 | Agent templates           | `alludium/agent-templates/`           | 8 Alludium runtime templates using the `vc_*` baseline                                   |
-| Task definition templates | `alludium/task-definition-templates/` | 25 VC workflow task templates and catalog metadata                                       |
+| Task definition templates | `alludium/task-definition-templates/` | 31 VC workflow and integration-management task templates plus catalog metadata            |
 | Project types             | `alludium/project-types/`             | VC Deal Room project type catalog and definition                                         |
 | Pack manifest             | `alludium/manifest.yaml`              | Alludium-specific inventory, boundaries, and future pack surfaces                        |
 | Plugin MCP manifest       | `.mcp.json`                           | Public-safe MCP definitions for VC research, CRM, meeting, and market-intelligence tools |

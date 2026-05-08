@@ -1,0 +1,57 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.slack_sync_write
+version: 0.1.0
+title: Draft Slack Handoff Notifications
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - slack
+  - sync-write
+definition:
+  name: Draft Slack Handoff Notifications
+  slug: slack-sync-write
+  description: Draft approved Slack handoff notifications for VC workflows without broad posting.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    taskFamily: integration_sync_write
+    requiredSkills:
+      - vc-slack-sync-write
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-slack-sync-write
+      - citation-enforcement
+    recommendedAgentTemplate: vc_pipeline_autopilot
+    plannedRecommendedAgentTemplate: vc_pipeline_autopilot
+    supportedProjectTypes:
+      - vc_deal_room
+    supportedProjectScopes:
+      - project_management
+    instructions:
+      executionInstructions: Draft Slack notification or handoff messages for an approved channel, user, or thread. Approved execution tools may include `slack_v2-send-message-to-channel`, `slack_v2-reply-to-a-message`, `slack_v2-send-block-kit-message`, or `slack_v2-send-message-to-user-or-group`, but this task must not send unless a later approved runtime path executes the tool.
+      missingInputPolicy: Ask for the target, message purpose, source artifact, timing, and approver before drafting.
+      externalActionPolicy: Draft only. Do not post, reply, create channels, archive channels, delete messages, update profiles, or administer Slack.
+      completionCriteria:
+        - Draft includes target, body, source context, timing, and approver.
+        - Output states no Slack message was sent.
+    humanDecisionPoints:
+      - Approve exact message content and target before send.
+fields:
+  input:
+    - key: handoff_source
+      name: Handoff Source
+      fieldType: json
+      required: true
+      position: 0
+      config: {}
+  output:
+    - key: slack_handoff_draft
+      name: Slack Handoff Draft
+      fieldType: richtext
+      required: false
+      position: 0
+      config:
+        rows: 8

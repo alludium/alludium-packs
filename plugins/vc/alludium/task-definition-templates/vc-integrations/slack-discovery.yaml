@@ -1,0 +1,64 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.slack_discovery
+version: 0.1.0
+title: Explore Slack Channels for VC Context
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - slack
+  - discovery
+definition:
+  name: Explore Slack Channels for VC Context
+  slug: slack-discovery
+  description: Discover Slack workspace and channel scope before selected VC context reads or handoff notifications.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    taskFamily: integration_discovery
+    requiredSkills:
+      - vc-slack-discovery
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-slack-discovery
+      - citation-enforcement
+    recommendedAgentTemplate: vc_pipeline_autopilot
+    plannedRecommendedAgentTemplate: vc_pipeline_autopilot
+    supportedProjectTypes:
+      - vc_deal_room
+    supportedProjectScopes:
+      - project_management
+    instructions:
+      executionInstructions: Use the connected `slack_v2` application to confirm workspace context with `slack_v2-get-current-user` and enumerate channels with `slack_v2-list-channels`. Classify channel purpose as deal intake, deal-specific discussion, IC prep, portfolio handoff, operations, broad/general, sensitive/excluded, or unknown.
+      missingInputPolicy: If Slack is not authorized, ask for authorization or a supplied channel list.
+      externalActionPolicy: Discovery only. Do not read messages, post, reply, create channels, or change channel settings.
+      completionCriteria:
+        - Candidate channels are classified with confidence.
+        - User choices needed before message/thread reads are explicit.
+    humanDecisionPoints:
+      - Approve included channels or threads before sync read.
+      - Approve any notification targets separately.
+fields:
+  input:
+    - key: discovery_goal
+      name: Discovery Goal
+      fieldType: string
+      required: true
+      position: 0
+      config: {}
+  output:
+    - key: slack_discovery_report
+      name: Slack Discovery Report
+      fieldType: richtext
+      required: false
+      position: 0
+      config:
+        rows: 8
+    - key: channel_scope_questions
+      name: Channel Scope Questions
+      fieldType: json
+      required: false
+      position: 1
+      config: {}

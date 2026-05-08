@@ -1,0 +1,64 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.slack_sync_read
+version: 0.1.0
+title: Preview Slack Deal Context
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - slack
+  - sync-read
+definition:
+  name: Preview Slack Deal Context
+  slug: slack-sync-read
+  description: Preview selected Slack channel, thread, message, and file context for VC Deal Room tasks.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    taskFamily: integration_sync_read
+    requiredSkills:
+      - vc-slack-sync-read
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-slack-sync-read
+      - citation-enforcement
+    recommendedAgentTemplate: vc_pipeline_autopilot
+    plannedRecommendedAgentTemplate: vc_pipeline_autopilot
+    supportedProjectTypes:
+      - vc_deal_room
+    supportedProjectScopes:
+      - project_management
+    instructions:
+      executionInstructions: Use `slack_v2-find-message`, `slack_v2-list-replies`, `slack_v2-list-files`, and `slack_v2-get-file` only inside the approved channel/thread scope. Summarize selected context and propose whether it belongs as knowledge context, artifact context, task context, or setup context.
+      missingInputPolicy: Ask for approved channel/thread scope before reading Slack messages.
+      externalActionPolicy: Read preview only. Do not ingest broad history, post, reply, delete, or update messages.
+      completionCriteria:
+        - Message/thread IDs and channel IDs are listed.
+        - Relevant context is summarized with timestamps and sensitivity caveats.
+        - Broad channel ingestion remains out of scope.
+    humanDecisionPoints:
+      - Approve selected context before attaching it to project/task state.
+fields:
+  input:
+    - key: selected_slack_scope
+      name: Selected Slack Scope
+      fieldType: json
+      required: true
+      position: 0
+      config: {}
+  output:
+    - key: slack_context_preview
+      name: Slack Context Preview
+      fieldType: richtext
+      required: false
+      position: 0
+      config:
+        rows: 8
+    - key: target_context_mapping
+      name: Target Context Mapping
+      fieldType: json
+      required: false
+      position: 1
+      config: {}

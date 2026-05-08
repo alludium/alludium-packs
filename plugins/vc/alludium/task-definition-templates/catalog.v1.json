@@ -32,7 +32,13 @@
         "vc-workflows/review-term-sheet.yaml",
         "vc-workflows/manage-closing-checklist.yaml",
         "vc-workflows/verify-conditions-precedent.yaml",
-        "vc-workflows/prepare-portfolio-onboarding.yaml"
+        "vc-workflows/prepare-portfolio-onboarding.yaml",
+        "vc-integrations/affinity-discovery.yaml",
+        "vc-integrations/affinity-sync-read.yaml",
+        "vc-integrations/affinity-sync-write.yaml",
+        "vc-integrations/slack-discovery.yaml",
+        "vc-integrations/slack-sync-read.yaml",
+        "vc-integrations/slack-sync-write.yaml"
       ],
       "title": "VC Workflows",
       "verticalKeys": ["venture_capital", "vc"]
