@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_initial_call
-version: 1.0.3
+version: 1.0.4
 title: Prepare Initial Call
 category: Venture Capital
 visibility: workspace
@@ -17,7 +17,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: initial_call
+    stage: assessment
     taskFamily: meeting
     requiredSkills:
       - meeting-prep-and-summary
@@ -67,9 +67,9 @@ fields:
       required: true
       position: 0
       config: {}
-    - key: pitch_deck_url
-      name: Pitch Deck Url
-      fieldType: string
+    - key: pitch_deck_artifact_id
+      name: Pitch Deck Artifact
+      fieldType: file
       required: true
       position: 1
       config: {}
@@ -91,25 +91,7 @@ fields:
       required: false
       position: 4
       config: {}
-  context:
-    - key: prior_task_outputs
-      name: Prior Task Outputs
-      fieldType: json
-      required: false
-      position: 0
-      config: {}
-    - key: source_artifacts
-      name: Source Artifacts
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: false
-      position: 2
-      config: {}
+
   output:
     - key: initial_call_brief_artifact_id
       name: Initial Call Brief

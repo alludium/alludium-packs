@@ -1,8 +1,8 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.summarize_initial_call
-version: 1.0.3
-title: Summarize Initial Call
+version: 1.0.4
+title: Summarize Meeting Records
 category: Venture Capital
 visibility: workspace
 systemUseOnly: false
@@ -11,13 +11,13 @@ tags:
   - initial-call
   - summary
 definition:
-  name: Summarize Initial Call
+  name: Summarize Meeting Records
   slug: summarize-initial-call
-  description: Summarize Initial Call for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
+  description: Summarize or ingest meeting records for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: initial_call
+    stage: assessment
     taskFamily: meeting
     requiredSkills:
       - meeting-prep-and-summary
@@ -35,8 +35,8 @@ definition:
         anchor: slide-14
         note: Initial call AI map
     instructions:
-      executionInstructions: Summarize the initial call, extract claims and gaps, capture action items, draft a CRM-neutral update, and recommend pass or follow-up. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Customer Insights Summary and attach it to the required output field `customer_insights_artifact_id`.
-      missingInputPolicy: Require meeting_transcript_url, company_name, and deal_room_url before producing the call summary. Use meeting_notes as optional supporting context when provided.
+      executionInstructions: Summarize or ingest the available meeting records for this opportunity, including transcript artifacts, meeting-summary artifacts, recording exports, notes, or meeting-source links represented in the supplied artifact list. Extract claims and gaps, capture action items, draft a CRM-neutral update, and recommend pass or follow-up. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Customer Insights Summary and attach it to the required output field `customer_insights_artifact_id`.
+      missingInputPolicy: Require meeting_record_artifact_ids and company_name before producing the call summary. Use meeting_notes as optional supporting context when provided.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
         - Required input gaps are resolved or listed as assumptions/open questions.
@@ -53,8 +53,8 @@ definition:
         note: Use only when the workspace explicitly configures this screening framework.
 fields:
   input:
-    - key: meeting_transcript_url
-      name: Meeting Transcript Url
+    - key: meeting_record_artifact_ids
+      name: Meeting Record Artifact IDs
       fieldType: string
       required: true
       position: 0
@@ -78,25 +78,7 @@ fields:
       required: true
       position: 3
       config: {}
-  context:
-    - key: prior_task_outputs
-      name: Prior Task Outputs
-      fieldType: json
-      required: false
-      position: 0
-      config: {}
-    - key: source_artifacts
-      name: Source Artifacts
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: false
-      position: 2
-      config: {}
+
   output:
     - key: customer_insights_artifact_id
       name: Customer Insights Summary

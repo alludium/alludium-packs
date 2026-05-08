@@ -2,7 +2,7 @@ schemaVersion: "0.1"
 pack:
   id: vc
   name: Alludium VC
-  version: "0.3.2"
+  version: "0.3.3"
   description: >
     Public VC workflow plugin and pack seed for Alludium, published as the
     first bundle in the broader Alludium packs catalog. This release contains
@@ -79,12 +79,11 @@ surfaces:
         platform release that declares external task-definition-template ingest
         support.
     ids:
-      - vc.evaluate_investment_opportunity
+      - vc.review_opportunity_status
       - vc.source_thesis_targets
       - vc.prepare_lead_gen_packet
       - vc.prepare_deal_flow_agenda
       - vc.screen_inbound_opportunity
-      - vc.create_deal_room
       - vc.request_founder_materials
       - vc.prepare_initial_call
       - vc.summarize_initial_call

@@ -1,4 +1,4 @@
-version: "1.0"
+version: "1.0.1"
 type: "template"
 platform_managed: false
 id: "vc_dealflow_concierge"
@@ -12,7 +12,6 @@ metadata:
   gitRepositoryUrl: https://github.com/alludium-templates/configurable-agent.git
   supportedTaskDefinitions:
     - screen-inbound-opportunity
-    - create-deal-room
     - request-founder-materials
     - prepare-initial-call
   primaryStage: "Intake"
@@ -70,7 +69,6 @@ prompt:
 
     Route work into these task references when relevant:
     - `screen-inbound-opportunity`
-    - `create-deal-room`
     - `request-founder-materials`
     - `prepare-initial-call` as a handoff to Meeting Operator
 

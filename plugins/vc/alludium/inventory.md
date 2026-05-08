@@ -67,9 +67,7 @@ Review notes:
 
 These templates are included because the platform VC workspace pack currently references them as installable VC workflow templates.
 
-- `vc.create_deal_room`
 - `vc.create_ic_memo`
-- `vc.evaluate_investment_opportunity`
 - `vc.generate_82_factor_questions`
 - `vc.manage_closing_checklist`
 - `vc.prepare_deal_flow_agenda`
@@ -81,6 +79,7 @@ These templates are included because the platform VC workspace pack currently re
 - `vc.prepare_team_review_pack`
 - `vc.record_ic_decision`
 - `vc.request_founder_materials`
+- `vc.review_opportunity_status`
 - `vc.review_ic_memo`
 - `vc.review_term_sheet`
 - `vc.run_commercial_dd`
@@ -101,6 +100,7 @@ Review notes:
 - Platform eligibility is driven by catalog `verticalKeys`, which the platform loader persists to `task_definitions.vertical_keys`; the per-template `definitionJson.vertical: vc` field remains legacy workflow metadata and is not used for workspace eligibility checks.
 - The task-template surface requires platform capability `external-task-definition-template-ingest`.
 - All task templates advertise `vc_deal_room` as a supported project type; that project type is now included in this pack's `projectTypes` surface.
+- Task templates without `supportedProjectScopes` are single-project `project_instance` tasks. Templates with `project_management` scope support pipeline, admin, or project-type management work and keep outputs on the task or future management surface unless an explicit management mapping is introduced.
 
 ---
 
@@ -111,9 +111,9 @@ Review notes:
 Review notes:
 
 - `vc_deal_room` is copied from the current platform-local project type definition and keeps version `1.0.0`.
-- The definition includes VC Deal Room fields, the instruction template, lifecycle states, and lifecycle transitions.
+- The definition includes VC Deal Room fields, the instruction template, collapsed lifecycle states, lifecycle transitions, command-view metadata, and conservative `projectTaskMappings`.
 - The project-type surface requires platform capability `external-project-type-ingest`.
-- Task auto-fire, lifecycle-stage triggers, and task input mappings are not encoded in the project type surface. Those remain task-orchestration and Workspace Setup concerns.
+- Task auto-fire and lifecycle-stage triggers are not enabled. The current mappings are declarative, manual-review mappings for direct project-backed inputs and required artifact outputs.
 
 ---
 

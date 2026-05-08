@@ -27,7 +27,7 @@ Task-template workspace eligibility is controlled by catalog-level `verticalKeys
 | ------------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------- |
 | Skills                    | `skills/`                             | 23 public workflow skills used by the VC agent templates                                 |
 | Agent templates           | `alludium/agent-templates/`           | 8 Alludium runtime templates using the `vc_*` baseline                                   |
-| Task definition templates | `alludium/task-definition-templates/` | 26 VC workflow task templates and catalog metadata                                       |
+| Task definition templates | `alludium/task-definition-templates/` | 25 VC workflow task templates and catalog metadata                                       |
 | Project types             | `alludium/project-types/`             | VC Deal Room project type catalog and definition                                         |
 | Pack manifest             | `alludium/manifest.yaml`              | Alludium-specific inventory, boundaries, and future pack surfaces                        |
 | Plugin MCP manifest       | `.mcp.json`                           | Public-safe MCP definitions for VC research, CRM, meeting, and market-intelligence tools |

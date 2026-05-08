@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.request_founder_materials
-version: 1.0.2
+version: 1.0.3
 title: Request Founder Materials
 category: Venture Capital
 visibility: workspace
@@ -17,7 +17,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: screening
+    stage: assessment
     taskFamily: deal_room
     requiredSkills:
       - citation-enforcement
@@ -78,31 +78,7 @@ fields:
       required: false
       position: 3
       config: {}
-  context:
-    - key: deal_room_url
-      name: Deal Room Url
-      fieldType: string
-      required: false
-      position: 0
-      config: {}
-    - key: prior_task_outputs
-      name: Prior Task Outputs
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
-    - key: source_artifacts
-      name: Source Artifacts
-      fieldType: json
-      required: false
-      position: 2
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: false
-      position: 3
-      config: {}
+
   output:
     - key: founder_materials_request_artifact_id
       name: Founder Materials Request

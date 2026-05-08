@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_portfolio_onboarding
-version: 1.0.2
+version: 1.0.3
 title: Prepare Portfolio Onboarding
 category: Venture Capital
 visibility: workspace
@@ -17,7 +17,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: portfolio_onboarding
+    stage: closing
     taskFamily: onboarding
     requiredSkills:
       - citation-enforcement
@@ -75,62 +75,7 @@ fields:
       required: true
       position: 2
       config: {}
-    - key: closing_summary
-      name: Closing Summary
-      fieldType: richtext
-      required: true
-      position: 3
-      config:
-        rows: 5
-    - key: investment_terms
-      name: Investment Terms
-      fieldType: json
-      required: true
-      position: 4
-      config: {}
-    - key: board_rep
-      name: Board Rep
-      fieldType: string
-      required: false
-      position: 5
-      config: {}
-    - key: reporting_requirements
-      name: Reporting Requirements
-      fieldType: json
-      required: false
-      position: 6
-      config: {}
-    - key: milestone_inputs
-      name: Milestone Inputs
-      fieldType: string
-      required: false
-      position: 7
-      config: {}
-  context:
-    - key: deal_room_url
-      name: Deal Room Url
-      fieldType: string
-      required: false
-      position: 0
-      config: {}
-    - key: prior_task_outputs
-      name: Prior Task Outputs
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
-    - key: source_artifacts
-      name: Source Artifacts
-      fieldType: json
-      required: false
-      position: 2
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: false
-      position: 3
-      config: {}
+
   output:
     - key: portfolio_onboarding_plan_artifact_id
       name: Portfolio Onboarding Plan

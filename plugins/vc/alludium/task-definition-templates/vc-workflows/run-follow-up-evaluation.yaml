@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_follow_up_evaluation
-version: 1.0.2
+version: 1.0.3
 title: Run Follow-Up Evaluation
 category: Venture Capital
 visibility: workspace
@@ -17,7 +17,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: follow_up
+    stage: assessment
     taskFamily: diligence
     requiredSkills:
       - red-flags-scanner
@@ -40,7 +40,7 @@ definition:
         anchor: slide-35
         note: 82-Factor dimensions
     instructions:
-      executionInstructions: Build the follow-up evaluation workspace with document requests, competitive landscape, early risks, and readiness recommendation. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it.
+      executionInstructions: Build the follow-up evaluation workspace with document requests, competitive landscape, early risks, and readiness recommendation. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Follow-Up Evaluation and attach it to the required output field `follow_up_evaluation_artifact_id`.
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
@@ -66,122 +66,25 @@ fields:
       required: true
       position: 0
       config: {}
-    - key: deal_room_url
-      name: Deal Room Url
-      fieldType: string
+    - key: first_look_scorecard_artifact_id
+      name: First-Look Scorecard
+      fieldType: file
       required: true
       position: 1
       config: {}
-    - key: prior_task_outputs
-      name: Prior Task Outputs
-      fieldType: json
-      required: false
+    - key: customer_insights_artifact_id
+      name: Customer Insights Summary
+      fieldType: file
+      required: true
       position: 2
       config: {}
-    - key: founder_documents
-      name: Founder Documents
-      fieldType: string
-      required: false
-      position: 3
-      config: {}
-  context:
-    - key: source_artifacts
-      name: Source Artifacts
-      fieldType: json
-      required: false
-      position: 0
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
+
   output:
-    - key: starter_82_factor_workspace
-      name: Starter 82 Factor Workspace
-      fieldType: string
-      required: false
+    - key: follow_up_evaluation_artifact_id
+      name: Follow-Up Evaluation
+      fieldType: file
+      required: true
       position: 0
-      config: {}
-    - key: document_request_list
-      name: Document Request List
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
-    - key: competitive_landscape
-      name: Competitive Landscape
-      fieldType: string
-      required: false
-      position: 2
-      config: {}
-    - key: early_risks
-      name: Early Risks
-      fieldType: json
-      required: false
-      position: 3
-      config: {}
-    - key: readiness_recommendation
-      name: Readiness Recommendation
-      fieldType: string
-      required: false
-      position: 4
-      config: {}
-    - key: summary
-      name: Summary
-      fieldType: richtext
-      required: false
-      position: 5
-      config:
-        rows: 5
-    - key: recommendation
-      name: Recommendation
-      fieldType: string
-      required: false
-      position: 6
-      config: {}
-    - key: source_links
-      name: Source Links
-      fieldType: string
-      required: false
-      position: 7
-      config: {}
-    - key: assumptions
-      name: Assumptions
-      fieldType: string
-      required: false
-      position: 8
-      config: {}
-    - key: evidence_quality
-      name: Evidence Quality
-      fieldType: json
-      required: false
-      position: 9
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: false
-      position: 10
-      config: {}
-    - key: risks
-      name: Risks
-      fieldType: json
-      required: false
-      position: 11
-      config: {}
-    - key: human_decision_points
-      name: Human Decision Points
-      fieldType: string
-      required: false
-      position: 12
-      config: {}
-    - key: next_actions
-      name: Next Actions
-      fieldType: json
-      required: false
-      position: 13
       config: {}
 runtime:
   defaultExecutionContext:

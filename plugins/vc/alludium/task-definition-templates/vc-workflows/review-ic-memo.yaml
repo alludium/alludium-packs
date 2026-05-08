@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.review_ic_memo
-version: 1.0.4
+version: 1.0.5
 title: Review IC Memo
 category: Venture Capital
 visibility: workspace
@@ -17,7 +17,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: investment_committee
+    stage: review
     taskFamily: ic
     requiredSkills:
       - citation-enforcement
@@ -75,50 +75,7 @@ fields:
       required: true
       position: 1
       config: {}
-    - key: ic_memo
-      name: Ic Memo
-      fieldType: richtext
-      required: true
-      position: 2
-      config:
-        rows: 5
-    - key: ic_pack
-      name: Ic Pack
-      fieldType: json
-      required: true
-      position: 3
-      config: {}
-    - key: source_artifacts
-      name: Source Artifacts
-      fieldType: json
-      required: false
-      position: 4
-      config: {}
-    - key: review_focus
-      name: Review Focus
-      fieldType: string
-      required: false
-      position: 5
-      config: {}
-  context:
-    - key: deal_room_url
-      name: Deal Room Url
-      fieldType: string
-      required: false
-      position: 0
-      config: {}
-    - key: prior_task_outputs
-      name: Prior Task Outputs
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: false
-      position: 2
-      config: {}
+
   output:
     - key: ic_memo_review_artifact_id
       name: IC Memo Review
