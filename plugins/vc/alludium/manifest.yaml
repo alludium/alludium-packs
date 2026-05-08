@@ -2,13 +2,14 @@ schemaVersion: "0.1"
 pack:
   id: vc
   name: Alludium VC
-  version: "0.3.4"
+  version: "0.3.5"
   description: >
     Public VC workflow plugin and pack seed for Alludium, published as the
     first bundle in the broader Alludium packs catalog. This release contains
     VC skills, Alludium runtime agent templates, VC task-definition templates,
     the VC Deal Room project type definition, workspace variable declarations,
-    and application recommendation metadata.
+    application recommendation metadata, and integration discovery/sync contract
+    recommendations.
   publisher: Alludium
   license: Apache-2.0
   repository: https://github.com/alludium/alludium-packs
@@ -44,6 +45,12 @@ surfaces:
       - ten-factor-evaluation
       - traction-and-saas-unit-economics
       - vc-task-and-next-step-generation
+      - vc-affinity-discovery
+      - vc-affinity-sync-read
+      - vc-affinity-sync-write
+      - vc-slack-discovery
+      - vc-slack-sync-read
+      - vc-slack-sync-write
   alludiumAgentTemplates:
     path: alludium/agent-templates
     ids:
@@ -104,6 +111,12 @@ surfaces:
       - vc.manage_closing_checklist
       - vc.verify_conditions_precedent
       - vc.prepare_portfolio_onboarding
+      - vc.affinity_discovery
+      - vc.affinity_sync_read
+      - vc.affinity_sync_write
+      - vc.slack_discovery
+      - vc.slack_sync_read
+      - vc.slack_sync_write
   projectTypes:
     path: alludium/project-types
     platformIngest:

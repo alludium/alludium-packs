@@ -27,6 +27,23 @@ recommendations:
         - CRM hygiene recommendations for review
       authorizationBoundary: Selecting Affinity only records that the firm uses it; OAuth or API authorization is still required before any data can be read.
       evidenceRequirement: User confirmation or an authorized Affinity connection.
+    entityRoles:
+      - organization
+      - person
+      - opportunity
+    actions:
+      - kind: discovery
+        label: Explore Affinity lists and stages
+        taskDefinitionTemplateId: vc.affinity_discovery
+        skillId: vc-affinity-discovery
+      - kind: sync_read
+        label: Preview and import Affinity pipeline data
+        taskDefinitionTemplateId: vc.affinity_sync_read
+        skillId: vc-affinity-sync-read
+      - kind: sync_write
+        label: Draft Affinity write-back proposals
+        taskDefinitionTemplateId: vc.affinity_sync_write
+        skillId: vc-affinity-sync-write
   - externalId: harmonic-mcp-oauth
     name: Harmonic
     category: Company Intelligence
@@ -319,22 +336,39 @@ recommendations:
       evidenceRequirement: User confirmation, file evidence, or future connector availability.
       alternatives:
         - Notion
-  - externalId: slack
+  - externalId: slack_v2
     name: Slack
     category: Collaboration
-    status: future
     use: Team communication workspace for deal routing, approvals, and collaboration context.
+    pluginCredentialBoundary: user_or_workspace_oauth
+    alludiumPlatformMapping: workspace_connection
+    platformDefaultAvailable: false
     recommendationStatus: recommended
-    reason: No Slack MCP server config exists yet.
     applicationRecommendation:
       pickerGroup: Collaboration
       systemCategory: Team Communication
       unlocks:
         - Collaboration-channel awareness
         - Reviewable notification and handoff planning
-        - Future deal and IC workflow routing
-      authorizationBoundary: Selecting Slack only records that the firm uses it; channels and messages are not read or written without a future authorized connector.
-      evidenceRequirement: User confirmation or future connector availability.
+        - Deal and IC workflow routing after channel scope approval
+      authorizationBoundary: Selecting Slack only records that the firm uses it; channels and messages are not read or written without an authorized Slack connection and approved scope.
+      evidenceRequirement: User confirmation or an authorized Slack connection.
+    entityRoles:
+      - message_or_conversation
+      - task_or_issue
+    actions:
+      - kind: discovery
+        label: Explore Slack workspaces and channels
+        taskDefinitionTemplateId: vc.slack_discovery
+        skillId: vc-slack-discovery
+      - kind: sync_read
+        label: Preview selected Slack channel and thread context
+        taskDefinitionTemplateId: vc.slack_sync_read
+        skillId: vc-slack-sync-read
+      - kind: sync_write
+        label: Draft approved Slack handoff notifications
+        taskDefinitionTemplateId: vc.slack_sync_write
+        skillId: vc-slack-sync-write
   - externalId: linkedin
     name: LinkedIn
     category: Relationship Intelligence

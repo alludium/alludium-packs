@@ -1,0 +1,58 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.affinity_sync_write
+version: 0.1.0
+title: Draft Affinity Write-Back Proposals
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - affinity
+  - sync-write
+definition:
+  name: Draft Affinity Write-Back Proposals
+  slug: affinity-sync-write
+  description: Draft reviewable Affinity note, field, and stage update proposals from VC task outputs.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    taskFamily: integration_sync_write
+    requiredSkills:
+      - vc-affinity-sync-write
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-affinity-sync-write
+      - citation-enforcement
+    recommendedAgentTemplate: vc_pipeline_autopilot
+    plannedRecommendedAgentTemplate: vc_pipeline_autopilot
+    supportedProjectTypes:
+      - vc_deal_room
+    supportedProjectScopes:
+      - project_management
+    instructions:
+      executionInstructions: Draft Affinity write-back proposals only. Each proposal must include the target Affinity object, before value, proposed after value or note text, source evidence, approving owner, and audit note. Reference `affinity_add_note` only as an approved execution tool if it is discovered and the runtime approval model is present.
+      missingInputPolicy: Ask for the source artifact, target Affinity record, and approval owner before drafting a write-back proposal.
+      externalActionPolicy: Draft only. Do not write notes, update fields, move stages, or change list entries.
+      completionCriteria:
+        - Every proposal is evidence-backed and approval-gated.
+        - The output clearly states no Affinity writes were performed.
+    humanDecisionPoints:
+      - Approve exact write target and content.
+      - Approve CRM field or stage changes outside this task.
+fields:
+  input:
+    - key: write_back_source
+      name: Write-Back Source
+      fieldType: json
+      required: true
+      position: 0
+      config: {}
+  output:
+    - key: affinity_write_back_proposals
+      name: Affinity Write-Back Proposals
+      fieldType: richtext
+      required: false
+      position: 0
+      config:
+        rows: 8
