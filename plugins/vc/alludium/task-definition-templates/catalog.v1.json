@@ -8,12 +8,11 @@
       "description": "Domain-specific templates for venture capital workflows.",
       "id": "vc-workflows",
       "templates": [
-        "vc-workflows/evaluate-investment-opportunity.yaml",
+        "vc-workflows/review-opportunity-status.yaml",
         "vc-workflows/source-thesis-targets.yaml",
         "vc-workflows/prepare-lead-gen-packet.yaml",
         "vc-workflows/prepare-deal-flow-agenda.yaml",
         "vc-workflows/screen-inbound-opportunity.yaml",
-        "vc-workflows/create-deal-room.yaml",
         "vc-workflows/request-founder-materials.yaml",
         "vc-workflows/prepare-initial-call.yaml",
         "vc-workflows/summarize-initial-call.yaml",

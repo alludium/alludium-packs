@@ -1,4 +1,4 @@
-version: "1.0"
+version: "1.0.1"
 type: "template"
 platform_managed: false
 id: "vc_diligence_analyst"
@@ -18,7 +18,7 @@ metadata:
     - run-technical-dd
     - run-financial-dd
   primaryStage: "Diligence"
-  primaryDealRoomState: "diligence-workstreams"
+  primaryDealRoomState: "diligence"
   requiredSkills:
     - company-research-and-enrichment
     - founder-evaluation-and-reference-checking

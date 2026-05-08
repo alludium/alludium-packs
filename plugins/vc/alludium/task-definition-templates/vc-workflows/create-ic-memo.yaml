@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.create_ic_memo
-version: 1.0.3
+version: 1.0.4
 title: Create IC Memo
 category: Venture Capital
 visibility: workspace
@@ -17,7 +17,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: investment_committee
+    stage: review
     taskFamily: ic
     requiredSkills:
       - ic-memo-assembly
@@ -120,55 +120,7 @@ fields:
       required: true
       position: 6
       config: {}
-    - key: stage_outputs
-      name: Stage Outputs
-      fieldType: json
-      required: true
-      position: 7
-      config: {}
-    - key: dd_summaries
-      name: Dd Summaries
-      fieldType: string
-      required: true
-      position: 8
-      config: {}
-    - key: founder_risk_assessment
-      name: Founder Risk Assessment
-      fieldType: string
-      required: false
-      position: 9
-      config: {}
-    - key: term_sheet_inputs
-      name: Term Sheet Inputs
-      fieldType: string
-      required: false
-      position: 10
-      config: {}
-    - key: source_artifacts
-      name: Source Artifacts
-      fieldType: json
-      required: false
-      position: 11
-      config: {}
-  context:
-    - key: deal_room_url
-      name: Deal Room Url
-      fieldType: string
-      required: false
-      position: 0
-      config: {}
-    - key: prior_task_outputs
-      name: Prior Task Outputs
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: false
-      position: 2
-      config: {}
+
   output:
     - key: investment_memo_artifact_id
       name: Investment Memo

@@ -1,4 +1,4 @@
-version: "1.0"
+version: "1.0.2"
 type: "template"
 platform_managed: false
 id: "vc_pipeline_autopilot"
@@ -11,10 +11,10 @@ metadata:
   gitBranch: main
   gitRepositoryUrl: https://github.com/alludium-templates/configurable-agent.git
   supportedTaskDefinitions:
-    - evaluate-investment-opportunity
+    - review-opportunity-status
     - prepare-deal-flow-agenda
   primaryStage: "Pipeline"
-  primaryDealRoomState: "pipeline-review"
+  primaryDealRoomState: "assessment"
   requiredSkills:
     - pipeline-health-and-crm-hygiene
     - vc-task-and-next-step-generation
@@ -49,7 +49,7 @@ prompt:
     ## Supported Tasks
 
     Route work into:
-    - `evaluate-investment-opportunity`
+    - `review-opportunity-status`
     - `prepare-deal-flow-agenda`
     - stale-deal review workflows
     - next-step generation workflows

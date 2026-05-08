@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_founder_evaluation
-version: 1.0.2
+version: 1.0.3
 title: Run Founder Evaluation
 category: Venture Capital
 visibility: workspace
@@ -17,7 +17,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: founder_evaluation
+    stage: diligence
     taskFamily: diligence
     requiredSkills:
       - team-and-hiring-assessment
@@ -76,37 +76,7 @@ fields:
       required: false
       position: 2
       config: {}
-    - key: prior_task_outputs
-      name: Prior Task Outputs
-      fieldType: json
-      required: false
-      position: 3
-      config: {}
-    - key: cap_table_or_equity_split
-      name: Cap Table Or Equity Split
-      fieldType: string
-      required: false
-      position: 4
-      config: {}
-  context:
-    - key: deal_room_url
-      name: Deal Room Url
-      fieldType: string
-      required: false
-      position: 0
-      config: {}
-    - key: source_artifacts
-      name: Source Artifacts
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: false
-      position: 2
-      config: {}
+
   output:
     - key: founder_evaluation_artifact_id
       name: Founder Evaluation

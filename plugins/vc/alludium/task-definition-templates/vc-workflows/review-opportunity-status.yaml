@@ -1,8 +1,8 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
-id: vc.evaluate_investment_opportunity
-version: 1.0.2
-title: Evaluate Investment Opportunity
+id: vc.review_opportunity_status
+version: 1.0.3
+title: Review Opportunity Status
 category: Venture Capital
 visibility: workspace
 systemUseOnly: false
@@ -11,13 +11,13 @@ tags:
   - pipeline
   - orchestration
 definition:
-  name: Evaluate Investment Opportunity
-  slug: evaluate-investment-opportunity
-  description: Evaluate Investment Opportunity for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
+  name: Review Opportunity Status
+  slug: review-opportunity-status
+  description: Review the current status of one venture-capital opportunity and suggest missing inputs, stage movement, and next tasks without producing a formal investment evaluation document.
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: deal_flow
+    stage: assessment
     taskFamily: pipeline
     requiredSkills:
       - citation-enforcement
@@ -57,7 +57,7 @@ definition:
         anchor: page-7
         note: Workflow vision
     instructions:
-      executionInstructions: Summarize the current opportunity state, identify missing inputs, recommend stage movement, and list next task suggestions using the workspace configured stage graph; do not create tasks automatically. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it.
+      executionInstructions: Review the supplied stage snapshot and current Deal Room state, identify missing inputs, recommend stage movement, and list next task suggestions using the workspace configured stage graph; do not create tasks automatically. This is a status/control helper, not a formal investment evaluation memo. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it.
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
@@ -75,7 +75,6 @@ definition:
         - screen-inbound-opportunity
         - prepare-lead-gen-packet
         - prepare-deal-flow-agenda
-        - create-deal-room
         - request-founder-materials
         - prepare-initial-call
         - summarize-initial-call
@@ -115,37 +114,26 @@ fields:
       required: true
       position: 0
       config: {}
-    - key: current_stage
-      name: Current Stage
+    - key: investment_stage
+      name: Investment Stage
       fieldType: string
       required: true
       position: 1
       config: {}
-    - key: deal_room_url
-      name: Deal Room Url
-      fieldType: string
-      required: false
+    - key: stage_snapshot
+      name: Stage Snapshot
+      fieldType: richtext
+      required: true
       position: 2
-      config: {}
-    - key: prior_task_outputs
-      name: Prior Task Outputs
-      fieldType: json
+      config:
+        rows: 8
+    - key: relevant_artifact_ids
+      name: Relevant Artifact IDs
+      fieldType: string
       required: false
       position: 3
       config: {}
-  context:
-    - key: source_artifacts
-      name: Source Artifacts
-      fieldType: json
-      required: false
-      position: 0
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
+
   output:
     - key: stage_summary
       name: Stage Summary
@@ -166,8 +154,8 @@ fields:
       required: false
       position: 2
       config: {}
-    - key: next_stage_task_suggestions
-      name: Next Stage Task Suggestions
+    - key: next_task_suggestions
+      name: Next Task Suggestions
       fieldType: string
       required: false
       position: 3
@@ -231,7 +219,7 @@ runtime:
   defaultExecutionContext:
     sourceMetadata:
       templateFamily: vc-workflows
-      taskKind: evaluate_investment_opportunity
+      taskKind: review_opportunity_status
   requiredResources:
     requiresTaskChat: true
   executionProfile:

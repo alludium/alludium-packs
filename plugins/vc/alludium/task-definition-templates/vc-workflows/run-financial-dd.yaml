@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_financial_dd
-version: 1.0.3
+version: 1.0.4
 title: Run Financial DD
 category: Venture Capital
 visibility: workspace
@@ -17,7 +17,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: financial_dd
+    stage: diligence
     taskFamily: diligence
     requiredSkills:
       - citation-enforcement
@@ -45,7 +45,7 @@ definition:
         anchor: worksheet-atomic-agents
         note: Spreadsheet row 25
     instructions:
-      executionInstructions: Run financial diligence covering historicals, burn and runway, cap table, business-model economics, forecast stress test, use of funds, and financial risks. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update durable project file artifacts named Financial DD Report and Unit Economics Analysis, and attach them to the required output fields `financial_dd_artifact_id` and `unit_economics_artifact_id`.
+      executionInstructions: Run financial diligence covering historicals, burn and runway, cap table, business-model economics, forecast stress test, use of funds, and financial risks from the supplied financial source artifact list. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update durable project file artifacts named Financial DD Report and Unit Economics Analysis, and attach them to the required output fields `financial_dd_artifact_id` and `unit_economics_artifact_id`.
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
@@ -63,8 +63,8 @@ definition:
         note: Use only for SaaS deals or workspaces that select this metric pack.
 fields:
   input:
-    - key: financial_statements
-      name: Financial Statements
+    - key: financial_source_artifact_ids
+      name: Financial Source Artifact IDs
       fieldType: string
       required: true
       position: 0
@@ -75,55 +75,25 @@ fields:
       required: false
       position: 1
       config: {}
-    - key: forecast_model
-      name: Forecast Model
-      fieldType: string
-      required: true
-      position: 2
-      config: {}
     - key: cap_table
       name: Cap Table
       fieldType: string
       required: false
-      position: 3
+      position: 2
       config: {}
     - key: bank_statement_evidence
       name: Bank Statement Evidence
       fieldType: json
       required: false
-      position: 4
+      position: 3
       config: {}
     - key: use_of_funds_plan
       name: Use Of Funds Plan
       fieldType: string
       required: false
-      position: 5
+      position: 4
       config: {}
-  context:
-    - key: deal_room_url
-      name: Deal Room Url
-      fieldType: string
-      required: false
-      position: 0
-      config: {}
-    - key: prior_task_outputs
-      name: Prior Task Outputs
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
-    - key: source_artifacts
-      name: Source Artifacts
-      fieldType: json
-      required: false
-      position: 2
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: false
-      position: 3
-      config: {}
+
   output:
     - key: financial_dd_artifact_id
       name: Financial DD Report

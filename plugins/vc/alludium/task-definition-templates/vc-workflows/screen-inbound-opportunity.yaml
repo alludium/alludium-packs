@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.screen_inbound_opportunity
-version: 1.0.3
+version: 1.0.4
 title: Screen Inbound Opportunity
 category: Venture Capital
 visibility: workspace
@@ -17,7 +17,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: screening
+    stage: assessment
     taskFamily: screening
     requiredSkills:
       - company-research-and-enrichment
@@ -82,10 +82,10 @@ fields:
       required: true
       position: 1
       config: {}
-    - key: pitch_deck_url
-      name: Pitch Deck Url
-      fieldType: string
-      required: false
+    - key: pitch_deck_artifact_id
+      name: Pitch Deck Artifact
+      fieldType: file
+      required: true
       position: 2
       config: {}
     - key: referrer
@@ -101,31 +101,7 @@ fields:
       position: 4
       config:
         rows: 5
-  context:
-    - key: deal_room_url
-      name: Deal Room Url
-      fieldType: string
-      required: false
-      position: 0
-      config: {}
-    - key: prior_task_outputs
-      name: Prior Task Outputs
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
-    - key: source_artifacts
-      name: Source Artifacts
-      fieldType: json
-      required: false
-      position: 2
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: false
-      position: 3
-      config: {}
+
   output:
     - key: first_look_scorecard_artifact_id
       name: First Look Scorecard

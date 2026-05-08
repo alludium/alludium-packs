@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_lead_gen_packet
-version: 1.0.3
+version: 1.0.5
 title: Prepare Lead Gen Packet
 category: Venture Capital
 visibility: workspace
@@ -17,7 +17,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: lead_gen
+    stage: assessment
     taskFamily: pipeline
     requiredSkills:
       - company-research-and-enrichment
@@ -29,6 +29,8 @@ definition:
     recommendedAgentTemplate: vc_origination_scout
     supportedProjectTypes:
       - vc_deal_room
+    supportedProjectScopes:
+      - project_management
     sourceAnchors:
       - source: investment-management-process-slides
         anchor: slide-8
@@ -46,7 +48,7 @@ definition:
         anchor: slide-37
         note: Benchmark references
     instructions:
-      executionInstructions: Prepare the lead-generation meeting packet from candidate companies and thesis context; include per-company snapshots, discussion points, and proposed next actions. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Lead Generation Packet and attach it to the required output field `lead_generation_packet_artifact_id`.
+      executionInstructions: Prepare the lead-generation meeting packet from candidate companies and thesis context; include per-company snapshots, discussion points, and proposed next actions. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable management task file artifact named Lead Generation Packet and attach it to the required output field `lead_generation_packet_artifact_id`; do not assume this project-management scoped output is indexed onto a single Deal Room project.
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
@@ -85,31 +87,7 @@ fields:
       position: 2
       config:
         rows: 5
-  context:
-    - key: deal_room_url
-      name: Deal Room Url
-      fieldType: string
-      required: false
-      position: 0
-      config: {}
-    - key: prior_task_outputs
-      name: Prior Task Outputs
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
-    - key: source_artifacts
-      name: Source Artifacts
-      fieldType: json
-      required: false
-      position: 2
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: false
-      position: 3
-      config: {}
+
   output:
     - key: lead_generation_packet_artifact_id
       name: Lead Generation Packet

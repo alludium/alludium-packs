@@ -1,4 +1,4 @@
-version: "1.0"
+version: "1.0.1"
 type: "template"
 platform_managed: false
 id: "vc_origination_scout"
@@ -14,7 +14,7 @@ metadata:
     - source-thesis-targets
     - prepare-lead-gen-packet
   primaryStage: "Origination"
-  primaryDealRoomState: "pre-deal"
+  primaryDealRoomState: "intake"
   requiredSkills:
     - company-research-and-enrichment
     - market-map-building

@@ -1,4 +1,4 @@
-version: "1.0"
+version: "1.0.1"
 type: "template"
 platform_managed: false
 id: "vc_ic_prep_producer"
@@ -19,7 +19,7 @@ metadata:
     - vc.create_ic_memo
     - vc.review_ic_memo
   primaryStage: "Investment Committee"
-  primaryDealRoomState: "ic-readiness"
+  primaryDealRoomState: "review"
   requiredSkills:
     - ic-memo-assembly
     - ic-risk-checklist-and-decision-log
