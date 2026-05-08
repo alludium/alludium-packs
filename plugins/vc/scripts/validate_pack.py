@@ -62,6 +62,7 @@ PROJECT_TASK_MAPPING_TARGETS = {"project.field", "project.state"}
 PROJECT_TASK_ACTIVATION_MODES = {"manual", "manual_review", "auto_start"}
 PROJECT_SCOPES = {"project_instance", "project_management"}
 DEFAULT_PROJECT_SCOPE = "project_instance"
+PROJECT_MANAGEMENT_SCOPE = "project_management"
 VC_DEAL_ROOM_LIFECYCLE_STAGES = {
     "intake",
     "assessment",
@@ -555,6 +556,30 @@ def normalize_supported_project_scopes(
     if len(scopes) != len(set(scopes)):
         fail(f"Task template {template_id} definitionJson.supportedProjectScopes has duplicates")
     return scopes
+
+
+def validate_project_scope_instruction_language(
+    template_id: str,
+    slug: str,
+    definition_json: dict[str, Any],
+    supported_project_scopes: list[str],
+) -> None:
+    if DEFAULT_PROJECT_SCOPE in supported_project_scopes:
+        return
+    if PROJECT_MANAGEMENT_SCOPE not in supported_project_scopes:
+        return
+
+    instructions = definition_json.get("instructions") or {}
+    if not isinstance(instructions, dict):
+        return
+    execution_instructions = instructions.get("executionInstructions")
+    if not isinstance(execution_instructions, str):
+        return
+    if "project file artifact" in execution_instructions.lower():
+        fail(
+            f"Task template {template_id} ({slug}) is project_management scoped only and "
+            "must not describe output artifacts as project file artifacts"
+        )
 
 
 def validate_task_template_reference_list(
@@ -1099,6 +1124,12 @@ def validate_task_template_file(
         template_id,
         definition_json,
         supported_project_types,
+    )
+    validate_project_scope_instruction_language(
+        template_id,
+        slug,
+        definition_json,
+        supported_project_scopes,
     )
     validate_task_template_reference_list(
         template_id,

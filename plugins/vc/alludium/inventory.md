@@ -100,6 +100,7 @@ Review notes:
 - Platform eligibility is driven by catalog `verticalKeys`, which the platform loader persists to `task_definitions.vertical_keys`; the per-template `definitionJson.vertical: vc` field remains legacy workflow metadata and is not used for workspace eligibility checks.
 - The task-template surface requires platform capability `external-task-definition-template-ingest`.
 - All task templates advertise `vc_deal_room` as a supported project type; that project type is now included in this pack's `projectTypes` surface.
+- Task templates without `supportedProjectScopes` are single-project `project_instance` tasks. Templates with `project_management` scope support pipeline, admin, or project-type management work and keep outputs on the task or future management surface unless an explicit management mapping is introduced.
 
 ---
 
