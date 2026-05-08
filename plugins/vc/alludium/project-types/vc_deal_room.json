@@ -1657,6 +1657,7 @@
         "id": "map-source-thesis-targets",
         "taskDefinitionTemplateId": "vc.source_thesis_targets",
         "taskDefinitionSlug": "source-thesis-targets",
+        "projectScope": "project_instance",
         "lifecycleStage": "assessment",
         "inputMappings": [
           {
@@ -1691,6 +1692,7 @@
         "id": "map-screen-inbound-opportunity",
         "taskDefinitionTemplateId": "vc.screen_inbound_opportunity",
         "taskDefinitionSlug": "screen-inbound-opportunity",
+        "projectScope": "project_instance",
         "lifecycleStage": "assessment",
         "inputMappings": [
           {
@@ -1731,6 +1733,7 @@
         "id": "map-run-ten-factor-screen",
         "taskDefinitionTemplateId": "vc.run_ten_factor_screen",
         "taskDefinitionSlug": "run-ten-factor-screen",
+        "projectScope": "project_instance",
         "lifecycleStage": "assessment",
         "inputMappings": [
           {
@@ -1765,6 +1768,7 @@
         "id": "map-request-founder-materials",
         "taskDefinitionTemplateId": "vc.request_founder_materials",
         "taskDefinitionSlug": "request-founder-materials",
+        "projectScope": "project_instance",
         "lifecycleStage": "assessment",
         "inputMappings": [
           {
@@ -1799,6 +1803,7 @@
         "id": "map-prepare-initial-call",
         "taskDefinitionTemplateId": "vc.prepare_initial_call",
         "taskDefinitionSlug": "prepare-initial-call",
+        "projectScope": "project_instance",
         "lifecycleStage": "assessment",
         "inputMappings": [
           {
@@ -1833,6 +1838,7 @@
         "id": "map-summarize-initial-call",
         "taskDefinitionTemplateId": "vc.summarize_initial_call",
         "taskDefinitionSlug": "summarize-initial-call",
+        "projectScope": "project_instance",
         "lifecycleStage": "assessment",
         "inputMappings": [
           {
@@ -1873,6 +1879,7 @@
         "id": "map-run-commercial-dd",
         "taskDefinitionTemplateId": "vc.run_commercial_dd",
         "taskDefinitionSlug": "run-commercial-dd",
+        "projectScope": "project_instance",
         "lifecycleStage": "diligence",
         "inputMappings": [
           {
@@ -1913,6 +1920,7 @@
         "id": "map-run-financial-dd",
         "taskDefinitionTemplateId": "vc.run_financial_dd",
         "taskDefinitionSlug": "run-financial-dd",
+        "projectScope": "project_instance",
         "lifecycleStage": "diligence",
         "inputMappings": [
           {
@@ -1947,6 +1955,7 @@
         "id": "map-run-founder-evaluation",
         "taskDefinitionTemplateId": "vc.run_founder_evaluation",
         "taskDefinitionSlug": "run-founder-evaluation",
+        "projectScope": "project_instance",
         "lifecycleStage": "diligence",
         "inputMappings": [
           {
@@ -1975,6 +1984,7 @@
         "id": "map-run-technical-dd",
         "taskDefinitionTemplateId": "vc.run_technical_dd",
         "taskDefinitionSlug": "run-technical-dd",
+        "projectScope": "project_instance",
         "lifecycleStage": "diligence",
         "inputMappings": [
           {
@@ -2009,6 +2019,7 @@
         "id": "map-run-follow-up-evaluation",
         "taskDefinitionTemplateId": "vc.run_follow_up_evaluation",
         "taskDefinitionSlug": "run-follow-up-evaluation",
+        "projectScope": "project_instance",
         "lifecycleStage": "assessment",
         "inputMappings": [
           {
@@ -2049,6 +2060,7 @@
         "id": "map-generate-82-factor-questions",
         "taskDefinitionTemplateId": "vc.generate_82_factor_questions",
         "taskDefinitionSlug": "generate-82-factor-questions",
+        "projectScope": "project_instance",
         "lifecycleStage": "diligence",
         "inputMappings": [
           {
@@ -2077,6 +2089,7 @@
         "id": "map-prepare-team-review-pack",
         "taskDefinitionTemplateId": "vc.prepare_team_review_pack",
         "taskDefinitionSlug": "prepare-team-review-pack",
+        "projectScope": "project_instance",
         "lifecycleStage": "review",
         "inputMappings": [
           {
@@ -2129,6 +2142,7 @@
         "id": "map-prepare-partner-review-pack",
         "taskDefinitionTemplateId": "vc.prepare_partner_review_pack",
         "taskDefinitionSlug": "prepare-partner-review-pack",
+        "projectScope": "project_instance",
         "lifecycleStage": "review",
         "inputMappings": [
           {
@@ -2187,6 +2201,7 @@
         "id": "map-create-ic-memo",
         "taskDefinitionTemplateId": "vc.create_ic_memo",
         "taskDefinitionSlug": "create-ic-memo",
+        "projectScope": "project_instance",
         "lifecycleStage": "review",
         "inputMappings": [
           {
@@ -2251,6 +2266,7 @@
         "id": "map-prepare-ic-agenda",
         "taskDefinitionTemplateId": "vc.prepare_ic_agenda",
         "taskDefinitionSlug": "prepare-ic-agenda",
+        "projectScope": "project_instance",
         "lifecycleStage": "review",
         "inputMappings": [
           {
@@ -2279,6 +2295,7 @@
         "id": "map-review-ic-memo",
         "taskDefinitionTemplateId": "vc.review_ic_memo",
         "taskDefinitionSlug": "review-ic-memo",
+        "projectScope": "project_instance",
         "lifecycleStage": "review",
         "inputMappings": [
           {
@@ -2313,6 +2330,7 @@
         "id": "map-record-ic-decision",
         "taskDefinitionTemplateId": "vc.record_ic_decision",
         "taskDefinitionSlug": "record-ic-decision",
+        "projectScope": "project_instance",
         "lifecycleStage": "review",
         "inputMappings": [
           {
@@ -2347,6 +2365,7 @@
         "id": "map-review-term-sheet",
         "taskDefinitionTemplateId": "vc.review_term_sheet",
         "taskDefinitionSlug": "review-term-sheet",
+        "projectScope": "project_instance",
         "lifecycleStage": "term_sheet",
         "inputMappings": [
           {
@@ -2375,6 +2394,7 @@
         "id": "map-manage-closing-checklist",
         "taskDefinitionTemplateId": "vc.manage_closing_checklist",
         "taskDefinitionSlug": "manage-closing-checklist",
+        "projectScope": "project_instance",
         "lifecycleStage": "closing",
         "inputMappings": [
           {
@@ -2415,6 +2435,7 @@
         "id": "map-verify-conditions-precedent",
         "taskDefinitionTemplateId": "vc.verify_conditions_precedent",
         "taskDefinitionSlug": "verify-conditions-precedent",
+        "projectScope": "project_instance",
         "lifecycleStage": "closing",
         "inputMappings": [
           {
@@ -2449,6 +2470,7 @@
         "id": "map-prepare-portfolio-onboarding",
         "taskDefinitionTemplateId": "vc.prepare_portfolio_onboarding",
         "taskDefinitionSlug": "prepare-portfolio-onboarding",
+        "projectScope": "project_instance",
         "lifecycleStage": "closing",
         "inputMappings": [
           {

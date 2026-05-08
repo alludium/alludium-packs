@@ -28,6 +28,8 @@ definition:
     recommendedAgentTemplate: vc_pipeline_autopilot
     supportedProjectTypes:
       - vc_deal_room
+    supportedProjectScopes:
+      - project_management
     sourceAnchors:
       - source: investment-management-process-slides
         anchor: slide-8

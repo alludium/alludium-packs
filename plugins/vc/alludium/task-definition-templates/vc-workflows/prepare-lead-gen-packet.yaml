@@ -29,6 +29,8 @@ definition:
     recommendedAgentTemplate: vc_origination_scout
     supportedProjectTypes:
       - vc_deal_room
+    supportedProjectScopes:
+      - project_management
     sourceAnchors:
       - source: investment-management-process-slides
         anchor: slide-8

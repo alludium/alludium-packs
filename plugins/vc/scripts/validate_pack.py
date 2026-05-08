@@ -60,6 +60,8 @@ PROJECT_TYPE_FIELD_KINDS = {"date", "enum", "member", "number", "text"}
 PROJECT_TASK_MAPPING_SOURCES = {"constant", "project.field", "project.id", "project.state"}
 PROJECT_TASK_MAPPING_TARGETS = {"project.field", "project.state"}
 PROJECT_TASK_ACTIVATION_MODES = {"manual", "manual_review", "auto_start"}
+PROJECT_SCOPES = {"project_instance", "project_management"}
+DEFAULT_PROJECT_SCOPE = "project_instance"
 VC_DEAL_ROOM_LIFECYCLE_STAGES = {
     "intake",
     "assessment",
@@ -94,6 +96,7 @@ VC_DEAL_ROOM_FORBIDDEN_CONTEXT_FIELDS = {
 ARTIFACT_FIELD_KEY_PATTERN = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+)*_artifact_id$")
 VC_ARTIFACT_OUTPUTS = {
     "source-thesis-targets": ["thesis_target_list_artifact_id"],
+    "prepare-lead-gen-packet": ["lead_generation_packet_artifact_id"],
     "screen-inbound-opportunity": ["first_look_scorecard_artifact_id"],
     "request-founder-materials": ["founder_materials_request_artifact_id"],
     "prepare-initial-call": ["initial_call_brief_artifact_id"],
@@ -521,6 +524,37 @@ def normalize_workspace_methodology_skills(value: Any, context: str) -> list[str
             continue
         fail(f"{context} entries must be strings or objects with a skill string")
     return skills
+
+
+def normalize_supported_project_scopes(
+    template_id: str,
+    definition_json: dict[str, Any],
+    supported_project_types: list[str],
+) -> list[str]:
+    value = definition_json.get("supportedProjectScopes")
+    if value is None:
+        return [DEFAULT_PROJECT_SCOPE] if supported_project_types else []
+
+    scopes = require_string_list(
+        value,
+        f"Task template {template_id} definitionJson.supportedProjectScopes",
+    )
+    if not supported_project_types:
+        fail(
+            f"Task template {template_id} definitionJson.supportedProjectScopes "
+            "requires supportedProjectTypes"
+        )
+    if not scopes:
+        fail(f"Task template {template_id} definitionJson.supportedProjectScopes must not be empty")
+    unknown_scopes = sorted(set(scopes) - PROJECT_SCOPES)
+    if unknown_scopes:
+        fail(
+            f"Task template {template_id} definitionJson.supportedProjectScopes "
+            f"contains unknown scopes: {unknown_scopes}"
+        )
+    if len(scopes) != len(set(scopes)):
+        fail(f"Task template {template_id} definitionJson.supportedProjectScopes has duplicates")
+    return scopes
 
 
 def validate_task_template_reference_list(
@@ -1061,6 +1095,11 @@ def validate_task_template_file(
         definition_json.get("supportedProjectTypes"),
         f"Task template {template_id} definitionJson.supportedProjectTypes",
     )
+    supported_project_scopes = normalize_supported_project_scopes(
+        template_id,
+        definition_json,
+        supported_project_types,
+    )
     validate_task_template_reference_list(
         template_id,
         "supportedProjectTypes",
@@ -1189,11 +1228,24 @@ def load_task_template_contracts() -> dict[str, dict[str, Any]]:
         template_id = template.get("id")
         definition = template.get("definition") or {}
         slug = definition.get("slug")
+        definition_json = definition.get("definitionJson") or {}
         fields = template.get("fields") or {}
         if not isinstance(template_id, str) or not isinstance(slug, str):
             continue
+        if not isinstance(definition_json, dict):
+            continue
+        supported_project_types = require_string_list(
+            definition_json.get("supportedProjectTypes"),
+            f"Task template {template_id} definitionJson.supportedProjectTypes",
+        )
         contracts[slug] = {
             "id": template_id,
+            "supportedProjectTypes": supported_project_types,
+            "supportedProjectScopes": normalize_supported_project_scopes(
+                template_id,
+                definition_json,
+                supported_project_types,
+            ),
             "fields": {
                 "input": field_map(template_id, "input", fields.get("input")),
                 "context": field_map(template_id, "context", fields.get("context")),
@@ -1228,6 +1280,12 @@ def validate_project_task_mapping_contracts() -> None:
         f"Project type {project_type_id} initialVersion.lifecycleStates",
     ))
     task_contracts = load_task_template_contracts()
+    project_instance_supported_slugs = {
+        slug
+        for slug, contract in task_contracts.items()
+        if "vc_deal_room" in contract.get("supportedProjectTypes", [])
+        and DEFAULT_PROJECT_SCOPE in contract.get("supportedProjectScopes", [])
+    }
     mappings = require_mapping_list(
         initial_version.get("projectTaskMappings"),
         f"Project type {project_type_id} initialVersion.projectTaskMappings",
@@ -1256,6 +1314,21 @@ def validate_project_task_mapping_contracts() -> None:
             fail(
                 f"Project type {project_type_id} mapping {mapping_id} references template id "
                 f"{template_id}, but {slug} has id {task_contract['id']}"
+            )
+
+        project_scope = mapping.get("projectScope", DEFAULT_PROJECT_SCOPE)
+        if not isinstance(project_scope, str) or not project_scope:
+            fail(f"Project type {project_type_id} mapping {mapping_id} projectScope must be a string")
+        if project_scope not in PROJECT_SCOPES:
+            fail(
+                f"Project type {project_type_id} mapping {mapping_id} projectScope must be one of "
+                f"{sorted(PROJECT_SCOPES)}"
+            )
+        if project_scope not in task_contract["supportedProjectScopes"]:
+            fail(
+                f"Project type {project_type_id} mapping {mapping_id} uses projectScope "
+                f"{project_scope}, but task {slug} supports "
+                f"{task_contract['supportedProjectScopes']}"
             )
 
         lifecycle_stage = mapping.get("lifecycleStage")
@@ -1329,7 +1402,8 @@ def validate_project_task_mapping_contracts() -> None:
                             f"Project type {project_type_id} mapping {mapping_id}.outputMappings.{task_field} "
                             "requiredForCompletion must be a boolean"
                         )
-                    mapped_outputs_by_slug.setdefault(slug, set()).add(task_field)
+                    if project_scope == DEFAULT_PROJECT_SCOPE:
+                        mapped_outputs_by_slug.setdefault(slug, set()).add(task_field)
 
         activation_policy = mapping.get("activationPolicy")
         if not isinstance(activation_policy, dict):
@@ -1358,6 +1432,8 @@ def validate_project_task_mapping_contracts() -> None:
         fail(f"Project type {project_type_id} has duplicate projectTaskMappings ids")
 
     for slug, artifact_fields in VC_ARTIFACT_OUTPUTS.items():
+        if slug not in project_instance_supported_slugs:
+            continue
         missing_project_fields = sorted(set(artifact_fields) - project_field_keys)
         if missing_project_fields:
             fail(
