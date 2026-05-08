@@ -38,7 +38,15 @@
         "vc-integrations/affinity-sync-write.yaml",
         "vc-integrations/slack-discovery.yaml",
         "vc-integrations/slack-sync-read.yaml",
-        "vc-integrations/slack-sync-write.yaml"
+        "vc-integrations/slack-sync-write.yaml",
+        "vc-integrations/google-drive-discovery.yaml",
+        "vc-integrations/google-drive-sync-read.yaml",
+        "vc-integrations/google-drive-sync-write.yaml",
+        "vc-integrations/notion-discovery.yaml",
+        "vc-integrations/notion-sync-read.yaml",
+        "vc-integrations/notion-sync-write.yaml",
+        "vc-integrations/harmonic-discovery.yaml",
+        "vc-integrations/harmonic-sync-read.yaml"
       ],
       "title": "VC Workflows",
       "verticalKeys": ["venture_capital", "vc"]
