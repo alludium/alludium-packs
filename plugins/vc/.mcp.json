@@ -25,6 +25,9 @@
         "Authorization": "Bearer ${input:firecrawl_api_key}"
       }
     },
+    "apify-actors-mcp": {
+      "url": "https://mcp.apify.com?tools=actors,docs&telemetry-enabled=false"
+    },
     "brave-search-mcp": {
       "command": "brave-search-mcp-server",
       "args": [],

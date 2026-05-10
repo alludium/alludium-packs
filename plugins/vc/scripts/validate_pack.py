@@ -80,6 +80,12 @@ EXPECTED_RECOMMENDATION_ACTIONS = {
     "harmonic-mcp-oauth": {
         "setup": "vc.harmonic_setup",
     },
+    "apify-actors-mcp": {
+        "setup": "vc.apify_setup",
+    },
+    "firecrawl-mcp-hosted": {
+        "setup": "vc.companies_house_setup",
+    },
 }
 EXPECTED_SETUP_CHILD_TASKS = {
     "vc.affinity_setup": {
@@ -119,6 +125,20 @@ EXPECTED_SETUP_CHILD_TASKS = {
         "childTaskDefinitionTemplateIds": {
             "discovery": "vc.harmonic_discovery",
             "syncRead": "vc.harmonic_sync_read",
+        },
+    },
+    "vc.apify_setup": {
+        "applicationExternalId": "apify-actors-mcp",
+        "childTaskDefinitionTemplateIds": {
+            "discovery": "vc.apify_discovery",
+            "syncRead": "vc.apify_sync_read",
+        },
+    },
+    "vc.companies_house_setup": {
+        "applicationExternalId": "firecrawl-mcp-hosted",
+        "childTaskDefinitionTemplateIds": {
+            "discovery": "vc.companies_house_discovery",
+            "syncRead": "vc.companies_house_sync_read",
         },
     },
 }
@@ -425,6 +445,22 @@ def require_string_list(value: Any, context: str) -> list[str]:
     return value
 
 
+def validate_supported_project_types(
+    value: Any,
+    context: str,
+    allowed_project_type_ids: set[str],
+) -> list[str]:
+    supported_project_types = require_string_list(value, context)
+    if not supported_project_types:
+        fail(f"{context} must declare at least one project type")
+    if len(supported_project_types) != len(set(supported_project_types)):
+        fail(f"{context} must not contain duplicate project types")
+    unknown_project_types = sorted(set(supported_project_types) - allowed_project_type_ids)
+    if unknown_project_types:
+        fail(f"{context} references unknown project types: {unknown_project_types}")
+    return supported_project_types
+
+
 def resolve_manifest_surface_path(
     manifest: dict[str, Any],
     surface_key: str,
@@ -507,6 +543,7 @@ def validate_workspace_variables(manifest: dict[str, Any]) -> set[str]:
 def validate_application_recommendations(
     manifest: dict[str, Any],
     recommendations: dict[str, Any],
+    project_type_ids: set[str],
 ) -> None:
     app_surface_path = resolve_manifest_surface_path(
         manifest,
@@ -559,6 +596,11 @@ def validate_application_recommendations(
                 fail(f"Application recommendation {recommendation_id} must declare {field_name}")
         if not isinstance(recommendation.get("category"), str) or not recommendation.get("category"):
             fail(f"Application recommendation {recommendation_id} must declare category")
+        validate_supported_project_types(
+            recommendation.get("supportedProjectTypes"),
+            f"Application recommendation {recommendation_id}.supportedProjectTypes",
+            project_type_ids,
+        )
         status = recommendation.get("status", "available")
         if status not in APPLICATION_RECOMMENDATION_STATUSES:
             fail(f"Application recommendation {recommendation_id} has invalid status")
@@ -622,10 +664,30 @@ def require_enum(value: Any, allowed: set[str], context: str) -> str:
     return value
 
 
+def load_task_template_supported_project_types_by_id() -> dict[str, list[str]]:
+    task_project_types: dict[str, list[str]] = {}
+    for path in (ROOT / "alludium" / "task-definition-templates").glob("**/*.yaml"):
+        template = read_yaml(path)
+        if not isinstance(template, dict):
+            continue
+        template_id = template.get("id")
+        definition = template.get("definition") or {}
+        definition_json = definition.get("definitionJson") or {}
+        if not isinstance(template_id, str) or not isinstance(definition_json, dict):
+            continue
+        task_project_types[template_id] = require_string_list(
+            definition_json.get("supportedProjectTypes"),
+            f"Task template {template_id} definitionJson.supportedProjectTypes",
+        )
+    return task_project_types
+
+
 def validate_recommendation_action(
     recommendation_id: str,
+    recommendation_project_types: list[str],
     action: Any,
     task_template_ids: set[str],
+    task_template_project_types: dict[str, list[str]],
     skill_ids: set[str],
 ) -> None:
     action_obj = require_mapping(action, f"Application recommendation {recommendation_id} action")
@@ -647,6 +709,25 @@ def validate_recommendation_action(
         fail(
             f"Application recommendation {recommendation_id} action {action_kind} references "
             f"missing task template {task_template_id}"
+        )
+
+    action_project_types = validate_supported_project_types(
+        action_obj.get("supportedProjectTypes"),
+        f"Application recommendation {recommendation_id} action {action_kind}.supportedProjectTypes",
+        set(recommendation_project_types),
+    )
+    supported_by_task = task_template_project_types.get(task_template_id)
+    if supported_by_task is None:
+        fail(
+            f"Application recommendation {recommendation_id} action {action_kind} "
+            f"references task template {task_template_id} without a project-type contract"
+        )
+    unsupported_by_task = sorted(set(action_project_types) - set(supported_by_task))
+    if unsupported_by_task:
+        fail(
+            f"Application recommendation {recommendation_id} action {action_kind} "
+            f"project types {unsupported_by_task} are not supported by task template "
+            f"{task_template_id}"
         )
 
     skill_id = action_obj.get("skillId")
@@ -684,12 +765,17 @@ def validate_recommendation_management_actions(
         fail("Use recommendation-level entityRoles/actions; integrationTaskAssociations is not supported")
 
     found_expected_ids: set[str] = set()
+    task_template_project_types = load_task_template_supported_project_types_by_id()
     for recommendation in recommendations.get("recommendations") or []:
         if not isinstance(recommendation, dict):
             continue
         recommendation_id = recommendation.get("externalId")
         if not isinstance(recommendation_id, str) or not recommendation_id:
             continue
+        recommendation_project_types = require_string_list(
+            recommendation.get("supportedProjectTypes"),
+            f"Application recommendation {recommendation_id}.supportedProjectTypes",
+        )
 
         entity_roles = require_string_list(
             recommendation.get("entityRoles"),
@@ -714,8 +800,10 @@ def validate_recommendation_management_actions(
         for action in actions:
             validate_recommendation_action(
                 recommendation_id,
+                recommendation_project_types,
                 action,
                 task_template_ids,
+                task_template_project_types,
                 skill_ids,
             )
             action_kinds.add(action["kind"])
@@ -1923,7 +2011,7 @@ def main() -> None:
         fail(f"{recommendations_path} must be an object")
     validate_mcp_definitions(manifest, recommendations)
     validate_workspace_variables(manifest)
-    validate_application_recommendations(manifest, recommendations)
+    validate_application_recommendations(manifest, recommendations, project_type_ids)
     validate_recommendation_management_actions(
         recommendations,
         set(manifest["surfaces"]["taskDefinitionTemplates"]["ids"]),

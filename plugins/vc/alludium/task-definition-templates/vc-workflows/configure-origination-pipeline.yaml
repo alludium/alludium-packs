@@ -1,0 +1,101 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.configure_origination_pipeline
+version: 0.1.0
+title: Configure VC Origination Pipeline
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - origination
+  - setup
+  - configuration
+definition:
+  name: Configure VC Origination Pipeline
+  slug: configure-origination-pipeline
+  description: Capture thesis, source selection, cadence intent, budget policy, review thresholds, and integration-readiness requirements for a VC origination pipeline.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: setup
+    taskFamily: origination_pipeline_setup
+    requiredSkills:
+      - vc-origination-pipeline-orchestration
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-origination-pipeline-orchestration
+      - citation-enforcement
+    recommendedAgentTemplate: vc_pipeline_autopilot
+    plannedRecommendedAgentTemplate: vc_pipeline_autopilot
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    supportedProjectScopes:
+      - project_instance
+    instructions:
+      executionInstructions: Guide the user through initial origination pipeline configuration. Capture thesis, source choices, cadence intent, digest destination, budget, review policy, promotion threshold, manual-review threshold, credential gaps, and child setup tasks needed for selected sources. Create setup child tasks only for selected integrations whose setup templates exist. Do not run sourcing, score candidates, create candidate records, enable schedules, write to external systems, send outreach, or promote candidates to Deal Rooms.
+      missingInputPolicy: Keep setup incomplete when thesis, enabled sources, review policy, budget policy, or required credential decisions are missing. Ask targeted task questions rather than inventing configuration.
+      externalActionPolicy: Configuration only. No external reads beyond connection-readiness checks, no scheduled runs, no imports, no external writes, no outreach, and no Deal Room creation.
+      humanConfirmationPolicy: always
+      completionCriteria:
+        - Thesis, source selection, run cadence intent, budget policy, review policy, and thresholds are captured or explicitly marked unresolved.
+        - Required setup child tasks for selected Apify and Companies House sources are proposed without executing source reads.
+        - Credential gaps and approved connection scopes are listed.
+        - The output distinguishes configuration intent from active automation.
+    humanDecisionPoints:
+      - Choose enabled source systems and approved source scope.
+      - Confirm budget and cadence intent before any later scheduled-run work.
+      - Approve child setup tasks separately for each integration.
+fields:
+  input:
+    - key: configuration_goal
+      name: Configuration Goal
+      fieldType: string
+      required: true
+      position: 0
+      config: {}
+    - key: current_pipeline_context
+      name: Current Pipeline Context
+      fieldType: json
+      required: false
+      position: 1
+      config: {}
+  output:
+    - key: configuration_summary
+      name: Configuration Summary
+      fieldType: richtext
+      required: false
+      position: 0
+      config:
+        rows: 8
+    - key: source_registry
+      name: Source Registry
+      fieldType: json
+      required: false
+      position: 1
+      config: {}
+    - key: review_policy
+      name: Review Policy
+      fieldType: json
+      required: false
+      position: 2
+      config: {}
+    - key: child_task_plan
+      name: Child Task Plan
+      fieldType: json
+      required: false
+      position: 3
+      config: {}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc
+      taskKind: configure_origination_pipeline
+      projectType: vc_origination_pipeline
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    maxAgentTurnsPerPass: 5
+    preferredMode: guided_configuration
+    requiresHumanConfirmationToComplete: true

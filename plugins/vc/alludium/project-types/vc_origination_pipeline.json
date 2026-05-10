@@ -1,0 +1,417 @@
+{
+  "kind": "project-type",
+  "apiVersion": "alludium/v1alpha1",
+  "key": "vc_origination_pipeline",
+  "name": "VC Origination Pipeline",
+  "description": "Project context for a standing venture sourcing pipeline that configures source coverage, credential readiness, review policy, and promotion thresholds before recurring sourcing work is enabled.",
+  "initialVersion": {
+    "version": "0.1.0",
+    "fieldsSchema": [
+      {
+        "id": "field-pipeline-name",
+        "key": "pipeline_name",
+        "label": "Pipeline Name",
+        "kind": "text",
+        "required": true,
+        "placeholder": "AI infrastructure sourcing"
+      },
+      {
+        "id": "field-firm-name",
+        "key": "firm_name",
+        "label": "Firm Name",
+        "kind": "text",
+        "required": false
+      },
+      {
+        "id": "field-fund-name",
+        "key": "fund_name",
+        "label": "Fund Name",
+        "kind": "text",
+        "required": false
+      },
+      {
+        "id": "field-investment-thesis",
+        "key": "investment_thesis",
+        "label": "Investment Thesis",
+        "kind": "text",
+        "required": false,
+        "description": "Compact thesis context used to configure source filters and review policy."
+      },
+      {
+        "id": "field-geography-focus",
+        "key": "geography_focus",
+        "label": "Geography Focus",
+        "kind": "text",
+        "required": false
+      },
+      {
+        "id": "field-stage-focus",
+        "key": "stage_focus",
+        "label": "Stage Focus",
+        "kind": "text",
+        "required": false
+      },
+      {
+        "id": "field-sector-focus",
+        "key": "sector_focus",
+        "label": "Sector Focus",
+        "kind": "text",
+        "required": false
+      },
+      {
+        "id": "field-enabled-sources",
+        "key": "enabled_sources",
+        "label": "Enabled Sources",
+        "kind": "text",
+        "required": false,
+        "description": "Source keys selected for this pipeline, such as apify or companies_house."
+      },
+      {
+        "id": "field-run-cadence",
+        "key": "run_cadence",
+        "label": "Run Cadence",
+        "kind": "enum",
+        "required": false,
+        "description": "Preferred cadence captured for later automation approval.",
+        "options": [
+          {
+            "value": "manual",
+            "label": "Manual"
+          },
+          {
+            "value": "daily",
+            "label": "Daily"
+          },
+          {
+            "value": "weekly",
+            "label": "Weekly"
+          },
+          {
+            "value": "monthly",
+            "label": "Monthly"
+          }
+        ]
+      },
+      {
+        "id": "field-digest-channel",
+        "key": "digest_channel",
+        "label": "Digest Channel",
+        "kind": "text",
+        "required": false,
+        "description": "Manual channel or destination reference for later digest setup."
+      },
+      {
+        "id": "field-source-cost-budget",
+        "key": "source_cost_budget",
+        "label": "Source Cost Budget",
+        "kind": "number",
+        "required": false,
+        "description": "Budget limit for paid source usage in the workspace currency."
+      },
+      {
+        "id": "field-promotion-threshold",
+        "key": "promotion_threshold",
+        "label": "Promotion Threshold",
+        "kind": "number",
+        "required": false,
+        "description": "Score or priority threshold that can later gate Deal Room promotion recommendations."
+      },
+      {
+        "id": "field-manual-review-threshold",
+        "key": "manual_review_threshold",
+        "label": "Manual Review Threshold",
+        "kind": "number",
+        "required": false,
+        "description": "Score or priority threshold that can later route candidates to human review."
+      },
+      {
+        "id": "field-source-registry",
+        "key": "source_registry",
+        "label": "Source Registry",
+        "kind": "text",
+        "required": false,
+        "description": "Compact registry of selected source scopes, actor allowlists, regions, and credential state."
+      },
+      {
+        "id": "field-review-policy",
+        "key": "review_policy",
+        "label": "Review Policy",
+        "kind": "text",
+        "required": false,
+        "description": "Human review rules, approval boundaries, and excluded-source policy."
+      },
+      {
+        "id": "field-crm-pipeline-url",
+        "key": "crm_pipeline_url",
+        "label": "CRM Pipeline URL",
+        "kind": "text",
+        "required": false
+      },
+      {
+        "id": "field-document-workspace-url",
+        "key": "document_workspace_url",
+        "label": "Document Workspace URL",
+        "kind": "text",
+        "required": false
+      },
+      {
+        "id": "field-owner",
+        "key": "owner",
+        "label": "Owner",
+        "kind": "member",
+        "required": false
+      },
+      {
+        "id": "field-confidentiality-level",
+        "key": "confidentiality_level",
+        "label": "Confidentiality Level",
+        "kind": "enum",
+        "required": false,
+        "options": [
+          {
+            "value": "standard",
+            "label": "Standard"
+          },
+          {
+            "value": "restricted",
+            "label": "Restricted"
+          },
+          {
+            "value": "partner_only",
+            "label": "Partner Only"
+          }
+        ]
+      }
+    ],
+    "instructionTemplate": "This project is a VC origination pipeline for configuring and operating upstream sourcing. Treat source credentials, actor allowlists, company registry previews, and review policy as setup evidence. Do not run scheduled sourcing, score candidates, write to external systems, send outreach, or promote candidates into Deal Rooms without a separate human-approved task.",
+    "lifecycleStates": [
+      "draft",
+      "configured",
+      "active",
+      "needs_credentials",
+      "source_degraded",
+      "review_backlog",
+      "paused",
+      "migration_in_progress",
+      "archived"
+    ],
+    "lifecycleTransitions": [
+      {
+        "from": "draft",
+        "to": "configured"
+      },
+      {
+        "from": "draft",
+        "to": "needs_credentials"
+      },
+      {
+        "from": "configured",
+        "to": "active"
+      },
+      {
+        "from": "configured",
+        "to": "needs_credentials"
+      },
+      {
+        "from": "active",
+        "to": "source_degraded"
+      },
+      {
+        "from": "active",
+        "to": "review_backlog"
+      },
+      {
+        "from": "active",
+        "to": "paused"
+      },
+      {
+        "from": "source_degraded",
+        "to": "active"
+      },
+      {
+        "from": "source_degraded",
+        "to": "needs_credentials"
+      },
+      {
+        "from": "review_backlog",
+        "to": "active"
+      },
+      {
+        "from": "paused",
+        "to": "active"
+      },
+      {
+        "from": "draft",
+        "to": "migration_in_progress"
+      },
+      {
+        "from": "migration_in_progress",
+        "to": "configured"
+      },
+      {
+        "from": "draft",
+        "to": "archived"
+      },
+      {
+        "from": "configured",
+        "to": "archived"
+      },
+      {
+        "from": "active",
+        "to": "archived"
+      },
+      {
+        "from": "needs_credentials",
+        "to": "archived"
+      },
+      {
+        "from": "source_degraded",
+        "to": "archived"
+      },
+      {
+        "from": "review_backlog",
+        "to": "archived"
+      },
+      {
+        "from": "paused",
+        "to": "archived"
+      },
+      {
+        "from": "migration_in_progress",
+        "to": "archived"
+      }
+    ],
+    "commandView": {
+      "key": "vc-origination-pipeline",
+      "typeLabel": "VC Origination Pipeline",
+      "collectionLabel": "Origination Pipelines",
+      "overviewTitle": "Origination overview",
+      "overviewAriaLabel": "Open origination pipeline data",
+      "overviewFallback": "Configure thesis, source scope, and credential readiness in Data.",
+      "executionTitle": "Alludium is preparing origination setup",
+      "stageGroups": [
+        {
+          "key": "setup",
+          "label": "Setup",
+          "states": [
+            "draft",
+            "configured",
+            "needs_credentials"
+          ]
+        },
+        {
+          "key": "source",
+          "label": "Source",
+          "states": [
+            "active",
+            "source_degraded"
+          ]
+        },
+        {
+          "key": "review",
+          "label": "Review",
+          "states": [
+            "review_backlog"
+          ]
+        },
+        {
+          "key": "operate",
+          "label": "Operate",
+          "states": [
+            "paused",
+            "migration_in_progress"
+          ]
+        },
+        {
+          "key": "outcomes",
+          "label": "Outcomes",
+          "states": [
+            "archived"
+          ]
+        }
+      ],
+      "fallbackAgents": [
+        {
+          "id": "vc_pipeline_autopilot",
+          "name": "Pipeline Autopilot",
+          "description": "Pipeline configuration and source-readiness planning"
+        },
+        {
+          "id": "vc_origination_scout",
+          "name": "Origination Scout",
+          "description": "Source discovery and read-preview support"
+        }
+      ],
+      "outputSlots": []
+    },
+    "projectTaskMappings": [
+      {
+        "id": "mapping-configure-origination-pipeline",
+        "taskDefinitionSlug": "configure-origination-pipeline",
+        "taskDefinitionTemplateId": "vc.configure_origination_pipeline",
+        "lifecycleStage": "draft",
+        "projectScope": "project_instance",
+        "activationMode": "manual",
+        "inputMappings": [
+          {
+            "taskField": "configuration_goal",
+            "source": "constant",
+            "constantValue": "Configure thesis, source scope, cadence, budget, review policy, and credential-readiness boundaries for this VC origination pipeline.",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "current_pipeline_context",
+            "source": "project.id",
+            "requiredForActivation": false
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "source_registry",
+            "target": "project.field",
+            "targetPath": "source_registry"
+          },
+          {
+            "taskField": "review_policy",
+            "target": "project.field",
+            "targetPath": "review_policy"
+          }
+        ]
+      },
+      {
+        "id": "mapping-apify-setup",
+        "taskDefinitionSlug": "apify-setup",
+        "taskDefinitionTemplateId": "vc.apify_setup",
+        "lifecycleStage": "needs_credentials",
+        "projectScope": "project_management",
+        "activationMode": "manual",
+        "inputMappings": [
+          {
+            "taskField": "setup_goal",
+            "source": "constant",
+            "constantValue": "Confirm Apify connection readiness, actor allowlist, source scope, and read-preview policy for this origination pipeline.",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": []
+      },
+      {
+        "id": "mapping-companies-house-setup",
+        "taskDefinitionSlug": "companies-house-setup",
+        "taskDefinitionTemplateId": "vc.companies_house_setup",
+        "lifecycleStage": "needs_credentials",
+        "projectScope": "project_management",
+        "activationMode": "manual",
+        "inputMappings": [
+          {
+            "taskField": "setup_goal",
+            "source": "constant",
+            "constantValue": "Confirm Companies House connection readiness, source scope, and read-preview policy for this origination pipeline.",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": []
+      }
+    ]
+  }
+}

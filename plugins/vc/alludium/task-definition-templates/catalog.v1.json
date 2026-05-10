@@ -34,6 +34,7 @@
         "vc-workflows/manage-closing-checklist.yaml",
         "vc-workflows/verify-conditions-precedent.yaml",
         "vc-workflows/prepare-portfolio-onboarding.yaml",
+        "vc-workflows/configure-origination-pipeline.yaml",
         "vc-integrations/affinity-setup.yaml",
         "vc-integrations/affinity-discovery.yaml",
         "vc-integrations/affinity-sync-read.yaml",
@@ -52,7 +53,13 @@
         "vc-integrations/notion-sync-write.yaml",
         "vc-integrations/harmonic-setup.yaml",
         "vc-integrations/harmonic-discovery.yaml",
-        "vc-integrations/harmonic-sync-read.yaml"
+        "vc-integrations/harmonic-sync-read.yaml",
+        "vc-integrations/apify-setup.yaml",
+        "vc-integrations/apify-discovery.yaml",
+        "vc-integrations/apify-sync-read.yaml",
+        "vc-integrations/companies-house-setup.yaml",
+        "vc-integrations/companies-house-discovery.yaml",
+        "vc-integrations/companies-house-sync-read.yaml"
       ],
       "title": "VC Workflows",
       "verticalKeys": ["venture_capital", "vc"]

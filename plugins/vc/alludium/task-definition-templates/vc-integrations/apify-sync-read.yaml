@@ -1,0 +1,66 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.apify_sync_read
+version: 0.1.0
+title: Preview Apify Origination Results
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - apify
+  - sync-read
+  - origination
+definition:
+  name: Preview Apify Origination Results
+  slug: apify-sync-read
+  description: Preview selected Apify actor results before using them as VC origination source context.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    taskFamily: integration_sync_read
+    requiredSkills:
+      - vc-apify-sync-read
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-apify-sync-read
+      - citation-enforcement
+    recommendedAgentTemplate: vc_origination_scout
+    plannedRecommendedAgentTemplate: vc_origination_scout
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    supportedProjectScopes:
+      - project_management
+    instructions:
+      executionInstructions: Build a read preview only after discovery has selected approved actors, input scope, budget limits, and result limits. Process only selected sample results and return identity signals, source receipts, cost/run metadata when available, and suggested mapping into the origination source registry.
+      missingInputPolicy: Ask for selected actors, approved input scope, run/result limits, and discovered tool IDs before processing actor output.
+      externalActionPolicy: Read preview only. Do not enable scheduled runs, import candidates, write candidate records, score candidates, contact founders, update external systems, or create Deal Room projects.
+      completionCriteria:
+        - Preview rows include actor/source IDs, candidate identity signals, source receipts, and rejection reasons when available.
+        - Run IDs, dataset IDs, cost metadata, or missing metadata are named.
+        - Import, recurring monitoring, scoring, outreach, and promotion approvals remain separate from the preview.
+    humanDecisionPoints:
+      - Approve sample results before candidate import or scoring.
+      - Approve source registry mappings and dedupe keys separately.
+fields:
+  input:
+    - key: selected_apify_scope
+      name: Selected Apify Scope
+      fieldType: json
+      required: true
+      position: 0
+      config: {}
+  output:
+    - key: apify_results_preview
+      name: Apify Results Preview
+      fieldType: richtext
+      required: false
+      position: 0
+      config:
+        rows: 8
+    - key: source_registry_mapping
+      name: Source Registry Mapping
+      fieldType: json
+      required: false
+      position: 1
+      config: {}
