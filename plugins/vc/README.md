@@ -4,7 +4,7 @@ Public VC workflow plugin and pack seed for [Alludium](https://www.alludium.ai).
 
 Alludium VC packages reusable venture capital workflows for sourcing, screening, diligence, investment committee preparation, closing, and portfolio onboarding. It is the first bundle inside the broader `alludium-packs` catalog, not a standalone VC-only repository.
 
-The current draft `v0.3.7` pack surface includes skills, Alludium runtime agent templates, MCP definitions, VC task-definition templates, both the canonical `venture_capital` vertical key and the legacy `vc` alias, the VC Deal Room project type and command-view metadata, workspace-variable declarations, application-recommendation metadata, collapsed Deal Room lifecycle mappings, required task-input mappings, compact Affinity/Slack/Google Drive/Notion/Harmonic management actions for discovery and sync surfaces, and runtime agent access to the platform text-artifact creation tool.
+The current draft `v0.3.7` pack surface includes skills, Alludium runtime agent templates, MCP definitions, VC task-definition templates, both the canonical `venture_capital` vertical key and the legacy `vc` alias, the VC Deal Room project type and command-view metadata, workspace-variable declarations, application-recommendation metadata, collapsed Deal Room lifecycle mappings, required task-input mappings, compact Affinity/Slack/Google Drive/Notion/Harmonic management actions for discovery and sync surfaces, runtime agent access to the platform text-artifact creation tool, and one setup task entry point for each setup-capable integration.
 
 The current draft pack surface contains:
 
@@ -27,7 +27,7 @@ Task-template workspace eligibility is controlled by catalog-level `verticalKeys
 | ------------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------- |
 | Skills                    | `skills/`                             | 37 public workflow and integration-management skills used by the VC pack                 |
 | Agent templates           | `alludium/agent-templates/`           | 8 Alludium runtime templates using the `vc_*` baseline                                   |
-| Task definition templates | `alludium/task-definition-templates/` | 39 VC workflow and integration-management task templates plus catalog metadata            |
+| Task definition templates | `alludium/task-definition-templates/` | 44 VC workflow and integration-management task templates plus catalog metadata            |
 | Project types             | `alludium/project-types/`             | VC Deal Room project type catalog and definition                                         |
 | Pack manifest             | `alludium/manifest.yaml`              | Alludium-specific inventory, boundaries, and future pack surfaces                        |
 | Plugin MCP manifest       | `.mcp.json`                           | Public-safe MCP definitions for VC research, CRM, meeting, and market-intelligence tools |

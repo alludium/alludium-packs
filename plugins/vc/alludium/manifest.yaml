@@ -8,8 +8,8 @@ pack:
     first bundle in the broader Alludium packs catalog. This release contains
     VC skills, Alludium runtime agent templates, VC task-definition templates,
     the VC Deal Room project type definition, workspace variable declarations,
-    application recommendation metadata, and integration discovery/sync contract
-    recommendations.
+    application recommendation metadata, and single-entry integration setup
+    task recommendations.
   publisher: Alludium
   license: Apache-2.0
   repository: https://github.com/alludium/alludium-packs
@@ -94,6 +94,7 @@ surfaces:
         platform release that declares external task-definition-template ingest
         support.
     ids:
+      - vc.pack_variable_discovery
       - vc.review_opportunity_status
       - vc.source_thesis_targets
       - vc.prepare_lead_gen_packet
@@ -119,18 +120,23 @@ surfaces:
       - vc.manage_closing_checklist
       - vc.verify_conditions_precedent
       - vc.prepare_portfolio_onboarding
+      - vc.affinity_setup
       - vc.affinity_discovery
       - vc.affinity_sync_read
       - vc.affinity_sync_write
+      - vc.slack_setup
       - vc.slack_discovery
       - vc.slack_sync_read
       - vc.slack_sync_write
+      - vc.google_drive_setup
       - vc.google_drive_discovery
       - vc.google_drive_sync_read
       - vc.google_drive_sync_write
+      - vc.notion_setup
       - vc.notion_discovery
       - vc.notion_sync_read
       - vc.notion_sync_write
+      - vc.harmonic_setup
       - vc.harmonic_discovery
       - vc.harmonic_sync_read
   projectTypes:
