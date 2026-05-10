@@ -60,35 +60,66 @@ INTEGRATION_ENTITY_ROLES = {
     "account",
     "custom",
 }
-INTEGRATION_TASK_ACTION_KINDS = {"discovery", "sync_read", "sync_write"}
-# Integration-management releases intentionally assert the application-specific
-# surfaces they introduce. The generic schema validation
-# below still applies to any future recommendation-level actions; add entries
-# here only when a pack release promises exact action coverage for an app.
+INTEGRATION_TASK_ACTION_KINDS = {"setup"}
+# Integration recommendations expose one setup entry point. The setup task
+# owns the detailed discovery/read/write subtask plan so application cards do
+# not become miniature workflow declarations.
 EXPECTED_RECOMMENDATION_ACTIONS = {
     "affinity-mcp-server": {
-        "discovery": ("vc.affinity_discovery", "vc-affinity-discovery"),
-        "sync_read": ("vc.affinity_sync_read", "vc-affinity-sync-read"),
-        "sync_write": ("vc.affinity_sync_write", "vc-affinity-sync-write"),
+        "setup": "vc.affinity_setup",
     },
     "slack_v2": {
-        "discovery": ("vc.slack_discovery", "vc-slack-discovery"),
-        "sync_read": ("vc.slack_sync_read", "vc-slack-sync-read"),
-        "sync_write": ("vc.slack_sync_write", "vc-slack-sync-write"),
+        "setup": "vc.slack_setup",
     },
     "google_drive": {
-        "discovery": ("vc.google_drive_discovery", "vc-google-drive-discovery"),
-        "sync_read": ("vc.google_drive_sync_read", "vc-google-drive-sync-read"),
-        "sync_write": ("vc.google_drive_sync_write", "vc-google-drive-sync-write"),
+        "setup": "vc.google_drive_setup",
     },
     "notion": {
-        "discovery": ("vc.notion_discovery", "vc-notion-discovery"),
-        "sync_read": ("vc.notion_sync_read", "vc-notion-sync-read"),
-        "sync_write": ("vc.notion_sync_write", "vc-notion-sync-write"),
+        "setup": "vc.notion_setup",
     },
     "harmonic-mcp-oauth": {
-        "discovery": ("vc.harmonic_discovery", "vc-harmonic-discovery"),
-        "sync_read": ("vc.harmonic_sync_read", "vc-harmonic-sync-read"),
+        "setup": "vc.harmonic_setup",
+    },
+}
+EXPECTED_SETUP_CHILD_TASKS = {
+    "vc.affinity_setup": {
+        "applicationExternalId": "affinity-mcp-server",
+        "childTaskDefinitionTemplateIds": {
+            "discovery": "vc.affinity_discovery",
+            "syncRead": "vc.affinity_sync_read",
+            "syncWrite": "vc.affinity_sync_write",
+        },
+    },
+    "vc.slack_setup": {
+        "applicationExternalId": "slack_v2",
+        "childTaskDefinitionTemplateIds": {
+            "discovery": "vc.slack_discovery",
+            "syncRead": "vc.slack_sync_read",
+            "syncWrite": "vc.slack_sync_write",
+        },
+    },
+    "vc.google_drive_setup": {
+        "applicationExternalId": "google_drive",
+        "childTaskDefinitionTemplateIds": {
+            "discovery": "vc.google_drive_discovery",
+            "syncRead": "vc.google_drive_sync_read",
+            "syncWrite": "vc.google_drive_sync_write",
+        },
+    },
+    "vc.notion_setup": {
+        "applicationExternalId": "notion",
+        "childTaskDefinitionTemplateIds": {
+            "discovery": "vc.notion_discovery",
+            "syncRead": "vc.notion_sync_read",
+            "syncWrite": "vc.notion_sync_write",
+        },
+    },
+    "vc.harmonic_setup": {
+        "applicationExternalId": "harmonic-mcp-oauth",
+        "childTaskDefinitionTemplateIds": {
+            "discovery": "vc.harmonic_discovery",
+            "syncRead": "vc.harmonic_sync_read",
+        },
     },
 }
 TASK_TEMPLATE_REQUIRED_SKILL_REFERENCE_FIELDS = ["requiredSkills", "plannedRequiredSkills"]
@@ -619,12 +650,12 @@ def validate_recommendation_action(
         )
 
     skill_id = action_obj.get("skillId")
-    if not isinstance(skill_id, str) or not skill_id:
+    if skill_id is not None and (not isinstance(skill_id, str) or not skill_id):
         fail(
             f"Application recommendation {recommendation_id} action {action_kind} "
-            "must declare skillId"
+            "skillId must be a non-empty string when declared"
         )
-    if skill_id not in skill_ids:
+    if isinstance(skill_id, str) and skill_id not in skill_ids:
         fail(
             f"Application recommendation {recommendation_id} action {action_kind} references "
             f"missing skill {skill_id}"
@@ -636,16 +667,11 @@ def validate_recommendation_action(
     expected = expected_actions.get(action_kind)
     if expected is None:
         return
-    expected_template_id, expected_skill_id = expected
+    expected_template_id = expected
     if task_template_id != expected_template_id:
         fail(
             f"Application recommendation {recommendation_id} action {action_kind} "
             f"must reference task template {expected_template_id}"
-        )
-    if skill_id != expected_skill_id:
-        fail(
-            f"Application recommendation {recommendation_id} action {action_kind} "
-            f"must reference skill {expected_skill_id}"
         )
 
 
@@ -1362,6 +1388,73 @@ def validate_task_template_file(
     return template_id
 
 
+def validate_integration_setup_task_templates(task_root: Path, template_ids: set[str]) -> None:
+    for setup_template_id, expected in EXPECTED_SETUP_CHILD_TASKS.items():
+        if setup_template_id not in template_ids:
+            fail(f"Missing integration setup task template {setup_template_id}")
+
+        setup_template: dict[str, Any] | None = None
+        for path in task_root.glob("**/*.yaml"):
+            candidate = read_yaml(path)
+            if isinstance(candidate, dict) and candidate.get("id") == setup_template_id:
+                setup_template = candidate
+                break
+        if setup_template is None:
+            fail(f"Missing integration setup task template file for {setup_template_id}")
+
+        definition = setup_template.get("definition")
+        if not isinstance(definition, dict):
+            fail(f"Integration setup task {setup_template_id} definition must be an object")
+        if definition.get("allowSubtasks") is not True:
+            fail(f"Integration setup task {setup_template_id} must allow subtasks")
+        definition_json = definition.get("definitionJson")
+        if not isinstance(definition_json, dict):
+            fail(f"Integration setup task {setup_template_id} definitionJson must be an object")
+        if definition_json.get("taskFamily") != "integration_setup":
+            fail(f"Integration setup task {setup_template_id} taskFamily must be integration_setup")
+
+        setup_contract = definition_json.get("integrationSetup")
+        if not isinstance(setup_contract, dict):
+            fail(f"Integration setup task {setup_template_id} must declare definitionJson.integrationSetup")
+        if setup_contract.get("applicationExternalId") != expected["applicationExternalId"]:
+            fail(
+                f"Integration setup task {setup_template_id} applicationExternalId must be "
+                f"{expected['applicationExternalId']}"
+            )
+
+        child_task_ids = setup_contract.get("childTaskDefinitionTemplateIds")
+        if not isinstance(child_task_ids, dict):
+            fail(
+                f"Integration setup task {setup_template_id} must declare "
+                "integrationSetup.childTaskDefinitionTemplateIds"
+            )
+        if child_task_ids != expected["childTaskDefinitionTemplateIds"]:
+            fail(
+                f"Integration setup task {setup_template_id} childTaskDefinitionTemplateIds must be "
+                f"{expected['childTaskDefinitionTemplateIds']}"
+            )
+        for child_template_id in child_task_ids.values():
+            if child_template_id not in template_ids:
+                fail(
+                    f"Integration setup task {setup_template_id} references missing child task "
+                    f"{child_template_id}"
+                )
+
+        default_flow = setup_contract.get("defaultFlow")
+        if not isinstance(default_flow, list) or not default_flow:
+            fail(f"Integration setup task {setup_template_id} must declare integrationSetup.defaultFlow")
+        flow_template_ids = {
+            step.get("taskDefinitionTemplateId")
+            for step in default_flow
+            if isinstance(step, dict) and isinstance(step.get("taskDefinitionTemplateId"), str)
+        }
+        if flow_template_ids != set(child_task_ids.values()):
+            fail(
+                f"Integration setup task {setup_template_id} defaultFlow must reference exactly "
+                "the declared child task templates"
+            )
+
+
 def validate_task_definition_templates(
     manifest: dict[str, Any],
     skill_ids: set[str],
@@ -1444,6 +1537,7 @@ def validate_task_definition_templates(
             f"manifest_only={sorted(set(manifest_template_ids) - set(discovered_ids))}, "
             f"catalog_only={sorted(set(discovered_ids) - set(manifest_template_ids))}"
         )
+    validate_integration_setup_task_templates(task_root, set(discovered_ids))
 
     actual_yaml_paths = {path.resolve() for path in task_root.glob("**/*.yaml")}
     extra_yaml_paths = actual_yaml_paths - discovered_paths

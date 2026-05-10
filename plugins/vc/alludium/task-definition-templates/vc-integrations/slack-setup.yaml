@@ -1,0 +1,99 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.slack_setup
+version: 0.1.0
+title: Set Up Slack for VC Deal Rooms
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - slack
+  - setup
+definition:
+  name: Set Up Slack for VC Deal Rooms
+  slug: slack-setup
+  description: Coordinate Slack connection readiness, channel discovery, read-preview policy, and optional notification proposal scope for VC Deal Room setup.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    taskFamily: integration_setup
+    requiredSkills:
+      - vc-slack-discovery
+      - vc-slack-sync-read
+      - vc-slack-sync-write
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-slack-discovery
+      - vc-slack-sync-read
+      - vc-slack-sync-write
+      - citation-enforcement
+    recommendedAgentTemplate: vc_pipeline_autopilot
+    plannedRecommendedAgentTemplate: vc_pipeline_autopilot
+    supportedProjectTypes:
+      - vc_deal_room
+    supportedProjectScopes:
+      - project_management
+    integrationSetup:
+      applicationExternalId: slack_v2
+      childTaskDefinitionTemplateIds:
+        discovery: vc.slack_discovery
+        syncRead: vc.slack_sync_read
+        syncWrite: vc.slack_sync_write
+      defaultFlow:
+        - kind: discovery
+          taskDefinitionTemplateId: vc.slack_discovery
+          label: Explore Slack workspaces and channels
+        - kind: sync_read
+          taskDefinitionTemplateId: vc.slack_sync_read
+          label: Preview selected channel and thread context
+        - kind: sync_write
+          taskDefinitionTemplateId: vc.slack_sync_write
+          label: Draft handoff notifications
+    instructions:
+      executionInstructions: Confirm that Slack is a selected collaboration source, check connection readiness, then coordinate workspace/channel discovery and reviewed read-preview setup. Create child tasks from the declared integrationSetup flow only when the user chooses that step. Keep message reads, posting, channel creation, recurring sync, and notification drafts disabled unless a later human approval explicitly creates that task.
+      missingInputPolicy: If Slack is not authorized or no channel/thread scope is selected, keep setup incomplete and ask for connection authorization, a supplied channel list, or the source-scope decision needed for discovery.
+      externalActionPolicy: Setup orchestration only. Do not read broad channel history, post messages, create channels, enable recurring sync, or create Deal Room projects from this setup task.
+      completionCriteria:
+        - Connection readiness or missing-authorization evidence is recorded.
+        - Candidate channel/thread scope is complete or the unanswered scope questions are explicit.
+        - Read-preview and optional notification-proposal policies are recorded without enabling external writes.
+        - The accepted connection scope states whether access is personal, project-shared, or workspace-shared.
+    humanDecisionPoints:
+      - Choose whether the Slack connection is personal, project-shared, or workspace-shared.
+      - Choose the workspace, channel, and thread scope.
+      - Approve any read-preview, notification, recurring sync, or post task separately.
+fields:
+  input:
+    - key: setup_goal
+      name: Setup Goal
+      fieldType: string
+      required: true
+      position: 0
+      config: {}
+  output:
+    - key: setup_summary
+      name: Setup Summary
+      fieldType: richtext
+      required: false
+      position: 0
+      config:
+        rows: 8
+    - key: accepted_connection_scope
+      name: Accepted Connection Scope
+      fieldType: string
+      required: false
+      position: 1
+      config: {}
+    - key: child_task_plan
+      name: Child Task Plan
+      fieldType: json
+      required: false
+      position: 2
+      config: {}
+    - key: sync_policy
+      name: Sync Policy
+      fieldType: json
+      required: false
+      position: 3
+      config: {}

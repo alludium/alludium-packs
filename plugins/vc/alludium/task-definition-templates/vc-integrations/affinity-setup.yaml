@@ -1,0 +1,117 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.affinity_setup
+version: 0.1.1
+title: Set Up Affinity for VC Deal Rooms
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - affinity
+  - setup
+definition:
+  name: Set Up Affinity for VC Deal Rooms
+  slug: affinity-setup
+  description: Coordinate Affinity connection readiness, list discovery, read-preview policy, and optional write-back proposal scope for VC Deal Room setup.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    taskFamily: integration_setup
+    requiredSkills:
+      - vc-affinity-discovery
+      - vc-affinity-sync-read
+      - vc-affinity-sync-write
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-affinity-discovery
+      - vc-affinity-sync-read
+      - vc-affinity-sync-write
+      - citation-enforcement
+    recommendedAgentTemplate: vc_pipeline_autopilot
+    plannedRecommendedAgentTemplate: vc_pipeline_autopilot
+    supportedProjectTypes:
+      - vc_deal_room
+    supportedProjectScopes:
+      - project_management
+    integrationSetup:
+      applicationExternalId: affinity-mcp-server
+      childTaskDefinitionTemplateIds:
+        discovery: vc.affinity_discovery
+        syncRead: vc.affinity_sync_read
+        syncWrite: vc.affinity_sync_write
+      defaultFlow:
+        - kind: discovery
+          taskDefinitionTemplateId: vc.affinity_discovery
+          label: Explore Affinity lists and stages
+        - kind: sync_read
+          taskDefinitionTemplateId: vc.affinity_sync_read
+          label: Preview selected pipeline data
+        - kind: sync_write
+          taskDefinitionTemplateId: vc.affinity_sync_write
+          label: Draft write-back proposals
+    instructions:
+      executionInstructions: Confirm that Affinity is the selected CRM path from the task integration setup context, then guide the user through connection readiness, connection sharing scope, and reviewed discovery scope. Use task-management.askTaskQuestion or task-management.askTaskQuestions for missing decisions. Do not call user-agent-deployment.getAgentSetupStatus for this task; that reports the assigned agent deployment, not the pack integration requirement. Create child tasks from the declared integrationSetup flow only when the user chooses that step. Keep all import, recurring sync, CRM writes, note creation, and stage movement disabled unless a later human approval explicitly creates that task.
+      missingInputPolicy: If Affinity is not authorized or no source scope is selected, keep setup incomplete, ask the user to authorize Affinity or provide an exported list/stage snapshot, and stop. Do not complete this task while connection evidence or required task questions are unresolved.
+      externalActionPolicy: Setup orchestration only. Do not import records, enable recurring sync, update CRM fields, write notes, move stages, or create Deal Room projects from this setup task.
+      humanConfirmationPolicy: when_external_setup_incomplete
+      completionCriteria:
+        - Affinity connection evidence is connected, or a user-approved exported snapshot fallback is recorded in task context.
+        - Required task questions for connection sharing scope and discovery scope are answered.
+        - Read-preview and optional write-proposal policies are recorded without enabling external writes.
+        - The accepted connection scope states whether access is personal, project-shared, or workspace-shared.
+    humanDecisionPoints:
+      - Choose whether the Affinity connection is personal, project-shared, or workspace-shared.
+      - Choose the Affinity list/source and active stage scope.
+      - Approve any read-preview, import, recurring sync, or write-back task separately.
+fields:
+  input:
+    - key: setup_goal
+      name: Setup Goal
+      fieldType: string
+      required: true
+      position: 0
+      config: {}
+  output:
+    - key: setup_summary
+      name: Setup Summary
+      fieldType: richtext
+      required: false
+      position: 0
+      config:
+        rows: 8
+    - key: accepted_connection_scope
+      name: Accepted Connection Scope
+      fieldType: string
+      required: false
+      position: 1
+      config: {}
+    - key: child_task_plan
+      name: Child Task Plan
+      fieldType: json
+      required: false
+      position: 2
+      config: {}
+    - key: sync_policy
+      name: Sync Policy
+      fieldType: json
+      required: false
+      position: 3
+      config: {}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc
+      taskKind: affinity_setup
+      integrationKey: affinity-mcp-server
+  requiredResources:
+    requiresTaskChat: true
+    requiredApplications:
+      - applicationExternalId: affinity-mcp-server
+        applicationName: Affinity CRM
+        connectionScope: USER_CONFIGURED
+  executionProfile:
+    agentStartsImmediately: true
+    maxAgentTurnsPerPass: 4
+    preferredMode: guided_integration_setup
+    requiresHumanConfirmationToComplete: true

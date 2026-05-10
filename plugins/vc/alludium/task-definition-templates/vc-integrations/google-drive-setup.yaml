@@ -1,0 +1,99 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.google_drive_setup
+version: 0.1.0
+title: Set Up Google Drive for VC Deal Rooms
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - google-drive
+  - setup
+definition:
+  name: Set Up Google Drive for VC Deal Rooms
+  slug: google-drive-setup
+  description: Coordinate Google Drive connection readiness, folder discovery, read-preview policy, and optional file proposal scope for VC Deal Room setup.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    taskFamily: integration_setup
+    requiredSkills:
+      - vc-google-drive-discovery
+      - vc-google-drive-sync-read
+      - vc-google-drive-sync-write
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-google-drive-discovery
+      - vc-google-drive-sync-read
+      - vc-google-drive-sync-write
+      - citation-enforcement
+    recommendedAgentTemplate: vc_pipeline_autopilot
+    plannedRecommendedAgentTemplate: vc_pipeline_autopilot
+    supportedProjectTypes:
+      - vc_deal_room
+    supportedProjectScopes:
+      - project_management
+    integrationSetup:
+      applicationExternalId: google_drive
+      childTaskDefinitionTemplateIds:
+        discovery: vc.google_drive_discovery
+        syncRead: vc.google_drive_sync_read
+        syncWrite: vc.google_drive_sync_write
+      defaultFlow:
+        - kind: discovery
+          taskDefinitionTemplateId: vc.google_drive_discovery
+          label: Explore shared folders and files
+        - kind: sync_read
+          taskDefinitionTemplateId: vc.google_drive_sync_read
+          label: Preview selected Drive context
+        - kind: sync_write
+          taskDefinitionTemplateId: vc.google_drive_sync_write
+          label: Draft file and folder proposals
+    instructions:
+      executionInstructions: Confirm that Google Drive is a selected document source, check connection readiness, then coordinate folder/file discovery and reviewed read-preview setup. Create child tasks from the declared integrationSetup flow only when the user chooses that step. Keep file creation, import, broad indexing, recurring sync, sharing changes, and Drive writes disabled unless a later human approval explicitly creates that task.
+      missingInputPolicy: If Google Drive is not authorized or no folder/file scope is selected, keep setup incomplete and ask for connection authorization, shared-drive context, or the source-scope decision needed for discovery.
+      externalActionPolicy: Setup orchestration only. Do not import files, change sharing, create folders, write documents, enable recurring sync, or create Deal Room projects from this setup task.
+      completionCriteria:
+        - Connection readiness or missing-authorization evidence is recorded.
+        - Candidate folder/file scope is complete or the unanswered scope questions are explicit.
+        - Read-preview and optional file-proposal policies are recorded without enabling external writes.
+        - The accepted connection scope states whether access is personal, project-shared, or workspace-shared.
+    humanDecisionPoints:
+      - Choose whether the Google Drive connection is personal, project-shared, or workspace-shared.
+      - Choose the shared drive, folder, or file scope.
+      - Approve any read-preview, import, recurring sync, or write task separately.
+fields:
+  input:
+    - key: setup_goal
+      name: Setup Goal
+      fieldType: string
+      required: true
+      position: 0
+      config: {}
+  output:
+    - key: setup_summary
+      name: Setup Summary
+      fieldType: richtext
+      required: false
+      position: 0
+      config:
+        rows: 8
+    - key: accepted_connection_scope
+      name: Accepted Connection Scope
+      fieldType: string
+      required: false
+      position: 1
+      config: {}
+    - key: child_task_plan
+      name: Child Task Plan
+      fieldType: json
+      required: false
+      position: 2
+      config: {}
+    - key: sync_policy
+      name: Sync Policy
+      fieldType: json
+      required: false
+      position: 3
+      config: {}

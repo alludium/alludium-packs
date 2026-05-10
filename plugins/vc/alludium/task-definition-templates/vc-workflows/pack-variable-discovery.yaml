@@ -1,0 +1,120 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.pack_variable_discovery
+version: 1.0.0
+title: VC Pack Variable Discovery
+category: Venture Capital
+visibility: workspace
+systemUseOnly: true
+tags:
+  - vc
+  - onboarding
+  - workspace-setup
+  - pack-setup
+  - discovery
+
+definition:
+  name: VC Pack Variable Discovery
+  slug: vc-pack-variable-discovery
+  description: Best-effort, review-only discovery for VC Pack Setup variables and invite suggestions.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    stage: setup
+    taskFamily: pack_setup
+    surfaceIntent: pack_setup_variable_discovery
+    packSetupDiscoveryKind: variables
+    instructions:
+      executionInstructions: >-
+        Use only the task input, task context, and safe workspace/onboarding
+        context provided to this task to suggest values for the declared VC
+        setup variables. Return best-effort answers keyed by namespace.key and
+        include a concise rationale for each answer when evidence exists. Also
+        suggest likely internal invite candidates only when the provided context
+        contains safe email, calendar, company, or workspace signals. Do not
+        browse external systems, sample CRM data, create projects, send invites,
+        connect apps, persist workspace facts, or write to external systems.
+        Finish by calling task-management.completeTask with output containing
+        summary, variable_answers, and invite_candidates. The parent Pack Setup
+        task remains the only review and persistence surface.
+      completionCriteria:
+        - Produce a concise summary of which setup variables could be inferred.
+        - Include variable_answers as an object keyed by namespace.key.
+        - Include invite_candidates as an array only when safe context supports them.
+        - Mark uncertain or missing answers as review-needed instead of inventing facts.
+        - Do not claim persistence or activation has occurred.
+      humanConfirmationPolicy: never
+    orchestration:
+      parentContextProjection:
+        mappings:
+          - sourcePath: variable_answers
+            targetPath: packSetup.variableAnswers
+            mergeStrategy: merge_object
+          - sourcePath: invite_candidates
+            targetPath: packSetup.inviteCandidates
+            mergeStrategy: replace
+          - sourcePath: summary
+            targetPath: packSetup.variableDiscovery.summary
+
+fields:
+  input:
+    - key: declared_variables
+      name: Declared Variables
+      fieldType: json
+      required: true
+      position: 0
+    - key: current_answers
+      name: Current Answers
+      fieldType: json
+      required: false
+      position: 1
+    - key: workspace_context
+      name: Workspace Context
+      fieldType: json
+      required: false
+      position: 2
+  context:
+    - key: pack_setup
+      name: Pack Setup Context
+      fieldType: json
+      required: false
+      position: 0
+  output:
+    - key: summary
+      name: Summary
+      fieldType: richtext
+      required: false
+      position: 0
+      config:
+        rows: 3
+    - key: variable_answers
+      name: Variable Answers
+      fieldType: json
+      required: false
+      position: 1
+    - key: invite_candidates
+      name: Invite Candidates
+      fieldType: json
+      required: false
+      position: 2
+
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc
+      taskKind: pack_setup_variable_discovery
+      packId: vc
+      playbookKey: venture_capital
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    requiredAgentType: alludium-navigator
+    agentStartsImmediately: true
+    maxAgentTurnsPerPass: 4
+    requiresHumanConfirmationToComplete: false
+    preferredMode: guided_configuration
+
+ui:
+  renderer: generic
+  surfaceKey: task-detail
+  frameRef: null
