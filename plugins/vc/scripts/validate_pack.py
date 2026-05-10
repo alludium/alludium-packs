@@ -487,7 +487,7 @@ def resolve_manifest_surface_path(
     return resolved
 
 
-def validate_workspace_variables(manifest: dict[str, Any]) -> set[str]:
+def validate_workspace_variables(manifest: dict[str, Any], project_type_ids: set[str]) -> set[str]:
     variables_path = resolve_manifest_surface_path(manifest, "workspaceVariables", "file")
     surface = read_yaml(variables_path)
     if not isinstance(surface, dict):
@@ -525,6 +525,19 @@ def validate_workspace_variables(manifest: dict[str, Any]) -> set[str]:
                 fail(f"Workspace variable {variable_key} must declare {field_name}")
         if variable.get("valueType") not in WORKSPACE_VARIABLE_VALUE_TYPES:
             fail(f"Workspace variable {variable_key} has invalid valueType")
+        supported_project_types = variable.get("supportedProjectTypes")
+        if not isinstance(supported_project_types, list) or not supported_project_types:
+            fail(f"Workspace variable {variable_key} must declare supportedProjectTypes")
+        invalid_project_types = [
+            project_type
+            for project_type in supported_project_types
+            if not isinstance(project_type, str) or project_type not in project_type_ids
+        ]
+        if invalid_project_types:
+            fail(
+                f"Workspace variable {variable_key} has invalid supportedProjectTypes: "
+                f"{sorted(invalid_project_types)}"
+            )
         render_metadata = variable.get("renderMetadata")
         if not isinstance(render_metadata, dict):
             fail(f"Workspace variable {variable_key} must declare renderMetadata")
@@ -1663,6 +1676,7 @@ def load_task_template_contracts() -> dict[str, dict[str, Any]]:
                 definition_json,
                 supported_project_types,
             ),
+            "stage": definition_json.get("stage"),
             "fields": {
                 "input": field_map(template_id, "input", fields.get("input")),
                 "context": field_map(template_id, "context", fields.get("context")),
@@ -1880,6 +1894,230 @@ def validate_project_task_mapping_contracts() -> None:
             )
 
 
+ORIGINATION_STAGE_LIFECYCLE_STAGES = {
+    "setup": {"draft", "configured", "needs_credentials"},
+    "source": {"active"},
+    "enrich": {"review_backlog"},
+    "score": {"review_backlog"},
+    "review": {"review_backlog"},
+    "engage": {"review_backlog"},
+    "promote": {"review_backlog"},
+    "operate": {"active", "source_degraded", "paused", "migration_in_progress"},
+}
+
+
+def validate_origination_pipeline_task_mapping_contracts() -> None:
+    project_type_id = "vc_origination_pipeline"
+    project_type = read_json(ROOT / "alludium" / "project-types" / f"{project_type_id}.json")
+    initial_version = project_type.get("initialVersion") or {}
+    project_field_keys = {
+        field["key"]
+        for field in initial_version.get("fieldsSchema", [])
+        if isinstance(field, dict) and isinstance(field.get("key"), str)
+    }
+    lifecycle_states = set(require_string_list(
+        initial_version.get("lifecycleStates"),
+        f"Project type {project_type_id} initialVersion.lifecycleStates",
+    ))
+    task_contracts = load_task_template_contracts()
+    mappings = require_mapping_list(
+        initial_version.get("projectTaskMappings"),
+        f"Project type {project_type_id} initialVersion.projectTaskMappings",
+    )
+    if not mappings:
+        fail(f"Project type {project_type_id} must declare projectTaskMappings")
+
+    expected_project_instance_slugs = {
+        slug
+        for slug, contract in task_contracts.items()
+        if project_type_id in contract.get("supportedProjectTypes", [])
+        and DEFAULT_PROJECT_SCOPE in contract.get("supportedProjectScopes", [])
+    }
+    mapped_project_instance_slugs: set[str] = set()
+    mapping_ids: list[str] = []
+
+    for mapping in mappings:
+        mapping_id = mapping.get("id")
+        if not isinstance(mapping_id, str) or not mapping_id:
+            fail(f"Project type {project_type_id} projectTaskMappings entries must declare id")
+        mapping_ids.append(mapping_id)
+        if "activationMode" in mapping:
+            fail(
+                f"Project type {project_type_id} mapping {mapping_id} must use "
+                "activationPolicy, not activationMode"
+            )
+
+        slug = mapping.get("taskDefinitionSlug")
+        template_id = mapping.get("taskDefinitionTemplateId")
+        if not isinstance(slug, str) or not slug:
+            fail(f"Project type {project_type_id} mapping {mapping_id} must declare taskDefinitionSlug")
+        if not isinstance(template_id, str) or not template_id:
+            fail(f"Project type {project_type_id} mapping {mapping_id} must declare taskDefinitionTemplateId")
+        task_contract = task_contracts.get(slug)
+        if task_contract is None:
+            fail(f"Project type {project_type_id} mapping {mapping_id} references unknown task {slug}")
+        if task_contract["id"] != template_id:
+            fail(
+                f"Project type {project_type_id} mapping {mapping_id} references template id "
+                f"{template_id}, but {slug} has id {task_contract['id']}"
+            )
+        if project_type_id not in task_contract.get("supportedProjectTypes", []):
+            fail(f"Project type {project_type_id} mapping {mapping_id} task {slug} does not support {project_type_id}")
+
+        project_scope = mapping.get("projectScope", DEFAULT_PROJECT_SCOPE)
+        if project_scope not in PROJECT_SCOPES:
+            fail(
+                f"Project type {project_type_id} mapping {mapping_id} projectScope must be one of "
+                f"{sorted(PROJECT_SCOPES)}"
+            )
+        if project_scope not in task_contract["supportedProjectScopes"]:
+            fail(
+                f"Project type {project_type_id} mapping {mapping_id} uses projectScope "
+                f"{project_scope}, but task {slug} supports {task_contract['supportedProjectScopes']}"
+            )
+        if project_scope == DEFAULT_PROJECT_SCOPE:
+            mapped_project_instance_slugs.add(slug)
+
+        lifecycle_stage = mapping.get("lifecycleStage")
+        if lifecycle_stage not in lifecycle_states:
+            fail(
+                f"Project type {project_type_id} mapping {mapping_id} references unknown "
+                f"lifecycleStage {lifecycle_stage}"
+            )
+        stage = task_contract.get("stage")
+        allowed_lifecycle_stages = ORIGINATION_STAGE_LIFECYCLE_STAGES.get(stage)
+        if allowed_lifecycle_stages is not None and lifecycle_stage not in allowed_lifecycle_stages:
+            fail(
+                f"Project type {project_type_id} mapping {mapping_id} maps task stage {stage} "
+                f"to lifecycleStage {lifecycle_stage}; expected one of "
+                f"{sorted(allowed_lifecycle_stages)}"
+            )
+
+        if require_mapping_list(
+            mapping.get("contextMappings"),
+            f"Project type {project_type_id} mapping {mapping_id}.contextMappings",
+        ):
+            fail(f"Project type {project_type_id} mapping {mapping_id} must not declare contextMappings")
+
+        mapped_input_fields: set[str] = set()
+        for entry in require_mapping_list(
+            mapping.get("inputMappings"),
+            f"Project type {project_type_id} mapping {mapping_id}.inputMappings",
+        ):
+            task_field = entry.get("taskField")
+            if not isinstance(task_field, str) or not task_field:
+                fail(f"Project type {project_type_id} mapping {mapping_id}.inputMappings entries must declare taskField")
+            if task_field not in task_contract["fields"]["input"]:
+                fail(
+                    f"Project type {project_type_id} mapping {mapping_id}.inputMappings.{task_field} "
+                    "references an unknown task input field"
+                )
+            mapped_input_fields.add(task_field)
+            source = entry.get("source")
+            if source not in PROJECT_TASK_MAPPING_SOURCES:
+                fail(
+                    f"Project type {project_type_id} mapping {mapping_id}.inputMappings.{task_field} "
+                    f"source must be one of {sorted(PROJECT_TASK_MAPPING_SOURCES)}"
+                )
+            source_path = entry.get("sourcePath")
+            if source == "project.field" and source_path not in project_field_keys:
+                fail(
+                    f"Project type {project_type_id} mapping {mapping_id}.inputMappings.{task_field} "
+                    f"sourcePath references unknown project field {source_path}"
+                )
+            if source == "constant" and "constantValue" not in entry:
+                fail(
+                    f"Project type {project_type_id} mapping {mapping_id}.inputMappings.{task_field} "
+                    "must declare constantValue for source constant"
+                )
+
+        required_input_fields = {
+            field_key
+            for field_key, field in task_contract["fields"]["input"].items()
+            if field.get("required") is True
+        }
+        missing_required_inputs = sorted(required_input_fields - mapped_input_fields)
+        if missing_required_inputs:
+            fail(
+                f"Project type {project_type_id} mapping {mapping_id} is missing "
+                f"required task input mappings: {missing_required_inputs}"
+            )
+
+        for entry in require_mapping_list(
+            mapping.get("outputMappings"),
+            f"Project type {project_type_id} mapping {mapping_id}.outputMappings",
+        ):
+            task_field = entry.get("taskField")
+            if not isinstance(task_field, str) or not task_field:
+                fail(f"Project type {project_type_id} mapping {mapping_id}.outputMappings entries must declare taskField")
+            if task_field not in task_contract["fields"]["output"]:
+                fail(
+                    f"Project type {project_type_id} mapping {mapping_id}.outputMappings.{task_field} "
+                    "references an unknown task output field"
+                )
+            target = entry.get("target")
+            if target not in PROJECT_TASK_MAPPING_TARGETS:
+                fail(
+                    f"Project type {project_type_id} mapping {mapping_id}.outputMappings.{task_field} "
+                    f"target must be one of {sorted(PROJECT_TASK_MAPPING_TARGETS)}"
+                )
+            target_path = entry.get("targetPath")
+            if target == "project.field" and target_path not in project_field_keys:
+                fail(
+                    f"Project type {project_type_id} mapping {mapping_id}.outputMappings.{task_field} "
+                    f"targetPath references unknown project field {target_path}"
+                )
+            output_field = task_contract["fields"]["output"][task_field]
+            if output_field.get("fieldType") == "json":
+                fail(
+                    f"Project type {project_type_id} mapping {mapping_id}.outputMappings.{task_field} "
+                    "must not map bulky JSON output into project data"
+                )
+
+        activation_policy = mapping.get("activationPolicy")
+        if not isinstance(activation_policy, dict):
+            fail(f"Project type {project_type_id} mapping {mapping_id} must declare activationPolicy")
+        if activation_policy.get("mode") not in PROJECT_TASK_ACTIVATION_MODES:
+            fail(
+                f"Project type {project_type_id} mapping {mapping_id} activationPolicy.mode "
+                f"must be one of {sorted(PROJECT_TASK_ACTIVATION_MODES)}"
+            )
+        if activation_policy.get("mode") != "manual_review":
+            fail(f"Project type {project_type_id} mapping {mapping_id} must use manual_review activation")
+        if activation_policy.get("autoStartWhenRequiredInputsAvailable") is not False:
+            fail(
+                f"Project type {project_type_id} mapping {mapping_id} must set "
+                "autoStartWhenRequiredInputsAvailable: false"
+            )
+        if activation_policy.get("requiresHumanApproval") is not True:
+            fail(f"Project type {project_type_id} mapping {mapping_id} must set requiresHumanApproval: true")
+        if activation_policy.get("createTaskWhenLifecycleStageEntered") is not False:
+            fail(
+                f"Project type {project_type_id} mapping {mapping_id} must set "
+                "createTaskWhenLifecycleStageEntered: false"
+            )
+
+    if len(mapping_ids) != len(set(mapping_ids)):
+        fail(f"Project type {project_type_id} has duplicate projectTaskMappings ids")
+
+    missing_project_instance_mappings = sorted(
+        expected_project_instance_slugs - mapped_project_instance_slugs
+    )
+    if missing_project_instance_mappings:
+        fail(
+            f"Project type {project_type_id} is missing projectTaskMappings for "
+            f"{missing_project_instance_mappings}"
+        )
+
+    for slug in expected_project_instance_slugs:
+        for field_key, field in task_contracts[slug]["fields"]["output"].items():
+            if field.get("fieldType") == "json":
+                fail(
+                    f"Project type {project_type_id} task {slug} output {field_key} "
+                    "must be a file artifact or compact scalar, not json"
+                )
+
+
 def validate_mcp_definitions(manifest: dict[str, Any], recommendations: dict[str, Any]) -> None:
     mcp_manifest = read_json(ROOT / manifest["surfaces"]["mcpServers"]["path"])
     mcp_servers = mcp_manifest.get("mcpServers")
@@ -2003,6 +2241,7 @@ def main() -> None:
     project_type_ids = validate_project_types(manifest)
     validate_task_definition_templates(manifest, skill_ids, agent_template_ids, project_type_ids)
     validate_project_task_mapping_contracts()
+    validate_origination_pipeline_task_mapping_contracts()
     recommendations_path = manifest["surfaces"]["alludiumMcpRecommendations"]["path"]
     if not (ROOT / recommendations_path).exists():
         fail(f"Missing Alludium MCP recommendations file: {recommendations_path}")
@@ -2010,7 +2249,7 @@ def main() -> None:
     if not isinstance(recommendations, dict):
         fail(f"{recommendations_path} must be an object")
     validate_mcp_definitions(manifest, recommendations)
-    validate_workspace_variables(manifest)
+    validate_workspace_variables(manifest, project_type_ids)
     validate_application_recommendations(manifest, recommendations, project_type_ids)
     validate_recommendation_management_actions(
         recommendations,

@@ -1,0 +1,79 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.audit_linkedin_query_spend
+version: 0.1.0
+title: Audit LinkedIn Query Spend
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - origination
+  - linkedin
+  - spend-audit
+definition:
+  name: Audit LinkedIn Query Spend
+  slug: audit-linkedin-query-spend
+  description: Produce a read-only Apify LinkedIn query yield and cost audit with manual KEEP/REVIEW/PRUNE recommendations.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    stage: operate
+    taskFamily: origination_spend_audit
+    requiredSkills:
+      - vc-linkedin-query-spend-audit
+      - vc-source-registry-and-state-management
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-linkedin-query-spend-audit
+      - vc-source-registry-and-state-management
+      - citation-enforcement
+    recommendedAgentTemplate: vc_pipeline_autopilot
+    plannedRecommendedAgentTemplate: vc_pipeline_autopilot
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    supportedProjectScopes:
+      - project_instance
+    scheduleDefaults:
+      enabledByDefault: false
+      requiresHumanApprovalToEnable: true
+      cadence: weekly
+      dayOfWeek: monday
+      localTime: "09:00"
+      dryRunFirst: true
+    instructions:
+      executionInstructions: Mirror the reference pipeline's read-only LinkedIn query audit. Compare query/track run depth, pages or result batches paid, candidate yield, duplicate or seen rate, exhaustion state, estimated cost, and cost per surfaced company. Recommend KEEP, REVIEW, or PRUNE for manual query-list maintenance.
+      missingInputPolicy: Ask for Apify run receipts, query offset state, candidate yield state, and cost assumptions.
+      externalActionPolicy: Read-only audit. Do not edit query lists, actor inputs, budgets, or schedules.
+      completionCriteria:
+        - Audit table includes query, track, spend/yield metrics, exhaustion notes, recommendation, and confidence.
+        - Paid source spend status is one of within_budget, near_limit, over_limit, or unknown.
+        - Prune/review recommendations are clearly manual follow-ups.
+fields:
+  input:
+    - key: spend_audit_scope
+      name: Spend Audit Scope
+      fieldType: json
+      required: true
+      position: 0
+      config: {}
+  output:
+    - key: linkedin_spend_audit_artifact_id
+      name: LinkedIn Spend Audit Artifact
+      fieldType: file
+      required: true
+      position: 0
+      config: {}
+    - key: paid_source_spend_status
+      name: Paid Source Spend Status
+      fieldType: string
+      required: false
+      position: 1
+      config: {}
+    - key: audit_report
+      name: Audit Report
+      fieldType: richtext
+      required: false
+      position: 2
+      config:
+        rows: 8

@@ -1,0 +1,76 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.review_portfolio_overlap
+version: 0.1.0
+title: Review Portfolio Overlap
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - origination
+  - portfolio
+  - overlap
+definition:
+  name: Review Portfolio Overlap
+  slug: review-portfolio-overlap
+  description: Compare active sourcing candidates against portfolio companies and flag possible competitive overlap.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    stage: review
+    taskFamily: origination_portfolio_overlap
+    requiredSkills:
+      - vc-portfolio-overlap-review
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-portfolio-overlap-review
+      - vc-relationship-context-check
+      - citation-enforcement
+    recommendedAgentTemplate: vc_first_look_analyst
+    plannedRecommendedAgentTemplate: vc_first_look_analyst
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    supportedProjectScopes:
+      - project_instance
+    scheduleDefaults:
+      enabledByDefault: false
+      requiresHumanApprovalToEnable: true
+      cadence: daily
+      localTime: "08:15"
+      dryRunFirst: true
+    instructions:
+      executionInstructions: Mirror the reference pipeline's portfolio-overlap checker. Compare only active candidates such as Meet, IC-Summary, or Reach out against the current portfolio. Classify overlap as none, low, medium, or high using target customer, problem, and product category; sectoral overlap alone is not enough. Do not auto-pass candidates for overlap.
+      missingInputPolicy: Ask for active candidate batch, portfolio source or cache, freshness policy, and whether cached portfolio data may be reused.
+      externalActionPolicy: Review and annotate proposal only. Do not change candidate status, pass candidates, contact founders, or update external systems without separate approval.
+      completionCriteria:
+        - Each checked candidate has severity, matching portfolio companies, reason, and receipt.
+        - Portfolio source freshness and cache age are named.
+fields:
+  input:
+    - key: portfolio_overlap_scope
+      name: Portfolio Overlap Scope
+      fieldType: json
+      required: true
+      position: 0
+      config: {}
+  output:
+    - key: portfolio_overlap_artifact_id
+      name: Portfolio Overlap Artifact
+      fieldType: file
+      required: true
+      position: 0
+      config: {}
+    - key: high_overlap_count
+      name: High Overlap Count
+      fieldType: number
+      required: false
+      position: 1
+      config: {}
+    - key: overlap_report
+      name: Overlap Report
+      fieldType: richtext
+      required: false
+      position: 2
+      config:
+        rows: 8

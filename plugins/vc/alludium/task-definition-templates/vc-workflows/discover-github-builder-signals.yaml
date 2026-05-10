@@ -1,0 +1,84 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.discover_github_builder_signals
+version: 0.1.0
+title: Discover GitHub Builder Signals
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - origination
+  - github
+  - discovery
+definition:
+  name: Discover GitHub Builder Signals
+  slug: discover-github-builder-signals
+  description: Discover UK/Ireland technical-founder and AI repository signals using the reference pipeline's two-pass GitHub model.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    stage: source
+    taskFamily: origination_source_discovery
+    requiredSkills:
+      - vc-github-builder-signal-discovery
+      - vc-source-registry-and-state-management
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-github-builder-signal-discovery
+      - vc-source-registry-and-state-management
+      - citation-enforcement
+    recommendedAgentTemplate: vc_origination_scout
+    plannedRecommendedAgentTemplate: vc_origination_scout
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    supportedProjectScopes:
+      - project_instance
+    scheduleDefaults:
+      enabledByDefault: false
+      requiresHumanApprovalToEnable: true
+      cadence: daily
+      localTime: "07:30"
+      dryRunFirst: true
+      defaultLookbackDays: 14
+    instructions:
+      executionInstructions: Mirror the reference pipeline's two-pass GitHub approach. Pass 1 searches users by UK/Ireland city/location and reviews their recently-created repositories. Pass 2 searches AI/LLM/agentic repository topics and descriptions, then checks owner profile location and README/product evidence. Score UK signal, B2B/enterprise language, AI keyword depth, serious topics, stars-per-day traction, homepage/contact signals, README pricing/CTA, and founder profile evidence.
+      missingInputPolicy: Ask for GitHub access, lookback window, approved topics/keywords, location scope, rate-limit policy, and seen repo/user state.
+      externalActionPolicy: Public/source read only. Do not open issues, star repos, contact maintainers, import candidates, or sync external records without a separate approved task.
+      completionCriteria:
+        - Candidate preview includes repository URL, owner, created date, stars, topics, language, founder/location evidence, score reasons, and source receipt.
+        - Source-state update includes full_name or repo ID dedupe, seen repo IDs, seen user logins, and rate-limit notes.
+fields:
+  input:
+    - key: github_discovery_scope
+      name: GitHub Discovery Scope
+      fieldType: json
+      required: true
+      position: 0
+      config: {}
+  output:
+    - key: github_discovery_artifact_id
+      name: GitHub Discovery Artifact
+      fieldType: file
+      required: true
+      position: 0
+      config: {}
+    - key: discovery_report
+      name: Discovery Report
+      fieldType: richtext
+      required: false
+      position: 1
+      config:
+        rows: 8
+    - key: source_result_count
+      name: Source Result Count
+      fieldType: number
+      required: false
+      position: 2
+      config: {}
+    - key: source_state_summary
+      name: Source State Summary
+      fieldType: string
+      required: false
+      position: 3
+      config: {}

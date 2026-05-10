@@ -1,0 +1,89 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.score_sourcing_candidates
+version: 0.1.0
+title: Score Sourcing Candidates
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - origination
+  - scoring
+definition:
+  name: Score Sourcing Candidates
+  slug: score-sourcing-candidates
+  description: Produce Meet/Watch/Pass verdicts and urgency scores for enriched origination candidates.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    stage: score
+    taskFamily: origination_scoring
+    requiredSkills:
+      - vc-sourcing-verdict-and-screening
+      - vc-sourcing-dedupe-and-novelty-check
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-sourcing-verdict-and-screening
+      - vc-sourcing-dedupe-and-novelty-check
+      - citation-enforcement
+    recommendedAgentTemplate: vc_first_look_analyst
+    plannedRecommendedAgentTemplate: vc_first_look_analyst
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    supportedProjectScopes:
+      - project_instance
+    instructions:
+      executionInstructions: Mirror the reference pipeline's verdict contract. Score from already-enriched data, separate evidence from inference, and return Meet, Watch, or Pass plus urgency. Apply hard stage safety by passing companies with Series A+ funding or more than 20 employees when reliable LinkedIn company data is present. Run the second-pass verdict only for Meet/Watch rows with fresh LinkedIn company data so paid scraping and model cost stay bounded.
+      missingInputPolicy: Ask for enriched candidates, thesis, geography/stage policy, relationship context, LinkedIn company data availability, and scoring thresholds before scoring.
+      externalActionPolicy: Scoring only. Do not sync external records, change manual decisions, send outreach, or create Deal Rooms.
+      completionCriteria:
+        - Each scored candidate has action, urgency, thesis fit, confidence, funding status, HQ/geography concern, frontier-pedigree evidence, reasons, and receipts.
+        - Auto-pass decisions name the specific rule and evidence.
+        - Second-pass rows are limited to candidates with fresh LinkedIn company data.
+fields:
+  input:
+    - key: enriched_candidate_batch
+      name: Enriched Candidate Batch
+      fieldType: json
+      required: true
+      position: 0
+      config: {}
+    - key: scoring_policy
+      name: Scoring Policy
+      fieldType: json
+      required: false
+      position: 1
+      config: {}
+  output:
+    - key: scoring_artifact_id
+      name: Scoring Artifact
+      fieldType: file
+      required: true
+      position: 0
+      config: {}
+    - key: meet_candidate_count
+      name: Meet Candidate Count
+      fieldType: number
+      required: false
+      position: 1
+      config: {}
+    - key: watch_candidate_count
+      name: Watch Candidate Count
+      fieldType: number
+      required: false
+      position: 2
+      config: {}
+    - key: promotion_ready_count
+      name: Promotion Ready Count
+      fieldType: number
+      required: false
+      position: 3
+      config: {}
+    - key: scoring_report
+      name: Scoring Report
+      fieldType: richtext
+      required: false
+      position: 4
+      config:
+        rows: 8

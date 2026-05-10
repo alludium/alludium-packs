@@ -70,20 +70,22 @@ fields:
         rows: 8
     - key: source_registry
       name: Source Registry
-      fieldType: json
+      fieldType: richtext
       required: false
       position: 1
-      config: {}
+      config:
+        rows: 6
     - key: review_policy
       name: Review Policy
-      fieldType: json
+      fieldType: richtext
       required: false
       position: 2
-      config: {}
-    - key: child_task_plan
-      name: Child Task Plan
-      fieldType: json
-      required: false
+      config:
+        rows: 6
+    - key: child_task_plan_artifact_id
+      name: Child Task Plan Artifact
+      fieldType: file
+      required: true
       position: 3
       config: {}
 runtime:

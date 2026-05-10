@@ -141,6 +141,228 @@
         "description": "Human review rules, approval boundaries, and excluded-source policy."
       },
       {
+        "id": "field-last-run-at",
+        "key": "last_run_at",
+        "label": "Last Run At",
+        "kind": "date",
+        "required": false,
+        "description": "Most recent sourcing, review, or operations task completion date."
+      },
+      {
+        "id": "field-last-run-status",
+        "key": "last_run_status",
+        "label": "Last Run Status",
+        "kind": "enum",
+        "required": false,
+        "description": "Compact status from the latest origination run.",
+        "options": [
+          {
+            "value": "dry_run",
+            "label": "Dry Run"
+          },
+          {
+            "value": "completed",
+            "label": "Completed"
+          },
+          {
+            "value": "partial",
+            "label": "Partial"
+          },
+          {
+            "value": "blocked",
+            "label": "Blocked"
+          },
+          {
+            "value": "failed",
+            "label": "Failed"
+          }
+        ]
+      },
+      {
+        "id": "field-source-health-status",
+        "key": "source_health_status",
+        "label": "Source Health Status",
+        "kind": "enum",
+        "required": false,
+        "description": "Highest-level source health signal for the pipeline.",
+        "options": [
+          {
+            "value": "healthy",
+            "label": "Healthy"
+          },
+          {
+            "value": "degraded",
+            "label": "Degraded"
+          },
+          {
+            "value": "needs_credentials",
+            "label": "Needs Credentials"
+          },
+          {
+            "value": "budget_blocked",
+            "label": "Budget Blocked"
+          },
+          {
+            "value": "unknown",
+            "label": "Unknown"
+          }
+        ]
+      },
+      {
+        "id": "field-paid-source-spend-status",
+        "key": "paid_source_spend_status",
+        "label": "Paid Source Spend Status",
+        "kind": "enum",
+        "required": false,
+        "description": "Compact spend signal for paid origination sources.",
+        "options": [
+          {
+            "value": "within_budget",
+            "label": "Within Budget"
+          },
+          {
+            "value": "near_limit",
+            "label": "Near Limit"
+          },
+          {
+            "value": "over_limit",
+            "label": "Over Limit"
+          },
+          {
+            "value": "unknown",
+            "label": "Unknown"
+          }
+        ]
+      },
+      {
+        "id": "field-last-source-result-count",
+        "key": "last_source_result_count",
+        "label": "Last Source Result Count",
+        "kind": "number",
+        "required": false,
+        "description": "Compact result count from the latest source-specific discovery task."
+      },
+      {
+        "id": "field-new-candidates-last-run",
+        "key": "new_candidates_last_run",
+        "label": "New Candidates Last Run",
+        "kind": "number",
+        "required": false,
+        "description": "Number of new candidates from the latest orchestration run."
+      },
+      {
+        "id": "field-candidate-backlog-count",
+        "key": "candidate_backlog_count",
+        "label": "Candidate Backlog Count",
+        "kind": "number",
+        "required": false,
+        "description": "Current or latest review backlog count."
+      },
+      {
+        "id": "field-promotion-ready-count",
+        "key": "promotion_ready_count",
+        "label": "Promotion Ready Count",
+        "kind": "number",
+        "required": false,
+        "description": "Number of candidates currently recommended for promotion review."
+      },
+      {
+        "id": "field-latest-run-receipt-artifact-id",
+        "key": "latest_run_receipt_artifact_id",
+        "label": "Latest Run Receipt Artifact ID",
+        "kind": "text",
+        "required": false,
+        "description": "Artifact ID for the latest sourcing run receipt."
+      },
+      {
+        "id": "field-latest-candidate-batch-artifact-id",
+        "key": "latest_candidate_batch_artifact_id",
+        "label": "Latest Candidate Batch Artifact ID",
+        "kind": "text",
+        "required": false,
+        "description": "Artifact ID for the latest candidate or discovery batch."
+      },
+      {
+        "id": "field-latest-source-state-artifact-id",
+        "key": "latest_source_state_artifact_id",
+        "label": "Latest Source State Artifact ID",
+        "kind": "text",
+        "required": false,
+        "description": "Artifact ID for the latest source-state update proposal."
+      },
+      {
+        "id": "field-latest-enrichment-artifact-id",
+        "key": "latest_enrichment_artifact_id",
+        "label": "Latest Enrichment Artifact ID",
+        "kind": "text",
+        "required": false,
+        "description": "Artifact ID for the latest enrichment batch."
+      },
+      {
+        "id": "field-latest-scoring-artifact-id",
+        "key": "latest_scoring_artifact_id",
+        "label": "Latest Scoring Artifact ID",
+        "kind": "text",
+        "required": false,
+        "description": "Artifact ID for the latest scoring report."
+      },
+      {
+        "id": "field-latest-review-artifact-id",
+        "key": "latest_review_artifact_id",
+        "label": "Latest Review Artifact ID",
+        "kind": "text",
+        "required": false,
+        "description": "Artifact ID for the latest review, screen, relationship, overlap, or IC-summary artifact."
+      },
+      {
+        "id": "field-latest-sync-plan-artifact-id",
+        "key": "latest_sync_plan_artifact_id",
+        "label": "Latest Sync Plan Artifact ID",
+        "kind": "text",
+        "required": false,
+        "description": "Artifact ID for the latest dry-run or approved sync plan."
+      },
+      {
+        "id": "field-latest-outreach-queue-artifact-id",
+        "key": "latest_outreach_queue_artifact_id",
+        "label": "Latest Outreach Queue Artifact ID",
+        "kind": "text",
+        "required": false,
+        "description": "Artifact ID for the latest outreach draft queue."
+      },
+      {
+        "id": "field-latest-promotion-package-artifact-id",
+        "key": "latest_promotion_package_artifact_id",
+        "label": "Latest Promotion Package Artifact ID",
+        "kind": "text",
+        "required": false,
+        "description": "Artifact ID for the latest Deal Room promotion package."
+      },
+      {
+        "id": "field-latest-digest-artifact-id",
+        "key": "latest_digest_artifact_id",
+        "label": "Latest Digest Artifact ID",
+        "kind": "text",
+        "required": false,
+        "description": "Artifact ID for the latest sourcing digest."
+      },
+      {
+        "id": "field-latest-source-health-artifact-id",
+        "key": "latest_source_health_artifact_id",
+        "label": "Latest Source Health Artifact ID",
+        "kind": "text",
+        "required": false,
+        "description": "Artifact ID for the latest source-health and error review."
+      },
+      {
+        "id": "field-latest-spend-audit-artifact-id",
+        "key": "latest_spend_audit_artifact_id",
+        "label": "Latest Spend Audit Artifact ID",
+        "kind": "text",
+        "required": false,
+        "description": "Artifact ID for the latest paid-source spend audit."
+      },
+      {
         "id": "field-crm-pipeline-url",
         "key": "crm_pipeline_url",
         "label": "CRM Pipeline URL",
@@ -351,7 +573,12 @@
         "taskDefinitionTemplateId": "vc.configure_origination_pipeline",
         "lifecycleStage": "draft",
         "projectScope": "project_instance",
-        "activationMode": "manual",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
         "inputMappings": [
           {
             "taskField": "configuration_goal",
@@ -379,12 +606,669 @@
         ]
       },
       {
+        "id": "mapping-run-sourcing-pipeline",
+        "taskDefinitionSlug": "run-sourcing-pipeline",
+        "taskDefinitionTemplateId": "vc.run_sourcing_pipeline",
+        "lifecycleStage": "active",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "sourcing_run_scope",
+            "source": "project.field",
+            "sourcePath": "source_registry",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "run_mode",
+            "source": "constant",
+            "constantValue": "dry_run_or_manual",
+            "requiredForActivation": false
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "run_status",
+            "target": "project.field",
+            "targetPath": "last_run_status"
+          },
+          {
+            "taskField": "new_candidates_count",
+            "target": "project.field",
+            "targetPath": "new_candidates_last_run"
+          },
+          {
+            "taskField": "promotion_ready_count",
+            "target": "project.field",
+            "targetPath": "promotion_ready_count"
+          },
+          {
+            "taskField": "run_completed_at",
+            "target": "project.field",
+            "targetPath": "last_run_at"
+          },
+          {
+            "taskField": "run_receipt_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_run_receipt_artifact_id"
+          },
+          {
+            "taskField": "candidate_batch_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_candidate_batch_artifact_id"
+          },
+          {
+            "taskField": "source_state_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_source_state_artifact_id"
+          }
+        ]
+      },
+      {
+        "id": "mapping-discover-companies-house-candidates",
+        "taskDefinitionSlug": "discover-companies-house-candidates",
+        "taskDefinitionTemplateId": "vc.discover_companies_house_candidates",
+        "lifecycleStage": "active",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "companies_house_discovery_scope",
+            "source": "project.field",
+            "sourcePath": "source_registry",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "companies_house_discovery_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_candidate_batch_artifact_id"
+          },
+          {
+            "taskField": "source_result_count",
+            "target": "project.field",
+            "targetPath": "last_source_result_count"
+          }
+        ]
+      },
+      {
+        "id": "mapping-discover-linkedin-founders",
+        "taskDefinitionSlug": "discover-linkedin-founders",
+        "taskDefinitionTemplateId": "vc.discover_linkedin_founders",
+        "lifecycleStage": "active",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "linkedin_discovery_scope",
+            "source": "project.field",
+            "sourcePath": "source_registry",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "linkedin_discovery_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_candidate_batch_artifact_id"
+          },
+          {
+            "taskField": "source_result_count",
+            "target": "project.field",
+            "targetPath": "last_source_result_count"
+          }
+        ]
+      },
+      {
+        "id": "mapping-discover-x-founder-signals",
+        "taskDefinitionSlug": "discover-x-founder-signals",
+        "taskDefinitionTemplateId": "vc.discover_x_founder_signals",
+        "lifecycleStage": "active",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "x_discovery_scope",
+            "source": "project.field",
+            "sourcePath": "source_registry",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "x_founder_discovery_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_candidate_batch_artifact_id"
+          },
+          {
+            "taskField": "source_result_count",
+            "target": "project.field",
+            "targetPath": "last_source_result_count"
+          }
+        ]
+      },
+      {
+        "id": "mapping-discover-github-builder-signals",
+        "taskDefinitionSlug": "discover-github-builder-signals",
+        "taskDefinitionTemplateId": "vc.discover_github_builder_signals",
+        "lifecycleStage": "active",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "github_discovery_scope",
+            "source": "project.field",
+            "sourcePath": "source_registry",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "github_discovery_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_candidate_batch_artifact_id"
+          },
+          {
+            "taskField": "source_result_count",
+            "target": "project.field",
+            "targetPath": "last_source_result_count"
+          }
+        ]
+      },
+      {
+        "id": "mapping-discover-reddit-builder-signals",
+        "taskDefinitionSlug": "discover-reddit-builder-signals",
+        "taskDefinitionTemplateId": "vc.discover_reddit_builder_signals",
+        "lifecycleStage": "active",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "reddit_discovery_scope",
+            "source": "project.field",
+            "sourcePath": "source_registry",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "reddit_discovery_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_candidate_batch_artifact_id"
+          },
+          {
+            "taskField": "source_result_count",
+            "target": "project.field",
+            "targetPath": "last_source_result_count"
+          }
+        ]
+      },
+      {
+        "id": "mapping-review-reddit-candidate-inbox",
+        "taskDefinitionSlug": "review-reddit-candidate-inbox",
+        "taskDefinitionTemplateId": "vc.review_reddit_candidate_inbox",
+        "lifecycleStage": "review_backlog",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "reddit_inbox_scope",
+            "source": "project.field",
+            "sourcePath": "latest_candidate_batch_artifact_id",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "reddit_inbox_review_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_review_artifact_id"
+          },
+          {
+            "taskField": "needs_review_count",
+            "target": "project.field",
+            "targetPath": "candidate_backlog_count"
+          }
+        ]
+      },
+      {
+        "id": "mapping-ingest-manual-sourcing-tip",
+        "taskDefinitionSlug": "ingest-manual-sourcing-tip",
+        "taskDefinitionTemplateId": "vc.ingest_manual_sourcing_tip",
+        "lifecycleStage": "active",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "manual_tip",
+            "source": "constant",
+            "constantValue": "Prompt the user for the manual tip payload, including company or founder identity, source, submitter, and confidence.",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "manual_tip_ingestion_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_candidate_batch_artifact_id"
+          }
+        ]
+      },
+      {
+        "id": "mapping-enrich-sourcing-candidates",
+        "taskDefinitionSlug": "enrich-sourcing-candidates",
+        "taskDefinitionTemplateId": "vc.enrich_sourcing_candidates",
+        "lifecycleStage": "review_backlog",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "candidate_batch",
+            "source": "project.field",
+            "sourcePath": "latest_candidate_batch_artifact_id",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "enrichment_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_enrichment_artifact_id"
+          }
+        ]
+      },
+      {
+        "id": "mapping-check-affinity-relationships",
+        "taskDefinitionSlug": "check-affinity-relationships",
+        "taskDefinitionTemplateId": "vc.check_affinity_relationships",
+        "lifecycleStage": "review_backlog",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "relationship_check_scope",
+            "source": "project.field",
+            "sourcePath": "latest_enrichment_artifact_id",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "relationship_context_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_review_artifact_id"
+          }
+        ]
+      },
+      {
+        "id": "mapping-score-sourcing-candidates",
+        "taskDefinitionSlug": "score-sourcing-candidates",
+        "taskDefinitionTemplateId": "vc.score_sourcing_candidates",
+        "lifecycleStage": "review_backlog",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "enriched_candidate_batch",
+            "source": "project.field",
+            "sourcePath": "latest_enrichment_artifact_id",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "scoring_policy",
+            "source": "project.field",
+            "sourcePath": "review_policy",
+            "requiredForActivation": false
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "scoring_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_scoring_artifact_id"
+          },
+          {
+            "taskField": "promotion_ready_count",
+            "target": "project.field",
+            "targetPath": "promotion_ready_count"
+          }
+        ]
+      },
+      {
+        "id": "mapping-sync-sourcing-candidates",
+        "taskDefinitionSlug": "sync-sourcing-candidates",
+        "taskDefinitionTemplateId": "vc.sync_sourcing_candidates",
+        "lifecycleStage": "review_backlog",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "sync_scope",
+            "source": "project.field",
+            "sourcePath": "latest_scoring_artifact_id",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "sync_plan_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_sync_plan_artifact_id"
+          }
+        ]
+      },
+      {
+        "id": "mapping-review-portfolio-overlap",
+        "taskDefinitionSlug": "review-portfolio-overlap",
+        "taskDefinitionTemplateId": "vc.review_portfolio_overlap",
+        "lifecycleStage": "review_backlog",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "portfolio_overlap_scope",
+            "source": "project.field",
+            "sourcePath": "latest_scoring_artifact_id",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "portfolio_overlap_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_review_artifact_id"
+          }
+        ]
+      },
+      {
+        "id": "mapping-screen-active-sourcing-candidates",
+        "taskDefinitionSlug": "screen-active-sourcing-candidates",
+        "taskDefinitionTemplateId": "vc.screen_active_sourcing_candidates",
+        "lifecycleStage": "review_backlog",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "screening_scope",
+            "source": "project.field",
+            "sourcePath": "latest_scoring_artifact_id",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "screening_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_review_artifact_id"
+          },
+          {
+            "taskField": "promotion_ready_count",
+            "target": "project.field",
+            "targetPath": "promotion_ready_count"
+          }
+        ]
+      },
+      {
+        "id": "mapping-prepare-sourcing-ic-summary",
+        "taskDefinitionSlug": "prepare-sourcing-ic-summary",
+        "taskDefinitionTemplateId": "vc.prepare_sourcing_ic_summary",
+        "lifecycleStage": "review_backlog",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "ic_summary_candidate",
+            "source": "project.field",
+            "sourcePath": "latest_scoring_artifact_id",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "ic_summary_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_review_artifact_id"
+          }
+        ]
+      },
+      {
+        "id": "mapping-prepare-outreach-draft-queue",
+        "taskDefinitionSlug": "prepare-outreach-draft-queue",
+        "taskDefinitionTemplateId": "vc.prepare_outreach_draft_queue",
+        "lifecycleStage": "review_backlog",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "outreach_scope",
+            "source": "project.field",
+            "sourcePath": "latest_review_artifact_id",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "outreach_queue_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_outreach_queue_artifact_id"
+          }
+        ]
+      },
+      {
+        "id": "mapping-promote-candidate-to-deal-room",
+        "taskDefinitionSlug": "promote-candidate-to-deal-room",
+        "taskDefinitionTemplateId": "vc.promote_candidate_to_deal_room",
+        "lifecycleStage": "review_backlog",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "promotion_candidate",
+            "source": "project.field",
+            "sourcePath": "latest_review_artifact_id",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "promotion_package_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_promotion_package_artifact_id"
+          }
+        ]
+      },
+      {
+        "id": "mapping-generate-sourcing-digest",
+        "taskDefinitionSlug": "generate-sourcing-digest",
+        "taskDefinitionTemplateId": "vc.generate_sourcing_digest",
+        "lifecycleStage": "active",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "digest_scope",
+            "source": "project.field",
+            "sourcePath": "latest_run_receipt_artifact_id",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "sourcing_digest_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_digest_artifact_id"
+          }
+        ]
+      },
+      {
+        "id": "mapping-audit-linkedin-query-spend",
+        "taskDefinitionSlug": "audit-linkedin-query-spend",
+        "taskDefinitionTemplateId": "vc.audit_linkedin_query_spend",
+        "lifecycleStage": "active",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "spend_audit_scope",
+            "source": "project.field",
+            "sourcePath": "latest_source_state_artifact_id",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "linkedin_spend_audit_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_spend_audit_artifact_id"
+          },
+          {
+            "taskField": "paid_source_spend_status",
+            "target": "project.field",
+            "targetPath": "paid_source_spend_status"
+          }
+        ]
+      },
+      {
+        "id": "mapping-review-source-errors-and-spend",
+        "taskDefinitionSlug": "review-source-errors-and-spend",
+        "taskDefinitionTemplateId": "vc.review_source_errors_and_spend",
+        "lifecycleStage": "source_degraded",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "source_health_scope",
+            "source": "project.field",
+            "sourcePath": "latest_run_receipt_artifact_id",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "source_health_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_source_health_artifact_id"
+          },
+          {
+            "taskField": "source_health_status",
+            "target": "project.field",
+            "targetPath": "source_health_status"
+          }
+        ]
+      },
+      {
         "id": "mapping-apify-setup",
         "taskDefinitionSlug": "apify-setup",
         "taskDefinitionTemplateId": "vc.apify_setup",
         "lifecycleStage": "needs_credentials",
         "projectScope": "project_management",
-        "activationMode": "manual",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
         "inputMappings": [
           {
             "taskField": "setup_goal",
@@ -401,7 +1285,12 @@
         "taskDefinitionTemplateId": "vc.companies_house_setup",
         "lifecycleStage": "needs_credentials",
         "projectScope": "project_management",
-        "activationMode": "manual",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
         "inputMappings": [
           {
             "taskField": "setup_goal",

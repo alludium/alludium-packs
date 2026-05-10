@@ -7,6 +7,9 @@ description: >
 workspaceVariables:
   - namespace: vc
     key: fundStage
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     label: Fund Stage Focus
     description: Target investment stages for thesis-fit screening and diligence context.
     valueType: string
@@ -19,6 +22,9 @@ workspaceVariables:
     sensitivity: standard
   - namespace: vc
     key: fundSectors
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     label: Fund Sector Focus
     description: Target sectors, verticals, or themes used for thesis-fit screening.
     valueType: string
@@ -31,6 +37,9 @@ workspaceVariables:
     sensitivity: standard
   - namespace: vc
     key: fundGeography
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     label: Fund Geography Focus
     description: Target investment geographies or market focus for fund-fit context.
     valueType: string
@@ -43,6 +52,9 @@ workspaceVariables:
     sensitivity: standard
   - namespace: vc
     key: fundThesis
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     label: Fund Thesis
     description: Workspace-level investment thesis used for thesis-fit screening, lead generation, and review-pack context.
     valueType: string
@@ -55,6 +67,9 @@ workspaceVariables:
     sensitivity: standard
   - namespace: vc
     key: scoringFramework
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     label: Fund Scoring Framework
     description: Workspace-level scoring or evaluation framework names and rubric notes used when screening and diligence workflows ask for configured methodology.
     valueType: string

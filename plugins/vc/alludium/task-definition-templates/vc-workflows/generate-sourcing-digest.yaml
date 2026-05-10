@@ -1,0 +1,75 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.generate_sourcing_digest
+version: 0.1.0
+title: Generate Sourcing Digest
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - origination
+  - digest
+definition:
+  name: Generate Sourcing Digest
+  slug: generate-sourcing-digest
+  description: Generate a daily or weekly origination digest with candidates, run receipts, degraded sources, and pending approvals.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    stage: operate
+    taskFamily: origination_digest
+    requiredSkills:
+      - vc-sourcing-digest-generation
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-sourcing-digest-generation
+      - citation-enforcement
+    recommendedAgentTemplate: vc_pipeline_autopilot
+    plannedRecommendedAgentTemplate: vc_pipeline_autopilot
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    supportedProjectScopes:
+      - project_instance
+    scheduleDefaults:
+      enabledByDefault: false
+      requiresHumanApprovalToEnable: true
+      cadence: daily
+      localTime: "08:45"
+      dryRunFirst: true
+      defaultChannel: project_digest_channel
+    instructions:
+      executionInstructions: Produce a reference-pipeline-style digest of new Meet/Watch and active candidates, source counts, run failures, budget/cost notes, and review actions. The default destination is a reviewable digest object; posting to Slack, ClickUp, email, or another external channel requires a separately approved write-capable task.
+      missingInputPolicy: Ask for run receipt, candidate batch, digest channel, audience, and whether this is daily, weekly, or monthly.
+      externalActionPolicy: Draft digest only unless explicit channel-post approval is granted.
+      completionCriteria:
+        - Digest groups candidates by action, urgency, source, and owner/review need.
+        - Run receipt, cost/budget notes, degraded-source warnings, and pending approvals are included.
+fields:
+  input:
+    - key: digest_scope
+      name: Digest Scope
+      fieldType: json
+      required: true
+      position: 0
+      config: {}
+  output:
+    - key: sourcing_digest_artifact_id
+      name: Sourcing Digest Artifact
+      fieldType: file
+      required: true
+      position: 0
+      config: {}
+    - key: digest_status
+      name: Digest Status
+      fieldType: string
+      required: false
+      position: 1
+      config: {}
+    - key: sourcing_digest
+      name: Sourcing Digest
+      fieldType: richtext
+      required: false
+      position: 2
+      config:
+        rows: 10

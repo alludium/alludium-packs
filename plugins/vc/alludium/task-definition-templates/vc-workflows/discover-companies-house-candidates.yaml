@@ -1,0 +1,88 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.discover_companies_house_candidates
+version: 0.1.0
+title: Discover Companies House Candidates
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - origination
+  - companies-house
+  - discovery
+definition:
+  name: Discover Companies House Candidates
+  slug: discover-companies-house-candidates
+  description: Discover UK company candidates from approved Companies House public-register pages using reference-pipeline scoring and dedupe patterns.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    stage: source
+    taskFamily: origination_source_discovery
+    requiredSkills:
+      - vc-companies-house-sourcing
+      - vc-source-registry-and-state-management
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-companies-house-sourcing
+      - vc-source-registry-and-state-management
+      - citation-enforcement
+    recommendedAgentTemplate: vc_origination_scout
+    plannedRecommendedAgentTemplate: vc_origination_scout
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    supportedProjectScopes:
+      - project_instance
+    scheduleDefaults:
+      enabledByDefault: false
+      requiresHumanApprovalToEnable: true
+      cadence: daily
+      localTime: "07:05"
+      dryRunFirst: true
+      defaultWindows:
+        recent: "0-14d"
+        mature: "14-548d"
+      defaultResultLimit: 100
+    instructions:
+      executionInstructions: Discover candidate companies from approved public Companies House search/result pages. Mirror the reference pipeline's two-window intent for recent incorporations and mature/fundraising-age companies. Prioritize active UK companies with software, data, R&D, biotech, AI, robotics, or deep-tech signals; reject mass-registration addresses, service/consultancy language, outside-geography signals, corporate officers, and weak name/location/founder evidence. Use company number as the primary dedupe key.
+      missingInputPolicy: Ask for selected public URL patterns, geography/stage/sector scope, result limits, allowed SIC or keyword filters, and Firecrawl availability before extraction.
+      externalActionPolicy: Read preview and candidate proposal only. Do not call the Companies House API, import candidates, score final verdicts, enable recurring monitoring, write CRM rows, or create Deal Rooms.
+      completionCriteria:
+        - Candidate preview includes company number, name, status, incorporation date, visible SIC/nature text, address locality, founder/officer hints when visible, source URL, and extraction timestamp.
+        - Rejection reasons and dedupe decisions are listed.
+        - Source-state update records company-number keys and selected search windows.
+fields:
+  input:
+    - key: companies_house_discovery_scope
+      name: Companies House Discovery Scope
+      fieldType: json
+      required: true
+      position: 0
+      config: {}
+  output:
+    - key: companies_house_discovery_artifact_id
+      name: Companies House Discovery Artifact
+      fieldType: file
+      required: true
+      position: 0
+      config: {}
+    - key: discovery_report
+      name: Discovery Report
+      fieldType: richtext
+      required: false
+      position: 1
+      config:
+        rows: 8
+    - key: source_result_count
+      name: Source Result Count
+      fieldType: number
+      required: false
+      position: 2
+      config: {}
+    - key: source_state_summary
+      name: Source State Summary
+      fieldType: string
+      required: false
+      position: 3
+      config: {}

@@ -1,0 +1,77 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.review_reddit_candidate_inbox
+version: 0.1.0
+title: Review Reddit Candidate Inbox
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - origination
+  - reddit
+  - approval
+definition:
+  name: Review Reddit Candidate Inbox
+  slug: review-reddit-candidate-inbox
+  description: Review Reddit discovery inbox rows and prepare approved candidates for enrichment.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    stage: review
+    taskFamily: origination_reddit_approval
+    requiredSkills:
+      - vc-reddit-inbox-approval
+      - vc-sourcing-dedupe-and-novelty-check
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-reddit-inbox-approval
+      - vc-sourcing-dedupe-and-novelty-check
+      - citation-enforcement
+    recommendedAgentTemplate: vc_origination_scout
+    plannedRecommendedAgentTemplate: vc_origination_scout
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    supportedProjectScopes:
+      - project_instance
+    instructions:
+      executionInstructions: Review public Reddit candidate inbox rows before they enter the main candidate flow. Approve only rows with first-person builder/founder evidence, durable company or product identity, and thesis-relevant signal. Prepare approved rows for enrichment; keep uncertain rows in review and reject noise with reasons.
+      missingInputPolicy: Ask for Reddit inbox rows, raw source receipts, approval policy, and dedupe state.
+      externalActionPolicy: Approval proposal only unless explicit write approval is granted. Do not mark rows pushed, comment, message users, or sync externally.
+      completionCriteria:
+        - Approved, rejected, and needs-review rows are separated with reasons and receipts.
+        - Approved rows include dedupe keys and enrichment-ready fields.
+fields:
+  input:
+    - key: reddit_inbox_scope
+      name: Reddit Inbox Scope
+      fieldType: json
+      required: true
+      position: 0
+      config: {}
+  output:
+    - key: reddit_inbox_review_artifact_id
+      name: Reddit Inbox Review Artifact
+      fieldType: file
+      required: true
+      position: 0
+      config: {}
+    - key: approved_candidate_count
+      name: Approved Candidate Count
+      fieldType: number
+      required: false
+      position: 1
+      config: {}
+    - key: needs_review_count
+      name: Needs Review Count
+      fieldType: number
+      required: false
+      position: 2
+      config: {}
+    - key: review_report
+      name: Review Report
+      fieldType: richtext
+      required: false
+      position: 3
+      config:
+        rows: 8

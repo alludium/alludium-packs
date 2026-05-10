@@ -10,7 +10,7 @@ The repository is intentionally broader than the first VC use case. It is expect
 
 | Pack | Path | Status | Contents |
 | --- | --- | --- | --- |
-| Alludium VC | `plugins/vc/` | Draft project-type and metadata expansion | VC workflow skills, Alludium runtime agent templates, VC task-definition templates, VC Deal Room project type, workspace variable declarations, application recommendations, integration setup tasks, and pack metadata |
+| Alludium VC | `plugins/vc/` | Draft project-type and metadata expansion | VC workflow skills, Alludium runtime agent templates, VC task-definition templates, VC Deal Room and VC Origination Pipeline project types, workspace variable declarations, application recommendations, integration setup tasks, and pack metadata |
 
 ## Plugin vs Pack
 
