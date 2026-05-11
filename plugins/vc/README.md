@@ -4,7 +4,7 @@ Public VC workflow plugin and pack seed for [Alludium](https://www.alludium.ai).
 
 Alludium VC packages reusable venture capital workflows for sourcing, screening, diligence, investment committee preparation, closing, and portfolio onboarding. It is the first bundle inside the broader `alludium-packs` catalog, not a standalone VC-only repository.
 
-The current draft `v0.3.6` pack surface includes skills, Alludium runtime agent templates, MCP definitions, VC task-definition templates, both the canonical `venture_capital` vertical key and the legacy `vc` alias, the VC Deal Room project type and command-view metadata, workspace-variable declarations, application-recommendation metadata, collapsed Deal Room lifecycle mappings, required task-input mappings, and compact Affinity/Slack/Google Drive/Notion/Harmonic management actions for discovery and sync surfaces.
+The current draft `v0.3.7` pack surface includes skills, Alludium runtime agent templates, MCP definitions, VC task-definition templates, both the canonical `venture_capital` vertical key and the legacy `vc` alias, the VC Deal Room project type and command-view metadata, workspace-variable declarations, application-recommendation metadata, collapsed Deal Room lifecycle mappings, required task-input mappings, compact Affinity/Slack/Google Drive/Notion/Harmonic management actions for discovery and sync surfaces, and runtime agent access to the platform text-artifact creation tool.
 
 The current draft pack surface contains:
 
@@ -17,7 +17,7 @@ The current draft pack surface contains:
 - Alludium workspace variable declarations in `alludium/workspace-variables.yaml`
 - a pack-aware Alludium manifest in `alludium/manifest.yaml`
 
-The VC task-definition templates advertise `vc_deal_room` as a supported project type. The draft `v0.3.6` surface includes that project type definition, but it still requires paired platform ingest support before it can be used as the runtime source of truth.
+The VC task-definition templates advertise `vc_deal_room` as a supported project type. The draft `v0.3.7` surface includes that project type definition, but it still requires paired platform ingest support before it can be used as the runtime source of truth.
 
 Task-template workspace eligibility is controlled by catalog-level `verticalKeys`. Individual template `definitionJson.vertical` values remain legacy workflow metadata, so the `v0.2.2` compatibility fix is intentionally made in `alludium/task-definition-templates/catalog.v1.json`.
 

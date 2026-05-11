@@ -1742,12 +1742,6 @@
             "requiredForActivation": true
           },
           {
-            "taskField": "source_thread_url",
-            "source": "project.field",
-            "sourcePath": "source_thread_url",
-            "requiredForActivation": true
-          },
-          {
             "taskField": "pitch_deck_artifact_id",
             "source": "project.field",
             "sourcePath": "pitch_deck_artifact_id",
