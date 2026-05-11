@@ -5,6 +5,7 @@ import os
 import re
 import subprocess
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -27,6 +28,16 @@ VERSIONED_DOC_PATHS = [
     "plugins/vc/README.md",
     "plugins/vc/alludium/inventory.md",
 ]
+
+
+@dataclass(frozen=True)
+class ReleaseContentDiff:
+    committed: bool
+    worktree: bool
+
+    @property
+    def changed(self) -> bool:
+        return self.committed or self.worktree
 
 
 def fail(message: str) -> None:
@@ -104,7 +115,7 @@ def parse_semver(version: str, context: str = "Pack version") -> tuple[int, int,
     return parsed
 
 
-def release_content_changed(base_ref: str, *, include_worktree: bool = True) -> bool:
+def get_release_content_diff(base_ref: str, *, include_worktree: bool = True) -> ReleaseContentDiff:
     committed_diff = run_git(
         ["diff", "--name-only", f"{base_ref}...HEAD", "--", *RELEASE_CONTENT_PATHS],
         allow_failure=False,
@@ -125,7 +136,10 @@ def release_content_changed(base_ref: str, *, include_worktree: bool = True) -> 
             ["ls-files", "--others", "--exclude-standard", "--", *RELEASE_CONTENT_PATHS],
             allow_failure=False,
         )
-    return any([committed_diff, staged_diff, unstaged_diff, untracked])
+    return ReleaseContentDiff(
+        committed=bool(committed_diff),
+        worktree=bool(staged_diff or unstaged_diff or untracked),
+    )
 
 
 def require_docs_reference_version(version: str) -> None:
@@ -168,7 +182,8 @@ def validate_release_contract(base_ref: str, remote: str) -> None:
     current_semver = parse_semver(current_version, "Current pack version")
     base_version = read_base_manifest_version(base_ref)
     base_semver = parse_semver(base_version, f"Base pack version at {base_ref}")
-    content_changed = release_content_changed(base_ref)
+    release_diff = get_release_content_diff(base_ref)
+    content_changed = release_diff.changed
 
     if current_semver < base_semver:
         fail(
@@ -181,7 +196,7 @@ def validate_release_contract(base_ref: str, remote: str) -> None:
             f"Current version is still {current_version}."
         )
 
-    if content_changed:
+    if release_diff.worktree:
         warn(
             "Release-content diff includes local staged, unstaged, and untracked files. "
             "Run from a clean worktree for CI-like behavior."
@@ -215,6 +230,9 @@ def validate_release_contract(base_ref: str, remote: str) -> None:
 
 
 def run_self_test() -> None:
+    assert ReleaseContentDiff(committed=False, worktree=False).changed is False
+    assert ReleaseContentDiff(committed=True, worktree=False).changed is True
+    assert ReleaseContentDiff(committed=False, worktree=True).changed is True
     assert parse_semver("0.3.2") == (0, 3, 2)
     assert parse_semver("10.20.30") == (10, 20, 30)
     for invalid in ["v0.3.2", "0.3", "0.3.2-beta", "01.2.3"]:
