@@ -455,6 +455,10 @@
         "to": "needs_credentials"
       },
       {
+        "from": "needs_credentials",
+        "to": "configured"
+      },
+      {
         "from": "review_backlog",
         "to": "active"
       },
