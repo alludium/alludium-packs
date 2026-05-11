@@ -38,6 +38,18 @@ definition:
       cadence: daily
       localTime: "08:20"
       dryRunFirst: true
+    scheduling:
+      schedulable: true
+      showInProjectSetup: true
+      setupStep: schedules
+      scheduleType: cron
+      defaultScheduleRef: scheduleDefaults
+      requiresHumanApprovalToEnable: true
+      canCreateTestRun: true
+      testRunCreatesVisibleTask: true
+      dryRunFirst: true
+      safety:
+        externalWritesRequireApproval: true
     instructions:
       executionInstructions: Screen active origination candidates using the reference pipeline's fast thesis filter rather than the downstream Deal Room first-look task. Assess stage, geography, enterprise software, AI-native depth, named buyer, moat, and founder balance. Return PROCEED_TO_IC, DIG_FURTHER, or PASS and map those to review actions without downgrading protected manual decisions.
       missingInputPolicy: Ask for active candidate batch, current manual actions, thesis policy, protected-action list, and approved write mode before screening.

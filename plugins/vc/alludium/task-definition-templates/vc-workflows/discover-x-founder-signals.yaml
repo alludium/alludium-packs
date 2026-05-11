@@ -43,6 +43,18 @@ definition:
       defaultLookbackDays: 7
       defaultResultLimit: 50
       budgetGuardrail: require_apify_budget
+    scheduling:
+      schedulable: true
+      showInProjectSetup: true
+      setupStep: schedules
+      scheduleType: cron
+      defaultScheduleRef: scheduleDefaults
+      requiresHumanApprovalToEnable: true
+      canCreateTestRun: true
+      testRunCreatesVisibleTask: true
+      dryRunFirst: true
+      safety:
+        externalWritesRequireApproval: true
     instructions:
       executionInstructions: Use approved X/Twitter actor scope only. Mirror the reference pipeline's target pattern for build-in-public, first-person launch/building language, AI/LLM/product terms, UK/Ireland location signals, B2B/enterprise hints, product URLs, engagement, and founder-author evidence. Reject media, VC, newsletter, aggregator, and third-party news accounts.
       missingInputPolicy: Ask for approved search terms, lookback window, budget/result cap, actor authorization, and seen-tweet state before discovery.

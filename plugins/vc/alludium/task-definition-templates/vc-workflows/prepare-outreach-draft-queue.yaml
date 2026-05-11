@@ -38,6 +38,18 @@ definition:
       cadence: daily
       localTime: "08:30"
       dryRunFirst: true
+    scheduling:
+      schedulable: true
+      showInProjectSetup: true
+      setupStep: schedules
+      scheduleType: cron
+      defaultScheduleRef: scheduleDefaults
+      requiresHumanApprovalToEnable: true
+      canCreateTestRun: true
+      testRunCreatesVisibleTask: true
+      dryRunFirst: true
+      safety:
+        externalWritesRequireApproval: true
     instructions:
       executionInstructions: Mirror the reference pipeline's outreach draft policy. Draft only for candidates with active actions such as Meet, IC-Summary, or Reach out, no manual Status/contact progress, and a founder LinkedIn URL. Produce short, specific, question-led LinkedIn connection notes tied to evidence. Skip weak hooks instead of fabricating personalization.
       missingInputPolicy: Ask for active candidate batch, founder profile URL, eligible actions, manual-contact status, outreach tone policy, and destination for drafts.

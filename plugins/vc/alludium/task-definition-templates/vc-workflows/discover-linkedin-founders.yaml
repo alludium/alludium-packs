@@ -43,6 +43,18 @@ definition:
       dryRunFirst: true
       defaultResultLimit: 200
       budgetGuardrail: require_apify_budget
+    scheduling:
+      schedulable: true
+      showInProjectSetup: true
+      setupStep: schedules
+      scheduleType: cron
+      defaultScheduleRef: scheduleDefaults
+      requiresHumanApprovalToEnable: true
+      canCreateTestRun: true
+      testRunCreatesVisibleTask: true
+      dryRunFirst: true
+      safety:
+        externalWritesRequireApproval: true
     instructions:
       executionInstructions: Use only approved Apify LinkedIn actor scopes. Mirror the reference pipeline's four-track model covering active AI founders, pedigree founders, exited or serial founders, and academic spinouts. Preserve per-query pagination/offsets, exhaustion locks, seen profile IDs, company URL slug dedupe, and quarantine rows without stable company identifiers. Treat LinkedIn people discovery as weekly by default because it is the expensive source.
       missingInputPolicy: Ask for actor allowlist, track selection, geography, result caps, query budget, dedupe-state availability, and whether this is a weekly full run or forced override.

@@ -48,6 +48,18 @@ definition:
         includeLinkedInPeopleDiscovery: false
       defaultResultLimit: 200
       budgetGuardrail: require_budget_before_paid_sources
+    scheduling:
+      schedulable: true
+      showInProjectSetup: true
+      setupStep: schedules
+      scheduleType: cron
+      defaultScheduleRef: scheduleDefaults
+      requiresHumanApprovalToEnable: true
+      canCreateTestRun: true
+      testRunCreatesVisibleTask: true
+      dryRunFirst: true
+      safety:
+        externalWritesRequireApproval: true
     instructions:
       executionInstructions: Run only approved origination sources and preserve the reference workflow order across Companies House recent and mature windows, GitHub builder signals, X/Twitter builder signals, cheap enrichment, Affinity relationship check, first verdict, LinkedIn company enrichment only for Meet or Watch, second verdict for fresh LinkedIn company data, sync proposal, portfolio-overlap review, screen, outreach drafts, and digest. LinkedIn people discovery is weekly by default or explicit override only. Create child tasks for the enabled steps; keep each child within its own source/action boundary.
       missingInputPolicy: Ask for enabled source registry, cadence policy, budget cap, result limits, review thresholds, and credential readiness before running. If paid-source budget is missing, run only no-cost previews or produce a dry-run plan.
