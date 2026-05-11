@@ -1,4 +1,4 @@
-version: "1.0.1"
+version: "1.0.2"
 type: "template"
 platform_managed: false
 id: "vc_legal_compliance_desk"
@@ -97,6 +97,7 @@ mcpServers:
       - name: artifact.list
       - name: artifact.getArtifact
       - name: artifact.findById
+      - name: artifact.createTextArtifact
       - name: artifact.attachToChat
       - name: artifact.detachFromChat
       - name: artifact.getArtifactsLinkedToChat
