@@ -5,6 +5,10 @@
     {
       "id": "vc_deal_room",
       "path": "vc_deal_room.json"
+    },
+    {
+      "id": "vc_origination_pipeline",
+      "path": "vc_origination_pipeline.json"
     }
   ]
 }

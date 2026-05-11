@@ -1,0 +1,77 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.enrich_sourcing_candidates
+version: 0.1.0
+title: Enrich Sourcing Candidates
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - origination
+  - enrichment
+definition:
+  name: Enrich Sourcing Candidates
+  slug: enrich-sourcing-candidates
+  description: Normalize and enrich candidate records with web, LinkedIn, founder, website, and evidence context before scoring.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    stage: enrich
+    taskFamily: origination_enrichment
+    requiredSkills:
+      - vc-sourcing-candidate-enrichment
+      - vc-sourcing-dedupe-and-novelty-check
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-sourcing-candidate-enrichment
+      - vc-sourcing-dedupe-and-novelty-check
+      - citation-enforcement
+    recommendedAgentTemplate: vc_origination_scout
+    plannedRecommendedAgentTemplate: vc_origination_scout
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    supportedProjectScopes:
+      - project_instance
+    instructions:
+      executionInstructions: Enrich only candidates above the configured source-specific floor. Preserve the reference pipeline separation between cheap enrichment and LLM verdict by first gathering search results, website, company LinkedIn URL, founder LinkedIn URLs, founder profile evidence, and receipts; do not make final Meet/Watch/Pass judgments in this task. For LinkedIn-sourced rows, reuse pre-verified founder/company LinkedIn URLs rather than re-searching them.
+      missingInputPolicy: Ask for candidate batch, enrichment budget, approved search/extraction tools, dedupe state, and minimum source score before enriching.
+      externalActionPolicy: Read/enrich only. Do not write CRM rows, create Notion pages, score final verdicts, contact founders, or create Deal Rooms.
+      completionCriteria:
+        - Enriched candidates include normalized identity, source key, website, company LinkedIn, founder LinkedIn evidence, search snippets, receipts, and missing-data flags.
+        - Dedupe decisions include company-number, LinkedIn slug, domain, name, repo, post, or tweet keys as applicable.
+        - Errors and skipped rows are listed with retry guidance.
+fields:
+  input:
+    - key: candidate_batch
+      name: Candidate Batch
+      fieldType: json
+      required: true
+      position: 0
+      config: {}
+  output:
+    - key: enrichment_artifact_id
+      name: Enrichment Artifact
+      fieldType: file
+      required: true
+      position: 0
+      config: {}
+    - key: enriched_candidate_count
+      name: Enriched Candidate Count
+      fieldType: number
+      required: false
+      position: 1
+      config: {}
+    - key: enrichment_status
+      name: Enrichment Status
+      fieldType: string
+      required: false
+      position: 2
+      config: {}
+    - key: enrichment_report
+      name: Enrichment Report
+      fieldType: richtext
+      required: false
+      position: 3
+      config:
+        rows: 8

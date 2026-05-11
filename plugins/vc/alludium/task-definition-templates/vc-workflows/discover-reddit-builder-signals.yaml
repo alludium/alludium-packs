@@ -1,0 +1,85 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.discover_reddit_builder_signals
+version: 0.1.0
+title: Discover Reddit Builder Signals
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - origination
+  - reddit
+  - discovery
+definition:
+  name: Discover Reddit Builder Signals
+  slug: discover-reddit-builder-signals
+  description: Discover public Reddit builder posts that may indicate early AI startup candidates.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    stage: source
+    taskFamily: origination_source_discovery
+    requiredSkills:
+      - vc-reddit-builder-signal-discovery
+      - vc-source-registry-and-state-management
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-reddit-builder-signal-discovery
+      - vc-source-registry-and-state-management
+      - citation-enforcement
+    recommendedAgentTemplate: vc_origination_scout
+    plannedRecommendedAgentTemplate: vc_origination_scout
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    supportedProjectScopes:
+      - project_instance
+    scheduleDefaults:
+      enabledByDefault: false
+      requiresHumanApprovalToEnable: true
+      cadence: weekly
+      dayOfWeek: monday
+      localTime: "07:40"
+      dryRunFirst: true
+      defaultLookbackDays: 30
+    instructions:
+      executionInstructions: Mirror the reference pipeline's Reddit approach against approved public communities and terms. Look for first-person build, launch, beta, pre-seed, early-user, AI/LLM, and B2B signals. Reject advice questions, job posts, hiring posts, rants, freelancing income posts, pure academic posts without product signal, and non-self posts. Preserve post ID as the dedupe key.
+      missingInputPolicy: Ask for approved subreddits, query terms, lookback window, minimum score, rate-limit policy, and seen post state.
+      externalActionPolicy: Public read and inbox proposal only. Do not comment, message, import into the main candidate queue, or sync externally without separate approval.
+      completionCriteria:
+        - Candidate preview includes Reddit URL, subreddit, author, extracted company/product, website if visible, UK signal, score reasons, and source receipt.
+        - Source-state update includes seen post IDs and rejected/noise counts.
+fields:
+  input:
+    - key: reddit_discovery_scope
+      name: Reddit Discovery Scope
+      fieldType: json
+      required: true
+      position: 0
+      config: {}
+  output:
+    - key: reddit_discovery_artifact_id
+      name: Reddit Discovery Artifact
+      fieldType: file
+      required: true
+      position: 0
+      config: {}
+    - key: discovery_report
+      name: Discovery Report
+      fieldType: richtext
+      required: false
+      position: 1
+      config:
+        rows: 8
+    - key: source_result_count
+      name: Source Result Count
+      fieldType: number
+      required: false
+      position: 2
+      config: {}
+    - key: source_state_summary
+      name: Source State Summary
+      fieldType: string
+      required: false
+      position: 3
+      config: {}

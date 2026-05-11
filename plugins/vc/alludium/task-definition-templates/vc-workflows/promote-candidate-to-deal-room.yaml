@@ -1,0 +1,71 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.promote_candidate_to_deal_room
+version: 0.1.0
+title: Promote Candidate to Deal Room
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - origination
+  - promotion
+  - deal-room
+definition:
+  name: Promote Candidate to Deal Room
+  slug: promote-candidate-to-deal-room
+  description: Prepare a reviewed promotion package for creating or updating a VC Deal Room from an approved origination candidate.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: promote
+    taskFamily: origination_promotion
+    requiredSkills:
+      - vc-origination-deal-room-promotion
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-origination-deal-room-promotion
+      - deal-room-setup-and-source-ingestion
+      - citation-enforcement
+    recommendedAgentTemplate: vc_dealflow_concierge
+    plannedRecommendedAgentTemplate: vc_dealflow_concierge
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    supportedProjectScopes:
+      - project_instance
+    instructions:
+      executionInstructions: Promote only human-approved candidates. Prepare a Deal Room creation/update package with company identity, founder evidence, source receipts, enrichment/verdict/screen summaries, relationship context, outreach state, and open questions. Do not create or update the Deal Room unless the platform action is explicitly approved.
+      missingInputPolicy: Ask for approved candidate, target Deal Room policy, promotion threshold evidence, owner, and required source artifacts.
+      externalActionPolicy: Promotion package by default. Deal Room creation/update, CRM changes, document creation, and notifications require separate explicit approval.
+      humanConfirmationPolicy: always_before_project_creation_or_external_write
+      completionCriteria:
+        - Promotion package includes source receipts, candidate evidence, recommended initial Deal Room state, required tasks, owner, and unresolved risks.
+        - Human approval boundary for project creation/update is explicit.
+fields:
+  input:
+    - key: promotion_candidate
+      name: Promotion Candidate
+      fieldType: json
+      required: true
+      position: 0
+      config: {}
+  output:
+    - key: promotion_package_artifact_id
+      name: Promotion Package Artifact
+      fieldType: file
+      required: true
+      position: 0
+      config: {}
+    - key: promoted_candidate_key
+      name: Promoted Candidate Key
+      fieldType: string
+      required: false
+      position: 1
+      config: {}
+    - key: promotion_summary
+      name: Promotion Summary
+      fieldType: richtext
+      required: false
+      position: 2
+      config:
+        rows: 8

@@ -1,0 +1,84 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.review_source_errors_and_spend
+version: 0.1.0
+title: Review Source Errors and Spend
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - origination
+  - source-health
+  - spend
+definition:
+  name: Review Source Errors and Spend
+  slug: review-source-errors-and-spend
+  description: Review degraded source runs, cost warnings, retry safety, and required human actions.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    stage: operate
+    taskFamily: origination_source_health
+    requiredSkills:
+      - vc-source-error-and-spend-audit
+      - vc-source-registry-and-state-management
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-source-error-and-spend-audit
+      - vc-source-registry-and-state-management
+      - citation-enforcement
+    recommendedAgentTemplate: vc_pipeline_autopilot
+    plannedRecommendedAgentTemplate: vc_pipeline_autopilot
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    supportedProjectScopes:
+      - project_instance
+    scheduleDefaults:
+      enabledByDefault: false
+      requiresHumanApprovalToEnable: true
+      cadence: daily
+      localTime: "09:10"
+      dryRunFirst: true
+    instructions:
+      executionInstructions: Review run receipts and degraded-source notes from the latest origination pass. Classify missing credentials, auth expiry, provider failure, rate limits, budget caps, exhausted queries, schema drift, no-yield sources, and blocked writes. Recommend retry, setup, query pruning, schedule pause, or human review.
+      missingInputPolicy: Ask for recent run receipts, source state, budget policy, provider status notes, and retry policy.
+      externalActionPolicy: Review only. Do not retry paid runs, change budgets, disable schedules, or update credentials.
+      completionCriteria:
+        - Each issue includes source, severity, impact, retry safety, owner, and next action.
+        - Source health status is one of healthy, degraded, needs_credentials, budget_blocked, or unknown.
+        - Paid retry and schedule-change approvals are explicit.
+fields:
+  input:
+    - key: source_health_scope
+      name: Source Health Scope
+      fieldType: json
+      required: true
+      position: 0
+      config: {}
+  output:
+    - key: source_health_artifact_id
+      name: Source Health Artifact
+      fieldType: file
+      required: true
+      position: 0
+      config: {}
+    - key: source_health_status
+      name: Source Health Status
+      fieldType: string
+      required: false
+      position: 1
+      config: {}
+    - key: source_error_count
+      name: Source Error Count
+      fieldType: number
+      required: false
+      position: 2
+      config: {}
+    - key: source_health_report
+      name: Source Health Report
+      fieldType: richtext
+      required: false
+      position: 3
+      config:
+        rows: 8

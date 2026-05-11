@@ -1,0 +1,67 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.prepare_sourcing_ic_summary
+version: 0.1.0
+title: Prepare Sourcing IC Summary
+category: Venture Capital
+visibility: workspace
+systemUseOnly: false
+tags:
+  - vc
+  - origination
+  - ic-summary
+definition:
+  name: Prepare Sourcing IC Summary
+  slug: prepare-sourcing-ic-summary
+  description: Prepare a lightweight IC-style summary for a reviewed origination candidate before Deal Room promotion.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    stage: review
+    taskFamily: origination_ic_summary
+    requiredSkills:
+      - vc-origination-ic-summary-preparation
+      - citation-enforcement
+    plannedRequiredSkills:
+      - vc-origination-ic-summary-preparation
+      - citation-enforcement
+    recommendedAgentTemplate: vc_ic_prep_producer
+    plannedRecommendedAgentTemplate: vc_ic_prep_producer
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    supportedProjectScopes:
+      - project_instance
+    instructions:
+      executionInstructions: Prepare a concise IC-style summary for Meet or Watch candidates using enriched candidate evidence, verdict, relationship context, portfolio-overlap result, source receipts, risks, and open questions. This replaces direct page-creation behavior from the reference implementation with a reviewable summary artifact.
+      missingInputPolicy: Ask for candidate evidence, verdict, relationship context, overlap review, source receipts, and target audience.
+      externalActionPolicy: Draft only. Do not create Notion pages, documents, external records, or Deal Rooms without explicit approval.
+      completionCriteria:
+        - Summary includes identity, product, thesis fit, founder signal, market/customer signal, relationship context, risks, unknowns, evidence quality, and recommended next step.
+fields:
+  input:
+    - key: ic_summary_candidate
+      name: IC Summary Candidate
+      fieldType: json
+      required: true
+      position: 0
+      config: {}
+  output:
+    - key: ic_summary_artifact_id
+      name: IC Summary Artifact
+      fieldType: file
+      required: true
+      position: 0
+      config: {}
+    - key: ic_summary_status
+      name: IC Summary Status
+      fieldType: string
+      required: false
+      position: 1
+      config: {}
+    - key: ic_summary
+      name: IC Summary
+      fieldType: richtext
+      required: false
+      position: 2
+      config:
+        rows: 12

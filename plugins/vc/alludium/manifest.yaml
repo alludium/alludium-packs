@@ -2,14 +2,14 @@ schemaVersion: "0.1"
 pack:
   id: vc
   name: Alludium VC
-  version: "0.3.7"
+  version: "0.4.0"
   description: >
     Public VC workflow plugin and pack seed for Alludium, published as the
     first bundle in the broader Alludium packs catalog. This release contains
     VC skills, Alludium runtime agent templates, VC task-definition templates,
-    the VC Deal Room project type definition, workspace variable declarations,
-    application recommendation metadata, and integration discovery/sync contract
-    recommendations.
+    VC Deal Room and VC Origination Pipeline project type definitions,
+    workspace variable declarations, application recommendation metadata, and
+    single-entry integration setup task recommendations.
   publisher: Alludium
   license: Apache-2.0
   repository: https://github.com/alludium/alludium-packs
@@ -59,6 +59,29 @@ surfaces:
       - vc-notion-sync-write
       - vc-harmonic-discovery
       - vc-harmonic-sync-read
+      - vc-origination-pipeline-orchestration
+      - vc-source-registry-and-state-management
+      - vc-apify-discovery
+      - vc-apify-sync-read
+      - vc-apify-linkedin-founder-discovery
+      - vc-apify-x-founder-discovery
+      - vc-companies-house-sourcing
+      - vc-companies-house-sync-read
+      - vc-github-builder-signal-discovery
+      - vc-reddit-builder-signal-discovery
+      - vc-reddit-inbox-approval
+      - vc-sourcing-candidate-enrichment
+      - vc-sourcing-dedupe-and-novelty-check
+      - vc-relationship-context-check
+      - vc-sourcing-verdict-and-screening
+      - vc-portfolio-overlap-review
+      - vc-outreach-draft-queue
+      - vc-sourcing-digest-generation
+      - vc-manual-tip-ingestion
+      - vc-origination-deal-room-promotion
+      - vc-linkedin-query-spend-audit
+      - vc-source-error-and-spend-audit
+      - vc-origination-ic-summary-preparation
   alludiumAgentTemplates:
     path: alludium/agent-templates
     ids:
@@ -94,6 +117,7 @@ surfaces:
         platform release that declares external task-definition-template ingest
         support.
     ids:
+      - vc.pack_variable_discovery
       - vc.review_opportunity_status
       - vc.source_thesis_targets
       - vc.prepare_lead_gen_packet
@@ -119,20 +143,52 @@ surfaces:
       - vc.manage_closing_checklist
       - vc.verify_conditions_precedent
       - vc.prepare_portfolio_onboarding
+      - vc.configure_origination_pipeline
+      - vc.run_sourcing_pipeline
+      - vc.discover_companies_house_candidates
+      - vc.discover_linkedin_founders
+      - vc.discover_x_founder_signals
+      - vc.discover_github_builder_signals
+      - vc.discover_reddit_builder_signals
+      - vc.review_reddit_candidate_inbox
+      - vc.ingest_manual_sourcing_tip
+      - vc.enrich_sourcing_candidates
+      - vc.check_affinity_relationships
+      - vc.score_sourcing_candidates
+      - vc.sync_sourcing_candidates
+      - vc.review_portfolio_overlap
+      - vc.screen_active_sourcing_candidates
+      - vc.prepare_sourcing_ic_summary
+      - vc.prepare_outreach_draft_queue
+      - vc.promote_candidate_to_deal_room
+      - vc.generate_sourcing_digest
+      - vc.audit_linkedin_query_spend
+      - vc.review_source_errors_and_spend
+      - vc.affinity_setup
       - vc.affinity_discovery
       - vc.affinity_sync_read
       - vc.affinity_sync_write
+      - vc.slack_setup
       - vc.slack_discovery
       - vc.slack_sync_read
       - vc.slack_sync_write
+      - vc.google_drive_setup
       - vc.google_drive_discovery
       - vc.google_drive_sync_read
       - vc.google_drive_sync_write
+      - vc.notion_setup
       - vc.notion_discovery
       - vc.notion_sync_read
       - vc.notion_sync_write
+      - vc.harmonic_setup
       - vc.harmonic_discovery
       - vc.harmonic_sync_read
+      - vc.apify_setup
+      - vc.apify_discovery
+      - vc.apify_sync_read
+      - vc.companies_house_setup
+      - vc.companies_house_discovery
+      - vc.companies_house_sync_read
   projectTypes:
     path: alludium/project-types
     platformIngest:
@@ -146,6 +202,7 @@ surfaces:
         project-type ingest support.
     ids:
       - vc_deal_room
+      - vc_origination_pipeline
 boundaries:
   publicSafe: true
   secretsAllowed: false

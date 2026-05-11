@@ -8,11 +8,18 @@ description: >
   managed providers or workspace connections instead of requiring the plugin
   placeholders directly. Records with `recommendationStatus` also appear in the
   platform application picker; those records use the same `externalId` and
-  `name` fields as the MCP mapping contract.
+  `name` fields as the MCP mapping contract. Each recommendation must declare
+  `supportedProjectTypes` so the platform can scope application recommendations
+  to the project definitions where they are relevant. Individual management
+  actions may declare a narrower `supportedProjectTypes` list when an integration
+  is broadly useful but the setup action only applies to one project type.
 recommendations:
   - externalId: affinity-mcp-server
     name: Affinity CRM
     category: CRM
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     use: Deal pipeline, CRM context, company/deal records, relationship context, and outreach history.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: workspace_connection
@@ -32,21 +39,17 @@ recommendations:
       - person
       - opportunity
     actions:
-      - kind: discovery
-        label: Explore Affinity lists and stages
-        taskDefinitionTemplateId: vc.affinity_discovery
-        skillId: vc-affinity-discovery
-      - kind: sync_read
-        label: Preview and import Affinity pipeline data
-        taskDefinitionTemplateId: vc.affinity_sync_read
-        skillId: vc-affinity-sync-read
-      - kind: sync_write
-        label: Draft Affinity write-back proposals
-        taskDefinitionTemplateId: vc.affinity_sync_write
-        skillId: vc-affinity-sync-write
+      - kind: setup
+        supportedProjectTypes:
+          - vc_deal_room
+        label: Set up Affinity for VC Deal Rooms
+        taskDefinitionTemplateId: vc.affinity_setup
   - externalId: harmonic-mcp-oauth
     name: Harmonic
     category: Company Intelligence
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     use: Company enrichment, founder profiles, market intelligence, and sourcing context.
     pluginCredentialBoundary: user_or_workspace_oauth
     alludiumPlatformMapping: workspace_connection
@@ -65,17 +68,69 @@ recommendations:
       - organization
       - person
     actions:
-      - kind: discovery
-        label: Explore Harmonic saved searches and source scopes
-        taskDefinitionTemplateId: vc.harmonic_discovery
-        skillId: vc-harmonic-discovery
-      - kind: sync_read
-        label: Preview Harmonic search results for sourcing context
-        taskDefinitionTemplateId: vc.harmonic_sync_read
-        skillId: vc-harmonic-sync-read
+      - kind: setup
+        supportedProjectTypes:
+          - vc_deal_room
+        label: Set up Harmonic for VC Deal Rooms
+        taskDefinitionTemplateId: vc.harmonic_setup
+  - externalId: apify-actors-mcp
+    name: Apify Actors
+    category: Source Automation
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    use: Approved actor-based source discovery for VC origination pipelines, including founder, company, launch, and hiring signals when a workspace authorizes those sources.
+    recommendationStatus: recommended
+    pluginCredentialBoundary: user_or_workspace_api_key
+    alludiumPlatformMapping: workspace_connection
+    platformDefaultAvailable: false
+    applicationRecommendation:
+      pickerGroup: Origination Sources
+      systemCategory: Source Automation
+      unlocks:
+        - Apify actor allowlist and source-scope setup
+        - Read-only preview of selected actor results
+        - Source registry evidence for origination pipeline configuration
+      authorizationBoundary: Selecting Apify records source intent only; actor runs and data reads require authorization, approved actor scope, and explicit read-preview approval.
+      evidenceRequirement: User confirmation, approved actor inventory, or an authorized Apify connection.
+      alternatives:
+        - Harmonic
+        - LinkedIn
+    entityRoles:
+      - organization
+      - person
+    actions:
+      - kind: setup
+        supportedProjectTypes:
+          - vc_origination_pipeline
+        label: Set up Apify for VC Origination
+        taskDefinitionTemplateId: vc.apify_setup
+  - externalId: companies-house-mcp
+    name: Companies House
+    category: Company Registry
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    status: future
+    use: Future typed UK company registry connector candidate for VC origination pipelines if public-page extraction proves insufficient.
+    recommendationStatus: optional
+    reason: Treat Companies House as a later managed connector candidate; the current pack uses Firecrawl against public Companies House pages instead of a Companies House MCP server.
+    pluginCredentialBoundary: user_or_workspace_api_key
+    alludiumPlatformMapping: workspace_connection
+    platformDefaultAvailable: false
+    applicationRecommendation:
+      pickerGroup: Origination Sources
+      systemCategory: Company Registry
+      unlocks:
+        - UK company source-scope setup
+        - Read-only preview of selected company, officer, and filing records
+        - Company-number dedupe keys for origination source registry planning
+      authorizationBoundary: Selecting Companies House records source intent only; registry reads require an authorized connector or approved source snapshot.
+      evidenceRequirement: User confirmation, managed connector availability, or a supplied source inventory.
   - externalId: dealroom-mcp
     name: Dealroom
     category: Private Market Data
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     use: Financing, investor, funding-round, and private-market context.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: workspace_connection
@@ -93,6 +148,9 @@ recommendations:
   - externalId: exa-mcp-hosted
     name: Exa Search
     category: Web Research
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     use: Public web, company, people, code, and deeper research workflows.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: platform_or_workspace_connection
@@ -100,13 +158,28 @@ recommendations:
   - externalId: firecrawl-mcp-hosted
     name: Firecrawl
     category: Web Extraction
-    use: First-party website extraction, website mapping, page evidence, and source-material gathering.
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
+    use: First-party website extraction, website mapping, page evidence, source-material gathering, and public Companies House page previews for VC origination.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: platform_or_workspace_connection
     platformDefaultAvailable: true
+    entityRoles:
+      - organization
+      - person
+    actions:
+      - kind: setup
+        supportedProjectTypes:
+          - vc_origination_pipeline
+        label: Configure Companies House public register preview
+        taskDefinitionTemplateId: vc.companies_house_setup
   - externalId: brave-search-mcp
     name: Brave Search
     category: Web Search
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     use: Broad public web and news search fallback.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: platform_or_workspace_connection
@@ -114,6 +187,9 @@ recommendations:
   - externalId: serpapi-mcp
     name: SerpAPI Search
     category: Web Search
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     use: Broad search fallback across Google, Bing, YouTube, and other search surfaces.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: platform_or_workspace_connection
@@ -121,6 +197,9 @@ recommendations:
   - externalId: tavily-mcp-hosted
     name: Tavily Search
     category: Web Search
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     use: Web search and extraction when a workspace prefers Tavily-backed research.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: workspace_connection
@@ -128,6 +207,9 @@ recommendations:
   - externalId: perplexity-mcp
     name: Perplexity
     category: Web Research
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     use: Search, reasoning, and deep research workflows where Perplexity is connected.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: workspace_connection
@@ -135,6 +217,9 @@ recommendations:
   - externalId: brightdata-mcp-hosted
     name: Bright Data
     category: Web Extraction
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     use: Real-time web access, search, and scraping where a workspace has Bright Data access.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: workspace_connection
@@ -142,6 +227,9 @@ recommendations:
   - externalId: meltwater-mcp
     name: Meltwater
     category: Media Intelligence
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     use: News, media monitoring, and market-signal intelligence where a workspace has Meltwater access.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: workspace_connection
@@ -149,6 +237,8 @@ recommendations:
   - externalId: granola-mcp
     name: Granola
     category: Meeting Notes
+    supportedProjectTypes:
+      - vc_deal_room
     use: Meeting transcript and notes context when connected.
     pluginCredentialBoundary: user_or_workspace_oauth
     alludiumPlatformMapping: workspace_connection
@@ -170,6 +260,8 @@ recommendations:
   - externalId: otter-mcp-oauth
     name: Otter AI
     category: Meeting Notes
+    supportedProjectTypes:
+      - vc_deal_room
     use: Meeting transcript context when connected.
     pluginCredentialBoundary: user_or_workspace_oauth
     alludiumPlatformMapping: workspace_connection
@@ -177,6 +269,8 @@ recommendations:
   - externalId: fireflies-mcp-oauth
     name: Fireflies
     category: Meeting Notes
+    supportedProjectTypes:
+      - vc_deal_room
     use: Meeting transcript, summary, contact, and user-data context when connected.
     pluginCredentialBoundary: user_or_workspace_oauth
     alludiumPlatformMapping: workspace_connection
@@ -198,6 +292,9 @@ recommendations:
   - externalId: crunchbase
     name: Crunchbase
     category: Private Market Data
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     status: future
     use: Private-market data source for company, funding, investor, and competitive context.
     recommendationStatus: optional
@@ -216,6 +313,9 @@ recommendations:
   - externalId: pitchbook
     name: PitchBook
     category: Private Market Data
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     status: future
     use: Private-market data source for company, financing, investor, and comparable-company research.
     recommendationStatus: optional
@@ -234,6 +334,9 @@ recommendations:
   - externalId: attio
     name: Attio
     category: CRM
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     status: future
     use: CRM or deal-tracking system alternative for firm pipeline and relationship workflows.
     recommendationStatus: optional
@@ -255,6 +358,9 @@ recommendations:
   - externalId: salesforce
     name: Salesforce
     category: CRM
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     status: future
     use: CRM or deal-tracking system alternative for firm pipeline and relationship workflows.
     recommendationStatus: optional
@@ -275,6 +381,9 @@ recommendations:
   - externalId: hubspot
     name: HubSpot
     category: CRM
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     status: future
     use: CRM or deal-tracking alternative for pipeline, relationship, and founder communication workflows.
     recommendationStatus: optional
@@ -295,6 +404,9 @@ recommendations:
   - externalId: airtable
     name: Airtable
     category: Deal Tracking
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     status: future
     use: Lightweight deal-tracking or operating-table system used by some firms instead of a dedicated CRM.
     recommendationStatus: optional
@@ -314,6 +426,9 @@ recommendations:
   - externalId: notion
     name: Notion
     category: Docs and Workspace
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     use: Lightweight deal-tracking, memo, knowledge-base, or operating-document workspace.
     recommendationStatus: optional
     pluginCredentialBoundary: user_or_workspace_oauth
@@ -335,21 +450,17 @@ recommendations:
       - document
       - project
     actions:
-      - kind: discovery
-        label: Explore Notion pages and databases
-        taskDefinitionTemplateId: vc.notion_discovery
-        skillId: vc-notion-discovery
-      - kind: sync_read
-        label: Preview selected Notion page and database context
-        taskDefinitionTemplateId: vc.notion_sync_read
-        skillId: vc-notion-sync-read
-      - kind: sync_write
-        label: Draft Notion update proposals
-        taskDefinitionTemplateId: vc.notion_sync_write
-        skillId: vc-notion-sync-write
+      - kind: setup
+        supportedProjectTypes:
+          - vc_deal_room
+        label: Set up Notion for VC Deal Rooms
+        taskDefinitionTemplateId: vc.notion_setup
   - externalId: google_drive
     name: Google Drive and Docs
     category: Document Storage
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     use: Shared documents, founder materials, diligence files, memos, and meeting notes.
     recommendationStatus: recommended
     pluginCredentialBoundary: user_or_workspace_oauth
@@ -369,21 +480,17 @@ recommendations:
     entityRoles:
       - document
     actions:
-      - kind: discovery
-        label: Explore Google Drive folders and files
-        taskDefinitionTemplateId: vc.google_drive_discovery
-        skillId: vc-google-drive-discovery
-      - kind: sync_read
-        label: Preview selected Google Drive context
-        taskDefinitionTemplateId: vc.google_drive_sync_read
-        skillId: vc-google-drive-sync-read
-      - kind: sync_write
-        label: Draft Google Drive file proposals
-        taskDefinitionTemplateId: vc.google_drive_sync_write
-        skillId: vc-google-drive-sync-write
+      - kind: setup
+        supportedProjectTypes:
+          - vc_deal_room
+        label: Set up Google Drive for VC Deal Rooms
+        taskDefinitionTemplateId: vc.google_drive_setup
   - externalId: slack_v2
     name: Slack
     category: Collaboration
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     use: Team communication workspace for deal routing, approvals, and collaboration context.
     pluginCredentialBoundary: user_or_workspace_oauth
     alludiumPlatformMapping: workspace_connection
@@ -402,21 +509,17 @@ recommendations:
       - message_or_conversation
       - task_or_issue
     actions:
-      - kind: discovery
-        label: Explore Slack workspaces and channels
-        taskDefinitionTemplateId: vc.slack_discovery
-        skillId: vc-slack-discovery
-      - kind: sync_read
-        label: Preview selected Slack channel and thread context
-        taskDefinitionTemplateId: vc.slack_sync_read
-        skillId: vc-slack-sync-read
-      - kind: sync_write
-        label: Draft approved Slack handoff notifications
-        taskDefinitionTemplateId: vc.slack_sync_write
-        skillId: vc-slack-sync-write
+      - kind: setup
+        supportedProjectTypes:
+          - vc_deal_room
+        label: Set up Slack for VC Deal Rooms
+        taskDefinitionTemplateId: vc.slack_setup
   - externalId: linkedin
     name: LinkedIn
     category: Relationship Intelligence
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
     status: future
     use: Professional network context for founder research, warm intro paths, and relationship mapping.
     recommendationStatus: optional
@@ -433,6 +536,8 @@ recommendations:
   - externalId: zoom
     name: Zoom
     category: Meetings and Transcripts
+    supportedProjectTypes:
+      - vc_deal_room
     status: future
     use: Meeting platform for founder calls, diligence calls, and partner meetings.
     recommendationStatus: optional
@@ -453,6 +558,8 @@ recommendations:
   - externalId: google_meet
     name: Google Meet
     category: Meetings and Transcripts
+    supportedProjectTypes:
+      - vc_deal_room
     status: future
     use: Meeting platform for founder calls, diligence calls, and partner meetings.
     recommendationStatus: optional

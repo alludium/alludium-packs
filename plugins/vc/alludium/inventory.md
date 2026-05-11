@@ -1,9 +1,9 @@
 # Alludium VC Inventory
 
-**Version**: 0.3.7
+**Version**: 0.4.0
 **Status**: Draft project-type and metadata expansion
 
-This inventory describes the current public VC plugin/pack seed plus the draft project-type and metadata expansion. Version numbers track pack release slices that need platform alignment, so this history only lists versions that introduced durable pack-surface changes. Version `0.1.0` contains VC skills, Alludium runtime agent templates, public-safe MCP definitions, and Alludium MCP recommendations. Version `0.2.2` adds VC task-definition templates and advertises both the canonical `venture_capital` vertical key and legacy `vc` alias. Version `0.3.0` adds the VC Deal Room project type as a first-class pack surface. Version `0.3.1` adds the VC Deal Room command-view metadata used by the project command center. Version `0.3.2` adds workspace variable declarations and application recommendation metadata for the paired platform ingest work. Version `0.3.4` aligns agent Deal Room states with the collapsed lifecycle and tightens required task-input mappings. Version `0.3.5` adds compact Affinity and Slack management-action metadata plus focused integration-specific discovery and sync task templates and skills. Version `0.3.6` extends the same integration-management surface to Google Drive, Notion, and Harmonic, with Harmonic limited to discovery/read-preview until trusted tool rows exist. Version `0.3.7` grants all VC runtime agent templates access to the platform text-artifact creation tool for durable file outputs.
+This inventory describes the current public VC plugin/pack seed plus the draft project-type and metadata expansion. Version numbers track pack release slices that need platform alignment, so this history only lists versions that introduced durable pack-surface changes. Version `0.1.0` contains VC skills, Alludium runtime agent templates, public-safe MCP definitions, and Alludium MCP recommendations. Version `0.2.2` adds VC task-definition templates and advertises both the canonical `venture_capital` vertical key and legacy `vc` alias. Version `0.3.0` adds the VC Deal Room project type as a first-class pack surface. Version `0.3.1` adds the VC Deal Room command-view metadata used by the project command center. Version `0.3.2` adds workspace variable declarations and application recommendation metadata for the paired platform ingest work. Version `0.3.4` aligns agent Deal Room states with the collapsed lifecycle and tightens required task-input mappings. Version `0.3.5` adds compact Affinity and Slack management-action metadata plus focused integration-specific discovery and sync task templates and skills. Version `0.3.6` extends the same integration-management surface to Google Drive, Notion, and Harmonic, with Harmonic limited to discovery/read-preview until trusted tool rows exist. Version `0.3.7` grants all VC runtime agent templates access to the platform text-artifact creation tool and collapses recommendation-level integration actions to one setup task per integration; each setup task declares its own discovery/read/write child task plan. Version `0.4.0` adds the VC Origination Pipeline project type, Apify and Companies House setup/readiness tasks, scheduled sourcing task definitions, compact origination project data mappings, and supporting origination skills.
 
 ---
 
@@ -106,18 +106,23 @@ These templates are included because the platform VC workspace pack currently re
 - `vc.source_thesis_targets`
 - `vc.summarize_initial_call`
 - `vc.verify_conditions_precedent`
+- `vc.affinity_setup`
 - `vc.affinity_discovery`
 - `vc.affinity_sync_read`
 - `vc.affinity_sync_write`
+- `vc.slack_setup`
 - `vc.slack_discovery`
 - `vc.slack_sync_read`
 - `vc.slack_sync_write`
+- `vc.google_drive_setup`
 - `vc.google_drive_discovery`
 - `vc.google_drive_sync_read`
 - `vc.google_drive_sync_write`
+- `vc.notion_setup`
 - `vc.notion_discovery`
 - `vc.notion_sync_read`
 - `vc.notion_sync_write`
+- `vc.harmonic_setup`
 - `vc.harmonic_discovery`
 - `vc.harmonic_sync_read`
 
@@ -129,7 +134,7 @@ Review notes:
 - The task-template surface requires platform capability `external-task-definition-template-ingest`.
 - All task templates advertise `vc_deal_room` as a supported project type; that project type is now included in this pack's `projectTypes` surface.
 - Task templates without `supportedProjectScopes` are single-project `project_instance` tasks. Templates with `project_management` scope support pipeline, admin, or project-type management work and keep outputs on the task or future management surface unless an explicit management mapping is introduced.
-- The integration templates are application-specific `project_management` tasks. They describe Affinity, Slack, Google Drive, Notion, and Harmonic tool use, discovery scope, preview/import behavior, and write-proposal boundaries without binding to a single Deal Room lifecycle stage, while the recommendation metadata only maps which management actions exist for each application.
+- The integration templates are application-specific `project_management` tasks. Each integration now exposes one setup task (`vc.*_setup`) in recommendation metadata. That setup task owns the discovery/read/write child task references and approval policy; the lower-level discovery, read-preview, and write-proposal templates remain available as setup-owned child tasks rather than direct application-card actions.
 
 ---
 
@@ -173,13 +178,13 @@ Application-only integration IDs used by standardized recommendation actions:
 - `google_drive`
 - `notion`
 
-Standardized management actions:
+Standardized setup actions:
 
-- `affinity-mcp-server`: declares `discovery`, `sync_read`, and `sync_write` actions directly on the Affinity recommendation record. Discovery enumerates lists, stages, and counts after authorization; read sync is preview/import oriented; write sync is proposal-only unless the platform approval model is present.
-- `slack_v2`: declares `discovery`, `sync_read`, and `sync_write` actions directly on the Slack recommendation record. Discovery enumerates workspaces/channels and classifies channel purpose; read sync is limited to selected channel/thread context; write sync is limited to approved notifications and handoffs.
-- `google_drive`: declares `discovery`, `sync_read`, and `sync_write` actions directly on the Google Drive recommendation record. Discovery enumerates shared drives, folders, files, and source scopes after authorization; read sync previews selected file/folder context before attachment or import; write sync is proposal-only and excludes broad file creation, sharing, deletion, moving, and permission changes.
-- `notion`: declares `discovery`, `sync_read`, and `sync_write` actions directly on the Notion recommendation record. Discovery enumerates/searches pages and databases after authorization; read sync previews selected page/database content; write sync is proposal-only and excludes broad page/database mutation unless a separate explicit approval workflow exists.
-- `harmonic-mcp-oauth`: declares `discovery` and `sync_read` actions directly on the Harmonic recommendation record. The local platform catalog currently has an active Harmonic OAuth application template but zero trusted Harmonic tool rows, so the task templates and skills explicitly report the tool-discovery gap. No `sync_write` action is declared because no current write/update surface is trusted.
+- `affinity-mcp-server`: declares one `setup` action pointing at `vc.affinity_setup`; that setup task owns the Affinity discovery, read-preview, and write-proposal child task references.
+- `slack_v2`: declares one `setup` action pointing at `vc.slack_setup`; that setup task owns the Slack discovery, read-preview, and notification-proposal child task references.
+- `google_drive`: declares one `setup` action pointing at `vc.google_drive_setup`; that setup task owns the Google Drive discovery, read-preview, and file-proposal child task references.
+- `notion`: declares one `setup` action pointing at `vc.notion_setup`; that setup task owns the Notion discovery, read-preview, and update-proposal child task references.
+- `harmonic-mcp-oauth`: declares one `setup` action pointing at `vc.harmonic_setup`; that setup task owns the Harmonic discovery and read-preview child task references. No write child task is declared because no current write/update surface is trusted.
 
 Review notes:
 
