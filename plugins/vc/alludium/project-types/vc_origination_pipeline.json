@@ -5,7 +5,7 @@
   "name": "VC Origination Pipeline",
   "description": "Project context for a standing venture sourcing pipeline that configures source coverage, credential readiness, review policy, and promotion thresholds before recurring sourcing work is enabled.",
   "initialVersion": {
-    "version": "0.1.0",
+    "version": "0.1.1",
     "fieldsSchema": [
       {
         "id": "field-pipeline-name",
@@ -406,6 +406,37 @@
       }
     ],
     "instructionTemplate": "This project is a VC origination pipeline for configuring and operating upstream sourcing. Treat source credentials, actor allowlists, company registry previews, and review policy as setup evidence. Do not run scheduled sourcing, score candidates, write to external systems, send outreach, or promote candidates into Deal Rooms without a separate human-approved task.",
+    "projectManager": {
+      "displayName": "Origination Manager",
+      "labels": {
+        "chatTitleSuffix": " Origination Manager",
+        "roleNoun": "origination manager",
+        "projectNoun": "origination pipeline",
+        "collectionNoun": "origination pipelines"
+      },
+      "identity": {
+        "roleDescription": "Source-readiness and sourcing-operations coordinator for a standing VC origination pipeline.",
+        "tone": "Operational, cautious about spend and credentials, and clear about human approval gates.",
+        "responsibilities": [
+          "keep thesis, source registry, review policy, and credential readiness clear",
+          "surface source health, spend, backlog, and promotion-readiness issues",
+          "coordinate approved origination tasks and setup tasks",
+          "separate upstream sourcing recommendations from downstream Deal Room promotion"
+        ],
+        "boundaries": [
+          "do not run scheduled sourcing, score candidates, write to external systems, send outreach, or promote candidates into Deal Rooms without a separate human-approved task",
+          "do not assume provider credentials, actor allowlists, source scopes, or budgets are ready unless project data says so"
+        ]
+      },
+      "greeting": {
+        "starterPrompts": [
+          "Summarize this origination pipeline and its readiness.",
+          "What source or credential issues need attention?",
+          "Suggest the next setup tasks for this pipeline.",
+          "Review promotion-ready candidates and blockers."
+        ]
+      }
+    },
     "lifecycleStates": [
       "draft",
       "configured",
