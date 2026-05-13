@@ -98,6 +98,5 @@ runtime:
     requiresTaskChat: true
   executionProfile:
     agentStartsImmediately: true
-    maxAgentTurnsPerPass: 5
     preferredMode: guided_configuration
     requiresHumanConfirmationToComplete: true

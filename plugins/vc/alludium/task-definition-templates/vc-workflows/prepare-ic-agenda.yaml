@@ -168,7 +168,6 @@ runtime:
     requiresTaskChat: true
   executionProfile:
     agentStartsImmediately: true
-    maxAgentTurnsPerPass: 6
     requiresHumanConfirmationToComplete: true
     preferredMode: iterative_drafting
     preferredAgentType: vc_ic_prep_producer
