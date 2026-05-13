@@ -73,6 +73,8 @@ The validator checks plugin manifests, skill frontmatter, manifest inventory, ag
 
 For same-repository pull requests, GitHub also runs a generated-Markdown sync workflow. If agent-template or task-definition YAML changes but the generated Markdown was not committed, the workflow regenerates `plugins/vc/agents/` and `plugins/vc/tasks/`, pushes those files back to the PR branch, and dispatches validation for the updated branch. The validation workflow remains the freshness check and still fails if generated Markdown is stale.
 
+Branch protection should require `Validate`, not the generated-Markdown sync helper. The helper pushes with `GITHUB_TOKEN`, so its bot push does not trigger `pull_request` workflows on the generated SHA; it explicitly dispatches `Validate` instead.
+
 CI also runs the VC release-contract validator:
 
 ```bash

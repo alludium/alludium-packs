@@ -82,6 +82,8 @@ Generated Markdown must be deterministic and kept in sync by `scripts/generate_m
 
 For same-repository pull requests, GitHub automatically runs the generator, pushes updated `agents/` and `tasks/` files back to the PR branch when YAML or generated Markdown changes, and dispatches validation for the updated branch. External fork PRs cannot receive bot pushes, so contributors from forks should run the generator locally before pushing.
 
+Branch protection should require the `Validate` workflow, not the generated-Markdown sync helper. The helper pushes with `GITHUB_TOKEN`, so its bot push does not trigger `pull_request` workflows on the generated SHA; it explicitly dispatches `Validate` instead.
+
 Because generated Markdown is part of the published pack artifact, YAML changes that regenerate `agents/` or `tasks/` are release-content changes. Bump the pack/plugin version and update this README plus `alludium/inventory.md` whenever those generated files change.
 
 The `.mcp.json` file lists VC-relevant MCP servers using public-safe user/workspace credential placeholders. When the same pack is ingested into Alludium, `alludium/mcp-recommendations.yaml` tells the platform which entries can map to managed platform defaults or workspace connections.

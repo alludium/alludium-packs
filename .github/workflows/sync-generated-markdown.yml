@@ -1,5 +1,9 @@
 name: Sync Generated Markdown
 
+# This workflow is an auto-fix helper, not the merge gate. Because it pushes
+# with GITHUB_TOKEN, its push does not trigger pull_request workflows on the
+# bot-created SHA. Keep branch protection requiring Validate, not this helper.
+
 on:
   pull_request:
     paths:
@@ -38,6 +42,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           for attempt in 1 2 3; do
+            # Reset before generating so a retry always starts from the latest
+            # PR branch head; generated commits only exist after this point.
             git fetch origin "${{ github.head_ref }}"
             git reset --hard "origin/${{ github.head_ref }}"
 
