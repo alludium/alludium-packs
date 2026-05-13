@@ -216,7 +216,6 @@ runtime:
     requiresTaskChat: true
   executionProfile:
     agentStartsImmediately: false
-    maxAgentTurnsPerPass: 6
     requiresHumanConfirmationToComplete: true
     preferredMode: review
     preferredAgentType: vc_legal_compliance_desk

@@ -228,7 +228,6 @@ runtime:
     requiresTaskChat: true
   executionProfile:
     agentStartsImmediately: true
-    maxAgentTurnsPerPass: 8
     requiresHumanConfirmationToComplete: true
     preferredMode: guided_execution
     preferredAgentType: vc_diligence_analyst

@@ -110,7 +110,6 @@ runtime:
   executionProfile:
     requiredAgentType: alludium-navigator
     agentStartsImmediately: true
-    maxAgentTurnsPerPass: 4
     requiresHumanConfirmationToComplete: false
     preferredMode: guided_configuration
 
