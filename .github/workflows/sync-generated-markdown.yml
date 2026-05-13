@@ -79,13 +79,20 @@ jobs:
           done
 
           NEW_SHA=$(git rev-parse HEAD)
+          INDEXED=false
           for wait_attempt in 1 2 3 4 5; do
             if gh api "repos/${{ github.repository }}/commits/$NEW_SHA" >/dev/null 2>&1; then
+              INDEXED=true
               break
             fi
-            echo "Waiting for GitHub to index generated commit $NEW_SHA."
+            echo "Waiting for GitHub to index generated commit $NEW_SHA (attempt $wait_attempt/5)."
             sleep 2
           done
+
+          if [ "$INDEXED" != "true" ]; then
+            echo "ERROR: GitHub did not index generated commit $NEW_SHA after 10 seconds." >&2
+            exit 1
+          fi
 
           REMOTE_SHA=$(gh api "repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" --jq .head.sha)
           if [ "$REMOTE_SHA" != "$NEW_SHA" ]; then
