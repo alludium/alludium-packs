@@ -336,6 +336,16 @@ def validate_plugin_manifest(path: Path) -> None:
         fail(f"{path.relative_to(ROOT)} mcpServers path must be ./.mcp.json")
 
 
+def validate_plugin_manifest_versions(pack_version: str) -> None:
+    for path in [ROOT / ".codex-plugin" / "plugin.json", ROOT / ".claude-plugin" / "plugin.json"]:
+        manifest = read_json(path)
+        if manifest.get("version") != pack_version:
+            fail(
+                f"{path.relative_to(ROOT)} version must match alludium/manifest.yaml "
+                f"pack.version {pack_version}"
+            )
+
+
 def validate_skills(manifest: dict[str, Any]) -> set[str]:
     skill_ids = manifest["surfaces"]["skills"]["ids"]
     if len(skill_ids) != len(set(skill_ids)):
@@ -2234,6 +2244,10 @@ def main() -> None:
         fail("alludium/manifest.yaml must be an object")
     if manifest.get("boundaries", {}).get("secretsAllowed") is not False:
         fail("Manifest must declare boundaries.secretsAllowed: false")
+    pack_version = manifest.get("pack", {}).get("version")
+    if not isinstance(pack_version, str) or not pack_version:
+        fail("Manifest must declare pack.version")
+    validate_plugin_manifest_versions(pack_version)
 
     skill_ids = validate_skills(manifest)
     validate_templates(manifest, skill_ids)

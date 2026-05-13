@@ -22,7 +22,7 @@ In this repository, each pack directory is also a valid plugin root. Standard pl
 
 The first VC bundle is plugin-shaped and pack-aware. VC task-definition templates, the VC Deal Room project type, workspace variable declarations, and application recommendations now live in the public pack as draft surfaces. The project-type and metadata surfaces still require the paired platform ingest work before they can become the runtime source of truth.
 
-Alludium YAML remains the source of truth for runtime agent templates and task-definition templates. The pack also publishes generated Markdown compatibility artifacts so external agentic tooling can consume those same definitions through plugin-native files.
+Alludium YAML remains the source of truth for runtime agent templates and task-definition templates. The pack also publishes generated Markdown compatibility artifacts so external agentic tooling can consume those same definitions from repository-native Markdown files.
 
 ## Repository Shape
 
@@ -48,7 +48,7 @@ Within a pack:
 
 - `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` describe the plugin for agent tooling.
 - `skills/` contains public skills in Markdown.
-- `agents/` contains generated plugin-native agent Markdown derived from `alludium/agent-templates/`.
+- `agents/` contains generated agent Markdown compatibility artifacts derived from `alludium/agent-templates/`.
 - `tasks/` contains generated task prompt Markdown derived from `alludium/task-definition-templates/`.
 - `.mcp.json` contains plugin-compatible MCP server definitions using public-safe credential placeholders.
 - `alludium/manifest.yaml` describes the Alludium pack surface.
@@ -71,7 +71,7 @@ python3 plugins/vc/scripts/generate_markdown.py --check
 
 The validator checks plugin manifests, skill frontmatter, manifest inventory, agent-template references, task-template references, project-type references, VC task artifact file-field contracts, workspace variables, application recommendations, generated Markdown freshness, and obvious secret-bearing values.
 
-For same-repository pull requests, GitHub also runs a generated-Markdown sync workflow. If agent-template or task-definition YAML changes but the generated Markdown was not committed, the workflow regenerates `plugins/vc/agents/` and `plugins/vc/tasks/` and pushes those files back to the PR branch. The validation workflow remains the hard gate and still fails if generated Markdown is stale.
+For same-repository pull requests, GitHub also runs a generated-Markdown sync workflow. If agent-template or task-definition YAML changes but the generated Markdown was not committed, the workflow regenerates `plugins/vc/agents/` and `plugins/vc/tasks/`, pushes those files back to the PR branch, and dispatches validation for the updated branch. The validation workflow remains the freshness check and still fails if generated Markdown is stale.
 
 CI also runs the VC release-contract validator:
 

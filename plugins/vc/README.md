@@ -28,7 +28,7 @@ Task-template workspace eligibility is controlled by catalog-level `verticalKeys
 | Surface                   | Path                                  | Notes                                                                                    |
 | ------------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------- |
 | Skills                    | `skills/`                             | 60 public workflow, integration-management, and origination skills used by the VC pack   |
-| Generated agents          | `agents/`                             | 8 plugin-native Markdown agents generated from Alludium runtime YAML                    |
+| Generated agents          | `agents/`                             | 8 agent Markdown compatibility artifacts generated from Alludium runtime YAML           |
 | Generated tasks           | `tasks/`                              | 72 task prompt Markdown files generated from task-definition YAML                        |
 | Agent templates           | `alludium/agent-templates/`           | 8 Alludium runtime templates using the `vc_*` baseline                                   |
 | Task definition templates | `alludium/task-definition-templates/` | 72 VC workflow, integration-management, and origination task templates plus catalog metadata |
@@ -74,13 +74,13 @@ The task-definition-template surface requires platform support for `external-tas
 
 The project-type surface requires platform support for `external-project-type-ingest`. Platform versions without that capability should continue using platform-local project types until the paired platform cutover lands.
 
-The top-level `agents/` directory contains generated plugin-native Claude/Codex agent definitions. The current `alludium/agent-templates/` files remain the source of truth; generated agent Markdown preserves prompt placeholders and carries skills plus source metadata for external agentic tooling.
+The top-level `agents/` directory contains generated Claude/Codex-style agent Markdown compatibility artifacts. The current `alludium/agent-templates/` files remain the source of truth; generated agent Markdown preserves prompt placeholders and carries skills plus source metadata for external agentic tooling.
 
 The top-level `tasks/` directory contains generated task prompt Markdown. The current `alludium/task-definition-templates/` YAML remains the source of truth; generated task Markdown extracts the execution instructions, input policy, action policy, completion criteria, human decision points, fields, skills, and routing metadata needed to start each task.
 
 Generated Markdown must be deterministic and kept in sync by `scripts/generate_markdown.py`. CI fails if YAML changes without regenerating the corresponding Markdown output.
 
-For same-repository pull requests, GitHub automatically runs the generator and pushes updated `agents/` and `tasks/` files back to the PR branch when YAML or generated Markdown changes. External fork PRs cannot receive bot pushes, so contributors from forks should run the generator locally before pushing.
+For same-repository pull requests, GitHub automatically runs the generator, pushes updated `agents/` and `tasks/` files back to the PR branch when YAML or generated Markdown changes, and dispatches validation for the updated branch. External fork PRs cannot receive bot pushes, so contributors from forks should run the generator locally before pushing.
 
 The `.mcp.json` file lists VC-relevant MCP servers using public-safe user/workspace credential placeholders. When the same pack is ingested into Alludium, `alludium/mcp-recommendations.yaml` tells the platform which entries can map to managed platform defaults or workspace connections.
 

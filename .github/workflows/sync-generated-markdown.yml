@@ -11,7 +11,12 @@ on:
       - "plugins/vc/scripts/generate_markdown.py"
 
 permissions:
+  actions: write
   contents: write
+
+concurrency:
+  group: sync-generated-markdown-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
   sync-generated-markdown:
@@ -39,3 +44,7 @@ jobs:
           git add plugins/vc/agents plugins/vc/tasks
           git commit -m "Regenerate VC agent and task Markdown"
           git push
+
+          gh workflow run validate.yml --ref "${{ github.head_ref }}"
+        env:
+          GH_TOKEN: ${{ github.token }}

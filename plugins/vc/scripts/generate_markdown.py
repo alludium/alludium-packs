@@ -16,6 +16,7 @@ AGENT_TEMPLATE_ROOT = PACK_ROOT / "alludium" / "agent-templates"
 TASK_TEMPLATE_ROOT = PACK_ROOT / "alludium" / "task-definition-templates"
 AGENT_OUTPUT_ROOT = PACK_ROOT / "agents"
 TASK_OUTPUT_ROOT = PACK_ROOT / "tasks"
+MANIFEST_PATH = PACK_ROOT / "alludium" / "manifest.yaml"
 
 
 def fail(message: str) -> None:
@@ -366,20 +367,66 @@ def render_task(path: Path) -> tuple[Path, str]:
     return TASK_OUTPUT_ROOT / f"{slug}.md", body
 
 
+def read_manifest() -> dict[str, Any]:
+    return read_yaml(MANIFEST_PATH)
+
+
+def add_expected_output(
+    outputs: dict[Path, str],
+    sources: dict[Path, Path],
+    output_path: Path,
+    body: str,
+    source_path: Path,
+) -> None:
+    existing_source = sources.get(output_path)
+    if existing_source is not None:
+        fail(
+            "Generated Markdown filename collision: "
+            f"{source_path.relative_to(PACK_ROOT)} and "
+            f"{existing_source.relative_to(PACK_ROOT)} both map to "
+            f"{output_path.relative_to(PACK_ROOT)}"
+        )
+    outputs[output_path] = body
+    sources[output_path] = source_path
+
+
 def expected_outputs() -> dict[Path, str]:
+    manifest = read_manifest()
+    agent_template_ids = manifest.get("surfaces", {}).get("alludiumAgentTemplates", {}).get("ids")
+    if not isinstance(agent_template_ids, list):
+        fail("alludium/manifest.yaml surfaces.alludiumAgentTemplates.ids must be a list")
+
     outputs: dict[Path, str] = {}
-    for path in sorted(AGENT_TEMPLATE_ROOT.glob("*.yaml")):
+    sources: dict[Path, Path] = {}
+    discovered_agent_paths = {path.name for path in AGENT_TEMPLATE_ROOT.glob("*.yaml")}
+    declared_agent_paths: set[str] = set()
+    for template_id in agent_template_ids:
+        if not isinstance(template_id, str) or not template_id:
+            fail("alludium/manifest.yaml agent template IDs must be non-empty strings")
+        declared_agent_paths.add(f"{template_id}.yaml")
+        path = AGENT_TEMPLATE_ROOT / f"{template_id}.yaml"
+        if not path.exists():
+            fail(f"Manifest agent template missing YAML: {template_id}")
         output_path, body = render_agent(path)
-        outputs[output_path] = body
+        add_expected_output(outputs, sources, output_path, body, path)
+
+    extra_agent_paths = sorted(discovered_agent_paths - declared_agent_paths)
+    if extra_agent_paths:
+        fail(f"Agent template YAML present on disk but missing from manifest: {extra_agent_paths}")
+
     for path in sorted(TASK_TEMPLATE_ROOT.glob("*/*.yaml")):
         output_path, body = render_task(path)
-        outputs[output_path] = body
+        add_expected_output(outputs, sources, output_path, body, path)
     return outputs
 
 
 def write_outputs(outputs: dict[Path, str]) -> None:
     for directory in [AGENT_OUTPUT_ROOT, TASK_OUTPUT_ROOT]:
         directory.mkdir(parents=True, exist_ok=True)
+    expected_paths = set(outputs)
+    actual_paths = set(AGENT_OUTPUT_ROOT.glob("*.md")) | set(TASK_OUTPUT_ROOT.glob("*.md"))
+    for path in sorted(actual_paths - expected_paths):
+        path.unlink()
     for path, body in outputs.items():
         path.write_text(body, encoding="utf-8")
 
