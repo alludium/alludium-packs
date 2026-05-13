@@ -71,6 +71,8 @@ python3 plugins/vc/scripts/generate_markdown.py --check
 
 The validator checks plugin manifests, skill frontmatter, manifest inventory, agent-template references, task-template references, project-type references, VC task artifact file-field contracts, workspace variables, application recommendations, generated Markdown freshness, and obvious secret-bearing values.
 
+For same-repository pull requests, GitHub also runs a generated-Markdown sync workflow. If agent-template or task-definition YAML changes but the generated Markdown was not committed, the workflow regenerates `plugins/vc/agents/` and `plugins/vc/tasks/` and pushes those files back to the PR branch. The validation workflow remains the hard gate and still fails if generated Markdown is stale.
+
 CI also runs the VC release-contract validator:
 
 ```bash

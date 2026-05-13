@@ -80,6 +80,8 @@ The top-level `tasks/` directory contains generated task prompt Markdown. The cu
 
 Generated Markdown must be deterministic and kept in sync by `scripts/generate_markdown.py`. CI fails if YAML changes without regenerating the corresponding Markdown output.
 
+For same-repository pull requests, GitHub automatically runs the generator and pushes updated `agents/` and `tasks/` files back to the PR branch when YAML or generated Markdown changes. External fork PRs cannot receive bot pushes, so contributors from forks should run the generator locally before pushing.
+
 The `.mcp.json` file lists VC-relevant MCP servers using public-safe user/workspace credential placeholders. When the same pack is ingested into Alludium, `alludium/mcp-recommendations.yaml` tells the platform which entries can map to managed platform defaults or workspace connections.
 
 Template `metadata.gitRepositoryUrl` values currently point at the configurable-agent implementation repository. They are runtime implementation metadata, not this pack's source provenance. Pack source provenance should be recorded separately by the platform when ingesting a tagged release.
