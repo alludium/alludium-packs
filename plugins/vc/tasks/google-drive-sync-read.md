@@ -8,7 +8,9 @@ skills:
 - citation-enforcement
 ---
 
-<!-- Generated from alludium/task-definition-templates/vc-integrations/google-drive-sync-read.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+> **GENERATED FILE**
+> Source: `alludium/task-definition-templates/vc-integrations/google-drive-sync-read.yaml`
+> Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
 # Preview Google Drive Context
 

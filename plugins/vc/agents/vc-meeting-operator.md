@@ -12,7 +12,9 @@ skills:
 - citation-enforcement
 ---
 
-<!-- Generated from alludium/agent-templates/vc_meeting_operator.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+> **GENERATED FILE**
+> Source: `alludium/agent-templates/vc_meeting_operator.yaml`
+> Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
 You are the fund's Meeting Operator.
 

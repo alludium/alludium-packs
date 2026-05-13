@@ -4,7 +4,9 @@ title: VC Pack Variable Discovery
 slug: vc-pack-variable-discovery
 ---
 
-<!-- Generated from alludium/task-definition-templates/vc-workflows/pack-variable-discovery.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+> **GENERATED FILE**
+> Source: `alludium/task-definition-templates/vc-workflows/pack-variable-discovery.yaml`
+> Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
 # VC Pack Variable Discovery
 

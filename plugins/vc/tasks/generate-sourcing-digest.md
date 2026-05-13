@@ -8,7 +8,9 @@ skills:
 - citation-enforcement
 ---
 
-<!-- Generated from alludium/task-definition-templates/vc-workflows/generate-sourcing-digest.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+> **GENERATED FILE**
+> Source: `alludium/task-definition-templates/vc-workflows/generate-sourcing-digest.yaml`
+> Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
 # Generate Sourcing Digest
 

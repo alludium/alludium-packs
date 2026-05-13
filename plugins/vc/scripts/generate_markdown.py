@@ -47,8 +47,10 @@ def yaml_frontmatter(data: dict[str, Any]) -> str:
 
 def generated_notice(source_path: Path) -> str:
     return (
-        f"<!-- Generated from {source_path.relative_to(PACK_ROOT)}; do not edit directly. "
-        "Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->\n\n"
+        "> **GENERATED FILE**\n"
+        f"> Source: `{source_path.relative_to(PACK_ROOT)}`\n"
+        "> Do not edit directly. Change the YAML source and run "
+        "`python plugins/vc/scripts/generate_markdown.py`.\n\n"
     )
 
 
@@ -62,6 +64,12 @@ def slugify(value: str) -> str:
 def require_string(value: Any, context: str) -> str:
     if not isinstance(value, str) or not value.strip():
         fail(f"{context} must be a non-empty string")
+    return value
+
+
+def require_mapping(value: Any, context: str) -> dict[str, Any]:
+    if not isinstance(value, dict):
+        fail(f"{context} must be an object")
     return value
 
 
@@ -401,10 +409,19 @@ def add_expected_output(
 
 def expected_outputs() -> dict[Path, str]:
     manifest = read_manifest()
-    agent_template_ids = manifest.get("surfaces", {}).get("alludiumAgentTemplates", {}).get("ids")
+    surfaces = require_mapping(manifest.get("surfaces"), "alludium/manifest.yaml surfaces")
+    agent_templates_surface = require_mapping(
+        surfaces.get("alludiumAgentTemplates"),
+        "alludium/manifest.yaml surfaces.alludiumAgentTemplates",
+    )
+    task_templates_surface = require_mapping(
+        surfaces.get("taskDefinitionTemplates"),
+        "alludium/manifest.yaml surfaces.taskDefinitionTemplates",
+    )
+    agent_template_ids = agent_templates_surface.get("ids")
     if not isinstance(agent_template_ids, list):
         fail("alludium/manifest.yaml surfaces.alludiumAgentTemplates.ids must be a list")
-    task_template_ids = manifest.get("surfaces", {}).get("taskDefinitionTemplates", {}).get("ids")
+    task_template_ids = task_templates_surface.get("ids")
     if not isinstance(task_template_ids, list):
         fail("alludium/manifest.yaml surfaces.taskDefinitionTemplates.ids must be a list")
 

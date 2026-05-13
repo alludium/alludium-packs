@@ -44,6 +44,14 @@ jobs:
           for attempt in 1 2 3; do
             # Reset before generating so a retry always starts from the latest
             # PR branch head; generated commits only exist after this point.
+            if [ "${GITHUB_ACTIONS:-}" != "true" ]; then
+              echo "ERROR: Refusing to run destructive reset outside GitHub Actions." >&2
+              exit 1
+            fi
+            if git status --porcelain --untracked-files=no | grep -q .; then
+              echo "ERROR: Working tree has uncommitted changes. Refusing destructive reset." >&2
+              exit 1
+            fi
             git fetch origin "${{ github.head_ref }}"
             git reset --hard "origin/${{ github.head_ref }}"
 
@@ -70,6 +78,22 @@ jobs:
             sleep 3
           done
 
+          NEW_SHA=$(git rev-parse HEAD)
+          for wait_attempt in 1 2 3 4 5; do
+            if gh api "repos/${{ github.repository }}/commits/$NEW_SHA" >/dev/null 2>&1; then
+              break
+            fi
+            echo "Waiting for GitHub to index generated commit $NEW_SHA."
+            sleep 2
+          done
+
+          REMOTE_SHA=$(gh api "repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" --jq .head.sha)
+          if [ "$REMOTE_SHA" != "$NEW_SHA" ]; then
+            echo "PR branch moved to $REMOTE_SHA after generated commit $NEW_SHA; skipping validation dispatch."
+            exit 0
+          fi
+
           gh workflow run validate.yml --ref "${{ github.head_ref }}"
+          echo "Dispatched Validate workflow for generated commit $NEW_SHA."
         env:
           GH_TOKEN: ${{ github.token }}

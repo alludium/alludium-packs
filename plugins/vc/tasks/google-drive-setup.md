@@ -10,7 +10,9 @@ skills:
 - citation-enforcement
 ---
 
-<!-- Generated from alludium/task-definition-templates/vc-integrations/google-drive-setup.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+> **GENERATED FILE**
+> Source: `alludium/task-definition-templates/vc-integrations/google-drive-setup.yaml`
+> Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
 # Set Up Google Drive for VC Deal Rooms
 
