@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.review_portfolio_overlap
-version: 0.1.0
+version: 0.1.1
 title: Review Portfolio Overlap
 category: Venture Capital
 visibility: workspace
@@ -39,6 +39,18 @@ definition:
       cadence: daily
       localTime: "08:15"
       dryRunFirst: true
+    scheduling:
+      schedulable: true
+      showInProjectSetup: true
+      setupStep: schedules
+      scheduleType: cron
+      defaultScheduleRef: scheduleDefaults
+      requiresHumanApprovalToEnable: true
+      canCreateTestRun: true
+      testRunCreatesVisibleTask: true
+      dryRunFirst: true
+      safety:
+        externalWritesRequireApproval: true
     instructions:
       executionInstructions: Mirror the reference pipeline's portfolio-overlap checker. Compare only active candidates such as Meet, IC-Summary, or Reach out against the current portfolio. Classify overlap as none, low, medium, or high using target customer, problem, and product category; sectoral overlap alone is not enough. Do not auto-pass candidates for overlap.
       missingInputPolicy: Ask for active candidate batch, portfolio source or cache, freshness policy, and whether cached portfolio data may be reused.

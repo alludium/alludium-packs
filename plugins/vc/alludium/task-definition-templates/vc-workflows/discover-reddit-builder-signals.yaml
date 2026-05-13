@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.discover_reddit_builder_signals
-version: 0.1.0
+version: 0.1.1
 title: Discover Reddit Builder Signals
 category: Venture Capital
 visibility: workspace
@@ -42,6 +42,18 @@ definition:
       localTime: "07:40"
       dryRunFirst: true
       defaultLookbackDays: 30
+    scheduling:
+      schedulable: true
+      showInProjectSetup: true
+      setupStep: schedules
+      scheduleType: cron
+      defaultScheduleRef: scheduleDefaults
+      requiresHumanApprovalToEnable: true
+      canCreateTestRun: true
+      testRunCreatesVisibleTask: true
+      dryRunFirst: true
+      safety:
+        externalWritesRequireApproval: true
     instructions:
       executionInstructions: Mirror the reference pipeline's Reddit approach against approved public communities and terms. Look for first-person build, launch, beta, pre-seed, early-user, AI/LLM, and B2B signals. Reject advice questions, job posts, hiring posts, rants, freelancing income posts, pure academic posts without product signal, and non-self posts. Preserve post ID as the dedupe key.
       missingInputPolicy: Ask for approved subreddits, query terms, lookback window, minimum score, rate-limit policy, and seen post state.

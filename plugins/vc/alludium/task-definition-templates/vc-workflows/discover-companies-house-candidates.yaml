@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.discover_companies_house_candidates
-version: 0.1.0
+version: 0.1.1
 title: Discover Companies House Candidates
 category: Venture Capital
 visibility: workspace
@@ -44,6 +44,18 @@ definition:
         recent: "0-14d"
         mature: "14-548d"
       defaultResultLimit: 100
+    scheduling:
+      schedulable: true
+      showInProjectSetup: true
+      setupStep: schedules
+      scheduleType: cron
+      defaultScheduleRef: scheduleDefaults
+      requiresHumanApprovalToEnable: true
+      canCreateTestRun: true
+      testRunCreatesVisibleTask: true
+      dryRunFirst: true
+      safety:
+        externalWritesRequireApproval: true
     instructions:
       executionInstructions: Discover candidate companies from approved public Companies House search/result pages. Mirror the reference pipeline's two-window intent for recent incorporations and mature/fundraising-age companies. Prioritize active UK companies with software, data, R&D, biotech, AI, robotics, or deep-tech signals; reject mass-registration addresses, service/consultancy language, outside-geography signals, corporate officers, and weak name/location/founder evidence. Use company number as the primary dedupe key.
       missingInputPolicy: Ask for selected public URL patterns, geography/stage/sector scope, result limits, allowed SIC or keyword filters, and Firecrawl availability before extraction.

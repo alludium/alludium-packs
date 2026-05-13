@@ -158,6 +158,9 @@ PROJECT_TASK_ACTIVATION_MODES = {"manual", "manual_review", "auto_start"}
 PROJECT_SCOPES = {"project_instance", "project_management"}
 DEFAULT_PROJECT_SCOPE = "project_instance"
 PROJECT_MANAGEMENT_SCOPE = "project_management"
+TASK_SCHEDULING_SETUP_STEPS = {"schedules"}
+TASK_SCHEDULING_TYPES = {"cron", "one_off"}
+TASK_SCHEDULING_DEFAULT_REFS = {"scheduleDefaults"}
 VC_DEAL_ROOM_LIFECYCLE_STAGES = {
     "intake",
     "assessment",
@@ -927,6 +930,81 @@ def validate_project_scope_instruction_language(
         )
 
 
+def validate_task_scheduling_contract(
+    template_id: str,
+    definition_json: dict[str, Any],
+    supported_project_types: list[str],
+) -> None:
+    schedule_defaults = definition_json.get("scheduleDefaults")
+    scheduling = definition_json.get("scheduling")
+
+    if schedule_defaults is None and scheduling is None:
+        return
+    if not isinstance(schedule_defaults, dict):
+        fail(f"Task template {template_id} definitionJson.scheduleDefaults must be an object")
+    if not isinstance(scheduling, dict):
+        fail(f"Task template {template_id} definitionJson.scheduling must be declared")
+
+    if scheduling.get("schedulable") is not True:
+        fail(f"Task template {template_id} definitionJson.scheduling.schedulable must be true")
+    if scheduling.get("showInProjectSetup") is not True:
+        fail(
+            f"Task template {template_id} definitionJson.scheduling.showInProjectSetup must be true"
+        )
+    if scheduling.get("setupStep") not in TASK_SCHEDULING_SETUP_STEPS:
+        fail(
+            f"Task template {template_id} definitionJson.scheduling.setupStep must be one of "
+            f"{sorted(TASK_SCHEDULING_SETUP_STEPS)}"
+        )
+    if scheduling.get("scheduleType") not in TASK_SCHEDULING_TYPES:
+        fail(
+            f"Task template {template_id} definitionJson.scheduling.scheduleType must be one of "
+            f"{sorted(TASK_SCHEDULING_TYPES)}"
+        )
+    if scheduling.get("defaultScheduleRef") not in TASK_SCHEDULING_DEFAULT_REFS:
+        fail(
+            f"Task template {template_id} definitionJson.scheduling.defaultScheduleRef must "
+            "point at scheduleDefaults"
+        )
+
+    for boolean_field in [
+        "requiresHumanApprovalToEnable",
+        "canCreateTestRun",
+        "testRunCreatesVisibleTask",
+        "dryRunFirst",
+    ]:
+        if not isinstance(scheduling.get(boolean_field), bool):
+            fail(
+                f"Task template {template_id} definitionJson.scheduling.{boolean_field} "
+                "must be a boolean"
+            )
+
+    if scheduling.get("requiresHumanApprovalToEnable") is not True:
+        fail(
+            f"Task template {template_id} definitionJson.scheduling must require human approval"
+        )
+    if scheduling.get("testRunCreatesVisibleTask") is not True:
+        fail(
+            f"Task template {template_id} definitionJson.scheduling test runs must create "
+            "visible tasks"
+        )
+
+    safety = scheduling.get("safety")
+    if not isinstance(safety, dict):
+        fail(f"Task template {template_id} definitionJson.scheduling.safety must be an object")
+    if safety.get("externalWritesRequireApproval") is not True:
+        fail(
+            f"Task template {template_id} definitionJson.scheduling.safety must require "
+            "approval for external writes"
+        )
+
+    if "vc_origination_pipeline" not in supported_project_types:
+        fail(
+            f"Task template {template_id} with setup scheduling must support "
+            "vc_origination_pipeline"
+        )
+
+
 def validate_task_template_reference_list(
     template_id: str,
     field_name: str,
@@ -1485,6 +1563,7 @@ def validate_task_template_file(
         project_type_ids,
         "included project types",
     )
+    validate_task_scheduling_contract(template_id, definition_json, supported_project_types)
 
     fields = template.get("fields") or {}
     if not isinstance(fields, dict):

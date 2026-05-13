@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.generate_sourcing_digest
-version: 0.1.0
+version: 0.1.1
 title: Generate Sourcing Digest
 category: Venture Capital
 visibility: workspace
@@ -38,6 +38,18 @@ definition:
       localTime: "08:45"
       dryRunFirst: true
       defaultChannel: project_digest_channel
+    scheduling:
+      schedulable: true
+      showInProjectSetup: true
+      setupStep: schedules
+      scheduleType: cron
+      defaultScheduleRef: scheduleDefaults
+      requiresHumanApprovalToEnable: true
+      canCreateTestRun: true
+      testRunCreatesVisibleTask: true
+      dryRunFirst: true
+      safety:
+        externalWritesRequireApproval: true
     instructions:
       executionInstructions: Produce a reference-pipeline-style digest of new Meet/Watch and active candidates, source counts, run failures, budget/cost notes, and review actions. The default destination is a reviewable digest object; posting to Slack, ClickUp, email, or another external channel requires a separately approved write-capable task.
       missingInputPolicy: Ask for run receipt, candidate batch, digest channel, audience, and whether this is daily, weekly, or monthly.

@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.discover_github_builder_signals
-version: 0.1.0
+version: 0.1.1
 title: Discover GitHub Builder Signals
 category: Venture Capital
 visibility: workspace
@@ -41,6 +41,18 @@ definition:
       localTime: "07:30"
       dryRunFirst: true
       defaultLookbackDays: 14
+    scheduling:
+      schedulable: true
+      showInProjectSetup: true
+      setupStep: schedules
+      scheduleType: cron
+      defaultScheduleRef: scheduleDefaults
+      requiresHumanApprovalToEnable: true
+      canCreateTestRun: true
+      testRunCreatesVisibleTask: true
+      dryRunFirst: true
+      safety:
+        externalWritesRequireApproval: true
     instructions:
       executionInstructions: Mirror the reference pipeline's two-pass GitHub approach. Pass 1 searches users by UK/Ireland city/location and reviews their recently-created repositories. Pass 2 searches AI/LLM/agentic repository topics and descriptions, then checks owner profile location and README/product evidence. Score UK signal, B2B/enterprise language, AI keyword depth, serious topics, stars-per-day traction, homepage/contact signals, README pricing/CTA, and founder profile evidence.
       missingInputPolicy: Ask for GitHub access, lookback window, approved topics/keywords, location scope, rate-limit policy, and seen repo/user state.
