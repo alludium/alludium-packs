@@ -9,6 +9,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/score-sourcing-candidates.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Score Sourcing Candidates
 
 Produce Meet/Watch/Pass verdicts and urgency scores for enriched origination candidates.

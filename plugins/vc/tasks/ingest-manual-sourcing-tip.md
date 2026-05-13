@@ -9,6 +9,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/ingest-manual-sourcing-tip.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Ingest Manual Sourcing Tip
 
 Normalize a manually submitted company or founder lead into the origination candidate model.

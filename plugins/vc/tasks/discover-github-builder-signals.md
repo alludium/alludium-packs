@@ -9,6 +9,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/discover-github-builder-signals.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Discover GitHub Builder Signals
 
 Discover UK/Ireland technical-founder and AI repository signals using the reference pipeline's two-pass GitHub model.

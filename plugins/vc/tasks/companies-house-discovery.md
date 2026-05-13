@@ -8,6 +8,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-integrations/companies-house-discovery.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Explore Companies House Public Register Scope
 
 Discover public Companies House search URLs, result limits, and page-preview scope before selected VC origination reads.

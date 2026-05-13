@@ -8,6 +8,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/generate-sourcing-digest.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Generate Sourcing Digest
 
 Generate a daily or weekly origination digest with candidates, run receipts, degraded sources, and pending approvals.

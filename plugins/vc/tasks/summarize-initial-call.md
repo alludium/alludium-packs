@@ -8,6 +8,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/summarize-initial-call.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Summarize Meeting Records
 
 Summarize or ingest meeting records for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.

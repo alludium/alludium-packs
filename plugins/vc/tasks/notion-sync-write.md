@@ -8,6 +8,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-integrations/notion-sync-write.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Draft Notion Update Proposals
 
 Draft reviewable Notion page, database, or comment proposals from VC task outputs without performing broad workspace mutation.

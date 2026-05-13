@@ -9,6 +9,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-integrations/apify-setup.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Set Up Apify for VC Origination
 
 Coordinate Apify connection readiness, actor allowlist, discovery scope, and read-preview policy for a VC origination pipeline.

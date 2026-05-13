@@ -8,6 +8,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-integrations/apify-discovery.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Explore Apify Origination Sources
 
 Discover approved Apify actors, input schemas, source scope, and run-cost guardrails before any VC origination read preview.

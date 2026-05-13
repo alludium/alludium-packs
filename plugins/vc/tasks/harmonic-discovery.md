@@ -8,6 +8,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-integrations/harmonic-discovery.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Explore Harmonic Source Scopes
 
 Discover Harmonic saved searches, daily searches, and source scope before selected VC sourcing context reads.

@@ -8,6 +8,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/review-term-sheet.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Review Term Sheet
 
 Review Term Sheet for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.

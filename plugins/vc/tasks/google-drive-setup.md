@@ -10,6 +10,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-integrations/google-drive-setup.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Set Up Google Drive for VC Deal Rooms
 
 Coordinate Google Drive connection readiness, folder discovery, read-preview policy, and optional file proposal scope for VC Deal Room setup.

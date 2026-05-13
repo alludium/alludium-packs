@@ -9,6 +9,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/enrich-sourcing-candidates.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Enrich Sourcing Candidates
 
 Normalize and enrich candidate records with web, LinkedIn, founder, website, and evidence context before scoring.

@@ -8,6 +8,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-integrations/google-drive-sync-write.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Draft Google Drive File Proposals
 
 Draft reviewable Google Drive file or comment proposals from VC task outputs without performing broad Drive mutations.

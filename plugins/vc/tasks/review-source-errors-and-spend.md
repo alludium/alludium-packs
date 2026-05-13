@@ -9,6 +9,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/review-source-errors-and-spend.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Review Source Errors and Spend
 
 Review degraded source runs, cost warnings, retry safety, and required human actions.

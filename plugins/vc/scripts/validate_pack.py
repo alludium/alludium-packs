@@ -326,6 +326,13 @@ def parse_frontmatter(path: Path) -> dict[str, Any]:
     return parsed
 
 
+def plugin_manifest_paths() -> list[Path]:
+    paths = sorted(ROOT.glob(".*-plugin/plugin.json"))
+    if not paths:
+        fail("No plugin manifests found")
+    return paths
+
+
 def validate_plugin_manifest(path: Path) -> None:
     manifest = read_json(path)
     if manifest.get("name") != "vc":
@@ -336,8 +343,8 @@ def validate_plugin_manifest(path: Path) -> None:
         fail(f"{path.relative_to(ROOT)} mcpServers path must be ./.mcp.json")
 
 
-def validate_plugin_manifest_versions(pack_version: str) -> None:
-    for path in [ROOT / ".codex-plugin" / "plugin.json", ROOT / ".claude-plugin" / "plugin.json"]:
+def validate_plugin_manifest_versions(pack_version: str, plugin_paths: list[Path]) -> None:
+    for path in plugin_paths:
         manifest = read_json(path)
         if manifest.get("version") != pack_version:
             fail(
@@ -2235,8 +2242,9 @@ def validate_no_public_readiness_leakage() -> None:
 
 
 def main() -> None:
-    validate_plugin_manifest(ROOT / ".codex-plugin" / "plugin.json")
-    validate_plugin_manifest(ROOT / ".claude-plugin" / "plugin.json")
+    plugin_paths = plugin_manifest_paths()
+    for path in plugin_paths:
+        validate_plugin_manifest(path)
     read_json(ROOT / ".mcp.json")
 
     manifest = read_yaml(ROOT / "alludium" / "manifest.yaml")
@@ -2247,7 +2255,7 @@ def main() -> None:
     pack_version = manifest.get("pack", {}).get("version")
     if not isinstance(pack_version, str) or not pack_version:
         fail("Manifest must declare pack.version")
-    validate_plugin_manifest_versions(pack_version)
+    validate_plugin_manifest_versions(pack_version, plugin_paths)
 
     skill_ids = validate_skills(manifest)
     validate_templates(manifest, skill_ids)

@@ -9,6 +9,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/run-sourcing-pipeline.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Run VC Sourcing Pipeline
 
 Orchestrate one VC origination sourcing pass across approved sources with source-state receipts, cost gates, and human approval boundaries.

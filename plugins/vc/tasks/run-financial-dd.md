@@ -7,6 +7,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/run-financial-dd.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Run Financial DD
 
 Run Financial DD for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.

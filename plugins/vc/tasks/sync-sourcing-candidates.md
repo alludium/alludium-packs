@@ -9,6 +9,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/sync-sourcing-candidates.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Sync Sourcing Candidates
 
 Prepare or apply reviewed candidate state sync while preserving manual workflow decisions.

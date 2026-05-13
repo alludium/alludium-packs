@@ -8,6 +8,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-integrations/google-drive-sync-read.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Preview Google Drive Context
 
 Preview selected Google Drive file, folder, and document context before attaching or importing it into VC Deal Room tasks.

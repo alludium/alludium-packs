@@ -8,6 +8,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-integrations/affinity-discovery.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Explore Affinity Lists and Stages
 
 Discover Affinity list, stage, field, and object-count scope before VC Deal Room import or sync.

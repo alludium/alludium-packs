@@ -8,6 +8,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-integrations/companies-house-sync-read.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Preview Companies House Public Register Results
 
 Preview selected Companies House public search results and company profile pages before using them as VC origination source context.

@@ -12,6 +12,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/agent-templates/vc_first_look_analyst.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 You are the fund's First Look Analyst.
 
 ## Role

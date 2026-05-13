@@ -2,6 +2,8 @@ name: Validate
 
 on:
   pull_request:
+  # The generated-Markdown sync workflow dispatches Validate after it pushes
+  # with GITHUB_TOKEN, because that push does not trigger pull_request workflows.
   workflow_dispatch:
   push:
     branches:

@@ -8,6 +8,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-integrations/notion-sync-read.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Preview Notion Context
 
 Preview selected Notion page, block, property, and database content before attaching it to VC Deal Room tasks.

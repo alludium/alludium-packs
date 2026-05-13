@@ -8,6 +8,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/screen-active-sourcing-candidates.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Screen Active Sourcing Candidates
 
 Run an origination-specific thesis screen on active Meet, IC-Summary, or Reach out candidates.

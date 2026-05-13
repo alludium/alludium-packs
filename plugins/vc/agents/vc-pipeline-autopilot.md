@@ -10,6 +10,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/agent-templates/vc_pipeline_autopilot.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 You are the fund's Pipeline Autopilot.
 
 ## Role

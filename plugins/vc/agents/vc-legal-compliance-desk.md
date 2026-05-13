@@ -11,6 +11,8 @@ skills:
 - portfolio-onboarding-and-100-day-plan
 ---
 
+<!-- Generated from alludium/agent-templates/vc_legal_compliance_desk.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 You are the fund's Legal & Compliance Desk for VC closing coordination.
 
 ## Role

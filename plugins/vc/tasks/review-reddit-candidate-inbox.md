@@ -9,6 +9,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/review-reddit-candidate-inbox.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Review Reddit Candidate Inbox
 
 Review Reddit discovery inbox rows and prepare approved candidates for enrichment.

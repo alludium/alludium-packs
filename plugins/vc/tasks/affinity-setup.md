@@ -10,6 +10,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-integrations/affinity-setup.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Set Up Affinity for VC Deal Rooms
 
 Coordinate Affinity connection readiness, list discovery, read-preview policy, and optional write-back proposal scope for VC Deal Room setup.

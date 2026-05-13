@@ -8,6 +8,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/check-affinity-relationships.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Check Affinity Relationship Context
 
 Check whether sourcing candidates are already known in Affinity and capture relationship context without changing CRM records.

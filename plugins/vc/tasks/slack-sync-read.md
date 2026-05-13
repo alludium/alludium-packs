@@ -8,6 +8,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-integrations/slack-sync-read.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Preview Slack Deal Context
 
 Preview selected Slack channel, thread, message, and file context for VC Deal Room tasks.

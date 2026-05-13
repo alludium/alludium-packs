@@ -10,6 +10,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-integrations/slack-setup.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Set Up Slack for VC Deal Rooms
 
 Coordinate Slack connection readiness, channel discovery, read-preview policy, and optional notification proposal scope for VC Deal Room setup.

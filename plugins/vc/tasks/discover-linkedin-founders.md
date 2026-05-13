@@ -9,6 +9,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/discover-linkedin-founders.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Discover LinkedIn Founder Candidates
 
 Find early UK/Ireland AI founder and company candidates through approved Apify LinkedIn actor tracks.

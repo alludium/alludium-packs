@@ -9,6 +9,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/discover-companies-house-candidates.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Discover Companies House Candidates
 
 Discover UK company candidates from approved Companies House public-register pages using reference-pipeline scoring and dedupe patterns.

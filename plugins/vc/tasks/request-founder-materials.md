@@ -7,6 +7,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/request-founder-materials.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Request Founder Materials
 
 Request Founder Materials for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.

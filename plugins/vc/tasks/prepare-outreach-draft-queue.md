@@ -8,6 +8,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/prepare-outreach-draft-queue.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Prepare Outreach Draft Queue
 
 Draft founder outreach notes for active candidates while leaving send decisions to humans.

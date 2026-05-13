@@ -9,6 +9,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-integrations/harmonic-setup.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Set Up Harmonic for VC Deal Rooms
 
 Coordinate Harmonic connection readiness, saved-search discovery, and read-preview policy for VC Deal Room setup.

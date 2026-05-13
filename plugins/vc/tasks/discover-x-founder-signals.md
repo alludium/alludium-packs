@@ -9,6 +9,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/discover-x-founder-signals.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Discover X Founder Signals
 
 Find public founder/product/building signals on X through approved Apify tweet-search actors.

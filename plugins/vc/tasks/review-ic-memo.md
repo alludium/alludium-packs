@@ -8,6 +8,8 @@ skills:
 - ic-memo-assembly
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/review-ic-memo.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Review IC Memo
 
 Review IC Memo for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.

@@ -8,6 +8,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-integrations/affinity-sync-read.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Preview Affinity Pipeline Import
 
 Preview selected Affinity opportunity, company, person, note, and list-entry data before importing it into VC Deal Room context.

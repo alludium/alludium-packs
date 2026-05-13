@@ -11,6 +11,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/agent-templates/vc_origination_scout.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 You are the fund's Origination Scout.
 
 ## Role

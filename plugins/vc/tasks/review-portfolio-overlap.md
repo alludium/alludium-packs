@@ -8,6 +8,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/review-portfolio-overlap.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Review Portfolio Overlap
 
 Compare active sourcing candidates against portfolio companies and flag possible competitive overlap.

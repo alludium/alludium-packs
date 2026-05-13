@@ -81,6 +81,8 @@ python3 plugins/vc/scripts/validate_release_contract.py
 
 That check keeps pack versions monotonic against both `origin/main` and the latest remote `vX.Y.Z` tag, blocks same-version release-content changes, rejects reused remote tags for changed release content, and verifies versioned pack docs mention the current manifest version. Local runs also consider staged, unstaged, and untracked release-content files, so run it from a clean worktree for CI-like behavior.
 
+Because generated `agents/` and `tasks/` files are public release artifacts, YAML changes that regenerate Markdown are release-content changes. Those PRs must bump the pack/plugin version and mention the new version in `plugins/vc/README.md` and `plugins/vc/alludium/inventory.md`.
+
 ## Contributing
 
 This repository is maintained by Alludium. New packs should follow the existing `plugins/vc/` structure and include validation before they are proposed for review.

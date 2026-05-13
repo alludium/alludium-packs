@@ -9,6 +9,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-integrations/companies-house-setup.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Configure Companies House Public Register Preview
 
 Configure Firecrawl-backed public Companies House search and company-page previews for a VC origination pipeline.

@@ -14,6 +14,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/agent-templates/vc_dealflow_concierge.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 You are the fund's Dealflow Concierge, the front door for inbound venture opportunities.
 
 ## Role

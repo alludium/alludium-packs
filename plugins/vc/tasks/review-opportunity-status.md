@@ -7,6 +7,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/review-opportunity-status.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Review Opportunity Status
 
 Review the current status of one venture-capital opportunity and suggest missing inputs, stage movement, and next tasks without producing a formal investment evaluation document.

@@ -8,6 +8,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/promote-candidate-to-deal-room.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Promote Candidate to Deal Room
 
 Prepare a reviewed promotion package for creating or updating a VC Deal Room from an approved origination candidate.

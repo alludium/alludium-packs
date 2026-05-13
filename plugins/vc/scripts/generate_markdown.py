@@ -45,6 +45,13 @@ def yaml_frontmatter(data: dict[str, Any]) -> str:
     return f"---\n{dumped}\n---\n\n"
 
 
+def generated_notice(source_path: Path) -> str:
+    return (
+        f"<!-- Generated from {source_path.relative_to(PACK_ROOT)}; do not edit directly. "
+        "Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->\n\n"
+    )
+
+
 def slugify(value: str) -> str:
     slug = re.sub(r"[^a-z0-9]+", "-", value.lower()).strip("-")
     if not slug:
@@ -200,6 +207,7 @@ def render_agent(path: Path) -> tuple[Path, str]:
     greeting = template.get("greeting") if isinstance(template.get("greeting"), str) else ""
 
     body = yaml_frontmatter(frontmatter)
+    body += generated_notice(path)
     body += prompt_template.strip() + "\n\n"
     body += "## Alludium Source\n\n"
     body += f"- Source template: `alludium/agent-templates/{path.name}`\n"
@@ -306,6 +314,7 @@ def render_task(path: Path) -> tuple[Path, str]:
         frontmatter["skills"] = required_skills
 
     body = yaml_frontmatter(frontmatter)
+    body += generated_notice(path)
     body += f"# {title}\n\n"
     body += f"{description}\n\n"
     body += "## Instructions\n\n"
@@ -395,9 +404,13 @@ def expected_outputs() -> dict[Path, str]:
     agent_template_ids = manifest.get("surfaces", {}).get("alludiumAgentTemplates", {}).get("ids")
     if not isinstance(agent_template_ids, list):
         fail("alludium/manifest.yaml surfaces.alludiumAgentTemplates.ids must be a list")
+    task_template_ids = manifest.get("surfaces", {}).get("taskDefinitionTemplates", {}).get("ids")
+    if not isinstance(task_template_ids, list):
+        fail("alludium/manifest.yaml surfaces.taskDefinitionTemplates.ids must be a list")
 
     outputs: dict[Path, str] = {}
     sources: dict[Path, Path] = {}
+
     discovered_agent_paths = {path.name for path in AGENT_TEMPLATE_ROOT.glob("*.yaml")}
     declared_agent_paths: set[str] = set()
     for template_id in agent_template_ids:
@@ -414,9 +427,34 @@ def expected_outputs() -> dict[Path, str]:
     if extra_agent_paths:
         fail(f"Agent template YAML present on disk but missing from manifest: {extra_agent_paths}")
 
+    discovered_task_paths_by_id: dict[str, Path] = {}
     for path in sorted(TASK_TEMPLATE_ROOT.glob("*/*.yaml")):
+        template = read_yaml(path)
+        template_id = require_string(template.get("id"), f"{path.relative_to(PACK_ROOT)}.id")
+        if template_id in discovered_task_paths_by_id:
+            fail(
+                "Duplicate task template ID in YAML: "
+                f"{template_id} appears in "
+                f"{discovered_task_paths_by_id[template_id].relative_to(PACK_ROOT)} and "
+                f"{path.relative_to(PACK_ROOT)}"
+            )
+        discovered_task_paths_by_id[template_id] = path
+
+    declared_task_ids: set[str] = set()
+    for template_id in task_template_ids:
+        if not isinstance(template_id, str) or not template_id:
+            fail("alludium/manifest.yaml task template IDs must be non-empty strings")
+        declared_task_ids.add(template_id)
+        path = discovered_task_paths_by_id.get(template_id)
+        if path is None:
+            fail(f"Manifest task template missing YAML: {template_id}")
         output_path, body = render_task(path)
         add_expected_output(outputs, sources, output_path, body, path)
+
+    extra_task_ids = sorted(set(discovered_task_paths_by_id) - declared_task_ids)
+    if extra_task_ids:
+        fail(f"Task template YAML present on disk but missing from manifest: {extra_task_ids}")
+
     return outputs
 
 

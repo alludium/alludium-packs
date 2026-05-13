@@ -8,6 +8,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-integrations/affinity-sync-write.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Draft Affinity Write-Back Proposals
 
 Draft reviewable Affinity note, field, and stage update proposals from VC task outputs.

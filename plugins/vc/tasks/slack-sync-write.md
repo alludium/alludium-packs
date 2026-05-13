@@ -8,6 +8,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-integrations/slack-sync-write.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Draft Slack Handoff Notifications
 
 Draft approved Slack handoff notifications for VC workflows without broad posting.

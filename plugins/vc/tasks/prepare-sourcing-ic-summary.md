@@ -8,6 +8,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/prepare-sourcing-ic-summary.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Prepare Sourcing IC Summary
 
 Prepare a lightweight IC-style summary for a reviewed origination candidate before Deal Room promotion.

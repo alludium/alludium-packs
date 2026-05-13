@@ -9,6 +9,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/audit-linkedin-query-spend.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Audit LinkedIn Query Spend
 
 Produce a read-only Apify LinkedIn query yield and cost audit with manual KEEP/REVIEW/PRUNE recommendations.

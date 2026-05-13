@@ -9,6 +9,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/discover-reddit-builder-signals.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Discover Reddit Builder Signals
 
 Discover public Reddit builder posts that may indicate early AI startup candidates.

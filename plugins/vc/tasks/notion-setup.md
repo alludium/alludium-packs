@@ -10,6 +10,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-integrations/notion-setup.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Set Up Notion for VC Deal Rooms
 
 Coordinate Notion connection readiness, page/database discovery, read-preview policy, and optional update-proposal scope for VC Deal Room setup.

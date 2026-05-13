@@ -8,6 +8,8 @@ skills:
 - citation-enforcement
 ---
 
+<!-- Generated from alludium/task-definition-templates/vc-workflows/run-ten-factor-screen.yaml; do not edit directly. Run python plugins/vc/scripts/generate_markdown.py after changing the YAML source. -->
+
 # Run 10-Factor Screen
 
 Run 10-Factor Screen for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
