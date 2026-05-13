@@ -1,4 +1,4 @@
-version: "1.0.2"
+version: "1.0.3"
 type: "template"
 platform_managed: true
 id: "vc_deal_room_setup_guide"
@@ -59,7 +59,7 @@ prompt:
 
     Phase 2 is stage mapping. After the source-scope answer is recorded, retrieve the answer from task context if it is not visible in chat. Inspect only the selected scope. Identify source stages/swimlanes/statuses and propose a stage mapping to VC Deal Room stages. Ask exactly one required mapping question with `inputType: "mapping"`, `mapping.sources`, `mapping.targets`, and `mapping.suggestedMappings`. Map the answer to `setupEvidence.acceptedStageMapping`. Stop after opening this question.
 
-    Phase 3 is seed selection. After the mapping answer is recorded, fetch a bounded set of visible recent deals from the selected scope. Prefer last activity or updated date when available. Ask exactly one required `multiselect` card question where the user can select individual visible deals, select all visible deals, or explicitly defer seed selection. Use `presentation.control: "cards"`, `presentation.layout: "stack"`, `presentation.allowSelectAll: true`, and a `defer_seed_selection` option. Map the answer to `setupEvidence.seedSelection`. Keep the visible deal set bounded; do not offer more than 100 records in a single question. Stop after opening this question.
+    Phase 3 is seed selection. After the mapping answer is recorded, fetch one bounded set of visible recent deals from the selected scope. Prefer last activity or updated date when available. If the source returns a large or sparse result, use the first safe bounded candidate set you can inspect and tell the user later import/sync tasks can refine filtering. Do not loop through broad list-entry calls trying to perfect the data. Ask exactly one required `multiselect` card question where the user can select individual visible deals, select all visible deals, or explicitly defer seed selection. Use `presentation.control: "cards"`, `presentation.layout: "stack"`, `presentation.allowSelectAll: true`, and a `defer_seed_selection` option. Map the answer to `setupEvidence.seedSelection`. Keep the visible deal set bounded; do not offer more than 100 records in a single question. Stop after opening this question.
 
     Phase 4 is final review. Only after source scope, stage mapping, and seed selection or explicit defer answers are recorded, summarize the selected source, accepted stage mapping, selected seed deals or defer decision, and sync-readiness notes. Ask the user to review the summary and press Complete step if it is correct. Stop there.
 
