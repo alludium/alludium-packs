@@ -4,11 +4,13 @@ Public VC workflow plugin and pack seed for [Alludium](https://www.alludium.ai).
 
 Alludium VC packages reusable venture capital workflows for sourcing, screening, diligence, investment committee preparation, closing, and portfolio onboarding. It is the first bundle inside the broader `alludium-packs` catalog, not a standalone VC-only repository.
 
-The current draft `v0.4.0` pack surface includes skills, Alludium runtime agent templates, MCP definitions, VC task-definition templates, both the canonical `venture_capital` vertical key and the legacy `vc` alias, the VC Deal Room and VC Origination Pipeline project type definitions, workspace-variable declarations, application-recommendation metadata, collapsed Deal Room lifecycle mappings, required task-input mappings, runtime agent access to the platform text-artifact creation tool, and one setup task entry point for each setup-capable integration.
+The current draft `v0.4.2` pack surface includes skills, generated agent/task Markdown for external agentic tooling, Alludium runtime agent templates, MCP definitions, VC task-definition templates, both the canonical `venture_capital` vertical key and the legacy `vc` alias, the VC Deal Room and VC Origination Pipeline project type definitions, workspace-variable declarations, application-recommendation metadata, collapsed Deal Room lifecycle mappings, required task-input mappings, runtime agent access to the platform text-artifact creation tool, and one setup task entry point for each setup-capable integration.
 
 The current draft pack surface contains:
 
 - Claude/Codex-style skills in `skills/`
+- generated Claude/Codex-style agent Markdown in `agents/`
+- generated task Markdown in `tasks/`
 - Alludium runtime agent templates in `alludium/agent-templates/`
 - VC task-definition templates in `alludium/task-definition-templates/`
 - VC Deal Room and VC Origination Pipeline project type definitions in `alludium/project-types/`
@@ -17,7 +19,7 @@ The current draft pack surface contains:
 - Alludium workspace variable declarations in `alludium/workspace-variables.yaml`
 - a pack-aware Alludium manifest in `alludium/manifest.yaml`
 
-The VC task-definition templates advertise `vc_deal_room` and `vc_origination_pipeline` as supported project types. The draft `v0.4.0` surface includes those project type definitions, but they still require paired platform ingest support before they can be used as the runtime source of truth.
+The VC task-definition templates advertise `vc_deal_room` and `vc_origination_pipeline` as supported project types. The draft `v0.4.2` surface includes those project type definitions, but they still require paired platform ingest support before they can be used as the runtime source of truth.
 
 Task-template workspace eligibility is controlled by catalog-level `verticalKeys`. Individual template `definitionJson.vertical` values remain legacy workflow metadata, so the `v0.2.2` compatibility fix is intentionally made in `alludium/task-definition-templates/catalog.v1.json`.
 
@@ -26,6 +28,8 @@ Task-template workspace eligibility is controlled by catalog-level `verticalKeys
 | Surface                   | Path                                  | Notes                                                                                    |
 | ------------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------- |
 | Skills                    | `skills/`                             | 60 public workflow, integration-management, and origination skills used by the VC pack   |
+| Generated agents          | `agents/`                             | 8 plugin-native Markdown agents generated from Alludium runtime YAML                    |
+| Generated tasks           | `tasks/`                              | 72 task prompt Markdown files generated from task-definition YAML                        |
 | Agent templates           | `alludium/agent-templates/`           | 8 Alludium runtime templates using the `vc_*` baseline                                   |
 | Task definition templates | `alludium/task-definition-templates/` | 72 VC workflow, integration-management, and origination task templates plus catalog metadata |
 | Project types             | `alludium/project-types/`             | VC Deal Room and VC Origination Pipeline project type catalog and definitions            |
@@ -45,7 +49,9 @@ alludium-packs/
         │   └── plugin.json
         ├── .codex-plugin/
         │   └── plugin.json
+        ├── agents/
         ├── skills/
+        ├── tasks/
         ├── .mcp.json
         ├── alludium/
         │   ├── manifest.yaml
@@ -68,7 +74,11 @@ The task-definition-template surface requires platform support for `external-tas
 
 The project-type surface requires platform support for `external-project-type-ingest`. Platform versions without that capability should continue using platform-local project types until the paired platform cutover lands.
 
-The top-level `agents/` directory is reserved for future plugin-native Claude/Codex agent definitions. The current `alludium/agent-templates/` files are Alludium runtime YAML templates, so they intentionally remain under the Alludium extension surface until a deliberate adapter or generated native-agent format exists.
+The top-level `agents/` directory contains generated plugin-native Claude/Codex agent definitions. The current `alludium/agent-templates/` files remain the source of truth; generated agent Markdown preserves prompt placeholders and carries skills plus source metadata for external agentic tooling.
+
+The top-level `tasks/` directory contains generated task prompt Markdown. The current `alludium/task-definition-templates/` YAML remains the source of truth; generated task Markdown extracts the execution instructions, input policy, action policy, completion criteria, human decision points, fields, skills, and routing metadata needed to start each task.
+
+Generated Markdown must be deterministic and kept in sync by `scripts/generate_markdown.py`. CI fails if YAML changes without regenerating the corresponding Markdown output.
 
 The `.mcp.json` file lists VC-relevant MCP servers using public-safe user/workspace credential placeholders. When the same pack is ingested into Alludium, `alludium/mcp-recommendations.yaml` tells the platform which entries can map to managed platform defaults or workspace connections.
 
@@ -85,6 +95,7 @@ Run:
 ```bash
 python3 -m pip install -r requirements.txt
 python3 scripts/validate_pack.py
+python3 scripts/generate_markdown.py --check
 ```
 
 The validator checks:
@@ -97,6 +108,7 @@ The validator checks:
 - Alludium agent-template skill references resolve to included skills
 - task-template skill and agent-template references resolve to manifest-declared surfaces
 - VC task artifact output/input fields are present, required, file-backed, and semantically named
+- generated agent/task Markdown is up to date
 - obvious secret-bearing values are not present
 
 CI also runs:

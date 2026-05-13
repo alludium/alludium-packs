@@ -10,7 +10,7 @@ The repository is intentionally broader than the first VC use case. It is expect
 
 | Pack | Path | Status | Contents |
 | --- | --- | --- | --- |
-| Alludium VC | `plugins/vc/` | Draft project-type and metadata expansion | VC workflow skills, Alludium runtime agent templates, VC task-definition templates, VC Deal Room and VC Origination Pipeline project types, workspace variable declarations, application recommendations, integration setup tasks, and pack metadata |
+| Alludium VC | `plugins/vc/` | Generated Markdown compatibility expansion | VC workflow skills, generated agent/task Markdown, Alludium runtime agent templates, VC task-definition templates, VC Deal Room and VC Origination Pipeline project types, workspace variable declarations, application recommendations, integration setup tasks, and pack metadata |
 
 ## Plugin vs Pack
 
@@ -21,6 +21,8 @@ A pack is the Alludium product/runtime concept. It can include one or more plugi
 In this repository, each pack directory is also a valid plugin root. Standard plugin surfaces live at the pack root; Alludium-only runtime surfaces live under `alludium/`.
 
 The first VC bundle is plugin-shaped and pack-aware. VC task-definition templates, the VC Deal Room project type, workspace variable declarations, and application recommendations now live in the public pack as draft surfaces. The project-type and metadata surfaces still require the paired platform ingest work before they can become the runtime source of truth.
+
+Alludium YAML remains the source of truth for runtime agent templates and task-definition templates. The pack also publishes generated Markdown compatibility artifacts so external agentic tooling can consume those same definitions through plugin-native files.
 
 ## Repository Shape
 
@@ -33,7 +35,9 @@ alludium-packs/
 │       ├── .claude-plugin/
 │       ├── .codex-plugin/
 │       ├── .mcp.json
+│       ├── agents/
 │       ├── skills/
+│       ├── tasks/
 │       ├── alludium/
 │       └── scripts/
 └── .github/
@@ -44,7 +48,8 @@ Within a pack:
 
 - `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` describe the plugin for agent tooling.
 - `skills/` contains public skills in Markdown.
-- `agents/` is reserved for future plugin-native Claude/Codex agent definitions.
+- `agents/` contains generated plugin-native agent Markdown derived from `alludium/agent-templates/`.
+- `tasks/` contains generated task prompt Markdown derived from `alludium/task-definition-templates/`.
 - `.mcp.json` contains plugin-compatible MCP server definitions using public-safe credential placeholders.
 - `alludium/manifest.yaml` describes the Alludium pack surface.
 - `alludium/agent-templates/` contains Alludium runtime agent templates.
@@ -61,9 +66,10 @@ Run:
 ```bash
 python3 -m pip install -r plugins/vc/requirements.txt
 python3 plugins/vc/scripts/validate_pack.py
+python3 plugins/vc/scripts/generate_markdown.py --check
 ```
 
-The validator checks plugin manifests, skill frontmatter, manifest inventory, agent-template references, task-template references, project-type references, VC task artifact file-field contracts, workspace variables, application recommendations, and obvious secret-bearing values.
+The validator checks plugin manifests, skill frontmatter, manifest inventory, agent-template references, task-template references, project-type references, VC task artifact file-field contracts, workspace variables, application recommendations, generated Markdown freshness, and obvious secret-bearing values.
 
 CI also runs the VC release-contract validator:
 
