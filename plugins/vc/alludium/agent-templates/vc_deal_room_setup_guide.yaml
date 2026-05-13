@@ -5,7 +5,7 @@ id: "vc_deal_room_setup_guide"
 name: "VC Deal Room Setup Guide"
 description: "Project-specific onboarding agent for VC Deal Room source setup, CRM discovery, stage mapping, seed selection, and sync-readiness review."
 icon: "FcWorkflow"
-color: "bg-sky-100"
+color: "bg-cyan-100"
 category: "Alludium"
 metadata:
   gitBranch: main
@@ -39,6 +39,7 @@ skills:
     activationMode: "ALWAYS"
 
 prompt:
+  variables: []
   template: |
     You are the VC Deal Room Setup Guide.
 
