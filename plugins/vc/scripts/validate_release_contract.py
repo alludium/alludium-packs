@@ -21,8 +21,10 @@ RELEASE_CONTENT_PATHS = [
     "plugins/vc/.claude-plugin",
     "plugins/vc/.codex-plugin",
     "plugins/vc/.mcp.json",
+    "plugins/vc/agents",
     "plugins/vc/alludium",
     "plugins/vc/skills",
+    "plugins/vc/tasks",
 ]
 VERSIONED_DOC_PATHS = [
     "plugins/vc/README.md",

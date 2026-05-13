@@ -1,0 +1,106 @@
+name: Sync Generated Markdown
+
+# This workflow is an auto-fix helper, not the merge gate. Because it pushes
+# with GITHUB_TOKEN, its push does not trigger pull_request workflows on the
+# bot-created SHA. Keep branch protection requiring Validate, not this helper.
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/sync-generated-markdown.yml"
+      - "plugins/vc/agents/**"
+      - "plugins/vc/tasks/**"
+      - "plugins/vc/alludium/agent-templates/**"
+      - "plugins/vc/alludium/task-definition-templates/**"
+      - "plugins/vc/scripts/generate_markdown.py"
+
+permissions:
+  actions: write
+  contents: write
+
+concurrency:
+  group: sync-generated-markdown-${{ github.event.pull_request.number }}
+  # Keep runs serialized instead of cancelling mid-generation or mid-push.
+  cancel-in-progress: false
+
+jobs:
+  sync-generated-markdown:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r plugins/vc/requirements.txt
+      - name: Commit generated Markdown
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          for attempt in 1 2 3; do
+            # Reset before generating so a retry always starts from the latest
+            # PR branch head; generated commits only exist after this point.
+            if [ "${GITHUB_ACTIONS:-}" != "true" ]; then
+              echo "ERROR: Refusing to run destructive reset outside GitHub Actions." >&2
+              exit 1
+            fi
+            if git status --porcelain --untracked-files=no | grep -q .; then
+              echo "ERROR: Working tree has uncommitted changes. Refusing destructive reset." >&2
+              exit 1
+            fi
+            git fetch origin "${{ github.head_ref }}"
+            git reset --hard "origin/${{ github.head_ref }}"
+
+            python plugins/vc/scripts/generate_markdown.py
+
+            if git diff --quiet -- plugins/vc/agents plugins/vc/tasks; then
+              echo "Generated Markdown is already up to date."
+              exit 0
+            fi
+
+            git add plugins/vc/agents plugins/vc/tasks
+            git commit -m "Regenerate VC agent and task Markdown"
+
+            if git push origin "HEAD:${{ github.head_ref }}"; then
+              break
+            fi
+
+            if [ "$attempt" -eq 3 ]; then
+              echo "Generated Markdown push failed after 3 attempts." >&2
+              exit 1
+            fi
+
+            echo "PR branch changed during sync; retrying from the latest branch head."
+            sleep 3
+          done
+
+          NEW_SHA=$(git rev-parse HEAD)
+          INDEXED=false
+          for wait_attempt in 1 2 3 4 5; do
+            if gh api "repos/${{ github.repository }}/commits/$NEW_SHA" >/dev/null 2>&1; then
+              INDEXED=true
+              break
+            fi
+            echo "Waiting for GitHub to index generated commit $NEW_SHA (attempt $wait_attempt/5)."
+            sleep 2
+          done
+
+          if [ "$INDEXED" != "true" ]; then
+            echo "ERROR: GitHub did not index generated commit $NEW_SHA after 10 seconds." >&2
+            exit 1
+          fi
+
+          REMOTE_SHA=$(gh api "repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" --jq .head.sha)
+          if [ "$REMOTE_SHA" != "$NEW_SHA" ]; then
+            echo "PR branch moved to $REMOTE_SHA after generated commit $NEW_SHA; skipping validation dispatch."
+            exit 0
+          fi
+
+          gh workflow run validate.yml --ref "${{ github.head_ref }}"
+          echo "Dispatched Validate workflow for generated commit $NEW_SHA."
+        env:
+          GH_TOKEN: ${{ github.token }}

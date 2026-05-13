@@ -2,6 +2,9 @@ name: Validate
 
 on:
   pull_request:
+  # The generated-Markdown sync workflow dispatches Validate after it pushes
+  # with GITHUB_TOKEN, because that push does not trigger pull_request workflows.
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -18,4 +21,5 @@ jobs:
           python-version: "3.12"
       - run: python -m pip install -r plugins/vc/requirements.txt
       - run: python plugins/vc/scripts/validate_pack.py
+      - run: python plugins/vc/scripts/generate_markdown.py --check
       - run: python plugins/vc/scripts/validate_release_contract.py
