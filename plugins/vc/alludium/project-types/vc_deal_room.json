@@ -4,6 +4,60 @@
   "key": "vc_deal_room",
   "name": "VC Deal Room",
   "description": "Project context for one venture investment opportunity from sourcing through portfolio handoff.",
+  "projectSetup": {
+    "setupLabel": "VC Deal Room Setup",
+    "starterId": "create-deal-room",
+    "starterLabel": "Create Deal Room Setup",
+    "starterResumeLabel": "Continue Deal Room Setup",
+    "starterDescription": "Create or resume the VC Deal Room project setup flow.",
+    "recommendedSetupAgent": "vc_deal_room_setup_guide",
+    "requiredEvidence": [
+      "source_choice",
+      "source_setup",
+      "variables",
+      "schedules",
+      "invite"
+    ],
+    "defaultChildTask": {
+      "label": "Setup source",
+      "taskDefinitionSlug": "project-source-setup",
+      "setupGoal": "Review the selected source route, discover existing dealflow context, and confirm seed or sync intent before any write."
+    },
+    "variableDiscoveryTask": {
+      "label": "VC Variable Discovery",
+      "taskDefinitionTemplateId": "vc.pack_variable_discovery",
+      "taskDefinitionSlug": "vc-pack-variable-discovery"
+    },
+    "sourceSetupTasks": [
+      {
+        "applicationRecommendationId": "affinity-mcp-server",
+        "applicationExternalId": "affinity-mcp-server",
+        "connectionBindingKey": "crm",
+        "label": "Set Up Affinity for VC Deal Rooms",
+        "setupGoal": "Confirm Affinity connection readiness, source scope, stage mapping, seed selection, and sync intent before any import or write.",
+        "taskDefinitionTemplateId": "vc.affinity_setup",
+        "taskDefinitionSlug": "affinity-setup"
+      }
+    ]
+  },
+  "setupRequirements": [
+    {
+      "key": "vc_deal_room.affinity_connection",
+      "kind": "integration_connection",
+      "requirement": "required",
+      "label": "Affinity CRM connection readiness",
+      "integrationKey": "affinity-mcp-server",
+      "connectionBindingKey": "crm",
+      "readinessEvidenceKey": "affinity_connection_ready",
+      "summary": "Prove that the workspace has a connected Affinity recommendation before the VC Deal Room configuration becomes enabled.",
+      "taskConfiguration": {
+        "sourceTaskKeys": ["vc.affinity_setup"],
+        "runMode": "manual",
+        "syncScopeKeys": ["affinity_lists", "affinity_pipeline_stages"],
+        "notes": "The Affinity setup task owns reviewed, manual, side-effect-free discovery readiness for this slice."
+      }
+    }
+  ],
   "initialVersion": {
     "version": "1.0.2",
     "fieldsSchema": [
@@ -1115,53 +1169,37 @@
         {
           "key": "intake",
           "label": "Intake",
-          "states": [
-            "intake"
-          ]
+          "states": ["intake"]
         },
         {
           "key": "assessment",
           "label": "Assessment",
-          "states": [
-            "assessment"
-          ]
+          "states": ["assessment"]
         },
         {
           "key": "diligence",
           "label": "Diligence",
-          "states": [
-            "diligence"
-          ]
+          "states": ["diligence"]
         },
         {
           "key": "review",
           "label": "Review",
-          "states": [
-            "review"
-          ]
+          "states": ["review"]
         },
         {
           "key": "term_sheet",
           "label": "Term Sheet",
-          "states": [
-            "term_sheet"
-          ]
+          "states": ["term_sheet"]
         },
         {
           "key": "closing",
           "label": "Closing",
-          "states": [
-            "closing"
-          ]
+          "states": ["closing"]
         },
         {
           "key": "outcomes",
           "label": "Outcomes",
-          "states": [
-            "invested",
-            "passed",
-            "archived"
-          ]
+          "states": ["invested", "passed", "archived"]
         }
       ],
       "fallbackAgents": [
@@ -1300,9 +1338,7 @@
                 "prepare-partner-review-pack",
                 "create-ic-memo"
               ],
-              "reviewInputFieldKeys": [
-                "commercial_dd_artifact_id"
-              ]
+              "reviewInputFieldKeys": ["commercial_dd_artifact_id"]
             }
           ],
           "stageKey": "diligence"
@@ -1350,9 +1386,7 @@
                 "prepare-partner-review-pack",
                 "create-ic-memo"
               ],
-              "reviewInputFieldKeys": [
-                "financial_dd_artifact_id"
-              ]
+              "reviewInputFieldKeys": ["financial_dd_artifact_id"]
             }
           ],
           "stageKey": "diligence"
@@ -1386,9 +1420,7 @@
                 "prepare-partner-review-pack",
                 "create-ic-memo"
               ],
-              "reviewInputFieldKeys": [
-                "founder_evaluation_artifact_id"
-              ]
+              "reviewInputFieldKeys": ["founder_evaluation_artifact_id"]
             }
           ],
           "stageKey": "diligence"
@@ -1408,9 +1440,7 @@
                 "prepare-partner-review-pack",
                 "create-ic-memo"
               ],
-              "reviewInputFieldKeys": [
-                "technical_dd_artifact_id"
-              ]
+              "reviewInputFieldKeys": ["technical_dd_artifact_id"]
             }
           ],
           "stageKey": "diligence"
@@ -1451,9 +1481,7 @@
                 "prepare-partner-review-pack",
                 "create-ic-memo"
               ],
-              "reviewInputFieldKeys": [
-                "team_review_pack_artifact_id"
-              ]
+              "reviewInputFieldKeys": ["team_review_pack_artifact_id"]
             }
           ],
           "stageKey": "review"
@@ -1468,12 +1496,8 @@
               "title": "Partner review pack",
               "producerTaskDefinitionSlug": "prepare-partner-review-pack",
               "outputFieldKey": "partner_review_pack_artifact_id",
-              "reviewTaskDefinitionSlugs": [
-                "create-ic-memo"
-              ],
-              "reviewInputFieldKeys": [
-                "partner_review_pack_artifact_id"
-              ]
+              "reviewTaskDefinitionSlugs": ["create-ic-memo"],
+              "reviewInputFieldKeys": ["partner_review_pack_artifact_id"]
             }
           ],
           "stageKey": "review"
@@ -1493,9 +1517,7 @@
                 "review-ic-memo",
                 "record-ic-decision"
               ],
-              "reviewInputFieldKeys": [
-                "investment_memo_artifact_id"
-              ]
+              "reviewInputFieldKeys": ["investment_memo_artifact_id"]
             }
           ],
           "stageKey": "review"
@@ -1514,9 +1536,7 @@
                 "review-ic-memo",
                 "record-ic-decision"
               ],
-              "reviewInputFieldKeys": [
-                "ic_agenda_artifact_id"
-              ]
+              "reviewInputFieldKeys": ["ic_agenda_artifact_id"]
             }
           ],
           "stageKey": "review"
@@ -1549,9 +1569,7 @@
                 "manage-closing-checklist",
                 "prepare-portfolio-onboarding"
               ],
-              "reviewInputFieldKeys": [
-                "ic_decision_record_artifact_id"
-              ]
+              "reviewInputFieldKeys": ["ic_decision_record_artifact_id"]
             }
           ],
           "stageKey": "review"
@@ -1566,12 +1584,8 @@
               "title": "Term sheet review",
               "producerTaskDefinitionSlug": "review-term-sheet",
               "outputFieldKey": "term_sheet_review_artifact_id",
-              "reviewTaskDefinitionSlugs": [
-                "manage-closing-checklist"
-              ],
-              "reviewInputFieldKeys": [
-                "term_sheet_review_artifact_id"
-              ]
+              "reviewTaskDefinitionSlugs": ["manage-closing-checklist"],
+              "reviewInputFieldKeys": ["term_sheet_review_artifact_id"]
             }
           ],
           "stageKey": "term_sheet"
@@ -1590,9 +1604,7 @@
                 "verify-conditions-precedent",
                 "prepare-portfolio-onboarding"
               ],
-              "reviewInputFieldKeys": [
-                "closing_checklist_artifact_id"
-              ]
+              "reviewInputFieldKeys": ["closing_checklist_artifact_id"]
             }
           ],
           "stageKey": "closing"
@@ -1607,9 +1619,7 @@
               "title": "Conditions precedent verification",
               "producerTaskDefinitionSlug": "verify-conditions-precedent",
               "outputFieldKey": "conditions_precedent_verification_artifact_id",
-              "reviewTaskDefinitionSlugs": [
-                "prepare-portfolio-onboarding"
-              ],
+              "reviewTaskDefinitionSlugs": ["prepare-portfolio-onboarding"],
               "reviewInputFieldKeys": [
                 "conditions_precedent_verification_artifact_id"
               ]
