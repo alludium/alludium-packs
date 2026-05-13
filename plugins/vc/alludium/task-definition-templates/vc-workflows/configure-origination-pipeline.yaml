@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.configure_origination_pipeline
-version: 0.1.0
+version: 0.1.1
 title: Configure VC Origination Pipeline
 category: Venture Capital
 visibility: workspace
