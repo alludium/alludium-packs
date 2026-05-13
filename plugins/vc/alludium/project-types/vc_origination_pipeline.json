@@ -4,6 +4,49 @@
   "key": "vc_origination_pipeline",
   "name": "VC Origination Pipeline",
   "description": "Project context for a standing venture sourcing pipeline that configures source coverage, credential readiness, review policy, and promotion thresholds before recurring sourcing work is enabled.",
+  "projectSetup": {
+    "setupLabel": "VC Origination Pipeline Setup",
+    "starterId": "create-origination",
+    "starterLabel": "Create Origination Setup",
+    "starterResumeLabel": "Continue Origination Setup",
+    "starterDescription": "Create or resume the VC Origination Pipeline setup flow.",
+    "recommendedSetupAgent": "vc_origination_scout",
+    "requiredEvidence": [
+      "source_choice",
+      "source_setup",
+      "variables",
+      "schedules",
+      "invite"
+    ],
+    "defaultChildTask": {
+      "label": "Setup source",
+      "taskDefinitionSlug": "project-source-setup",
+      "setupGoal": "Review the selected origination source route, discovery scope, seed policy, and sync intent before any run or write."
+    },
+    "variableDiscoveryTask": {
+      "label": "VC Variable Discovery",
+      "taskDefinitionTemplateId": "vc.pack_variable_discovery",
+      "taskDefinitionSlug": "vc-pack-variable-discovery"
+    },
+    "sourceSetupTasks": [
+      {
+        "applicationRecommendationId": "apify-actors-mcp",
+        "applicationExternalId": "apify-actors-mcp",
+        "label": "Set Up Apify for VC Origination",
+        "setupGoal": "Confirm Apify connection readiness, actor allowlist, source scope, and read-preview policy for this origination pipeline.",
+        "taskDefinitionTemplateId": "vc.apify_setup",
+        "taskDefinitionSlug": "apify-setup"
+      },
+      {
+        "applicationRecommendationId": "firecrawl-mcp-hosted",
+        "applicationExternalId": "firecrawl-mcp-hosted",
+        "label": "Configure Companies House public register preview",
+        "setupGoal": "Confirm Companies House public-register source scope and read-preview policy for this origination pipeline.",
+        "taskDefinitionTemplateId": "vc.companies_house_setup",
+        "taskDefinitionSlug": "companies-house-setup"
+      }
+    ]
+  },
   "initialVersion": {
     "version": "0.1.0",
     "fieldsSchema": [
@@ -519,41 +562,27 @@
         {
           "key": "setup",
           "label": "Setup",
-          "states": [
-            "draft",
-            "configured",
-            "needs_credentials"
-          ]
+          "states": ["draft", "configured", "needs_credentials"]
         },
         {
           "key": "source",
           "label": "Source",
-          "states": [
-            "active",
-            "source_degraded"
-          ]
+          "states": ["active", "source_degraded"]
         },
         {
           "key": "review",
           "label": "Review",
-          "states": [
-            "review_backlog"
-          ]
+          "states": ["review_backlog"]
         },
         {
           "key": "operate",
           "label": "Operate",
-          "states": [
-            "paused",
-            "migration_in_progress"
-          ]
+          "states": ["paused", "migration_in_progress"]
         },
         {
           "key": "outcomes",
           "label": "Outcomes",
-          "states": [
-            "archived"
-          ]
+          "states": ["archived"]
         }
       ],
       "fallbackAgents": [
