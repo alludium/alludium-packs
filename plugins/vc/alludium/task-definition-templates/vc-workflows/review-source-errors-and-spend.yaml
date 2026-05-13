@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.review_source_errors_and_spend
-version: 0.1.0
+version: 0.1.1
 title: Review Source Errors and Spend
 category: Venture Capital
 visibility: workspace

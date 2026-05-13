@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.discover_reddit_builder_signals
-version: 0.1.0
+version: 0.1.1
 title: Discover Reddit Builder Signals
 category: Venture Capital
 visibility: workspace
