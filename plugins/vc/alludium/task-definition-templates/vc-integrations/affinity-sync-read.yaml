@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.affinity_sync_read
-version: 0.1.0
+version: 0.1.1
 title: Preview Affinity Pipeline Import
 category: Venture Capital
 visibility: workspace
@@ -28,8 +28,29 @@ definition:
     plannedRecommendedAgentTemplate: vc_pipeline_autopilot
     supportedProjectTypes:
       - vc_deal_room
+      - vc_origination_pipeline
     supportedProjectScopes:
       - project_management
+    scheduleDefaults:
+      enabledByDefault: false
+      requiresHumanApprovalToEnable: true
+      dryRunFirst: true
+      cadence: daily
+      localTime: "07:45"
+      timezonePolicy: project_or_workspace_timezone
+      defaultResultLimit: 100
+    scheduling:
+      schedulable: true
+      showInProjectSetup: true
+      setupStep: schedules
+      scheduleType: cron
+      defaultScheduleRef: scheduleDefaults
+      requiresHumanApprovalToEnable: true
+      canCreateTestRun: true
+      testRunCreatesVisibleTask: true
+      dryRunFirst: true
+      safety:
+        externalWritesRequireApproval: true
     instructions:
       executionInstructions: Build an Affinity read-sync preview from the approved list/source and stage scope. Use `affinity_get_list_entries`, `affinity_list_opportunities`, `affinity_get_opportunity`, `affinity_search_companies`, `affinity_get_company`, `affinity_search_persons`, `affinity_get_person`, and `affinity_list_company_notes` only inside approved scope. Show proposed project, field, task, artifact, and setup-context mappings before import.
       missingInputPolicy: Ask for the selected Affinity source scope before creating a preview.
