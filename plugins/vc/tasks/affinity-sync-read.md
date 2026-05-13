@@ -60,6 +60,7 @@ Preview/import design only. Do not import records or enable recurring sync witho
 - Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
 - Supported project types:
   - `vc_deal_room`
+  - `vc_origination_pipeline`
 - Supported project scopes:
   - `project_management`
 
