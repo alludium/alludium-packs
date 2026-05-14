@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_ic_agenda
-version: 1.0.3
+version: 1.0.4
 title: Prepare IC Agenda
 category: Venture Capital
 visibility: workspace
@@ -168,7 +168,6 @@ runtime:
     requiresTaskChat: true
   executionProfile:
     agentStartsImmediately: true
-    maxAgentTurnsPerPass: 6
     requiresHumanConfirmationToComplete: true
     preferredMode: iterative_drafting
     preferredAgentType: vc_ic_prep_producer

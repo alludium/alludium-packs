@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.summarize_initial_call
-version: 1.0.4
+version: 1.0.5
 title: Summarize Meeting Records
 category: Venture Capital
 visibility: workspace
@@ -187,7 +187,6 @@ runtime:
     requiresTaskChat: true
   executionProfile:
     agentStartsImmediately: true
-    maxAgentTurnsPerPass: 6
     requiresHumanConfirmationToComplete: true
     preferredMode: guided_execution
     preferredAgentType: vc_meeting_operator

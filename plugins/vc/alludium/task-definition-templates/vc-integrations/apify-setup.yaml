@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.apify_setup
-version: 0.1.0
+version: 0.1.1
 title: Set Up Apify for VC Origination
 category: Venture Capital
 visibility: workspace
@@ -107,6 +107,5 @@ runtime:
         connectionScope: USER_CONFIGURED
   executionProfile:
     agentStartsImmediately: true
-    maxAgentTurnsPerPass: 4
     preferredMode: guided_integration_setup
     requiresHumanConfirmationToComplete: true

@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_partner_review_pack
-version: 1.0.5
+version: 1.0.6
 title: Prepare Partner Review Pack
 category: Venture Capital
 visibility: workspace
@@ -206,7 +206,6 @@ runtime:
     requiresTaskChat: true
   executionProfile:
     agentStartsImmediately: true
-    maxAgentTurnsPerPass: 6
     requiresHumanConfirmationToComplete: true
     preferredMode: guided_execution
     preferredAgentType: vc_diligence_analyst

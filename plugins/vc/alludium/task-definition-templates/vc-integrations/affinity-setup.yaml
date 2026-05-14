@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.affinity_setup
-version: 0.1.6
+version: 0.1.7
 title: Set Up Affinity for VC Deal Rooms
 category: Venture Capital
 visibility: workspace
@@ -134,7 +134,6 @@ runtime:
         connectionScope: USER_CONFIGURED
   executionProfile:
     agentStartsImmediately: true
-    maxAgentTurnsPerPass: 8
     preferredAgentType: vc_deal_room_setup_guide
     preferredMode: guided_integration_setup
     requiresHumanConfirmationToComplete: true

@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.create_ic_memo
-version: 1.0.4
+version: 1.0.5
 title: Create IC Memo
 category: Venture Capital
 visibility: workspace
@@ -223,7 +223,6 @@ runtime:
     requiresTaskChat: true
   executionProfile:
     agentStartsImmediately: true
-    maxAgentTurnsPerPass: 8
     requiresHumanConfirmationToComplete: true
     preferredMode: iterative_drafting
     preferredAgentType: vc_ic_prep_producer

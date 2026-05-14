@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_sourcing_pipeline
-version: 0.1.1
+version: 0.1.2
 title: Run VC Sourcing Pipeline
 category: Venture Capital
 visibility: workspace
@@ -155,6 +155,5 @@ runtime:
     requiresTaskChat: true
   executionProfile:
     agentStartsImmediately: true
-    maxAgentTurnsPerPass: 8
     preferredMode: guarded_orchestration
     requiresHumanConfirmationToComplete: true

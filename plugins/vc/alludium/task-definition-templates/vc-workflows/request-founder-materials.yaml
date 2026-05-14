@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.request_founder_materials
-version: 1.0.3
+version: 1.0.4
 title: Request Founder Materials
 category: Venture Capital
 visibility: workspace
@@ -181,7 +181,6 @@ runtime:
     requiresTaskChat: true
   executionProfile:
     agentStartsImmediately: true
-    maxAgentTurnsPerPass: 6
     requiresHumanConfirmationToComplete: true
     preferredMode: guided_execution
     preferredAgentType: vc_dealflow_concierge
