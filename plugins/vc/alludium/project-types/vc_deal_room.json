@@ -66,6 +66,15 @@
       }
     ],
     "postApprovalActions": {
+      "applyVariables": {
+        "enabled": true,
+        "label": "Apply reviewed setup variables",
+        "sourceEvidenceKeys": ["variables"],
+        "target": "workspace_and_created_projects",
+        "actionMode": "platform_variable_application",
+        "requiresReviewedUserApproval": true,
+        "setupTasksMayPersistValues": false
+      },
       "importProjects": {
         "enabled": true,
         "label": "Create Deal Rooms from selected Affinity deals",
@@ -102,6 +111,26 @@
           "setupTasksMayImportRecords": false,
           "setupTasksMayEnableRecurringSync": false
         }
+      },
+      "inviteCollaborators": {
+        "enabled": true,
+        "label": "Invite approved Deal Room collaborators",
+        "sourceEvidenceKeys": ["invite"],
+        "target": "createdProjects",
+        "dependsOn": ["importProjects"],
+        "actionMode": "platform_project_membership",
+        "requiresReviewedUserApproval": true,
+        "setupTasksMaySendInvites": false
+      },
+      "enableSchedules": {
+        "enabled": true,
+        "label": "Enable approved Deal Room schedules",
+        "sourceEvidenceKeys": ["schedules"],
+        "target": "createdProjects",
+        "scheduleGroupsRef": "projectSetup.scheduleGroups",
+        "defaultEnabled": false,
+        "requiresReviewedUserApproval": true,
+        "setupTasksMayEnableRecurringSync": false
       }
     },
     "scheduleGroups": [

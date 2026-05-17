@@ -56,9 +56,32 @@
       }
     ],
     "postApprovalActions": {
+      "applyVariables": {
+        "enabled": true,
+        "label": "Apply reviewed origination variables",
+        "sourceEvidenceKeys": ["variables"],
+        "target": "workspace_and_project_setup_context",
+        "actionMode": "platform_variable_application",
+        "requiresReviewedUserApproval": true,
+        "setupTasksMayPersistValues": false
+      },
       "importProjects": {
         "enabled": false,
         "reason": "Origination setup configures an upstream sourcing pipeline. Deal Room creation happens later through an approved promotion task."
+      },
+      "inviteCollaborators": {
+        "enabled": false,
+        "reason": "Origination setup does not include an invite step. Collaborators can be invited through a separate project-membership action if needed."
+      },
+      "enableSchedules": {
+        "enabled": true,
+        "label": "Enable approved origination schedules",
+        "sourceEvidenceKeys": ["schedules"],
+        "target": "configuredProject",
+        "scheduleGroupsRef": "projectSetup.scheduleGroups",
+        "defaultEnabled": false,
+        "requiresReviewedUserApproval": true,
+        "setupTasksMayEnableRecurringSync": false
       }
     },
     "scheduleGroups": [

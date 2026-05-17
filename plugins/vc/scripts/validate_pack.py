@@ -163,6 +163,12 @@ TASK_SCHEDULING_SETUP_STEPS = {"schedules"}
 TASK_SCHEDULING_TYPES = {"cron", "one_off"}
 TASK_SCHEDULING_DEFAULT_REFS = {"scheduleDefaults"}
 PROJECT_SETUP_STEP_TYPES = {"source_choice", "source_setup", "variables", "schedules", "invite"}
+PROJECT_SETUP_POST_APPROVAL_ACTIONS = {
+    "applyVariables",
+    "importProjects",
+    "inviteCollaborators",
+    "enableSchedules",
+}
 VC_DEAL_ROOM_LIFECYCLE_STAGES = {
     "intake",
     "assessment",
@@ -1481,9 +1487,84 @@ def validate_project_setup_contract(project_type_id: str, project_type: dict[str
     if len(schedule_group_keys) != len(set(schedule_group_keys)):
         fail(f"Project type {project_type_id} projectSetup.scheduleGroups has duplicate keys")
 
+    def validate_source_evidence_keys(action_key: str, action: dict[str, Any]) -> list[str]:
+        source_evidence_keys = require_string_list(
+            action.get("sourceEvidenceKeys"),
+            f"Project type {project_type_id} postApprovalActions.{action_key}.sourceEvidenceKeys",
+        )
+        if not source_evidence_keys:
+            fail(
+                f"Project type {project_type_id} postApprovalActions.{action_key}.sourceEvidenceKeys "
+                "must not be empty"
+            )
+        unknown_evidence_roots = sorted(
+            evidence_key.split(".", 1)[0]
+            for evidence_key in source_evidence_keys
+            if evidence_key.split(".", 1)[0] not in step_keys
+        )
+        if unknown_evidence_roots:
+            fail(
+                f"Project type {project_type_id} postApprovalActions.{action_key}.sourceEvidenceKeys "
+                f"reference undeclared setup evidence roots: {unknown_evidence_roots}"
+            )
+        return source_evidence_keys
+
+    def validate_enabled_platform_action(action_key: str, action: dict[str, Any]) -> None:
+        if not isinstance(action.get("label"), str) or not action.get("label"):
+            fail(f"Project type {project_type_id} enabled {action_key} must declare label")
+        if not isinstance(action.get("target"), str) or not action.get("target"):
+            fail(f"Project type {project_type_id} enabled {action_key} must declare target")
+        validate_source_evidence_keys(action_key, action)
+        if action.get("requiresReviewedUserApproval") is not True:
+            fail(
+                f"Project type {project_type_id} enabled {action_key} must require "
+                "reviewed user approval"
+            )
+        if "dependsOn" in action:
+            depends_on = require_string_list(
+                action.get("dependsOn"),
+                f"Project type {project_type_id} postApprovalActions.{action_key}.dependsOn",
+            )
+            unknown_dependencies = sorted(set(depends_on) - PROJECT_SETUP_POST_APPROVAL_ACTIONS)
+            if unknown_dependencies:
+                fail(
+                    f"Project type {project_type_id} postApprovalActions.{action_key}.dependsOn "
+                    f"references unknown actions: {unknown_dependencies}"
+                )
+
     post_approval_actions = project_setup.get("postApprovalActions")
     if not isinstance(post_approval_actions, dict):
         fail(f"Project type {project_type_id} projectSetup.postApprovalActions must be declared")
+    unknown_post_approval_actions = sorted(set(post_approval_actions) - PROJECT_SETUP_POST_APPROVAL_ACTIONS)
+    if unknown_post_approval_actions:
+        fail(
+            f"Project type {project_type_id} projectSetup.postApprovalActions contains "
+            f"unknown actions: {unknown_post_approval_actions}"
+        )
+    missing_post_approval_actions = sorted(PROJECT_SETUP_POST_APPROVAL_ACTIONS - set(post_approval_actions))
+    if missing_post_approval_actions:
+        fail(
+            f"Project type {project_type_id} projectSetup.postApprovalActions must explicitly "
+            f"declare actions: {missing_post_approval_actions}"
+        )
+
+    apply_variables = post_approval_actions.get("applyVariables")
+    if not isinstance(apply_variables, dict):
+        fail(f"Project type {project_type_id} projectSetup.postApprovalActions.applyVariables must be declared")
+    if not isinstance(apply_variables.get("enabled"), bool):
+        fail(f"Project type {project_type_id} applyVariables.enabled must be a boolean")
+    if apply_variables.get("enabled") is True:
+        validate_enabled_platform_action("applyVariables", apply_variables)
+        if apply_variables.get("actionMode") != "platform_variable_application":
+            fail(
+                f"Project type {project_type_id} applyVariables.actionMode must be "
+                "platform_variable_application"
+            )
+        if apply_variables.get("setupTasksMayPersistValues") is not False:
+            fail(f"Project type {project_type_id} applyVariables.setupTasksMayPersistValues must be false")
+    elif not isinstance(apply_variables.get("reason"), str) or not apply_variables.get("reason"):
+        fail(f"Project type {project_type_id} disabled applyVariables must declare reason")
+
     import_projects = post_approval_actions.get("importProjects")
     if not isinstance(import_projects, dict):
         fail(
@@ -1503,12 +1584,7 @@ def validate_project_setup_contract(project_type_id: str, project_type: dict[str
                 f"Project type {project_type_id} importProjects.targetProjectTypeKey must be "
                 f"{project_type_id}"
             )
-        source_evidence_keys = require_string_list(
-            import_projects.get("sourceEvidenceKeys"),
-            f"Project type {project_type_id} importProjects.sourceEvidenceKeys",
-        )
-        if not source_evidence_keys:
-            fail(f"Project type {project_type_id} importProjects.sourceEvidenceKeys must not be empty")
+        validate_source_evidence_keys("importProjects", import_projects)
         project_import_task = import_projects.get("projectImportTask")
         if not isinstance(project_import_task, dict):
             fail(f"Project type {project_type_id} importProjects.projectImportTask must be declared")
@@ -1601,6 +1677,53 @@ def validate_project_setup_contract(project_type_id: str, project_type: dict[str
                 )
     elif not isinstance(import_projects.get("reason"), str) or not import_projects.get("reason"):
         fail(f"Project type {project_type_id} disabled importProjects must declare reason")
+
+    invite_collaborators = post_approval_actions.get("inviteCollaborators")
+    if not isinstance(invite_collaborators, dict):
+        fail(
+            f"Project type {project_type_id} projectSetup.postApprovalActions.inviteCollaborators "
+            "must be declared"
+        )
+    if not isinstance(invite_collaborators.get("enabled"), bool):
+        fail(f"Project type {project_type_id} inviteCollaborators.enabled must be a boolean")
+    if invite_collaborators.get("enabled") is True:
+        validate_enabled_platform_action("inviteCollaborators", invite_collaborators)
+        if "invite" not in step_keys:
+            fail(
+                f"Project type {project_type_id} inviteCollaborators is enabled without an invite "
+                "setup step"
+            )
+        if invite_collaborators.get("actionMode") != "platform_project_membership":
+            fail(
+                f"Project type {project_type_id} inviteCollaborators.actionMode must be "
+                "platform_project_membership"
+            )
+        if invite_collaborators.get("setupTasksMaySendInvites") is not False:
+            fail(f"Project type {project_type_id} inviteCollaborators.setupTasksMaySendInvites must be false")
+    elif not isinstance(invite_collaborators.get("reason"), str) or not invite_collaborators.get("reason"):
+        fail(f"Project type {project_type_id} disabled inviteCollaborators must declare reason")
+
+    enable_schedules = post_approval_actions.get("enableSchedules")
+    if not isinstance(enable_schedules, dict):
+        fail(f"Project type {project_type_id} projectSetup.postApprovalActions.enableSchedules must be declared")
+    if not isinstance(enable_schedules.get("enabled"), bool):
+        fail(f"Project type {project_type_id} enableSchedules.enabled must be a boolean")
+    if enable_schedules.get("enabled") is True:
+        validate_enabled_platform_action("enableSchedules", enable_schedules)
+        if enable_schedules.get("scheduleGroupsRef") != "projectSetup.scheduleGroups":
+            fail(
+                f"Project type {project_type_id} enableSchedules.scheduleGroupsRef must be "
+                "projectSetup.scheduleGroups"
+            )
+        if enable_schedules.get("defaultEnabled") is not False:
+            fail(f"Project type {project_type_id} enableSchedules.defaultEnabled must be false")
+        if enable_schedules.get("setupTasksMayEnableRecurringSync") is not False:
+            fail(
+                f"Project type {project_type_id} enableSchedules.setupTasksMayEnableRecurringSync "
+                "must be false"
+            )
+    elif not isinstance(enable_schedules.get("reason"), str) or not enable_schedules.get("reason"):
+        fail(f"Project type {project_type_id} disabled enableSchedules must declare reason")
 
 
 def validate_project_type_file(path: Path, expected_id: str) -> str:
