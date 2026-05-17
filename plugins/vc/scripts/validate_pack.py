@@ -1456,6 +1456,22 @@ def validate_project_setup_contract(project_type_id: str, project_type: dict[str
                     f"Project type {project_type_id} projectSetup.scheduleGroups.{group_key} "
                     f"references task {task_slug}, which does not support {project_type_id}"
                 )
+            scheduling = contract.get("scheduling")
+            if not isinstance(scheduling, dict) or scheduling.get("schedulable") is not True:
+                fail(
+                    f"Project type {project_type_id} projectSetup.scheduleGroups.{group_key} "
+                    f"references task {task_slug}, which is not schedulable"
+                )
+            if scheduling.get("showInProjectSetup") is not True:
+                fail(
+                    f"Project type {project_type_id} projectSetup.scheduleGroups.{group_key} "
+                    f"references task {task_slug}, which is not shown in Project Setup"
+                )
+            if scheduling.get("setupStep") != "schedules":
+                fail(
+                    f"Project type {project_type_id} projectSetup.scheduleGroups.{group_key} "
+                    f"references task {task_slug}, which is not a schedules-step task"
+                )
         for field_name in ["defaultExpanded", "advanced"]:
             if not isinstance(group.get(field_name), bool):
                 fail(
@@ -1480,11 +1496,19 @@ def validate_project_setup_contract(project_type_id: str, project_type: dict[str
             "must be a boolean"
         )
     if import_projects.get("enabled") is True:
+        if not isinstance(import_projects.get("label"), str) or not import_projects.get("label"):
+            fail(f"Project type {project_type_id} enabled importProjects must declare label")
         if import_projects.get("targetProjectTypeKey") != project_type_id:
             fail(
                 f"Project type {project_type_id} importProjects.targetProjectTypeKey must be "
                 f"{project_type_id}"
             )
+        source_evidence_keys = require_string_list(
+            import_projects.get("sourceEvidenceKeys"),
+            f"Project type {project_type_id} importProjects.sourceEvidenceKeys",
+        )
+        if not source_evidence_keys:
+            fail(f"Project type {project_type_id} importProjects.sourceEvidenceKeys must not be empty")
         project_import_task = import_projects.get("projectImportTask")
         if not isinstance(project_import_task, dict):
             fail(f"Project type {project_type_id} importProjects.projectImportTask must be declared")
@@ -1493,6 +1517,87 @@ def validate_project_setup_contract(project_type_id: str, project_type: dict[str
                 fail(
                     f"Project type {project_type_id} importProjects.projectImportTask "
                     f"must declare {field_name}"
+                )
+        task_slug = project_import_task["taskDefinitionSlug"]
+        task_contract = task_contracts.get(task_slug)
+        if task_contract is None:
+            fail(f"Project type {project_type_id} importProjects references unknown task {task_slug}")
+        if task_contract["id"] != project_import_task["taskDefinitionTemplateId"]:
+            fail(
+                f"Project type {project_type_id} importProjects references template id "
+                f"{project_import_task['taskDefinitionTemplateId']}, but {task_slug} has id "
+                f"{task_contract['id']}"
+            )
+        if project_type_id not in task_contract.get("supportedProjectTypes", []):
+            fail(
+                f"Project type {project_type_id} importProjects task {task_slug} "
+                f"does not support {project_type_id}"
+            )
+        if DEFAULT_PROJECT_SCOPE not in task_contract.get("supportedProjectScopes", []):
+            fail(
+                f"Project type {project_type_id} importProjects task {task_slug} "
+                f"must support {DEFAULT_PROJECT_SCOPE}"
+            )
+        input_field = project_import_task["inputField"]
+        task_input_fields = task_contract["fields"]["input"]
+        if input_field not in task_input_fields:
+            fail(
+                f"Project type {project_type_id} importProjects inputField {input_field} "
+                f"is not an input field on {task_slug}"
+            )
+        if task_input_fields[input_field].get("required") is not True:
+            fail(
+                f"Project type {project_type_id} importProjects inputField {input_field} "
+                f"must be required on {task_slug}"
+            )
+        payload_contract = project_import_task.get("payloadContract")
+        if not isinstance(payload_contract, dict):
+            fail(f"Project type {project_type_id} importProjects.projectImportTask must declare payloadContract")
+        if not isinstance(payload_contract.get("version"), str) or not payload_contract.get("version"):
+            fail(f"Project type {project_type_id} importProjects.payloadContract must declare version")
+        for field_name in [
+            "requiredTopLevelKeys",
+            "requiredApprovalKeys",
+            "requiredSourceKeys",
+            "requiredSeedKeys",
+            "requiredTargetProjectKeys",
+        ]:
+            if not require_string_list(
+                payload_contract.get(field_name),
+                f"Project type {project_type_id} importProjects.payloadContract.{field_name}",
+            ):
+                fail(
+                    f"Project type {project_type_id} importProjects.payloadContract.{field_name} "
+                    "must not be empty"
+                )
+        output_evidence_keys = require_string_list(
+            project_import_task.get("outputEvidenceKeys"),
+            f"Project type {project_type_id} importProjects.projectImportTask.outputEvidenceKeys",
+        )
+        if not output_evidence_keys:
+            fail(f"Project type {project_type_id} importProjects.outputEvidenceKeys must not be empty")
+        unknown_output_keys = sorted(
+            set(output_evidence_keys) - set(task_contract["fields"]["output"].keys())
+        )
+        if unknown_output_keys:
+            fail(
+                f"Project type {project_type_id} importProjects.outputEvidenceKeys references "
+                f"unknown task outputs: {unknown_output_keys}"
+            )
+        safety = import_projects.get("safety")
+        if not isinstance(safety, dict):
+            fail(f"Project type {project_type_id} importProjects.safety must be declared")
+        expected_safety_values = {
+            "requiresReviewedUserApproval": True,
+            "setupTasksMayCreateProjects": False,
+            "setupTasksMayImportRecords": False,
+            "setupTasksMayEnableRecurringSync": False,
+        }
+        for field_name, expected_value in expected_safety_values.items():
+            if safety.get(field_name) is not expected_value:
+                fail(
+                    f"Project type {project_type_id} importProjects.safety.{field_name} "
+                    f"must be {expected_value}"
                 )
     elif not isinstance(import_projects.get("reason"), str) or not import_projects.get("reason"):
         fail(f"Project type {project_type_id} disabled importProjects must declare reason")
@@ -1964,6 +2069,7 @@ def load_task_template_contracts() -> dict[str, dict[str, Any]]:
                 supported_project_types,
             ),
             "stage": definition_json.get("stage"),
+            "scheduling": definition_json.get("scheduling"),
             "fields": {
                 "input": field_map(template_id, "input", fields.get("input")),
                 "context": field_map(template_id, "context", fields.get("context")),

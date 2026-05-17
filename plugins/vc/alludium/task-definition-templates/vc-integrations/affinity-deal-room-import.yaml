@@ -57,7 +57,29 @@ fields:
       fieldType: json
       required: true
       position: 0
-      config: {}
+      config:
+        contractRef: vc.affinity_deal_room_import.import_payload.v1
+        requiredTopLevelKeys:
+          - setupTaskId
+          - approval
+          - source
+          - seed
+          - targetProject
+        requiredApprovalKeys:
+          - approvedByUserId
+          - approvedAt
+          - reviewedEvidenceArtifactIds
+        requiredSourceKeys:
+          - provider
+          - selectedSourceScope
+          - acceptedStageMapping
+        requiredSeedKeys:
+          - affinityOrganizationId
+          - companyName
+        requiredTargetProjectKeys:
+          - projectId
+          - projectTypeKey
+          - workspaceId
   output:
     - key: affinity_import_receipt_artifact_id
       name: Affinity Import Receipt

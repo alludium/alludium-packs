@@ -78,7 +78,23 @@
         "projectImportTask": {
           "taskDefinitionTemplateId": "vc.affinity_deal_room_import",
           "taskDefinitionSlug": "affinity-deal-room-import",
-          "inputField": "import_payload"
+          "inputField": "import_payload",
+          "payloadContract": {
+            "version": "vc.affinity_deal_room_import.import_payload.v1",
+            "requiredTopLevelKeys": ["setupTaskId", "approval", "source", "seed", "targetProject"],
+            "requiredApprovalKeys": ["approvedByUserId", "approvedAt", "reviewedEvidenceArtifactIds"],
+            "requiredSourceKeys": ["provider", "selectedSourceScope", "acceptedStageMapping"],
+            "requiredSeedKeys": ["affinityOrganizationId", "companyName"],
+            "requiredTargetProjectKeys": ["projectId", "projectTypeKey", "workspaceId"]
+          },
+          "outputEvidenceKeys": [
+            "affinity_import_receipt_artifact_id",
+            "import_status",
+            "import_summary",
+            "imported_field_map",
+            "source_index",
+            "next_task_recommendations"
+          ]
         },
         "safety": {
           "requiresReviewedUserApproval": true,
