@@ -15,13 +15,104 @@
       "source_choice",
       "source_setup",
       "variables",
-      "schedules",
-      "invite"
+      "schedules"
+    ],
+    "setupSteps": [
+      {
+        "key": "source_choice",
+        "label": "Choose sourcing route",
+        "purpose": "Choose approved upstream origination sources such as Apify actors, Companies House public register previews, or manual source configuration.",
+        "stepType": "source_choice",
+        "evidenceKey": "source_choice",
+        "required": true,
+        "taskDefinitionSlug": "project-source-choice"
+      },
+      {
+        "key": "source_setup",
+        "label": "Setup sourcing sources",
+        "purpose": "Review source readiness, actor or URL scope, budget policy, and read-preview boundaries without running sourcing.",
+        "stepType": "source_setup",
+        "evidenceKey": "source_setup",
+        "required": true,
+        "taskSelection": "sourceSetupTasks"
+      },
+      {
+        "key": "variables",
+        "label": "Review variables",
+        "purpose": "Review thesis, source policy, budget, and review-threshold variables before activating the origination pipeline.",
+        "stepType": "variables",
+        "evidenceKey": "variables",
+        "required": true,
+        "taskDefinitionSlug": "project-variable-review"
+      },
+      {
+        "key": "schedules",
+        "label": "Configure sourcing schedules",
+        "purpose": "Review optional recurring sourcing, digest, screening, and source-health tasks; all schedules stay disabled until explicitly approved.",
+        "stepType": "schedules",
+        "evidenceKey": "schedules",
+        "required": true,
+        "taskDefinitionSlug": "project-schedule-review"
+      }
+    ],
+    "postApprovalActions": {
+      "importProjects": {
+        "enabled": false,
+        "reason": "Origination setup configures an upstream sourcing pipeline. Deal Room creation happens later through an approved promotion task."
+      }
+    },
+    "scheduleGroups": [
+      {
+        "key": "core_sourcing",
+        "label": "Core sourcing loop",
+        "description": "Primary recurring sourcing pass, digest, and source-health review for the origination pipeline.",
+        "taskDefinitionSlugs": [
+          "run-sourcing-pipeline",
+          "generate-sourcing-digest",
+          "review-source-errors-and-spend"
+        ],
+        "defaultExpanded": true,
+        "advanced": false
+      },
+      {
+        "key": "source_discovery",
+        "label": "Source-specific discovery",
+        "description": "Optional source-level discovery schedules for approved public and paid source surfaces.",
+        "taskDefinitionSlugs": [
+          "discover-companies-house-candidates",
+          "discover-x-founder-signals",
+          "discover-github-builder-signals",
+          "discover-linkedin-founders",
+          "discover-reddit-builder-signals"
+        ],
+        "defaultExpanded": false,
+        "advanced": true
+      },
+      {
+        "key": "review_and_engagement",
+        "label": "Review and engagement prep",
+        "description": "Optional review, screening, portfolio-overlap, and outreach-draft tasks that operate on approved candidate batches.",
+        "taskDefinitionSlugs": [
+          "review-portfolio-overlap",
+          "screen-active-sourcing-candidates",
+          "prepare-outreach-draft-queue"
+        ],
+        "defaultExpanded": false,
+        "advanced": true
+      },
+      {
+        "key": "spend_controls",
+        "label": "Spend controls",
+        "description": "Optional recurring paid-source spend audit for LinkedIn/Apify query management.",
+        "taskDefinitionSlugs": ["audit-linkedin-query-spend"],
+        "defaultExpanded": false,
+        "advanced": true
+      }
     ],
     "defaultChildTask": {
       "label": "Setup source",
       "taskDefinitionSlug": "project-source-setup",
-      "setupGoal": "Review the selected origination source route, discovery scope, seed policy, and sync intent before any run or write."
+      "setupGoal": "Review the selected origination source route, discovery scope, source policy, and schedule intent before any run or write."
     },
     "variableDiscoveryTask": {
       "label": "VC Variable Discovery",
