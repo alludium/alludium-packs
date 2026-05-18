@@ -17,7 +17,7 @@ Manage Closing Checklist for one venture-capital opportunity with evidence captu
 
 ## Instructions
 
-Track closing workplan owners, due dates, blockers, daily status, and onboarding readiness for human close-readiness review. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifacts `ic_decision_record_artifact_id` and `term_sheet_review_artifact_id` as the decision and terms sources, and use `closing_source_artifact_ids` for legal documents, workplans, counsel notes, CP lists, signed documents, and evidence files. Create or update a durable project file artifact named Closing Checklist and attach it to the required output field `closing_checklist_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
+Track closing workplan owners, due dates, blockers, daily status, and onboarding readiness for human close-readiness review. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifacts `ic_decision_record_artifact_id` and `term_sheet_review_artifact_id` as the decision and terms sources, and use `closing_source_artifact_ids` for legal documents, workplans, counsel notes, CP lists, signed documents, and evidence files. Create or update a durable project file artifact named Closing Checklist and attach it to the required output field `closing_checklist_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -73,6 +73,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Document References
 
 - `vc.document.closing_checklist` (output_template) -> `closing_checklist_artifact_id`
+- `vc.document.template_use_guidance` (operating_guidance)
 
 ## Routing
 

@@ -9,18 +9,32 @@ summary: Reusable lightweight IC-style summary for sourced candidates before Dea
 
 # Sourcing IC Summary Template
 
-## Sections
+## Candidate Snapshot
 
-- Candidate identity
-- Product and customer signal
-- Thesis fit
-- Founder signal
-- Source receipts
-- Relationship context
-- Portfolio overlap notes
-- Risks and unknowns
-- Evidence quality
-- Recommended next step
+| Field | Content |
+| --- | --- |
+| Company | Name, domain, location |
+| Product | One-line product description |
+| Customer / buyer | Target customer and pain |
+| Thesis fit | Why this matters to the fund |
+| Source path | How the candidate surfaced |
+
+## IC-Style Summary
+
+| Topic | Summary | Evidence |
+| --- | --- | --- |
+| Product and customer signal |  |  |
+| Founder signal |  |  |
+| Market / timing |  |  |
+| Portfolio overlap |  |  |
+| Relationship context |  |  |
+| Risks and unknowns |  |  |
+
+## Recommendation
+
+| Recommendation | Rationale | Next Step |
+| --- | --- | --- |
+| Promote / watch / reject / partner review |  |  |
 
 ## Standard
 

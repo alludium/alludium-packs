@@ -9,17 +9,37 @@ summary: Reusable meeting-record summary for customer, founder, and diligence ca
 
 # Customer Insights Summary Template
 
-## Sections
+## Source Coverage
 
-- Source records reviewed
-- Meeting or transcript summary
-- Customer and buyer claims
-- Product and workflow claims
-- Traction, budget, and urgency signals
-- Contradictions or gaps
-- Action items
-- CRM-neutral update draft
-- Pass or follow-up recommendation
+| Source | Date | Coverage | Reliability |
+| --- | --- | --- | --- |
+| Transcript, notes, recording, CRM note, or artifact |  | Complete / partial / excerpt | High / Medium / Low |
+
+## Insight Summary
+
+| Topic | Evidence | Investment Implication |
+| --- | --- | --- |
+| Customer pain |  |  |
+| Buyer and budget |  |  |
+| Product workflow |  |  |
+| Traction or urgency |  |  |
+| Competition |  |  |
+
+## Contradictions And Gaps
+
+| Gap / Contradiction | Why It Matters | Follow-Up |
+| --- | --- | --- |
+|  |  |  |
+
+## Action Items
+
+| Action | Owner | Due Date | Approval Needed? |
+| --- | --- | --- | --- |
+|  |  |  | Yes / No |
+
+## CRM-Neutral Update Draft
+
+Provide a short update that can be reviewed before any CRM write. Do not imply that the write has happened.
 
 ## Standard
 

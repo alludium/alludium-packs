@@ -9,16 +9,36 @@ summary: Reusable digest format for sourced candidate updates.
 
 # Sourcing Digest Template
 
-## Sections
+## Digest Header
 
-- Digest period and pipeline scope
-- Best new candidates
-- Candidates needing human review
-- Candidates promoted or rejected
-- Source health notes
-- Spend or quota notes
-- Relationship paths to check
-- Recommended next tasks
+| Field | Content |
+| --- | --- |
+| Period | Date range |
+| Pipeline | Name and thesis |
+| Sources covered | Source keys and run IDs |
+| Prepared by | Owner and date |
+
+## Highlights
+
+| Category | Summary | Link / Artifact |
+| --- | --- | --- |
+| Best new candidates |  |  |
+| Candidates needing review |  |  |
+| Promoted or rejected |  |  |
+| Source health notes |  |  |
+| Spend or quota notes |  |  |
+
+## Candidate Actions
+
+| Company | Recommended Action | Rationale | Owner |
+| --- | --- | --- | --- |
+|  | Meet / research / watch / reject / promote |  |  |
+
+## Next Tasks
+
+| Task | Owner | Dependency |
+| --- | --- | --- |
+|  |  |  |
 
 ## Standard
 

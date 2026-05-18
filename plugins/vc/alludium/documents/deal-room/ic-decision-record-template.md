@@ -9,18 +9,31 @@ summary: Reusable record for IC decisions and conditions.
 
 # IC Decision Record Template
 
-## Fields
+## Decision Summary
 
-- Company
-- Meeting date
-- Decision
-- Decision makers present
-- Investment amount and terms discussed
-- Conditions or required follow-ups
-- Main reasons for approval or rejection
-- Dissent or unresolved concerns
-- Evidence references
-- Owner and completion deadline
+| Field | Content |
+| --- | --- |
+| Company | Name and project |
+| Meeting date | Date |
+| Decision | Approved / approved with conditions / continue diligence / passed |
+| Decision makers present | Names or roles |
+| Deal lead | Owner |
+| Investment amount | Proposed amount and ownership |
+| Terms discussed | Valuation, round, instrument, key conditions |
+
+## Rationale
+
+| Area | Summary | Evidence |
+| --- | --- | --- |
+| Approval rationale | Main reasons for decision | Memo, model, diligence artifacts |
+| Dissent or concerns | Objections and unresolved issues | Reviewer comments or cited evidence |
+| Conditions | Required items before closing or next stage | Owner and deadline |
+
+## Follow-Up
+
+| Action | Owner | Deadline | Blocks Close? |
+| --- | --- | --- | --- |
+|  |  |  | Yes / No |
 
 ## Standard
 

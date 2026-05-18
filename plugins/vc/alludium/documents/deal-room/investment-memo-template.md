@@ -9,21 +9,72 @@ summary: Reusable investment memo structure for IC preparation.
 
 # Investment Memo Template
 
-## Sections
+## Cover Summary
 
-- Decision ask
-- Company snapshot
-- Investment thesis
-- Market and customer evidence
-- Product and technology assessment
-- Team assessment
-- Traction, financials, and unit economics
-- Competitive landscape
-- Round terms and ownership
-- Risks, mitigants, and unknowns
-- Diligence summary and source index
-- Recommendation and conditions
+| Field | Content |
+| --- | --- |
+| Company | Name, sector, geography, stage |
+| Decision ask | Invest / proceed to IC / continue diligence / pass |
+| Round | Round size, valuation, lead, expected close date |
+| Proposed check | Amount, target ownership, reserve implication |
+| Owner | Deal lead and memo preparer |
+| Recommendation | One-line recommendation with conditions |
+
+## Executive Summary
+
+Write one tight page covering the business, why now, why this fund, proposed action, headline returns or ownership logic, and the top three risks. Include both the bull case and the bear case; do not bury the bear case in the risk section.
+
+## Investment Thesis
+
+| Thesis Pillar | Evidence | Why It Matters | Confidence |
+| --- | --- | --- | --- |
+| Pillar 1 | Cited evidence | Link to return, ownership, or strategic fit | High / Medium / Low |
+| Pillar 2 | Cited evidence | Link to return, ownership, or strategic fit | High / Medium / Low |
+| Pillar 3 | Cited evidence | Link to return, ownership, or strategic fit | High / Medium / Low |
+
+## Business Overview
+
+- Company snapshot and product description
+- Customer, buyer, and workflow summary
+- Business model and pricing
+- Current traction and operating cadence
+- What must be true for this to become a fund-returning outcome
+
+## Market And Competition
+
+| Topic | Required Content |
+| --- | --- |
+| Market | Size, growth, urgency, and customer budget owner |
+| Category dynamics | Tailwinds, adoption barriers, timing risk |
+| Competitive set | Direct alternatives, incumbents, substitutes |
+| Differentiation | What is defensible versus what is merely claimed |
+
+## Diligence Findings
+
+| Workstream | Finding | Evidence | Risk / Gap | Owner |
+| --- | --- | --- | --- | --- |
+| Commercial |  |  |  |  |
+| Financial |  |  |  |  |
+| Technical |  |  |  |  |
+| Founder / team |  |  |  |  |
+| Legal / regulatory |  |  |  |  |
+
+## Terms, Ownership, And Returns
+
+Include round terms, implied valuation, target ownership, dilution assumptions, reserves, exit path, and sensitivity cases when available. If a returns model is not available, state that plainly and avoid implying precision.
+
+## Risks, Mitigants, And Unknowns
+
+| Risk | Severity | Evidence | Mitigant | Decision Impact |
+| --- | --- | --- | --- | --- |
+|  | High / Medium / Low |  |  | Proceed / condition / pass |
+
+## Conditions And Next Actions
+
+| Condition / Action | Owner | Due Date | Blocks Decision? |
+| --- | --- | --- | --- |
+|  |  |  | Yes / No |
 
 ## Standard
 
-Every material claim should cite a source. The memo should state what would change the recommendation and distinguish completed diligence from remaining work.
+Every material claim should cite a source. The memo should distinguish completed diligence from remaining work, state what would change the recommendation, and end with a source index.

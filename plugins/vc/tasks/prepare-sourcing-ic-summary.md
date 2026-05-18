@@ -18,7 +18,7 @@ Prepare a lightweight IC-style summary for a reviewed origination candidate befo
 
 ## Instructions
 
-Prepare a concise IC-style summary for Meet or Watch candidates using enriched candidate evidence, verdict, relationship context, portfolio-overlap result, source receipts, risks, and open questions. This replaces direct page-creation behavior from the reference implementation with a reviewable summary artifact. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
+Prepare a concise IC-style summary for Meet or Watch candidates using enriched candidate evidence, verdict, relationship context, portfolio-overlap result, source receipts, risks, and open questions. This replaces direct page-creation behavior from the reference implementation with a reviewable summary artifact. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -54,6 +54,7 @@ Draft only. Do not create Notion pages, documents, external records, or Deal Roo
 
 - `vc.document.sourcing_ic_summary_template` (output_template) -> `ic_summary_artifact_id`
 - `vc.document.evidence_citation_style_guide` (style_guide)
+- `vc.document.template_use_guidance` (operating_guidance)
 
 ## Routing
 

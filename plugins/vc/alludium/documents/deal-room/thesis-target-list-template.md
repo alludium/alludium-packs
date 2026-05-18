@@ -9,17 +9,26 @@ summary: Reusable target-list format for thesis-led sourcing and warm-intro plan
 
 # Thesis Target List Template
 
-## Sections
+## Search Brief
 
-- Thesis and scope
-- Search method
-- Target company list
-- Fit rationale
-- Source links
-- Warm intro paths
-- Confidence notes
-- Exclusions and rejected candidates
-- Recommended next actions
+| Field | Content |
+| --- | --- |
+| Thesis | Specific investment thesis or market map |
+| Scope | Geography, stage, sector, business model |
+| Exclusions | Companies, categories, geographies, or stages to avoid |
+| Sources used | Search tools, databases, referrals, public sources |
+
+## Target List
+
+| Priority | Company | Domain | Fit Rationale | Evidence | Warm Intro Path | Confidence | Next Action |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| A / B / C |  |  |  |  |  | High / Medium / Low | Research / intro / pass |
+
+## Exclusions
+
+| Company | Reason Excluded | Evidence |
+| --- | --- | --- |
+|  | Duplicate / poor fit / stale / too late / insufficient evidence |  |
 
 ## Standard
 

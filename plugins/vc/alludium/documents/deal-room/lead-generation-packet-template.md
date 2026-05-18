@@ -9,17 +9,32 @@ summary: Reusable management-level packet for thesis-led lead generation reviews
 
 # Lead Generation Packet Template
 
-## Sections
+## Packet Summary
 
-- Meeting objective
-- Thesis and search scope
-- Candidate company snapshots
-- Fit rationale
-- Evidence and source links
-- Warm intro paths
-- Discussion topics
-- Proposed next actions
-- Open assumptions
+| Field | Content |
+| --- | --- |
+| Meeting objective | Source review, partner discussion, or outreach decision |
+| Thesis / theme | Market or thesis area |
+| Source period | Date range and sources covered |
+| Prepared by | Owner and date |
+
+## Candidate Summary
+
+| Rank | Company | Why It Fits | Evidence | Relationship Path | Recommended Action |
+| --- | --- | --- | --- | --- | --- |
+| 1 |  |  |  |  | Meet / research / watch / pass |
+
+## Discussion Topics
+
+- Companies that deserve immediate outreach
+- Companies that need more evidence before outreach
+- Thesis assumptions that changed during sourcing
+- Sources that produced low-quality results
+- Open relationship or intro questions
+
+## Open Assumptions
+
+List assumptions that are material to the packet and the source needed to confirm them.
 
 ## Standard
 

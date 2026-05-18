@@ -9,20 +9,20 @@ summary: Reusable queue for founder outreach drafts and owner review.
 
 # Outreach Queue Template
 
-## Columns
+## Queue
 
-- Company
-- Contact
-- Reason to reach out
-- Source evidence
-- Relationship path
-- Suggested channel
-- Draft status
-- Owner
-- Priority
-- Approval status
-- Last touch
-- Next step
+| Priority | Company | Contact | Reason To Reach Out | Source Evidence | Relationship Path | Channel | Draft Status | Owner | Approval | Last Touch | Next Step |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| A / B / C |  |  |  |  |  | LinkedIn / email / intro | Not drafted / drafted / reviewed |  | Pending / approved / rejected |  |  |
+
+## Draft Requirements
+
+| Requirement | Check |
+| --- | --- |
+| Specific hook tied to evidence | Yes / No |
+| No fabricated personalization | Yes / No |
+| Relationship path checked | Yes / No |
+| Human approval captured before send | Yes / No |
 
 ## Boundary
 

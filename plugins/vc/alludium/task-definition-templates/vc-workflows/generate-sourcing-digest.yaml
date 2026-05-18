@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.generate_sourcing_digest
-version: 0.1.3
+version: 0.1.5
 title: Generate Sourcing Digest
 category: Venture Capital
 visibility: workspace
@@ -23,6 +23,8 @@ definition:
       - documentId: vc.document.sourcing_digest_template
         usage: output_template
         outputFieldKey: sourcing_digest_artifact_id
+      - documentId: vc.document.template_use_guidance
+        usage: operating_guidance
     requiredSkills:
       - vc-sourcing-digest-generation
       - citation-enforcement
@@ -55,7 +57,8 @@ definition:
       safety:
         externalWritesRequireApproval: true
     instructions:
-      executionInstructions: Produce a reference-pipeline-style digest of new Meet/Watch and active candidates, source counts, run failures, budget/cost notes, and review actions. The default destination is a reviewable digest object; posting to Slack, ClickUp, email, or another external channel requires a separately approved write-capable task. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
+      executionInstructions: >-
+        Produce a reference-pipeline-style digest of new Meet/Watch and active candidates, source counts, run failures, budget/cost notes, and review actions. The default destination is a reviewable digest object; posting to Slack, ClickUp, email, or another external channel requires a separately approved write-capable task. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
       missingInputPolicy: Ask for run receipt, candidate batch, digest channel, audience, and whether this is daily, weekly, or monthly.
       externalActionPolicy: Draft digest only unless explicit channel-post approval is granted.
       completionCriteria:

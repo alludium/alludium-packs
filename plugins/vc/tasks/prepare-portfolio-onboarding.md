@@ -17,7 +17,7 @@ Prepare Portfolio Onboarding for one venture-capital opportunity with evidence c
 
 ## Instructions
 
-Prepare the portfolio handoff with board setup notes, reporting cadence, 100-day plan, milestones, support request intake, and owner assignments. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifacts `ic_decision_record_artifact_id`, `closing_checklist_artifact_id`, and `conditions_precedent_verification_artifact_id` as source artifacts for the portfolio onboarding plan. Create or update a durable project file artifact named Portfolio Onboarding Plan and attach it to the required output field `portfolio_onboarding_plan_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
+Prepare the portfolio handoff with board setup notes, reporting cadence, 100-day plan, milestones, support request intake, and owner assignments. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifacts `ic_decision_record_artifact_id`, `closing_checklist_artifact_id`, and `conditions_precedent_verification_artifact_id` as source artifacts for the portfolio onboarding plan. Create or update a durable project file artifact named Portfolio Onboarding Plan and attach it to the required output field `portfolio_onboarding_plan_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -70,6 +70,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Document References
 
 - `vc.document.portfolio_onboarding_plan_template` (output_template) -> `portfolio_onboarding_plan_artifact_id`
+- `vc.document.template_use_guidance` (operating_guidance)
 
 ## Routing
 

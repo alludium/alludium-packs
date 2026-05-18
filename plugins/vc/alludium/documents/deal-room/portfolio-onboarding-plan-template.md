@@ -9,16 +9,39 @@ summary: Reusable post-close onboarding and first-100-days plan.
 
 # Portfolio Onboarding Plan Template
 
-## Sections
+## Onboarding Header
 
-- Investment owner and operating partner
-- Founder communication plan
-- Board, observer, and governance setup
-- Reporting cadence and metrics
-- First 30, 60, and 100 day support plan
-- Hiring, customer, finance, and GTM support needs
-- Risk watchlist
-- Follow-up tasks and owners
+| Field | Content |
+| --- | --- |
+| Company | Name |
+| Close date | Date or expected date |
+| Investment owner | Partner or deal lead |
+| Operating owner | Platform or portfolio lead |
+| Founder contact | Primary contact |
+
+## First 100 Days
+
+| Timeframe | Priority | Owner | Success Measure |
+| --- | --- | --- | --- |
+| Day 0-30 | Governance, reporting, relationship setup |  |  |
+| Day 31-60 | Operating support, hiring, GTM, finance |  |  |
+| Day 61-100 | Board cadence, risk review, value creation plan |  |  |
+
+## Operating Support Plan
+
+| Area | Need | Firm Support | Owner |
+| --- | --- | --- | --- |
+| Hiring |  |  |  |
+| Customers / GTM |  |  |  |
+| Finance / reporting |  |  |  |
+| Product / technical |  |  |  |
+| Governance |  |  |  |
+
+## Risk Watchlist
+
+| Risk | Trigger | Review Cadence | Owner |
+| --- | --- | --- | --- |
+|  |  |  |  |
 
 ## Standard
 

@@ -9,17 +9,25 @@ summary: Source-specific setup checklist for Companies House public-register sou
 
 # Companies House Source Setup Checklist
 
-## Checks
+## Setup Checks
 
-- Company geography and jurisdiction scope
-- Search terms and excluded categories
-- Filing age and status filters
-- Director or officer matching policy
-- Evidence fields required for candidate batches
-- False-positive handling
-- Public-source citation format
-- Dry run reviewed
-- Human approval captured before recurring use
+| Check | Status | Evidence |
+| --- | --- | --- |
+| Company geography and jurisdiction scope | Pass / Issue / Blocked |  |
+| Search terms and excluded categories | Pass / Issue / Blocked |  |
+| Filing age and status filters | Pass / Issue / Blocked |  |
+| Director or officer matching policy | Pass / Issue / Blocked |  |
+| Evidence fields required for candidate batches | Pass / Issue / Blocked |  |
+| False-positive handling | Pass / Issue / Blocked |  |
+| Public-source citation format | Pass / Issue / Blocked |  |
+| Dry run reviewed | Pass / Issue / Blocked |  |
+| Human approval captured before recurring use | Pass / Issue / Blocked |  |
+
+## Approval
+
+| Decision | Rationale | Next Step |
+| --- | --- | --- |
+| Approve / tune / reject / hold |  |  |
 
 ## Boundary
 

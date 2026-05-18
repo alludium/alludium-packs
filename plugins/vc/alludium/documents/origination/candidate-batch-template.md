@@ -9,21 +9,32 @@ summary: Reusable batch review template for sourced candidates.
 
 # Candidate Batch Template
 
-## Columns
+## Batch Header
 
-- Company
-- Domain
-- Source
-- Source object URL
-- Thesis tags
-- Initial evidence
-- Dedupe status
-- Relationship context
-- Screening score
-- Confidence
-- Recommended next action
-- Owner
-- Notes
+| Field | Content |
+| --- | --- |
+| Pipeline | Name and thesis |
+| Batch period | Date range |
+| Sources | Source keys used |
+| Prepared by | Owner and date |
+| Review objective | Score, enrich, promote, reject, or watch |
+
+## Candidate Table
+
+| Company | Domain | Source | Source URL | Thesis Tags | Initial Evidence | Dedupe Status | Relationship Context | Score | Confidence | Next Action | Owner | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  |  |  |  |  |  | New / existing / ambiguous / prior reject |  | Promote / review / watch / reject | High / Medium / Low | Meet / research / pass / hold |  |  |
+
+## Batch Summary
+
+| Metric | Count / Note |
+| --- | --- |
+| Candidates reviewed |  |
+| Promote |  |
+| Review |  |
+| Watch |  |
+| Reject |  |
+| Ambiguous dedupe |  |
 
 ## Batch Rule
 

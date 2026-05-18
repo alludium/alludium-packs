@@ -12,18 +12,26 @@ summary: Structured diligence question-bank methodology for investment workstrea
 
 ## Purpose
 
-Use this framework to turn known facts, evidence gaps, and risk hypotheses into a structured diligence question bank. It generalizes "structured diligence question framework" language into a reusable investment diligence question framework while preserving the idea of broad, systematic coverage.
+Use this framework to turn known facts, risk hypotheses, and evidence gaps into an assignable diligence question bank. Good questions are specific, answerable, owned, and tied to a decision. Avoid generic diligence prompts that do not change the investment view.
 
-## Question Families
+## Question Bank Format
 
-- Market, customer, and demand validation
-- Product, technology, and roadmap defensibility
-- Team, hiring plan, governance, and founder references
-- Financial model, unit economics, burn, and runway
-- Commercial motion, pipeline, pricing, and retention
-- Legal, regulatory, data, security, and contractual risk
-- Fund fit, ownership, round dynamics, and exit path
+| Priority | Workstream | Question | Why It Matters | Expected Evidence | Owner | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| Must answer | Market / customer / product / team / financial / legal / fund fit | Specific question | Decision affected by the answer | Source, artifact, interview, model, or counsel input | Named owner | Open / In review / Answered / Blocked |
+
+## Workstreams
+
+| Workstream | Example Focus Areas |
+| --- | --- |
+| Market and customer | Market urgency, buyer pain, budget owner, category growth, customer proof |
+| Product and technology | Product depth, defensibility, roadmap, security, AI or data dependencies |
+| Team and governance | Founder quality, hiring plan, board needs, references, key-person risk |
+| Financial and unit economics | Revenue quality, gross margin, burn, runway, payback, forecast realism |
+| Commercial motion | Pipeline, sales cycle, pricing power, retention, expansion, channel risk |
+| Legal and regulatory | IP, contracts, privacy, employment, regulatory exposure, counsel items |
+| Fund fit and ownership | Round dynamics, valuation, reserves, ownership path, exit logic |
 
 ## Prioritization
 
-Tag each question as must-answer, should-answer, or optional. Include the rationale, owner, source gap, expected evidence, and the decision it informs. Questions should be specific enough to assign and answer, not generic diligence prompts.
+Use `must answer` for questions that can change proceed/pass, valuation, terms, or approval conditions. Use `should answer` for questions that affect conviction or workstream planning. Use `optional` only for useful context that should not block the investment decision. End with the top five unanswered questions and the decision each one informs.

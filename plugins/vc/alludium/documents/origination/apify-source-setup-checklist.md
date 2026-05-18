@@ -9,17 +9,25 @@ summary: Source-specific setup checklist for Apify-backed sourcing.
 
 # Apify Source Setup Checklist
 
-## Checks
+## Setup Checks
 
-- Approved actor allowlist
-- Input schema understood
-- Spend or run limits configured
-- Rate and cadence policy reviewed
-- Output fields mapped to candidate batch fields
-- PII and excluded-source policy reviewed
-- Dry run completed
-- Read-preview artifact reviewed
-- Human approval captured before recurring use
+| Check | Status | Evidence |
+| --- | --- | --- |
+| Approved actor allowlist | Pass / Issue / Blocked |  |
+| Input schema understood | Pass / Issue / Blocked |  |
+| Spend or run limits configured | Pass / Issue / Blocked |  |
+| Rate and cadence policy reviewed | Pass / Issue / Blocked |  |
+| Output fields mapped to candidate batch fields | Pass / Issue / Blocked |  |
+| PII and excluded-source policy reviewed | Pass / Issue / Blocked |  |
+| Dry run completed | Pass / Issue / Blocked |  |
+| Read-preview artifact reviewed | Pass / Issue / Blocked |  |
+| Human approval captured before recurring use | Pass / Issue / Blocked |  |
+
+## Approval
+
+| Decision | Rationale | Next Step |
+| --- | --- | --- |
+| Approve / tune / reject / hold |  |  |
 
 ## Boundary
 

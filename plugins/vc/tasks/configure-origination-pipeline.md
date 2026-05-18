@@ -18,7 +18,7 @@ Capture thesis, source selection, cadence intent, budget policy, review threshol
 
 ## Instructions
 
-Guide the user through initial origination pipeline configuration. Capture thesis, source choices, cadence intent, digest destination, budget, review policy, promotion threshold, manual-review threshold, credential gaps, and child setup tasks needed for selected sources. Create setup child tasks only for selected integrations whose setup templates exist. Do not run sourcing, score candidates, create candidate records, enable schedules, write to external systems, send outreach, or promote candidates to Deal Rooms. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
+Guide the user through initial origination pipeline configuration. Capture thesis, source choices, cadence intent, digest destination, budget, review policy, promotion threshold, manual-review threshold, credential gaps, and child setup tasks needed for selected sources. Create setup child tasks only for selected integrations whose setup templates exist. Do not run sourcing, score candidates, create candidate records, enable schedules, write to external systems, send outreach, or promote candidates to Deal Rooms. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -61,6 +61,7 @@ Configuration only. No external reads beyond connection-readiness checks, no sch
 
 - `vc.document.origination_pipeline_sop` (operating_guidance)
 - `vc.document.source_registry_template` (operating_guidance)
+- `vc.document.template_use_guidance` (operating_guidance)
 
 ## Routing
 

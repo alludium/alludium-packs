@@ -18,7 +18,7 @@ Draft founder outreach notes for active candidates while leaving send decisions 
 
 ## Instructions
 
-Mirror the reference pipeline's outreach draft policy. Draft only for candidates with active actions such as Meet, IC-Summary, or Reach out, no manual Status/contact progress, and a founder LinkedIn URL. Produce short, specific, question-led LinkedIn connection notes tied to evidence. Skip weak hooks instead of fabricating personalization. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
+Mirror the reference pipeline's outreach draft policy. Draft only for candidates with active actions such as Meet, IC-Summary, or Reach out, no manual Status/contact progress, and a founder LinkedIn URL. Produce short, specific, question-led LinkedIn connection notes tied to evidence. Skip weak hooks instead of fabricating personalization. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -55,6 +55,7 @@ Draft only. Do not send messages, insert browser-extension notes, mark outreach 
 ## Document References
 
 - `vc.document.outreach_queue_template` (output_template) -> `outreach_queue_artifact_id`
+- `vc.document.template_use_guidance` (operating_guidance)
 
 ## Routing
 

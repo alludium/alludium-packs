@@ -15,11 +15,13 @@ Use this SOP to operate a standing sourcing machine. Origination finds, enriches
 
 ## Workflow
 
-- Configure thesis, geography, stage, source scope, review policy, and budgets.
-- Run discovery and read-preview tasks before enabling recurring or paid source activity.
-- Batch candidates for enrichment, dedupe, scoring, and relationship checks.
-- Produce digests and outreach queues for human review.
-- Promote only candidates with clear evidence, novelty status, and a promotion package.
+| Step | Output | Approval Gate |
+| --- | --- | --- |
+| Configure thesis, geography, stage, source scope, review policy, and budgets | Source registry | Human confirms scope |
+| Run discovery and read-preview tasks | Setup and preview artifacts | Human approves source readiness |
+| Batch candidates for enrichment, dedupe, scoring, and relationship checks | Candidate batch | Human reviews batch quality |
+| Produce digests and outreach queues | Sourcing digest and outreach queue | Human approves outreach or follow-up |
+| Promote qualified candidates | Promotion package | Human approves Deal Room creation or update |
 
 ## Controls
 

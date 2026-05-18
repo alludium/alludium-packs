@@ -9,16 +9,24 @@ summary: Checklist for close-readiness and portfolio handoff.
 
 # Closing Checklist
 
-## Required Checks
+## Close Readiness
 
-- IC decision and conditions confirmed
-- Term sheet or investment documents reviewed by counsel
-- Conditions precedent listed with owners
-- Signing authority and fund approvals confirmed
-- Wire, KYC, tax, and administrative steps assigned
-- Communications plan ready
-- Portfolio onboarding owner identified
-- Post-close reporting cadence drafted
+| Check | Owner | Status | Evidence |
+| --- | --- | --- | --- |
+| IC decision and conditions confirmed |  | Not started / In progress / Complete / Blocked |  |
+| Investment documents reviewed by counsel |  | Not started / In progress / Complete / Blocked |  |
+| Conditions precedent listed with owners |  | Not started / In progress / Complete / Blocked |  |
+| Signing authority and fund approvals confirmed |  | Not started / In progress / Complete / Blocked |  |
+| Wire, KYC, tax, and admin steps assigned |  | Not started / In progress / Complete / Blocked |  |
+| Communications plan ready |  | Not started / In progress / Complete / Blocked |  |
+| Portfolio onboarding owner identified |  | Not started / In progress / Complete / Blocked |  |
+| Post-close reporting cadence drafted |  | Not started / In progress / Complete / Blocked |  |
+
+## Blockers
+
+| Blocker | Severity | Required Resolution | Owner | Due Date |
+| --- | --- | --- | --- | --- |
+|  | High / Medium / Low |  |  |  |
 
 ## Boundary
 

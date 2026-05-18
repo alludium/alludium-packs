@@ -18,7 +18,7 @@ Prepare Lead Gen Packet for one venture-capital opportunity with evidence captur
 
 ## Instructions
 
-Prepare the lead-generation meeting packet from candidate companies and thesis context; include per-company snapshots, discussion points, and proposed next actions. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable management task file artifact named Lead Generation Packet and attach it to the required output field `lead_generation_packet_artifact_id`; do not assume this project-management scoped output is indexed onto a single Deal Room project. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
+Prepare the lead-generation meeting packet from candidate companies and thesis context; include per-company snapshots, discussion points, and proposed next actions. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable management task file artifact named Lead Generation Packet and attach it to the required output field `lead_generation_packet_artifact_id`; do not assume this project-management scoped output is indexed onto a single Deal Room project. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -70,6 +70,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 
 - `vc.document.lead_generation_packet_template` (output_template) -> `lead_generation_packet_artifact_id`
 - `vc.document.evidence_citation_style_guide` (style_guide)
+- `vc.document.template_use_guidance` (operating_guidance)
 
 ## Routing
 

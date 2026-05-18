@@ -9,15 +9,27 @@ summary: Reusable founder request template for diligence materials.
 
 # Founder Materials Request Template
 
-## Request Sections
+## Request Summary
 
-- Company overview and latest pitch deck
-- Product demo, screenshots, or technical overview
-- Customer references, case studies, and pipeline detail
-- Financial model, revenue metrics, burn, runway, and cap table
-- Hiring plan, org chart, and key team biographies
-- Legal, IP, data, security, and regulatory materials where relevant
-- Current fundraise materials, term expectations, and timing
+| Field | Content |
+| --- | --- |
+| Company | Name and current process stage |
+| Recipient | Founder, CFO, advisor, or counsel |
+| Requested by | Firm owner |
+| Response deadline | Date or dependency |
+| Sensitivity | Founder-friendly, internal, counsel-reviewed |
+
+## Request Table
+
+| Category | Requested Material | Priority | Notes |
+| --- | --- | --- | --- |
+| Company overview | Latest deck, company one-pager, product overview | Required | Avoid duplicates already provided |
+| Product | Demo, screenshots, technical overview, roadmap | Required / Optional | Match to stage depth |
+| Customer and GTM | References, case studies, pipeline, churn or retention detail | Required | Mark sensitive customer data |
+| Financial | Financial model, revenue metrics, burn, runway, cap table | Required | Ask for units and reporting period |
+| Team | Hiring plan, org chart, key biographies | Optional / Later-stage | Tailor to current concerns |
+| Legal / security | IP, data, security, regulatory, contracts | Later-stage | Route sensitive legal asks through counsel |
+| Fundraise | Current round materials, term expectations, timing | Required | Ask only where relevant |
 
 ## Usage Notes
 

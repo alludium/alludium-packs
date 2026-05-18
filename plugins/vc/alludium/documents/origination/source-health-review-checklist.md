@@ -9,18 +9,25 @@ summary: Checklist for reviewing source quality and operational health.
 
 # Source Health Review Checklist
 
-## Checks
+## Health Checks
 
-- Recent successful runs
-- Credential or connection errors
-- Source coverage drift
-- Duplicate rate
-- Candidate quality trend
-- False-positive patterns
-- Manual review backlog
-- Budget or quota pressure
-- Disabled or noisy filters
-- Follow-up owner assigned
+| Check | Status | Evidence | Owner |
+| --- | --- | --- | --- |
+| Recent successful runs | Pass / Issue / Blocked |  |  |
+| Credential or connection errors | Pass / Issue / Blocked |  |  |
+| Source coverage drift | Pass / Issue / Blocked |  |  |
+| Duplicate rate | Pass / Issue / Blocked |  |  |
+| Candidate quality trend | Pass / Issue / Blocked |  |  |
+| False-positive patterns | Pass / Issue / Blocked |  |  |
+| Manual review backlog | Pass / Issue / Blocked |  |  |
+| Budget or quota pressure | Pass / Issue / Blocked |  |  |
+| Disabled or noisy filters | Pass / Issue / Blocked |  |  |
+
+## Recommendation
+
+| Decision | Rationale | Required Action |
+| --- | --- | --- |
+| Continue / reduce / pause / expand / needs partner review |  |  |
 
 ## Cadence
 

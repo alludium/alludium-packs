@@ -9,18 +9,21 @@ summary: Reusable tracker for conditions precedent and evidence.
 
 # Conditions Precedent Tracker Template
 
-## Columns
+## Tracker
 
-- Condition
-- Source document
-- Owner
-- Evidence required
-- Current status
-- Blocker severity
-- Counsel review status
-- Due date
-- Completion evidence
-- Notes
+| Condition | Source Document | Owner | Evidence Required | Status | Severity | Counsel Review | Due Date | Completion Evidence | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  |  |  |  | Open / In progress / Complete / Waived / Blocked | High / Medium / Low | Needed / In review / Complete / Not needed |  |  |  |
+
+## Summary
+
+| Metric | Count |
+| --- | --- |
+| Total conditions |  |
+| Complete |  |
+| Blocked |  |
+| Counsel review needed |  |
+| High severity |  |
 
 ## Usage
 

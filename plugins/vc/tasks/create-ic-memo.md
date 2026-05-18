@@ -18,7 +18,7 @@ Create IC Memo for one venture-capital opportunity with evidence capture, human 
 
 ## Instructions
 
-Assemble the IC memo and pack checklist from stage outputs, DD summaries, founder risks, term-sheet inputs, source artifacts, unresolved risks, assumptions, and citation coverage. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required diligence input file artifacts `commercial_dd_artifact_id`, `financial_dd_artifact_id`, `founder_evaluation_artifact_id`, `technical_dd_artifact_id`, and `diligence_question_bank_artifact_id` as source artifacts for the IC memo. Create or update a durable project file artifact named Investment Memo and attach it to the required output field `investment_memo_artifact_id`. Use the required input file artifacts `team_review_pack_artifact_id` and `partner_review_pack_artifact_id` as the review-pack sources for the IC memo. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
+Assemble the IC memo and pack checklist from stage outputs, DD summaries, founder risks, term-sheet inputs, source artifacts, unresolved risks, assumptions, and citation coverage. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required diligence input file artifacts `commercial_dd_artifact_id`, `financial_dd_artifact_id`, `founder_evaluation_artifact_id`, `technical_dd_artifact_id`, and `diligence_question_bank_artifact_id` as source artifacts for the IC memo. Create or update a durable project file artifact named Investment Memo and attach it to the required output field `investment_memo_artifact_id`. Use the required input file artifacts `team_review_pack_artifact_id` and `partner_review_pack_artifact_id` as the review-pack sources for the IC memo. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -75,6 +75,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 
 - `vc.document.investment_memo_template` (output_template) -> `investment_memo_artifact_id`
 - `vc.document.evidence_citation_style_guide` (style_guide)
+- `vc.document.template_use_guidance` (operating_guidance)
 
 ## Routing
 

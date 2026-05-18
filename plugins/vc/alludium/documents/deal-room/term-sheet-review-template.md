@@ -9,17 +9,36 @@ summary: Reusable business review format for term-sheet deviations, red flags, a
 
 # Term Sheet Review Template
 
-## Sections
+## Review Header
 
-- Term sheet source reviewed
-- Business term summary
-- Deviation table
-- Economics and ownership notes
-- Governance and control notes
-- Information and protective rights
-- Red flags
-- Counsel review questions
-- Approval recommendation
+| Field | Content |
+| --- | --- |
+| Source reviewed | Term sheet artifact or link |
+| Company | Name |
+| Reviewer | Business owner |
+| Counsel status | Not reviewed / in review / reviewed |
+
+## Business Term Summary
+
+| Term | Proposed | Expected / Prior View | Comment |
+| --- | --- | --- | --- |
+| Valuation |  |  |  |
+| Instrument |  |  |  |
+| Investment amount |  |  |  |
+| Ownership |  |  |  |
+| Liquidation preference |  |  |  |
+| Board / observer rights |  |  |  |
+| Pro rata / information rights |  |  |  |
+
+## Deviations And Red Flags
+
+| Issue | Severity | Business Impact | Counsel Question |
+| --- | --- | --- | --- |
+|  | High / Medium / Low |  |  |
+
+## Approval Recommendation
+
+State whether business terms are acceptable, acceptable with counsel changes, or not ready. Do not provide legal advice.
 
 ## Standard
 

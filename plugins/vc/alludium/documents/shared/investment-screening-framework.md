@@ -12,21 +12,32 @@ summary: Reusable first-look scorecard methodology for venture screening.
 
 ## Purpose
 
-Use this framework to create an initial investment screen scorecard for one company or a batch of sourced candidates. It replaces hard-coded "custom screening" language with a configurable screening method that can still support a ten-dimension scorecard when the workspace chooses that model.
+Use this framework to create a first-look investment screen for one company or a sourced candidate batch. The output should help an investor decide whether to pass, watch, continue, promote, or ask for specific missing evidence. It is a screening tool, not a full diligence memo.
 
-## Dimensions
+## Scorecard
 
-- Thesis fit and timing
-- Market size, urgency, and category direction
-- Product clarity and adoption evidence
-- Team quality and founder-market fit
-- Business model, unit economics, and pricing power
-- Traction quality and retention signals
-- Competitive position and differentiation
-- Financing readiness and round fit
-- Key risks, unknowns, and disconfirming evidence
-- Next action recommendation
+| Dimension | What To Assess | Evidence To Look For | Rating |
+| --- | --- | --- | --- |
+| Thesis fit | Fit to fund mandate, stage, geography, sector, and timing | Fund thesis, source context, company description | Strong / Mixed / Weak / Unknown |
+| Market pull | Urgency, budget, category momentum, buyer pain | Customer evidence, market reports, sales notes | Strong / Mixed / Weak / Unknown |
+| Product clarity | Clear product, workflow, differentiation, and adoption path | Demo, pitch deck, product notes, usage evidence | Strong / Mixed / Weak / Unknown |
+| Team | Founder-market fit, hiring gaps, operating credibility | Founder bios, references, prior outcomes | Strong / Mixed / Weak / Unknown |
+| Traction | Revenue, usage, retention, pipeline, or credible proxy signals | Metrics, CRM notes, customer claims | Strong / Mixed / Weak / Unknown |
+| Economics | Pricing power, margins, burn, runway, payback, or path to quality revenue | Financial model, ARR bridge, unit economics | Strong / Mixed / Weak / Unknown |
+| Competition | Differentiation, defensibility, category crowding, switching costs | Competitor map, customer alternatives | Strong / Mixed / Weak / Unknown |
+| Financing fit | Round size, ownership path, valuation reasonableness, syndicate fit | Fundraise materials, cap table, terms | Strong / Mixed / Weak / Unknown |
+| Risks and unknowns | Disqualifying issues, missing evidence, and what would change the answer | Red flags, contradictions, open questions | Clear / Manageable / Severe / Unknown |
+
+## Recommendation Bands
+
+| Recommendation | Use When | Required Next Step |
+| --- | --- | --- |
+| Continue | Most core dimensions are strong or answerable and no obvious hard stop exists | Run follow-up evaluation or diligence questions |
+| Watch | Fit is plausible, but timing, traction, or evidence is not yet strong enough | Define watch trigger and owner |
+| Pass | Fund fit, evidence quality, risk, or timing is materially weak | Record concise pass rationale |
+| Promote | Sourcing candidate has enough evidence for Deal Room review | Prepare promotion package and require human approval |
+| Needs partner judgment | Evidence is incomplete but strategic relevance may override the screen | Escalate exact tradeoff, not a generic "maybe" |
 
 ## Output Standard
 
-Each screen should include a score or qualitative rating per dimension, evidence citations, confidence, unknowns, and a recommendation of pass, watch, continue, or promote. Do not present assumptions as facts. If a dimension is not assessable, mark it unknown and state what evidence would change that.
+Every screen should include a one-paragraph verdict, the scorecard table, cited evidence, unknowns, disconfirming evidence, and an explicit next action. Do not average ratings mechanically. If a dimension is unknown, state the specific source input that would make it assessable.

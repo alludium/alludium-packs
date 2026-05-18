@@ -17,7 +17,7 @@ Verify Conditions Precedent for one venture-capital opportunity with evidence ca
 
 ## Instructions
 
-Map conditions precedent to available closing evidence, identify missing items and blocker severity, and prepare counsel review recommendation and signing readiness. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifact `closing_checklist_artifact_id` as the closing checklist subject, and use `closing_source_artifact_ids` for legal documents, counsel notes, CP lists, signed documents, and evidence files. Create or update a durable project file artifact named Conditions Precedent Verification and attach it to the required output field `conditions_precedent_verification_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
+Map conditions precedent to available closing evidence, identify missing items and blocker severity, and prepare counsel review recommendation and signing readiness. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifact `closing_checklist_artifact_id` as the closing checklist subject, and use `closing_source_artifact_ids` for legal documents, counsel notes, CP lists, signed documents, and evidence files. Create or update a durable project file artifact named Conditions Precedent Verification and attach it to the required output field `conditions_precedent_verification_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -70,6 +70,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Document References
 
 - `vc.document.conditions_precedent_tracker_template` (output_template) -> `conditions_precedent_verification_artifact_id`
+- `vc.document.template_use_guidance` (operating_guidance)
 
 ## Routing
 

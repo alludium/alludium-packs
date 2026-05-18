@@ -15,11 +15,15 @@ Use this SOP to run one venture opportunity from intake through closing and port
 
 ## Workflow
 
-- Confirm company identity, source, owner, and current lifecycle state.
-- Attach source artifacts and founder materials before formal scoring.
-- Run screening, follow-up evaluation, workstream diligence, and review packs in stage order unless a partner explicitly overrides sequence.
-- Prepare IC materials only after material diligence artifacts are available or the gaps are clearly named.
-- Treat closing and portfolio onboarding as execution readiness work, not investment recommendation work.
+| Stage | Required Work Product | Approval Gate |
+| --- | --- | --- |
+| Intake | Company snapshot, source context, owner, lifecycle state | Human confirms project boundary |
+| Assessment | Screening scorecard, founder materials request, initial call brief | Human approves next stage or pass |
+| Diligence | Diligence question bank and workstream reports | Human reviews gaps and risks |
+| Review | Team review pack, partner review pack, IC memo | Human approves IC handling |
+| IC / term sheet | Agenda, decision record, term sheet review | IC or partner decision |
+| Closing | Closing checklist and CP tracker | Counsel and fund approvals |
+| Portfolio handoff | Onboarding plan | Portfolio owner acceptance |
 
 ## Controls
 

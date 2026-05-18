@@ -9,17 +9,37 @@ summary: Reusable follow-up evaluation after first-call or first-look work.
 
 # Follow-Up Evaluation Template
 
-## Sections
+## Evaluation Objective
 
-- Evaluation objective
-- Inputs reviewed
-- Follow-up evidence summary
-- Competitive and market notes
-- Product, customer, and team risks
-- Document requests
-- Readiness recommendation
-- Required owner actions
-- Open questions before diligence
+State the decision this follow-up should support: continue diligence, request materials, pass, watch, or escalate to partner judgment.
+
+## Evidence Reviewed
+
+| Input | What It Adds | Quality |
+| --- | --- | --- |
+| Initial screen, call notes, customer evidence, deck, model, source links |  | High / Medium / Low |
+
+## What Changed Since Prior Review
+
+| Area | Prior View | New Evidence | Updated View |
+| --- | --- | --- | --- |
+| Product |  |  |  |
+| Market |  |  |  |
+| Team |  |  |  |
+| Traction |  |  |  |
+| Risk |  |  |  |
+
+## Readiness Recommendation
+
+| Recommendation | Rationale | Required Conditions |
+| --- | --- | --- |
+| Continue / Watch / Pass / Request materials / Partner review |  |  |
+
+## Open Questions Before Diligence
+
+| Question | Owner | Evidence Needed |
+| --- | --- | --- |
+|  |  |  |
 
 ## Standard
 

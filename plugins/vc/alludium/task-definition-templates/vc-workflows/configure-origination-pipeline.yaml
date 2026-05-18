@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.configure_origination_pipeline
-version: 0.1.4
+version: 0.1.6
 title: Configure VC Origination Pipeline
 category: Venture Capital
 visibility: workspace
@@ -25,6 +25,8 @@ definition:
         usage: operating_guidance
       - documentId: vc.document.source_registry_template
         usage: operating_guidance
+      - documentId: vc.document.template_use_guidance
+        usage: operating_guidance
     requiredSkills:
       - vc-origination-pipeline-orchestration
       - citation-enforcement
@@ -38,7 +40,8 @@ definition:
     supportedProjectScopes:
       - project_instance
     instructions:
-      executionInstructions: Guide the user through initial origination pipeline configuration. Capture thesis, source choices, cadence intent, digest destination, budget, review policy, promotion threshold, manual-review threshold, credential gaps, and child setup tasks needed for selected sources. Create setup child tasks only for selected integrations whose setup templates exist. Do not run sourcing, score candidates, create candidate records, enable schedules, write to external systems, send outreach, or promote candidates to Deal Rooms. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
+      executionInstructions: >-
+        Guide the user through initial origination pipeline configuration. Capture thesis, source choices, cadence intent, digest destination, budget, review policy, promotion threshold, manual-review threshold, credential gaps, and child setup tasks needed for selected sources. Create setup child tasks only for selected integrations whose setup templates exist. Do not run sourcing, score candidates, create candidate records, enable schedules, write to external systems, send outreach, or promote candidates to Deal Rooms. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
       missingInputPolicy: Keep setup incomplete when thesis, enabled sources, review policy, budget policy, or required credential decisions are missing. Ask targeted task questions rather than inventing configuration.
       externalActionPolicy: Configuration only. No external reads beyond connection-readiness checks, no scheduled runs, no imports, no external writes, no outreach, and no Deal Room creation.
       humanConfirmationPolicy: always

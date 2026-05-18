@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.screen_active_sourcing_candidates
-version: 0.1.4
+version: 0.1.6
 title: Screen Active Sourcing Candidates
 category: Venture Capital
 visibility: workspace
@@ -25,6 +25,8 @@ definition:
         outputFieldKey: screening_artifact_id
       - documentId: vc.document.dedupe_novelty_policy
         usage: policy
+      - documentId: vc.document.template_use_guidance
+        usage: operating_guidance
     requiredSkills:
       - vc-sourcing-verdict-and-screening
       - citation-enforcement
@@ -57,7 +59,8 @@ definition:
       safety:
         externalWritesRequireApproval: true
     instructions:
-      executionInstructions: Screen active origination candidates using the reference pipeline's fast thesis filter rather than the downstream Deal Room first-look task. Assess stage, geography, enterprise software, AI-native depth, named buyer, moat, and founder balance. Return PROCEED_TO_IC, DIG_FURTHER, or PASS and map those to review actions without downgrading protected manual decisions. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
+      executionInstructions: >-
+        Screen active origination candidates using the reference pipeline's fast thesis filter rather than the downstream Deal Room first-look task. Assess stage, geography, enterprise software, AI-native depth, named buyer, moat, and founder balance. Return PROCEED_TO_IC, DIG_FURTHER, or PASS and map those to review actions without downgrading protected manual decisions. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
       missingInputPolicy: Ask for active candidate batch, current manual actions, thesis policy, protected-action list, and approved write mode before screening.
       externalActionPolicy: Screening recommendation only unless explicit write approval is granted. Never downgrade protected manual decisions such as IC-Summary or Pass.
       completionCriteria:

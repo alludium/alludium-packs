@@ -116,6 +116,7 @@ surfaces:
       - vc.document.investment_screening_framework
       - vc.document.investment_diligence_question_framework
       - vc.document.evidence_citation_style_guide
+      - vc.document.template_use_guidance
       - vc.document.file_naming_source_index_sop
       - vc.document.deal_room_sop
       - vc.document.founder_materials_request_template
