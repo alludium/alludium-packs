@@ -65,7 +65,7 @@ Run this check first and stop if any required item is missing.
 
 | Artifact                     | Produced By                               | Used In Sections            |
 | ---------------------------- | ----------------------------------------- | --------------------------- |
-| investment screening scorecard          | `investment-screening-framework`                   | 12 (recommendation context) |
+| Investment Screening scorecard          | `investment-screening-framework`                   | 12 (recommendation context) |
 | Diligence question bank      | `investment-diligence-question-framework` | 11                          |
 | Deal terms / cap table notes | Founder materials / call notes            | 9                           |
 | Company research profile     | `company-research-and-enrichment`         | 1, 2, 5                     |
@@ -147,7 +147,7 @@ next action. Surface conflicting evidence here rather than resolving it elsewher
 
 ### 11. Diligence Plan + Open Questions
 
-Pull from the Investment Diligence Diligence Question Generator output if available.
+Pull from the Investment Diligence Question Generator output if available.
 Organise questions into: Critical (must answer before decision), Important
 (should answer soon), and Nice-to-have. Align to Investment Diligence categories.
 
@@ -178,8 +178,8 @@ Use this table to trace every section back to its source artifacts:
 | 8. Team                             | Team table                       | Call notes                                                             |
 | 9. Deal Terms                       | Call notes, founder materials    | Cap table summary                                                      |
 | 10. Risks & Mitigations             | Red flags list                   | All other artifacts                                                    |
-| 11. Diligence Plan + Open Questions | Diligence question bank          | investment screening scorecard unknowns                                           |
-| 12. Recommendation + Decision Ask   | All inputs (synthesis)           | investment screening scorecard                                                    |
+| 11. Diligence Plan + Open Questions | Diligence question bank          | Investment Screening scorecard unknowns                                           |
+| 12. Recommendation + Decision Ask   | All inputs (synthesis)           | Investment Screening scorecard                                                    |
 
 ## Citation Enforcement
 
@@ -265,7 +265,7 @@ direct links to all supporting artifacts:
 | Team table | [link] | YYYY-MM-DD |
 | Red flags scan | [link] | YYYY-MM-DD |
 | Diligence question bank | [link] | YYYY-MM-DD |
-| investment screening scorecard | [link] | YYYY-MM-DD |
+| Investment Screening scorecard | [link] | YYYY-MM-DD |
 | Legal docs (if any) | [link] | YYYY-MM-DD |
 ```
 

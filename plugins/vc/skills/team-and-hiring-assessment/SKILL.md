@@ -47,7 +47,7 @@ from what is inferred.
 
 This skill covers team extraction, background verification, stage-appropriate
 completeness analysis, first-party hiring signals, and team-specific negative
-signal scanning. It does not cover broader investment screening scoring (use
+signal scanning. It does not cover broader Investment Screening scoring (use
 `investment-screening-framework`) or general red-flag analysis beyond team (use
 `red-flags-scanner`).
 
@@ -70,7 +70,7 @@ If none exist, stop and ask for the minimum missing input.
 5. Assess team completeness for the company's current stage.
 6. Analyse hiring signals from official first-party sources.
 7. Run the negative signal scan.
-8. Apply the Team Quality Framework (investment screening and Investment Diligence questions).
+8. Apply the Team Quality Framework (Investment Screening and Investment Diligence questions).
 9. Produce the output artifact.
 
 ## Step 1: Team Roster Extraction
@@ -296,10 +296,10 @@ when there is cited public evidence available through connected tools.
 
 ## Step 7: Team Quality Framework
 
-Apply team assessment criteria from the investment screening Team sub-questions and the
+Apply team assessment criteria from the Investment Screening Team sub-questions and the
 Investment Diligence Management Due Diligence section.
 
-### investment screening Team Sub-Questions
+### Investment Screening Team Sub-Questions
 
 For each, provide a 1-2 sentence evidence-based assessment:
 
@@ -403,7 +403,7 @@ Assessment: [2-3 sentences on overall completeness]
 
 ## Team Quality Assessment
 
-### investment screening Team Evaluation
+### Investment Screening Team Evaluation
 
 | #   | Dimension    | Assessment      | Confidence   |
 | --- | ------------ | --------------- | ------------ |

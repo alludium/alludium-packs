@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_team_review_pack
-version: 1.0.11
+version: 1.0.12
 title: Prepare Team Review Pack
 category: Venture Capital
 visibility: workspace
@@ -123,7 +123,7 @@ fields:
       config:
         rows: 5
     - key: ten_and_investment_diligence_summary
-      name: Ten And 82 Factor Summary
+      name: Initial Screening And Diligence Summary
       fieldType: richtext
       required: false
       position: 3

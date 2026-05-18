@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_commercial_dd
-version: 1.0.10
+version: 1.0.11
 title: Run Commercial DD
 category: Venture Capital
 visibility: workspace
@@ -23,12 +23,6 @@ definition:
       - documentId: vc.document.diligence_report_template
         usage: output_template
         outputFieldKey: commercial_dd_artifact_id
-      - documentId: vc.document.diligence_report_template
-        usage: output_template
-        outputFieldKey: market_analysis_artifact_id
-      - documentId: vc.document.diligence_report_template
-        usage: output_template
-        outputFieldKey: customer_reference_summary_artifact_id
       - documentId: vc.document.evidence_citation_style_guide
         usage: style_guide
       - documentId: vc.document.template_use_guidance
@@ -130,15 +124,13 @@ fields:
       fieldType: file
       required: true
       position: 1
-      config:
-        documentRefId: vc.document.diligence_report_template
+      config: {}
     - key: customer_reference_summary_artifact_id
       name: Customer Reference Summary
       fieldType: file
       required: true
       position: 2
-      config:
-        documentRefId: vc.document.diligence_report_template
+      config: {}
     - key: tam_sam_som_assessment
       name: Tam Sam Som Assessment
       fieldType: string

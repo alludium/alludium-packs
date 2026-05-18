@@ -56,7 +56,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `team_review_pack_artifact_id` | Team Review Pack | `file` | yes |
 | `company_snapshot` | Company Snapshot | `json` | no |
 | `evidence_summary` | Evidence Summary | `richtext` | no |
-| `ten_and_investment_diligence_summary` | Ten And 82 Factor Summary | `richtext` | no |
+| `ten_and_investment_diligence_summary` | Initial Screening And Diligence Summary | `richtext` | no |
 | `founder_risk_summary` | Founder Risk Summary | `richtext` | no |
 | `stage_gate_recommendation` | Stage Gate Recommendation | `string` | no |
 | `summary` | Summary | `richtext` | no |

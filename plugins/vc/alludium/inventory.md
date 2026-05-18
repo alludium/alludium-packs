@@ -11,7 +11,6 @@ This inventory describes the current public VC plugin/pack seed plus the draft p
 
 These skills are included because the current `vc_*` Alludium agent templates reference them directly.
 
-- `investment-diligence-question-framework`
 - `citation-enforcement`
 - `closing-coordination-and-cp-tracking`
 - `commercial-diligence-workstream`
@@ -23,6 +22,8 @@ These skills are included because the current `vc_*` Alludium agent templates re
 - `founder-outreach-and-intro-paths`
 - `ic-memo-assembly`
 - `ic-risk-checklist-and-decision-log`
+- `investment-diligence-question-framework`
+- `investment-screening-framework`
 - `market-map-building`
 - `meeting-prep-and-summary`
 - `pipeline-health-and-crm-hygiene`
@@ -31,12 +32,11 @@ These skills are included because the current `vc_*` Alludium agent templates re
 - `red-flags-scanner`
 - `team-and-hiring-assessment`
 - `technical-diligence-workstream`
-- `investment-screening-framework`
 - `traction-and-saas-unit-economics`
 - `vc-task-and-next-step-generation`
 - `vc-affinity-discovery`
-- `vc-affinity-sync-read`
 - `vc-affinity-deal-room-import`
+- `vc-affinity-sync-read`
 - `vc-affinity-sync-write`
 - `vc-slack-discovery`
 - `vc-slack-sync-read`

@@ -1,6 +1,6 @@
 # Investment Diligence Question Bank
 
-Source: structured investment diligence question framework.
+Source: structured Investment Diligence question framework.
 
 ---
 

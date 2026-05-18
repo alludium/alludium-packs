@@ -2,7 +2,7 @@
 id: investment-diligence-question-framework
 name: Investment Diligence Question Framework
 description: >
-  Turn an investment diligence question framework into a prioritised, practical question set tailored to a
+  Turn an Investment Diligence question framework into a prioritised, practical question set tailored to a
   specific deal. Use this skill when preparing for a diligence call, identifying what is
   already known vs unknown, converting knowledge gaps into concrete questions, prioritising
   by decision impact, building a next-call agenda, or surfacing the top unknowns that block
@@ -39,7 +39,7 @@ capability:
 
 # Investment Diligence Question Framework
 
-Convert the investment diligence question framework into a deal-specific, prioritised question set. The goal
+Convert the Investment Diligence question framework into a deal-specific, prioritised question set. The goal
 is a usable next-call agenda, not a wall of 127 questions. Surface what is genuinely unknown,
 suppress what is already answered, and rank by decision impact.
 
@@ -77,7 +77,7 @@ The 6 categories and their question counts:
 
 ### Step 1 — Inventory Existing Knowledge
 
-Scan all available DD artifacts and map what is already known against the investment diligence
+Scan all available DD artifacts and map what is already known against the Investment Diligence
 framework. For each category, classify every question as:
 
 - **Answered** — evidence exists in artifacts. Record the source and a one-line summary.

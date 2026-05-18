@@ -2,7 +2,7 @@
 id: investment-screening-framework
 name: Investment Screening Framework
 description: >
-  Apply an investment screening framework to an investment opportunity using founder
+  Apply an Investment Screening framework to an investment opportunity using founder
   materials, deal artifacts, and external research. Use this skill when screening an
   inbound deal, evaluating whether a company fits the firm's investment criteria, turning a
   deck or first-call notes into a structured scorecard, identifying what is known vs
@@ -38,7 +38,7 @@ capability:
 
 # Investment Screening Framework
 
-Apply an investment screening framework to produce a structured, evidence-backed assessment
+Apply an Investment Screening framework to produce a structured, evidence-backed assessment
 of a company. The goal is to clearly separate what is known from what is unknown, and
 recommend a next step.
 
@@ -49,7 +49,7 @@ creation, and not deep diligence.
 
 Keep this distinction explicit:
 
-- the underlying investment screening framework is qualitative
+- the underlying Investment Screening framework is qualitative
 - it does not define a native numeric scoring rubric
 - the platform operating convention introduces a practical scorecard format with
   score, rationale, evidence, unknowns, roll-up, and recommendation

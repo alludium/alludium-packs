@@ -42,7 +42,7 @@ reusable artifact that becomes the default starting point for the deal team duri
 evaluation-stage diligence.
 
 This skill is for the Market Map itself — not the full diligence pack, not the IC
-memo, and not the investment screening screen.
+memo, and not the Investment Screening screen.
 
 ## Minimum Inputs
 
