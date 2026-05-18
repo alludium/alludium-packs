@@ -38,7 +38,7 @@ definition:
         note: Follow-up AI map
       - source: investment-management-process-slides
         anchor: slide-35
-        note: 82-Factor dimensions
+        note: structured diligence dimensions
     instructions:
       executionInstructions: Build the follow-up evaluation workspace with document requests, competitive landscape, early risks, and readiness recommendation. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Follow-Up Evaluation and attach it to the required output field `follow_up_evaluation_artifact_id`.
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.

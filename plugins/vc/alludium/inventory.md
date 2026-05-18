@@ -85,7 +85,7 @@ Review notes:
 These templates are included because the platform VC workspace pack currently references them as installable VC workflow templates.
 
 - `vc.create_ic_memo`
-- `vc.generate_82_factor_questions`
+- `vc.generate_diligence_questions`
 - `vc.manage_closing_checklist`
 - `vc.prepare_deal_flow_agenda`
 - `vc.prepare_ic_agenda`
@@ -104,7 +104,7 @@ These templates are included because the platform VC workspace pack currently re
 - `vc.run_follow_up_evaluation`
 - `vc.run_founder_evaluation`
 - `vc.run_technical_dd`
-- `vc.run_ten_factor_screen`
+- `vc.run_investment_screen`
 - `vc.screen_inbound_opportunity`
 - `vc.source_thesis_targets`
 - `vc.summarize_initial_call`

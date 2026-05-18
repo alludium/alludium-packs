@@ -19,7 +19,7 @@ Screen Inbound Opportunity for one venture-capital opportunity with evidence cap
 
 ## Instructions
 
-Screen the inbound company against fund thesis and available deck or intro context; return fit recommendation, 10-Factor summary, gaps, red flags, pass feedback draft, and next actions. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named First Look Scorecard and attach it to the required output field `first_look_scorecard_artifact_id`.
+Screen the inbound company against fund thesis and available deck or intro context; return fit recommendation, initial screening summary, gaps, red flags, pass feedback draft, and next actions. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named First Look Scorecard and attach it to the required output field `first_look_scorecard_artifact_id`.
 
 ## Missing Input Policy
 
@@ -54,7 +54,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | --- | --- | --- | --- |
 | `first_look_scorecard_artifact_id` | First Look Scorecard | `file` | yes |
 | `fit_recommendation` | Fit Recommendation | `string` | no |
-| `initial_ten_factor_summary` | Initial Ten Factor Summary | `richtext` | no |
+| `initial_investment_screen_summary` | Initial Investment Screen Summary | `richtext` | no |
 | `missing_information` | Missing Information | `string` | no |
 | `red_flags` | Red Flags | `string` | no |
 | `pass_feedback_draft` | Pass Feedback Draft | `string` | no |

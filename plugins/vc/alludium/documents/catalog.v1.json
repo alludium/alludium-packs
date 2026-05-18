@@ -11,7 +11,7 @@
       "supportedProjectTypes": ["vc_deal_room", "vc_origination_pipeline"],
       "relatedTaskDefinitionSlugs": [
         "screen-inbound-opportunity",
-        "run-ten-factor-screen",
+        "run-investment-screen",
         "score-sourcing-candidates",
         "screen-active-sourcing-candidates"
       ],
@@ -25,7 +25,7 @@
       "path": "shared/investment-diligence-question-framework.md",
       "supportedProjectTypes": ["vc_deal_room", "vc_origination_pipeline"],
       "relatedTaskDefinitionSlugs": [
-        "generate-82-factor-questions",
+        "generate-diligence-questions",
         "run-commercial-dd",
         "run-technical-dd",
         "run-financial-dd"

@@ -3,7 +3,7 @@ type: "template"
 platform_managed: false
 id: "vc_first_look_analyst"
 name: "First Look Analyst"
-description: "VC first-look screening analyst that turns company context, founder materials, and first-call evidence into cited Ten-Factor, 82-Factor, red-flag, and follow-up recommendations for human review."
+description: "VC first-look screening analyst that turns company context, founder materials, and first-call evidence into cited initial screening, structured diligence, red-flag, and follow-up recommendations for human review."
 icon: "FcBinoculars"
 color: "bg-cyan-100"
 category: "Alludium"
@@ -11,9 +11,9 @@ metadata:
   gitBranch: main
   gitRepositoryUrl: https://github.com/alludium-templates/configurable-agent.git
   supportedTaskDefinitions:
-    - run-ten-factor-screen
+    - run-investment-screen
     - run-follow-up-evaluation
-    - generate-82-factor-questions
+    - generate-diligence-questions
   primaryStage: "Assessment"
   primaryDealRoomState: "assessment"
   requiredSkills:
@@ -54,9 +54,9 @@ prompt:
     ## Supported Tasks
 
     Route work into:
-    - `run-ten-factor-screen`
+    - `run-investment-screen`
     - `run-follow-up-evaluation`
-    - `generate-82-factor-questions`
+    - `generate-diligence-questions`
 
     Current runtime may not have every task definition installed. When a task is unavailable, explain the intended task route and continue with the matching skill output.
 
@@ -79,7 +79,7 @@ prompt:
     - company and context summary
     - evidence inventory and missing inputs
     - ten-factor scores with citations, confidence, assumptions, and unknowns
-    - follow-up evaluation or 82-factor questions when requested
+    - follow-up evaluation or structured diligence questions when requested
     - red flags and validation questions
     - risks, open questions, and suggested next actions
     - human-only decision prompts
@@ -155,8 +155,8 @@ actions:
   - Title: "Ten-Factor Screen"
     Message: "Run a cited Ten-Factor screen for this company."
     Icon: "FcSurvey"
-  - Title: "82-Factor Questions"
-    Message: "Generate prioritized 82-Factor diligence questions for this company."
+  - Title: "Structured Diligence Questions"
+    Message: "Generate prioritized structured diligence questions for this company."
     Icon: "FcQuestions"
   - Title: "Red Flags"
     Message: "Scan the current evidence for early red flags and contradictions."

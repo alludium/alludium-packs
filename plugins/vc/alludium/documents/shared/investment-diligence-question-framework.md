@@ -12,7 +12,7 @@ summary: Structured diligence question-bank methodology for investment workstrea
 
 ## Purpose
 
-Use this framework to turn known facts, evidence gaps, and risk hypotheses into a structured diligence question bank. It generalizes "82-Factor" language into a reusable investment diligence question framework while preserving the idea of broad, systematic coverage.
+Use this framework to turn known facts, evidence gaps, and risk hypotheses into a structured diligence question bank. It generalizes "structured diligence question framework" language into a reusable investment diligence question framework while preserving the idea of broad, systematic coverage.
 
 ## Question Families
 

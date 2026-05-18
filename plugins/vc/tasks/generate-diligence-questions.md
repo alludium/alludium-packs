@@ -1,14 +1,14 @@
 ---
-id: vc.generate_82_factor_questions
+id: vc.generate_diligence_questions
 title: Generate Diligence Questions
-slug: generate-82-factor-questions
+slug: generate-diligence-questions
 agent: vc-first-look-analyst
 skills:
 - citation-enforcement
 ---
 
 > **GENERATED FILE**
-> Source: `alludium/task-definition-templates/vc-workflows/generate-82-factor-questions.yaml`
+> Source: `alludium/task-definition-templates/vc-workflows/generate-diligence-questions.yaml`
 > Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
 # Generate Diligence Questions
@@ -17,7 +17,7 @@ Generate a structured investment diligence question bank for one venture-capital
 
 ## Instructions
 
-Generate prioritized investment diligence questions with rationale, source gap, owner, and urgency. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Structured Diligence Question Bank and attach it to the required output field `eighty_two_factor_questions_artifact_id`.
+Generate prioritized investment diligence questions with rationale, source gap, owner, and urgency. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Structured Diligence Question Bank and attach it to the required output field `diligence_question_bank_artifact_id`.
 
 ## Missing Input Policy
 
@@ -51,7 +51,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 
 | Key | Name | Type | Required |
 | --- | --- | --- | --- |
-| `eighty_two_factor_questions_artifact_id` | Structured Diligence Question Bank | `file` | yes |
+| `diligence_question_bank_artifact_id` | Structured Diligence Question Bank | `file` | yes |
 | `question_set` | Question Set | `string` | no |
 | `rationale` | Rationale | `string` | no |
 | `source_gap` | Source Gap | `string` | no |
@@ -69,8 +69,8 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 
 ## Routing
 
-- Source template: `alludium/task-definition-templates/vc-workflows/generate-82-factor-questions.yaml`
-- Alludium task ID: `vc.generate_82_factor_questions`
+- Source template: `alludium/task-definition-templates/vc-workflows/generate-diligence-questions.yaml`
+- Alludium task ID: `vc.generate_diligence_questions`
 - Task family: `diligence`
 - Lifecycle stage: `diligence`
 - Recommended agent: `vc-first-look-analyst` (Alludium template `vc_first_look_analyst`)

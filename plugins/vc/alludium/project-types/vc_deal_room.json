@@ -1035,12 +1035,12 @@
         "description": "First-look scorecard artifact produced by screen-inbound-opportunity."
       },
       {
-        "id": "field-ten-factor-scorecard-artifact-id",
-        "key": "ten_factor_scorecard_artifact_id",
+        "id": "field-investment-screen-scorecard-artifact-id",
+        "key": "investment_screen_scorecard_artifact_id",
         "label": "Initial investment screen scorecard",
         "kind": "text",
         "required": false,
-        "description": "Initial investment screen scorecard artifact produced by run-ten-factor-screen."
+        "description": "Initial investment screen scorecard artifact produced by run-investment-screen."
       },
       {
         "id": "field-founder-materials-request-artifact-id",
@@ -1131,12 +1131,12 @@
         "description": "Follow-up evaluation artifact produced by run-follow-up-evaluation."
       },
       {
-        "id": "field-eighty-two-factor-questions-artifact-id",
-        "key": "eighty_two_factor_questions_artifact_id",
+        "id": "field-diligence-question-bank-artifact-id",
+        "key": "diligence_question_bank_artifact_id",
         "label": "Structured diligence question bank",
         "kind": "text",
         "required": false,
-        "description": "Structured diligence question bank artifact produced by generate-82-factor-questions."
+        "description": "Structured diligence question bank artifact produced by generate-diligence-questions."
       },
       {
         "id": "field-team-review-pack-artifact-id",
@@ -1432,15 +1432,15 @@
           "stageKey": "assessment"
         },
         {
-          "key": "ten_factor_scorecard",
+          "key": "investment_screen_scorecard",
           "title": "Initial investment screen scorecard",
           "description": "Structured initial investment scoring and human review prompts",
           "artifactOutputs": [
             {
-              "key": "ten_factor_scorecard",
+              "key": "investment_screen_scorecard",
               "title": "Initial investment screen scorecard",
-              "producerTaskDefinitionSlug": "run-ten-factor-screen",
-              "outputFieldKey": "ten_factor_scorecard_artifact_id"
+              "producerTaskDefinitionSlug": "run-investment-screen",
+              "outputFieldKey": "investment_screen_scorecard_artifact_id"
             }
           ],
           "stageKey": "assessment"
@@ -1624,22 +1624,22 @@
           "stageKey": "diligence"
         },
         {
-          "key": "eighty_two_factor_questions",
+          "key": "diligence_question_bank",
           "title": "Structured diligence question bank",
           "description": "Prioritized diligence questions with rationale, owners, and urgency",
           "artifactOutputs": [
             {
-              "key": "eighty_two_factor_questions",
+              "key": "diligence_question_bank",
               "title": "Structured diligence question bank",
-              "producerTaskDefinitionSlug": "generate-82-factor-questions",
-              "outputFieldKey": "eighty_two_factor_questions_artifact_id",
+              "producerTaskDefinitionSlug": "generate-diligence-questions",
+              "outputFieldKey": "diligence_question_bank_artifact_id",
               "reviewTaskDefinitionSlugs": [
                 "prepare-team-review-pack",
                 "prepare-partner-review-pack",
                 "create-ic-memo"
               ],
               "reviewInputFieldKeys": [
-                "eighty_two_factor_questions_artifact_id"
+                "diligence_question_bank_artifact_id"
               ]
             }
           ],
@@ -1978,9 +1978,9 @@
         }
       },
       {
-        "id": "map-run-ten-factor-screen",
-        "taskDefinitionTemplateId": "vc.run_ten_factor_screen",
-        "taskDefinitionSlug": "run-ten-factor-screen",
+        "id": "map-run-investment-screen",
+        "taskDefinitionTemplateId": "vc.run_investment_screen",
+        "taskDefinitionSlug": "run-investment-screen",
         "projectScope": "project_instance",
         "lifecycleStage": "assessment",
         "inputMappings": [
@@ -1999,9 +1999,9 @@
         ],
         "outputMappings": [
           {
-            "taskField": "ten_factor_scorecard_artifact_id",
+            "taskField": "investment_screen_scorecard_artifact_id",
             "target": "project.field",
-            "targetPath": "ten_factor_scorecard_artifact_id",
+            "targetPath": "investment_screen_scorecard_artifact_id",
             "requiredForCompletion": true
           }
         ],
@@ -2311,9 +2311,9 @@
         }
       },
       {
-        "id": "map-generate-82-factor-questions",
-        "taskDefinitionTemplateId": "vc.generate_82_factor_questions",
-        "taskDefinitionSlug": "generate-82-factor-questions",
+        "id": "map-generate-diligence-questions",
+        "taskDefinitionTemplateId": "vc.generate_diligence_questions",
+        "taskDefinitionSlug": "generate-diligence-questions",
         "projectScope": "project_instance",
         "lifecycleStage": "diligence",
         "inputMappings": [
@@ -2332,9 +2332,9 @@
         ],
         "outputMappings": [
           {
-            "taskField": "eighty_two_factor_questions_artifact_id",
+            "taskField": "diligence_question_bank_artifact_id",
             "target": "project.field",
-            "targetPath": "eighty_two_factor_questions_artifact_id",
+            "targetPath": "diligence_question_bank_artifact_id",
             "requiredForCompletion": true
           }
         ],
@@ -2377,9 +2377,9 @@
             "requiredForActivation": true
           },
           {
-            "taskField": "eighty_two_factor_questions_artifact_id",
+            "taskField": "diligence_question_bank_artifact_id",
             "source": "project.field",
-            "sourcePath": "eighty_two_factor_questions_artifact_id",
+            "sourcePath": "diligence_question_bank_artifact_id",
             "requiredForActivation": true
           }
         ],
@@ -2436,9 +2436,9 @@
             "requiredForActivation": true
           },
           {
-            "taskField": "eighty_two_factor_questions_artifact_id",
+            "taskField": "diligence_question_bank_artifact_id",
             "source": "project.field",
-            "sourcePath": "eighty_two_factor_questions_artifact_id",
+            "sourcePath": "diligence_question_bank_artifact_id",
             "requiredForActivation": true
           }
         ],
@@ -2501,9 +2501,9 @@
             "requiredForActivation": true
           },
           {
-            "taskField": "eighty_two_factor_questions_artifact_id",
+            "taskField": "diligence_question_bank_artifact_id",
             "source": "project.field",
-            "sourcePath": "eighty_two_factor_questions_artifact_id",
+            "sourcePath": "diligence_question_bank_artifact_id",
             "requiredForActivation": true
           }
         ],

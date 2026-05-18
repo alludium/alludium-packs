@@ -19,7 +19,7 @@ Prepare Initial Call for one venture-capital opportunity with evidence capture, 
 
 ## Instructions
 
-Prepare the first-call brief, founder and company summary, competitor and funding activity, starter 10-Factor scorecard, and questions by topic. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Initial Call Brief and attach it to the required output field `initial_call_brief_artifact_id`.
+Prepare the first-call brief, founder and company summary, competitor and funding activity, starter Initial investment screen scorecard, and questions by topic. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Initial Call Brief and attach it to the required output field `initial_call_brief_artifact_id`.
 
 ## Missing Input Policy
 
@@ -58,7 +58,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `pre_call_brief` | Pre Call Brief | `richtext` | no |
 | `founder_company_summary` | Founder Company Summary | `richtext` | no |
 | `competitor_funding_activity` | Competitor Funding Activity | `string` | no |
-| `starter_ten_factor_scorecard` | Starter Ten Factor Scorecard | `string` | no |
+| `starter_investment_screen_scorecard` | Starter Investment Screen Scorecard | `string` | no |
 | `questions_by_topic` | Questions By Topic | `json` | no |
 | `summary` | Summary | `richtext` | no |
 | `recommendation` | Recommendation | `string` | no |

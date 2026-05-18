@@ -18,7 +18,7 @@ Create IC Memo for one venture-capital opportunity with evidence capture, human 
 
 ## Instructions
 
-Assemble the IC memo and pack checklist from stage outputs, DD summaries, founder risks, term-sheet inputs, source artifacts, unresolved risks, assumptions, and citation coverage. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required diligence input file artifacts `commercial_dd_artifact_id`, `financial_dd_artifact_id`, `founder_evaluation_artifact_id`, `technical_dd_artifact_id`, and `eighty_two_factor_questions_artifact_id` as source artifacts for the IC memo. Create or update a durable project file artifact named Investment Memo and attach it to the required output field `investment_memo_artifact_id`. Use the required input file artifacts `team_review_pack_artifact_id` and `partner_review_pack_artifact_id` as the review-pack sources for the IC memo.
+Assemble the IC memo and pack checklist from stage outputs, DD summaries, founder risks, term-sheet inputs, source artifacts, unresolved risks, assumptions, and citation coverage. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required diligence input file artifacts `commercial_dd_artifact_id`, `financial_dd_artifact_id`, `founder_evaluation_artifact_id`, `technical_dd_artifact_id`, and `diligence_question_bank_artifact_id` as source artifacts for the IC memo. Create or update a durable project file artifact named Investment Memo and attach it to the required output field `investment_memo_artifact_id`. Use the required input file artifacts `team_review_pack_artifact_id` and `partner_review_pack_artifact_id` as the review-pack sources for the IC memo.
 
 ## Missing Input Policy
 
@@ -49,7 +49,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `financial_dd_artifact_id` | Financial DD Report | `file` | yes |
 | `founder_evaluation_artifact_id` | Founder Evaluation | `file` | yes |
 | `technical_dd_artifact_id` | Technical DD Report | `file` | yes |
-| `eighty_two_factor_questions_artifact_id` | 82-Factor Question Set | `file` | yes |
+| `diligence_question_bank_artifact_id` | Structured Diligence Question Bank | `file` | yes |
 
 ## Outputs
 

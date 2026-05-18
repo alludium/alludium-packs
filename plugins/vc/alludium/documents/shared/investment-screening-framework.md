@@ -12,7 +12,7 @@ summary: Reusable first-look scorecard methodology for venture screening.
 
 ## Purpose
 
-Use this framework to create an initial investment screen scorecard for one company or a batch of sourced candidates. It replaces hard-coded "10-Factor" language with a configurable screening method that can still support a ten-dimension scorecard when the workspace chooses that model.
+Use this framework to create an initial investment screen scorecard for one company or a batch of sourced candidates. It replaces hard-coded "custom screening" language with a configurable screening method that can still support a ten-dimension scorecard when the workspace chooses that model.
 
 ## Dimensions
 

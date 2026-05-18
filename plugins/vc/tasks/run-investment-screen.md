@@ -1,7 +1,7 @@
 ---
-id: vc.run_ten_factor_screen
+id: vc.run_investment_screen
 title: Run Initial Investment Screen
-slug: run-ten-factor-screen
+slug: run-investment-screen
 agent: vc-first-look-analyst
 skills:
 - red-flags-scanner
@@ -9,7 +9,7 @@ skills:
 ---
 
 > **GENERATED FILE**
-> Source: `alludium/task-definition-templates/vc-workflows/run-ten-factor-screen.yaml`
+> Source: `alludium/task-definition-templates/vc-workflows/run-investment-screen.yaml`
 > Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
 # Run Initial Investment Screen
@@ -18,7 +18,7 @@ Run an initial investment screen for one venture-capital opportunity with eviden
 
 ## Instructions
 
-Score each configured screening criterion with rationale, source links, unknowns, and human-review prompts before recommending continue or pass. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Initial Investment Screen Scorecard and attach it to the required output field `ten_factor_scorecard_artifact_id`.
+Score each configured screening criterion with rationale, source links, unknowns, and human-review prompts before recommending continue or pass. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Initial Investment Screen Scorecard and attach it to the required output field `investment_screen_scorecard_artifact_id`.
 
 ## Missing Input Policy
 
@@ -52,7 +52,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 
 | Key | Name | Type | Required |
 | --- | --- | --- | --- |
-| `ten_factor_scorecard_artifact_id` | Initial Investment Screen Scorecard | `file` | yes |
+| `investment_screen_scorecard_artifact_id` | Initial Investment Screen Scorecard | `file` | yes |
 | `factor_scores` | Factor Scores | `json` | no |
 | `overall_recommendation` | Overall Recommendation | `string` | no |
 | `source_links` | Source Links | `string` | no |
@@ -69,8 +69,8 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 
 ## Routing
 
-- Source template: `alludium/task-definition-templates/vc-workflows/run-ten-factor-screen.yaml`
-- Alludium task ID: `vc.run_ten_factor_screen`
+- Source template: `alludium/task-definition-templates/vc-workflows/run-investment-screen.yaml`
+- Alludium task ID: `vc.run_investment_screen`
 - Task family: `screening`
 - Lifecycle stage: `assessment`
 - Recommended agent: `vc-first-look-analyst` (Alludium template `vc_first_look_analyst`)

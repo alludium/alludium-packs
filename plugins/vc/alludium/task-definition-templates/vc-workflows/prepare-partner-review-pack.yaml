@@ -43,7 +43,7 @@ definition:
         anchor: slide-34
         note: Roles
     instructions:
-      executionInstructions: Prepare the Partner Review pack with investment thesis, strategic fit, proposed DD scope, workstream owners, key risks, and decision ask. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Use the required input file artifacts `commercial_dd_artifact_id`, `financial_dd_artifact_id`, `founder_evaluation_artifact_id`, `technical_dd_artifact_id`, and `eighty_two_factor_questions_artifact_id` as the review subjects for the partner review pack. Use the required input file artifact `team_review_pack_artifact_id` as the team review pack being escalated to partner review. Create or update a durable project file artifact named Partner Review Pack and attach it to the required output field `partner_review_pack_artifact_id`.
+      executionInstructions: Prepare the Partner Review pack with investment thesis, strategic fit, proposed DD scope, workstream owners, key risks, and decision ask. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Use the required input file artifacts `commercial_dd_artifact_id`, `financial_dd_artifact_id`, `founder_evaluation_artifact_id`, `technical_dd_artifact_id`, and `diligence_question_bank_artifact_id` as the review subjects for the partner review pack. Use the required input file artifact `team_review_pack_artifact_id` as the team review pack being escalated to partner review. Create or update a durable project file artifact named Partner Review Pack and attach it to the required output field `partner_review_pack_artifact_id`.
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
@@ -91,8 +91,8 @@ fields:
       required: true
       position: 4
       config: {}
-    - key: eighty_two_factor_questions_artifact_id
-      name: 82-Factor Question Set
+    - key: diligence_question_bank_artifact_id
+      name: Structured Diligence Question Bank
       fieldType: file
       required: true
       position: 5

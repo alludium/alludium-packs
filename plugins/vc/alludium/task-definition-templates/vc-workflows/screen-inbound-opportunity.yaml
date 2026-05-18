@@ -52,7 +52,7 @@ definition:
         anchor: slide-10
         note: Discovery AI map
     instructions:
-      executionInstructions: Screen the inbound company against fund thesis and available deck or intro context; return fit recommendation, 10-Factor summary, gaps, red flags, pass feedback draft, and next actions. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named First Look Scorecard and attach it to the required output field `first_look_scorecard_artifact_id`.
+      executionInstructions: Screen the inbound company against fund thesis and available deck or intro context; return fit recommendation, initial screening summary, gaps, red flags, pass feedback draft, and next actions. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named First Look Scorecard and attach it to the required output field `first_look_scorecard_artifact_id`.
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
@@ -102,8 +102,8 @@ fields:
       required: false
       position: 1
       config: {}
-    - key: initial_ten_factor_summary
-      name: Initial Ten Factor Summary
+    - key: initial_investment_screen_summary
+      name: Initial Investment Screen Summary
       fieldType: richtext
       required: false
       position: 2

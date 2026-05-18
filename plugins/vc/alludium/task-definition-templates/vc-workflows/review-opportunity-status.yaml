@@ -78,9 +78,9 @@ definition:
         - request-founder-materials
         - prepare-initial-call
         - summarize-initial-call
-        - run-ten-factor-screen
+        - run-investment-screen
         - run-follow-up-evaluation
-        - generate-82-factor-questions
+        - generate-diligence-questions
         - run-founder-evaluation
         - prepare-team-review-pack
         - prepare-partner-review-pack

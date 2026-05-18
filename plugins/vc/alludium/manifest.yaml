@@ -160,9 +160,9 @@ surfaces:
       - vc.request_founder_materials
       - vc.prepare_initial_call
       - vc.summarize_initial_call
-      - vc.run_ten_factor_screen
+      - vc.run_investment_screen
       - vc.run_follow_up_evaluation
-      - vc.generate_82_factor_questions
+      - vc.generate_diligence_questions
       - vc.run_founder_evaluation
       - vc.prepare_team_review_pack
       - vc.prepare_partner_review_pack
