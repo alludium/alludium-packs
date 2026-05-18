@@ -207,6 +207,47 @@ PROJECT_SETUP_POST_APPROVAL_ACTIONS = {
     "inviteCollaborators",
     "enableSchedules",
 }
+PROJECT_CREATION_KEYS = {
+    "launcherLabel",
+    "starterId",
+    "aliases",
+    "requiredFieldKeys",
+    "recommendedFieldKeys",
+    "advancedFieldKeys",
+    "sourceReference",
+    "defaultState",
+    "guidedTask",
+    "postCreate",
+}
+PROJECT_CREATION_FIELD_LISTS = [
+    "requiredFieldKeys",
+    "recommendedFieldKeys",
+    "advancedFieldKeys",
+]
+PROJECT_CREATION_STARTER_ID_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+PROJECT_CREATION_SOURCE_REFERENCE_INPUT_KINDS = {"connected_record_reference"}
+PROJECT_CREATION_SOURCE_REFERENCE_TARGET_KEYS = {
+    "system",
+    "objectId",
+    "objectUrl",
+    "recordUrlTemplate",
+}
+PROJECT_CREATION_VARIABLE_FIELD_ALIASES = {
+    "vc.fundStage": {"stage_focus"},
+    "vc.fundSectors": {"sector_focus"},
+    "vc.fundGeography": {"geography_focus"},
+    "vc.fundThesis": {"investment_thesis"},
+    "vc.firmName": {"firm_name"},
+    "vc.fundName": {"fund_name"},
+    "vc.originationEnabledSources": {"enabled_sources"},
+    "vc.originationRunCadence": {"run_cadence"},
+    "vc.originationDigestDestination": {"digest_channel"},
+    "vc.originationSourceCostBudget": {"source_cost_budget"},
+    "vc.originationPromotionThreshold": {"promotion_threshold"},
+    "vc.originationManualReviewThreshold": {"manual_review_threshold"},
+    "vc.originationCrmPipelineUrl": {"crm_pipeline_url"},
+    "vc.originationDocumentWorkspaceUrl": {"document_workspace_url"},
+}
 VC_DEAL_ROOM_LIFECYCLE_STAGES = {
     "intake",
     "assessment",
@@ -1876,6 +1917,204 @@ def validate_project_setup_contract(project_type_id: str, project_type: dict[str
         fail(f"Project type {project_type_id} disabled enableSchedules must declare reason")
 
 
+def validate_project_creation_contract(
+    project_type_id: str,
+    project_type: dict[str, Any],
+    field_keys: set[str],
+    lifecycle_states: set[str],
+) -> None:
+    project_creation = project_type.get("projectCreation")
+    if not isinstance(project_creation, dict):
+        fail(f"Project type {project_type_id} must declare projectCreation")
+
+    unknown_keys = sorted(set(project_creation) - PROJECT_CREATION_KEYS)
+    if unknown_keys:
+        fail(f"Project type {project_type_id} projectCreation contains unknown keys: {unknown_keys}")
+
+    for field_name in ["launcherLabel", "starterId", "defaultState"]:
+        if not isinstance(project_creation.get(field_name), str) or not project_creation.get(field_name):
+            fail(f"Project type {project_type_id} projectCreation.{field_name} must be declared")
+
+    starter_id = project_creation["starterId"]
+    if PROJECT_CREATION_STARTER_ID_PATTERN.fullmatch(starter_id) is None:
+        fail(
+            f"Project type {project_type_id} projectCreation.starterId must be a stable "
+            "lowercase slug"
+        )
+
+    aliases = require_string_list(
+        project_creation.get("aliases"),
+        f"Project type {project_type_id} projectCreation.aliases",
+    )
+    if len(aliases) != len(set(aliases)):
+        fail(f"Project type {project_type_id} projectCreation.aliases has duplicates")
+
+    all_creation_field_keys: list[str] = []
+    for field_name in PROJECT_CREATION_FIELD_LISTS:
+        keys = require_string_list(
+            project_creation.get(field_name),
+            f"Project type {project_type_id} projectCreation.{field_name}",
+        )
+        if len(keys) != len(set(keys)):
+            fail(f"Project type {project_type_id} projectCreation.{field_name} has duplicates")
+        unknown_field_keys = sorted(set(keys) - field_keys)
+        if unknown_field_keys:
+            fail(
+                f"Project type {project_type_id} projectCreation.{field_name} "
+                f"references unknown field keys: {unknown_field_keys}"
+            )
+        all_creation_field_keys.extend(keys)
+
+    duplicate_creation_field_keys = sorted(
+        key for key in set(all_creation_field_keys) if all_creation_field_keys.count(key) > 1
+    )
+    if duplicate_creation_field_keys:
+        fail(
+            f"Project type {project_type_id} projectCreation field lists overlap: "
+            f"{duplicate_creation_field_keys}"
+        )
+    reserved_setup_field_keys = project_creation_reserved_field_keys_by_project_type().get(
+        project_type_id,
+        set(),
+    )
+    setup_fields_exposed_for_creation = sorted(
+        set(all_creation_field_keys).intersection(reserved_setup_field_keys)
+    )
+    if setup_fields_exposed_for_creation:
+        fail(
+            f"Project type {project_type_id} projectCreation must not expose setup/workspace "
+            f"variable fields: {setup_fields_exposed_for_creation}"
+        )
+
+    source_reference = project_creation.get("sourceReference")
+    if source_reference is not None:
+        if not isinstance(source_reference, dict):
+            fail(f"Project type {project_type_id} projectCreation.sourceReference must be an object")
+        for field_name in ["label", "connectionBindingKey"]:
+            if not isinstance(source_reference.get(field_name), str) or not source_reference.get(field_name):
+                fail(
+                    f"Project type {project_type_id} projectCreation.sourceReference "
+                    f"must declare {field_name}"
+                )
+        if source_reference.get("inputKind") not in PROJECT_CREATION_SOURCE_REFERENCE_INPUT_KINDS:
+            fail(
+                f"Project type {project_type_id} projectCreation.sourceReference.inputKind "
+                f"must be one of {sorted(PROJECT_CREATION_SOURCE_REFERENCE_INPUT_KINDS)}"
+            )
+        target_field_keys = source_reference.get("targetFieldKeys")
+        if not isinstance(target_field_keys, dict):
+            fail(
+                f"Project type {project_type_id} projectCreation.sourceReference."
+                "targetFieldKeys must be declared"
+            )
+        missing_target_keys = sorted(
+            PROJECT_CREATION_SOURCE_REFERENCE_TARGET_KEYS - set(target_field_keys)
+        )
+        unknown_target_keys = sorted(
+            set(target_field_keys) - PROJECT_CREATION_SOURCE_REFERENCE_TARGET_KEYS
+        )
+        if missing_target_keys or unknown_target_keys:
+            fail(
+                f"Project type {project_type_id} projectCreation.sourceReference."
+                f"targetFieldKeys mismatch: missing={missing_target_keys}, "
+                f"unknown={unknown_target_keys}"
+            )
+        source_reference_field_keys: list[str] = []
+        for target_key, field_key in target_field_keys.items():
+            if not isinstance(field_key, str) or not field_key:
+                fail(
+                    f"Project type {project_type_id} projectCreation.sourceReference."
+                    f"targetFieldKeys.{target_key} must be a field key"
+                )
+            if field_key not in field_keys:
+                fail(
+                    f"Project type {project_type_id} projectCreation.sourceReference."
+                    f"targetFieldKeys.{target_key} references unknown field key {field_key}"
+                )
+            source_reference_field_keys.append(field_key)
+        legacy_field_keys = require_string_list(
+            source_reference.get("legacyFieldKeys"),
+            f"Project type {project_type_id} projectCreation.sourceReference.legacyFieldKeys",
+        )
+        unknown_legacy_field_keys = sorted(set(legacy_field_keys) - field_keys)
+        if unknown_legacy_field_keys:
+            fail(
+                f"Project type {project_type_id} projectCreation.sourceReference."
+                f"legacyFieldKeys references unknown field keys: {unknown_legacy_field_keys}"
+            )
+        source_reference_field_keys.extend(legacy_field_keys)
+        duplicated_source_reference_keys = sorted(
+            key
+            for key in set(source_reference_field_keys)
+            if source_reference_field_keys.count(key) > 1
+        )
+        if duplicated_source_reference_keys:
+            fail(
+                f"Project type {project_type_id} projectCreation.sourceReference "
+                f"contains duplicate field refs: {duplicated_source_reference_keys}"
+            )
+        exposed_source_reference_keys = sorted(
+            set(source_reference_field_keys).intersection(all_creation_field_keys)
+        )
+        if exposed_source_reference_keys:
+            fail(
+                f"Project type {project_type_id} projectCreation.sourceReference fields "
+                f"must not also be rendered as creation fields: {exposed_source_reference_keys}"
+            )
+
+    default_state = project_creation["defaultState"]
+    if default_state not in lifecycle_states:
+        fail(
+            f"Project type {project_type_id} projectCreation.defaultState must be one of "
+            f"{sorted(lifecycle_states)}"
+        )
+
+    guided_task = project_creation.get("guidedTask")
+    if not isinstance(guided_task, dict):
+        fail(f"Project type {project_type_id} projectCreation.guidedTask must be declared")
+    for field_name in ["taskDefinitionTemplateId", "taskDefinitionSlug"]:
+        if not isinstance(guided_task.get(field_name), str) or not guided_task.get(field_name):
+            fail(
+                f"Project type {project_type_id} projectCreation.guidedTask "
+                f"must declare {field_name}"
+            )
+    task_contracts = load_task_template_contracts()
+    task_slug = guided_task["taskDefinitionSlug"]
+    task_contract = task_contracts.get(task_slug)
+    if task_contract is None:
+        fail(f"Project type {project_type_id} projectCreation references unknown task {task_slug}")
+    if task_contract["id"] != guided_task["taskDefinitionTemplateId"]:
+        fail(
+            f"Project type {project_type_id} projectCreation references template id "
+            f"{guided_task['taskDefinitionTemplateId']}, but {task_slug} has id "
+            f"{task_contract['id']}"
+        )
+    if project_type_id not in task_contract.get("supportedProjectTypes", []):
+        fail(
+            f"Project type {project_type_id} projectCreation task {task_slug} "
+            f"does not support {project_type_id}"
+        )
+    if DEFAULT_PROJECT_SCOPE not in task_contract.get("supportedProjectScopes", []):
+        fail(
+            f"Project type {project_type_id} projectCreation task {task_slug} "
+            f"must support {DEFAULT_PROJECT_SCOPE}"
+        )
+
+    post_create = project_creation.get("postCreate")
+    if not isinstance(post_create, dict):
+        fail(f"Project type {project_type_id} projectCreation.postCreate must be declared")
+    if set(post_create) != {"triggerInitialStateTasks"}:
+        fail(
+            f"Project type {project_type_id} projectCreation.postCreate must only declare "
+            "triggerInitialStateTasks"
+        )
+    if not isinstance(post_create.get("triggerInitialStateTasks"), bool):
+        fail(
+            f"Project type {project_type_id} projectCreation.postCreate."
+            "triggerInitialStateTasks must be a boolean"
+        )
+
+
 def validate_project_type_file(path: Path, expected_id: str) -> str:
     project_type = read_json(path)
     relative_path = path.relative_to(ROOT)
@@ -1927,6 +2166,12 @@ def validate_project_type_file(path: Path, expected_id: str) -> str:
         fail(f"Project type {expected_id} initialVersion.lifecycleStates must not be empty")
     if len(lifecycle_states) != len(set(lifecycle_states)):
         fail(f"Project type {expected_id} has duplicate lifecycle states")
+    validate_project_creation_contract(
+        expected_id,
+        project_type,
+        set(field_keys),
+        set(lifecycle_states),
+    )
 
     lifecycle_transitions = initial_version.get("lifecycleTransitions")
     if not isinstance(lifecycle_transitions, list) or not lifecycle_transitions:
@@ -2661,6 +2906,40 @@ def field_option_values(field: dict[str, Any]) -> set[str]:
     if isinstance(config, dict):
         values.update(option_values(config.get("options")))
     return values
+
+
+def camel_to_snake(value: str) -> str:
+    return re.sub(r"(?<!^)(?=[A-Z])", "_", value).lower()
+
+
+@lru_cache(maxsize=1)
+def project_creation_reserved_field_keys_by_project_type() -> dict[str, set[str]]:
+    variables_path = ROOT / "alludium" / "workspace-variables.yaml"
+    if not variables_path.exists():
+        return {}
+    surface = read_yaml(variables_path)
+    if not isinstance(surface, dict):
+        return {}
+    reserved_by_project_type: dict[str, set[str]] = {}
+    for variable in surface.get("workspaceVariables") or []:
+        if not isinstance(variable, dict):
+            continue
+        namespace = variable.get("namespace")
+        key = variable.get("key")
+        if not isinstance(namespace, str) or not isinstance(key, str):
+            continue
+        variable_key = f"{namespace}.{key}"
+        derived_field_key = camel_to_snake(key)
+        if derived_field_key.startswith("origination_"):
+            derived_field_key = derived_field_key.removeprefix("origination_")
+        reserved_field_keys = {derived_field_key}
+        reserved_field_keys.update(PROJECT_CREATION_VARIABLE_FIELD_ALIASES.get(variable_key, set()))
+        for project_type_id in require_string_list(
+            variable.get("supportedProjectTypes"),
+            f"Workspace variable {variable_key}.supportedProjectTypes",
+        ):
+            reserved_by_project_type.setdefault(project_type_id, set()).update(reserved_field_keys)
+    return reserved_by_project_type
 
 
 def project_setup_import_task_slugs(project_type: dict[str, Any]) -> set[str]:

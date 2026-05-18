@@ -161,6 +161,22 @@
       }
     ]
   },
+  "projectCreation": {
+    "launcherLabel": "Create VC Origination Pipeline",
+    "starterId": "create-vc-origination-pipeline-project",
+    "aliases": ["origination pipeline", "sourcing pipeline", "deal sourcing"],
+    "requiredFieldKeys": ["pipeline_name"],
+    "recommendedFieldKeys": [],
+    "advancedFieldKeys": ["confidentiality_level"],
+    "defaultState": "draft",
+    "guidedTask": {
+      "taskDefinitionTemplateId": "vc.configure_origination_pipeline",
+      "taskDefinitionSlug": "configure-origination-pipeline"
+    },
+    "postCreate": {
+      "triggerInitialStateTasks": true
+    }
+  },
   "initialVersion": {
     "version": "0.1.3",
     "documentLibrary": {
@@ -194,115 +210,6 @@
         "kind": "text",
         "required": true,
         "placeholder": "AI infrastructure sourcing"
-      },
-      {
-        "id": "field-firm-name",
-        "key": "firm_name",
-        "label": "Firm Name",
-        "kind": "text",
-        "required": false
-      },
-      {
-        "id": "field-fund-name",
-        "key": "fund_name",
-        "label": "Fund Name",
-        "kind": "text",
-        "required": false
-      },
-      {
-        "id": "field-investment-thesis",
-        "key": "investment_thesis",
-        "label": "Investment Thesis",
-        "kind": "text",
-        "required": false,
-        "description": "Compact thesis context used to configure source filters and review policy."
-      },
-      {
-        "id": "field-geography-focus",
-        "key": "geography_focus",
-        "label": "Geography Focus",
-        "kind": "text",
-        "required": false
-      },
-      {
-        "id": "field-stage-focus",
-        "key": "stage_focus",
-        "label": "Stage Focus",
-        "kind": "text",
-        "required": false
-      },
-      {
-        "id": "field-sector-focus",
-        "key": "sector_focus",
-        "label": "Sector Focus",
-        "kind": "text",
-        "required": false
-      },
-      {
-        "id": "field-enabled-sources",
-        "key": "enabled_sources",
-        "label": "Enabled Sources",
-        "kind": "text",
-        "required": false,
-        "description": "Source keys selected for this pipeline, such as apify or companies_house."
-      },
-      {
-        "id": "field-run-cadence",
-        "key": "run_cadence",
-        "label": "Run Cadence",
-        "kind": "enum",
-        "required": false,
-        "description": "Preferred cadence captured for later automation approval.",
-        "options": [
-          {
-            "value": "manual",
-            "label": "Manual"
-          },
-          {
-            "value": "daily",
-            "label": "Daily"
-          },
-          {
-            "value": "weekly",
-            "label": "Weekly"
-          },
-          {
-            "value": "monthly",
-            "label": "Monthly"
-          }
-        ]
-      },
-      {
-        "id": "field-digest-channel",
-        "key": "digest_channel",
-        "label": "Digest Channel",
-        "kind": "text",
-        "required": false,
-        "description": "Manual channel or destination reference for later digest setup."
-      },
-      {
-        "id": "field-source-cost-budget",
-        "key": "source_cost_budget",
-        "label": "Source Cost Budget",
-        "kind": "number",
-        "required": false,
-        "description": "Budget limit for paid source usage in the workspace currency."
-      },
-      {
-        "id": "field-promotion-threshold",
-        "key": "promotion_threshold",
-        "label": "Promotion Threshold",
-        "kind": "number",
-        "required": false,
-        "description": "Score or priority threshold that can later gate Deal Room promotion recommendations."
-      },
-      {
-        "id": "field-manual-review-threshold",
-        "key": "manual_review_threshold",
-        "label": "Manual Review Threshold",
-        "kind": "number",
-        "required": false,
-        "description": "Score or priority threshold that can later route candidates to human review."
       },
       {
         "id": "field-source-registry",
@@ -541,20 +448,6 @@
         "kind": "text",
         "required": false,
         "description": "Artifact ID for the latest paid-source spend audit."
-      },
-      {
-        "id": "field-crm-pipeline-url",
-        "key": "crm_pipeline_url",
-        "label": "CRM Pipeline URL",
-        "kind": "text",
-        "required": false
-      },
-      {
-        "id": "field-document-workspace-url",
-        "key": "document_workspace_url",
-        "label": "Document Workspace URL",
-        "kind": "text",
-        "required": false
       },
       {
         "id": "field-owner",
