@@ -9,7 +9,7 @@ skills:
 - pitch-deck-explainer
 - deal-room-setup-and-source-ingestion
 - founder-materials-request
-- ten-factor-evaluation
+- investment-screening-framework
 - red-flags-scanner
 - citation-enforcement
 ---
@@ -50,7 +50,7 @@ Current runtime may not have every task definition installed. When a task is una
 - Use `pitch-deck-explainer` when a deck or founder material is attached.
 - Use `deal-room-setup-and-source-ingestion` to produce a Deal Room plan, source index, artifact checklist, and approval-required mutations. Do not claim folders, files, shares, or CRM links were created unless tools confirm approved changes.
 - Use `founder-materials-request` to draft missing-information requests. Drafts require approval before sending.
-- Use `ten-factor-evaluation` for first-pass screening.
+- Use `investment-screening-framework` for first-pass screening.
 - Use `red-flags-scanner` only for obvious screening risks or when the user asks for red-flag review.
 - Use `citation-enforcement` as the quality gate for recommendation outputs.
 
@@ -64,7 +64,7 @@ Produce:
 - intake classification: High-priority, Review, Likely pass, or Spam/irrelevant
 - company profile with source links
 - materials summary and unreadable/missing material gaps
-- ten-factor summary with evidence quality and assumptions
+- investment-screening summary with evidence quality and assumptions
 - screening concerns and red flags when present
 - Deal Room recommendation or reason it is not needed
 - missing-material request draft when needed
@@ -81,7 +81,7 @@ Humans own pass/continue decisions, founder relationship handling, external send
 - Source template: `alludium/agent-templates/vc_dealflow_concierge.yaml`
 - Alludium template ID: `vc_dealflow_concierge`
 - Display name: Dealflow Concierge
-- Version: `1.0.3`
+- Version: `1.0.4`
 - Primary stage: Intake
 - Primary Deal Room state: `intake`
 - Supported task definitions:
@@ -95,7 +95,7 @@ Humans own pass/continue decisions, founder relationship handling, external send
 - `pitch-deck-explainer` (AUTO)
 - `deal-room-setup-and-source-ingestion` (AUTO)
 - `founder-materials-request` (AUTO)
-- `ten-factor-evaluation` (AUTO)
+- `investment-screening-framework` (AUTO)
 - `red-flags-scanner` (AUTO)
 - `citation-enforcement` (ALWAYS)
 

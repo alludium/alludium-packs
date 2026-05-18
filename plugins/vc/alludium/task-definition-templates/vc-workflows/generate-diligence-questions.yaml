@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.generate_diligence_questions
-version: 1.0.8
+version: 1.0.9
 title: Generate Diligence Questions
 category: Venture Capital
 visibility: workspace
@@ -58,7 +58,7 @@ definition:
       parentTaskPolicy: none
       suggestedChildTasks: []
     workspaceConfiguredMethodologySkills:
-      - skill: 82-factor-diligence-question-generation
+      - skill: investment-diligence-question-framework
         note: Use only when the workspace explicitly configures this diligence framework.
 fields:
   input:

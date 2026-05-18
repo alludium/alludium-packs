@@ -96,4 +96,4 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Workspace-Configured Methodology Skills
 
 - `market-map-building`: Use only when the workspace explicitly configures this market mapping method.
-- `ten-factor-evaluation`: Use only when the workspace explicitly configures this screening framework.
+- `investment-screening-framework`: Use only when the workspace explicitly configures this screening framework.

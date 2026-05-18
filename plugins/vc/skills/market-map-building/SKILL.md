@@ -42,7 +42,7 @@ reusable artifact that becomes the default starting point for the deal team duri
 evaluation-stage diligence.
 
 This skill is for the Market Map itself — not the full diligence pack, not the IC
-memo, and not the 10-Factor screen.
+memo, and not the investment screening screen.
 
 ## Minimum Inputs
 
@@ -327,7 +327,7 @@ Founder Materials (deck, data room, transcripts)
 [market-map-building] ----------------------> B4 Market Map          <-- THIS SKILL
 [team-and-hiring-assessment] --------------> Team Table
 [red-flags-scanner] -----------------------> B5 Red Flags Checklist
-[82-factor-diligence-question-generation] -> Question Bank (82-factor)
+[investment-diligence-question-framework] -> Question Bank (investment-diligence)
     |
     all linked from
     v
@@ -343,5 +343,5 @@ B6 IC Memo (Section 5 = Market + competitive landscape)
 - `company-research-and-enrichment` — foundation data and company context
 - `traction-and-saas-unit-economics` — traction signals that validate market position claims
 - `red-flags-scanner` — structured risk scan that complements the Risks section
-- `ten-factor-evaluation` — Factor 7 is the lightweight screening version; this skill
+- `investment-screening-framework` — Factor 7 is the lightweight screening version; this skill
   provides the deep evaluation version

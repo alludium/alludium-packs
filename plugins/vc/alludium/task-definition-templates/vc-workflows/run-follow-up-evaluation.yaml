@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_follow_up_evaluation
-version: 1.0.5
+version: 1.0.6
 title: Run Follow-Up Evaluation
 category: Venture Capital
 visibility: workspace
@@ -60,7 +60,7 @@ definition:
       parentTaskPolicy: none
       suggestedChildTasks: []
     workspaceConfiguredMethodologySkills:
-      - skill: 82-factor-diligence-question-generation
+      - skill: investment-diligence-question-framework
         note: Use only when the workspace explicitly configures this diligence framework.
       - skill: market-map-building
         note: Use only when the workspace explicitly configures this market mapping method.

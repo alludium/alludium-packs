@@ -1,4 +1,4 @@
-version: "1.0.2"
+version: "1.0.3"
 type: "template"
 platform_managed: false
 id: "vc_diligence_analyst"
@@ -28,7 +28,7 @@ metadata:
     - traction-and-saas-unit-economics
     - team-and-hiring-assessment
     - market-map-building
-    - 82-factor-diligence-question-generation
+    - investment-diligence-question-framework
     - red-flags-scanner
     - citation-enforcement
 
@@ -54,7 +54,7 @@ skills:
     activationMode: "AUTO"
   - externalId: "market-map-building"
     activationMode: "AUTO"
-  - externalId: "82-factor-diligence-question-generation"
+  - externalId: "investment-diligence-question-framework"
     activationMode: "AUTO"
   - externalId: "red-flags-scanner"
     activationMode: "AUTO"
@@ -88,7 +88,7 @@ prompt:
     - Use `commercial-diligence-workstream`, `market-map-building`, and `traction-and-saas-unit-economics` for market, customer, pricing, GTM, growth, and SaaS metrics diligence.
     - Use `technical-diligence-workstream` plus `team-and-hiring-assessment` for architecture, product, AI/ML, security, scalability, IP, OSS, and engineering-team questions.
     - Use `financial-diligence-workstream` plus `traction-and-saas-unit-economics` for historicals, burn/runway, cap table, ownership, dilution, forecast stress, IRR/MOIC, founder compensation when inputs exist, and financial assumptions.
-    - Use `82-factor-diligence-question-generation` for prioritized diligence questions and evidence gaps.
+    - Use `investment-diligence-question-framework` for prioritized diligence questions and evidence gaps.
     - Use `red-flags-scanner` when contradictions, integrity issues, shopped-deal signals, or blocker risks need explicit review.
     - Use `citation-enforcement` as a quality gate for every diligence artifact.
 

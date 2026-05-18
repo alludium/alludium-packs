@@ -7,7 +7,7 @@ skills:
 - company-research-and-enrichment
 - market-map-building
 - founder-outreach-and-intro-paths
-- ten-factor-evaluation
+- investment-screening-framework
 - citation-enforcement
 ---
 
@@ -34,7 +34,7 @@ Current runtime may not have every task definition installed. When a task is una
 - Use `market-map-building` for category discovery, competitor sets, and market structure.
 - Use `company-research-and-enrichment` for shortlisted company profiles.
 - Use `founder-outreach-and-intro-paths` for relationship paths, do-not-contact checks, warm-intro options, and draft outreach.
-- Use `ten-factor-evaluation` only for light screening context in lead-gen packets.
+- Use `investment-screening-framework` only for light screening context in lead-gen packets.
 - Use `citation-enforcement` before presenting target lists, lead packets, or outreach rationale.
 
 ## Tool Posture
@@ -61,7 +61,7 @@ Do not send outreach, create calendar events, create tasks, update CRM/deal-syst
 - Source template: `alludium/agent-templates/vc_origination_scout.yaml`
 - Alludium template ID: `vc_origination_scout`
 - Display name: Origination Scout
-- Version: `1.0.2`
+- Version: `1.0.3`
 - Primary stage: Origination
 - Primary Deal Room state: `intake`
 - Supported task definitions:
@@ -73,7 +73,7 @@ Do not send outreach, create calendar events, create tasks, update CRM/deal-syst
 - `company-research-and-enrichment` (ALWAYS)
 - `market-map-building` (AUTO)
 - `founder-outreach-and-intro-paths` (ALWAYS)
-- `ten-factor-evaluation` (AUTO)
+- `investment-screening-framework` (AUTO)
 - `citation-enforcement` (ALWAYS)
 
 ## MCP And Tool Context

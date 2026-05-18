@@ -396,5 +396,5 @@ it as a priority follow-up.
 This skill works well with:
 
 - `company-research-and-enrichment` — foundation data, validates claimed revenue/funding
-- `ten-factor-evaluation` — this skill feeds Factor 4 (Business Model) and Factor 6 (Value Creation)
+- `investment-screening-framework` — this skill feeds Factor 4 (Business Model) and Factor 6 (Value Creation)
 - `red-flags-scanner` — flags metric inconsistencies, vanity metrics, unrealistic projections

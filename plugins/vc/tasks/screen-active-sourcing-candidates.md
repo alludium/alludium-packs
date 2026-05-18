@@ -76,5 +76,5 @@ Screening recommendation only unless explicit write approval is granted. Never d
 ## Planned Skills
 
 - `vc-sourcing-verdict-and-screening`
-- `ten-factor-evaluation`
+- `investment-screening-framework`
 - `citation-enforcement`

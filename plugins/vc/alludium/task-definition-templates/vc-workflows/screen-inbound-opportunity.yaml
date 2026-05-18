@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.screen_inbound_opportunity
-version: 1.0.8
+version: 1.0.9
 title: Screen Inbound Opportunity
 category: Venture Capital
 visibility: workspace
@@ -72,7 +72,7 @@ definition:
       parentTaskPolicy: none
       suggestedChildTasks: []
     workspaceConfiguredMethodologySkills:
-      - skill: ten-factor-evaluation
+      - skill: investment-screening-framework
         note: Use only when the workspace explicitly configures this screening framework.
 fields:
   input:

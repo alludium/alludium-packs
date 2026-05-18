@@ -1,19 +1,19 @@
 ---
-id: 82-factor-diligence-question-generation
-name: 82-Factor Diligence Question Generation
+id: investment-diligence-question-framework
+name: Investment Diligence Question Framework
 description: >
-  Turn an 82-Factor framework into a prioritised, practical question set tailored to a
+  Turn an investment diligence question framework into a prioritised, practical question set tailored to a
   specific deal. Use this skill when preparing for a diligence call, identifying what is
   already known vs unknown, converting knowledge gaps into concrete questions, prioritising
   by decision impact, building a next-call agenda, or surfacing the top unknowns that block
-  an investment decision. This skill maps existing DD artifacts against the 127-question bank
+  an investment decision. This skill maps existing DD artifacts against the structured question bank
   across 6 categories, suppresses answered questions, and produces a focused, tiered output
   rather than an exhaustive dump.
 tags:
   - vc
   - diligence
   - questions
-  - 82-factor
+  - investment-diligence
 capability:
   dependencies:
     - kind: skill-assignment
@@ -37,9 +37,9 @@ capability:
       - Builder, Skills Manager, or a deal-workflow owner assigns this skill; it does not create artifacts or fetch unavailable deal materials by itself.
 ---
 
-# 82-Factor Diligence Question Generation
+# Investment Diligence Question Framework
 
-Convert the 82-Factor framework into a deal-specific, prioritised question set. The goal
+Convert the investment diligence question framework into a deal-specific, prioritised question set. The goal
 is a usable next-call agenda, not a wall of 127 questions. Surface what is genuinely unknown,
 suppress what is already answered, and rank by decision impact.
 
@@ -51,7 +51,7 @@ memo assembly, not for the screening evaluation itself.
 Before generating questions, confirm the following exist:
 
 - A company name and deal context (stage, sector, round size)
-- At least one DD artifact: pitch deck, ten-factor scorecard, call notes, data room index,
+- At least one DD artifact: pitch deck, investment-screening scorecard, call notes, data room index,
   or prior memo draft
 
 If no DD artifacts exist beyond a short inbound email or similarly thin context, stop and
@@ -59,7 +59,7 @@ recommend requesting more founder materials first. Do not generate questions in 
 
 ## Reference Material
 
-The full 127-question bank lives in `references/82-factor-checklist.md` within this skill
+The full question bank lives in `references/diligence-question-bank.md` within this skill
 directory. That file is the canonical source — do not hard-code questions inline.
 
 The 6 categories and their question counts:
@@ -77,7 +77,7 @@ The 6 categories and their question counts:
 
 ### Step 1 — Inventory Existing Knowledge
 
-Scan all available DD artifacts and map what is already known against the 82-Factor
+Scan all available DD artifacts and map what is already known against the investment diligence
 framework. For each category, classify every question as:
 
 - **Answered** — evidence exists in artifacts. Record the source and a one-line summary.
@@ -164,7 +164,7 @@ it:
 ## Output Shape
 
 ```
-# 82-Factor Diligence Questions: [Company Name]
+# Investment Diligence Questions: [Company Name]
 
 ## Deal Context
 - **Stage:** [Seed / Series A / ...]
@@ -239,9 +239,9 @@ of the diligence process itself.
 
 - **Generate, do not answer.** This skill produces questions and prioritises them. It does
   not attempt to answer the questions or assess the company. That is what
-  `ten-factor-evaluation` and the broader DD process do.
+  `investment-screening-framework` and the broader DD process do.
 
-- **Suppress aggressively, document transparently.** A 127-question dump is worse than
+- **Suppress aggressively, document transparently.** An exhaustive question dump is worse than
   useless. But every suppression must be visible and reversible. The user must trust that
   nothing important was hidden.
 
@@ -260,14 +260,14 @@ of the diligence process itself.
   next 20 / nice-to-have structure, group and compress. A usable agenda beats a
   comprehensive dump.
 
-- **Respect prior work.** If a `ten-factor-evaluation` scorecard exists, use its Unknowns
+- **Respect prior work.** If a `investment-screening-framework` scorecard exists, use its Unknowns
   sections as primary input. Do not re-derive what is already mapped.
 
 ## Related Skills
 
 This skill works well with:
 
-- `ten-factor-evaluation` — upstream: provides the initial known/unknown map
+- `investment-screening-framework` — upstream: provides the initial known/unknown map
 - `red-flags-scanner` — flags that elevate specific questions to Tier 1
 - `team-and-hiring-assessment` — deeper input for Management DD questions (Category 2)
 - `traction-and-saas-unit-economics` — deeper input for Financial questions (Category 6)

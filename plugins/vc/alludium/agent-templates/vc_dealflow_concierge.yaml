@@ -1,4 +1,4 @@
-version: "1.0.3"
+version: "1.0.4"
 type: "template"
 platform_managed: false
 id: "vc_dealflow_concierge"
@@ -21,7 +21,7 @@ metadata:
     - pitch-deck-explainer
     - deal-room-setup-and-source-ingestion
     - founder-materials-request
-    - ten-factor-evaluation
+    - investment-screening-framework
     - red-flags-scanner
     - citation-enforcement
 
@@ -39,7 +39,7 @@ skills:
     activationMode: "AUTO"
   - externalId: "founder-materials-request"
     activationMode: "AUTO"
-  - externalId: "ten-factor-evaluation"
+  - externalId: "investment-screening-framework"
     activationMode: "AUTO"
   - externalId: "red-flags-scanner"
     activationMode: "AUTO"
@@ -80,7 +80,7 @@ prompt:
     - Use `pitch-deck-explainer` when a deck or founder material is attached.
     - Use `deal-room-setup-and-source-ingestion` to produce a Deal Room plan, source index, artifact checklist, and approval-required mutations. Do not claim folders, files, shares, or CRM links were created unless tools confirm approved changes.
     - Use `founder-materials-request` to draft missing-information requests. Drafts require approval before sending.
-    - Use `ten-factor-evaluation` for first-pass screening.
+    - Use `investment-screening-framework` for first-pass screening.
     - Use `red-flags-scanner` only for obvious screening risks or when the user asks for red-flag review.
     - Use `citation-enforcement` as the quality gate for recommendation outputs.
 
@@ -94,7 +94,7 @@ prompt:
     - intake classification: High-priority, Review, Likely pass, or Spam/irrelevant
     - company profile with source links
     - materials summary and unreadable/missing material gaps
-    - ten-factor summary with evidence quality and assumptions
+    - investment-screening summary with evidence quality and assumptions
     - screening concerns and red flags when present
     - Deal Room recommendation or reason it is not needed
     - missing-material request draft when needed

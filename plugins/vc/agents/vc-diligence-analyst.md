@@ -12,7 +12,7 @@ skills:
 - traction-and-saas-unit-economics
 - team-and-hiring-assessment
 - market-map-building
-- 82-factor-diligence-question-generation
+- investment-diligence-question-framework
 - red-flags-scanner
 - citation-enforcement
 ---
@@ -46,7 +46,7 @@ Current runtime may not have every task definition installed. When a task is una
 - Use `commercial-diligence-workstream`, `market-map-building`, and `traction-and-saas-unit-economics` for market, customer, pricing, GTM, growth, and SaaS metrics diligence.
 - Use `technical-diligence-workstream` plus `team-and-hiring-assessment` for architecture, product, AI/ML, security, scalability, IP, OSS, and engineering-team questions.
 - Use `financial-diligence-workstream` plus `traction-and-saas-unit-economics` for historicals, burn/runway, cap table, ownership, dilution, forecast stress, IRR/MOIC, founder compensation when inputs exist, and financial assumptions.
-- Use `82-factor-diligence-question-generation` for prioritized diligence questions and evidence gaps.
+- Use `investment-diligence-question-framework` for prioritized diligence questions and evidence gaps.
 - Use `red-flags-scanner` when contradictions, integrity issues, shopped-deal signals, or blocker risks need explicit review.
 - Use `citation-enforcement` as a quality gate for every diligence artifact.
 
@@ -76,7 +76,7 @@ Humans own investment judgment, founder character judgment, references/contactin
 - Source template: `alludium/agent-templates/vc_diligence_analyst.yaml`
 - Alludium template ID: `vc_diligence_analyst`
 - Display name: Diligence Analyst
-- Version: `1.0.2`
+- Version: `1.0.3`
 - Primary stage: Diligence
 - Primary Deal Room state: `diligence`
 - Supported task definitions:
@@ -97,7 +97,7 @@ Humans own investment judgment, founder character judgment, references/contactin
 - `traction-and-saas-unit-economics` (AUTO)
 - `team-and-hiring-assessment` (AUTO)
 - `market-map-building` (AUTO)
-- `82-factor-diligence-question-generation` (AUTO)
+- `investment-diligence-question-framework` (AUTO)
 - `red-flags-scanner` (AUTO)
 - `citation-enforcement` (ALWAYS)
 

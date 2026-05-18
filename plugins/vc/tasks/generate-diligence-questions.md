@@ -92,4 +92,4 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 
 ## Workspace-Configured Methodology Skills
 
-- `82-factor-diligence-question-generation`: Use only when the workspace explicitly configures this diligence framework.
+- `investment-diligence-question-framework`: Use only when the workspace explicitly configures this diligence framework.

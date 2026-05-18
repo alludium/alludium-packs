@@ -97,4 +97,4 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 
 ## Workspace-Configured Methodology Skills
 
-- `ten-factor-evaluation`: Use only when the workspace explicitly configures this screening framework.
+- `investment-screening-framework`: Use only when the workspace explicitly configures this screening framework.

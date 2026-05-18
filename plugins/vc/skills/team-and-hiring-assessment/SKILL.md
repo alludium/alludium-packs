@@ -47,8 +47,8 @@ from what is inferred.
 
 This skill covers team extraction, background verification, stage-appropriate
 completeness analysis, first-party hiring signals, and team-specific negative
-signal scanning. It does not cover broader 10-Factor scoring (use
-`ten-factor-evaluation`) or general red-flag analysis beyond team (use
+signal scanning. It does not cover broader investment screening scoring (use
+`investment-screening-framework`) or general red-flag analysis beyond team (use
 `red-flags-scanner`).
 
 ## Minimum Inputs
@@ -70,7 +70,7 @@ If none exist, stop and ask for the minimum missing input.
 5. Assess team completeness for the company's current stage.
 6. Analyse hiring signals from official first-party sources.
 7. Run the negative signal scan.
-8. Apply the Team Quality Framework (10-Factor and 82-Factor questions).
+8. Apply the Team Quality Framework (investment screening and Investment Diligence questions).
 9. Produce the output artifact.
 
 ## Step 1: Team Roster Extraction
@@ -296,10 +296,10 @@ when there is cited public evidence available through connected tools.
 
 ## Step 7: Team Quality Framework
 
-Apply team assessment criteria from the 10-Factor Team sub-questions and the
-82-Factor Management Due Diligence section.
+Apply team assessment criteria from the investment screening Team sub-questions and the
+Investment Diligence Management Due Diligence section.
 
-### 10-Factor Team Sub-Questions
+### investment screening Team Sub-Questions
 
 For each, provide a 1-2 sentence evidence-based assessment:
 
@@ -315,7 +315,7 @@ For each, provide a 1-2 sentence evidence-based assessment:
 10. **Gaps** — What critical skills or roles are missing?
 11. **Humility** — Coachability and willingness to listen?
 
-### 82-Factor Management DD
+### Investment Diligence Management DD
 
 Address these where evidence exists. Do not force answers when data is absent; mark
 them as `Unknown`.
@@ -403,7 +403,7 @@ Assessment: [2-3 sentences on overall completeness]
 
 ## Team Quality Assessment
 
-### 10-Factor Team Evaluation
+### investment screening Team Evaluation
 
 | #   | Dimension    | Assessment      | Confidence   |
 | --- | ------------ | --------------- | ------------ |
@@ -411,7 +411,7 @@ Assessment: [2-3 sentences on overall completeness]
 | ... | ...          | ...             | ...          |
 | 11  | Humility     | ...             | ...          |
 
-### 82-Factor Management DD
+### Investment Diligence Management DD
 
 | #     | Question                | Answer       | Evidence | Status                   |
 | ----- | ----------------------- | ------------ | -------- | ------------------------ |
@@ -486,5 +486,5 @@ Do not resolve contradictions by averaging or choosing the more flattering versi
 
 - `company-research-and-enrichment` — foundation data and company context
 - `red-flags-scanner` — broader risk scan beyond team-specific signals
-- `ten-factor-evaluation` — uses team assessment as input for Factor 10 scoring
-- `82-factor-diligence-question-generation` — deeper question generation from team unknowns
+- `investment-screening-framework` — uses team assessment as input for Factor 10 scoring
+- `investment-diligence-question-framework` — deeper question generation from team unknowns

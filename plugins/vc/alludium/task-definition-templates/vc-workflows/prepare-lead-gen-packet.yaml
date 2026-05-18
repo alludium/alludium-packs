@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_lead_gen_packet
-version: 1.0.7
+version: 1.0.8
 title: Prepare Lead Gen Packet
 category: Venture Capital
 visibility: workspace
@@ -70,7 +70,7 @@ definition:
     workspaceConfiguredMethodologySkills:
       - skill: market-map-building
         note: Use only when the workspace explicitly configures this market mapping method.
-      - skill: ten-factor-evaluation
+      - skill: investment-screening-framework
         note: Use only when the workspace explicitly configures this screening framework.
 fields:
   input:

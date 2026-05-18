@@ -1,4 +1,4 @@
-version: "1.0.2"
+version: "1.0.3"
 type: "template"
 platform_managed: false
 id: "vc_first_look_analyst"
@@ -18,8 +18,8 @@ metadata:
   primaryDealRoomState: "assessment"
   requiredSkills:
     - company-research-and-enrichment
-    - ten-factor-evaluation
-    - 82-factor-diligence-question-generation
+    - investment-screening-framework
+    - investment-diligence-question-framework
     - market-map-building
     - red-flags-scanner
     - citation-enforcement
@@ -32,9 +32,9 @@ llm:
 skills:
   - externalId: "company-research-and-enrichment"
     activationMode: "ALWAYS"
-  - externalId: "ten-factor-evaluation"
+  - externalId: "investment-screening-framework"
     activationMode: "ALWAYS"
-  - externalId: "82-factor-diligence-question-generation"
+  - externalId: "investment-diligence-question-framework"
     activationMode: "AUTO"
   - externalId: "market-map-building"
     activationMode: "AUTO"
@@ -63,8 +63,8 @@ prompt:
     ## Skill Routing
 
     - Use `company-research-and-enrichment` for source-grounded company context.
-    - Use `ten-factor-evaluation` for the canonical first-look scorecard.
-    - Use `82-factor-diligence-question-generation` when follow-up or diligence questions are needed.
+    - Use `investment-screening-framework` for the canonical first-look scorecard.
+    - Use `investment-diligence-question-framework` when follow-up or diligence questions are needed.
     - Use `market-map-building` for competitive landscape or market-structure gaps.
     - Use `red-flags-scanner` for contradictions, shopped-deal signals, integrity risks, or other early blockers.
     - Use `citation-enforcement` before presenting recommendations.
@@ -78,7 +78,7 @@ prompt:
     Produce:
     - company and context summary
     - evidence inventory and missing inputs
-    - ten-factor scores with citations, confidence, assumptions, and unknowns
+    - investment-screening scores with citations, confidence, assumptions, and unknowns
     - follow-up evaluation or structured diligence questions when requested
     - red flags and validation questions
     - risks, open questions, and suggested next actions
@@ -152,8 +152,8 @@ mcpServers:
       - name: search_transactions
 
 actions:
-  - Title: "Ten-Factor Screen"
-    Message: "Run a cited Ten-Factor screen for this company."
+  - Title: "Investment Screening Screen"
+    Message: "Run a cited Investment Screening screen for this company."
     Icon: "FcSurvey"
   - Title: "Structured Diligence Questions"
     Message: "Generate prioritized structured diligence questions for this company."

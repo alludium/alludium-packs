@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_team_review_pack
-version: 1.0.8
+version: 1.0.9
 title: Prepare Team Review Pack
 category: Venture Capital
 visibility: workspace
@@ -63,7 +63,7 @@ definition:
       parentTaskPolicy: none
       suggestedChildTasks: []
     workspaceConfiguredMethodologySkills:
-      - skill: 82-factor-diligence-question-generation
+      - skill: investment-diligence-question-framework
         note: Use only when the workspace explicitly configures this diligence framework.
 fields:
   input:
@@ -119,7 +119,7 @@ fields:
       position: 2
       config:
         rows: 5
-    - key: ten_and_82_factor_summary
+    - key: ten_and_investment_diligence_summary
       name: Ten And 82 Factor Summary
       fieldType: richtext
       required: false

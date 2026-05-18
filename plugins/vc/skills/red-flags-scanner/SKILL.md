@@ -165,7 +165,7 @@ Scan for legal, structural, and regulatory risks.
   compliance approach).
 - Aggressive or unusual NDA/term sheet terms.
 
-**Additional flags from 82-Factor legal DD:**
+**Additional flags from Investment Diligence legal DD:**
 
 - Cap table consistency issues (ownership percentages do not add up, option pool not
   specified, unclear SAFE/note conversion terms).
@@ -316,7 +316,7 @@ Use tools to gather evidence. Do not ask the user for information that tools can
 | Harmonic                       | Structured company and team context to compare against founder materials                                                            |
 | Affinity                       | Existing firm notes, prior interactions, and internal context that may surface contradictions                                       |
 
-If an existing Company Research & Enrichment profile or Ten-Factor Evaluation exists, use
+If an existing Company Research & Enrichment profile or Investment Screening Framework exists, use
 them as starting points — do not duplicate work already done.
 
 ## Guardrails
@@ -341,9 +341,9 @@ them as starting points — do not duplicate work already done.
 
 This skill works well with:
 
-- `ten-factor-evaluation` — red flags feed directly into Factor 9 (Risks) scoring
+- `investment-screening-framework` — red flags feed directly into Factor 9 (Risks) scoring
 - `team-and-hiring-assessment` — deeper team analysis when Team flags are raised
-- `82-factor-diligence-question-generation` — converts flag recommended actions into
+- `investment-diligence-question-framework` — converts flag recommended actions into
   structured diligence questions
 - `citation-enforcement` — validates that flag evidence meets citation standards
 - `company-research-and-enrichment` — foundation data and external signals
