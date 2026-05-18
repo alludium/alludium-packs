@@ -30,6 +30,7 @@ VERSIONED_DOC_PATHS = [
     "plugins/vc/README.md",
     "plugins/vc/alludium/inventory.md",
 ]
+TASK_DEFINITION_TEMPLATE_ROOT = "plugins/vc/alludium/task-definition-templates"
 
 
 @dataclass(frozen=True)
@@ -115,6 +116,99 @@ def parse_semver(version: str, context: str = "Pack version") -> tuple[int, int,
             "with no prefix or prerelease suffix"
         )
     return parsed
+
+
+def normalized_template_body(parsed: dict[str, Any]) -> Any:
+    body = {key: value for key, value in parsed.items() if key != "version"}
+    return _stable(body)
+
+
+def _stable(value: Any) -> Any:
+    if isinstance(value, dict):
+        return {key: _stable(value[key]) for key in sorted(value)}
+    if isinstance(value, list):
+        return [_stable(item) for item in value]
+    return value
+
+
+def parse_template_yaml_text(text: str, context: str) -> dict[str, Any]:
+    parsed = read_yaml_text(text, context)
+    kind = parsed.get("kind")
+    if kind != "task-definition-template":
+        return {}
+    return parsed
+
+
+def list_changed_template_paths(base_ref: str) -> list[str]:
+    committed = run_git(
+        ["diff", "--name-only", f"{base_ref}...HEAD", "--", TASK_DEFINITION_TEMPLATE_ROOT],
+        allow_failure=False,
+    )
+    staged = run_git(
+        ["diff", "--cached", "--name-only", "--", TASK_DEFINITION_TEMPLATE_ROOT],
+        allow_failure=False,
+    )
+    unstaged = run_git(
+        ["diff", "--name-only", "--", TASK_DEFINITION_TEMPLATE_ROOT],
+        allow_failure=False,
+    )
+    untracked = run_git(
+        ["ls-files", "--others", "--exclude-standard", "--", TASK_DEFINITION_TEMPLATE_ROOT],
+        allow_failure=False,
+    )
+    seen: dict[str, None] = {}
+    for block in (committed, staged, unstaged, untracked):
+        for line in block.splitlines():
+            if line.endswith(".yaml") or line.endswith(".yml"):
+                seen.setdefault(line, None)
+    return list(seen.keys())
+
+
+def validate_template_version_bumps(base_ref: str) -> None:
+    changed_paths = list_changed_template_paths(base_ref)
+    collisions: list[str] = []
+    for relative_path in changed_paths:
+        absolute_path = REPO_ROOT / relative_path
+        if not absolute_path.exists():
+            # File was deleted on HEAD; nothing to enforce.
+            continue
+        head_text = absolute_path.read_text(encoding="utf-8")
+        head_parsed = parse_template_yaml_text(head_text, relative_path)
+        if not head_parsed:
+            continue
+        base_text = run_git(["show", f"{base_ref}:{relative_path}"], allow_failure=True)
+        if not base_text:
+            # New template at HEAD; pack-level release contract already gates this.
+            continue
+        base_parsed = parse_template_yaml_text(base_text, f"{base_ref}:{relative_path}")
+        if not base_parsed:
+            continue
+        if normalized_template_body(head_parsed) == normalized_template_body(base_parsed):
+            continue
+        head_version = head_parsed.get("version")
+        base_version = base_parsed.get("version")
+        if not isinstance(head_version, str) or not head_version:
+            collisions.append(
+                f"  - {relative_path}: missing or invalid top-level 'version:' on HEAD"
+            )
+            continue
+        if not isinstance(base_version, str) or not base_version:
+            # Base did not declare version; treat current as a fresh start, do not enforce.
+            continue
+        if head_version == base_version:
+            collisions.append(
+                f"  - {relative_path}: content changed at version {head_version} "
+                f"({base_ref} had the same version with different content). "
+                f"Bump the top-level 'version:' field."
+            )
+    if collisions:
+        details = "\n".join(collisions)
+        fail(
+            "Task definition templates have content changes without a version bump. "
+            "This will cause platform bootstrap to violate the "
+            "task_definition_template_versions (template_id, version) unique constraint.\n"
+            f"{details}"
+        )
 
 
 def get_release_content_diff(base_ref: str, *, include_worktree: bool = True) -> ReleaseContentDiff:
@@ -204,6 +298,8 @@ def validate_release_contract(base_ref: str, remote: str) -> None:
             "Run from a clean worktree for CI-like behavior."
         )
 
+    validate_template_version_bumps(base_ref)
+
     require_docs_reference_version(current_version)
 
     version_changed = current_version != base_version
@@ -257,6 +353,30 @@ def run_self_test() -> None:
         if parsed is not None:
             parsed_versions[tag_name[1:]] = parsed
     assert max(parsed_versions.items(), key=lambda item: item[1]) == ("0.4.0", (0, 4, 0))
+
+    base_template = {
+        "kind": "task-definition-template",
+        "id": "vc.example",
+        "version": "1.0.0",
+        "title": "Example",
+        "definition": {"slug": "example", "name": "Example"},
+    }
+    head_template_same = dict(base_template)
+    head_template_changed_no_bump = dict(base_template)
+    head_template_changed_no_bump["title"] = "Example (renamed)"
+    head_template_changed_with_bump = dict(head_template_changed_no_bump)
+    head_template_changed_with_bump["version"] = "1.0.1"
+    assert normalized_template_body(base_template) == normalized_template_body(head_template_same)
+    assert normalized_template_body(base_template) != normalized_template_body(
+        head_template_changed_no_bump
+    )
+    assert normalized_template_body(base_template) != normalized_template_body(
+        head_template_changed_with_bump
+    )
+    # Equal even when version differs because version is excluded from the body.
+    assert normalized_template_body(head_template_changed_no_bump) == normalized_template_body(
+        head_template_changed_with_bump
+    )
     print("Release contract self-test passed")
 
 
