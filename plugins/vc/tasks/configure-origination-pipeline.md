@@ -55,12 +55,12 @@ Configuration only. No external reads beyond connection-readiness checks, no sch
 | `configuration_summary` | Configuration Summary | `richtext` | no |
 | `source_registry` | Source Registry | `richtext` | no |
 | `review_policy` | Review Policy | `richtext` | no |
-| `child_task_plan_artifact_id` | Child Task Plan Artifact | `file` | yes |
+| `child_task_plan` | Child Task Plan | `richtext` | yes |
 
 ## Document References
 
 - `vc.document.origination_pipeline_sop` (operating_guidance)
-- `vc.document.source_registry_template` (output_template) -> `child_task_plan_artifact_id`
+- `vc.document.source_registry_template` (operating_guidance)
 
 ## Routing
 

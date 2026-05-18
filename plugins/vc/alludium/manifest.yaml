@@ -119,11 +119,18 @@ surfaces:
       - vc.document.file_naming_source_index_sop
       - vc.document.deal_room_sop
       - vc.document.founder_materials_request_template
+      - vc.document.thesis_target_list_template
+      - vc.document.lead_generation_packet_template
+      - vc.document.initial_call_brief_template
+      - vc.document.customer_insights_summary_template
+      - vc.document.follow_up_evaluation_template
       - vc.document.investment_memo_template
       - vc.document.ic_agenda_template
       - vc.document.ic_decision_record_template
       - vc.document.diligence_report_template
       - vc.document.review_pack_checklist
+      - vc.document.ic_memo_review_template
+      - vc.document.term_sheet_review_template
       - vc.document.closing_checklist
       - vc.document.conditions_precedent_tracker_template
       - vc.document.portfolio_onboarding_plan_template
@@ -136,6 +143,7 @@ surfaces:
       - vc.document.sourcing_digest_template
       - vc.document.outreach_queue_template
       - vc.document.promotion_package_template
+      - vc.document.sourcing_ic_summary_template
       - vc.document.dedupe_novelty_policy
       - vc.document.apify_source_setup_checklist
       - vc.document.companies_house_source_setup_checklist

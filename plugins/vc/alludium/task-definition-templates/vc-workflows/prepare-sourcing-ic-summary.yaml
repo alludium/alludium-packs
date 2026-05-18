@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_sourcing_ic_summary
-version: 0.1.0
+version: 0.1.1
 title: Prepare Sourcing IC Summary
 category: Venture Capital
 visibility: workspace
@@ -19,6 +19,12 @@ definition:
     vertical: vc
     stage: review
     taskFamily: origination_ic_summary
+    documentRefs:
+      - documentId: vc.document.sourcing_ic_summary_template
+        usage: output_template
+        outputFieldKey: ic_summary_artifact_id
+      - documentId: vc.document.evidence_citation_style_guide
+        usage: style_guide
     requiredSkills:
       - vc-origination-ic-summary-preparation
       - citation-enforcement
@@ -32,7 +38,7 @@ definition:
     supportedProjectScopes:
       - project_instance
     instructions:
-      executionInstructions: Prepare a concise IC-style summary for Meet or Watch candidates using enriched candidate evidence, verdict, relationship context, portfolio-overlap result, source receipts, risks, and open questions. This replaces direct page-creation behavior from the reference implementation with a reviewable summary artifact.
+      executionInstructions: Prepare a concise IC-style summary for Meet or Watch candidates using enriched candidate evidence, verdict, relationship context, portfolio-overlap result, source receipts, risks, and open questions. This replaces direct page-creation behavior from the reference implementation with a reviewable summary artifact. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
       missingInputPolicy: Ask for candidate evidence, verdict, relationship context, overlap review, source receipts, and target audience.
       externalActionPolicy: Draft only. Do not create Notion pages, documents, external records, or Deal Rooms without explicit approval.
       completionCriteria:
@@ -51,7 +57,8 @@ fields:
       fieldType: file
       required: true
       position: 0
-      config: {}
+      config:
+        documentRefId: vc.document.sourcing_ic_summary_template
     - key: ic_summary_status
       name: IC Summary Status
       fieldType: string

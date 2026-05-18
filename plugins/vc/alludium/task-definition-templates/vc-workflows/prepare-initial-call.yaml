@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_initial_call
-version: 1.0.5
+version: 1.0.6
 title: Prepare Initial Call
 category: Venture Capital
 visibility: workspace
@@ -19,6 +19,12 @@ definition:
     vertical: vc
     stage: assessment
     taskFamily: meeting
+    documentRefs:
+      - documentId: vc.document.initial_call_brief_template
+        usage: output_template
+        outputFieldKey: initial_call_brief_artifact_id
+      - documentId: vc.document.evidence_citation_style_guide
+        usage: style_guide
     requiredSkills:
       - meeting-prep-and-summary
       - company-research-and-enrichment
@@ -43,7 +49,7 @@ definition:
         anchor: worksheet-atomic-agents
         note: Spreadsheet row 15
     instructions:
-      executionInstructions: Prepare the first-call brief, founder and company summary, competitor and funding activity, starter Initial investment screen scorecard, and questions by topic. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Initial Call Brief and attach it to the required output field `initial_call_brief_artifact_id`.
+      executionInstructions: Prepare the first-call brief, founder and company summary, competitor and funding activity, starter Initial investment screen scorecard, and questions by topic. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Initial Call Brief and attach it to the required output field `initial_call_brief_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
@@ -98,7 +104,8 @@ fields:
       fieldType: file
       required: true
       position: 0
-      config: {}
+      config:
+        documentRefId: vc.document.initial_call_brief_template
     - key: pre_call_brief
       name: Pre Call Brief
       fieldType: richtext

@@ -113,6 +113,76 @@
       "status": "source"
     },
     {
+      "id": "vc.document.thesis_target_list_template",
+      "title": "Thesis Target List Template",
+      "description": "Reusable target-list format for thesis-led sourcing and warm-intro planning.",
+      "documentType": "template",
+      "path": "deal-room/thesis-target-list-template.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "source-thesis-targets"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.lead_generation_packet_template",
+      "title": "Lead Generation Packet Template",
+      "description": "Reusable management-level packet for thesis-led lead generation reviews.",
+      "documentType": "template",
+      "path": "deal-room/lead-generation-packet-template.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "prepare-lead-gen-packet"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.initial_call_brief_template",
+      "title": "Initial Call Brief Template",
+      "description": "Reusable pre-call brief for first founder or management meetings.",
+      "documentType": "template",
+      "path": "deal-room/initial-call-brief-template.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "prepare-initial-call"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.customer_insights_summary_template",
+      "title": "Customer Insights Summary Template",
+      "description": "Reusable meeting-record summary for customer, founder, and diligence call evidence.",
+      "documentType": "template",
+      "path": "deal-room/customer-insights-summary-template.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "summarize-initial-call"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.follow_up_evaluation_template",
+      "title": "Follow-Up Evaluation Template",
+      "description": "Reusable follow-up evaluation after first-call or first-look work.",
+      "documentType": "template",
+      "path": "deal-room/follow-up-evaluation-template.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "run-follow-up-evaluation"
+      ],
+      "status": "source"
+    },
+    {
       "id": "vc.document.investment_memo_template",
       "title": "Investment Memo Template",
       "description": "Reusable IC investment memo structure with thesis, evidence, risks, valuation, diligence, and decision ask.",
@@ -184,6 +254,34 @@
       "relatedTaskDefinitionSlugs": [
         "prepare-partner-review-pack",
         "prepare-team-review-pack"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.ic_memo_review_template",
+      "title": "IC Memo Review Template",
+      "description": "Reusable review format for checking IC memo readiness, gaps, and required changes.",
+      "documentType": "template",
+      "path": "deal-room/ic-memo-review-template.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "review-ic-memo"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.term_sheet_review_template",
+      "title": "Term Sheet Review Template",
+      "description": "Reusable business review format for term-sheet deviations, red flags, and counsel questions.",
+      "documentType": "template",
+      "path": "deal-room/term-sheet-review-template.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "review-term-sheet"
       ],
       "status": "source"
     },
@@ -360,6 +458,20 @@
       "relatedTaskDefinitionSlugs": [
         "prepare-sourcing-ic-summary",
         "promote-candidate-to-deal-room"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.sourcing_ic_summary_template",
+      "title": "Sourcing IC Summary Template",
+      "description": "Reusable lightweight IC-style summary for sourced candidates before Deal Room promotion.",
+      "documentType": "template",
+      "path": "origination/sourcing-ic-summary-template.md",
+      "supportedProjectTypes": [
+        "vc_origination_pipeline"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "prepare-sourcing-ic-summary"
       ],
       "status": "source"
     },

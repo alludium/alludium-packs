@@ -164,6 +164,12 @@ DOCUMENT_REF_USAGES = {
     "setup_checklist",
     "style_guide",
 }
+DOCUMENT_REF_STRUCTURED_ARTIFACT_OUTPUT_FIELDS = {
+    "child_task_plan_artifact_id",
+    "run_receipt_artifact_id",
+    "source_state_artifact_id",
+    "sync_plan_artifact_id",
+}
 EXPECTED_VC_TASK_TEMPLATE_VERTICAL_KEYS = ["venture_capital", "vc"]
 PROJECT_TYPE_FIELD_KINDS = {"date", "enum", "member", "number", "text"}
 PROJECT_TASK_MAPPING_SOURCES = {"constant", "project.field", "project.id", "project.state"}
@@ -1278,6 +1284,12 @@ def validate_task_template_document_refs(
         output_field_key = ref.get("outputFieldKey")
         if output_field_key is not None and not isinstance(output_field_key, str):
             fail(f"Task template {template_id} documentRef {document_id} outputFieldKey must be a string")
+        if output_field_key in DOCUMENT_REF_STRUCTURED_ARTIFACT_OUTPUT_FIELDS:
+            fail(
+                f"Task template {template_id} documentRef {document_id} references structured "
+                f"artifact output field {output_field_key}; state, receipts, and task plans "
+                "must not be modeled as document templates"
+            )
         ref_key = (document_id, usage, output_field_key)
         if ref_key in ref_keys:
             fail(f"Task template {template_id} has duplicate documentRef {ref_key}")

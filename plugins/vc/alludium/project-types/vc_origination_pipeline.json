@@ -179,6 +179,7 @@
         "vc.document.sourcing_digest_template",
         "vc.document.outreach_queue_template",
         "vc.document.promotion_package_template",
+        "vc.document.sourcing_ic_summary_template",
         "vc.document.dedupe_novelty_policy",
         "vc.document.apify_source_setup_checklist",
         "vc.document.companies_house_source_setup_checklist"

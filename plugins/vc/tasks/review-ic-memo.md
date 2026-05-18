@@ -18,7 +18,7 @@ Review IC Memo for one venture-capital opportunity with evidence capture, human 
 
 ## Instructions
 
-Review the IC memo and pack for findings, citation gaps, assumption gaps, unresolved risks, decision readiness, and required changes. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifacts `investment_memo_artifact_id` and `ic_agenda_artifact_id` as the memo and agenda under review; do not substitute a task slug, UI label, or pasted memo text for artifact-backed files. Create or update a durable project file artifact named IC Memo Review and attach it to the required output field `ic_memo_review_artifact_id`.
+Review the IC memo and pack for findings, citation gaps, assumption gaps, unresolved risks, decision readiness, and required changes. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifacts `investment_memo_artifact_id` and `ic_agenda_artifact_id` as the memo and agenda under review; do not substitute a task slug, UI label, or pasted memo text for artifact-backed files. Create or update a durable project file artifact named IC Memo Review and attach it to the required output field `ic_memo_review_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -67,6 +67,11 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `risks` | Risks | `json` | no |
 | `human_decision_points` | Human Decision Points | `string` | no |
 | `next_actions` | Next Actions | `json` | no |
+
+## Document References
+
+- `vc.document.ic_memo_review_template` (output_template) -> `ic_memo_review_artifact_id`
+- `vc.document.evidence_citation_style_guide` (style_guide)
 
 ## Routing
 

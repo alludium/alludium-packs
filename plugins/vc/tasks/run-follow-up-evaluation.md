@@ -18,7 +18,7 @@ Run Follow-Up Evaluation for one venture-capital opportunity with evidence captu
 
 ## Instructions
 
-Build the follow-up evaluation workspace with document requests, competitive landscape, early risks, and readiness recommendation. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Follow-Up Evaluation and attach it to the required output field `follow_up_evaluation_artifact_id`.
+Build the follow-up evaluation workspace with document requests, competitive landscape, early risks, and readiness recommendation. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Follow-Up Evaluation and attach it to the required output field `follow_up_evaluation_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -52,6 +52,11 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | Key | Name | Type | Required |
 | --- | --- | --- | --- |
 | `follow_up_evaluation_artifact_id` | Follow-Up Evaluation | `file` | yes |
+
+## Document References
+
+- `vc.document.follow_up_evaluation_template` (output_template) -> `follow_up_evaluation_artifact_id`
+- `vc.document.evidence_citation_style_guide` (style_guide)
 
 ## Routing
 

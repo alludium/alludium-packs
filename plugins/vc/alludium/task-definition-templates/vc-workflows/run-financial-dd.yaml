@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_financial_dd
-version: 1.0.7
+version: 1.0.8
 title: Run Financial DD
 category: Venture Capital
 visibility: workspace
@@ -23,6 +23,9 @@ definition:
       - documentId: vc.document.diligence_report_template
         usage: output_template
         outputFieldKey: financial_dd_artifact_id
+      - documentId: vc.document.diligence_report_template
+        usage: output_template
+        outputFieldKey: unit_economics_artifact_id
       - documentId: vc.document.evidence_citation_style_guide
         usage: style_guide
     requiredSkills:
@@ -113,7 +116,8 @@ fields:
       fieldType: file
       required: true
       position: 1
-      config: {}
+      config:
+        documentRefId: vc.document.diligence_report_template
     - key: historicals_summary
       name: Historicals Summary
       fieldType: richtext

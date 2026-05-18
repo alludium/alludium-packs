@@ -19,7 +19,7 @@ Configure Firecrawl-backed public Companies House search and company-page previe
 
 ## Instructions
 
-Confirm that Companies House public register preview is a selected origination source, then coordinate Firecrawl readiness, search terms, allowed public URLs, result limits, and reviewed read-preview setup. Use public search URLs such as `https://find-and-update.company-information.service.gov.uk/search/companies?q=<term>` and `https://find-and-update.company-information.service.gov.uk/advanced-search/get-results?companyNameIncludes=<term>` as the approved source surface. Create child tasks from the declared integrationSetup flow only when the user chooses that step. Keep imports, recurring monitoring, candidate scoring, CRM writes, outreach, and Deal Room promotion disabled unless a later human approval explicitly creates that task. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
+Confirm that Companies House public register preview is a selected origination source, then coordinate Firecrawl readiness, search terms, allowed public URLs, result limits, and reviewed read-preview setup. Use public search URLs such as `https://find-and-update.company-information.service.gov.uk/search/companies?q=<term>` and `https://find-and-update.company-information.service.gov.uk/advanced-search/get-results?companyNameIncludes=<term>` as the approved source surface. Create child tasks from the declared integrationSetup flow only when the user chooses that step. Keep imports, recurring monitoring, candidate scoring, CRM writes, outreach, and Deal Room promotion disabled unless a later human approval explicitly creates that task.
 
 ## Missing Input Policy
 
@@ -56,10 +56,6 @@ Setup orchestration only. Do not call the Companies House API, import companies,
 | `accepted_connection_scope` | Accepted Connection Scope | `string` | no |
 | `child_task_plan` | Child Task Plan | `json` | no |
 | `sync_policy` | Sync Policy | `json` | no |
-
-## Document References
-
-- `vc.document.companies_house_source_setup_checklist` (setup_checklist)
 
 ## Routing
 

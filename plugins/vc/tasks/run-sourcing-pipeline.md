@@ -62,12 +62,11 @@ Read, score, draft, and propose only unless a child task has explicit human appr
 | `run_receipt_artifact_id` | Run Receipt Artifact | `file` | yes |
 | `candidate_batch_artifact_id` | Candidate Batch Artifact | `file` | yes |
 | `source_state_artifact_id` | Source State Artifact | `file` | yes |
-| `child_task_plan_artifact_id` | Child Task Plan Artifact | `file` | yes |
+| `child_task_plan` | Child Task Plan | `richtext` | yes |
 
 ## Document References
 
 - `vc.document.candidate_batch_template` (output_template) -> `candidate_batch_artifact_id`
-- `vc.document.source_registry_template` (output_template) -> `source_state_artifact_id`
 - `vc.document.origination_pipeline_sop` (operating_guidance)
 
 ## Routing
