@@ -20,6 +20,17 @@ summary: Reusable investment memo structure for IC preparation.
 | Owner | Deal lead and memo preparer |
 | Recommendation | One-line recommendation with conditions |
 
+## Source Inputs
+
+| Source Input | Use For |
+| --- | --- |
+| Founder deck or data room materials | Company narrative, product, market, traction, financial claims, fundraise terms |
+| CRM notes or intro context | Source path, relationship context, prior partner views, open action history |
+| Initial call brief and transcript | Founder claims, customer pain, GTM motion, current unknowns |
+| Diligence reports and question bank | Workstream findings, open risks, disconfirming evidence, required follow-up |
+| Financial model or cap table | Burn, runway, ownership, valuation, reserves, return sensitivity |
+| Term sheet or counsel notes | Terms, closing conditions, legal/commercial issues |
+
 ## Executive Summary
 
 Write one tight page covering the business, why now, why this fund, proposed action, headline returns or ownership logic, and the top three risks. Include both the bull case and the bear case; do not bury the bear case in the risk section.

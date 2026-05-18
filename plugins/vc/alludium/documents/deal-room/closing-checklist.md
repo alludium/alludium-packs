@@ -9,6 +9,16 @@ summary: Checklist for close-readiness and portfolio handoff.
 
 # Closing Checklist
 
+## Source Inputs
+
+| Source Input | Use For |
+| --- | --- |
+| IC decision record | Approved decision, conditions, dissent, required follow-up |
+| Term sheet review | Business terms, deviations, counsel questions, negotiation issues |
+| Conditions precedent tracker | CP status, blockers, evidence, counsel review state |
+| Legal documents and counsel notes | Signing readiness, required approvals, unresolved legal issues |
+| Portfolio onboarding plan | Handoff owner, reporting cadence, post-close support requirements |
+
 ## Close Readiness
 
 | Check | Owner | Status | Evidence |

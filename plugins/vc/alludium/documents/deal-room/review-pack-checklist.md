@@ -19,6 +19,16 @@ summary: Checklist for team and partner review packs.
 | Prepared by | Owner and date |
 | Required reviewers | Names or roles |
 
+## Source Inputs
+
+| Source Input | Use For |
+| --- | --- |
+| Screening scorecard or sourcing summary | Current recommendation, confidence, fit rationale, pass/watch/continue logic |
+| Diligence reports and question bank | Workstream findings, open questions, evidence quality, required next work |
+| Founder materials and meeting notes | Company narrative, founder claims, commercial context, unanswered questions |
+| CRM or project state | Lifecycle stage, owner, prior decisions, reviewer history, next approval point |
+| Source index and linked artifacts | Citation coverage, missing evidence, reviewer pre-read links |
+
 ## Required Sections
 
 | Section | Required Content | Complete? |

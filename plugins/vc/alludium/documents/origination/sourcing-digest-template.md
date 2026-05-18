@@ -18,6 +18,16 @@ summary: Reusable digest format for sourced candidate updates.
 | Sources covered | Source keys and run IDs |
 | Prepared by | Owner and date |
 
+## Source Inputs
+
+| Source Input | Use For |
+| --- | --- |
+| Candidate batch artifact | New Meet/Watch/Pass candidates, action queue, duplicate state |
+| Source run receipts | Source coverage, failures, degraded runs, spend or quota notes |
+| Scoring and screening outputs | Recommendation, urgency, confidence, reason codes |
+| Relationship and portfolio-overlap checks | Warm paths, conflict risk, protected manual decisions |
+| Outreach queue or promotion package | Follow-up actions, owner assignments, candidates ready for human approval |
+
 ## Highlights
 
 | Category | Summary | Link / Artifact |

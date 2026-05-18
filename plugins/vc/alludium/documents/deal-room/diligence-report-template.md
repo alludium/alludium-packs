@@ -19,6 +19,17 @@ summary: Reusable report format for diligence workstreams.
 | Prepared by | Owner and date |
 | Decision supported | Screen, diligence continuation, IC, terms, closing |
 
+## Source Inputs
+
+| Source Input | Use For |
+| --- | --- |
+| Founder-provided materials | Claims to verify, product narrative, customer examples, financial history |
+| Prior screening and review packs | Existing thesis, known risks, unanswered questions, recommendation history |
+| Workstream source artifacts | Commercial, financial, technical, founder, legal, or market-specific evidence |
+| Meeting transcripts or call notes | Founder explanations, customer pain, operating cadence, unresolved contradictions |
+| Third-party sources | Market context, competitor evidence, public filings, hiring or product signals |
+| Models, cap tables, or usage exports | Quantitative checks, sensitivities, unit economics, burn and runway |
+
 ## Findings Summary
 
 | Finding | Evidence | Confidence | Investment Impact |
@@ -50,3 +61,7 @@ Use short subsections for the workstream-specific analysis. For financial dilige
 ## Workstream Variants
 
 Use the same structure for commercial, technical, financial, founder, legal, and market diligence. Add specialist sections only where the evidence requires it.
+
+## Standard
+
+Keep the report evidence-led and decision-oriented. Separate verified facts, founder claims, assumptions, and investor judgment. Do not imply diligence is complete when a workstream still has unanswered must-answer questions.

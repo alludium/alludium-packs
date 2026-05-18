@@ -18,6 +18,21 @@ Use this guidance whenever a task references a pack document as an output templa
 
 Treat referenced document templates as adaptable artifact scaffolds. Preserve the core sections needed for the decision, but omit, compress, or mark sections as not available when they are irrelevant or unsupported by source inputs. Never fill a section with generic prose solely because the template contains it.
 
+## Document Type Semantics
+
+| Document Type | Use It For | Quality Bar |
+| --- | --- | --- |
+| Template | A reusable output structure for a generated artifact | Produces a polished reader-facing artifact without exposing authoring guidance |
+| Methodology | Reusable analysis logic, scoring, or diligence structure | Explains how to reason, not merely what headings to use |
+| Checklist | Status tracking, readiness review, setup review, or control completion | Captures owner, status, evidence, and blocker state |
+| Style guide | Citation, source-confidence, claim-language, or formatting discipline | Governs how claims are written across artifacts |
+| Policy | Boundaries, approval rules, or disallowed behavior | States what may and may not happen |
+| SOP | Operating sequence, handoff convention, or repeatable process | Gives ordered, action-oriented process guidance |
+
+## Source Input Mapping
+
+When a template includes a source-input map, use it to route evidence into the right section. Do not treat the map as an exhaustive requirement. If a mapped source is missing, mark the affected section as unknown or not assessed rather than inventing content.
+
 ## Section Handling
 
 | Situation | Expected Handling |
@@ -34,7 +49,7 @@ Every material claim should have a source link, source artifact reference, or a 
 
 ## Output Hygiene
 
-Do not reproduce internal authoring notes, task instructions, or template-use guidance in the generated artifact unless the referenced template intentionally includes a reader-facing standard, source index, decision criteria, or usage section. Final artifacts should read like partner-ready VC work product, not like a prompt trace.
+Do not reproduce internal drafting notes, task instructions, or template-use guidance in the generated artifact unless the referenced template intentionally includes a reader-facing standard, source index, decision criteria, or usage section. Final artifacts should read like partner-ready VC work product, not like a workflow trace.
 
 ## Completion Check
 

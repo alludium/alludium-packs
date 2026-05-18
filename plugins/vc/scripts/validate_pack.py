@@ -155,6 +155,25 @@ DOCUMENT_SURFACE_STATUS = "pack-native-document-sources"
 DOCUMENT_CATALOG_PATH = "alludium/documents/catalog.v1.json"
 DOCUMENT_TYPES = {"checklist", "methodology", "policy", "sop", "style_guide", "template"}
 DOCUMENT_STATUSES = {"source"}
+DOCUMENT_AUTHORING_LEAK_PATTERNS = [
+    "delete this section",
+    "remove this section",
+    "do not include this",
+    "the agent should",
+    "authoring note",
+    "prompt trace",
+]
+DOCUMENT_REF_USAGE_DOCUMENT_TYPES = {
+    "checklist": {"checklist"},
+    "methodology": {"methodology"},
+    "operating_guidance": {"methodology", "policy", "sop", "template"},
+    "output_template": {"checklist", "template"},
+    "policy": {"policy"},
+    "setup_checklist": {"checklist"},
+    "style_guide": {"style_guide"},
+}
+TEMPLATE_USE_GUIDANCE_DOCUMENT_ID = "vc.document.template_use_guidance"
+TEMPLATE_USE_GUIDANCE_REQUIRED_USAGES = {"checklist", "output_template"}
 DOCUMENT_REF_USAGES = {
     "checklist",
     "methodology",
@@ -1247,6 +1266,7 @@ def validate_task_template_document_refs(
     definition_json: dict[str, Any],
     fields: dict[str, Any],
     document_ids: set[str],
+    document_types_by_id: dict[str, str],
 ) -> None:
     output_fields = field_map(template_id, "output", fields.get("output"))
     document_refs = definition_json.get("documentRefs")
@@ -1267,6 +1287,8 @@ def validate_task_template_document_refs(
 
     ref_keys: set[tuple[str, str, str | None]] = set()
     output_ref_pairs: set[tuple[str, str]] = set()
+    has_template_guidance = False
+    requires_template_guidance = False
     for ref in document_refs:
         if not isinstance(ref, dict):
             fail(f"Task template {template_id} definitionJson.documentRefs entries must be objects")
@@ -1281,6 +1303,18 @@ def validate_task_template_document_refs(
                 f"Task template {template_id} documentRef {document_id} usage must be one of "
                 f"{sorted(DOCUMENT_REF_USAGES)}"
             )
+        document_type = document_types_by_id.get(document_id)
+        allowed_document_types = DOCUMENT_REF_USAGE_DOCUMENT_TYPES.get(usage, set())
+        if document_type not in allowed_document_types:
+            fail(
+                f"Task template {template_id} documentRef {document_id} usage {usage} "
+                f"does not match documentType {document_type}; expected one of "
+                f"{sorted(allowed_document_types)}"
+            )
+        if usage in TEMPLATE_USE_GUIDANCE_REQUIRED_USAGES:
+            requires_template_guidance = True
+        if document_id == TEMPLATE_USE_GUIDANCE_DOCUMENT_ID and usage == "operating_guidance":
+            has_template_guidance = True
         output_field_key = ref.get("outputFieldKey")
         if output_field_key is not None and not isinstance(output_field_key, str):
             fail(f"Task template {template_id} documentRef {document_id} outputFieldKey must be a string")
@@ -1294,7 +1328,6 @@ def validate_task_template_document_refs(
         if ref_key in ref_keys:
             fail(f"Task template {template_id} has duplicate documentRef {ref_key}")
         ref_keys.add(ref_key)
-
         if output_field_key is None:
             continue
         output_field = output_fields.get(output_field_key)
@@ -1332,6 +1365,11 @@ def validate_task_template_document_refs(
                 f"Task template {template_id} output field {output_field_key} declares "
                 f"documentRefId {document_ref_id} without matching definitionJson.documentRefs entry"
             )
+    if requires_template_guidance and not has_template_guidance:
+        fail(
+            f"Task template {template_id} uses output/checklist document refs but does not reference "
+            f"{TEMPLATE_USE_GUIDANCE_DOCUMENT_ID} as operating_guidance"
+        )
 
 
 def validate_project_type_field(project_type_id: str, field: Any) -> tuple[str, str]:
@@ -2006,6 +2044,7 @@ def validate_document_markdown(
 ) -> None:
     frontmatter = parse_frontmatter(markdown_path)
     relative_path = markdown_path.relative_to(document_root)
+    markdown_text = markdown_path.read_text(encoding="utf-8")
 
     for field_name in ["id", "title", "documentType", "supportedProjectTypes"]:
         if field_name not in frontmatter:
@@ -2027,12 +2066,76 @@ def validate_document_markdown(
         )
     if not isinstance(frontmatter.get("summary"), str) or not frontmatter.get("summary"):
         fail(f"Document {relative_path} frontmatter must declare summary")
+    validate_markdown_tables(relative_path, markdown_text)
+    validate_document_output_hygiene(relative_path, markdown_text)
+    validate_document_quality_sections(relative_path, markdown_text, catalog_entry)
+
+
+def validate_markdown_tables(relative_path: Path, markdown_text: str) -> None:
+    table_block: list[tuple[int, str]] = []
+    for line_number, line in enumerate(markdown_text.splitlines(), start=1):
+        if line.startswith("|"):
+            table_block.append((line_number, line))
+            continue
+        if table_block:
+            validate_markdown_table_block(relative_path, table_block)
+            table_block = []
+    if table_block:
+        validate_markdown_table_block(relative_path, table_block)
+
+
+def validate_markdown_table_block(relative_path: Path, table_block: list[tuple[int, str]]) -> None:
+    pipe_counts = {line.count("|") for _, line in table_block}
+    if len(pipe_counts) > 1:
+        first_line = table_block[0][0]
+        fail(
+            f"Document {relative_path}:{first_line} has inconsistent Markdown table columns: "
+            f"{sorted(pipe_counts)}"
+        )
+
+
+def validate_document_output_hygiene(relative_path: Path, markdown_text: str) -> None:
+    lowered = markdown_text.lower()
+    for pattern in DOCUMENT_AUTHORING_LEAK_PATTERNS:
+        if pattern in lowered:
+            fail(f"Document {relative_path} contains authoring/prompt guidance leak: {pattern!r}")
+
+
+def validate_document_quality_sections(
+    relative_path: Path,
+    markdown_text: str,
+    catalog_entry: dict[str, Any],
+) -> None:
+    document_type = catalog_entry.get("documentType")
+    reader_facing_quality_sections = [
+        "## Approval Rule",
+        "## Batch Rule",
+        "## Boundary",
+        "## Cadence",
+        "## Decision",
+        "## Escalation Rule",
+        "## Standard",
+        "## Usage",
+    ]
+    if document_type in {"template", "checklist"} and not any(
+        heading in markdown_text for heading in reader_facing_quality_sections
+    ):
+        fail(f"Document {relative_path} must include a reader-facing quality or boundary section")
+    if catalog_entry.get("id") in {
+        "vc.document.investment_memo_template",
+        "vc.document.diligence_report_template",
+        "vc.document.review_pack_checklist",
+        "vc.document.initial_call_brief_template",
+        "vc.document.sourcing_digest_template",
+        "vc.document.closing_checklist",
+    } and "## Source Inputs" not in markdown_text:
+        fail(f"Document {relative_path} must include a Source Inputs section")
 
 
 def validate_documents(
     manifest: dict[str, Any],
     project_type_ids: set[str],
-) -> dict[str, set[str]]:
+) -> tuple[dict[str, set[str]], dict[str, str]]:
     surface = manifest["surfaces"].get("documents")
     if not isinstance(surface, dict):
         fail("Manifest must declare surfaces.documents")
@@ -2080,6 +2183,7 @@ def validate_documents(
     document_ids_by_project_type: dict[str, set[str]] = {
         project_type_id: set() for project_type_id in project_type_ids
     }
+    document_types_by_id: dict[str, str] = {}
     task_slugs = set(load_task_template_contracts())
     for entry in catalog_entries:
         if not isinstance(entry, dict):
@@ -2094,6 +2198,7 @@ def validate_documents(
             fail(f"Document catalog entry {document_id} must declare description")
         if entry.get("documentType") not in DOCUMENT_TYPES:
             fail(f"Document catalog entry {document_id} has invalid documentType")
+        document_types_by_id[document_id] = entry["documentType"]
         if entry.get("status") not in DOCUMENT_STATUSES:
             fail(f"Document catalog entry {document_id} has invalid status")
         if not isinstance(relative_document_path, str) or not relative_document_path:
@@ -2159,7 +2264,7 @@ def validate_documents(
             f"{sorted(str(path.relative_to(document_root)) for path in extra_markdown_paths)}"
         )
 
-    return document_ids_by_project_type
+    return document_ids_by_project_type, document_types_by_id
 
 
 def validate_project_type_document_references(
@@ -2203,6 +2308,7 @@ def validate_task_template_file(
     agent_template_ids: set[str],
     project_type_ids: set[str],
     document_ids: set[str],
+    document_types_by_id: dict[str, str],
 ) -> str:
     template = read_yaml(path)
     relative_path = path.relative_to(ROOT)
@@ -2297,7 +2403,14 @@ def validate_task_template_file(
     fields = template.get("fields") or {}
     if not isinstance(fields, dict):
         fail(f"Task template {template_id} fields must be an object when declared")
-    validate_task_template_document_refs(template_id, slug, definition_json, fields, document_ids)
+    validate_task_template_document_refs(
+        template_id,
+        slug,
+        definition_json,
+        fields,
+        document_ids,
+        document_types_by_id,
+    )
     validate_required_artifact_fields(template_id, slug, fields)
     validate_vc_deal_room_task_template_shape(
         template_id,
@@ -2388,6 +2501,7 @@ def validate_task_definition_templates(
     agent_template_ids: set[str],
     project_type_ids: set[str],
     document_ids: set[str],
+    document_types_by_id: dict[str, str],
 ) -> None:
     surface = manifest["surfaces"].get("taskDefinitionTemplates")
     if not isinstance(surface, dict):
@@ -2455,6 +2569,7 @@ def validate_task_definition_templates(
                     agent_template_ids,
                     project_type_ids,
                     document_ids,
+                    document_types_by_id,
                 )
             )
 
@@ -3177,7 +3292,7 @@ def main() -> None:
     validate_templates(manifest, skill_ids)
     agent_template_ids = set(manifest["surfaces"]["alludiumAgentTemplates"]["ids"])
     project_type_ids = validate_project_types(manifest)
-    document_ids_by_project_type = validate_documents(manifest, project_type_ids)
+    document_ids_by_project_type, document_types_by_id = validate_documents(manifest, project_type_ids)
     validate_project_type_document_references(manifest, document_ids_by_project_type)
     document_ids = set(manifest["surfaces"]["documents"]["ids"])
     validate_task_definition_templates(
@@ -3186,6 +3301,7 @@ def main() -> None:
         agent_template_ids,
         project_type_ids,
         document_ids,
+        document_types_by_id,
     )
     validate_project_task_mapping_contracts()
     validate_origination_pipeline_task_mapping_contracts()

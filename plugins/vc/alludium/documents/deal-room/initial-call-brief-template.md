@@ -19,6 +19,16 @@ summary: Reusable pre-call brief for first founder or management meetings.
 | Source path | Inbound, outbound, referral, sourcing pipeline |
 | Current view | Pass / watch / continue / unknown |
 
+## Source Inputs
+
+| Source Input | Use For |
+| --- | --- |
+| Founder deck, website, or product notes | Product summary, customer/buyer hypothesis, traction claims |
+| CRM, intro, or sourcing context | Source path, relationship owner, why this meeting is happening now |
+| Prior screen or sourcing verdict | Current view, key unknowns, pass/watch/continue rationale |
+| Public research and third-party sources | Market, competition, financing, hiring, and credibility checks |
+| Calendar invite or attendee list | Meeting objective, attendees, relationship paths, follow-up owner |
+
 ## Pre-Call Snapshot
 
 | Topic | Notes | Evidence |
