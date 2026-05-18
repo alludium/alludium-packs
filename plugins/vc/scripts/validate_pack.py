@@ -2213,20 +2213,109 @@ def require_mapping_list(value: Any, context: str) -> list[dict[str, Any]]:
     return value
 
 
+def option_values(options: Any) -> set[str]:
+    values: set[str] = set()
+    if not isinstance(options, list):
+        return values
+    for option in options:
+        if isinstance(option, str) and option:
+            values.add(option)
+        elif isinstance(option, dict):
+            value = option.get("value")
+            if isinstance(value, str) and value:
+                values.add(value)
+    return values
+
+
+def field_option_values(field: dict[str, Any]) -> set[str]:
+    values = option_values(field.get("options"))
+    config = field.get("config")
+    if isinstance(config, dict):
+        values.update(option_values(config.get("options")))
+    return values
+
+
+def project_setup_import_task_slugs(project_type: dict[str, Any]) -> set[str]:
+    project_setup = project_type.get("projectSetup")
+    if not isinstance(project_setup, dict):
+        return set()
+    post_approval_actions = project_setup.get("postApprovalActions")
+    if not isinstance(post_approval_actions, dict):
+        return set()
+    import_projects = post_approval_actions.get("importProjects")
+    if not isinstance(import_projects, dict) or import_projects.get("enabled") is not True:
+        return set()
+    project_import_task = import_projects.get("projectImportTask")
+    if not isinstance(project_import_task, dict):
+        return set()
+    task_slug = project_import_task.get("taskDefinitionSlug")
+    return {task_slug} if isinstance(task_slug, str) and task_slug else set()
+
+
+def validate_json_input_mapping_source(
+    project_type_id: str,
+    mapping_id: str,
+    task_field: str,
+    entry: dict[str, Any],
+    task_input_field: dict[str, Any],
+) -> None:
+    if (
+        task_input_field.get("fieldType") == "json"
+        and entry.get("source") == "constant"
+        and isinstance(entry.get("constantValue"), str)
+    ):
+        fail(
+            f"Project type {project_type_id} mapping {mapping_id}.inputMappings.{task_field} "
+            "must not satisfy a JSON input field with a string constant"
+        )
+
+
+def validate_project_enum_output_mapping(
+    project_type_id: str,
+    mapping_id: str,
+    task_field: str,
+    task_output_field: dict[str, Any],
+    project_field: dict[str, Any],
+) -> None:
+    if project_field.get("kind") != "enum":
+        return
+    output_type = task_output_field.get("fieldType")
+    if output_type != "select":
+        fail(
+            f"Project type {project_type_id} mapping {mapping_id}.outputMappings.{task_field} "
+            "maps into an enum project field, so the task output must use fieldType: select"
+        )
+    project_options = field_option_values(project_field)
+    output_options = field_option_values(task_output_field)
+    if not output_options:
+        fail(
+            f"Project type {project_type_id} mapping {mapping_id}.outputMappings.{task_field} "
+            "maps into an enum project field, so the task output must declare options"
+        )
+    unknown_options = sorted(output_options - project_options)
+    if unknown_options:
+        fail(
+            f"Project type {project_type_id} mapping {mapping_id}.outputMappings.{task_field} "
+            f"declares options not present on the target enum project field: {unknown_options}"
+        )
+
+
 def validate_project_task_mapping_contracts() -> None:
     project_type = read_json(ROOT / "alludium" / "project-types" / "vc_deal_room.json")
     initial_version = project_type.get("initialVersion") or {}
     project_type_id = project_type.get("key", "vc_deal_room")
-    project_field_keys = {
-        field["key"]
+    project_fields_by_key = {
+        field["key"]: field
         for field in initial_version.get("fieldsSchema", [])
         if isinstance(field, dict) and isinstance(field.get("key"), str)
     }
+    project_field_keys = set(project_fields_by_key)
     lifecycle_states = set(require_string_list(
         initial_version.get("lifecycleStates"),
         f"Project type {project_type_id} initialVersion.lifecycleStates",
     ))
     task_contracts = load_task_template_contracts()
+    import_project_task_slugs = project_setup_import_task_slugs(project_type)
     project_instance_supported_slugs = {
         slug
         for slug, contract in task_contracts.items()
@@ -2327,6 +2416,13 @@ def validate_project_task_mapping_contracts() -> None:
                             f"Project type {project_type_id} mapping {mapping_id}.inputMappings.{task_field} "
                             "must declare constantValue for source constant"
                         )
+                    validate_json_input_mapping_source(
+                        project_type_id,
+                        mapping_id,
+                        task_field,
+                        entry,
+                        task_contract["fields"]["input"][task_field],
+                    )
                     if "requiredForActivation" in entry and not isinstance(entry["requiredForActivation"], bool):
                         fail(
                             f"Project type {project_type_id} mapping {mapping_id}.inputMappings.{task_field} "
@@ -2346,6 +2442,14 @@ def validate_project_task_mapping_contracts() -> None:
                             f"Project type {project_type_id} mapping {mapping_id}.outputMappings.{task_field} "
                             f"targetPath references unknown project field {target_path}"
                         )
+                    if target == "project.field":
+                        validate_project_enum_output_mapping(
+                            project_type_id,
+                            mapping_id,
+                            task_field,
+                            task_contract["fields"]["output"][task_field],
+                            project_fields_by_key[target_path],
+                        )
                     if "requiredForCompletion" in entry and not isinstance(entry["requiredForCompletion"], bool):
                         fail(
                             f"Project type {project_type_id} mapping {mapping_id}.outputMappings.{task_field} "
@@ -2361,7 +2465,7 @@ def validate_project_task_mapping_contracts() -> None:
                 if field.get("required") is True
             }
             missing_required_inputs = sorted(required_input_fields - mapped_input_fields)
-            if missing_required_inputs:
+            if missing_required_inputs and slug not in import_project_task_slugs:
                 fail(
                     f"Project type {project_type_id} mapping {mapping_id} is missing "
                     f"required task input mappings: {missing_required_inputs}"

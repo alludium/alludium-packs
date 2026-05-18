@@ -89,10 +89,15 @@ fields:
       config: {}
     - key: import_status
       name: Import Status
-      fieldType: string
+      fieldType: select
       required: false
       position: 1
-      config: {}
+      config:
+        options:
+          - completed
+          - partial
+          - blocked
+          - failed
     - key: import_summary
       name: Import Summary
       fieldType: richtext

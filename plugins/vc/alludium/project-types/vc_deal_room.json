@@ -1868,14 +1868,6 @@
         "taskDefinitionSlug": "affinity-deal-room-import",
         "projectScope": "project_instance",
         "lifecycleStage": "intake",
-        "inputMappings": [
-          {
-            "taskField": "import_payload",
-            "source": "constant",
-            "constantValue": "Platform importProjects must pass the reviewed Affinity setup evidence, approved seed deal, created Deal Room project, and approval metadata for this project-scoped import.",
-            "requiredForActivation": true
-          }
-        ],
         "outputMappings": [
           {
             "taskField": "affinity_import_receipt_artifact_id",

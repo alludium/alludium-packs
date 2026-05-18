@@ -54,7 +54,7 @@ Project-scoped import only. Reads are limited to approved Affinity records. Exte
 | Key | Name | Type | Required |
 | --- | --- | --- | --- |
 | `affinity_import_receipt_artifact_id` | Affinity Import Receipt | `file` | yes |
-| `import_status` | Import Status | `string` | no |
+| `import_status` | Import Status | `select` | no |
 | `import_summary` | Import Summary | `richtext` | no |
 | `imported_field_map` | Imported Field Map | `richtext` | no |
 | `source_index` | Source Index | `richtext` | no |
