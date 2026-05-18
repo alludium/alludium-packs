@@ -53,6 +53,10 @@ Read-only audit. Do not edit query lists, actor inputs, budgets, or schedules.
 | `paid_source_spend_status` | Paid Source Spend Status | `string` | no |
 | `audit_report` | Audit Report | `richtext` | no |
 
+## Document References
+
+- `vc.document.paid_source_spend_audit_checklist` (output_template) -> `linkedin_spend_audit_artifact_id`
+
 ## Routing
 
 - Source template: `alludium/task-definition-templates/vc-workflows/audit-linkedin-query-spend.yaml`

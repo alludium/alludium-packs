@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_sourcing_pipeline
-version: 0.1.2
+version: 0.1.3
 title: Run VC Sourcing Pipeline
 category: Venture Capital
 visibility: workspace
@@ -20,6 +20,15 @@ definition:
     vertical: vc
     stage: source
     taskFamily: origination_pipeline_run
+    documentRefs:
+      - documentId: vc.document.candidate_batch_template
+        usage: output_template
+        outputFieldKey: candidate_batch_artifact_id
+      - documentId: vc.document.source_registry_template
+        usage: output_template
+        outputFieldKey: source_state_artifact_id
+      - documentId: vc.document.origination_pipeline_sop
+        usage: operating_guidance
     requiredSkills:
       - vc-origination-pipeline-orchestration
       - vc-source-registry-and-state-management
@@ -132,13 +141,15 @@ fields:
       fieldType: file
       required: true
       position: 6
-      config: {}
+      config:
+        documentRefId: vc.document.candidate_batch_template
     - key: source_state_artifact_id
       name: Source State Artifact
       fieldType: file
       required: true
       position: 7
-      config: {}
+      config:
+        documentRefId: vc.document.source_registry_template
     - key: child_task_plan_artifact_id
       name: Child Task Plan Artifact
       fieldType: file

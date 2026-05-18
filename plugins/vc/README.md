@@ -77,7 +77,7 @@ The task-definition-template surface requires platform support for `external-tas
 
 The project-type surface requires platform support for `external-project-type-ingest`. Platform versions without that capability should continue using platform-local project types until the paired platform cutover lands.
 
-The document surface is pack-native source material under `alludium/documents/`. It records reusable methodology, SOPs, checklists, templates, and style guidance and is referenced by project type metadata, but this repository does not implement platform document rendering or runtime behavior.
+The document surface is pack-native source material under `alludium/documents/`. It records reusable methodology, SOPs, checklists, templates, and style guidance and is referenced by project type metadata. Task templates can also declare durable `definitionJson.documentRefs` entries and output-field `config.documentRefId` values so artifact-producing tasks can point at a stable document source independent of the runtime artifact ID. This repository still does not implement platform document rendering or runtime behavior.
 
 The top-level `agents/` directory contains generated Claude/Codex-style agent Markdown compatibility artifacts. The current `alludium/agent-templates/` files remain the source of truth; generated agent Markdown preserves prompt placeholders and carries skills plus source metadata for external agentic tooling.
 

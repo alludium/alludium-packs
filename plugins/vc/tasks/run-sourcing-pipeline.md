@@ -64,6 +64,12 @@ Read, score, draft, and propose only unless a child task has explicit human appr
 | `source_state_artifact_id` | Source State Artifact | `file` | yes |
 | `child_task_plan_artifact_id` | Child Task Plan Artifact | `file` | yes |
 
+## Document References
+
+- `vc.document.candidate_batch_template` (output_template) -> `candidate_batch_artifact_id`
+- `vc.document.source_registry_template` (output_template) -> `source_state_artifact_id`
+- `vc.document.origination_pipeline_sop` (operating_guidance)
+
 ## Routing
 
 - Source template: `alludium/task-definition-templates/vc-workflows/run-sourcing-pipeline.yaml`

@@ -51,6 +51,10 @@ Draft digest only unless explicit channel-post approval is granted.
 | `digest_status` | Digest Status | `string` | no |
 | `sourcing_digest` | Sourcing Digest | `richtext` | no |
 
+## Document References
+
+- `vc.document.sourcing_digest_template` (output_template) -> `sourcing_digest_artifact_id`
+
 ## Routing
 
 - Source template: `alludium/task-definition-templates/vc-workflows/generate-sourcing-digest.yaml`

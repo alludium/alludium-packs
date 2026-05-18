@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.request_founder_materials
-version: 1.0.4
+version: 1.0.5
 title: Request Founder Materials
 category: Venture Capital
 visibility: workspace
@@ -19,6 +19,12 @@ definition:
     vertical: vc
     stage: assessment
     taskFamily: deal_room
+    documentRefs:
+      - documentId: vc.document.founder_materials_request_template
+        usage: output_template
+        outputFieldKey: founder_materials_request_artifact_id
+      - documentId: vc.document.file_naming_source_index_sop
+        usage: operating_guidance
     requiredSkills:
       - citation-enforcement
     plannedRequiredSkills:
@@ -85,7 +91,8 @@ fields:
       fieldType: file
       required: true
       position: 0
-      config: {}
+      config:
+        documentRefId: vc.document.founder_materials_request_template
     - key: materials_request_checklist
       name: Materials Request Checklist
       fieldType: json

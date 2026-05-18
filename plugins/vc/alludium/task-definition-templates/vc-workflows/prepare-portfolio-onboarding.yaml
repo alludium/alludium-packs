@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_portfolio_onboarding
-version: 1.0.4
+version: 1.0.5
 title: Prepare Portfolio Onboarding
 category: Venture Capital
 visibility: workspace
@@ -19,6 +19,10 @@ definition:
     vertical: vc
     stage: closing
     taskFamily: onboarding
+    documentRefs:
+      - documentId: vc.document.portfolio_onboarding_plan_template
+        usage: output_template
+        outputFieldKey: portfolio_onboarding_plan_artifact_id
     requiredSkills:
       - citation-enforcement
     plannedRequiredSkills:
@@ -82,7 +86,8 @@ fields:
       fieldType: file
       required: true
       position: 0
-      config: {}
+      config:
+        documentRefId: vc.document.portfolio_onboarding_plan_template
     - key: board_setup_notes
       name: Board Setup Notes
       fieldType: richtext

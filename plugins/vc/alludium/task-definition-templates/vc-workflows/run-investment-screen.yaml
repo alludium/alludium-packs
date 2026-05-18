@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_investment_screen
-version: 1.0.6
+version: 1.0.7
 title: Run Initial Investment Screen
 category: Venture Capital
 visibility: workspace
@@ -19,6 +19,12 @@ definition:
     vertical: vc
     stage: assessment
     taskFamily: screening
+    documentRefs:
+      - documentId: vc.document.investment_screening_framework
+        usage: methodology
+        outputFieldKey: investment_screen_scorecard_artifact_id
+      - documentId: vc.document.evidence_citation_style_guide
+        usage: style_guide
     requiredSkills:
       - red-flags-scanner
       - citation-enforcement
@@ -90,7 +96,8 @@ fields:
       fieldType: file
       required: true
       position: 0
-      config: {}
+      config:
+        documentRefId: vc.document.investment_screening_framework
     - key: factor_scores
       name: Factor Scores
       fieldType: json

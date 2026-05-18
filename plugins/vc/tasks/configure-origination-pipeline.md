@@ -57,6 +57,11 @@ Configuration only. No external reads beyond connection-readiness checks, no sch
 | `review_policy` | Review Policy | `richtext` | no |
 | `child_task_plan_artifact_id` | Child Task Plan Artifact | `file` | yes |
 
+## Document References
+
+- `vc.document.origination_pipeline_sop` (operating_guidance)
+- `vc.document.source_registry_template` (output_template) -> `child_task_plan_artifact_id`
+
 ## Routing
 
 - Source template: `alludium/task-definition-templates/vc-workflows/configure-origination-pipeline.yaml`

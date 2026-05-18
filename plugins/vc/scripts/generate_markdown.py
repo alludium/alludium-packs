@@ -124,6 +124,27 @@ def action_list(actions: list[dict[str, Any]]) -> str:
     return "".join(lines)
 
 
+def document_ref_list(refs: Any) -> str:
+    if not isinstance(refs, list) or not refs:
+        return "- None declared\n"
+    lines: list[str] = []
+    for ref in refs:
+        if not isinstance(ref, dict):
+            continue
+        document_id = ref.get("documentId")
+        usage = ref.get("usage")
+        if not isinstance(document_id, str) or not document_id:
+            continue
+        suffix = ""
+        if isinstance(usage, str) and usage:
+            suffix += f" ({usage})"
+        output_field_key = ref.get("outputFieldKey")
+        if isinstance(output_field_key, str) and output_field_key:
+            suffix += f" -> `{output_field_key}`"
+        lines.append(f"- `{document_id}`{suffix}\n")
+    return "".join(lines) if lines else "- None declared\n"
+
+
 def skill_ids_from_agent(template: dict[str, Any]) -> list[str]:
     skills = template.get("skills")
     if not isinstance(skills, list):
@@ -342,6 +363,10 @@ def render_task(path: Path) -> tuple[Path, str]:
         body += field_table(context_dicts)
     body += "\n## Outputs\n\n"
     body += field_table(output_dicts)
+    document_refs = definition_json.get("documentRefs")
+    if isinstance(document_refs, list) and document_refs:
+        body += "\n## Document References\n\n"
+        body += document_ref_list(document_refs)
     body += "\n## Routing\n\n"
     body += f"- Source template: `alludium/task-definition-templates/{path.relative_to(TASK_TEMPLATE_ROOT)}`\n"
     body += f"- Alludium task ID: `{template_id}`\n"

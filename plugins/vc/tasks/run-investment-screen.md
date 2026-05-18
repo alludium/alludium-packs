@@ -67,6 +67,11 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `human_decision_points` | Human Decision Points | `string` | no |
 | `next_actions` | Next Actions | `json` | no |
 
+## Document References
+
+- `vc.document.investment_screening_framework` (methodology) -> `investment_screen_scorecard_artifact_id`
+- `vc.document.evidence_citation_style_guide` (style_guide)
+
 ## Routing
 
 - Source template: `alludium/task-definition-templates/vc-workflows/run-investment-screen.yaml`

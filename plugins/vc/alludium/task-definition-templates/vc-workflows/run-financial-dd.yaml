@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_financial_dd
-version: 1.0.5
+version: 1.0.6
 title: Run Financial DD
 category: Venture Capital
 visibility: workspace
@@ -19,6 +19,12 @@ definition:
     vertical: vc
     stage: diligence
     taskFamily: diligence
+    documentRefs:
+      - documentId: vc.document.diligence_report_template
+        usage: output_template
+        outputFieldKey: financial_dd_artifact_id
+      - documentId: vc.document.evidence_citation_style_guide
+        usage: style_guide
     requiredSkills:
       - citation-enforcement
     plannedRequiredSkills:
@@ -100,7 +106,8 @@ fields:
       fieldType: file
       required: true
       position: 0
-      config: {}
+      config:
+        documentRefId: vc.document.diligence_report_template
     - key: unit_economics_artifact_id
       name: Unit Economics Analysis
       fieldType: file

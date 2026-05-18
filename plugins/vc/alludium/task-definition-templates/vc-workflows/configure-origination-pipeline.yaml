@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.configure_origination_pipeline
-version: 0.1.1
+version: 0.1.2
 title: Configure VC Origination Pipeline
 category: Venture Capital
 visibility: workspace
@@ -20,6 +20,12 @@ definition:
     vertical: vc
     stage: setup
     taskFamily: origination_pipeline_setup
+    documentRefs:
+      - documentId: vc.document.origination_pipeline_sop
+        usage: operating_guidance
+      - documentId: vc.document.source_registry_template
+        usage: output_template
+        outputFieldKey: child_task_plan_artifact_id
     requiredSkills:
       - vc-origination-pipeline-orchestration
       - citation-enforcement
@@ -87,7 +93,8 @@ fields:
       fieldType: file
       required: true
       position: 3
-      config: {}
+      config:
+        documentRefId: vc.document.source_registry_template
 runtime:
   defaultExecutionContext:
     sourceMetadata:

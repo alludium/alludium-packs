@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_outreach_draft_queue
-version: 0.1.1
+version: 0.1.2
 title: Prepare Outreach Draft Queue
 category: Venture Capital
 visibility: workspace
@@ -19,6 +19,10 @@ definition:
     vertical: vc
     stage: engage
     taskFamily: origination_outreach_drafts
+    documentRefs:
+      - documentId: vc.document.outreach_queue_template
+        usage: output_template
+        outputFieldKey: outreach_queue_artifact_id
     requiredSkills:
       - vc-outreach-draft-queue
       - citation-enforcement
@@ -72,7 +76,8 @@ fields:
       fieldType: file
       required: true
       position: 0
-      config: {}
+      config:
+        documentRefId: vc.document.outreach_queue_template
     - key: outreach_draft_count
       name: Outreach Draft Count
       fieldType: number

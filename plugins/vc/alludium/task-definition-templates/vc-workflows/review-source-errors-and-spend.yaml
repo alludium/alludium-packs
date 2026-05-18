@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.review_source_errors_and_spend
-version: 0.1.1
+version: 0.1.2
 title: Review Source Errors and Spend
 category: Venture Capital
 visibility: workspace
@@ -20,6 +20,12 @@ definition:
     vertical: vc
     stage: operate
     taskFamily: origination_source_health
+    documentRefs:
+      - documentId: vc.document.source_health_review_checklist
+        usage: output_template
+        outputFieldKey: source_health_artifact_id
+      - documentId: vc.document.paid_source_spend_audit_checklist
+        usage: checklist
     requiredSkills:
       - vc-source-error-and-spend-audit
       - vc-source-registry-and-state-management
@@ -74,7 +80,8 @@ fields:
       fieldType: file
       required: true
       position: 0
-      config: {}
+      config:
+        documentRefId: vc.document.source_health_review_checklist
     - key: source_health_status
       name: Source Health Status
       fieldType: string

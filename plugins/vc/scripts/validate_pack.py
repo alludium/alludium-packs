@@ -155,6 +155,15 @@ DOCUMENT_SURFACE_STATUS = "pack-native-document-sources"
 DOCUMENT_CATALOG_PATH = "alludium/documents/catalog.v1.json"
 DOCUMENT_TYPES = {"checklist", "methodology", "policy", "sop", "style_guide", "template"}
 DOCUMENT_STATUSES = {"source"}
+DOCUMENT_REF_USAGES = {
+    "checklist",
+    "methodology",
+    "operating_guidance",
+    "output_template",
+    "policy",
+    "setup_checklist",
+    "style_guide",
+}
 EXPECTED_VC_TASK_TEMPLATE_VERTICAL_KEYS = ["venture_capital", "vc"]
 PROJECT_TYPE_FIELD_KINDS = {"date", "enum", "member", "number", "text"}
 PROJECT_TASK_MAPPING_SOURCES = {"constant", "project.field", "project.id", "project.state"}
@@ -1226,6 +1235,83 @@ def validate_vc_deal_room_task_template_shape(
             )
 
 
+def validate_task_template_document_refs(
+    template_id: str,
+    slug: str,
+    definition_json: dict[str, Any],
+    fields: dict[str, Any],
+    document_ids: set[str],
+) -> None:
+    output_fields = field_map(template_id, "output", fields.get("output"))
+    document_refs = definition_json.get("documentRefs")
+    if document_refs is None:
+        document_refs = []
+    if not isinstance(document_refs, list):
+        fail(f"Task template {template_id} definitionJson.documentRefs must be a list")
+
+    ref_keys: set[tuple[str, str, str | None]] = set()
+    output_ref_pairs: set[tuple[str, str]] = set()
+    for ref in document_refs:
+        if not isinstance(ref, dict):
+            fail(f"Task template {template_id} definitionJson.documentRefs entries must be objects")
+        document_id = ref.get("documentId")
+        if not isinstance(document_id, str) or not document_id:
+            fail(f"Task template {template_id} documentRefs entries must declare documentId")
+        if document_id not in document_ids:
+            fail(f"Task template {template_id} references unknown document {document_id}")
+        usage = ref.get("usage")
+        if usage not in DOCUMENT_REF_USAGES:
+            fail(
+                f"Task template {template_id} documentRef {document_id} usage must be one of "
+                f"{sorted(DOCUMENT_REF_USAGES)}"
+            )
+        output_field_key = ref.get("outputFieldKey")
+        if output_field_key is not None and not isinstance(output_field_key, str):
+            fail(f"Task template {template_id} documentRef {document_id} outputFieldKey must be a string")
+        ref_key = (document_id, usage, output_field_key)
+        if ref_key in ref_keys:
+            fail(f"Task template {template_id} has duplicate documentRef {ref_key}")
+        ref_keys.add(ref_key)
+
+        if output_field_key is None:
+            continue
+        output_field = output_fields.get(output_field_key)
+        if output_field is None:
+            fail(
+                f"Task template {template_id} documentRef {document_id} references missing "
+                f"output field {output_field_key}"
+            )
+        if output_field.get("fieldType") != "file":
+            fail(
+                f"Task template {template_id} documentRef {document_id} output field "
+                f"{output_field_key} must be a file field"
+            )
+        config = output_field.get("config")
+        if not isinstance(config, dict):
+            fail(f"Task template {template_id} output field {output_field_key} config must be an object")
+        if config.get("documentRefId") != document_id:
+            fail(
+                f"Task template {template_id} output field {output_field_key} must set "
+                f"config.documentRefId to {document_id}"
+            )
+        output_ref_pairs.add((output_field_key, document_id))
+
+    for output_field_key, output_field in output_fields.items():
+        config = output_field.get("config") or {}
+        if not isinstance(config, dict):
+            continue
+        document_ref_id = config.get("documentRefId")
+        if document_ref_id is None:
+            continue
+        if not isinstance(document_ref_id, str) or not document_ref_id:
+            fail(f"Task template {template_id} output field {output_field_key} has invalid documentRefId")
+        if (output_field_key, document_ref_id) not in output_ref_pairs:
+            fail(
+                f"Task template {template_id} output field {output_field_key} declares "
+                f"documentRefId {document_ref_id} without matching definitionJson.documentRefs entry"
+            )
+
+
 def validate_project_type_field(project_type_id: str, field: Any) -> tuple[str, str]:
     if not isinstance(field, dict):
         fail(f"Project type {project_type_id} fieldsSchema entries must be objects")
@@ -2094,6 +2180,7 @@ def validate_task_template_file(
     skill_ids: set[str],
     agent_template_ids: set[str],
     project_type_ids: set[str],
+    document_ids: set[str],
 ) -> str:
     template = read_yaml(path)
     relative_path = path.relative_to(ROOT)
@@ -2188,6 +2275,7 @@ def validate_task_template_file(
     fields = template.get("fields") or {}
     if not isinstance(fields, dict):
         fail(f"Task template {template_id} fields must be an object when declared")
+    validate_task_template_document_refs(template_id, slug, definition_json, fields, document_ids)
     validate_required_artifact_fields(template_id, slug, fields)
     validate_vc_deal_room_task_template_shape(
         template_id,
@@ -2277,6 +2365,7 @@ def validate_task_definition_templates(
     skill_ids: set[str],
     agent_template_ids: set[str],
     project_type_ids: set[str],
+    document_ids: set[str],
 ) -> None:
     surface = manifest["surfaces"].get("taskDefinitionTemplates")
     if not isinstance(surface, dict):
@@ -2343,6 +2432,7 @@ def validate_task_definition_templates(
                     skill_ids,
                     agent_template_ids,
                     project_type_ids,
+                    document_ids,
                 )
             )
 
@@ -3067,7 +3157,14 @@ def main() -> None:
     project_type_ids = validate_project_types(manifest)
     document_ids_by_project_type = validate_documents(manifest, project_type_ids)
     validate_project_type_document_references(manifest, document_ids_by_project_type)
-    validate_task_definition_templates(manifest, skill_ids, agent_template_ids, project_type_ids)
+    document_ids = set(manifest["surfaces"]["documents"]["ids"])
+    validate_task_definition_templates(
+        manifest,
+        skill_ids,
+        agent_template_ids,
+        project_type_ids,
+        document_ids,
+    )
     validate_project_task_mapping_contracts()
     validate_origination_pipeline_task_mapping_contracts()
     recommendations_path = manifest["surfaces"]["alludiumMcpRecommendations"]["path"]

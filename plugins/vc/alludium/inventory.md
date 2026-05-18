@@ -161,7 +161,7 @@ Review notes:
 
 ## Included Project Type Documents
 
-The document surface lives at `alludium/documents/catalog.v1.json` with Markdown source files under `alludium/documents`. It is a pack-native source surface for methodology, SOPs, checklists, templates, and style guidance. Project types reference documents through `initialVersion.documentLibrary.documentIds`; platform runtime support is intentionally not implemented in this pack.
+The document surface lives at `alludium/documents/catalog.v1.json` with Markdown source files under `alludium/documents`. It is a pack-native source surface for methodology, SOPs, checklists, templates, and style guidance. Project types reference documents through `initialVersion.documentLibrary.documentIds`; task templates reference them through durable `definitionJson.documentRefs` entries and output-field `config.documentRefId` values when an artifact should be produced from a pack document. Platform runtime support is intentionally not implemented in this pack.
 
 Included shared documents:
 

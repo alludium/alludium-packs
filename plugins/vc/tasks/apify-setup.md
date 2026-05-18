@@ -57,6 +57,10 @@ Setup orchestration only. Do not run scheduled sourcing, import candidates, writ
 | `child_task_plan` | Child Task Plan | `json` | no |
 | `sync_policy` | Sync Policy | `json` | no |
 
+## Document References
+
+- `vc.document.apify_source_setup_checklist` (setup_checklist)
+
 ## Routing
 
 - Source template: `alludium/task-definition-templates/vc-integrations/apify-setup.yaml`

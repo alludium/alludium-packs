@@ -67,6 +67,11 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `human_decision_points` | Human Decision Points | `string` | no |
 | `next_actions` | Next Actions | `json` | no |
 
+## Document References
+
+- `vc.document.founder_materials_request_template` (output_template) -> `founder_materials_request_artifact_id`
+- `vc.document.file_naming_source_index_sop` (operating_guidance)
+
 ## Routing
 
 - Source template: `alludium/task-definition-templates/vc-workflows/request-founder-materials.yaml`

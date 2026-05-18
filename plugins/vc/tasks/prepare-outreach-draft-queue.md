@@ -52,6 +52,10 @@ Draft only. Do not send messages, insert browser-extension notes, mark outreach 
 | `outreach_draft_count` | Outreach Draft Count | `number` | no |
 | `outreach_report` | Outreach Report | `richtext` | no |
 
+## Document References
+
+- `vc.document.outreach_queue_template` (output_template) -> `outreach_queue_artifact_id`
+
 ## Routing
 
 - Source template: `alludium/task-definition-templates/vc-workflows/prepare-outreach-draft-queue.yaml`

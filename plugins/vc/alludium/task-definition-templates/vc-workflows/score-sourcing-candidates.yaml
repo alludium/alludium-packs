@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.score_sourcing_candidates
-version: 0.1.0
+version: 0.1.1
 title: Score Sourcing Candidates
 category: Venture Capital
 visibility: workspace
@@ -19,6 +19,10 @@ definition:
     vertical: vc
     stage: score
     taskFamily: origination_scoring
+    documentRefs:
+      - documentId: vc.document.sourcing_scoring_rubric
+        usage: methodology
+        outputFieldKey: scoring_artifact_id
     requiredSkills:
       - vc-sourcing-verdict-and-screening
       - vc-sourcing-dedupe-and-novelty-check
@@ -61,7 +65,8 @@ fields:
       fieldType: file
       required: true
       position: 0
-      config: {}
+      config:
+        documentRefId: vc.document.sourcing_scoring_rubric
     - key: meet_candidate_count
       name: Meet Candidate Count
       fieldType: number

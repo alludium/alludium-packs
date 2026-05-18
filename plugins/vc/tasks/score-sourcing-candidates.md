@@ -56,6 +56,10 @@ Scoring only. Do not sync external records, change manual decisions, send outrea
 | `promotion_ready_count` | Promotion Ready Count | `number` | no |
 | `scoring_report` | Scoring Report | `richtext` | no |
 
+## Document References
+
+- `vc.document.sourcing_scoring_rubric` (methodology) -> `scoring_artifact_id`
+
 ## Routing
 
 - Source template: `alludium/task-definition-templates/vc-workflows/score-sourcing-candidates.yaml`

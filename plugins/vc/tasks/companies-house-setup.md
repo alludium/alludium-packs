@@ -57,6 +57,10 @@ Setup orchestration only. Do not call the Companies House API, import companies,
 | `child_task_plan` | Child Task Plan | `json` | no |
 | `sync_policy` | Sync Policy | `json` | no |
 
+## Document References
+
+- `vc.document.companies_house_source_setup_checklist` (setup_checklist)
+
 ## Routing
 
 - Source template: `alludium/task-definition-templates/vc-integrations/companies-house-setup.yaml`

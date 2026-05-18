@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_ic_agenda
-version: 1.0.4
+version: 1.0.5
 title: Prepare IC Agenda
 category: Venture Capital
 visibility: workspace
@@ -19,6 +19,10 @@ definition:
     vertical: vc
     stage: review
     taskFamily: ic
+    documentRefs:
+      - documentId: vc.document.ic_agenda_template
+        usage: output_template
+        outputFieldKey: ic_agenda_artifact_id
     requiredSkills:
       - meeting-prep-and-summary
       - citation-enforcement
@@ -72,7 +76,8 @@ fields:
       fieldType: file
       required: true
       position: 0
-      config: {}
+      config:
+        documentRefId: vc.document.ic_agenda_template
     - key: agenda
       name: Agenda
       fieldType: richtext

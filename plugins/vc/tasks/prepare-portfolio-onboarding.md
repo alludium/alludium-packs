@@ -67,6 +67,10 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `human_decision_points` | Human Decision Points | `string` | no |
 | `next_actions` | Next Actions | `json` | no |
 
+## Document References
+
+- `vc.document.portfolio_onboarding_plan_template` (output_template) -> `portfolio_onboarding_plan_artifact_id`
+
 ## Routing
 
 - Source template: `alludium/task-definition-templates/vc-workflows/prepare-portfolio-onboarding.yaml`

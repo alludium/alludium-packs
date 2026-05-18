@@ -68,6 +68,11 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `risks` | Risks | `json` | no |
 | `human_decision_points` | Human Decision Points | `string` | no |
 
+## Document References
+
+- `vc.document.investment_screening_framework` (methodology) -> `first_look_scorecard_artifact_id`
+- `vc.document.evidence_citation_style_guide` (style_guide)
+
 ## Routing
 
 - Source template: `alludium/task-definition-templates/vc-workflows/screen-inbound-opportunity.yaml`

@@ -51,6 +51,10 @@ Promotion package by default. Deal Room creation/update, CRM changes, document c
 | `promoted_candidate_key` | Promoted Candidate Key | `string` | no |
 | `promotion_summary` | Promotion Summary | `richtext` | no |
 
+## Document References
+
+- `vc.document.promotion_package_template` (output_template) -> `promotion_package_artifact_id`
+
 ## Routing
 
 - Source template: `alludium/task-definition-templates/vc-workflows/promote-candidate-to-deal-room.yaml`

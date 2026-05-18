@@ -71,6 +71,11 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `human_decision_points` | Human Decision Points | `string` | no |
 | `next_actions` | Next Actions | `json` | no |
 
+## Document References
+
+- `vc.document.review_pack_checklist` (output_template) -> `partner_review_pack_artifact_id`
+- `vc.document.evidence_citation_style_guide` (style_guide)
+
 ## Routing
 
 - Source template: `alludium/task-definition-templates/vc-workflows/prepare-partner-review-pack.yaml`

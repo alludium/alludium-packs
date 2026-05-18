@@ -51,6 +51,11 @@ Screening recommendation only unless explicit write approval is granted. Never d
 | `promotion_ready_count` | Promotion Ready Count | `number` | no |
 | `screening_report` | Screening Report | `richtext` | no |
 
+## Document References
+
+- `vc.document.sourcing_scoring_rubric` (methodology) -> `screening_artifact_id`
+- `vc.document.dedupe_novelty_policy` (policy)
+
 ## Routing
 
 - Source template: `alludium/task-definition-templates/vc-workflows/screen-active-sourcing-candidates.yaml`

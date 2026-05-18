@@ -54,6 +54,11 @@ Review only. Do not retry paid runs, change budgets, disable schedules, or updat
 | `source_error_count` | Source Error Count | `number` | no |
 | `source_health_report` | Source Health Report | `richtext` | no |
 
+## Document References
+
+- `vc.document.source_health_review_checklist` (output_template) -> `source_health_artifact_id`
+- `vc.document.paid_source_spend_audit_checklist` (checklist)
+
 ## Routing
 
 - Source template: `alludium/task-definition-templates/vc-workflows/review-source-errors-and-spend.yaml`

@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.screen_active_sourcing_candidates
-version: 0.1.1
+version: 0.1.2
 title: Screen Active Sourcing Candidates
 category: Venture Capital
 visibility: workspace
@@ -19,6 +19,12 @@ definition:
     vertical: vc
     stage: review
     taskFamily: origination_screening
+    documentRefs:
+      - documentId: vc.document.sourcing_scoring_rubric
+        usage: methodology
+        outputFieldKey: screening_artifact_id
+      - documentId: vc.document.dedupe_novelty_policy
+        usage: policy
     requiredSkills:
       - vc-sourcing-verdict-and-screening
       - citation-enforcement
@@ -71,7 +77,8 @@ fields:
       fieldType: file
       required: true
       position: 0
-      config: {}
+      config:
+        documentRefId: vc.document.sourcing_scoring_rubric
     - key: promotion_ready_count
       name: Promotion Ready Count
       fieldType: number

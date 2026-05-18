@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.generate_diligence_questions
-version: 1.0.6
+version: 1.0.7
 title: Generate Diligence Questions
 category: Venture Capital
 visibility: workspace
@@ -19,6 +19,12 @@ definition:
     vertical: vc
     stage: diligence
     taskFamily: diligence
+    documentRefs:
+      - documentId: vc.document.investment_diligence_question_framework
+        usage: methodology
+        outputFieldKey: diligence_question_bank_artifact_id
+      - documentId: vc.document.evidence_citation_style_guide
+        usage: style_guide
     requiredSkills:
       - citation-enforcement
     plannedRequiredSkills:
@@ -87,7 +93,8 @@ fields:
       fieldType: file
       required: true
       position: 0
-      config: {}
+      config:
+        documentRefId: vc.document.investment_diligence_question_framework
     - key: question_set
       name: Question Set
       fieldType: string

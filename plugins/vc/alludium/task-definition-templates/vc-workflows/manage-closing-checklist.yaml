@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.manage_closing_checklist
-version: 1.0.4
+version: 1.0.5
 title: Manage Closing Checklist
 category: Venture Capital
 visibility: workspace
@@ -19,6 +19,10 @@ definition:
     vertical: vc
     stage: closing
     taskFamily: closing
+    documentRefs:
+      - documentId: vc.document.closing_checklist
+        usage: output_template
+        outputFieldKey: closing_checklist_artifact_id
     requiredSkills:
       - citation-enforcement
     plannedRequiredSkills:
@@ -107,7 +111,8 @@ fields:
       fieldType: file
       required: true
       position: 0
-      config: {}
+      config:
+        documentRefId: vc.document.closing_checklist
     - key: closing_status
       name: Closing Status
       fieldType: string

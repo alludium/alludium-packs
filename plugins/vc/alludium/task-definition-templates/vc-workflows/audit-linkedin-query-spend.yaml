@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.audit_linkedin_query_spend
-version: 0.1.1
+version: 0.1.2
 title: Audit LinkedIn Query Spend
 category: Venture Capital
 visibility: workspace
@@ -20,6 +20,10 @@ definition:
     vertical: vc
     stage: operate
     taskFamily: origination_spend_audit
+    documentRefs:
+      - documentId: vc.document.paid_source_spend_audit_checklist
+        usage: output_template
+        outputFieldKey: linkedin_spend_audit_artifact_id
     requiredSkills:
       - vc-linkedin-query-spend-audit
       - vc-source-registry-and-state-management
@@ -75,7 +79,8 @@ fields:
       fieldType: file
       required: true
       position: 0
-      config: {}
+      config:
+        documentRefId: vc.document.paid_source_spend_audit_checklist
     - key: paid_source_spend_status
       name: Paid Source Spend Status
       fieldType: string
