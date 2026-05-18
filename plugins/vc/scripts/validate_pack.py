@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import re
 import sys
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -161,6 +162,13 @@ PROJECT_MANAGEMENT_SCOPE = "project_management"
 TASK_SCHEDULING_SETUP_STEPS = {"schedules"}
 TASK_SCHEDULING_TYPES = {"cron", "one_off"}
 TASK_SCHEDULING_DEFAULT_REFS = {"scheduleDefaults"}
+PROJECT_SETUP_STEP_TYPES = {"source_choice", "source_setup", "variables", "schedules", "invite"}
+PROJECT_SETUP_POST_APPROVAL_ACTIONS = {
+    "applyVariables",
+    "importProjects",
+    "inviteCollaborators",
+    "enableSchedules",
+}
 VC_DEAL_ROOM_LIFECYCLE_STAGES = {
     "intake",
     "assessment",
@@ -224,6 +232,7 @@ VC_ARTIFACT_OUTPUTS = {
     "manage-closing-checklist": ["closing_checklist_artifact_id"],
     "verify-conditions-precedent": ["conditions_precedent_verification_artifact_id"],
     "prepare-portfolio-onboarding": ["portfolio_onboarding_plan_artifact_id"],
+    "affinity-deal-room-import": ["affinity_import_receipt_artifact_id"],
 }
 VC_ARTIFACT_INPUTS = {
     "screen-inbound-opportunity": ["pitch_deck_artifact_id"],
@@ -930,8 +939,43 @@ def validate_project_scope_instruction_language(
         )
 
 
+@lru_cache(maxsize=1)
+def load_project_setup_schedule_group_slugs_by_project_type() -> dict[str, set[str]]:
+    grouped_slugs: dict[str, set[str]] = {}
+    project_type_root = ROOT / "alludium" / "project-types"
+
+    for path in project_type_root.glob("*.json"):
+        if path.name == "catalog.v1.json":
+            continue
+        project_type = read_json(path)
+        if not isinstance(project_type, dict):
+            continue
+        project_type_id = project_type.get("key")
+        if not isinstance(project_type_id, str) or not project_type_id:
+            continue
+        project_setup = project_type.get("projectSetup")
+        if not isinstance(project_setup, dict):
+            grouped_slugs[project_type_id] = set()
+            continue
+        schedule_groups = project_setup.get("scheduleGroups")
+        if not isinstance(schedule_groups, list):
+            grouped_slugs[project_type_id] = set()
+            continue
+        slugs: set[str] = set()
+        for group in schedule_groups:
+            if isinstance(group, dict):
+                slugs.update(require_string_list(
+                    group.get("taskDefinitionSlugs"),
+                    f"Project type {project_type_id} projectSetup.scheduleGroups.taskDefinitionSlugs",
+                ))
+        grouped_slugs[project_type_id] = slugs
+
+    return grouped_slugs
+
+
 def validate_task_scheduling_contract(
     template_id: str,
+    slug: str,
     definition_json: dict[str, Any],
     supported_project_types: list[str],
 ) -> None:
@@ -998,10 +1042,16 @@ def validate_task_scheduling_contract(
             "approval for external writes"
         )
 
-    if "vc_origination_pipeline" not in supported_project_types:
+    schedule_groups_by_project_type = load_project_setup_schedule_group_slugs_by_project_type()
+    missing_schedule_groups = sorted(
+        project_type
+        for project_type in supported_project_types
+        if slug not in schedule_groups_by_project_type.get(project_type, set())
+    )
+    if missing_schedule_groups:
         fail(
-            f"Task template {template_id} with setup scheduling must support "
-            "vc_origination_pipeline"
+            f"Task template {template_id} ({slug}) with setup scheduling must be declared in "
+            f"projectSetup.scheduleGroups for {missing_schedule_groups}"
         )
 
 
@@ -1308,6 +1358,374 @@ def validate_vc_deal_room_command_view(project_type_id: str, initial_version: di
                 )
 
 
+def validate_project_setup_contract(project_type_id: str, project_type: dict[str, Any]) -> None:
+    project_setup = project_type.get("projectSetup")
+    if not isinstance(project_setup, dict):
+        fail(f"Project type {project_type_id} must declare projectSetup")
+
+    required_evidence = require_string_list(
+        project_setup.get("requiredEvidence"),
+        f"Project type {project_type_id} projectSetup.requiredEvidence",
+    )
+    if not required_evidence:
+        fail(f"Project type {project_type_id} projectSetup.requiredEvidence must not be empty")
+    if len(required_evidence) != len(set(required_evidence)):
+        fail(f"Project type {project_type_id} projectSetup.requiredEvidence has duplicates")
+
+    setup_steps = require_mapping_list(
+        project_setup.get("setupSteps"),
+        f"Project type {project_type_id} projectSetup.setupSteps",
+    )
+    if not setup_steps:
+        fail(f"Project type {project_type_id} projectSetup.setupSteps must not be empty")
+
+    step_keys: list[str] = []
+    required_step_evidence: list[str] = []
+    for step in setup_steps:
+        step_key = step.get("key")
+        if not isinstance(step_key, str) or not step_key:
+            fail(f"Project type {project_type_id} projectSetup.setupSteps entries must declare key")
+        step_keys.append(step_key)
+        for field_name in ["label", "purpose", "evidenceKey"]:
+            if not isinstance(step.get(field_name), str) or not step.get(field_name):
+                fail(
+                    f"Project type {project_type_id} projectSetup.setupSteps.{step_key} "
+                    f"must declare {field_name}"
+                )
+        if step.get("stepType") not in PROJECT_SETUP_STEP_TYPES:
+            fail(
+                f"Project type {project_type_id} projectSetup.setupSteps.{step_key}.stepType "
+                f"must be one of {sorted(PROJECT_SETUP_STEP_TYPES)}"
+            )
+        if not isinstance(step.get("required"), bool):
+            fail(
+                f"Project type {project_type_id} projectSetup.setupSteps.{step_key}.required "
+                "must be a boolean"
+            )
+        if step.get("required") is True:
+            required_step_evidence.append(step["evidenceKey"])
+
+        has_task_reference = any(
+            isinstance(step.get(field_name), str) and step.get(field_name)
+            for field_name in ["taskDefinitionSlug", "taskDefinitionTemplateId", "taskSelection"]
+        )
+        if not has_task_reference:
+            fail(
+                f"Project type {project_type_id} projectSetup.setupSteps.{step_key} "
+                "must declare a task reference or taskSelection"
+            )
+
+    if len(step_keys) != len(set(step_keys)):
+        fail(f"Project type {project_type_id} projectSetup.setupSteps has duplicate keys")
+    if set(required_step_evidence) != set(required_evidence):
+        fail(
+            f"Project type {project_type_id} projectSetup.requiredEvidence must match required "
+            f"setup step evidence keys: requiredEvidence={sorted(required_evidence)}, "
+            f"requiredStepEvidence={sorted(required_step_evidence)}"
+        )
+
+    schedule_groups = require_mapping_list(
+        project_setup.get("scheduleGroups"),
+        f"Project type {project_type_id} projectSetup.scheduleGroups",
+    )
+    schedule_group_keys: list[str] = []
+    task_contracts = load_task_template_contracts()
+    for group in schedule_groups:
+        group_key = group.get("key")
+        if not isinstance(group_key, str) or not group_key:
+            fail(f"Project type {project_type_id} projectSetup.scheduleGroups entries must declare key")
+        schedule_group_keys.append(group_key)
+        for field_name in ["label", "description"]:
+            if not isinstance(group.get(field_name), str) or not group.get(field_name):
+                fail(
+                    f"Project type {project_type_id} projectSetup.scheduleGroups.{group_key} "
+                    f"must declare {field_name}"
+                )
+        task_slugs = require_string_list(
+            group.get("taskDefinitionSlugs"),
+            f"Project type {project_type_id} projectSetup.scheduleGroups.{group_key}.taskDefinitionSlugs",
+        )
+        if not task_slugs:
+            fail(
+                f"Project type {project_type_id} projectSetup.scheduleGroups.{group_key} "
+                "must list at least one taskDefinitionSlug"
+            )
+        for task_slug in task_slugs:
+            contract = task_contracts.get(task_slug)
+            if contract is None:
+                fail(
+                    f"Project type {project_type_id} projectSetup.scheduleGroups.{group_key} "
+                    f"references unknown task {task_slug}"
+                )
+            if project_type_id not in contract.get("supportedProjectTypes", []):
+                fail(
+                    f"Project type {project_type_id} projectSetup.scheduleGroups.{group_key} "
+                    f"references task {task_slug}, which does not support {project_type_id}"
+                )
+            scheduling = contract.get("scheduling")
+            if not isinstance(scheduling, dict) or scheduling.get("schedulable") is not True:
+                fail(
+                    f"Project type {project_type_id} projectSetup.scheduleGroups.{group_key} "
+                    f"references task {task_slug}, which is not schedulable"
+                )
+            if scheduling.get("showInProjectSetup") is not True:
+                fail(
+                    f"Project type {project_type_id} projectSetup.scheduleGroups.{group_key} "
+                    f"references task {task_slug}, which is not shown in Project Setup"
+                )
+            if scheduling.get("setupStep") != "schedules":
+                fail(
+                    f"Project type {project_type_id} projectSetup.scheduleGroups.{group_key} "
+                    f"references task {task_slug}, which is not a schedules-step task"
+                )
+        for field_name in ["defaultExpanded", "advanced"]:
+            if not isinstance(group.get(field_name), bool):
+                fail(
+                    f"Project type {project_type_id} projectSetup.scheduleGroups.{group_key} "
+                    f"must declare boolean {field_name}"
+                )
+    if len(schedule_group_keys) != len(set(schedule_group_keys)):
+        fail(f"Project type {project_type_id} projectSetup.scheduleGroups has duplicate keys")
+
+    def validate_source_evidence_keys(action_key: str, action: dict[str, Any]) -> list[str]:
+        source_evidence_keys = require_string_list(
+            action.get("sourceEvidenceKeys"),
+            f"Project type {project_type_id} postApprovalActions.{action_key}.sourceEvidenceKeys",
+        )
+        if not source_evidence_keys:
+            fail(
+                f"Project type {project_type_id} postApprovalActions.{action_key}.sourceEvidenceKeys "
+                "must not be empty"
+            )
+        unknown_evidence_roots = sorted(
+            evidence_key.split(".", 1)[0]
+            for evidence_key in source_evidence_keys
+            if evidence_key.split(".", 1)[0] not in step_keys
+        )
+        if unknown_evidence_roots:
+            fail(
+                f"Project type {project_type_id} postApprovalActions.{action_key}.sourceEvidenceKeys "
+                f"reference undeclared setup evidence roots: {unknown_evidence_roots}"
+            )
+        return source_evidence_keys
+
+    def validate_enabled_platform_action(action_key: str, action: dict[str, Any]) -> None:
+        if not isinstance(action.get("label"), str) or not action.get("label"):
+            fail(f"Project type {project_type_id} enabled {action_key} must declare label")
+        if not isinstance(action.get("target"), str) or not action.get("target"):
+            fail(f"Project type {project_type_id} enabled {action_key} must declare target")
+        validate_source_evidence_keys(action_key, action)
+        if action.get("requiresReviewedUserApproval") is not True:
+            fail(
+                f"Project type {project_type_id} enabled {action_key} must require "
+                "reviewed user approval"
+            )
+        if "dependsOn" in action:
+            depends_on = require_string_list(
+                action.get("dependsOn"),
+                f"Project type {project_type_id} postApprovalActions.{action_key}.dependsOn",
+            )
+            unknown_dependencies = sorted(set(depends_on) - PROJECT_SETUP_POST_APPROVAL_ACTIONS)
+            if unknown_dependencies:
+                fail(
+                    f"Project type {project_type_id} postApprovalActions.{action_key}.dependsOn "
+                    f"references unknown actions: {unknown_dependencies}"
+                )
+
+    post_approval_actions = project_setup.get("postApprovalActions")
+    if not isinstance(post_approval_actions, dict):
+        fail(f"Project type {project_type_id} projectSetup.postApprovalActions must be declared")
+    unknown_post_approval_actions = sorted(set(post_approval_actions) - PROJECT_SETUP_POST_APPROVAL_ACTIONS)
+    if unknown_post_approval_actions:
+        fail(
+            f"Project type {project_type_id} projectSetup.postApprovalActions contains "
+            f"unknown actions: {unknown_post_approval_actions}"
+        )
+    missing_post_approval_actions = sorted(PROJECT_SETUP_POST_APPROVAL_ACTIONS - set(post_approval_actions))
+    if missing_post_approval_actions:
+        fail(
+            f"Project type {project_type_id} projectSetup.postApprovalActions must explicitly "
+            f"declare actions: {missing_post_approval_actions}"
+        )
+
+    apply_variables = post_approval_actions.get("applyVariables")
+    if not isinstance(apply_variables, dict):
+        fail(f"Project type {project_type_id} projectSetup.postApprovalActions.applyVariables must be declared")
+    if not isinstance(apply_variables.get("enabled"), bool):
+        fail(f"Project type {project_type_id} applyVariables.enabled must be a boolean")
+    if apply_variables.get("enabled") is True:
+        validate_enabled_platform_action("applyVariables", apply_variables)
+        if apply_variables.get("actionMode") != "platform_variable_application":
+            fail(
+                f"Project type {project_type_id} applyVariables.actionMode must be "
+                "platform_variable_application"
+            )
+        if apply_variables.get("setupTasksMayPersistValues") is not False:
+            fail(f"Project type {project_type_id} applyVariables.setupTasksMayPersistValues must be false")
+    elif not isinstance(apply_variables.get("reason"), str) or not apply_variables.get("reason"):
+        fail(f"Project type {project_type_id} disabled applyVariables must declare reason")
+
+    import_projects = post_approval_actions.get("importProjects")
+    if not isinstance(import_projects, dict):
+        fail(
+            f"Project type {project_type_id} projectSetup.postApprovalActions.importProjects "
+            "must be declared"
+        )
+    if not isinstance(import_projects.get("enabled"), bool):
+        fail(
+            f"Project type {project_type_id} projectSetup.postApprovalActions.importProjects.enabled "
+            "must be a boolean"
+        )
+    if import_projects.get("enabled") is True:
+        if not isinstance(import_projects.get("label"), str) or not import_projects.get("label"):
+            fail(f"Project type {project_type_id} enabled importProjects must declare label")
+        if import_projects.get("targetProjectTypeKey") != project_type_id:
+            fail(
+                f"Project type {project_type_id} importProjects.targetProjectTypeKey must be "
+                f"{project_type_id}"
+            )
+        validate_source_evidence_keys("importProjects", import_projects)
+        project_import_task = import_projects.get("projectImportTask")
+        if not isinstance(project_import_task, dict):
+            fail(f"Project type {project_type_id} importProjects.projectImportTask must be declared")
+        for field_name in ["taskDefinitionTemplateId", "taskDefinitionSlug", "inputField"]:
+            if not isinstance(project_import_task.get(field_name), str) or not project_import_task.get(field_name):
+                fail(
+                    f"Project type {project_type_id} importProjects.projectImportTask "
+                    f"must declare {field_name}"
+                )
+        task_slug = project_import_task["taskDefinitionSlug"]
+        task_contract = task_contracts.get(task_slug)
+        if task_contract is None:
+            fail(f"Project type {project_type_id} importProjects references unknown task {task_slug}")
+        if task_contract["id"] != project_import_task["taskDefinitionTemplateId"]:
+            fail(
+                f"Project type {project_type_id} importProjects references template id "
+                f"{project_import_task['taskDefinitionTemplateId']}, but {task_slug} has id "
+                f"{task_contract['id']}"
+            )
+        if project_type_id not in task_contract.get("supportedProjectTypes", []):
+            fail(
+                f"Project type {project_type_id} importProjects task {task_slug} "
+                f"does not support {project_type_id}"
+            )
+        if DEFAULT_PROJECT_SCOPE not in task_contract.get("supportedProjectScopes", []):
+            fail(
+                f"Project type {project_type_id} importProjects task {task_slug} "
+                f"must support {DEFAULT_PROJECT_SCOPE}"
+            )
+        input_field = project_import_task["inputField"]
+        task_input_fields = task_contract["fields"]["input"]
+        if input_field not in task_input_fields:
+            fail(
+                f"Project type {project_type_id} importProjects inputField {input_field} "
+                f"is not an input field on {task_slug}"
+            )
+        if task_input_fields[input_field].get("required") is not True:
+            fail(
+                f"Project type {project_type_id} importProjects inputField {input_field} "
+                f"must be required on {task_slug}"
+            )
+        payload_contract = project_import_task.get("payloadContract")
+        if not isinstance(payload_contract, dict):
+            fail(f"Project type {project_type_id} importProjects.projectImportTask must declare payloadContract")
+        if not isinstance(payload_contract.get("version"), str) or not payload_contract.get("version"):
+            fail(f"Project type {project_type_id} importProjects.payloadContract must declare version")
+        for field_name in [
+            "requiredTopLevelKeys",
+            "requiredApprovalKeys",
+            "requiredSourceKeys",
+            "requiredSeedKeys",
+            "requiredTargetProjectKeys",
+        ]:
+            if not require_string_list(
+                payload_contract.get(field_name),
+                f"Project type {project_type_id} importProjects.payloadContract.{field_name}",
+            ):
+                fail(
+                    f"Project type {project_type_id} importProjects.payloadContract.{field_name} "
+                    "must not be empty"
+                )
+        output_evidence_keys = require_string_list(
+            project_import_task.get("outputEvidenceKeys"),
+            f"Project type {project_type_id} importProjects.projectImportTask.outputEvidenceKeys",
+        )
+        if not output_evidence_keys:
+            fail(f"Project type {project_type_id} importProjects.outputEvidenceKeys must not be empty")
+        unknown_output_keys = sorted(
+            set(output_evidence_keys) - set(task_contract["fields"]["output"].keys())
+        )
+        if unknown_output_keys:
+            fail(
+                f"Project type {project_type_id} importProjects.outputEvidenceKeys references "
+                f"unknown task outputs: {unknown_output_keys}"
+            )
+        safety = import_projects.get("safety")
+        if not isinstance(safety, dict):
+            fail(f"Project type {project_type_id} importProjects.safety must be declared")
+        expected_safety_values = {
+            "requiresReviewedUserApproval": True,
+            "setupTasksMayCreateProjects": False,
+            "setupTasksMayImportRecords": False,
+            "setupTasksMayEnableRecurringSync": False,
+        }
+        for field_name, expected_value in expected_safety_values.items():
+            if safety.get(field_name) is not expected_value:
+                fail(
+                    f"Project type {project_type_id} importProjects.safety.{field_name} "
+                    f"must be {expected_value}"
+                )
+    elif not isinstance(import_projects.get("reason"), str) or not import_projects.get("reason"):
+        fail(f"Project type {project_type_id} disabled importProjects must declare reason")
+
+    invite_collaborators = post_approval_actions.get("inviteCollaborators")
+    if not isinstance(invite_collaborators, dict):
+        fail(
+            f"Project type {project_type_id} projectSetup.postApprovalActions.inviteCollaborators "
+            "must be declared"
+        )
+    if not isinstance(invite_collaborators.get("enabled"), bool):
+        fail(f"Project type {project_type_id} inviteCollaborators.enabled must be a boolean")
+    if invite_collaborators.get("enabled") is True:
+        validate_enabled_platform_action("inviteCollaborators", invite_collaborators)
+        if "invite" not in step_keys:
+            fail(
+                f"Project type {project_type_id} inviteCollaborators is enabled without an invite "
+                "setup step"
+            )
+        if invite_collaborators.get("actionMode") != "platform_project_membership":
+            fail(
+                f"Project type {project_type_id} inviteCollaborators.actionMode must be "
+                "platform_project_membership"
+            )
+        if invite_collaborators.get("setupTasksMaySendInvites") is not False:
+            fail(f"Project type {project_type_id} inviteCollaborators.setupTasksMaySendInvites must be false")
+    elif not isinstance(invite_collaborators.get("reason"), str) or not invite_collaborators.get("reason"):
+        fail(f"Project type {project_type_id} disabled inviteCollaborators must declare reason")
+
+    enable_schedules = post_approval_actions.get("enableSchedules")
+    if not isinstance(enable_schedules, dict):
+        fail(f"Project type {project_type_id} projectSetup.postApprovalActions.enableSchedules must be declared")
+    if not isinstance(enable_schedules.get("enabled"), bool):
+        fail(f"Project type {project_type_id} enableSchedules.enabled must be a boolean")
+    if enable_schedules.get("enabled") is True:
+        validate_enabled_platform_action("enableSchedules", enable_schedules)
+        if enable_schedules.get("scheduleGroupsRef") != "projectSetup.scheduleGroups":
+            fail(
+                f"Project type {project_type_id} enableSchedules.scheduleGroupsRef must be "
+                "projectSetup.scheduleGroups"
+            )
+        if enable_schedules.get("defaultEnabled") is not False:
+            fail(f"Project type {project_type_id} enableSchedules.defaultEnabled must be false")
+        if enable_schedules.get("setupTasksMayEnableRecurringSync") is not False:
+            fail(
+                f"Project type {project_type_id} enableSchedules.setupTasksMayEnableRecurringSync "
+                "must be false"
+            )
+    elif not isinstance(enable_schedules.get("reason"), str) or not enable_schedules.get("reason"):
+        fail(f"Project type {project_type_id} disabled enableSchedules must declare reason")
+
+
 def validate_project_type_file(path: Path, expected_id: str) -> str:
     project_type = read_json(path)
     relative_path = path.relative_to(ROOT)
@@ -1325,6 +1743,7 @@ def validate_project_type_file(path: Path, expected_id: str) -> str:
         fail(f"Project type {expected_id} is missing name")
     if not isinstance(project_type.get("description"), str) or not project_type.get("description"):
         fail(f"Project type {expected_id} is missing description")
+    validate_project_setup_contract(expected_id, project_type)
 
     initial_version = project_type.get("initialVersion")
     if not isinstance(initial_version, dict):
@@ -1563,7 +1982,7 @@ def validate_task_template_file(
         project_type_ids,
         "included project types",
     )
-    validate_task_scheduling_contract(template_id, definition_json, supported_project_types)
+    validate_task_scheduling_contract(template_id, slug, definition_json, supported_project_types)
 
     fields = template.get("fields") or {}
     if not isinstance(fields, dict):
@@ -1773,6 +2192,7 @@ def load_task_template_contracts() -> dict[str, dict[str, Any]]:
                 supported_project_types,
             ),
             "stage": definition_json.get("stage"),
+            "scheduling": definition_json.get("scheduling"),
             "fields": {
                 "input": field_map(template_id, "input", fields.get("input")),
                 "context": field_map(template_id, "context", fields.get("context")),
@@ -1793,20 +2213,109 @@ def require_mapping_list(value: Any, context: str) -> list[dict[str, Any]]:
     return value
 
 
+def option_values(options: Any) -> set[str]:
+    values: set[str] = set()
+    if not isinstance(options, list):
+        return values
+    for option in options:
+        if isinstance(option, str) and option:
+            values.add(option)
+        elif isinstance(option, dict):
+            value = option.get("value")
+            if isinstance(value, str) and value:
+                values.add(value)
+    return values
+
+
+def field_option_values(field: dict[str, Any]) -> set[str]:
+    values = option_values(field.get("options"))
+    config = field.get("config")
+    if isinstance(config, dict):
+        values.update(option_values(config.get("options")))
+    return values
+
+
+def project_setup_import_task_slugs(project_type: dict[str, Any]) -> set[str]:
+    project_setup = project_type.get("projectSetup")
+    if not isinstance(project_setup, dict):
+        return set()
+    post_approval_actions = project_setup.get("postApprovalActions")
+    if not isinstance(post_approval_actions, dict):
+        return set()
+    import_projects = post_approval_actions.get("importProjects")
+    if not isinstance(import_projects, dict) or import_projects.get("enabled") is not True:
+        return set()
+    project_import_task = import_projects.get("projectImportTask")
+    if not isinstance(project_import_task, dict):
+        return set()
+    task_slug = project_import_task.get("taskDefinitionSlug")
+    return {task_slug} if isinstance(task_slug, str) and task_slug else set()
+
+
+def validate_json_input_mapping_source(
+    project_type_id: str,
+    mapping_id: str,
+    task_field: str,
+    entry: dict[str, Any],
+    task_input_field: dict[str, Any],
+) -> None:
+    if (
+        task_input_field.get("fieldType") == "json"
+        and entry.get("source") == "constant"
+        and isinstance(entry.get("constantValue"), str)
+    ):
+        fail(
+            f"Project type {project_type_id} mapping {mapping_id}.inputMappings.{task_field} "
+            "must not satisfy a JSON input field with a string constant"
+        )
+
+
+def validate_project_enum_output_mapping(
+    project_type_id: str,
+    mapping_id: str,
+    task_field: str,
+    task_output_field: dict[str, Any],
+    project_field: dict[str, Any],
+) -> None:
+    if project_field.get("kind") != "enum":
+        return
+    output_type = task_output_field.get("fieldType")
+    if output_type != "select":
+        fail(
+            f"Project type {project_type_id} mapping {mapping_id}.outputMappings.{task_field} "
+            "maps into an enum project field, so the task output must use fieldType: select"
+        )
+    project_options = field_option_values(project_field)
+    output_options = field_option_values(task_output_field)
+    if not output_options:
+        fail(
+            f"Project type {project_type_id} mapping {mapping_id}.outputMappings.{task_field} "
+            "maps into an enum project field, so the task output must declare options"
+        )
+    unknown_options = sorted(output_options - project_options)
+    if unknown_options:
+        fail(
+            f"Project type {project_type_id} mapping {mapping_id}.outputMappings.{task_field} "
+            f"declares options not present on the target enum project field: {unknown_options}"
+        )
+
+
 def validate_project_task_mapping_contracts() -> None:
     project_type = read_json(ROOT / "alludium" / "project-types" / "vc_deal_room.json")
     initial_version = project_type.get("initialVersion") or {}
     project_type_id = project_type.get("key", "vc_deal_room")
-    project_field_keys = {
-        field["key"]
+    project_fields_by_key = {
+        field["key"]: field
         for field in initial_version.get("fieldsSchema", [])
         if isinstance(field, dict) and isinstance(field.get("key"), str)
     }
+    project_field_keys = set(project_fields_by_key)
     lifecycle_states = set(require_string_list(
         initial_version.get("lifecycleStates"),
         f"Project type {project_type_id} initialVersion.lifecycleStates",
     ))
     task_contracts = load_task_template_contracts()
+    import_project_task_slugs = project_setup_import_task_slugs(project_type)
     project_instance_supported_slugs = {
         slug
         for slug, contract in task_contracts.items()
@@ -1907,6 +2416,13 @@ def validate_project_task_mapping_contracts() -> None:
                             f"Project type {project_type_id} mapping {mapping_id}.inputMappings.{task_field} "
                             "must declare constantValue for source constant"
                         )
+                    validate_json_input_mapping_source(
+                        project_type_id,
+                        mapping_id,
+                        task_field,
+                        entry,
+                        task_contract["fields"]["input"][task_field],
+                    )
                     if "requiredForActivation" in entry and not isinstance(entry["requiredForActivation"], bool):
                         fail(
                             f"Project type {project_type_id} mapping {mapping_id}.inputMappings.{task_field} "
@@ -1926,6 +2442,14 @@ def validate_project_task_mapping_contracts() -> None:
                             f"Project type {project_type_id} mapping {mapping_id}.outputMappings.{task_field} "
                             f"targetPath references unknown project field {target_path}"
                         )
+                    if target == "project.field":
+                        validate_project_enum_output_mapping(
+                            project_type_id,
+                            mapping_id,
+                            task_field,
+                            task_contract["fields"]["output"][task_field],
+                            project_fields_by_key[target_path],
+                        )
                     if "requiredForCompletion" in entry and not isinstance(entry["requiredForCompletion"], bool):
                         fail(
                             f"Project type {project_type_id} mapping {mapping_id}.outputMappings.{task_field} "
@@ -1941,7 +2465,7 @@ def validate_project_task_mapping_contracts() -> None:
                 if field.get("required") is True
             }
             missing_required_inputs = sorted(required_input_fields - mapped_input_fields)
-            if missing_required_inputs:
+            if missing_required_inputs and slug not in import_project_task_slugs:
                 fail(
                     f"Project type {project_type_id} mapping {mapping_id} is missing "
                     f"required task input mappings: {missing_required_inputs}"

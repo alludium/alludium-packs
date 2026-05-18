@@ -18,6 +18,131 @@
       "schedules",
       "invite"
     ],
+    "setupSteps": [
+      {
+        "key": "source_choice",
+        "label": "Connect source",
+        "purpose": "Choose the source of truth for Deal Room creation.",
+        "stepType": "source_choice",
+        "evidenceKey": "source_choice",
+        "required": true,
+        "taskDefinitionSlug": "project-source-choice"
+      },
+      {
+        "key": "source_setup",
+        "label": "Setup Affinity source",
+        "purpose": "Review Affinity connection readiness, source scope, stage mapping, and seed selection without importing records.",
+        "stepType": "source_setup",
+        "evidenceKey": "source_setup",
+        "required": true,
+        "taskSelection": "sourceSetupTasks"
+      },
+      {
+        "key": "variables",
+        "label": "Review variables",
+        "purpose": "Review workspace and Deal Room variables before creating projects.",
+        "stepType": "variables",
+        "evidenceKey": "variables",
+        "required": true,
+        "taskDefinitionSlug": "project-variable-review"
+      },
+      {
+        "key": "schedules",
+        "label": "Configure schedules",
+        "purpose": "Review optional Deal Room sync-preview schedules without enabling recurring work by default.",
+        "stepType": "schedules",
+        "evidenceKey": "schedules",
+        "required": true,
+        "taskDefinitionSlug": "project-schedule-review"
+      },
+      {
+        "key": "invite",
+        "label": "Invite team",
+        "purpose": "Review Deal Room collaborator suggestions without sending invitations.",
+        "stepType": "invite",
+        "evidenceKey": "invite",
+        "required": true,
+        "taskDefinitionSlug": "project-team-invite"
+      }
+    ],
+    "postApprovalActions": {
+      "applyVariables": {
+        "enabled": true,
+        "label": "Apply reviewed setup variables",
+        "sourceEvidenceKeys": ["variables"],
+        "target": "workspace_and_created_projects",
+        "actionMode": "platform_variable_application",
+        "requiresReviewedUserApproval": true,
+        "setupTasksMayPersistValues": false
+      },
+      "importProjects": {
+        "enabled": true,
+        "label": "Create Deal Rooms from selected Affinity deals",
+        "targetProjectTypeKey": "vc_deal_room",
+        "sourceEvidenceKeys": [
+          "source_setup.selected_source_scope",
+          "source_setup.accepted_stage_mapping",
+          "source_setup.seed_selection"
+        ],
+        "projectImportTask": {
+          "taskDefinitionTemplateId": "vc.affinity_deal_room_import",
+          "taskDefinitionSlug": "affinity-deal-room-import",
+          "inputField": "import_payload",
+          "payloadContract": {
+            "version": "vc.affinity_deal_room_import.import_payload.v1",
+            "requiredTopLevelKeys": ["setupTaskId", "approval", "source", "seed", "targetProject"],
+            "requiredApprovalKeys": ["approvedByUserId", "approvedAt", "reviewedEvidenceArtifactIds"],
+            "requiredSourceKeys": ["provider", "selectedSourceScope", "acceptedStageMapping"],
+            "requiredSeedKeys": ["affinityOrganizationId", "companyName"],
+            "requiredTargetProjectKeys": ["projectId", "projectTypeKey", "workspaceId"]
+          },
+          "outputEvidenceKeys": [
+            "affinity_import_receipt_artifact_id",
+            "import_status",
+            "import_summary",
+            "imported_field_map",
+            "source_index",
+            "next_task_recommendations"
+          ]
+        },
+        "safety": {
+          "requiresReviewedUserApproval": true,
+          "setupTasksMayCreateProjects": false,
+          "setupTasksMayImportRecords": false,
+          "setupTasksMayEnableRecurringSync": false
+        }
+      },
+      "inviteCollaborators": {
+        "enabled": true,
+        "label": "Invite approved Deal Room collaborators",
+        "sourceEvidenceKeys": ["invite"],
+        "target": "createdProjects",
+        "dependsOn": ["importProjects"],
+        "actionMode": "platform_project_membership",
+        "requiresReviewedUserApproval": true,
+        "setupTasksMaySendInvites": false
+      },
+      "enableSchedules": {
+        "enabled": true,
+        "label": "Enable approved Deal Room schedules",
+        "sourceEvidenceKeys": ["schedules"],
+        "target": "createdProjects",
+        "scheduleGroupsRef": "projectSetup.scheduleGroups",
+        "defaultEnabled": false,
+        "requiresReviewedUserApproval": true,
+        "setupTasksMayEnableRecurringSync": false
+      }
+    },
+    "scheduleGroups": [
+      {
+        "key": "deal_room_crm_preview",
+        "label": "Deal Room CRM preview",
+        "description": "Optional read-only Affinity preview refresh for Deal Room source context.",
+        "taskDefinitionSlugs": ["affinity-sync-read"],
+        "defaultExpanded": true,
+        "advanced": false
+      }
+    ],
     "defaultChildTask": {
       "label": "Setup source",
       "taskDefinitionSlug": "project-source-setup",
@@ -216,6 +341,40 @@
         "required": false,
         "description": "Affinity-compatible CRM record link retained for older surfaces.",
         "placeholder": "https://app.affinity.co/..."
+      },
+      {
+        "id": "field-affinity-import-status",
+        "key": "affinity_import_status",
+        "label": "Affinity Import Status",
+        "kind": "enum",
+        "required": false,
+        "description": "Latest project-scoped Affinity import status for this Deal Room.",
+        "options": [
+          {
+            "value": "completed",
+            "label": "Completed"
+          },
+          {
+            "value": "partial",
+            "label": "Partial"
+          },
+          {
+            "value": "blocked",
+            "label": "Blocked"
+          },
+          {
+            "value": "failed",
+            "label": "Failed"
+          }
+        ]
+      },
+      {
+        "id": "field-affinity-import-receipt-artifact-id",
+        "key": "affinity_import_receipt_artifact_id",
+        "label": "Affinity Import Receipt",
+        "kind": "text",
+        "required": false,
+        "description": "Import receipt artifact produced by affinity-deal-room-import."
       },
       {
         "id": "field-pitch-deck-artifact-id",
@@ -1703,6 +1862,32 @@
       ]
     },
     "projectTaskMappings": [
+      {
+        "id": "map-affinity-deal-room-import",
+        "taskDefinitionTemplateId": "vc.affinity_deal_room_import",
+        "taskDefinitionSlug": "affinity-deal-room-import",
+        "projectScope": "project_instance",
+        "lifecycleStage": "intake",
+        "outputMappings": [
+          {
+            "taskField": "affinity_import_receipt_artifact_id",
+            "target": "project.field",
+            "targetPath": "affinity_import_receipt_artifact_id",
+            "requiredForCompletion": true
+          },
+          {
+            "taskField": "import_status",
+            "target": "project.field",
+            "targetPath": "affinity_import_status"
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
       {
         "id": "map-source-thesis-targets",
         "taskDefinitionTemplateId": "vc.source_thesis_targets",

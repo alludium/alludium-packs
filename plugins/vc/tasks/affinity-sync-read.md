@@ -18,7 +18,7 @@ Preview selected Affinity opportunity, company, person, note, and list-entry dat
 
 ## Instructions
 
-Build an Affinity read-sync preview from the approved list/source and stage scope. Use `affinity_get_list_entries`, `affinity_list_opportunities`, `affinity_get_opportunity`, `affinity_search_companies`, `affinity_get_company`, `affinity_search_persons`, `affinity_get_person`, and `affinity_list_company_notes` only inside approved scope. Show proposed project, field, task, artifact, and setup-context mappings before import.
+Build a Deal Room Affinity read-sync preview from the approved list/source and stage scope. Use `affinity_get_list_entries`, `affinity_list_opportunities`, `affinity_get_opportunity`, `affinity_search_companies`, `affinity_get_company`, `affinity_search_persons`, `affinity_get_person`, and `affinity_list_company_notes` only inside approved scope. Show proposed project, field, task, artifact, and setup-context mappings before import. Durable project creation and initial import belong to `affinity-deal-room-import` after reviewed user approval.
 
 ## Missing Input Policy
 
@@ -32,7 +32,7 @@ Preview/import design only. Do not import records or enable recurring sync witho
 
 - Preview rows include source IDs, target mappings, conflicts, and rejection reasons.
 - Tool IDs used are named.
-- Import approval remains separate from the preview.
+- Import approval remains separate from the preview and is executed through affinity-deal-room-import.
 
 ## Human Decision Points
 
@@ -60,7 +60,6 @@ Preview/import design only. Do not import records or enable recurring sync witho
 - Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
 - Supported project types:
   - `vc_deal_room`
-  - `vc_origination_pipeline`
 - Supported project scopes:
   - `project_management`
 

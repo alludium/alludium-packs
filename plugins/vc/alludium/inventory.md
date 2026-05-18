@@ -1,9 +1,9 @@
 # Alludium VC Inventory
 
-**Version**: 0.5.2
-**Status**: Project setup entrypoint metadata expansion
+**Version**: 0.5.3
+**Status**: Declarative project setup and Deal Room import expansion
 
-This inventory describes the current public VC plugin/pack seed plus the draft project-type and metadata expansion. Version numbers track pack release slices that need platform alignment, so this history only lists versions that introduced durable pack-surface changes. Version `0.1.0` contains VC skills, Alludium runtime agent templates, public-safe MCP definitions, and Alludium MCP recommendations. Version `0.2.2` adds VC task-definition templates and advertises both the canonical `venture_capital` vertical key and legacy `vc` alias. Version `0.3.0` adds the VC Deal Room project type as a first-class pack surface. Version `0.3.1` adds the VC Deal Room command-view metadata used by the project command center. Version `0.3.2` adds workspace variable declarations and application recommendation metadata for the paired platform ingest work. Version `0.3.4` aligns agent Deal Room states with the collapsed lifecycle and tightens required task-input mappings. Version `0.3.5` adds compact Affinity and Slack management-action metadata plus focused integration-specific discovery and sync task templates and skills. Version `0.3.6` extends the same integration-management surface to Google Drive, Notion, and Harmonic, with Harmonic limited to discovery/read-preview until trusted tool rows exist. Version `0.3.7` grants all VC runtime agent templates access to the platform text-artifact creation tool and collapses recommendation-level integration actions to one setup task per integration; each setup task declares its own discovery/read/write child task plan. Version `0.4.0` adds the VC Origination Pipeline project type, Apify and Companies House setup/readiness tasks, scheduled sourcing task definitions, compact origination project data mappings, and supporting origination skills. Version `0.4.1` validates project manager overlays. Version `0.4.2` adds generated agent Markdown compatibility artifacts and task prompt Markdown derived from the existing Alludium YAML source of truth. Version `0.5.0` adds the VC Deal Room Setup Guide agent, routes Affinity setup toward agent-led discovery, mapping, and seed review, and declares schedulable VC tasks for project setup orchestration. Version `0.5.1` removes task-definition template turn caps so platform defaults can control agent execution budgets. Version `0.5.2` adds pack-owned project setup entrypoint metadata for VC project types.
+This inventory describes the current public VC plugin/pack seed plus the draft project-type and metadata expansion. Version numbers track pack release slices that need platform alignment, so this history only lists versions that introduced durable pack-surface changes. Version `0.1.0` contains VC skills, Alludium runtime agent templates, public-safe MCP definitions, and Alludium MCP recommendations. Version `0.2.2` adds VC task-definition templates and advertises both the canonical `venture_capital` vertical key and legacy `vc` alias. Version `0.3.0` adds the VC Deal Room project type as a first-class pack surface. Version `0.3.1` adds the VC Deal Room command-view metadata used by the project command center. Version `0.3.2` adds workspace variable declarations and application recommendation metadata for the paired platform ingest work. Version `0.3.4` aligns agent Deal Room states with the collapsed lifecycle and tightens required task-input mappings. Version `0.3.5` adds compact Affinity and Slack management-action metadata plus focused integration-specific discovery and sync task templates and skills. Version `0.3.6` extends the same integration-management surface to Google Drive, Notion, and Harmonic, with Harmonic limited to discovery/read-preview until trusted tool rows exist. Version `0.3.7` grants all VC runtime agent templates access to the platform text-artifact creation tool and collapses recommendation-level integration actions to one setup task per integration; each setup task declares its own discovery/read/write child task plan. Version `0.4.0` adds the VC Origination Pipeline project type, Apify and Companies House setup/readiness tasks, scheduled sourcing task definitions, compact origination project data mappings, and supporting origination skills. Version `0.4.1` validates project manager overlays. Version `0.4.2` adds generated agent Markdown compatibility artifacts and task prompt Markdown derived from the existing Alludium YAML source of truth. Version `0.5.0` adds the VC Deal Room Setup Guide agent, routes Affinity setup toward agent-led discovery, mapping, and seed review, and declares schedulable VC tasks for project setup orchestration. Version `0.5.1` removes task-definition template turn caps so platform defaults can control agent execution budgets. Version `0.5.2` adds pack-owned project setup entrypoint metadata for VC project types. Version `0.5.3` makes project setup steps, schedule groups, and post-approval platform actions explicit in the project type definitions, adds the project-scoped Affinity Deal Room import task, and keeps Origination setup distinct from Deal Room import.
 
 ---
 
@@ -36,6 +36,7 @@ These skills are included because the current `vc_*` Alludium agent templates re
 - `vc-task-and-next-step-generation`
 - `vc-affinity-discovery`
 - `vc-affinity-sync-read`
+- `vc-affinity-deal-room-import`
 - `vc-affinity-sync-write`
 - `vc-slack-discovery`
 - `vc-slack-sync-read`
@@ -111,6 +112,7 @@ These templates are included because the platform VC workspace pack currently re
 - `vc.affinity_setup`
 - `vc.affinity_discovery`
 - `vc.affinity_sync_read`
+- `vc.affinity_deal_room_import`
 - `vc.affinity_sync_write`
 - `vc.slack_setup`
 - `vc.slack_discovery`
@@ -135,7 +137,7 @@ Review notes:
 - The task-template catalog preserves the current platform `vc-workflows` pack metadata, template IDs, and template versions while advertising both supported vertical keys: `venture_capital` and `vc`.
 - Platform eligibility is driven by catalog `verticalKeys`, which the platform loader persists to `task_definitions.vertical_keys`; the per-template `definitionJson.vertical: vc` field remains legacy workflow metadata and is not used for workspace eligibility checks.
 - The task-template surface requires platform capability `external-task-definition-template-ingest`.
-- All task templates advertise `vc_deal_room` as a supported project type; that project type is now included in this pack's `projectTypes` surface.
+- Task templates advertise `vc_deal_room`, `vc_origination_pipeline`, or both according to their declared workflow scope; both project types are now included in this pack's `projectTypes` surface.
 - Task templates without `supportedProjectScopes` are single-project `project_instance` tasks. Templates with `project_management` scope support pipeline, admin, or project-type management work and keep outputs on the task or future management surface unless an explicit management mapping is introduced.
 - The integration templates are application-specific `project_management` tasks. Each integration now exposes one setup task (`vc.*_setup`) in recommendation metadata. That setup task owns the discovery/read/write child task references and approval policy; the lower-level discovery, read-preview, and write-proposal templates remain available as setup-owned child tasks rather than direct application-card actions.
 
@@ -144,11 +146,14 @@ Review notes:
 ## Included Project Types
 
 - `vc_deal_room`
+- `vc_origination_pipeline`
 
 Review notes:
 
 - `vc_deal_room` is copied from the current platform-local project type definition and keeps version `1.0.2`.
-- The definition includes VC Deal Room fields, the instruction template, collapsed lifecycle states, lifecycle transitions, command-view metadata, and conservative `projectTaskMappings`.
+- `vc_origination_pipeline` declares a standing sourcing-pipeline project type with setup, source, review, engagement, promotion, and operating states.
+- The definitions include project fields, instruction templates, lifecycle states, lifecycle transitions, command-view metadata, conservative `projectTaskMappings`, and pack-owned `projectSetup` metadata.
+- Deal Room setup declares source, variables, schedules, and invite steps plus post-approval platform actions for applying variables, creating/importing Deal Room projects, inviting approved collaborators, and enabling approved schedules. Origination setup declares source, variables, and schedules plus post-approval platform actions for applying variables and enabling approved schedules; it does not declare initial import or invite actions.
 - The project-type surface requires platform capability `external-project-type-ingest`.
 - Task auto-fire and lifecycle-stage triggers are not enabled. The current mappings are declarative, manual-review mappings for direct project-backed inputs and required artifact outputs.
 

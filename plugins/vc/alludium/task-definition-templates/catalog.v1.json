@@ -58,6 +58,7 @@
         "vc-integrations/affinity-setup.yaml",
         "vc-integrations/affinity-discovery.yaml",
         "vc-integrations/affinity-sync-read.yaml",
+        "vc-integrations/affinity-deal-room-import.yaml",
         "vc-integrations/affinity-sync-write.yaml",
         "vc-integrations/slack-setup.yaml",
         "vc-integrations/slack-discovery.yaml",
