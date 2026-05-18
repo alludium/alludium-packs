@@ -19,7 +19,7 @@ Produce Meet/Watch/Pass verdicts and urgency scores for enriched origination can
 
 ## Instructions
 
-Mirror the reference pipeline's verdict contract. Score from already-enriched data, separate evidence from inference, and return Meet, Watch, or Pass plus urgency. Apply hard stage safety by passing companies with Series A+ funding or more than 20 employees when reliable LinkedIn company data is present. Run the second-pass verdict only for Meet/Watch rows with fresh LinkedIn company data so paid scraping and model cost stay bounded.
+Mirror the reference pipeline's verdict contract. Score from already-enriched data, separate evidence from inference, and return Meet, Watch, or Pass plus urgency. Apply hard stage safety by passing companies with Series A+ funding or more than 20 employees when reliable LinkedIn company data is present. Run the second-pass verdict only for Meet/Watch rows with fresh LinkedIn company data so paid scraping and model cost stay bounded. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -55,6 +55,11 @@ Scoring only. Do not sync external records, change manual decisions, send outrea
 | `watch_candidate_count` | Watch Candidate Count | `number` | no |
 | `promotion_ready_count` | Promotion Ready Count | `number` | no |
 | `scoring_report` | Scoring Report | `richtext` | no |
+
+## Document References
+
+- `vc.document.sourcing_scoring_rubric` (methodology) -> `scoring_artifact_id`
+- `vc.document.template_use_guidance` (operating_guidance)
 
 ## Routing
 

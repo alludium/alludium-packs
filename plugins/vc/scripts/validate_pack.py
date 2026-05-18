@@ -151,6 +151,44 @@ TASK_TEMPLATE_AGENT_TEMPLATE_REFERENCE_FIELDS = [
 ]
 TASK_TEMPLATE_PLATFORM_CAPABILITY = "external-task-definition-template-ingest"
 PROJECT_TYPE_PLATFORM_CAPABILITY = "external-project-type-ingest"
+DOCUMENT_SURFACE_STATUS = "pack-native-document-sources"
+DOCUMENT_CATALOG_PATH = "alludium/documents/catalog.v1.json"
+DOCUMENT_TYPES = {"checklist", "methodology", "policy", "sop", "style_guide", "template"}
+DOCUMENT_STATUSES = {"source"}
+DOCUMENT_AUTHORING_LEAK_PATTERNS = [
+    "delete this section",
+    "remove this section",
+    "do not include this",
+    "the agent should",
+    "authoring note",
+    "prompt trace",
+]
+DOCUMENT_REF_USAGE_DOCUMENT_TYPES = {
+    "checklist": {"checklist"},
+    "methodology": {"methodology"},
+    "operating_guidance": {"methodology", "policy", "sop", "template"},
+    "output_template": {"checklist", "template"},
+    "policy": {"policy"},
+    "setup_checklist": {"checklist"},
+    "style_guide": {"style_guide"},
+}
+TEMPLATE_USE_GUIDANCE_DOCUMENT_ID = "vc.document.template_use_guidance"
+TEMPLATE_USE_GUIDANCE_REQUIRED_USAGES = {"checklist", "output_template"}
+DOCUMENT_REF_USAGES = {
+    "checklist",
+    "methodology",
+    "operating_guidance",
+    "output_template",
+    "policy",
+    "setup_checklist",
+    "style_guide",
+}
+DOCUMENT_REF_STRUCTURED_ARTIFACT_OUTPUT_FIELDS = {
+    "child_task_plan_artifact_id",
+    "run_receipt_artifact_id",
+    "source_state_artifact_id",
+    "sync_plan_artifact_id",
+}
 EXPECTED_VC_TASK_TEMPLATE_VERTICAL_KEYS = ["venture_capital", "vc"]
 PROJECT_TYPE_FIELD_KINDS = {"date", "enum", "member", "number", "text"}
 PROJECT_TASK_MAPPING_SOURCES = {"constant", "project.field", "project.id", "project.state"}
@@ -209,8 +247,8 @@ VC_ARTIFACT_OUTPUTS = {
     "prepare-initial-call": ["initial_call_brief_artifact_id"],
     "summarize-initial-call": ["customer_insights_artifact_id"],
     "run-follow-up-evaluation": ["follow_up_evaluation_artifact_id"],
-    "run-ten-factor-screen": ["ten_factor_scorecard_artifact_id"],
-    "generate-82-factor-questions": ["eighty_two_factor_questions_artifact_id"],
+    "run-investment-screen": ["investment_screen_scorecard_artifact_id"],
+    "generate-diligence-questions": ["diligence_question_bank_artifact_id"],
     "run-founder-evaluation": ["founder_evaluation_artifact_id"],
     "prepare-team-review-pack": ["team_review_pack_artifact_id"],
     "prepare-partner-review-pack": ["partner_review_pack_artifact_id"],
@@ -242,7 +280,7 @@ VC_ARTIFACT_INPUTS = {
         "first_look_scorecard_artifact_id",
         "customer_insights_artifact_id",
     ],
-    "run-ten-factor-screen": ["pitch_deck_artifact_id"],
+    "run-investment-screen": ["pitch_deck_artifact_id"],
     "run-financial-dd": ["financial_source_artifact_ids"],
     "run-technical-dd": ["technical_source_artifact_ids"],
     "prepare-team-review-pack": [
@@ -250,14 +288,14 @@ VC_ARTIFACT_INPUTS = {
         "financial_dd_artifact_id",
         "founder_evaluation_artifact_id",
         "technical_dd_artifact_id",
-        "eighty_two_factor_questions_artifact_id",
+        "diligence_question_bank_artifact_id",
     ],
     "prepare-partner-review-pack": [
         "commercial_dd_artifact_id",
         "financial_dd_artifact_id",
         "founder_evaluation_artifact_id",
         "technical_dd_artifact_id",
-        "eighty_two_factor_questions_artifact_id",
+        "diligence_question_bank_artifact_id",
         "team_review_pack_artifact_id",
     ],
     "create-ic-memo": [
@@ -265,7 +303,7 @@ VC_ARTIFACT_INPUTS = {
         "financial_dd_artifact_id",
         "founder_evaluation_artifact_id",
         "technical_dd_artifact_id",
-        "eighty_two_factor_questions_artifact_id",
+        "diligence_question_bank_artifact_id",
         "team_review_pack_artifact_id",
         "partner_review_pack_artifact_id",
     ],
@@ -1222,6 +1260,118 @@ def validate_vc_deal_room_task_template_shape(
             )
 
 
+def validate_task_template_document_refs(
+    template_id: str,
+    slug: str,
+    definition_json: dict[str, Any],
+    fields: dict[str, Any],
+    document_ids: set[str],
+    document_types_by_id: dict[str, str],
+) -> None:
+    output_fields = field_map(template_id, "output", fields.get("output"))
+    document_refs = definition_json.get("documentRefs")
+    if document_refs is None:
+        document_refs = []
+    if not isinstance(document_refs, list):
+        fail(f"Task template {template_id} definitionJson.documentRefs must be a list")
+    if document_refs:
+        instructions = definition_json.get("instructions")
+        if not isinstance(instructions, dict):
+            fail(f"Task template {template_id} definitionJson.instructions must be an object")
+        execution_instructions = instructions.get("executionInstructions")
+        if not isinstance(execution_instructions, str) or "definitionJson.documentRefs" not in execution_instructions:
+            fail(
+                f"Task template {template_id} declares documentRefs but executionInstructions "
+                "must tell the agent to use definitionJson.documentRefs"
+            )
+
+    ref_keys: set[tuple[str, str, str | None]] = set()
+    output_ref_pairs: set[tuple[str, str]] = set()
+    has_template_guidance = False
+    requires_template_guidance = False
+    for ref in document_refs:
+        if not isinstance(ref, dict):
+            fail(f"Task template {template_id} definitionJson.documentRefs entries must be objects")
+        document_id = ref.get("documentId")
+        if not isinstance(document_id, str) or not document_id:
+            fail(f"Task template {template_id} documentRefs entries must declare documentId")
+        if document_id not in document_ids:
+            fail(f"Task template {template_id} references unknown document {document_id}")
+        usage = ref.get("usage")
+        if usage not in DOCUMENT_REF_USAGES:
+            fail(
+                f"Task template {template_id} documentRef {document_id} usage must be one of "
+                f"{sorted(DOCUMENT_REF_USAGES)}"
+            )
+        document_type = document_types_by_id.get(document_id)
+        allowed_document_types = DOCUMENT_REF_USAGE_DOCUMENT_TYPES.get(usage, set())
+        if document_type not in allowed_document_types:
+            fail(
+                f"Task template {template_id} documentRef {document_id} usage {usage} "
+                f"does not match documentType {document_type}; expected one of "
+                f"{sorted(allowed_document_types)}"
+            )
+        if usage in TEMPLATE_USE_GUIDANCE_REQUIRED_USAGES:
+            requires_template_guidance = True
+        if document_id == TEMPLATE_USE_GUIDANCE_DOCUMENT_ID and usage == "operating_guidance":
+            has_template_guidance = True
+        output_field_key = ref.get("outputFieldKey")
+        if output_field_key is not None and not isinstance(output_field_key, str):
+            fail(f"Task template {template_id} documentRef {document_id} outputFieldKey must be a string")
+        if output_field_key in DOCUMENT_REF_STRUCTURED_ARTIFACT_OUTPUT_FIELDS:
+            fail(
+                f"Task template {template_id} documentRef {document_id} references structured "
+                f"artifact output field {output_field_key}; state, receipts, and task plans "
+                "must not be modeled as document templates"
+            )
+        ref_key = (document_id, usage, output_field_key)
+        if ref_key in ref_keys:
+            fail(f"Task template {template_id} has duplicate documentRef {ref_key}")
+        ref_keys.add(ref_key)
+        if output_field_key is None:
+            continue
+        output_field = output_fields.get(output_field_key)
+        if output_field is None:
+            fail(
+                f"Task template {template_id} documentRef {document_id} references missing "
+                f"output field {output_field_key}"
+            )
+        if output_field.get("fieldType") != "file":
+            fail(
+                f"Task template {template_id} documentRef {document_id} output field "
+                f"{output_field_key} must be a file field"
+            )
+        config = output_field.get("config")
+        if not isinstance(config, dict):
+            fail(f"Task template {template_id} output field {output_field_key} config must be an object")
+        if config.get("documentRefId") != document_id:
+            fail(
+                f"Task template {template_id} output field {output_field_key} must set "
+                f"config.documentRefId to {document_id}"
+            )
+        output_ref_pairs.add((output_field_key, document_id))
+
+    for output_field_key, output_field in output_fields.items():
+        config = output_field.get("config") or {}
+        if not isinstance(config, dict):
+            continue
+        document_ref_id = config.get("documentRefId")
+        if document_ref_id is None:
+            continue
+        if not isinstance(document_ref_id, str) or not document_ref_id:
+            fail(f"Task template {template_id} output field {output_field_key} has invalid documentRefId")
+        if (output_field_key, document_ref_id) not in output_ref_pairs:
+            fail(
+                f"Task template {template_id} output field {output_field_key} declares "
+                f"documentRefId {document_ref_id} without matching definitionJson.documentRefs entry"
+            )
+    if requires_template_guidance and not has_template_guidance:
+        fail(
+            f"Task template {template_id} uses output/checklist document refs but does not reference "
+            f"{TEMPLATE_USE_GUIDANCE_DOCUMENT_ID} as operating_guidance"
+        )
+
+
 def validate_project_type_field(project_type_id: str, field: Any) -> tuple[str, str]:
     if not isinstance(field, dict):
         fail(f"Project type {project_type_id} fieldsSchema entries must be objects")
@@ -1887,12 +2037,278 @@ def validate_project_types(manifest: dict[str, Any]) -> set[str]:
     return set(discovered_ids)
 
 
+def validate_document_markdown(
+    document_root: Path,
+    markdown_path: Path,
+    catalog_entry: dict[str, Any],
+) -> None:
+    frontmatter = parse_frontmatter(markdown_path)
+    relative_path = markdown_path.relative_to(document_root)
+    markdown_text = markdown_path.read_text(encoding="utf-8")
+
+    for field_name in ["id", "title", "documentType", "supportedProjectTypes"]:
+        if field_name not in frontmatter:
+            fail(f"Document {relative_path} frontmatter must declare {field_name}")
+    for field_name in ["id", "title", "documentType"]:
+        if frontmatter.get(field_name) != catalog_entry.get(field_name):
+            fail(
+                f"Document {relative_path} frontmatter {field_name} must match catalog entry "
+                f"{catalog_entry.get('id')}"
+            )
+    supported_project_types = require_string_list(
+        frontmatter.get("supportedProjectTypes"),
+        f"Document {relative_path} frontmatter.supportedProjectTypes",
+    )
+    if supported_project_types != catalog_entry.get("supportedProjectTypes"):
+        fail(
+            f"Document {relative_path} frontmatter.supportedProjectTypes must match catalog entry "
+            f"{catalog_entry.get('id')}"
+        )
+    if not isinstance(frontmatter.get("summary"), str) or not frontmatter.get("summary"):
+        fail(f"Document {relative_path} frontmatter must declare summary")
+    validate_markdown_tables(relative_path, markdown_text)
+    validate_document_output_hygiene(relative_path, markdown_text)
+    validate_document_quality_sections(relative_path, markdown_text, catalog_entry)
+
+
+def validate_markdown_tables(relative_path: Path, markdown_text: str) -> None:
+    table_block: list[tuple[int, str]] = []
+    for line_number, line in enumerate(markdown_text.splitlines(), start=1):
+        if line.startswith("|"):
+            table_block.append((line_number, line))
+            continue
+        if table_block:
+            validate_markdown_table_block(relative_path, table_block)
+            table_block = []
+    if table_block:
+        validate_markdown_table_block(relative_path, table_block)
+
+
+def validate_markdown_table_block(relative_path: Path, table_block: list[tuple[int, str]]) -> None:
+    pipe_counts = {line.count("|") for _, line in table_block}
+    if len(pipe_counts) > 1:
+        first_line = table_block[0][0]
+        fail(
+            f"Document {relative_path}:{first_line} has inconsistent Markdown table columns: "
+            f"{sorted(pipe_counts)}"
+        )
+
+
+def validate_document_output_hygiene(relative_path: Path, markdown_text: str) -> None:
+    lowered = markdown_text.lower()
+    for pattern in DOCUMENT_AUTHORING_LEAK_PATTERNS:
+        if pattern in lowered:
+            fail(f"Document {relative_path} contains authoring/prompt guidance leak: {pattern!r}")
+
+
+def validate_document_quality_sections(
+    relative_path: Path,
+    markdown_text: str,
+    catalog_entry: dict[str, Any],
+) -> None:
+    document_type = catalog_entry.get("documentType")
+    reader_facing_quality_sections = [
+        "## Approval Rule",
+        "## Batch Rule",
+        "## Boundary",
+        "## Cadence",
+        "## Decision",
+        "## Escalation Rule",
+        "## Standard",
+        "## Usage",
+    ]
+    if document_type in {"template", "checklist"} and not any(
+        heading in markdown_text for heading in reader_facing_quality_sections
+    ):
+        fail(f"Document {relative_path} must include a reader-facing quality or boundary section")
+    if catalog_entry.get("id") in {
+        "vc.document.investment_memo_template",
+        "vc.document.diligence_report_template",
+        "vc.document.review_pack_checklist",
+        "vc.document.initial_call_brief_template",
+        "vc.document.sourcing_digest_template",
+        "vc.document.closing_checklist",
+    } and "## Source Inputs" not in markdown_text:
+        fail(f"Document {relative_path} must include a Source Inputs section")
+
+
+def validate_documents(
+    manifest: dict[str, Any],
+    project_type_ids: set[str],
+) -> tuple[dict[str, set[str]], dict[str, str]]:
+    surface = manifest["surfaces"].get("documents")
+    if not isinstance(surface, dict):
+        fail("Manifest must declare surfaces.documents")
+    surface_path = surface.get("path")
+    if not isinstance(surface_path, str) or not surface_path:
+        fail("surfaces.documents.path must be declared")
+    if surface.get("status") != DOCUMENT_SURFACE_STATUS:
+        fail(f"surfaces.documents.status must be {DOCUMENT_SURFACE_STATUS}")
+    if surface.get("catalog") != "catalog.v1.json":
+        fail("surfaces.documents.catalog must be catalog.v1.json")
+    manifest_document_ids = surface.get("ids")
+    if not isinstance(manifest_document_ids, list) or not all(
+        isinstance(item, str) for item in manifest_document_ids
+    ):
+        fail("surfaces.documents.ids must be a list of strings")
+    if len(manifest_document_ids) != len(set(manifest_document_ids)):
+        fail("Duplicate document IDs in alludium/manifest.yaml")
+
+    document_root = ROOT / surface_path
+    resolved_document_root = document_root.resolve()
+    try:
+        resolved_document_root.relative_to(ROOT.resolve())
+    except ValueError:
+        fail(f"surfaces.documents.path must resolve inside the pack root: {surface_path}")
+    if not document_root.is_dir():
+        fail(f"surfaces.documents.path must reference an existing directory: {surface_path}")
+
+    catalog_path = document_root / "catalog.v1.json"
+    if not catalog_path.exists():
+        fail(f"Missing document catalog: {catalog_path.relative_to(ROOT)}")
+    catalog = read_json(catalog_path)
+    if not isinstance(catalog, dict):
+        fail(f"{catalog_path.relative_to(ROOT)} must be an object")
+    if catalog.get("kind") != "document-catalog":
+        fail(f"{catalog_path.relative_to(ROOT)} kind must be document-catalog")
+    if catalog.get("apiVersion") != "alludium/v1alpha1":
+        fail(f"{catalog_path.relative_to(ROOT)} apiVersion must be alludium/v1alpha1")
+
+    catalog_entries = catalog.get("documents")
+    if not isinstance(catalog_entries, list) or not catalog_entries:
+        fail(f"{catalog_path.relative_to(ROOT)} documents must be a non-empty list")
+
+    discovered_ids: list[str] = []
+    discovered_paths: set[Path] = set()
+    document_ids_by_project_type: dict[str, set[str]] = {
+        project_type_id: set() for project_type_id in project_type_ids
+    }
+    document_types_by_id: dict[str, str] = {}
+    task_slugs = set(load_task_template_contracts())
+    for entry in catalog_entries:
+        if not isinstance(entry, dict):
+            fail("Document catalog entries must be objects")
+        document_id = entry.get("id")
+        relative_document_path = entry.get("path")
+        if not isinstance(document_id, str) or not document_id:
+            fail("Document catalog entries must declare id")
+        if not isinstance(entry.get("title"), str) or not entry.get("title"):
+            fail(f"Document catalog entry {document_id} must declare title")
+        if not isinstance(entry.get("description"), str) or not entry.get("description"):
+            fail(f"Document catalog entry {document_id} must declare description")
+        if entry.get("documentType") not in DOCUMENT_TYPES:
+            fail(f"Document catalog entry {document_id} has invalid documentType")
+        document_types_by_id[document_id] = entry["documentType"]
+        if entry.get("status") not in DOCUMENT_STATUSES:
+            fail(f"Document catalog entry {document_id} has invalid status")
+        if not isinstance(relative_document_path, str) or not relative_document_path:
+            fail(f"Document catalog entry {document_id} must declare path")
+        if not relative_document_path.endswith(".md"):
+            fail(f"Document catalog entry {document_id} path must reference Markdown")
+
+        supported_project_types = require_string_list(
+            entry.get("supportedProjectTypes"),
+            f"Document catalog entry {document_id}.supportedProjectTypes",
+        )
+        if not supported_project_types:
+            fail(f"Document catalog entry {document_id} must declare supportedProjectTypes")
+        unknown_project_types = sorted(set(supported_project_types) - project_type_ids)
+        if unknown_project_types:
+            fail(
+                f"Document catalog entry {document_id} references unknown project types: "
+                f"{unknown_project_types}"
+            )
+        if len(supported_project_types) != len(set(supported_project_types)):
+            fail(f"Document catalog entry {document_id} has duplicate supportedProjectTypes")
+        related_slugs = require_string_list(
+            entry.get("relatedTaskDefinitionSlugs"),
+            f"Document catalog entry {document_id}.relatedTaskDefinitionSlugs",
+        )
+        if len(related_slugs) != len(set(related_slugs)):
+            fail(f"Document catalog entry {document_id} has duplicate relatedTaskDefinitionSlugs")
+        unknown_related_slugs = sorted(set(related_slugs) - task_slugs)
+        if unknown_related_slugs:
+            fail(
+                f"Document catalog entry {document_id} references unknown task slugs: "
+                f"{unknown_related_slugs}"
+            )
+
+        document_path = document_root / relative_document_path
+        resolved_document_path = document_path.resolve()
+        try:
+            resolved_document_path.relative_to(resolved_document_root)
+        except ValueError:
+            fail(f"Document catalog path escapes document surface: {relative_document_path}")
+        if not document_path.exists():
+            fail(f"Document catalog references missing file {relative_document_path}")
+        discovered_paths.add(resolved_document_path)
+        discovered_ids.append(document_id)
+        validate_document_markdown(document_root, resolved_document_path, entry)
+        for project_type_id in supported_project_types:
+            document_ids_by_project_type[project_type_id].add(document_id)
+
+    if len(discovered_ids) != len(set(discovered_ids)):
+        fail("Duplicate document IDs in catalog files")
+    if set(discovered_ids) != set(manifest_document_ids):
+        fail(
+            "Manifest document IDs do not match catalog files: "
+            f"manifest_only={sorted(set(manifest_document_ids) - set(discovered_ids))}, "
+            f"catalog_only={sorted(set(discovered_ids) - set(manifest_document_ids))}"
+        )
+
+    actual_markdown_paths = {path.resolve() for path in document_root.glob("**/*.md")}
+    extra_markdown_paths = actual_markdown_paths - discovered_paths
+    if extra_markdown_paths:
+        fail(
+            "Document Markdown files present on disk but missing from catalog: "
+            f"{sorted(str(path.relative_to(document_root)) for path in extra_markdown_paths)}"
+        )
+
+    return document_ids_by_project_type, document_types_by_id
+
+
+def validate_project_type_document_references(
+    manifest: dict[str, Any],
+    document_ids_by_project_type: dict[str, set[str]],
+) -> None:
+    project_type_root = ROOT / manifest["surfaces"]["projectTypes"]["path"]
+    for project_type_id, expected_document_ids in document_ids_by_project_type.items():
+        project_type_path = project_type_root / f"{project_type_id}.json"
+        project_type = read_json(project_type_path)
+        initial_version = project_type.get("initialVersion") or {}
+        if not isinstance(initial_version, dict):
+            fail(f"Project type {project_type_id} initialVersion must be an object")
+        document_library = initial_version.get("documentLibrary")
+        if not isinstance(document_library, dict):
+            fail(f"Project type {project_type_id} initialVersion.documentLibrary must be declared")
+        if document_library.get("catalogPath") != DOCUMENT_CATALOG_PATH:
+            fail(
+                f"Project type {project_type_id} documentLibrary.catalogPath must be "
+                f"{DOCUMENT_CATALOG_PATH}"
+            )
+        document_ids = require_string_list(
+            document_library.get("documentIds"),
+            f"Project type {project_type_id} documentLibrary.documentIds",
+        )
+        if len(document_ids) != len(set(document_ids)):
+            fail(f"Project type {project_type_id} documentLibrary.documentIds has duplicates")
+        if set(document_ids) != expected_document_ids:
+            fail(
+                f"Project type {project_type_id} documentLibrary.documentIds must match "
+                "document catalog supportedProjectTypes: "
+                f"missing={sorted(expected_document_ids - set(document_ids))}, "
+                f"extra={sorted(set(document_ids) - expected_document_ids)}"
+            )
+
+
 def validate_task_template_file(
     path: Path,
     expected_pack: dict[str, Any],
     skill_ids: set[str],
     agent_template_ids: set[str],
     project_type_ids: set[str],
+    document_ids: set[str],
+    document_types_by_id: dict[str, str],
 ) -> str:
     template = read_yaml(path)
     relative_path = path.relative_to(ROOT)
@@ -1987,6 +2403,14 @@ def validate_task_template_file(
     fields = template.get("fields") or {}
     if not isinstance(fields, dict):
         fail(f"Task template {template_id} fields must be an object when declared")
+    validate_task_template_document_refs(
+        template_id,
+        slug,
+        definition_json,
+        fields,
+        document_ids,
+        document_types_by_id,
+    )
     validate_required_artifact_fields(template_id, slug, fields)
     validate_vc_deal_room_task_template_shape(
         template_id,
@@ -2076,6 +2500,8 @@ def validate_task_definition_templates(
     skill_ids: set[str],
     agent_template_ids: set[str],
     project_type_ids: set[str],
+    document_ids: set[str],
+    document_types_by_id: dict[str, str],
 ) -> None:
     surface = manifest["surfaces"].get("taskDefinitionTemplates")
     if not isinstance(surface, dict):
@@ -2142,6 +2568,8 @@ def validate_task_definition_templates(
                     skill_ids,
                     agent_template_ids,
                     project_type_ids,
+                    document_ids,
+                    document_types_by_id,
                 )
             )
 
@@ -2864,7 +3292,17 @@ def main() -> None:
     validate_templates(manifest, skill_ids)
     agent_template_ids = set(manifest["surfaces"]["alludiumAgentTemplates"]["ids"])
     project_type_ids = validate_project_types(manifest)
-    validate_task_definition_templates(manifest, skill_ids, agent_template_ids, project_type_ids)
+    document_ids_by_project_type, document_types_by_id = validate_documents(manifest, project_type_ids)
+    validate_project_type_document_references(manifest, document_ids_by_project_type)
+    document_ids = set(manifest["surfaces"]["documents"]["ids"])
+    validate_task_definition_templates(
+        manifest,
+        skill_ids,
+        agent_template_ids,
+        project_type_ids,
+        document_ids,
+        document_types_by_id,
+    )
     validate_project_task_mapping_contracts()
     validate_origination_pipeline_task_mapping_contracts()
     recommendations_path = manifest["surfaces"]["alludiumMcpRecommendations"]["path"]
@@ -2889,7 +3327,8 @@ def main() -> None:
         f"{len(skill_ids)} skills, "
         f"{len(manifest['surfaces']['alludiumAgentTemplates']['ids'])} agent templates, "
         f"{len(manifest['surfaces']['taskDefinitionTemplates']['ids'])} task definition templates, "
-        f"{len(project_type_ids)} project types"
+        f"{len(project_type_ids)} project types, "
+        f"{len(manifest['surfaces']['documents']['ids'])} documents"
     )
 
 

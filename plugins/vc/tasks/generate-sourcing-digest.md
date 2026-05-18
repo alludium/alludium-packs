@@ -18,7 +18,7 @@ Generate a daily or weekly origination digest with candidates, run receipts, deg
 
 ## Instructions
 
-Produce a reference-pipeline-style digest of new Meet/Watch and active candidates, source counts, run failures, budget/cost notes, and review actions. The default destination is a reviewable digest object; posting to Slack, ClickUp, email, or another external channel requires a separately approved write-capable task.
+Produce a reference-pipeline-style digest of new Meet/Watch and active candidates, source counts, run failures, budget/cost notes, and review actions. The default destination is a reviewable digest object; posting to Slack, ClickUp, email, or another external channel requires a separately approved write-capable task. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -50,6 +50,11 @@ Draft digest only unless explicit channel-post approval is granted.
 | `sourcing_digest_artifact_id` | Sourcing Digest Artifact | `file` | yes |
 | `digest_status` | Digest Status | `string` | no |
 | `sourcing_digest` | Sourcing Digest | `richtext` | no |
+
+## Document References
+
+- `vc.document.sourcing_digest_template` (output_template) -> `sourcing_digest_artifact_id`
+- `vc.document.template_use_guidance` (operating_guidance)
 
 ## Routing
 

@@ -1,8 +1,8 @@
 ---
-id: ten-factor-evaluation
-name: Ten-Factor Evaluation
+id: investment-screening-framework
+name: Investment Screening Framework
 description: >
-  Apply a Ten-Factor screening method to an investment opportunity using founder
+  Apply an Investment Screening framework to an investment opportunity using founder
   materials, deal artifacts, and external research. Use this skill when screening an
   inbound deal, evaluating whether a company fits the firm's investment criteria, turning a
   deck or first-call notes into a structured scorecard, identifying what is known vs
@@ -12,7 +12,7 @@ tags:
   - vc
   - screening
   - evaluation
-  - ten-factor
+  - investment-screening
 capability:
   dependencies:
     - kind: skill-assignment
@@ -21,7 +21,7 @@ capability:
     - kind: tool
       importance: recommended
       required: false
-      note: Ten-Factor evaluation depends on founder materials, deal artifacts, company context, and available external research sources. Provider-specific tool IDs are intentionally omitted because evidence may be supplied through several configured surfaces.
+      note: Investment screening depends on founder materials, deal artifacts, company context, and available external research sources. Provider-specific tool IDs are intentionally omitted because evidence may be supplied through several configured surfaces.
       gracefulDegradation: Score only factors supported by available evidence and mark the rest N/A or unknown.
     - kind: setup
       importance: recommended
@@ -36,9 +36,9 @@ capability:
       - This skill recommends next steps from evidence; it does not create deal rooms or mutate CRM by itself.
 ---
 
-# Ten-Factor Evaluation
+# Investment Screening Framework
 
-Apply a Ten-Factor screening method to produce a structured, evidence-backed assessment
+Apply an Investment Screening framework to produce a structured, evidence-backed assessment
 of a company. The goal is to clearly separate what is known from what is unknown, and
 recommend a next step.
 
@@ -49,7 +49,7 @@ creation, and not deep diligence.
 
 Keep this distinction explicit:
 
-- the underlying Ten-Factor checklist is qualitative
+- the underlying Investment Screening framework is qualitative
 - it does not define a native numeric scoring rubric
 - the platform operating convention introduces a practical scorecard format with
   score, rationale, evidence, unknowns, roll-up, and recommendation
@@ -76,7 +76,7 @@ If the firm's investment thesis is available, do a fast fit check before full ev
 - Is there a hard mismatch that makes full scoring low-value?
 
 If there is a clear thesis mismatch, say so, explain why, and recommend Pass without
-running the full 10 factors.
+running the full framework.
 
 ## Core Method
 
@@ -84,7 +84,7 @@ running the full 10 factors.
 2. Run thesis fit pre-check if thesis context is available.
 3. Gather evidence from founder materials, call notes, company website, existing research
    artifacts, and external sources via tools.
-4. For each of the 10 factors:
+4. For each factor in the framework:
    - **Known** — summarise the strongest evidence. Cite sources.
    - **Assessment** — 2-3 sentences explaining the score. Surface contradictions explicitly.
    - **Score 1-5 or N/A** — where 1 is very weak and 5 is very strong. Include a confidence
@@ -94,7 +94,7 @@ running the full 10 factors.
      for 12 months" is useful. "More data" is not.
 5. Produce the roll-up, cases, questions, and recommendation.
 
-## The 10 Factors
+## Screening Factors
 
 ### 1. Problem
 
@@ -221,7 +221,7 @@ The recommendation must follow from the evidence pattern, not from gut feel.
 ## Output Shape
 
 ```
-# Ten-Factor Evaluation: [Company Name]
+# Investment Screening Framework: [Company Name]
 
 ## Summary
 
@@ -243,10 +243,10 @@ Average: X.X/5 | Distribution: X strong / X mixed / X weak / X N/A
 ### 2. Product — X/5 (Confidence: X)
 ...
 
-[...all 10 factors]
+[...all screening factors]
 
 ## Pattern
-[What stands out across the 10 factors taken together]
+[What stands out across the screening factors taken together]
 
 ## Bull Case
 [2-3 sentences — best realistic version]
@@ -301,5 +301,5 @@ This skill works well with:
 - `company-research-and-enrichment` — foundation data
 - `market-map-building` — deeper competitive context for Factor 7
 - `red-flags-scanner` — structured risk scan beyond Factor 9
-- `82-factor-diligence-question-generation` — deeper question set beyond the top 5
+- `investment-diligence-question-framework` — deeper question set beyond the top 5
 - `meeting-prep-and-summary` — first-call preparation from this evaluation

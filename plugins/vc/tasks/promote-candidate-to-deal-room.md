@@ -18,7 +18,7 @@ Prepare a reviewed promotion package for creating or updating a VC Deal Room fro
 
 ## Instructions
 
-Promote only human-approved candidates. Prepare a Deal Room creation/update package with company identity, founder evidence, source receipts, enrichment/verdict/screen summaries, relationship context, outreach state, and open questions. Do not create or update the Deal Room unless the platform action is explicitly approved.
+Promote only human-approved candidates. Prepare a Deal Room creation/update package with company identity, founder evidence, source receipts, enrichment/verdict/screen summaries, relationship context, outreach state, and open questions. Do not create or update the Deal Room unless the platform action is explicitly approved. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -50,6 +50,11 @@ Promotion package by default. Deal Room creation/update, CRM changes, document c
 | `promotion_package_artifact_id` | Promotion Package Artifact | `file` | yes |
 | `promoted_candidate_key` | Promoted Candidate Key | `string` | no |
 | `promotion_summary` | Promotion Summary | `richtext` | no |
+
+## Document References
+
+- `vc.document.promotion_package_template` (output_template) -> `promotion_package_artifact_id`
+- `vc.document.template_use_guidance` (operating_guidance)
 
 ## Routing
 

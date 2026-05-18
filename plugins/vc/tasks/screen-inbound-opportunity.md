@@ -19,7 +19,7 @@ Screen Inbound Opportunity for one venture-capital opportunity with evidence cap
 
 ## Instructions
 
-Screen the inbound company against fund thesis and available deck or intro context; return fit recommendation, 10-Factor summary, gaps, red flags, pass feedback draft, and next actions. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named First Look Scorecard and attach it to the required output field `first_look_scorecard_artifact_id`.
+Screen the inbound company against fund thesis and available deck or intro context; return fit recommendation, initial screening summary, gaps, red flags, pass feedback draft, and next actions. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named First Look Scorecard and attach it to the required output field `first_look_scorecard_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -54,7 +54,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | --- | --- | --- | --- |
 | `first_look_scorecard_artifact_id` | First Look Scorecard | `file` | yes |
 | `fit_recommendation` | Fit Recommendation | `string` | no |
-| `initial_ten_factor_summary` | Initial Ten Factor Summary | `richtext` | no |
+| `initial_investment_screen_summary` | Initial Investment Screen Summary | `richtext` | no |
 | `missing_information` | Missing Information | `string` | no |
 | `red_flags` | Red Flags | `string` | no |
 | `pass_feedback_draft` | Pass Feedback Draft | `string` | no |
@@ -67,6 +67,12 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `open_questions` | Open Questions | `json` | no |
 | `risks` | Risks | `json` | no |
 | `human_decision_points` | Human Decision Points | `string` | no |
+
+## Document References
+
+- `vc.document.investment_screening_framework` (methodology) -> `first_look_scorecard_artifact_id`
+- `vc.document.evidence_citation_style_guide` (style_guide)
+- `vc.document.template_use_guidance` (operating_guidance)
 
 ## Routing
 
@@ -93,4 +99,4 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 
 ## Workspace-Configured Methodology Skills
 
-- `ten-factor-evaluation`: Use only when the workspace explicitly configures this screening framework.
+- `investment-screening-framework`: Use only when the workspace explicitly configures this screening framework.

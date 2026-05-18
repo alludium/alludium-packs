@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_founder_evaluation
-version: 1.0.4
+version: 1.0.8
 title: Run Founder Evaluation
 category: Venture Capital
 visibility: workspace
@@ -19,6 +19,14 @@ definition:
     vertical: vc
     stage: diligence
     taskFamily: diligence
+    documentRefs:
+      - documentId: vc.document.diligence_report_template
+        usage: output_template
+        outputFieldKey: founder_evaluation_artifact_id
+      - documentId: vc.document.evidence_citation_style_guide
+        usage: style_guide
+      - documentId: vc.document.template_use_guidance
+        usage: operating_guidance
     requiredSkills:
       - team-and-hiring-assessment
       - red-flags-scanner
@@ -43,7 +51,8 @@ definition:
         anchor: slide-34
         note: Roles
     instructions:
-      executionInstructions: Prepare founder dossier, reference plan, reference summaries when available, founder risk assessment, stop signals, and human-only judgment prompts. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a durable project file artifact named Founder Evaluation and attach it to the required output field `founder_evaluation_artifact_id`.
+      executionInstructions: >-
+        Prepare founder dossier, reference plan, reference summaries when available, founder risk assessment, stop signals, and human-only judgment prompts. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a durable project file artifact named Founder Evaluation and attach it to the required output field `founder_evaluation_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
@@ -83,7 +92,8 @@ fields:
       fieldType: file
       required: true
       position: 0
-      config: {}
+      config:
+        documentRefId: vc.document.diligence_report_template
     - key: founder_dossier
       name: Founder Dossier
       fieldType: string

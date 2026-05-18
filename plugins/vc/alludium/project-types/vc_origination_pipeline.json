@@ -162,7 +162,30 @@
     ]
   },
   "initialVersion": {
-    "version": "0.1.0",
+    "version": "0.1.3",
+    "documentLibrary": {
+      "catalogPath": "alludium/documents/catalog.v1.json",
+      "documentIds": [
+        "vc.document.investment_screening_framework",
+        "vc.document.investment_diligence_question_framework",
+        "vc.document.evidence_citation_style_guide",
+        "vc.document.template_use_guidance",
+        "vc.document.file_naming_source_index_sop",
+        "vc.document.origination_pipeline_sop",
+        "vc.document.source_registry_template",
+        "vc.document.candidate_batch_template",
+        "vc.document.sourcing_scoring_rubric",
+        "vc.document.source_health_review_checklist",
+        "vc.document.paid_source_spend_audit_checklist",
+        "vc.document.sourcing_digest_template",
+        "vc.document.outreach_queue_template",
+        "vc.document.promotion_package_template",
+        "vc.document.sourcing_ic_summary_template",
+        "vc.document.dedupe_novelty_policy",
+        "vc.document.apify_source_setup_checklist",
+        "vc.document.companies_house_source_setup_checklist"
+      ]
+    },
     "fieldsSchema": [
       {
         "id": "field-pipeline-name",

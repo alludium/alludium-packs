@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.review_opportunity_status
-version: 1.0.4
+version: 1.0.5
 title: Review Opportunity Status
 category: Venture Capital
 visibility: workspace
@@ -78,9 +78,9 @@ definition:
         - request-founder-materials
         - prepare-initial-call
         - summarize-initial-call
-        - run-ten-factor-screen
+        - run-investment-screen
         - run-follow-up-evaluation
-        - generate-82-factor-questions
+        - generate-diligence-questions
         - run-founder-evaluation
         - prepare-team-review-pack
         - prepare-partner-review-pack

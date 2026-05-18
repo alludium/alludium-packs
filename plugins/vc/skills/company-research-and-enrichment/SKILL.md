@@ -236,7 +236,7 @@ Requested by: [skill or workflow that triggered this]
 
 - Sources queried: [list]
 - Artifacts referenced: [deck, docs, notes, URLs]
-- Suggested downstream uses: [ten-factor, meeting prep, outreach, etc.]
+- Suggested downstream uses: [investment-screening, meeting prep, outreach, etc.]
 ```
 
 ## Depth Levels
@@ -277,7 +277,7 @@ If the requesting workflow does not specify depth, default to Standard.
 
 ## Related Skills
 
-- `ten-factor-evaluation` — primary consumer; uses this profile as evidence base
+- `investment-screening-framework` — primary consumer; uses this profile as evidence base
 - `market-map-building` — extends the Market & Competition section into a full map
 - `team-and-hiring-assessment` — deep-dives on the Team section
 - `founder-outreach-and-intro-paths` — uses relationship context for warm intro routing

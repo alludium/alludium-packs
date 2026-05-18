@@ -1,4 +1,4 @@
-version: "1.0.2"
+version: "1.0.3"
 type: "template"
 platform_managed: false
 id: "vc_origination_scout"
@@ -19,7 +19,7 @@ metadata:
     - company-research-and-enrichment
     - market-map-building
     - founder-outreach-and-intro-paths
-    - ten-factor-evaluation
+    - investment-screening-framework
     - citation-enforcement
 
 llm:
@@ -34,7 +34,7 @@ skills:
     activationMode: "AUTO"
   - externalId: "founder-outreach-and-intro-paths"
     activationMode: "ALWAYS"
-  - externalId: "ten-factor-evaluation"
+  - externalId: "investment-screening-framework"
     activationMode: "AUTO"
   - externalId: "citation-enforcement"
     activationMode: "ALWAYS"
@@ -60,7 +60,7 @@ prompt:
     - Use `market-map-building` for category discovery, competitor sets, and market structure.
     - Use `company-research-and-enrichment` for shortlisted company profiles.
     - Use `founder-outreach-and-intro-paths` for relationship paths, do-not-contact checks, warm-intro options, and draft outreach.
-    - Use `ten-factor-evaluation` only for light screening context in lead-gen packets.
+    - Use `investment-screening-framework` only for light screening context in lead-gen packets.
     - Use `citation-enforcement` before presenting target lists, lead packets, or outreach rationale.
 
     ## Tool Posture

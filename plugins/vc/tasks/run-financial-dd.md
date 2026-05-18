@@ -17,7 +17,7 @@ Run Financial DD for one venture-capital opportunity with evidence capture, huma
 
 ## Instructions
 
-Run financial diligence covering historicals, burn and runway, cap table, business-model economics, forecast stress test, use of funds, and financial risks from the supplied financial source artifact list. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update durable project file artifacts named Financial DD Report and Unit Economics Analysis, and attach them to the required output fields `financial_dd_artifact_id` and `unit_economics_artifact_id`.
+Run financial diligence covering historicals, burn and runway, cap table, business-model economics, forecast stress test, use of funds, and financial risks from the supplied financial source artifact list. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update durable project file artifacts named Financial DD Report and Unit Economics Analysis, and attach them to the required output fields `financial_dd_artifact_id` and `unit_economics_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -70,6 +70,13 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `risks` | Risks | `json` | no |
 | `human_decision_points` | Human Decision Points | `string` | no |
 | `next_actions` | Next Actions | `json` | no |
+
+## Document References
+
+- `vc.document.diligence_report_template` (output_template) -> `financial_dd_artifact_id`
+- `vc.document.diligence_report_template` (output_template) -> `unit_economics_artifact_id`
+- `vc.document.evidence_citation_style_guide` (style_guide)
+- `vc.document.template_use_guidance` (operating_guidance)
 
 ## Routing
 

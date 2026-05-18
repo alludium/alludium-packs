@@ -65,8 +65,8 @@ Run this check first and stop if any required item is missing.
 
 | Artifact                     | Produced By                               | Used In Sections            |
 | ---------------------------- | ----------------------------------------- | --------------------------- |
-| 10-Factor scorecard          | `ten-factor-evaluation`                   | 12 (recommendation context) |
-| Diligence question bank      | `82-factor-diligence-question-generation` | 11                          |
+| Investment Screening scorecard          | `investment-screening-framework`                   | 12 (recommendation context) |
+| Diligence question bank      | `investment-diligence-question-framework` | 11                          |
 | Deal terms / cap table notes | Founder materials / call notes            | 9                           |
 | Company research profile     | `company-research-and-enrichment`         | 1, 2, 5                     |
 
@@ -147,9 +147,9 @@ next action. Surface conflicting evidence here rather than resolving it elsewher
 
 ### 11. Diligence Plan + Open Questions
 
-Pull from the 82-Factor Diligence Question Generator output if available.
+Pull from the Investment Diligence Question Generator output if available.
 Organise questions into: Critical (must answer before decision), Important
-(should answer soon), and Nice-to-have. Align to 82-Factor categories.
+(should answer soon), and Nice-to-have. Align to Investment Diligence categories.
 
 ### 12. Recommendation + Decision Ask
 
@@ -178,8 +178,8 @@ Use this table to trace every section back to its source artifacts:
 | 8. Team                             | Team table                       | Call notes                                                             |
 | 9. Deal Terms                       | Call notes, founder materials    | Cap table summary                                                      |
 | 10. Risks & Mitigations             | Red flags list                   | All other artifacts                                                    |
-| 11. Diligence Plan + Open Questions | Diligence question bank          | 10-Factor scorecard unknowns                                           |
-| 12. Recommendation + Decision Ask   | All inputs (synthesis)           | 10-Factor scorecard                                                    |
+| 11. Diligence Plan + Open Questions | Diligence question bank          | Investment Screening scorecard unknowns                                           |
+| 12. Recommendation + Decision Ask   | All inputs (synthesis)           | Investment Screening scorecard                                                    |
 
 ## Citation Enforcement
 
@@ -265,7 +265,7 @@ direct links to all supporting artifacts:
 | Team table | [link] | YYYY-MM-DD |
 | Red flags scan | [link] | YYYY-MM-DD |
 | Diligence question bank | [link] | YYYY-MM-DD |
-| 10-Factor scorecard | [link] | YYYY-MM-DD |
+| Investment Screening scorecard | [link] | YYYY-MM-DD |
 | Legal docs (if any) | [link] | YYYY-MM-DD |
 ```
 
@@ -322,7 +322,7 @@ profile, and Exa rather than blocking the memo.
 [ranked risk table with evidence and actions]
 
 ## 11. Diligence Plan + Open Questions
-[prioritised question list, 82-factor aligned]
+[prioritised question list, investment-diligence aligned]
 
 ## 12. Recommendation + Decision Ask
 [Invest / Continue / Pass + rationale + specific ask]
@@ -362,7 +362,7 @@ profile, and Exa rather than blocking the memo.
 - `team-and-hiring-assessment` -- deeper team evaluation for Section 8
 - `market-map-building` -- deeper competitive landscape for Section 5
 - `red-flags-scanner` -- structured risk scan for Section 10
-- `82-factor-diligence-question-generation` -- full question bank for Section 11
-- `ten-factor-evaluation` -- screening scorecard that feeds Section 12 context
+- `investment-diligence-question-framework` -- full question bank for Section 11
+- `investment-screening-framework` -- screening scorecard that feeds Section 12 context
 - `company-research-and-enrichment` -- foundation data for Sections 1, 2, 5
 - `meeting-prep-and-summary` -- call notes that feed Sections 3, 9

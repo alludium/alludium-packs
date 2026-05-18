@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.audit_linkedin_query_spend
-version: 0.1.1
+version: 0.1.5
 title: Audit LinkedIn Query Spend
 category: Venture Capital
 visibility: workspace
@@ -20,6 +20,12 @@ definition:
     vertical: vc
     stage: operate
     taskFamily: origination_spend_audit
+    documentRefs:
+      - documentId: vc.document.paid_source_spend_audit_checklist
+        usage: output_template
+        outputFieldKey: linkedin_spend_audit_artifact_id
+      - documentId: vc.document.template_use_guidance
+        usage: operating_guidance
     requiredSkills:
       - vc-linkedin-query-spend-audit
       - vc-source-registry-and-state-management
@@ -54,7 +60,8 @@ definition:
       safety:
         externalWritesRequireApproval: true
     instructions:
-      executionInstructions: Mirror the reference pipeline's read-only LinkedIn query audit. Compare query/track run depth, pages or result batches paid, candidate yield, duplicate or seen rate, exhaustion state, estimated cost, and cost per surfaced company. Recommend KEEP, REVIEW, or PRUNE for manual query-list maintenance.
+      executionInstructions: >-
+        Mirror the reference pipeline's read-only LinkedIn query audit. Compare query/track run depth, pages or result batches paid, candidate yield, duplicate or seen rate, exhaustion state, estimated cost, and cost per surfaced company. Recommend KEEP, REVIEW, or PRUNE for manual query-list maintenance. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
       missingInputPolicy: Ask for Apify run receipts, query offset state, candidate yield state, and cost assumptions.
       externalActionPolicy: Read-only audit. Do not edit query lists, actor inputs, budgets, or schedules.
       completionCriteria:
@@ -75,7 +82,8 @@ fields:
       fieldType: file
       required: true
       position: 0
-      config: {}
+      config:
+        documentRefId: vc.document.paid_source_spend_audit_checklist
     - key: paid_source_spend_status
       name: Paid Source Spend Status
       fieldType: string

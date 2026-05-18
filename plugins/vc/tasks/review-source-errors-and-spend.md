@@ -19,7 +19,7 @@ Review degraded source runs, cost warnings, retry safety, and required human act
 
 ## Instructions
 
-Review run receipts and degraded-source notes from the latest origination pass. Classify missing credentials, auth expiry, provider failure, rate limits, budget caps, exhausted queries, schema drift, no-yield sources, and blocked writes. Recommend retry, setup, query pruning, schedule pause, or human review.
+Review run receipts and degraded-source notes from the latest origination pass. Classify missing credentials, auth expiry, provider failure, rate limits, budget caps, exhausted queries, schema drift, no-yield sources, and blocked writes. Recommend retry, setup, query pruning, schedule pause, or human review. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -53,6 +53,12 @@ Review only. Do not retry paid runs, change budgets, disable schedules, or updat
 | `source_health_status` | Source Health Status | `string` | no |
 | `source_error_count` | Source Error Count | `number` | no |
 | `source_health_report` | Source Health Report | `richtext` | no |
+
+## Document References
+
+- `vc.document.source_health_review_checklist` (output_template) -> `source_health_artifact_id`
+- `vc.document.paid_source_spend_audit_checklist` (checklist)
+- `vc.document.template_use_guidance` (operating_guidance)
 
 ## Routing
 

@@ -17,7 +17,7 @@ Record IC Decision for one venture-capital opportunity with evidence capture, hu
 
 ## Instructions
 
-Record the IC decision outcome, vote or consensus summary, dissent and objections, conditions, post-IC action items, and stage transition recommendation. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifacts `investment_memo_artifact_id` and `ic_agenda_artifact_id` as the IC decision record subjects, alongside the transcript or notes. Create or update a durable project file artifact named IC Decision Record and attach it to the required output field `ic_decision_record_artifact_id`.
+Record the IC decision outcome, vote or consensus summary, dissent and objections, conditions, post-IC action items, and stage transition recommendation. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifacts `investment_memo_artifact_id` and `ic_agenda_artifact_id` as the IC decision record subjects, alongside the transcript or notes. Create or update a durable project file artifact named IC Decision Record and attach it to the required output field `ic_decision_record_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -69,6 +69,12 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `risks` | Risks | `json` | no |
 | `human_decision_points` | Human Decision Points | `string` | no |
 | `next_actions` | Next Actions | `json` | no |
+
+## Document References
+
+- `vc.document.ic_decision_record_template` (output_template) -> `ic_decision_record_artifact_id`
+- `vc.document.evidence_citation_style_guide` (style_guide)
+- `vc.document.template_use_guidance` (operating_guidance)
 
 ## Routing
 

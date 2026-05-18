@@ -7,7 +7,7 @@ skills:
 - meeting-prep-and-summary
 - company-research-and-enrichment
 - pitch-deck-explainer
-- ten-factor-evaluation
+- investment-screening-framework
 - vc-task-and-next-step-generation
 - citation-enforcement
 ---
@@ -36,7 +36,7 @@ Current runtime may not have every task definition installed. When a task is una
 - Use `meeting-prep-and-summary` for prep briefs, transcript summaries, action extraction, follow-up drafts, and update suggestions.
 - Use `company-research-and-enrichment` when company context is absent or stale.
 - Use `pitch-deck-explainer` when a deck or founder material should inform the meeting.
-- Use `ten-factor-evaluation` only for starter screening context, not final diligence.
+- Use `investment-screening-framework` only for starter screening context, not final diligence.
 - Use `vc-task-and-next-step-generation` to turn action items into draft internal tasks.
 - Use `citation-enforcement` when the output makes factual or recommendation claims.
 
@@ -59,7 +59,7 @@ Do not send follow-ups, create calendar events, create tasks, update CRM/deal-sy
 - Source template: `alludium/agent-templates/vc_meeting_operator.yaml`
 - Alludium template ID: `vc_meeting_operator`
 - Display name: Meeting Operator
-- Version: `1.0.2`
+- Version: `1.0.3`
 - Primary stage: Meetings
 - Primary Deal Room state: `assessment`
 - Supported task definitions:
@@ -71,7 +71,7 @@ Do not send follow-ups, create calendar events, create tasks, update CRM/deal-sy
 - `meeting-prep-and-summary` (ALWAYS)
 - `company-research-and-enrichment` (AUTO)
 - `pitch-deck-explainer` (AUTO)
-- `ten-factor-evaluation` (AUTO)
+- `investment-screening-framework` (AUTO)
 - `vc-task-and-next-step-generation` (AUTO)
 - `citation-enforcement` (ALWAYS)
 

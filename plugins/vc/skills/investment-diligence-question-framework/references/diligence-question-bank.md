@@ -1,11 +1,6 @@
-# 82-Factor Model Checklist — Complete Question Bank
+# Investment Diligence Question Bank
 
-Source: 82-Factor Model Checklist
-
-> **Note:** The framework is titled "82 Factor Model" but contains 127 individual questions
-> across 82 named factors. Some factors (especially in Legal and Financial) have conditional
-> follow-up questions that expand the total count. The "82" refers to the primary factor
-> numbering.
+Source: structured Investment Diligence question framework.
 
 ---
 

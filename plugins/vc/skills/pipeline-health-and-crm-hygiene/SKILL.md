@@ -374,7 +374,7 @@ structured financing context was not checked.
 
 This skill works well with:
 
-- `ten-factor-evaluation` — screening scores can feed stage assessment where the workspace's stage model uses a screening-style step
+- `investment-screening-framework` — screening scores can feed stage assessment where the workspace's stage model uses a screening-style step
 - `meeting-prep-and-summary` — meeting outputs are primary evidence for stage moves and CRM patches
 - `company-research-and-enrichment` — enrichment data fills CRM gaps and informs next steps
 - `vc-task-and-next-step-generation` — use when pipeline, meeting, IC, diligence, or

@@ -331,7 +331,7 @@ This skill works well with:
 
 - `company-research-and-enrichment` — foundation data and enrichment profiles
   feed personalisation hooks
-- `ten-factor-evaluation` — screening context informs why the firm is reaching out
+- `investment-screening-framework` — screening context informs why the firm is reaching out
   and what thesis alignment to reference
 - `meeting-prep-and-summary` — once a meeting is booked, hand off to meeting
   prep for the call brief

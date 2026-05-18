@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.companies_house_setup
-version: 0.1.1
+version: 0.1.4
 title: Configure Companies House Public Register Preview
 category: Venture Capital
 visibility: workspace

@@ -19,7 +19,7 @@ Prepare Initial Call for one venture-capital opportunity with evidence capture, 
 
 ## Instructions
 
-Prepare the first-call brief, founder and company summary, competitor and funding activity, starter 10-Factor scorecard, and questions by topic. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Initial Call Brief and attach it to the required output field `initial_call_brief_artifact_id`.
+Prepare the first-call brief, founder and company summary, competitor and funding activity, starter Initial investment screen scorecard, and questions by topic. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Initial Call Brief and attach it to the required output field `initial_call_brief_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -58,7 +58,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `pre_call_brief` | Pre Call Brief | `richtext` | no |
 | `founder_company_summary` | Founder Company Summary | `richtext` | no |
 | `competitor_funding_activity` | Competitor Funding Activity | `string` | no |
-| `starter_ten_factor_scorecard` | Starter Ten Factor Scorecard | `string` | no |
+| `starter_investment_screen_scorecard` | Starter Investment Screen Scorecard | `string` | no |
 | `questions_by_topic` | Questions By Topic | `json` | no |
 | `summary` | Summary | `richtext` | no |
 | `recommendation` | Recommendation | `string` | no |
@@ -69,6 +69,12 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `risks` | Risks | `json` | no |
 | `human_decision_points` | Human Decision Points | `string` | no |
 | `next_actions` | Next Actions | `json` | no |
+
+## Document References
+
+- `vc.document.initial_call_brief_template` (output_template) -> `initial_call_brief_artifact_id`
+- `vc.document.evidence_citation_style_guide` (style_guide)
+- `vc.document.template_use_guidance` (operating_guidance)
 
 ## Routing
 
@@ -95,4 +101,4 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 
 ## Workspace-Configured Methodology Skills
 
-- `ten-factor-evaluation`: Use only when the workspace explicitly configures this screening framework.
+- `investment-screening-framework`: Use only when the workspace explicitly configures this screening framework.

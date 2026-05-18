@@ -19,7 +19,7 @@ Produce a read-only Apify LinkedIn query yield and cost audit with manual KEEP/R
 
 ## Instructions
 
-Mirror the reference pipeline's read-only LinkedIn query audit. Compare query/track run depth, pages or result batches paid, candidate yield, duplicate or seen rate, exhaustion state, estimated cost, and cost per surfaced company. Recommend KEEP, REVIEW, or PRUNE for manual query-list maintenance.
+Mirror the reference pipeline's read-only LinkedIn query audit. Compare query/track run depth, pages or result batches paid, candidate yield, duplicate or seen rate, exhaustion state, estimated cost, and cost per surfaced company. Recommend KEEP, REVIEW, or PRUNE for manual query-list maintenance. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -52,6 +52,11 @@ Read-only audit. Do not edit query lists, actor inputs, budgets, or schedules.
 | `linkedin_spend_audit_artifact_id` | LinkedIn Spend Audit Artifact | `file` | yes |
 | `paid_source_spend_status` | Paid Source Spend Status | `string` | no |
 | `audit_report` | Audit Report | `richtext` | no |
+
+## Document References
+
+- `vc.document.paid_source_spend_audit_checklist` (output_template) -> `linkedin_spend_audit_artifact_id`
+- `vc.document.template_use_guidance` (operating_guidance)
 
 ## Routing
 

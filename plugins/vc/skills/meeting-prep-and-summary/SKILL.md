@@ -69,7 +69,7 @@ the depth, focus areas, and output shape.
 
 | Type               | Primary Focus                                                          | Depth                                                   |
 | ------------------ | ---------------------------------------------------------------------- | ------------------------------------------------------- |
-| Founder Call       | 10-Factor validation, relationship building, deal progression          | Medium — cover all factors lightly, go deep on 2-3      |
+| Founder Call       | Investment Screening validation, relationship building, deal progression          | Medium — cover all factors lightly, go deep on 2-3      |
 | DD Expert Session  | Specific unknowns from diligence, technical or market validation       | Deep — narrow scope, exhaust the expert's domain        |
 | Board Meeting      | KPI review, strategic decisions, portfolio health                      | Broad — cover all agenda items, flag deviations         |
 | Customer Reference | Product satisfaction, competitive comparison, willingness to recommend | Focused — structured interview, capture verbatim quotes |
@@ -98,13 +98,13 @@ ask before proceeding.
 
 ### Targeted Questions by Meeting Type
 
-**Founder Call** — Generate 5-7 questions mapped to the 10-Factor framework. Prioritise
-factors with low confidence or unresolved unknowns from the most recent Ten-Factor
+**Founder Call** — Generate 5-7 questions mapped to the Investment Screening framework. Prioritise
+factors with low confidence or unresolved unknowns from the most recent Investment Screening
 Evaluation. If no prior evaluation exists, cover Problem, Product, Traction, Team,
 and Business Model.
 
 **DD Expert Session** — Pull the top unknowns from the current diligence artifacts
-(82-Factor question bank, Red Flags scan, Traction KPI gaps). Generate 5-10 questions
+(Investment Diligence question bank, Red Flags scan, Traction KPI gaps). Generate 5-10 questions
 scoped to the expert's domain. Include specific data points or claims to validate.
 
 **Board Meeting** — Generate questions around:
@@ -192,7 +192,7 @@ deal status in pipeline]
 
 ### Meeting-Type-Specific Extraction
 
-**Founder Call** — Map discussion points to 10-Factor categories. Flag any factor where
+**Founder Call** — Map discussion points to Investment Screening categories. Flag any factor where
 new evidence changes the confidence level. Capture the founder's answers to validation
 questions and note contradictions with prior materials.
 
@@ -254,7 +254,7 @@ Date: [date] | Duration: [actual] | Participants: [names]
 |---|---------|-----------|----------|------------|
 
 ## [Meeting-Type-Specific Section]
-[Founder Call: 10-Factor Evidence Updates]
+[Founder Call: Investment Screening Evidence Updates]
 [DD Expert: Diligence Finding Updates]
 [Board Meeting: Strategic Discussion Notes]
 [Customer Reference: Structured Interview Responses]
@@ -279,7 +279,7 @@ After every meeting summary, identify updates for the Deal Snapshot:
 1. **Decision History** — add a row: Date | Decision | Rationale | Follow-ups | Owner
 2. **Meeting Notes** — add link to the new summary
 3. **Diligence Artifacts** — update if the meeting produced new evidence for any
-   artifact (Traction KPI Worksheet, Red Flags, 10-Factor scores)
+   artifact (Traction KPI Worksheet, Red Flags, Investment Screening scores)
 4. **Status/Stage** — suggest a stage change if the meeting outcome warrants one
    (e.g., "proceed to DD" after a strong first call)
 5. **Receipts** — add links to transcript source and summary document
@@ -370,7 +370,7 @@ rather than proceeding without it.
 This skill works well with:
 
 - `company-research-and-enrichment` — foundation data for prep briefs
-- `ten-factor-evaluation` — maps founder call findings to the 10-Factor scorecard
-- `82-factor-diligence-question-generation` — generates targeted questions for DD expert sessions
+- `investment-screening-framework` — maps founder call findings to the Investment Screening scorecard
+- `investment-diligence-question-framework` — generates targeted questions for DD expert sessions
 - `traction-and-saas-unit-economics` — validates KPIs discussed in meetings
 - `red-flags-scanner` — cross-references meeting findings against risk patterns

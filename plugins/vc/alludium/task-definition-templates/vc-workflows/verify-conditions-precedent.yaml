@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.verify_conditions_precedent
-version: 1.0.4
+version: 1.0.8
 title: Verify Conditions Precedent
 category: Venture Capital
 visibility: workspace
@@ -19,6 +19,12 @@ definition:
     vertical: vc
     stage: closing
     taskFamily: closing
+    documentRefs:
+      - documentId: vc.document.conditions_precedent_tracker_template
+        usage: output_template
+        outputFieldKey: conditions_precedent_verification_artifact_id
+      - documentId: vc.document.template_use_guidance
+        usage: operating_guidance
     requiredSkills:
       - citation-enforcement
     plannedRequiredSkills:
@@ -42,7 +48,8 @@ definition:
         anchor: worksheet-atomic-agents
         note: Spreadsheet rows 62, 68-69
     instructions:
-      executionInstructions: Map conditions precedent to available closing evidence, identify missing items and blocker severity, and prepare counsel review recommendation and signing readiness. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifact `closing_checklist_artifact_id` as the closing checklist subject, and use `closing_source_artifact_ids` for legal documents, counsel notes, CP lists, signed documents, and evidence files. Create or update a durable project file artifact named Conditions Precedent Verification and attach it to the required output field `conditions_precedent_verification_artifact_id`.
+      executionInstructions: >-
+        Map conditions precedent to available closing evidence, identify missing items and blocker severity, and prepare counsel review recommendation and signing readiness. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifact `closing_checklist_artifact_id` as the closing checklist subject, and use `closing_source_artifact_ids` for legal documents, counsel notes, CP lists, signed documents, and evidence files. Create or update a durable project file artifact named Conditions Precedent Verification and attach it to the required output field `conditions_precedent_verification_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
@@ -88,7 +95,8 @@ fields:
       fieldType: file
       required: true
       position: 0
-      config: {}
+      config:
+        documentRefId: vc.document.conditions_precedent_tracker_template
     - key: cp_evidence_mapping
       name: Cp Evidence Mapping
       fieldType: json

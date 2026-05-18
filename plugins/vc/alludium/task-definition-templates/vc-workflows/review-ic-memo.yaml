@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.review_ic_memo
-version: 1.0.6
+version: 1.0.9
 title: Review IC Memo
 category: Venture Capital
 visibility: workspace
@@ -19,6 +19,14 @@ definition:
     vertical: vc
     stage: review
     taskFamily: ic
+    documentRefs:
+      - documentId: vc.document.ic_memo_review_template
+        usage: output_template
+        outputFieldKey: ic_memo_review_artifact_id
+      - documentId: vc.document.evidence_citation_style_guide
+        usage: style_guide
+      - documentId: vc.document.template_use_guidance
+        usage: operating_guidance
     requiredSkills:
       - citation-enforcement
       - ic-memo-assembly
@@ -44,7 +52,8 @@ definition:
         anchor: slide-29
         note: IC AI map
     instructions:
-      executionInstructions: Review the IC memo and pack for findings, citation gaps, assumption gaps, unresolved risks, decision readiness, and required changes. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifacts `investment_memo_artifact_id` and `ic_agenda_artifact_id` as the memo and agenda under review; do not substitute a task slug, UI label, or pasted memo text for artifact-backed files. Create or update a durable project file artifact named IC Memo Review and attach it to the required output field `ic_memo_review_artifact_id`.
+      executionInstructions: >-
+        Review the IC memo and pack for findings, citation gaps, assumption gaps, unresolved risks, decision readiness, and required changes. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifacts `investment_memo_artifact_id` and `ic_agenda_artifact_id` as the memo and agenda under review; do not substitute a task slug, UI label, or pasted memo text for artifact-backed files. Create or update a durable project file artifact named IC Memo Review and attach it to the required output field `ic_memo_review_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
@@ -82,7 +91,8 @@ fields:
       fieldType: file
       required: true
       position: 0
-      config: {}
+      config:
+        documentRefId: vc.document.ic_memo_review_template
     - key: review_summary
       name: Review Summary
       fieldType: richtext

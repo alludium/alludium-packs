@@ -1,23 +1,23 @@
 ---
-id: vc.generate_82_factor_questions
-title: Generate 82-Factor Questions
-slug: generate-82-factor-questions
+id: vc.generate_diligence_questions
+title: Generate Diligence Questions
+slug: generate-diligence-questions
 agent: vc-first-look-analyst
 skills:
 - citation-enforcement
 ---
 
 > **GENERATED FILE**
-> Source: `alludium/task-definition-templates/vc-workflows/generate-82-factor-questions.yaml`
+> Source: `alludium/task-definition-templates/vc-workflows/generate-diligence-questions.yaml`
 > Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
-# Generate 82-Factor Questions
+# Generate Diligence Questions
 
-Generate 82-Factor Questions for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
+Generate a structured investment diligence question bank for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
 
 ## Instructions
 
-Generate prioritized 82-Factor diligence questions with rationale, source gap, owner, and urgency. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named 82-Factor Question Set and attach it to the required output field `eighty_two_factor_questions_artifact_id`.
+Generate prioritized investment diligence questions with rationale, source gap, owner, and urgency. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Structured Diligence Question Bank and attach it to the required output field `diligence_question_bank_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -51,7 +51,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 
 | Key | Name | Type | Required |
 | --- | --- | --- | --- |
-| `eighty_two_factor_questions_artifact_id` | 82-Factor Question Set | `file` | yes |
+| `diligence_question_bank_artifact_id` | Structured Diligence Question Bank | `file` | yes |
 | `question_set` | Question Set | `string` | no |
 | `rationale` | Rationale | `string` | no |
 | `source_gap` | Source Gap | `string` | no |
@@ -67,10 +67,16 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `human_decision_points` | Human Decision Points | `string` | no |
 | `next_actions` | Next Actions | `json` | no |
 
+## Document References
+
+- `vc.document.investment_diligence_question_framework` (methodology) -> `diligence_question_bank_artifact_id`
+- `vc.document.evidence_citation_style_guide` (style_guide)
+- `vc.document.template_use_guidance` (operating_guidance)
+
 ## Routing
 
-- Source template: `alludium/task-definition-templates/vc-workflows/generate-82-factor-questions.yaml`
-- Alludium task ID: `vc.generate_82_factor_questions`
+- Source template: `alludium/task-definition-templates/vc-workflows/generate-diligence-questions.yaml`
+- Alludium task ID: `vc.generate_diligence_questions`
 - Task family: `diligence`
 - Lifecycle stage: `diligence`
 - Recommended agent: `vc-first-look-analyst` (Alludium template `vc_first_look_analyst`)
@@ -87,4 +93,4 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 
 ## Workspace-Configured Methodology Skills
 
-- `82-factor-diligence-question-generation`: Use only when the workspace explicitly configures this diligence framework.
+- `investment-diligence-question-framework`: Use only when the workspace explicitly configures this diligence framework.

@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.review_source_errors_and_spend
-version: 0.1.1
+version: 0.1.5
 title: Review Source Errors and Spend
 category: Venture Capital
 visibility: workspace
@@ -20,6 +20,14 @@ definition:
     vertical: vc
     stage: operate
     taskFamily: origination_source_health
+    documentRefs:
+      - documentId: vc.document.source_health_review_checklist
+        usage: output_template
+        outputFieldKey: source_health_artifact_id
+      - documentId: vc.document.paid_source_spend_audit_checklist
+        usage: checklist
+      - documentId: vc.document.template_use_guidance
+        usage: operating_guidance
     requiredSkills:
       - vc-source-error-and-spend-audit
       - vc-source-registry-and-state-management
@@ -53,7 +61,8 @@ definition:
       safety:
         externalWritesRequireApproval: true
     instructions:
-      executionInstructions: Review run receipts and degraded-source notes from the latest origination pass. Classify missing credentials, auth expiry, provider failure, rate limits, budget caps, exhausted queries, schema drift, no-yield sources, and blocked writes. Recommend retry, setup, query pruning, schedule pause, or human review.
+      executionInstructions: >-
+        Review run receipts and degraded-source notes from the latest origination pass. Classify missing credentials, auth expiry, provider failure, rate limits, budget caps, exhausted queries, schema drift, no-yield sources, and blocked writes. Recommend retry, setup, query pruning, schedule pause, or human review. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
       missingInputPolicy: Ask for recent run receipts, source state, budget policy, provider status notes, and retry policy.
       externalActionPolicy: Review only. Do not retry paid runs, change budgets, disable schedules, or update credentials.
       completionCriteria:
@@ -74,7 +83,8 @@ fields:
       fieldType: file
       required: true
       position: 0
-      config: {}
+      config:
+        documentRefId: vc.document.source_health_review_checklist
     - key: source_health_status
       name: Source Health Status
       fieldType: string

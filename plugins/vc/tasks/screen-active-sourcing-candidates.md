@@ -18,7 +18,7 @@ Run an origination-specific thesis screen on active Meet, IC-Summary, or Reach o
 
 ## Instructions
 
-Screen active origination candidates using the reference pipeline's fast thesis filter rather than the downstream Deal Room first-look task. Assess stage, geography, enterprise software, AI-native depth, named buyer, moat, and founder balance. Return PROCEED_TO_IC, DIG_FURTHER, or PASS and map those to review actions without downgrading protected manual decisions.
+Screen active origination candidates using the reference pipeline's fast thesis filter rather than the downstream Deal Room first-look task. Assess stage, geography, enterprise software, AI-native depth, named buyer, moat, and founder balance. Return PROCEED_TO_IC, DIG_FURTHER, or PASS and map those to review actions without downgrading protected manual decisions. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -51,6 +51,12 @@ Screening recommendation only unless explicit write approval is granted. Never d
 | `promotion_ready_count` | Promotion Ready Count | `number` | no |
 | `screening_report` | Screening Report | `richtext` | no |
 
+## Document References
+
+- `vc.document.sourcing_scoring_rubric` (methodology) -> `screening_artifact_id`
+- `vc.document.dedupe_novelty_policy` (policy)
+- `vc.document.template_use_guidance` (operating_guidance)
+
 ## Routing
 
 - Source template: `alludium/task-definition-templates/vc-workflows/screen-active-sourcing-candidates.yaml`
@@ -71,5 +77,5 @@ Screening recommendation only unless explicit write approval is granted. Never d
 ## Planned Skills
 
 - `vc-sourcing-verdict-and-screening`
-- `ten-factor-evaluation`
+- `investment-screening-framework`
 - `citation-enforcement`
