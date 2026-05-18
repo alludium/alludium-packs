@@ -18,7 +18,7 @@ Prepare a reviewed promotion package for creating or updating a VC Deal Room fro
 
 ## Instructions
 
-Promote only human-approved candidates. Prepare a Deal Room creation/update package with company identity, founder evidence, source receipts, enrichment/verdict/screen summaries, relationship context, outreach state, and open questions. Do not create or update the Deal Room unless the platform action is explicitly approved.
+Promote only human-approved candidates. Prepare a Deal Room creation/update package with company identity, founder evidence, source receipts, enrichment/verdict/screen summaries, relationship context, outreach state, and open questions. Do not create or update the Deal Room unless the platform action is explicitly approved. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 

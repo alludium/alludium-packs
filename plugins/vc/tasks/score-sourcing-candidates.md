@@ -19,7 +19,7 @@ Produce Meet/Watch/Pass verdicts and urgency scores for enriched origination can
 
 ## Instructions
 
-Mirror the reference pipeline's verdict contract. Score from already-enriched data, separate evidence from inference, and return Meet, Watch, or Pass plus urgency. Apply hard stage safety by passing companies with Series A+ funding or more than 20 employees when reliable LinkedIn company data is present. Run the second-pass verdict only for Meet/Watch rows with fresh LinkedIn company data so paid scraping and model cost stay bounded.
+Mirror the reference pipeline's verdict contract. Score from already-enriched data, separate evidence from inference, and return Meet, Watch, or Pass plus urgency. Apply hard stage safety by passing companies with Series A+ funding or more than 20 employees when reliable LinkedIn company data is present. Run the second-pass verdict only for Meet/Watch rows with fresh LinkedIn company data so paid scraping and model cost stay bounded. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 

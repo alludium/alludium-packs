@@ -19,7 +19,7 @@ Run Technical DD for one venture-capital opportunity with evidence capture, huma
 
 ## Instructions
 
-Run technical diligence covering architecture, product, engineering team, IP and licensing, AI/ML risks, scalability, security, and technical scorecard from the supplied technical source artifact list and approved access references. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a durable project file artifact named Technical DD Report and attach it to the required output field `technical_dd_artifact_id`.
+Run technical diligence covering architecture, product, engineering team, IP and licensing, AI/ML risks, scalability, security, and technical scorecard from the supplied technical source artifact list and approved access references. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a durable project file artifact named Technical DD Report and attach it to the required output field `technical_dd_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 

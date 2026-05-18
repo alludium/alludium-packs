@@ -17,7 +17,7 @@ Record IC Decision for one venture-capital opportunity with evidence capture, hu
 
 ## Instructions
 
-Record the IC decision outcome, vote or consensus summary, dissent and objections, conditions, post-IC action items, and stage transition recommendation. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifacts `investment_memo_artifact_id` and `ic_agenda_artifact_id` as the IC decision record subjects, alongside the transcript or notes. Create or update a durable project file artifact named IC Decision Record and attach it to the required output field `ic_decision_record_artifact_id`.
+Record the IC decision outcome, vote or consensus summary, dissent and objections, conditions, post-IC action items, and stage transition recommendation. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifacts `investment_memo_artifact_id` and `ic_agenda_artifact_id` as the IC decision record subjects, alongside the transcript or notes. Create or update a durable project file artifact named IC Decision Record and attach it to the required output field `ic_decision_record_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 

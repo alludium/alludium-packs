@@ -18,7 +18,7 @@ Capture thesis, source selection, cadence intent, budget policy, review threshol
 
 ## Instructions
 
-Guide the user through initial origination pipeline configuration. Capture thesis, source choices, cadence intent, digest destination, budget, review policy, promotion threshold, manual-review threshold, credential gaps, and child setup tasks needed for selected sources. Create setup child tasks only for selected integrations whose setup templates exist. Do not run sourcing, score candidates, create candidate records, enable schedules, write to external systems, send outreach, or promote candidates to Deal Rooms.
+Guide the user through initial origination pipeline configuration. Capture thesis, source choices, cadence intent, digest destination, budget, review policy, promotion threshold, manual-review threshold, credential gaps, and child setup tasks needed for selected sources. Create setup child tasks only for selected integrations whose setup templates exist. Do not run sourcing, score candidates, create candidate records, enable schedules, write to external systems, send outreach, or promote candidates to Deal Rooms. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 

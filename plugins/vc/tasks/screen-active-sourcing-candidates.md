@@ -18,7 +18,7 @@ Run an origination-specific thesis screen on active Meet, IC-Summary, or Reach o
 
 ## Instructions
 
-Screen active origination candidates using the reference pipeline's fast thesis filter rather than the downstream Deal Room first-look task. Assess stage, geography, enterprise software, AI-native depth, named buyer, moat, and founder balance. Return PROCEED_TO_IC, DIG_FURTHER, or PASS and map those to review actions without downgrading protected manual decisions.
+Screen active origination candidates using the reference pipeline's fast thesis filter rather than the downstream Deal Room first-look task. Assess stage, geography, enterprise software, AI-native depth, named buyer, moat, and founder balance. Return PROCEED_TO_IC, DIG_FURTHER, or PASS and map those to review actions without downgrading protected manual decisions. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 

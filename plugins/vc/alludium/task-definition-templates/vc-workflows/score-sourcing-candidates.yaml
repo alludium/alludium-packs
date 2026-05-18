@@ -38,7 +38,7 @@ definition:
     supportedProjectScopes:
       - project_instance
     instructions:
-      executionInstructions: Mirror the reference pipeline's verdict contract. Score from already-enriched data, separate evidence from inference, and return Meet, Watch, or Pass plus urgency. Apply hard stage safety by passing companies with Series A+ funding or more than 20 employees when reliable LinkedIn company data is present. Run the second-pass verdict only for Meet/Watch rows with fresh LinkedIn company data so paid scraping and model cost stay bounded.
+      executionInstructions: Mirror the reference pipeline's verdict contract. Score from already-enriched data, separate evidence from inference, and return Meet, Watch, or Pass plus urgency. Apply hard stage safety by passing companies with Series A+ funding or more than 20 employees when reliable LinkedIn company data is present. Run the second-pass verdict only for Meet/Watch rows with fresh LinkedIn company data so paid scraping and model cost stay bounded. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
       missingInputPolicy: Ask for enriched candidates, thesis, geography/stage policy, relationship context, LinkedIn company data availability, and scoring thresholds before scoring.
       externalActionPolicy: Scoring only. Do not sync external records, change manual decisions, send outreach, or create Deal Rooms.
       completionCriteria:

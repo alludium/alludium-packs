@@ -19,7 +19,7 @@ Review degraded source runs, cost warnings, retry safety, and required human act
 
 ## Instructions
 
-Review run receipts and degraded-source notes from the latest origination pass. Classify missing credentials, auth expiry, provider failure, rate limits, budget caps, exhausted queries, schema drift, no-yield sources, and blocked writes. Recommend retry, setup, query pruning, schedule pause, or human review.
+Review run receipts and degraded-source notes from the latest origination pass. Classify missing credentials, auth expiry, provider failure, rate limits, budget caps, exhausted queries, schema drift, no-yield sources, and blocked writes. Recommend retry, setup, query pruning, schedule pause, or human review. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 

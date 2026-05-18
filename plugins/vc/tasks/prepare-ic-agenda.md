@@ -18,7 +18,7 @@ Prepare IC Agenda for one venture-capital opportunity with evidence capture, hum
 
 ## Instructions
 
-Prepare the IC agenda, pack checklist, key debate topics, follow-up questions, and pre-read requirements. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifact `investment_memo_artifact_id` as the source memo when preparing the IC agenda. Create or update a durable project file artifact named IC Agenda and attach it to the required output field `ic_agenda_artifact_id`.
+Prepare the IC agenda, pack checklist, key debate topics, follow-up questions, and pre-read requirements. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifact `investment_memo_artifact_id` as the source memo when preparing the IC agenda. Create or update a durable project file artifact named IC Agenda and attach it to the required output field `ic_agenda_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 

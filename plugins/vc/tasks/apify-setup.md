@@ -19,7 +19,7 @@ Coordinate Apify connection readiness, actor allowlist, discovery scope, and rea
 
 ## Instructions
 
-Confirm that Apify is a selected origination source, then coordinate connection readiness, actor allowlist, run budget, and reviewed discovery scope. Create child tasks from the declared integrationSetup flow only when the user chooses that step. Keep imports, scheduled actor runs, candidate scoring, CRM writes, outreach, and Deal Room promotion disabled unless a later human approval explicitly creates that task.
+Confirm that Apify is a selected origination source, then coordinate connection readiness, actor allowlist, run budget, and reviewed discovery scope. Create child tasks from the declared integrationSetup flow only when the user chooses that step. Keep imports, scheduled actor runs, candidate scoring, CRM writes, outreach, and Deal Room promotion disabled unless a later human approval explicitly creates that task. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 

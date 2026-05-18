@@ -19,7 +19,7 @@ Run Founder Evaluation for one venture-capital opportunity with evidence capture
 
 ## Instructions
 
-Prepare founder dossier, reference plan, reference summaries when available, founder risk assessment, stop signals, and human-only judgment prompts. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a durable project file artifact named Founder Evaluation and attach it to the required output field `founder_evaluation_artifact_id`.
+Prepare founder dossier, reference plan, reference summaries when available, founder risk assessment, stop signals, and human-only judgment prompts. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a durable project file artifact named Founder Evaluation and attach it to the required output field `founder_evaluation_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 

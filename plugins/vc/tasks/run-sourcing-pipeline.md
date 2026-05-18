@@ -19,7 +19,7 @@ Orchestrate one VC origination sourcing pass across approved sources with source
 
 ## Instructions
 
-Run only approved origination sources and preserve the reference workflow order across Companies House recent and mature windows, GitHub builder signals, X/Twitter builder signals, cheap enrichment, Affinity relationship check, first verdict, LinkedIn company enrichment only for Meet or Watch, second verdict for fresh LinkedIn company data, sync proposal, portfolio-overlap review, screen, outreach drafts, and digest. LinkedIn people discovery is weekly by default or explicit override only. Create child tasks for the enabled steps; keep each child within its own source/action boundary.
+Run only approved origination sources and preserve the reference workflow order across Companies House recent and mature windows, GitHub builder signals, X/Twitter builder signals, cheap enrichment, Affinity relationship check, first verdict, LinkedIn company enrichment only for Meet or Watch, second verdict for fresh LinkedIn company data, sync proposal, portfolio-overlap review, screen, outreach drafts, and digest. LinkedIn people discovery is weekly by default or explicit override only. Create child tasks for the enabled steps; keep each child within its own source/action boundary. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 

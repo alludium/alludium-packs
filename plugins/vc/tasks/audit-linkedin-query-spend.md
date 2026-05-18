@@ -19,7 +19,7 @@ Produce a read-only Apify LinkedIn query yield and cost audit with manual KEEP/R
 
 ## Instructions
 
-Mirror the reference pipeline's read-only LinkedIn query audit. Compare query/track run depth, pages or result batches paid, candidate yield, duplicate or seen rate, exhaustion state, estimated cost, and cost per surfaced company. Recommend KEEP, REVIEW, or PRUNE for manual query-list maintenance.
+Mirror the reference pipeline's read-only LinkedIn query audit. Compare query/track run depth, pages or result batches paid, candidate yield, duplicate or seen rate, exhaustion state, estimated cost, and cost per surfaced company. Recommend KEEP, REVIEW, or PRUNE for manual query-list maintenance. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 

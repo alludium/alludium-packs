@@ -1248,6 +1248,16 @@ def validate_task_template_document_refs(
         document_refs = []
     if not isinstance(document_refs, list):
         fail(f"Task template {template_id} definitionJson.documentRefs must be a list")
+    if document_refs:
+        instructions = definition_json.get("instructions")
+        if not isinstance(instructions, dict):
+            fail(f"Task template {template_id} definitionJson.instructions must be an object")
+        execution_instructions = instructions.get("executionInstructions")
+        if not isinstance(execution_instructions, str) or "definitionJson.documentRefs" not in execution_instructions:
+            fail(
+                f"Task template {template_id} declares documentRefs but executionInstructions "
+                "must tell the agent to use definitionJson.documentRefs"
+            )
 
     ref_keys: set[tuple[str, str, str | None]] = set()
     output_ref_pairs: set[tuple[str, str]] = set()

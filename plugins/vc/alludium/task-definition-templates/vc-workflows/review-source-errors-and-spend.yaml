@@ -59,7 +59,7 @@ definition:
       safety:
         externalWritesRequireApproval: true
     instructions:
-      executionInstructions: Review run receipts and degraded-source notes from the latest origination pass. Classify missing credentials, auth expiry, provider failure, rate limits, budget caps, exhausted queries, schema drift, no-yield sources, and blocked writes. Recommend retry, setup, query pruning, schedule pause, or human review.
+      executionInstructions: Review run receipts and degraded-source notes from the latest origination pass. Classify missing credentials, auth expiry, provider failure, rate limits, budget caps, exhausted queries, schema drift, no-yield sources, and blocked writes. Recommend retry, setup, query pruning, schedule pause, or human review. Use `definitionJson.documentRefs` as the durable document reference contract; for refs with `outputFieldKey`, produce that output using the referenced pack document ID as the template or methodology source, and preserve the document ID alongside the output artifact.
       missingInputPolicy: Ask for recent run receipts, source state, budget policy, provider status notes, and retry policy.
       externalActionPolicy: Review only. Do not retry paid runs, change budgets, disable schedules, or update credentials.
       completionCriteria:
