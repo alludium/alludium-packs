@@ -1,11 +1,10 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.apify_discovery
-version: 0.1.0
+version: 0.1.1
 title: Explore Apify Origination Sources
 category: Venture Capital
 visibility: workspace
-systemUseOnly: false
 tags:
   - vc
   - apify

@@ -1,11 +1,10 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.source_thesis_targets
-version: 1.0.8
+version: 1.0.9
 title: Source Thesis Targets
 category: Venture Capital
 visibility: workspace
-systemUseOnly: false
 tags:
   - vc
   - discovery

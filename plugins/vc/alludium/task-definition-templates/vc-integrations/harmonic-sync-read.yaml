@@ -1,11 +1,10 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.harmonic_sync_read
-version: 0.1.0
+version: 0.1.1
 title: Preview Harmonic Search Results
 category: Venture Capital
 visibility: workspace
-systemUseOnly: false
 tags:
   - vc
   - harmonic

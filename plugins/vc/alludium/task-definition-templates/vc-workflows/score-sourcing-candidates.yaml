@@ -1,11 +1,10 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.score_sourcing_candidates
-version: 0.1.4
+version: 0.1.5
 title: Score Sourcing Candidates
 category: Venture Capital
 visibility: workspace
-systemUseOnly: false
 tags:
   - vc
   - origination

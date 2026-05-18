@@ -1,11 +1,10 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.summarize_initial_call
-version: 1.0.9
+version: 1.0.10
 title: Summarize Meeting Records
 category: Venture Capital
 visibility: workspace
-systemUseOnly: false
 tags:
   - vc
   - initial-call

@@ -1,11 +1,10 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.discover_github_builder_signals
-version: 0.1.1
+version: 0.1.2
 title: Discover GitHub Builder Signals
 category: Venture Capital
 visibility: workspace
-systemUseOnly: false
 tags:
   - vc
   - origination

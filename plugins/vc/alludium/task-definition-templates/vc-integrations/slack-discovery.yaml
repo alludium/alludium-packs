@@ -1,11 +1,10 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.slack_discovery
-version: 0.1.0
+version: 0.1.1
 title: Explore Slack Channels for VC Context
 category: Venture Capital
 visibility: workspace
-systemUseOnly: false
 tags:
   - vc
   - slack

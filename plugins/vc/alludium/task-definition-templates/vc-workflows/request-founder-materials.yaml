@@ -1,11 +1,10 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.request_founder_materials
-version: 1.0.8
+version: 1.0.9
 title: Request Founder Materials
 category: Venture Capital
 visibility: workspace
-systemUseOnly: false
 tags:
   - vc
   - intake

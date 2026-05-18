@@ -1,11 +1,10 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.manage_closing_checklist
-version: 1.0.8
+version: 1.0.9
 title: Manage Closing Checklist
 category: Venture Capital
 visibility: workspace
-systemUseOnly: false
 tags:
   - vc
   - closing
