@@ -1,6 +1,6 @@
 ---
 id: vc.generate_82_factor_questions
-title: Generate 82-Factor Questions
+title: Generate Diligence Questions
 slug: generate-82-factor-questions
 agent: vc-first-look-analyst
 skills:
@@ -11,13 +11,13 @@ skills:
 > Source: `alludium/task-definition-templates/vc-workflows/generate-82-factor-questions.yaml`
 > Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
-# Generate 82-Factor Questions
+# Generate Diligence Questions
 
-Generate 82-Factor Questions for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
+Generate a structured investment diligence question bank for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
 
 ## Instructions
 
-Generate prioritized 82-Factor diligence questions with rationale, source gap, owner, and urgency. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named 82-Factor Question Set and attach it to the required output field `eighty_two_factor_questions_artifact_id`.
+Generate prioritized investment diligence questions with rationale, source gap, owner, and urgency. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Structured Diligence Question Bank and attach it to the required output field `eighty_two_factor_questions_artifact_id`.
 
 ## Missing Input Policy
 
@@ -51,7 +51,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 
 | Key | Name | Type | Required |
 | --- | --- | --- | --- |
-| `eighty_two_factor_questions_artifact_id` | 82-Factor Question Set | `file` | yes |
+| `eighty_two_factor_questions_artifact_id` | Structured Diligence Question Bank | `file` | yes |
 | `question_set` | Question Set | `string` | no |
 | `rationale` | Rationale | `string` | no |
 | `source_gap` | Source Gap | `string` | no |

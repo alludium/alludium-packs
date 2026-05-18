@@ -1,8 +1,8 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.generate_82_factor_questions
-version: 1.0.5
-title: Generate 82-Factor Questions
+version: 1.0.6
+title: Generate Diligence Questions
 category: Venture Capital
 visibility: workspace
 systemUseOnly: false
@@ -11,9 +11,9 @@ tags:
   - follow-up
   - questions
 definition:
-  name: Generate 82-Factor Questions
+  name: Generate Diligence Questions
   slug: generate-82-factor-questions
-  description: Generate 82-Factor Questions for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
+  description: Generate a structured investment diligence question bank for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
   allowSubtasks: true
   definitionJson:
     vertical: vc
@@ -36,9 +36,9 @@ definition:
         note: Follow-up AI map
       - source: investment-management-process-slides
         anchor: slide-35
-        note: 82-Factor dimensions
+        note: Structured diligence question dimensions
     instructions:
-      executionInstructions: Generate prioritized 82-Factor diligence questions with rationale, source gap, owner, and urgency. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named 82-Factor Question Set and attach it to the required output field `eighty_two_factor_questions_artifact_id`.
+      executionInstructions: Generate prioritized investment diligence questions with rationale, source gap, owner, and urgency. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Structured Diligence Question Bank and attach it to the required output field `eighty_two_factor_questions_artifact_id`.
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
@@ -83,7 +83,7 @@ fields:
 
   output:
     - key: eighty_two_factor_questions_artifact_id
-      name: 82-Factor Question Set
+      name: Structured Diligence Question Bank
       fieldType: file
       required: true
       position: 0

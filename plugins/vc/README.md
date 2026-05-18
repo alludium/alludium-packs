@@ -4,7 +4,7 @@ Public VC workflow plugin and pack seed for [Alludium](https://www.alludium.ai).
 
 Alludium VC packages reusable venture capital workflows for sourcing, screening, diligence, investment committee preparation, closing, and portfolio onboarding. It is the first bundle inside the broader `alludium-packs` catalog, not a standalone VC-only repository.
 
-The current draft `v0.5.3` pack surface includes skills, generated agent/task Markdown for external agentic tooling, Alludium runtime agent templates, MCP definitions, VC task-definition templates, both the canonical `venture_capital` vertical key and the legacy `vc` alias, the VC Deal Room and VC Origination Pipeline project type definitions, workspace-variable declarations, application-recommendation metadata, collapsed Deal Room lifecycle mappings, required task-input mappings, runtime agent access to the platform text-artifact creation tool, one setup task entry point for each setup-capable integration, and declarative project setup metadata for platform orchestration. Version `0.5.1` removes template-level task turn caps so the platform default can control agent execution budgets; version `0.5.2` adds pack-owned project setup entrypoint metadata; version `0.5.3` adds explicit setup steps, schedule groups, platform-side post-approval setup actions, and a project-scoped Affinity Deal Room import task.
+The current draft `v0.5.3` pack surface includes skills, generated agent/task Markdown for external agentic tooling, Alludium runtime agent templates, MCP definitions, VC task-definition templates, both the canonical `venture_capital` vertical key and the legacy `vc` alias, the VC Deal Room and VC Origination Pipeline project type definitions, workspace-variable declarations, application-recommendation metadata, collapsed Deal Room lifecycle mappings, required task-input mappings, runtime agent access to the platform text-artifact creation tool, one setup task entry point for each setup-capable integration, declarative project setup metadata for platform orchestration, a project-scoped Affinity Deal Room import task, and pack-native project methodology documents. Version `0.5.1` removes template-level task turn caps so the platform default can control agent execution budgets; version `0.5.2` adds pack-owned project setup entrypoint metadata; version `0.5.3` adds explicit setup steps, schedule groups, platform-side post-approval setup actions, a project-scoped Affinity Deal Room import task, and methodology, SOP, checklist, template, and style-guide documents for Deal Room and Origination.
 
 The current draft pack surface contains:
 
@@ -14,6 +14,7 @@ The current draft pack surface contains:
 - Alludium runtime agent templates in `alludium/agent-templates/`
 - VC task-definition templates in `alludium/task-definition-templates/`
 - VC Deal Room and VC Origination Pipeline project type definitions in `alludium/project-types/`
+- VC project-type document sources in `alludium/documents/`
 - VC-relevant MCP server definitions in `.mcp.json`
 - Alludium application recommendations in `alludium/mcp-recommendations.yaml`
 - Alludium workspace variable declarations in `alludium/workspace-variables.yaml`
@@ -33,6 +34,7 @@ Task-template workspace eligibility is controlled by catalog-level `verticalKeys
 | Agent templates           | `alludium/agent-templates/`           | 9 Alludium runtime templates using the `vc_*` baseline                                   |
 | Task definition templates | `alludium/task-definition-templates/` | 73 VC workflow, integration-management, and origination task templates plus catalog metadata |
 | Project types             | `alludium/project-types/`             | VC Deal Room and VC Origination Pipeline project type catalog and definitions            |
+| Documents                 | `alludium/documents/`                 | Pack-native methodology, SOP, checklist, template, and style-guide sources               |
 | Pack manifest             | `alludium/manifest.yaml`              | Alludium-specific inventory, boundaries, and future pack surfaces                        |
 | Plugin MCP manifest       | `.mcp.json`                           | Public-safe MCP definitions for VC research, CRM, meeting, and market-intelligence tools |
 | Application recommendations | `alludium/mcp-recommendations.yaml` | VC application recommendations nested on the same `externalId`/`name` records as MCP mapping |
@@ -57,6 +59,7 @@ alludium-packs/
         │   ├── manifest.yaml
         │   ├── mcp-recommendations.yaml
         │   ├── agent-templates/
+        │   ├── documents/
         │   ├── task-definition-templates/
         │   └── project-types/
         └── scripts/
@@ -73,6 +76,8 @@ The Alludium pack surface is the product/runtime extension point. It tracks Allu
 The task-definition-template surface requires platform support for `external-task-definition-template-ingest`. Platform versions that only understand external pack skills and Alludium agent templates can ingest the older surfaces but will ignore task templates.
 
 The project-type surface requires platform support for `external-project-type-ingest`. Platform versions without that capability should continue using platform-local project types until the paired platform cutover lands.
+
+The document surface is pack-native source material under `alludium/documents/`. It records reusable methodology, SOPs, checklists, templates, and style guidance and is referenced by project type metadata, but this repository does not implement platform document rendering or runtime behavior.
 
 The top-level `agents/` directory contains generated Claude/Codex-style agent Markdown compatibility artifacts. The current `alludium/agent-templates/` files remain the source of truth; generated agent Markdown preserves prompt placeholders and carries skills plus source metadata for external agentic tooling.
 

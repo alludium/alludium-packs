@@ -1,0 +1,321 @@
+{
+  "apiVersion": "alludium/v1alpha1",
+  "kind": "document-catalog",
+  "documents": [
+    {
+      "id": "vc.document.investment_screening_framework",
+      "title": "Investment Screening Framework",
+      "description": "Reusable first-look scorecard methodology for deciding whether a venture opportunity deserves deeper work.",
+      "documentType": "methodology",
+      "path": "shared/investment-screening-framework.md",
+      "supportedProjectTypes": ["vc_deal_room", "vc_origination_pipeline"],
+      "relatedTaskDefinitionSlugs": [
+        "screen-inbound-opportunity",
+        "run-ten-factor-screen",
+        "score-sourcing-candidates",
+        "screen-active-sourcing-candidates"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.investment_diligence_question_framework",
+      "title": "Investment Diligence Question Framework",
+      "description": "Structured diligence question-bank methodology for converting knowns, unknowns, and risks into workstream questions.",
+      "documentType": "methodology",
+      "path": "shared/investment-diligence-question-framework.md",
+      "supportedProjectTypes": ["vc_deal_room", "vc_origination_pipeline"],
+      "relatedTaskDefinitionSlugs": [
+        "generate-82-factor-questions",
+        "run-commercial-dd",
+        "run-technical-dd",
+        "run-financial-dd"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.evidence_citation_style_guide",
+      "title": "Evidence And Citation Style Guide",
+      "description": "Pack-level style guide for citations, assumptions, source confidence, and claim hygiene across VC documents.",
+      "documentType": "style_guide",
+      "path": "shared/evidence-citation-style-guide.md",
+      "supportedProjectTypes": ["vc_deal_room", "vc_origination_pipeline"],
+      "relatedTaskDefinitionSlugs": [
+        "create-ic-memo",
+        "prepare-sourcing-ic-summary",
+        "run-sourcing-pipeline"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.file_naming_source_index_sop",
+      "title": "File Naming And Source Index SOP",
+      "description": "Operating convention for naming files, tracking source provenance, and maintaining a compact source index.",
+      "documentType": "sop",
+      "path": "shared/file-naming-source-index-sop.md",
+      "supportedProjectTypes": ["vc_deal_room", "vc_origination_pipeline"],
+      "relatedTaskDefinitionSlugs": [
+        "request-founder-materials",
+        "run-sourcing-pipeline",
+        "sync-sourcing-candidates"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.deal_room_sop",
+      "title": "Deal Room Operating SOP",
+      "description": "End-to-end Deal Room operating method from intake through closing and portfolio handoff.",
+      "documentType": "sop",
+      "path": "deal-room/deal-room-sop.md",
+      "supportedProjectTypes": ["vc_deal_room"],
+      "relatedTaskDefinitionSlugs": [
+        "review-opportunity-status",
+        "prepare-team-review-pack",
+        "prepare-partner-review-pack"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.founder_materials_request_template",
+      "title": "Founder Materials Request Template",
+      "description": "Reusable founder request template for source materials, financials, customer evidence, technical context, and legal basics.",
+      "documentType": "template",
+      "path": "deal-room/founder-materials-request-template.md",
+      "supportedProjectTypes": ["vc_deal_room"],
+      "relatedTaskDefinitionSlugs": ["request-founder-materials"],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.investment_memo_template",
+      "title": "Investment Memo Template",
+      "description": "Reusable IC investment memo structure with thesis, evidence, risks, valuation, diligence, and decision ask.",
+      "documentType": "template",
+      "path": "deal-room/investment-memo-template.md",
+      "supportedProjectTypes": ["vc_deal_room"],
+      "relatedTaskDefinitionSlugs": ["create-ic-memo", "review-ic-memo"],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.ic_agenda_template",
+      "title": "IC Agenda Template",
+      "description": "Reusable investment committee agenda for sequencing discussion, open questions, decision items, and pre-reads.",
+      "documentType": "template",
+      "path": "deal-room/ic-agenda-template.md",
+      "supportedProjectTypes": ["vc_deal_room"],
+      "relatedTaskDefinitionSlugs": ["prepare-ic-agenda"],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.ic_decision_record_template",
+      "title": "IC Decision Record Template",
+      "description": "Reusable decision record for approvals, conditions, dissent, follow-ups, and evidence references.",
+      "documentType": "template",
+      "path": "deal-room/ic-decision-record-template.md",
+      "supportedProjectTypes": ["vc_deal_room"],
+      "relatedTaskDefinitionSlugs": ["record-ic-decision"],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.diligence_report_template",
+      "title": "Diligence Report Template",
+      "description": "Reusable diligence report structure for commercial, technical, financial, founder, and legal workstreams.",
+      "documentType": "template",
+      "path": "deal-room/diligence-report-template.md",
+      "supportedProjectTypes": ["vc_deal_room"],
+      "relatedTaskDefinitionSlugs": [
+        "run-commercial-dd",
+        "run-technical-dd",
+        "run-financial-dd",
+        "run-founder-evaluation"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.review_pack_checklist",
+      "title": "Review Pack Checklist",
+      "description": "Checklist for team review and partner review packs before escalation to IC materials.",
+      "documentType": "checklist",
+      "path": "deal-room/review-pack-checklist.md",
+      "supportedProjectTypes": ["vc_deal_room"],
+      "relatedTaskDefinitionSlugs": [
+        "prepare-team-review-pack",
+        "prepare-partner-review-pack"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.closing_checklist",
+      "title": "Closing Checklist",
+      "description": "Checklist for legal, finance, operational, and onboarding readiness before signing and completion.",
+      "documentType": "checklist",
+      "path": "deal-room/closing-checklist.md",
+      "supportedProjectTypes": ["vc_deal_room"],
+      "relatedTaskDefinitionSlugs": ["manage-closing-checklist"],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.conditions_precedent_tracker_template",
+      "title": "Conditions Precedent Tracker Template",
+      "description": "Reusable tracker for condition, owner, evidence, blocker, counsel review, and completion status.",
+      "documentType": "template",
+      "path": "deal-room/conditions-precedent-tracker-template.md",
+      "supportedProjectTypes": ["vc_deal_room"],
+      "relatedTaskDefinitionSlugs": ["verify-conditions-precedent"],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.portfolio_onboarding_plan_template",
+      "title": "Portfolio Onboarding Plan Template",
+      "description": "Reusable post-close onboarding plan covering owners, first 100 days, reporting, board setup, and operating cadence.",
+      "documentType": "template",
+      "path": "deal-room/portfolio-onboarding-plan-template.md",
+      "supportedProjectTypes": ["vc_deal_room"],
+      "relatedTaskDefinitionSlugs": ["prepare-portfolio-onboarding"],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.origination_pipeline_sop",
+      "title": "Origination Pipeline Operating SOP",
+      "description": "Operating method for standing venture sourcing pipelines from source configuration through promotion packages.",
+      "documentType": "sop",
+      "path": "origination/origination-pipeline-sop.md",
+      "supportedProjectTypes": ["vc_origination_pipeline"],
+      "relatedTaskDefinitionSlugs": [
+        "configure-origination-pipeline",
+        "run-sourcing-pipeline",
+        "promote-candidate-to-deal-room"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.source_registry_template",
+      "title": "Source Registry Template",
+      "description": "Reusable registry for source keys, scopes, owners, credential state, budgets, cadence, and review policy.",
+      "documentType": "template",
+      "path": "origination/source-registry-template.md",
+      "supportedProjectTypes": ["vc_origination_pipeline"],
+      "relatedTaskDefinitionSlugs": ["configure-origination-pipeline"],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.candidate_batch_template",
+      "title": "Candidate Batch Template",
+      "description": "Reusable batch review template for sourced companies, evidence, dedupe state, fit scores, and next actions.",
+      "documentType": "template",
+      "path": "origination/candidate-batch-template.md",
+      "supportedProjectTypes": ["vc_origination_pipeline"],
+      "relatedTaskDefinitionSlugs": [
+        "run-sourcing-pipeline",
+        "enrich-sourcing-candidates",
+        "score-sourcing-candidates"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.sourcing_scoring_rubric",
+      "title": "Sourcing Scoring Rubric",
+      "description": "Reusable scoring rubric for sourced candidate fit, evidence quality, novelty, timing, and promotion readiness.",
+      "documentType": "methodology",
+      "path": "origination/sourcing-scoring-rubric.md",
+      "supportedProjectTypes": ["vc_origination_pipeline"],
+      "relatedTaskDefinitionSlugs": [
+        "score-sourcing-candidates",
+        "screen-active-sourcing-candidates"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.source_health_review_checklist",
+      "title": "Source Health Review Checklist",
+      "description": "Checklist for reviewing source freshness, error rates, coverage drift, duplication, and review queue quality.",
+      "documentType": "checklist",
+      "path": "origination/source-health-review-checklist.md",
+      "supportedProjectTypes": ["vc_origination_pipeline"],
+      "relatedTaskDefinitionSlugs": ["review-source-errors-and-spend"],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.paid_source_spend_audit_checklist",
+      "title": "Paid Source Spend Audit Checklist",
+      "description": "Checklist for paid-source budgets, query cost, usage spikes, result quality, and disabled-source policy.",
+      "documentType": "checklist",
+      "path": "origination/paid-source-spend-audit-checklist.md",
+      "supportedProjectTypes": ["vc_origination_pipeline"],
+      "relatedTaskDefinitionSlugs": [
+        "audit-linkedin-query-spend",
+        "review-source-errors-and-spend"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.sourcing_digest_template",
+      "title": "Sourcing Digest Template",
+      "description": "Reusable sourcing digest format for new candidates, changes, source performance, decisions, and follow-ups.",
+      "documentType": "template",
+      "path": "origination/sourcing-digest-template.md",
+      "supportedProjectTypes": ["vc_origination_pipeline"],
+      "relatedTaskDefinitionSlugs": ["generate-sourcing-digest"],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.outreach_queue_template",
+      "title": "Outreach Queue Template",
+      "description": "Reusable outreach queue template for candidate priority, reason to reach out, channel, owner, and draft status.",
+      "documentType": "template",
+      "path": "origination/outreach-queue-template.md",
+      "supportedProjectTypes": ["vc_origination_pipeline"],
+      "relatedTaskDefinitionSlugs": ["prepare-outreach-draft-queue"],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.promotion_package_template",
+      "title": "Promotion Package Template",
+      "description": "Reusable promotion package for turning a sourced candidate into a Deal Room creation or update recommendation.",
+      "documentType": "template",
+      "path": "origination/promotion-package-template.md",
+      "supportedProjectTypes": ["vc_origination_pipeline"],
+      "relatedTaskDefinitionSlugs": [
+        "prepare-sourcing-ic-summary",
+        "promote-candidate-to-deal-room"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.dedupe_novelty_policy",
+      "title": "Dedupe And Novelty Policy",
+      "description": "Policy for matching sourced candidates to existing opportunities, relationships, and prior rejects before promotion.",
+      "documentType": "policy",
+      "path": "origination/dedupe-novelty-policy.md",
+      "supportedProjectTypes": ["vc_origination_pipeline"],
+      "relatedTaskDefinitionSlugs": ["screen-active-sourcing-candidates"],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.apify_source_setup_checklist",
+      "title": "Apify Source Setup Checklist",
+      "description": "Source-specific setup checklist for Apify actor allowlists, inputs, spend controls, and preview policy.",
+      "documentType": "checklist",
+      "path": "origination/apify-source-setup-checklist.md",
+      "supportedProjectTypes": ["vc_origination_pipeline"],
+      "relatedTaskDefinitionSlugs": [
+        "apify-setup",
+        "apify-discovery",
+        "apify-sync-read"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.companies_house_source_setup_checklist",
+      "title": "Companies House Source Setup Checklist",
+      "description": "Source-specific setup checklist for public-register discovery scope, region policy, and reviewed read-preview.",
+      "documentType": "checklist",
+      "path": "origination/companies-house-source-setup-checklist.md",
+      "supportedProjectTypes": ["vc_origination_pipeline"],
+      "relatedTaskDefinitionSlugs": [
+        "companies-house-setup",
+        "companies-house-discovery",
+        "companies-house-sync-read"
+      ],
+      "status": "source"
+    }
+  ]
+}

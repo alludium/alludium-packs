@@ -8,8 +8,9 @@ pack:
     first bundle in the broader Alludium packs catalog. This release contains
     VC skills, Alludium runtime agent templates, VC task-definition templates,
     VC Deal Room and VC Origination Pipeline project type definitions,
-    workspace variable declarations, application recommendation metadata, and
-    single-entry integration setup task recommendations.
+    workspace variable declarations, application recommendation metadata,
+    single-entry integration setup task recommendations, and pack-native
+    project methodology documents.
   publisher: Alludium
   license: Apache-2.0
   repository: https://github.com/alludium/alludium-packs
@@ -107,6 +108,37 @@ surfaces:
   workspaceVariables:
     path: alludium/workspace-variables.yaml
     status: platform-workspace-variable-declarations
+  documents:
+    path: alludium/documents
+    status: pack-native-document-sources
+    catalog: catalog.v1.json
+    ids:
+      - vc.document.investment_screening_framework
+      - vc.document.investment_diligence_question_framework
+      - vc.document.evidence_citation_style_guide
+      - vc.document.file_naming_source_index_sop
+      - vc.document.deal_room_sop
+      - vc.document.founder_materials_request_template
+      - vc.document.investment_memo_template
+      - vc.document.ic_agenda_template
+      - vc.document.ic_decision_record_template
+      - vc.document.diligence_report_template
+      - vc.document.review_pack_checklist
+      - vc.document.closing_checklist
+      - vc.document.conditions_precedent_tracker_template
+      - vc.document.portfolio_onboarding_plan_template
+      - vc.document.origination_pipeline_sop
+      - vc.document.source_registry_template
+      - vc.document.candidate_batch_template
+      - vc.document.sourcing_scoring_rubric
+      - vc.document.source_health_review_checklist
+      - vc.document.paid_source_spend_audit_checklist
+      - vc.document.sourcing_digest_template
+      - vc.document.outreach_queue_template
+      - vc.document.promotion_package_template
+      - vc.document.dedupe_novelty_policy
+      - vc.document.apify_source_setup_checklist
+      - vc.document.companies_house_source_setup_checklist
   taskDefinitionTemplates:
     path: alludium/task-definition-templates
     platformIngest:

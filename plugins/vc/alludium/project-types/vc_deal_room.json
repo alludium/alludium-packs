@@ -184,7 +184,26 @@
     }
   ],
   "initialVersion": {
-    "version": "1.0.2",
+    "version": "1.0.3",
+    "documentLibrary": {
+      "catalogPath": "alludium/documents/catalog.v1.json",
+      "documentIds": [
+        "vc.document.investment_screening_framework",
+        "vc.document.investment_diligence_question_framework",
+        "vc.document.evidence_citation_style_guide",
+        "vc.document.file_naming_source_index_sop",
+        "vc.document.deal_room_sop",
+        "vc.document.founder_materials_request_template",
+        "vc.document.investment_memo_template",
+        "vc.document.ic_agenda_template",
+        "vc.document.ic_decision_record_template",
+        "vc.document.diligence_report_template",
+        "vc.document.review_pack_checklist",
+        "vc.document.closing_checklist",
+        "vc.document.conditions_precedent_tracker_template",
+        "vc.document.portfolio_onboarding_plan_template"
+      ]
+    },
     "fieldsSchema": [
       {
         "id": "field-company-name",
@@ -1018,10 +1037,10 @@
       {
         "id": "field-ten-factor-scorecard-artifact-id",
         "key": "ten_factor_scorecard_artifact_id",
-        "label": "10-factor scorecard",
+        "label": "Initial investment screen scorecard",
         "kind": "text",
         "required": false,
-        "description": "10-factor scorecard artifact produced by run-ten-factor-screen."
+        "description": "Initial investment screen scorecard artifact produced by run-ten-factor-screen."
       },
       {
         "id": "field-founder-materials-request-artifact-id",
@@ -1114,10 +1133,10 @@
       {
         "id": "field-eighty-two-factor-questions-artifact-id",
         "key": "eighty_two_factor_questions_artifact_id",
-        "label": "82-factor question set",
+        "label": "Structured diligence question bank",
         "kind": "text",
         "required": false,
-        "description": "82-factor question set artifact produced by generate-82-factor-questions."
+        "description": "Structured diligence question bank artifact produced by generate-82-factor-questions."
       },
       {
         "id": "field-team-review-pack-artifact-id",
@@ -1414,12 +1433,12 @@
         },
         {
           "key": "ten_factor_scorecard",
-          "title": "10-factor scorecard",
-          "description": "Structured 10-factor scoring and human review prompts",
+          "title": "Initial investment screen scorecard",
+          "description": "Structured initial investment scoring and human review prompts",
           "artifactOutputs": [
             {
               "key": "ten_factor_scorecard",
-              "title": "10-factor scorecard",
+              "title": "Initial investment screen scorecard",
               "producerTaskDefinitionSlug": "run-ten-factor-screen",
               "outputFieldKey": "ten_factor_scorecard_artifact_id"
             }
@@ -1606,12 +1625,12 @@
         },
         {
           "key": "eighty_two_factor_questions",
-          "title": "82-factor question set",
+          "title": "Structured diligence question bank",
           "description": "Prioritized diligence questions with rationale, owners, and urgency",
           "artifactOutputs": [
             {
               "key": "eighty_two_factor_questions",
-              "title": "82-factor question set",
+              "title": "Structured diligence question bank",
               "producerTaskDefinitionSlug": "generate-82-factor-questions",
               "outputFieldKey": "eighty_two_factor_questions_artifact_id",
               "reviewTaskDefinitionSlugs": [

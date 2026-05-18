@@ -1,19 +1,19 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_ten_factor_screen
-version: 1.0.5
-title: Run 10-Factor Screen
+version: 1.0.6
+title: Run Initial Investment Screen
 category: Venture Capital
 visibility: workspace
 systemUseOnly: false
 tags:
   - vc
   - screening
-  - ten-factor
+  - investment-screening
 definition:
-  name: Run 10-Factor Screen
+  name: Run Initial Investment Screen
   slug: run-ten-factor-screen
-  description: Run 10-Factor Screen for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
+  description: Run an initial investment screen for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
   allowSubtasks: true
   definitionJson:
     vertical: vc
@@ -32,7 +32,7 @@ definition:
     sourceAnchors:
       - source: investment-management-process-slides
         anchor: slide-9
-        note: 10-Factor model
+        note: Initial investment screen scorecard
       - source: investment-management-process-slides
         anchor: slide-13
         note: Initial call stage
@@ -40,7 +40,7 @@ definition:
         anchor: slide-14
         note: Initial call AI map
     instructions:
-      executionInstructions: Score each 10-Factor criterion with rationale, source links, unknowns, and human-review prompts before recommending continue or pass. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Ten Factor Scorecard and attach it to the required output field `ten_factor_scorecard_artifact_id`.
+      executionInstructions: Score each configured screening criterion with rationale, source links, unknowns, and human-review prompts before recommending continue or pass. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Initial Investment Screen Scorecard and attach it to the required output field `ten_factor_scorecard_artifact_id`.
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
@@ -86,7 +86,7 @@ fields:
 
   output:
     - key: ten_factor_scorecard_artifact_id
-      name: Ten Factor Scorecard
+      name: Initial Investment Screen Scorecard
       fieldType: file
       required: true
       position: 0
