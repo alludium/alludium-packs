@@ -232,6 +232,7 @@ PROJECT_CREATION_SOURCE_REFERENCE_TARGET_KEYS = {
     "objectUrl",
     "recordUrlTemplate",
 }
+PROJECT_CREATION_COMPLETION_OUTPUT_KEY = "projectCreation"
 PROJECT_CREATION_VARIABLE_FIELD_ALIASES = {
     "vc.fundStage": {"stage_focus"},
     "vc.fundSectors": {"sector_focus"},
@@ -2099,6 +2100,56 @@ def validate_project_creation_contract(
             f"Project type {project_type_id} projectCreation task {task_slug} "
             f"must support {DEFAULT_PROJECT_SCOPE}"
         )
+    task_input_fields = task_contract["fields"]["input"]
+    task_output_fields = task_contract["fields"]["output"]
+    for field_key in require_string_list(
+        project_creation.get("requiredFieldKeys"),
+        f"Project type {project_type_id} projectCreation.requiredFieldKeys",
+    ):
+        if field_key not in task_input_fields and field_key not in task_output_fields:
+            fail(
+                f"Project type {project_type_id} projectCreation guided task {task_slug} "
+                f"must collect or emit required creation field {field_key}"
+            )
+    completion_output = task_output_fields.get(PROJECT_CREATION_COMPLETION_OUTPUT_KEY)
+    if completion_output is None:
+        fail(
+            f"Project type {project_type_id} projectCreation guided task {task_slug} "
+            f"must declare output {PROJECT_CREATION_COMPLETION_OUTPUT_KEY}"
+        )
+    if completion_output.get("fieldType") != "json":
+        fail(
+            f"Project type {project_type_id} projectCreation guided task {task_slug} "
+            f"output {PROJECT_CREATION_COMPLETION_OUTPUT_KEY} must use fieldType: json"
+        )
+    if completion_output.get("required") is not True:
+        fail(
+            f"Project type {project_type_id} projectCreation guided task {task_slug} "
+            f"output {PROJECT_CREATION_COMPLETION_OUTPUT_KEY} must be required"
+        )
+    completion_config = completion_output.get("config")
+    if not isinstance(completion_config, dict):
+        fail(
+            f"Project type {project_type_id} projectCreation guided task {task_slug} "
+            f"output {PROJECT_CREATION_COMPLETION_OUTPUT_KEY} must declare config"
+        )
+    required_paths = require_string_list(
+        completion_config.get("requiredPaths"),
+        (
+            f"Project type {project_type_id} projectCreation guided task {task_slug} "
+            f"output {PROJECT_CREATION_COMPLETION_OUTPUT_KEY}.config.requiredPaths"
+        ),
+    )
+    missing_required_paths = sorted(
+        f"fieldValues.{field_key}"
+        for field_key in project_creation["requiredFieldKeys"]
+        if f"fieldValues.{field_key}" not in required_paths
+    )
+    if missing_required_paths:
+        fail(
+            f"Project type {project_type_id} projectCreation guided task {task_slug} "
+            f"completion output is missing requiredPaths: {missing_required_paths}"
+        )
 
     post_create = project_creation.get("postCreate")
     if not isinstance(post_create, dict):
@@ -3438,7 +3489,10 @@ def validate_origination_pipeline_task_mapping_contracts() -> None:
 
     for slug in expected_project_instance_slugs:
         for field_key, field in task_contracts[slug]["fields"]["output"].items():
-            if field.get("fieldType") == "json":
+            if (
+                field.get("fieldType") == "json"
+                and field_key != PROJECT_CREATION_COMPLETION_OUTPUT_KEY
+            ):
                 fail(
                     f"Project type {project_type_id} task {slug} output {field_key} "
                     "must be a file artifact or compact scalar, not json"

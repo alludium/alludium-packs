@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.screen_inbound_opportunity
-version: 1.0.11
+version: 1.0.12
 title: Screen Inbound Opportunity
 category: Venture Capital
 visibility: workspace
@@ -61,13 +61,14 @@ definition:
         note: Discovery AI map
     instructions:
       executionInstructions: >-
-        Screen the inbound company against fund thesis and available deck or intro context; return fit recommendation, initial screening summary, gaps, red flags, pass feedback draft, and next actions. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named First Look Scorecard and attach it to the required output field `first_look_scorecard_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+        Screen the inbound company against fund thesis and available deck or intro context; return fit recommendation, initial screening summary, gaps, red flags, pass feedback draft, and next actions. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named First Look Scorecard and attach it to the required output field `first_look_scorecard_artifact_id`. When this task is used as a guided project creation task, complete with structured output `projectCreation.fieldValues.company_name`, include `projectCreation.fieldValues.pitch_deck_artifact_id` when a pitch deck is available, and include only other declared VC Deal Room creation fields that were confidently collected. Do not create the project; the platform finalizer owns deterministic project creation after task completion. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
         - Required input gaps are resolved or listed as assumptions/open questions.
         - Material conclusions include source links or are labeled as human judgment calls.
         - Next actions identify owner, dependency, and required human approval point.
+        - "Guided project creation output includes `projectCreation.fieldValues.company_name` and any confidently collected declared creation fields."
     humanDecisionPoints:
       - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
       - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
@@ -192,6 +193,15 @@ fields:
       required: false
       position: 14
       config: {}
+    - key: projectCreation
+      name: Project Creation Field Values
+      fieldType: json
+      required: true
+      position: 15
+      config:
+        contractRef: projectCreation.fieldValues.v1
+        requiredPaths:
+          - fieldValues.company_name
 runtime:
   defaultExecutionContext:
     sourceMetadata:

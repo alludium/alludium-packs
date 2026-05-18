@@ -644,10 +644,16 @@
         },
         "inputMappings": [
           {
+            "taskField": "pipeline_name",
+            "source": "project.field",
+            "sourcePath": "pipeline_name",
+            "requiredForActivation": true
+          },
+          {
             "taskField": "configuration_goal",
             "source": "constant",
             "constantValue": "Configure thesis, source scope, cadence, budget, review policy, and credential-readiness boundaries for this VC origination pipeline.",
-            "requiredForActivation": true
+            "requiredForActivation": false
           },
           {
             "taskField": "current_pipeline_context",
