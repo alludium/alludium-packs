@@ -1,11 +1,10 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.review_ic_memo
-version: 1.0.9
+version: 1.0.10
 title: Review IC Memo
 category: Venture Capital
 visibility: workspace
-systemUseOnly: false
 tags:
   - vc
   - investment-committee

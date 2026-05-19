@@ -1,11 +1,10 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_sourcing_pipeline
-version: 0.1.7
+version: 0.1.8
 title: Run VC Sourcing Pipeline
 category: Venture Capital
 visibility: workspace
-systemUseOnly: false
 tags:
   - vc
   - origination

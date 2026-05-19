@@ -1,11 +1,10 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.audit_linkedin_query_spend
-version: 0.1.5
+version: 0.1.6
 title: Audit LinkedIn Query Spend
 category: Venture Capital
 visibility: workspace
-systemUseOnly: false
 tags:
   - vc
   - origination

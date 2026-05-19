@@ -1,11 +1,10 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_investment_screen
-version: 1.0.11
+version: 1.0.12
 title: Run Initial Investment Screen
 category: Venture Capital
 visibility: workspace
-systemUseOnly: false
 tags:
   - vc
   - screening

@@ -2333,6 +2333,20 @@ def validate_project_types(manifest: dict[str, Any]) -> set[str]:
     return set(discovered_ids)
 
 
+def find_key_paths(value: Any, key: str, path: str = "$") -> list[str]:
+    paths: list[str] = []
+    if isinstance(value, dict):
+        for child_key, child_value in value.items():
+            child_path = f"{path}.{child_key}"
+            if child_key == key:
+                paths.append(child_path)
+            paths.extend(find_key_paths(child_value, key, child_path))
+    elif isinstance(value, list):
+        for index, child_value in enumerate(value):
+            paths.extend(find_key_paths(child_value, key, f"{path}[{index}]"))
+    return paths
+
+
 def validate_document_markdown(
     document_root: Path,
     markdown_path: Path,
@@ -2612,6 +2626,13 @@ def validate_task_template_file(
         fail(f"Task definition template must be an object: {relative_path}")
     if template.get("kind") != "task-definition-template":
         fail(f"{relative_path} is not a task-definition-template")
+    system_use_only_paths = find_key_paths(template, "systemUseOnly")
+    if system_use_only_paths:
+        fail(
+            f"{relative_path} must not declare systemUseOnly "
+            f"({', '.join(system_use_only_paths)}); "
+            "system-only task visibility is platform-owned"
+        )
 
     template_id = template.get("id")
     if not isinstance(template_id, str) or not template_id:

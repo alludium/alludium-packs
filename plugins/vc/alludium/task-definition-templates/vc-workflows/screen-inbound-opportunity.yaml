@@ -1,11 +1,10 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.screen_inbound_opportunity
-version: 1.0.12
+version: 1.0.13
 title: Screen Inbound Opportunity
 category: Venture Capital
 visibility: workspace
-systemUseOnly: false
 tags:
   - vc
   - intake

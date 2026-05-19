@@ -1,11 +1,10 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.check_affinity_relationships
-version: 0.1.0
+version: 0.1.1
 title: Check Affinity Relationship Context
 category: Venture Capital
 visibility: workspace
-systemUseOnly: false
 tags:
   - vc
   - origination

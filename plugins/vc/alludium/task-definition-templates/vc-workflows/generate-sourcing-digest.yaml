@@ -1,11 +1,10 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.generate_sourcing_digest
-version: 0.1.5
+version: 0.1.6
 title: Generate Sourcing Digest
 category: Venture Capital
 visibility: workspace
-systemUseOnly: false
 tags:
   - vc
   - origination
