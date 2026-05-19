@@ -134,10 +134,14 @@ workspaceVariables:
     renderMetadata:
       render: select
       options:
-        - manual
-        - daily
-        - weekly
-        - monthly
+        - value: manual
+          label: Manual
+        - value: daily
+          label: Daily
+        - value: weekly
+          label: Weekly
+        - value: monthly
+          label: Monthly
     validationMetadata:
       maxLength: 80
     requirement: recommended
