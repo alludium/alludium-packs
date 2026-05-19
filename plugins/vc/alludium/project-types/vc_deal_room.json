@@ -165,6 +165,46 @@
       }
     ]
   },
+  "projectCreation": {
+    "launcherLabel": "Create VC Deal Room",
+    "starterId": "create-vc-deal-room-project",
+    "aliases": ["deal room", "investment opportunity", "portfolio opportunity"],
+    "requiredFieldKeys": ["company_name"],
+    "recommendedFieldKeys": [
+      "company_domain",
+      "deal_source",
+      "investment_stage",
+      "lead_partner",
+      "pitch_deck_artifact_id",
+      "confidentiality_level"
+    ],
+    "advancedFieldKeys": [
+      "source_thread_url",
+      "source_thread_artifact_id",
+      "source_material_artifact_ids",
+      "founder_materials_artifact_ids",
+      "drive_deal_room_url"
+    ],
+    "sourceReference": {
+      "label": "CRM source record",
+      "inputKind": "connected_record_reference",
+      "connectionBindingKey": "crm",
+      "targetFieldKeys": {
+        "system": "source_system",
+        "objectId": "source_object_id",
+        "objectUrl": "source_object_url",
+        "recordUrlTemplate": "source_record_url_template"
+      }
+    },
+    "defaultState": "intake",
+    "guidedTask": {
+      "taskDefinitionTemplateId": "vc.screen_inbound_opportunity",
+      "taskDefinitionSlug": "screen-inbound-opportunity"
+    },
+    "postCreate": {
+      "triggerInitialStateTasks": true
+    }
+  },
   "setupRequirements": [
     {
       "key": "vc_deal_room.affinity_connection",
@@ -351,23 +391,6 @@
         "kind": "text",
         "required": false,
         "description": "CRM or relationship system for the source record."
-      },
-      {
-        "id": "field-crm-record-url",
-        "key": "crm_record_url",
-        "label": "CRM Record URL",
-        "kind": "text",
-        "required": false,
-        "description": "Manual CRM record link when a CRM is not connected."
-      },
-      {
-        "id": "field-affinity-record-url",
-        "key": "affinity_record_url",
-        "label": "Affinity Record URL",
-        "kind": "text",
-        "required": false,
-        "description": "Affinity-compatible CRM record link retained for older surfaces.",
-        "placeholder": "https://app.affinity.co/..."
       },
       {
         "id": "field-affinity-import-status",

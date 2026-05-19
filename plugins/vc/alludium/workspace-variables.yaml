@@ -80,3 +80,143 @@ workspaceVariables:
       maxLength: 4000
     requirement: recommended
     sensitivity: standard
+  - namespace: vc
+    key: firmName
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
+    label: Firm Name
+    description: Workspace-level firm name used in VC workflow context, reporting, and generated project artifacts.
+    valueType: string
+    renderMetadata:
+      render: text
+      placeholder: Alludium Ventures
+    validationMetadata:
+      maxLength: 240
+    requirement: recommended
+    sensitivity: standard
+  - namespace: vc
+    key: fundName
+    supportedProjectTypes:
+      - vc_deal_room
+      - vc_origination_pipeline
+    label: Fund Name
+    description: Workspace-level fund name or strategy label used in screening, sourcing, and review context.
+    valueType: string
+    renderMetadata:
+      render: text
+      placeholder: Fund I, Opportunity Fund, or seed strategy.
+    validationMetadata:
+      maxLength: 240
+    requirement: recommended
+    sensitivity: standard
+  - namespace: vc
+    key: originationEnabledSources
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    label: Origination Enabled Sources
+    description: Approved source keys for the origination pipeline, such as Apify actors, Companies House, manual tips, or CRM-backed source lists.
+    valueType: string
+    renderMetadata:
+      render: textarea
+      placeholder: apify, companies_house, manual_tip, crm_source_list
+    validationMetadata:
+      maxLength: 2000
+    requirement: recommended
+    sensitivity: standard
+  - namespace: vc
+    key: originationRunCadence
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    label: Origination Run Cadence
+    description: Preferred sourcing cadence captured during setup before any recurring schedule is enabled.
+    valueType: string
+    renderMetadata:
+      render: select
+      options:
+        - manual
+        - daily
+        - weekly
+        - monthly
+    validationMetadata:
+      maxLength: 80
+    requirement: recommended
+    sensitivity: standard
+  - namespace: vc
+    key: originationDigestDestination
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    label: Origination Digest Destination
+    description: Workspace destination for sourcing digests, such as a Slack channel, email alias, or manual review queue.
+    valueType: string
+    renderMetadata:
+      render: text
+      placeholder: "#sourcing-digest or manual review queue"
+    validationMetadata:
+      maxLength: 240
+    requirement: optional
+    sensitivity: standard
+  - namespace: vc
+    key: originationSourceCostBudget
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    label: Origination Source Cost Budget
+    description: Budget guardrail for paid source usage in the workspace currency.
+    valueType: number
+    renderMetadata:
+      render: number
+      placeholder: "500"
+    requirement: recommended
+    sensitivity: standard
+  - namespace: vc
+    key: originationPromotionThreshold
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    label: Origination Promotion Threshold
+    description: Score or priority threshold used to recommend when a sourced candidate is ready for Deal Room promotion.
+    valueType: number
+    renderMetadata:
+      render: number
+      placeholder: "80"
+    requirement: recommended
+    sensitivity: standard
+  - namespace: vc
+    key: originationManualReviewThreshold
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    label: Origination Manual Review Threshold
+    description: Score or priority threshold used to route sourced candidates to human review before promotion or rejection.
+    valueType: number
+    renderMetadata:
+      render: number
+      placeholder: "60"
+    requirement: recommended
+    sensitivity: standard
+  - namespace: vc
+    key: originationCrmPipelineUrl
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    label: Origination CRM Pipeline URL
+    description: Workspace-level CRM pipeline or source-list URL used as the canonical origination operating surface when applicable.
+    valueType: string
+    renderMetadata:
+      render: text
+      placeholder: https://crm.example.com/pipeline
+    validationMetadata:
+      maxLength: 2000
+    requirement: optional
+    sensitivity: standard
+  - namespace: vc
+    key: originationDocumentWorkspaceUrl
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    label: Origination Document Workspace URL
+    description: Workspace-level document folder, drive, or knowledge-space URL for origination artifacts and review material.
+    valueType: string
+    renderMetadata:
+      render: text
+      placeholder: https://drive.example.com/folders/...
+    validationMetadata:
+      maxLength: 2000
+    requirement: optional
+    sensitivity: standard

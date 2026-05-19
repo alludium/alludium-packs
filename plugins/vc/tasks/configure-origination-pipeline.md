@@ -18,7 +18,7 @@ Capture thesis, source selection, cadence intent, budget policy, review threshol
 
 ## Instructions
 
-Guide the user through initial origination pipeline configuration. Capture thesis, source choices, cadence intent, digest destination, budget, review policy, promotion threshold, manual-review threshold, credential gaps, and child setup tasks needed for selected sources. Create setup child tasks only for selected integrations whose setup templates exist. Do not run sourcing, score candidates, create candidate records, enable schedules, write to external systems, send outreach, or promote candidates to Deal Rooms. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+Guide the user through initial origination pipeline configuration. Capture the required `pipeline_name`, thesis, source choices, cadence intent, digest destination, budget, review policy, promotion threshold, manual-review threshold, credential gaps, and child setup tasks needed for selected sources. Create setup child tasks only for selected integrations whose setup templates exist. Complete with structured output `projectCreation.fieldValues.pipeline_name`, include `projectCreation.fieldValues.source_registry` and `projectCreation.fieldValues.review_policy` when captured, and include `projectCreation.fieldValues.confidentiality_level` only when confidently captured. Do not run sourcing, score candidates, create candidate records, enable schedules, write to external systems, send outreach, create Deal Rooms, or create the Origination Pipeline project; the platform finalizer owns deterministic project creation after task completion. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -30,10 +30,12 @@ Configuration only. No external reads beyond connection-readiness checks, no sch
 
 ## Completion Criteria
 
+- `pipeline_name` is captured for guided project creation finalization.
 - Thesis, source selection, run cadence intent, budget policy, review policy, and thresholds are captured or explicitly marked unresolved.
 - Required setup child tasks for selected Apify and Companies House sources are proposed without executing source reads.
 - Credential gaps and approved connection scopes are listed.
 - The output distinguishes configuration intent from active automation.
+- Guided project creation output includes `projectCreation.fieldValues.pipeline_name` and captured runtime project fields such as `source_registry` and `review_policy`.
 
 ## Human Decision Points
 
@@ -45,7 +47,8 @@ Configuration only. No external reads beyond connection-readiness checks, no sch
 
 | Key | Name | Type | Required |
 | --- | --- | --- | --- |
-| `configuration_goal` | Configuration Goal | `string` | yes |
+| `pipeline_name` | Pipeline Name | `string` | yes |
+| `configuration_goal` | Configuration Goal | `string` | no |
 | `current_pipeline_context` | Current Pipeline Context | `json` | no |
 
 ## Outputs
@@ -56,6 +59,7 @@ Configuration only. No external reads beyond connection-readiness checks, no sch
 | `source_registry` | Source Registry | `richtext` | no |
 | `review_policy` | Review Policy | `richtext` | no |
 | `child_task_plan` | Child Task Plan | `richtext` | yes |
+| `projectCreation` | Project Creation Field Values | `json` | yes |
 
 ## Document References
 
