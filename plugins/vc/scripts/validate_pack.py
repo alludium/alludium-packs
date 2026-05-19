@@ -652,6 +652,23 @@ def validate_workspace_variables(manifest: dict[str, Any], project_type_ids: set
             fail(f"Workspace variable {variable_key} must declare renderMetadata")
         if render_metadata.get("render") not in WORKSPACE_VARIABLE_RENDER_TYPES:
             fail(f"Workspace variable {variable_key} has invalid renderMetadata.render")
+        render_options = render_metadata.get("options")
+        if render_options is not None:
+            if not isinstance(render_options, list):
+                fail(f"Workspace variable {variable_key} renderMetadata.options must be a list")
+            for option in render_options:
+                if not isinstance(option, dict):
+                    fail(
+                        f"Workspace variable {variable_key} renderMetadata.options must be objects"
+                    )
+                if not isinstance(option.get("value"), str) or not option.get("value"):
+                    fail(
+                        f"Workspace variable {variable_key} renderMetadata.options entries must declare value"
+                    )
+                if not isinstance(option.get("label"), str) or not option.get("label"):
+                    fail(
+                        f"Workspace variable {variable_key} renderMetadata.options entries must declare label"
+                    )
         if variable.get("requirement") not in WORKSPACE_VARIABLE_REQUIREMENT_LEVELS:
             fail(f"Workspace variable {variable_key} has invalid requirement")
         if variable.get("sensitivity") not in WORKSPACE_VARIABLE_SENSITIVITY_LEVELS:
