@@ -1,4 +1,4 @@
-version: "1.0.4"
+version: "1.0.5"
 type: "template"
 platform_managed: true
 id: "vc_deal_room_setup_guide"
@@ -24,7 +24,7 @@ metadata:
 llm:
   provider: "ANTHROPIC"
   infra: "AMZN"
-  model: "Claude Opus 4.6"
+  model: "Claude Sonnet 4.6"
 
 skills:
   - externalId: "deal-room-setup-and-source-ingestion"

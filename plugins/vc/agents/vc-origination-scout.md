@@ -2,7 +2,7 @@
 name: vc-origination-scout
 description: Thesis-driven VC sourcing agent that discovers target companies, enriches them, maps warm intro paths, drafts
   outreach for approval, and prepares lead-gen packets with citations.
-model: opus
+model: sonnet
 skills:
 - company-research-and-enrichment
 - market-map-building
@@ -61,7 +61,7 @@ Do not send outreach, create calendar events, create tasks, update CRM/deal-syst
 - Source template: `alludium/agent-templates/vc_origination_scout.yaml`
 - Alludium template ID: `vc_origination_scout`
 - Display name: Origination Scout
-- Version: `1.0.3`
+- Version: `1.0.4`
 - Primary stage: Origination
 - Primary Deal Room state: `intake`
 - Supported task definitions:

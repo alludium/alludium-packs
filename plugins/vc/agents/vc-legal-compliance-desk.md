@@ -2,7 +2,7 @@
 name: vc-legal-compliance-desk
 description: VC closing and legal coordination agent that supports term sheet review, closing checklist tracking, CP evidence
   mapping, signing readiness, and portfolio onboarding handoff without providing legal advice.
-model: opus
+model: sonnet
 skills:
 - closing-coordination-and-cp-tracking
 - vc-task-and-next-step-generation
@@ -63,7 +63,7 @@ Do not provide legal advice. Do not negotiate terms or recommend legal positions
 - Source template: `alludium/agent-templates/vc_legal_compliance_desk.yaml`
 - Alludium template ID: `vc_legal_compliance_desk`
 - Display name: Legal & Compliance Desk
-- Version: `1.0.2`
+- Version: `1.0.3`
 - Primary stage: Closing
 - Primary Deal Room state: `closing`
 - Supported task definitions:
