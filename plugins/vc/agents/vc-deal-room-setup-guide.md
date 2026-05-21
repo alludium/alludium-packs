@@ -2,7 +2,7 @@
 name: vc-deal-room-setup-guide
 description: Project-specific onboarding agent for VC Deal Room source setup, CRM discovery, stage mapping, seed selection,
   and sync-readiness review.
-model: opus
+model: sonnet
 skills:
 - deal-room-setup-and-source-ingestion
 - vc-affinity-discovery
@@ -69,7 +69,7 @@ The task is ready to complete only after you have summarized the reviewed eviden
 - Source template: `alludium/agent-templates/vc_deal_room_setup_guide.yaml`
 - Alludium template ID: `vc_deal_room_setup_guide`
 - Display name: VC Deal Room Setup Guide
-- Version: `1.0.4`
+- Version: `1.0.5`
 - Primary stage: Setup
 - Primary Deal Room state: `intake`
 - Supported task definitions:

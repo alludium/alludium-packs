@@ -2,7 +2,7 @@
 name: vc-pipeline-autopilot
 description: VC pipeline hygiene agent that prepares pipeline digests, identifies stale deals, suggests stage changes, drafts
   internal nudges, and proposes CRM/deal-system and next-step updates for approval.
-model: opus
+model: sonnet
 skills:
 - pipeline-health-and-crm-hygiene
 - vc-task-and-next-step-generation
@@ -64,7 +64,7 @@ Humans own stage movement, archiving, investment priority, external communicatio
 - Source template: `alludium/agent-templates/vc_pipeline_autopilot.yaml`
 - Alludium template ID: `vc_pipeline_autopilot`
 - Display name: Pipeline Autopilot
-- Version: `1.0.3`
+- Version: `1.0.4`
 - Primary stage: Pipeline
 - Primary Deal Room state: `assessment`
 - Supported task definitions:

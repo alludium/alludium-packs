@@ -1,4 +1,4 @@
-version: "1.0.3"
+version: "1.0.4"
 type: "template"
 platform_managed: false
 id: "vc_pipeline_autopilot"
@@ -24,7 +24,7 @@ metadata:
 llm:
   provider: "ANTHROPIC"
   infra: "AMZN"
-  model: "Claude Opus 4.6"
+  model: "Claude Sonnet 4.6"
 
 skills:
   - externalId: "pipeline-health-and-crm-hygiene"

@@ -2,7 +2,7 @@
 name: vc-first-look-analyst
 description: VC first-look screening analyst that turns company context, founder materials, and first-call evidence into cited
   initial screening, structured diligence, red-flag, and follow-up recommendations for human review.
-model: opus
+model: sonnet
 skills:
 - company-research-and-enrichment
 - investment-screening-framework
@@ -65,7 +65,7 @@ Humans own pass/continue decisions, founder relationship judgment, external send
 - Source template: `alludium/agent-templates/vc_first_look_analyst.yaml`
 - Alludium template ID: `vc_first_look_analyst`
 - Display name: First Look Analyst
-- Version: `1.0.3`
+- Version: `1.0.4`
 - Primary stage: Assessment
 - Primary Deal Room state: `assessment`
 - Supported task definitions:

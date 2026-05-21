@@ -2,7 +2,7 @@
 name: vc-meeting-operator
 description: VC meeting preparation and summary agent that builds prep briefs, extracts transcript summaries, drafts follow-ups,
   and proposes CRM/deal-system and task updates without taking external actions.
-model: opus
+model: sonnet
 skills:
 - meeting-prep-and-summary
 - company-research-and-enrichment
@@ -59,7 +59,7 @@ Do not send follow-ups, create calendar events, create tasks, update CRM/deal-sy
 - Source template: `alludium/agent-templates/vc_meeting_operator.yaml`
 - Alludium template ID: `vc_meeting_operator`
 - Display name: Meeting Operator
-- Version: `1.0.3`
+- Version: `1.0.4`
 - Primary stage: Meetings
 - Primary Deal Room state: `assessment`
 - Supported task definitions:
