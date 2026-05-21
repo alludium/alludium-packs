@@ -1,6 +1,6 @@
 ---
 id: vc.run_follow_up_evaluation
-title: Run Follow-Up Evaluation
+title: Run Opportunity Evaluation
 slug: run-follow-up-evaluation
 agent: vc-first-look-analyst
 skills:
@@ -12,17 +12,17 @@ skills:
 > Source: `alludium/task-definition-templates/vc-workflows/run-follow-up-evaluation.yaml`
 > Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
-# Run Follow-Up Evaluation
+# Run Opportunity Evaluation
 
-Run Follow-Up Evaluation for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
+Run a deeper opportunity evaluation after screening for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
 
 ## Instructions
 
-Build the follow-up evaluation workspace with document requests, competitive landscape, early risks, and readiness recommendation. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Follow-Up Evaluation and attach it to the required output field `follow_up_evaluation_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+Build an opportunity evaluation from the investment fit screen, meeting records, founder materials, customer evidence, market sources, technical sources, financial sources, and existing questions. Produce a deeper evaluation scorecard, key claims register, critical unknowns, initial diligence recommendations, and recommended decision path. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Opportunity Evaluation and attach it to the required output field `follow_up_evaluation_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
-Ask for missing required inputs before producing investment-stage recommendations.
+Ask for the investment screen and at least one meeting, founder-material, customer, market, technical, or financial evidence source before producing the evaluation.
 
 ## External Action Policy
 
@@ -44,14 +44,14 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | Key | Name | Type | Required |
 | --- | --- | --- | --- |
 | `company_name` | Company Name | `string` | yes |
-| `first_look_scorecard_artifact_id` | First-Look Scorecard | `file` | yes |
-| `customer_insights_artifact_id` | Customer Insights Summary | `file` | yes |
+| `investment_screen_scorecard_artifact_id` | Investment Fit Screen Scorecard | `file` | yes |
+| `customer_insights_artifact_id` | Meeting Records Summary | `file` | yes |
 
 ## Outputs
 
 | Key | Name | Type | Required |
 | --- | --- | --- | --- |
-| `follow_up_evaluation_artifact_id` | Follow-Up Evaluation | `file` | yes |
+| `follow_up_evaluation_artifact_id` | Opportunity Evaluation | `file` | yes |
 
 ## Document References
 
@@ -63,7 +63,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 
 - Source template: `alludium/task-definition-templates/vc-workflows/run-follow-up-evaluation.yaml`
 - Alludium task ID: `vc.run_follow_up_evaluation`
-- Task family: `diligence`
+- Task family: `evaluation`
 - Lifecycle stage: `evaluation`
 - Recommended agent: `vc-first-look-analyst` (Alludium template `vc_first_look_analyst`)
 - Supported project types:

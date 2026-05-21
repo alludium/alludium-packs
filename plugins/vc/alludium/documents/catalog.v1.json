@@ -217,8 +217,8 @@
     },
     {
       "id": "vc.document.follow_up_evaluation_template",
-      "title": "Follow-Up Evaluation Template",
-      "description": "Reusable follow-up evaluation after first-call or first-look work.",
+      "title": "Opportunity Evaluation Template",
+      "description": "Reusable deeper opportunity evaluation after investment screening and early evidence collection.",
       "documentType": "template",
       "path": "deal-room/follow-up-evaluation-template.md",
       "supportedProjectTypes": [

@@ -571,7 +571,7 @@ Status: implemented in this branch; needs validation and final review.
 
 ### Slice 2: Meeting Task Generalization
 
-Status: next recommended implementation slice after Slice 1 validates.
+Status: implemented in this branch.
 
 - Retitle `prepare-initial-call` as `Prepare Meeting`.
 - Retitle `summarize-initial-call` as `Summarize Meeting Records`.
@@ -580,7 +580,7 @@ Status: next recommended implementation slice after Slice 1 validates.
 
 ### Slice 3: Early Deal Task Clarity
 
-Status: follows Slice 2, or can be pulled forward if guided project creation blocks validation.
+Status: implemented in this branch.
 
 - Reframe `screen-inbound-opportunity` as intake/guided project creation.
 - Make pitch deck optional when other source artifacts exist.

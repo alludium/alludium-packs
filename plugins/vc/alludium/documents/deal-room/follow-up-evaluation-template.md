@@ -1,17 +1,17 @@
 ---
 id: vc.document.follow_up_evaluation_template
-title: Follow-Up Evaluation Template
+title: Opportunity Evaluation Template
 documentType: template
 supportedProjectTypes:
   - vc_deal_room
-summary: Reusable follow-up evaluation after first-call or first-look work.
+summary: Reusable deeper opportunity evaluation after investment screening and early evidence collection.
 ---
 
-# Follow-Up Evaluation Template
+# Opportunity Evaluation Template
 
 ## Evaluation Objective
 
-State the decision this follow-up should support: continue diligence, request materials, pass, watch, or escalate to partner judgment.
+State the decision this evaluation should support: continue diligence, request materials, pass, watch, or escalate to partner judgment.
 
 ## Evidence Reviewed
 

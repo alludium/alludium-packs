@@ -1112,20 +1112,20 @@
         "description": "Thesis target list artifact produced by source-thesis-targets."
       },
       {
-        "id": "field-first-look-scorecard-artifact-id",
-        "key": "first_look_scorecard_artifact_id",
-        "label": "First-look scorecard",
+        "id": "field-opportunity-intake-artifact-id",
+        "key": "opportunity_intake_artifact_id",
+        "label": "Opportunity intake summary",
         "kind": "text",
         "required": false,
-        "description": "First-look scorecard artifact produced by screen-inbound-opportunity."
+        "description": "Opportunity intake summary artifact produced by screen-inbound-opportunity."
       },
       {
         "id": "field-investment-screen-scorecard-artifact-id",
         "key": "investment_screen_scorecard_artifact_id",
-        "label": "Initial investment screen scorecard",
+        "label": "Investment fit screen scorecard",
         "kind": "text",
         "required": false,
-        "description": "Initial investment screen scorecard artifact produced by run-investment-screen."
+        "description": "Investment fit screen scorecard artifact produced by run-investment-screen."
       },
       {
         "id": "field-founder-materials-request-artifact-id",
@@ -1210,10 +1210,10 @@
       {
         "id": "field-follow-up-evaluation-artifact-id",
         "key": "follow_up_evaluation_artifact_id",
-        "label": "Follow-Up Evaluation",
+        "label": "Opportunity Evaluation",
         "kind": "text",
         "required": false,
-        "description": "Follow-up evaluation artifact produced by run-follow-up-evaluation."
+        "description": "Opportunity evaluation artifact produced by run-follow-up-evaluation."
       },
       {
         "id": "field-diligence-question-bank-artifact-id",
@@ -1605,22 +1605,22 @@
           "stageKey": "intake"
         },
         {
-          "key": "first_look_scorecard",
-          "title": "First-look scorecard",
-          "description": "Inbound fit recommendation, gaps, red flags, and next actions",
+          "key": "opportunity_intake",
+          "title": "Opportunity intake",
+          "description": "Source context, known fields, missing information, and recommended next task",
           "artifactOutputs": [
             {
-              "key": "first_look_scorecard",
-              "title": "First-look scorecard",
+              "key": "opportunity_intake",
+              "title": "Opportunity intake",
               "producerTaskDefinitionSlug": "screen-inbound-opportunity",
-              "outputFieldKey": "first_look_scorecard_artifact_id"
+              "outputFieldKey": "opportunity_intake_artifact_id"
             }
           ],
-          "stageKey": "screening"
+          "stageKey": "intake"
         },
         {
           "key": "investment_screen_scorecard",
-          "title": "Initial investment screen scorecard",
+          "title": "Investment fit screen scorecard",
           "description": "Structured initial investment scoring and human review prompts",
           "artifactOutputs": [
             {
@@ -2162,7 +2162,7 @@
         "taskDefinitionTemplateId": "vc.screen_inbound_opportunity",
         "taskDefinitionSlug": "screen-inbound-opportunity",
         "projectScope": "project_instance",
-        "lifecycleStage": "screening",
+        "lifecycleStage": "intake",
         "inputMappings": [
           {
             "taskField": "company_name",
@@ -2179,9 +2179,9 @@
         ],
         "outputMappings": [
           {
-            "taskField": "first_look_scorecard_artifact_id",
+            "taskField": "opportunity_intake_artifact_id",
             "target": "project.field",
-            "targetPath": "first_look_scorecard_artifact_id",
+            "targetPath": "opportunity_intake_artifact_id",
             "requiredForCompletion": true
           }
         ],
@@ -2209,7 +2209,19 @@
             "taskField": "pitch_deck_artifact_id",
             "source": "project.field",
             "sourcePath": "pitch_deck_artifact_id",
-            "requiredForActivation": true
+            "requiredForActivation": false
+          },
+          {
+            "taskField": "opportunity_intake_artifact_id",
+            "source": "project.field",
+            "sourcePath": "opportunity_intake_artifact_id",
+            "requiredForActivation": false
+          },
+          {
+            "taskField": "source_material_artifact_ids",
+            "source": "project.field",
+            "sourcePath": "source_material_artifact_ids",
+            "requiredForActivation": false
           }
         ],
         "outputMappings": [
@@ -2498,9 +2510,9 @@
             "requiredForActivation": true
           },
           {
-            "taskField": "first_look_scorecard_artifact_id",
+            "taskField": "investment_screen_scorecard_artifact_id",
             "source": "project.field",
-            "sourcePath": "first_look_scorecard_artifact_id",
+            "sourcePath": "investment_screen_scorecard_artifact_id",
             "requiredForActivation": true
           },
           {

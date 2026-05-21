@@ -287,7 +287,7 @@ ARTIFACT_FIELD_KEY_PATTERN = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+)*_artifact_id$
 VC_ARTIFACT_OUTPUTS = {
     "source-thesis-targets": ["thesis_target_list_artifact_id"],
     "prepare-lead-gen-packet": ["lead_generation_packet_artifact_id"],
-    "screen-inbound-opportunity": ["first_look_scorecard_artifact_id"],
+    "screen-inbound-opportunity": ["opportunity_intake_artifact_id"],
     "request-founder-materials": ["founder_materials_request_artifact_id"],
     "prepare-initial-call": ["initial_call_brief_artifact_id"],
     "summarize-initial-call": ["customer_insights_artifact_id"],
@@ -318,13 +318,11 @@ VC_ARTIFACT_OUTPUTS = {
     "affinity-deal-room-import": ["affinity_import_receipt_artifact_id"],
 }
 VC_ARTIFACT_INPUTS = {
-    "screen-inbound-opportunity": ["pitch_deck_artifact_id"],
     "summarize-initial-call": ["meeting_record_artifact_ids"],
     "run-follow-up-evaluation": [
-        "first_look_scorecard_artifact_id",
+        "investment_screen_scorecard_artifact_id",
         "customer_insights_artifact_id",
     ],
-    "run-investment-screen": ["pitch_deck_artifact_id"],
     "run-financial-dd": ["financial_source_artifact_ids"],
     "run-technical-dd": ["technical_source_artifact_ids"],
     "prepare-team-review-pack": [
@@ -375,6 +373,8 @@ VC_ARTIFACT_INPUTS = {
 }
 OPTIONAL_ARTIFACT_INPUTS = {
     "prepare-initial-call": {"pitch_deck_artifact_id"},
+    "run-investment-screen": {"opportunity_intake_artifact_id", "pitch_deck_artifact_id"},
+    "screen-inbound-opportunity": {"pitch_deck_artifact_id"},
 }
 
 

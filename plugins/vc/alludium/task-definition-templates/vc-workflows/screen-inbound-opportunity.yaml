@@ -1,39 +1,38 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.screen_inbound_opportunity
-version: 1.0.14
-title: Screen Inbound Opportunity
+version: 1.0.15
+title: Capture Opportunity Intake
 category: Venture Capital
 visibility: workspace
 tags:
   - vc
   - intake
-  - screening
+  - project-creation
 definition:
-  name: Screen Inbound Opportunity
+  name: Capture Opportunity Intake
   slug: screen-inbound-opportunity
-  description: Screen Inbound Opportunity for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
+  description: Capture source context, known fields, missing information, and guided project-creation values for one venture-capital opportunity before formal screening.
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: screening
-    taskFamily: screening
+    stage: intake
+    taskFamily: intake
     documentRefs:
-      - documentId: vc.document.investment_screening_framework
-        usage: methodology
-        outputFieldKey: first_look_scorecard_artifact_id
+      - documentId: vc.document.deal_room_sop
+        usage: operating_guidance
       - documentId: vc.document.evidence_citation_style_guide
         usage: style_guide
       - documentId: vc.document.template_use_guidance
         usage: operating_guidance
     requiredSkills:
+      - deal-room-setup-and-source-ingestion
       - company-research-and-enrichment
-      - red-flags-scanner
       - citation-enforcement
     plannedRequiredSkills:
       - pitch-deck-explainer
+      - deal-room-setup-and-source-ingestion
       - company-research-and-enrichment
-      - red-flags-scanner
       - citation-enforcement
     plannedRecommendedAgentTemplate: vc_dealflow_concierge
     recommendedAgentTemplate: vc_dealflow_concierge
@@ -60,8 +59,8 @@ definition:
         note: Discovery AI map
     instructions:
       executionInstructions: >-
-        Screen the inbound company against fund thesis and available deck or intro context; return fit recommendation, initial screening summary, gaps, red flags, pass feedback draft, and next actions. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named First Look Scorecard and attach it to the required output field `first_look_scorecard_artifact_id`. When this task is used as a guided project creation task, complete with structured output `projectCreation.fieldValues.company_name`, include `projectCreation.fieldValues.pitch_deck_artifact_id` when a pitch deck is available, and include only other declared VC Deal Room creation fields that were confidently collected. Do not create the project; the platform finalizer owns deterministic project creation after task completion. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
-      missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
+        Capture the inbound or promoted opportunity's source context, known project fields, missing setup information, source index, and recommended next task before formal screening. Use a pitch deck, intro note, source thread, CRM/source record, or other supplied material when available, but do not require a pitch deck when another source explains the opportunity. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a durable project file artifact named Opportunity Intake Summary and attach it to the required output field `opportunity_intake_artifact_id`. When this task is used as a guided project creation task, complete with structured output `projectCreation.fieldValues.company_name`, include `projectCreation.fieldValues.pitch_deck_artifact_id` when a pitch deck is available, and include only other declared VC Deal Room creation fields that were confidently collected. Do not create the project; the platform finalizer owns deterministic project creation after task completion. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+      missingInputPolicy: Ask for company_name plus at least one source note, source artifact, source record, pitch deck, or source thread before completing intake.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
         - Required input gaps are resolved or listed as assumptions/open questions.
@@ -74,9 +73,6 @@ definition:
     orchestration:
       parentTaskPolicy: none
       suggestedChildTasks: []
-    workspaceConfiguredMethodologySkills:
-      - skill: investment-screening-framework
-        note: Use only when the workspace explicitly configures this screening framework.
 fields:
   input:
     - key: company_name
@@ -88,7 +84,7 @@ fields:
     - key: pitch_deck_artifact_id
       name: Pitch Deck Artifact
       fieldType: file
-      required: true
+      required: false
       position: 2
       config: {}
     - key: referrer
@@ -99,21 +95,20 @@ fields:
       config: {}
 
   output:
-    - key: first_look_scorecard_artifact_id
-      name: First Look Scorecard
+    - key: opportunity_intake_artifact_id
+      name: Opportunity Intake Summary
       fieldType: file
       required: true
       position: 0
-      config:
-        documentRefId: vc.document.investment_screening_framework
+      config: {}
     - key: fit_recommendation
-      name: Fit Recommendation
+      name: Intake Recommendation
       fieldType: string
       required: false
       position: 1
       config: {}
     - key: initial_investment_screen_summary
-      name: Initial Investment Screen Summary
+      name: Intake Summary
       fieldType: richtext
       required: false
       position: 2
@@ -126,7 +121,7 @@ fields:
       position: 3
       config: {}
     - key: red_flags
-      name: Red Flags
+      name: Early Red Flags
       fieldType: string
       required: false
       position: 4

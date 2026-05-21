@@ -1,6 +1,6 @@
 ---
 id: vc.run_investment_screen
-title: Run Initial Investment Screen
+title: Run Investment Fit Screen
 slug: run-investment-screen
 agent: vc-first-look-analyst
 skills:
@@ -12,17 +12,17 @@ skills:
 > Source: `alludium/task-definition-templates/vc-workflows/run-investment-screen.yaml`
 > Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
-# Run Initial Investment Screen
+# Run Investment Fit Screen
 
-Run an initial investment screen for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
+Run a fast investment fit screen for one venture-capital opportunity using configured criteria, available evidence, human review gates, and next-action recommendations.
 
 ## Instructions
 
-Score each configured screening criterion with rationale, source links, unknowns, and human-review prompts before recommending continue or pass. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Initial Investment Screen Scorecard and attach it to the required output field `investment_screen_scorecard_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+Score each configured investment-fit criterion with rationale, source links, unknowns, red flags, and human-review prompts before recommending continue, watch, or pass. Use a pitch deck, source material, source thread, opportunity intake artifact, meeting notes, or source links as evidence; do not require a pitch deck when another source is sufficient. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Investment Fit Screen Scorecard and attach it to the required output field `investment_screen_scorecard_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
-Ask for missing required inputs before producing investment-stage recommendations.
+Ask for at least one evidence source before producing an investment fit recommendation.
 
 ## External Action Policy
 
@@ -44,16 +44,18 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | Key | Name | Type | Required |
 | --- | --- | --- | --- |
 | `company_name` | Company Name | `string` | yes |
-| `pitch_deck_artifact_id` | Pitch Deck Artifact | `file` | yes |
+| `pitch_deck_artifact_id` | Pitch Deck Artifact | `file` | no |
 | `meeting_notes` | Meeting Notes | `richtext` | no |
 | `source_links` | Source Links | `string` | no |
+| `opportunity_intake_artifact_id` | Opportunity Intake Summary | `file` | no |
+| `source_material_artifact_ids` | Source Material Artifact IDs | `string` | no |
 
 ## Outputs
 
 | Key | Name | Type | Required |
 | --- | --- | --- | --- |
-| `investment_screen_scorecard_artifact_id` | Initial Investment Screen Scorecard | `file` | yes |
-| `factor_scores` | Factor Scores | `json` | no |
+| `investment_screen_scorecard_artifact_id` | Investment Fit Screen Scorecard | `file` | yes |
+| `factor_scores` | Criterion Scores | `json` | no |
 | `overall_recommendation` | Overall Recommendation | `string` | no |
 | `source_links` | Source Links | `string` | no |
 | `unknowns` | Unknowns | `string` | no |
