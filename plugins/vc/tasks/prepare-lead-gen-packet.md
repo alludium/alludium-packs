@@ -77,7 +77,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Source template: `alludium/task-definition-templates/vc-workflows/prepare-lead-gen-packet.yaml`
 - Alludium task ID: `vc.prepare_lead_gen_packet`
 - Task family: `pipeline`
-- Lifecycle stage: `assessment`
+- Lifecycle stage: `intake`
 - Recommended agent: `vc-origination-scout` (Alludium template `vc_origination_scout`)
 - Supported project types:
   - `vc_deal_room`

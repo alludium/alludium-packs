@@ -81,7 +81,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Source template: `alludium/task-definition-templates/vc-workflows/screen-inbound-opportunity.yaml`
 - Alludium task ID: `vc.screen_inbound_opportunity`
 - Task family: `screening`
-- Lifecycle stage: `assessment`
+- Lifecycle stage: `screening`
 - Recommended agent: `vc-dealflow-concierge` (Alludium template `vc_dealflow_concierge`)
 - Supported project types:
   - `vc_deal_room`

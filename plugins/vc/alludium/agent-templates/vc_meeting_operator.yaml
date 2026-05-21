@@ -1,4 +1,4 @@
-version: "1.0.3"
+version: "1.0.4"
 type: "template"
 platform_managed: false
 id: "vc_meeting_operator"
@@ -14,7 +14,7 @@ metadata:
     - prepare-initial-call
     - summarize-initial-call
   primaryStage: "Meetings"
-  primaryDealRoomState: "assessment"
+  primaryDealRoomState: "evaluation"
   requiredSkills:
     - meeting-prep-and-summary
     - company-research-and-enrichment

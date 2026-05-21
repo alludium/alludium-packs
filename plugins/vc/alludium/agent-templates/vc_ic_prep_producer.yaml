@@ -1,4 +1,4 @@
-version: "1.0.2"
+version: "1.0.3"
 type: "template"
 platform_managed: false
 id: "vc_ic_prep_producer"
@@ -18,8 +18,8 @@ metadata:
   installedTaskTemplateIds:
     - vc.create_ic_memo
     - vc.review_ic_memo
-  primaryStage: "Investment Committee"
-  primaryDealRoomState: "review"
+  primaryStage: "Decision Review"
+  primaryDealRoomState: "decision_review"
   requiredSkills:
     - ic-memo-assembly
     - ic-risk-checklist-and-decision-log

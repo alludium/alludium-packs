@@ -79,7 +79,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Source template: `alludium/task-definition-templates/vc-workflows/source-thesis-targets.yaml`
 - Alludium task ID: `vc.source_thesis_targets`
 - Task family: `pipeline`
-- Lifecycle stage: `assessment`
+- Lifecycle stage: `intake`
 - Recommended agent: `vc-origination-scout` (Alludium template `vc_origination_scout`)
 - Supported project types:
   - `vc_deal_room`

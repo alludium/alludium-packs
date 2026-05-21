@@ -1,4 +1,4 @@
-version: "1.0.3"
+version: "1.0.4"
 type: "template"
 platform_managed: false
 id: "vc_first_look_analyst"
@@ -14,8 +14,8 @@ metadata:
     - run-investment-screen
     - run-follow-up-evaluation
     - generate-diligence-questions
-  primaryStage: "Assessment"
-  primaryDealRoomState: "assessment"
+  primaryStage: "Screening"
+  primaryDealRoomState: "screening"
   requiredSkills:
     - company-research-and-enrichment
     - investment-screening-framework

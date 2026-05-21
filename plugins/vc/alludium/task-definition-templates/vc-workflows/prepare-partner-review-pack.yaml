@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_partner_review_pack
-version: 1.0.11
+version: 1.0.12
 title: Prepare Partner Review Pack
 category: Venture Capital
 visibility: workspace
@@ -16,7 +16,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: review
+    stage: decision_review
     taskFamily: diligence
     documentRefs:
       - documentId: vc.document.review_pack_checklist

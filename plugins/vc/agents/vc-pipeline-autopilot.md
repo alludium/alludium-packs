@@ -64,9 +64,9 @@ Humans own stage movement, archiving, investment priority, external communicatio
 - Source template: `alludium/agent-templates/vc_pipeline_autopilot.yaml`
 - Alludium template ID: `vc_pipeline_autopilot`
 - Display name: Pipeline Autopilot
-- Version: `1.0.3`
+- Version: `1.0.4`
 - Primary stage: Pipeline
-- Primary Deal Room state: `assessment`
+- Primary Deal Room state: `evaluation`
 - Supported task definitions:
   - `review-opportunity-status`
   - `prepare-deal-flow-agenda`

@@ -251,11 +251,14 @@ PROJECT_CREATION_VARIABLE_FIELD_ALIASES = {
 }
 VC_DEAL_ROOM_LIFECYCLE_STAGES = {
     "intake",
-    "assessment",
-    "diligence",
-    "review",
-    "term_sheet",
+    "screening",
+    "evaluation",
+    "decision_review",
+    "deal_structuring",
+    "formal_diligence",
+    "contracts",
     "closing",
+    "watchlist",
 }
 VC_DEAL_ROOM_REPLACED_TASK_FIELDS = {"pitch_deck_url", "meeting_transcript_url"}
 VC_DEAL_ROOM_FORBIDDEN_TASK_FIELDS = {
@@ -316,7 +319,6 @@ VC_ARTIFACT_OUTPUTS = {
 }
 VC_ARTIFACT_INPUTS = {
     "screen-inbound-opportunity": ["pitch_deck_artifact_id"],
-    "prepare-initial-call": ["pitch_deck_artifact_id"],
     "summarize-initial-call": ["meeting_record_artifact_ids"],
     "run-follow-up-evaluation": [
         "first_look_scorecard_artifact_id",
@@ -370,6 +372,9 @@ VC_ARTIFACT_INPUTS = {
         "closing_checklist_artifact_id",
         "conditions_precedent_verification_artifact_id",
     ],
+}
+OPTIONAL_ARTIFACT_INPUTS = {
+    "prepare-initial-call": {"pitch_deck_artifact_id"},
 }
 
 
@@ -1233,6 +1238,8 @@ def validate_artifact_field_shape(
     template_id: str,
     section_name: str,
     field: dict[str, Any],
+    *,
+    require_required: bool = True,
 ) -> None:
     key = field["key"]
     is_artifact_key = key.endswith("_artifact_id")
@@ -1246,7 +1253,7 @@ def validate_artifact_field_shape(
         )
     if field.get("fieldType") != "file":
         fail(f"Task template {template_id} fields.{section_name}.{key} must use fieldType: file")
-    if field.get("required") is not True:
+    if require_required and field.get("required") is not True:
         fail(f"Task template {template_id} fields.{section_name}.{key} must set required: true")
 
 
@@ -1264,7 +1271,13 @@ def validate_required_artifact_fields(
         ("output", output_fields),
     ]:
         for field in mapped_fields.values():
-            validate_artifact_field_shape(template_id, section_name, field)
+            optional_inputs = OPTIONAL_ARTIFACT_INPUTS.get(slug, set())
+            validate_artifact_field_shape(
+                template_id,
+                section_name,
+                field,
+                require_required=not (section_name == "input" and field["key"] in optional_inputs),
+            )
 
     for key in VC_ARTIFACT_INPUTS.get(slug, []):
         field = input_fields.get(key)

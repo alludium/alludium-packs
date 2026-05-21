@@ -69,7 +69,9 @@
       "applyVariables": {
         "enabled": true,
         "label": "Apply reviewed setup variables",
-        "sourceEvidenceKeys": ["variables"],
+        "sourceEvidenceKeys": [
+          "variables"
+        ],
         "target": "workspace_and_created_projects",
         "actionMode": "platform_variable_application",
         "requiresReviewedUserApproval": true,
@@ -90,11 +92,32 @@
           "inputField": "import_payload",
           "payloadContract": {
             "version": "vc.affinity_deal_room_import.import_payload.v1",
-            "requiredTopLevelKeys": ["setupTaskId", "approval", "source", "seed", "targetProject"],
-            "requiredApprovalKeys": ["approvedByUserId", "approvedAt", "reviewedEvidenceArtifactIds"],
-            "requiredSourceKeys": ["provider", "selectedSourceScope", "acceptedStageMapping"],
-            "requiredSeedKeys": ["affinityOrganizationId", "companyName"],
-            "requiredTargetProjectKeys": ["projectId", "projectTypeKey", "workspaceId"]
+            "requiredTopLevelKeys": [
+              "setupTaskId",
+              "approval",
+              "source",
+              "seed",
+              "targetProject"
+            ],
+            "requiredApprovalKeys": [
+              "approvedByUserId",
+              "approvedAt",
+              "reviewedEvidenceArtifactIds"
+            ],
+            "requiredSourceKeys": [
+              "provider",
+              "selectedSourceScope",
+              "acceptedStageMapping"
+            ],
+            "requiredSeedKeys": [
+              "affinityOrganizationId",
+              "companyName"
+            ],
+            "requiredTargetProjectKeys": [
+              "projectId",
+              "projectTypeKey",
+              "workspaceId"
+            ]
           },
           "outputEvidenceKeys": [
             "affinity_import_receipt_artifact_id",
@@ -115,9 +138,13 @@
       "inviteCollaborators": {
         "enabled": true,
         "label": "Invite approved Deal Room collaborators",
-        "sourceEvidenceKeys": ["invite"],
+        "sourceEvidenceKeys": [
+          "invite"
+        ],
         "target": "createdProjects",
-        "dependsOn": ["importProjects"],
+        "dependsOn": [
+          "importProjects"
+        ],
         "actionMode": "platform_project_membership",
         "requiresReviewedUserApproval": true,
         "setupTasksMaySendInvites": false
@@ -125,7 +152,9 @@
       "enableSchedules": {
         "enabled": true,
         "label": "Enable approved Deal Room schedules",
-        "sourceEvidenceKeys": ["schedules"],
+        "sourceEvidenceKeys": [
+          "schedules"
+        ],
         "target": "createdProjects",
         "scheduleGroupsRef": "projectSetup.scheduleGroups",
         "defaultEnabled": false,
@@ -138,7 +167,9 @@
         "key": "deal_room_crm_preview",
         "label": "Deal Room CRM preview",
         "description": "Optional read-only Affinity preview refresh for Deal Room source context.",
-        "taskDefinitionSlugs": ["affinity-sync-read"],
+        "taskDefinitionSlugs": [
+          "affinity-sync-read"
+        ],
         "defaultExpanded": true,
         "advanced": false
       }
@@ -168,8 +199,14 @@
   "projectCreation": {
     "launcherLabel": "Create VC Deal Room",
     "starterId": "create-vc-deal-room-project",
-    "aliases": ["deal room", "investment opportunity", "portfolio opportunity"],
-    "requiredFieldKeys": ["company_name"],
+    "aliases": [
+      "deal room",
+      "investment opportunity",
+      "portfolio opportunity"
+    ],
+    "requiredFieldKeys": [
+      "company_name"
+    ],
     "recommendedFieldKeys": [
       "company_domain",
       "deal_source",
@@ -216,15 +253,20 @@
       "readinessEvidenceKey": "affinity_connection_ready",
       "summary": "Prove that the workspace has a connected Affinity recommendation before the VC Deal Room configuration becomes enabled.",
       "taskConfiguration": {
-        "sourceTaskKeys": ["vc.affinity_setup"],
+        "sourceTaskKeys": [
+          "vc.affinity_setup"
+        ],
         "runMode": "manual",
-        "syncScopeKeys": ["affinity_lists", "affinity_pipeline_stages"],
+        "syncScopeKeys": [
+          "affinity_lists",
+          "affinity_pipeline_stages"
+        ],
         "notes": "The Affinity setup task owns reviewed, manual, side-effect-free discovery readiness for this slice."
       }
     }
   ],
   "initialVersion": {
-    "version": "1.0.5",
+    "version": "1.0.6",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -432,7 +474,7 @@
         "label": "Pitch Deck Artifact ID",
         "kind": "text",
         "required": false,
-        "description": "Uploaded pitch deck artifact used by assessment tasks."
+        "description": "Uploaded pitch deck artifact used by screening and evaluation tasks."
       },
       {
         "id": "field-source-thread-url",
@@ -505,31 +547,43 @@
         "label": "Investment Stage",
         "kind": "enum",
         "required": false,
-        "description": "Collapsed investment workflow stage for the Deal Room.",
+        "description": "Current investment workflow stage for the Deal Room.",
         "options": [
           {
             "value": "intake",
             "label": "Intake"
           },
           {
-            "value": "assessment",
-            "label": "Assessment"
+            "value": "screening",
+            "label": "Screening"
           },
           {
-            "value": "diligence",
-            "label": "Diligence"
+            "value": "evaluation",
+            "label": "Evaluation"
           },
           {
-            "value": "review",
-            "label": "Review"
+            "value": "decision_review",
+            "label": "Decision Review"
           },
           {
-            "value": "term_sheet",
-            "label": "Term Sheet"
+            "value": "deal_structuring",
+            "label": "Deal Structuring"
+          },
+          {
+            "value": "formal_diligence",
+            "label": "Formal Diligence"
+          },
+          {
+            "value": "contracts",
+            "label": "Contracts"
           },
           {
             "value": "closing",
             "label": "Closing"
+          },
+          {
+            "value": "watchlist",
+            "label": "Watchlist"
           }
         ]
       },
@@ -737,7 +791,7 @@
         "label": "Thesis Area",
         "kind": "text",
         "required": false,
-        "description": "Thesis area used for source or fit assessment."
+        "description": "Thesis area used for source review or investment fit screening."
       },
       {
         "id": "field-fund-thesis-context",
@@ -745,7 +799,7 @@
         "label": "Fund Thesis Context",
         "kind": "text",
         "required": false,
-        "description": "Compact fund or partner thesis context for assessment tasks."
+        "description": "Compact fund or partner thesis context for screening and evaluation tasks."
       },
       {
         "id": "field-founder-names",
@@ -777,7 +831,7 @@
         "label": "Meeting Date",
         "kind": "date",
         "required": false,
-        "description": "Next or primary meeting date for active assessment."
+        "description": "Next or primary meeting date for the active deal stage."
       },
       {
         "id": "field-business-model",
@@ -1269,11 +1323,14 @@
     "instructionTemplate": "This project is a VC Deal Room for one investment opportunity. Treat source links, decks, transcripts, CRM references, and task outputs as evidence that should stay attached to the Deal Room when supported. Ask for manual links or files when integrations are missing. External sends, CRM writes, Drive changes, investment decisions, and legal decisions require explicit human approval.",
     "lifecycleStates": [
       "intake",
-      "assessment",
-      "diligence",
-      "review",
-      "term_sheet",
+      "screening",
+      "evaluation",
+      "decision_review",
+      "deal_structuring",
+      "formal_diligence",
+      "contracts",
       "closing",
+      "watchlist",
       "invested",
       "passed",
       "archived"
@@ -1281,55 +1338,123 @@
     "lifecycleTransitions": [
       {
         "from": "intake",
-        "to": "assessment"
+        "to": "screening"
       },
       {
-        "from": "assessment",
-        "to": "diligence"
+        "from": "intake",
+        "to": "watchlist"
       },
       {
-        "from": "assessment",
-        "to": "review"
-      },
-      {
-        "from": "assessment",
+        "from": "intake",
         "to": "passed"
       },
       {
-        "from": "diligence",
-        "to": "review"
+        "from": "intake",
+        "to": "archived"
       },
       {
-        "from": "diligence",
-        "to": "assessment"
+        "from": "screening",
+        "to": "evaluation"
       },
       {
-        "from": "diligence",
+        "from": "screening",
+        "to": "watchlist"
+      },
+      {
+        "from": "screening",
         "to": "passed"
       },
       {
-        "from": "review",
-        "to": "term_sheet"
+        "from": "screening",
+        "to": "archived"
       },
       {
-        "from": "review",
-        "to": "diligence"
+        "from": "evaluation",
+        "to": "decision_review"
       },
       {
-        "from": "review",
+        "from": "evaluation",
+        "to": "screening"
+      },
+      {
+        "from": "evaluation",
+        "to": "watchlist"
+      },
+      {
+        "from": "evaluation",
         "to": "passed"
       },
       {
-        "from": "term_sheet",
+        "from": "evaluation",
+        "to": "archived"
+      },
+      {
+        "from": "decision_review",
+        "to": "deal_structuring"
+      },
+      {
+        "from": "decision_review",
+        "to": "evaluation"
+      },
+      {
+        "from": "decision_review",
+        "to": "formal_diligence"
+      },
+      {
+        "from": "decision_review",
+        "to": "passed"
+      },
+      {
+        "from": "decision_review",
+        "to": "archived"
+      },
+      {
+        "from": "deal_structuring",
+        "to": "formal_diligence"
+      },
+      {
+        "from": "deal_structuring",
+        "to": "decision_review"
+      },
+      {
+        "from": "deal_structuring",
+        "to": "passed"
+      },
+      {
+        "from": "deal_structuring",
+        "to": "archived"
+      },
+      {
+        "from": "formal_diligence",
+        "to": "contracts"
+      },
+      {
+        "from": "formal_diligence",
+        "to": "decision_review"
+      },
+      {
+        "from": "formal_diligence",
+        "to": "passed"
+      },
+      {
+        "from": "formal_diligence",
+        "to": "archived"
+      },
+      {
+        "from": "contracts",
         "to": "closing"
       },
       {
-        "from": "term_sheet",
-        "to": "review"
+        "from": "contracts",
+        "to": "formal_diligence"
       },
       {
-        "from": "term_sheet",
+        "from": "contracts",
         "to": "passed"
+      },
+      {
+        "from": "contracts",
+        "to": "archived"
       },
       {
         "from": "closing",
@@ -1337,30 +1462,30 @@
       },
       {
         "from": "closing",
-        "to": "term_sheet"
-      },
-      {
-        "from": "intake",
-        "to": "archived"
-      },
-      {
-        "from": "assessment",
-        "to": "archived"
-      },
-      {
-        "from": "diligence",
-        "to": "archived"
-      },
-      {
-        "from": "review",
-        "to": "archived"
-      },
-      {
-        "from": "term_sheet",
-        "to": "archived"
+        "to": "contracts"
       },
       {
         "from": "closing",
+        "to": "passed"
+      },
+      {
+        "from": "closing",
+        "to": "archived"
+      },
+      {
+        "from": "watchlist",
+        "to": "screening"
+      },
+      {
+        "from": "watchlist",
+        "to": "evaluation"
+      },
+      {
+        "from": "watchlist",
+        "to": "passed"
+      },
+      {
+        "from": "watchlist",
         "to": "archived"
       }
     ],
@@ -1378,37 +1503,68 @@
         {
           "key": "intake",
           "label": "Intake",
-          "states": ["intake"]
+          "states": [
+            "intake"
+          ]
         },
         {
-          "key": "assessment",
-          "label": "Assessment",
-          "states": ["assessment"]
+          "key": "screening",
+          "label": "Screening",
+          "states": [
+            "screening"
+          ]
         },
         {
-          "key": "diligence",
+          "key": "evaluation",
+          "label": "Evaluation",
+          "states": [
+            "evaluation"
+          ]
+        },
+        {
+          "key": "decision_review",
+          "label": "Decision",
+          "states": [
+            "decision_review"
+          ]
+        },
+        {
+          "key": "deal_structuring",
+          "label": "Structuring",
+          "states": [
+            "deal_structuring"
+          ]
+        },
+        {
+          "key": "formal_diligence",
           "label": "Diligence",
-          "states": ["diligence"]
+          "states": [
+            "formal_diligence"
+          ]
         },
         {
-          "key": "review",
-          "label": "Review",
-          "states": ["review"]
-        },
-        {
-          "key": "term_sheet",
-          "label": "Term Sheet",
-          "states": ["term_sheet"]
+          "key": "contracts",
+          "label": "Contracts",
+          "states": [
+            "contracts"
+          ]
         },
         {
           "key": "closing",
           "label": "Closing",
-          "states": ["closing"]
+          "states": [
+            "closing"
+          ]
         },
         {
           "key": "outcomes",
           "label": "Outcomes",
-          "states": ["invested", "passed", "archived"]
+          "states": [
+            "watchlist",
+            "invested",
+            "passed",
+            "archived"
+          ]
         }
       ],
       "fallbackAgents": [
@@ -1446,7 +1602,7 @@
               "outputFieldKey": "thesis_target_list_artifact_id"
             }
           ],
-          "stageKey": "assessment"
+          "stageKey": "intake"
         },
         {
           "key": "first_look_scorecard",
@@ -1460,7 +1616,7 @@
               "outputFieldKey": "first_look_scorecard_artifact_id"
             }
           ],
-          "stageKey": "assessment"
+          "stageKey": "screening"
         },
         {
           "key": "investment_screen_scorecard",
@@ -1474,7 +1630,7 @@
               "outputFieldKey": "investment_screen_scorecard_artifact_id"
             }
           ],
-          "stageKey": "assessment"
+          "stageKey": "screening"
         },
         {
           "key": "founder_materials_request",
@@ -1488,7 +1644,7 @@
               "outputFieldKey": "founder_materials_request_artifact_id"
             }
           ],
-          "stageKey": "assessment"
+          "stageKey": "evaluation"
         },
         {
           "key": "initial_call_brief",
@@ -1502,7 +1658,7 @@
               "outputFieldKey": "initial_call_brief_artifact_id"
             }
           ],
-          "stageKey": "assessment"
+          "stageKey": "evaluation"
         },
         {
           "key": "customer_insights",
@@ -1516,7 +1672,7 @@
               "outputFieldKey": "customer_insights_artifact_id"
             }
           ],
-          "stageKey": "assessment"
+          "stageKey": "evaluation"
         },
         {
           "key": "follow_up_evaluation",
@@ -1530,7 +1686,7 @@
               "outputFieldKey": "follow_up_evaluation_artifact_id"
             }
           ],
-          "stageKey": "assessment"
+          "stageKey": "evaluation"
         },
         {
           "key": "commercial_dd",
@@ -1547,10 +1703,12 @@
                 "prepare-partner-review-pack",
                 "create-ic-memo"
               ],
-              "reviewInputFieldKeys": ["commercial_dd_artifact_id"]
+              "reviewInputFieldKeys": [
+                "commercial_dd_artifact_id"
+              ]
             }
           ],
-          "stageKey": "diligence"
+          "stageKey": "formal_diligence"
         },
         {
           "key": "market_analysis",
@@ -1564,7 +1722,7 @@
               "outputFieldKey": "market_analysis_artifact_id"
             }
           ],
-          "stageKey": "diligence"
+          "stageKey": "formal_diligence"
         },
         {
           "key": "customer_reference_summary",
@@ -1578,7 +1736,7 @@
               "outputFieldKey": "customer_reference_summary_artifact_id"
             }
           ],
-          "stageKey": "diligence"
+          "stageKey": "formal_diligence"
         },
         {
           "key": "financial_dd",
@@ -1595,10 +1753,12 @@
                 "prepare-partner-review-pack",
                 "create-ic-memo"
               ],
-              "reviewInputFieldKeys": ["financial_dd_artifact_id"]
+              "reviewInputFieldKeys": [
+                "financial_dd_artifact_id"
+              ]
             }
           ],
-          "stageKey": "diligence"
+          "stageKey": "formal_diligence"
         },
         {
           "key": "unit_economics",
@@ -1612,7 +1772,7 @@
               "outputFieldKey": "unit_economics_artifact_id"
             }
           ],
-          "stageKey": "diligence"
+          "stageKey": "formal_diligence"
         },
         {
           "key": "founder_evaluation",
@@ -1629,10 +1789,12 @@
                 "prepare-partner-review-pack",
                 "create-ic-memo"
               ],
-              "reviewInputFieldKeys": ["founder_evaluation_artifact_id"]
+              "reviewInputFieldKeys": [
+                "founder_evaluation_artifact_id"
+              ]
             }
           ],
-          "stageKey": "diligence"
+          "stageKey": "formal_diligence"
         },
         {
           "key": "technical_dd",
@@ -1649,10 +1811,12 @@
                 "prepare-partner-review-pack",
                 "create-ic-memo"
               ],
-              "reviewInputFieldKeys": ["technical_dd_artifact_id"]
+              "reviewInputFieldKeys": [
+                "technical_dd_artifact_id"
+              ]
             }
           ],
-          "stageKey": "diligence"
+          "stageKey": "formal_diligence"
         },
         {
           "key": "diligence_question_bank",
@@ -1674,7 +1838,7 @@
               ]
             }
           ],
-          "stageKey": "diligence"
+          "stageKey": "evaluation"
         },
         {
           "key": "team_review_pack",
@@ -1690,10 +1854,12 @@
                 "prepare-partner-review-pack",
                 "create-ic-memo"
               ],
-              "reviewInputFieldKeys": ["team_review_pack_artifact_id"]
+              "reviewInputFieldKeys": [
+                "team_review_pack_artifact_id"
+              ]
             }
           ],
-          "stageKey": "review"
+          "stageKey": "decision_review"
         },
         {
           "key": "partner_review_pack",
@@ -1705,11 +1871,15 @@
               "title": "Partner review pack",
               "producerTaskDefinitionSlug": "prepare-partner-review-pack",
               "outputFieldKey": "partner_review_pack_artifact_id",
-              "reviewTaskDefinitionSlugs": ["create-ic-memo"],
-              "reviewInputFieldKeys": ["partner_review_pack_artifact_id"]
+              "reviewTaskDefinitionSlugs": [
+                "create-ic-memo"
+              ],
+              "reviewInputFieldKeys": [
+                "partner_review_pack_artifact_id"
+              ]
             }
           ],
-          "stageKey": "review"
+          "stageKey": "decision_review"
         },
         {
           "key": "investment_memo",
@@ -1726,10 +1896,12 @@
                 "review-ic-memo",
                 "record-ic-decision"
               ],
-              "reviewInputFieldKeys": ["investment_memo_artifact_id"]
+              "reviewInputFieldKeys": [
+                "investment_memo_artifact_id"
+              ]
             }
           ],
-          "stageKey": "review"
+          "stageKey": "decision_review"
         },
         {
           "key": "ic_agenda",
@@ -1745,10 +1917,12 @@
                 "review-ic-memo",
                 "record-ic-decision"
               ],
-              "reviewInputFieldKeys": ["ic_agenda_artifact_id"]
+              "reviewInputFieldKeys": [
+                "ic_agenda_artifact_id"
+              ]
             }
           ],
-          "stageKey": "review"
+          "stageKey": "decision_review"
         },
         {
           "key": "ic_memo_review",
@@ -1762,7 +1936,7 @@
               "outputFieldKey": "ic_memo_review_artifact_id"
             }
           ],
-          "stageKey": "review"
+          "stageKey": "decision_review"
         },
         {
           "key": "ic_decision_record",
@@ -1778,10 +1952,12 @@
                 "manage-closing-checklist",
                 "prepare-portfolio-onboarding"
               ],
-              "reviewInputFieldKeys": ["ic_decision_record_artifact_id"]
+              "reviewInputFieldKeys": [
+                "ic_decision_record_artifact_id"
+              ]
             }
           ],
-          "stageKey": "review"
+          "stageKey": "decision_review"
         },
         {
           "key": "term_sheet_review",
@@ -1793,11 +1969,15 @@
               "title": "Term sheet review",
               "producerTaskDefinitionSlug": "review-term-sheet",
               "outputFieldKey": "term_sheet_review_artifact_id",
-              "reviewTaskDefinitionSlugs": ["manage-closing-checklist"],
-              "reviewInputFieldKeys": ["term_sheet_review_artifact_id"]
+              "reviewTaskDefinitionSlugs": [
+                "manage-closing-checklist"
+              ],
+              "reviewInputFieldKeys": [
+                "term_sheet_review_artifact_id"
+              ]
             }
           ],
-          "stageKey": "term_sheet"
+          "stageKey": "deal_structuring"
         },
         {
           "key": "closing_checklist",
@@ -1813,7 +1993,9 @@
                 "verify-conditions-precedent",
                 "prepare-portfolio-onboarding"
               ],
-              "reviewInputFieldKeys": ["closing_checklist_artifact_id"]
+              "reviewInputFieldKeys": [
+                "closing_checklist_artifact_id"
+              ]
             }
           ],
           "stageKey": "closing"
@@ -1828,7 +2010,9 @@
               "title": "Conditions precedent verification",
               "producerTaskDefinitionSlug": "verify-conditions-precedent",
               "outputFieldKey": "conditions_precedent_verification_artifact_id",
-              "reviewTaskDefinitionSlugs": ["prepare-portfolio-onboarding"],
+              "reviewTaskDefinitionSlugs": [
+                "prepare-portfolio-onboarding"
+              ],
               "reviewInputFieldKeys": [
                 "conditions_precedent_verification_artifact_id"
               ]
@@ -1943,7 +2127,7 @@
         "taskDefinitionTemplateId": "vc.source_thesis_targets",
         "taskDefinitionSlug": "source-thesis-targets",
         "projectScope": "project_instance",
-        "lifecycleStage": "assessment",
+        "lifecycleStage": "intake",
         "inputMappings": [
           {
             "taskField": "thesis_area",
@@ -1978,7 +2162,7 @@
         "taskDefinitionTemplateId": "vc.screen_inbound_opportunity",
         "taskDefinitionSlug": "screen-inbound-opportunity",
         "projectScope": "project_instance",
-        "lifecycleStage": "assessment",
+        "lifecycleStage": "screening",
         "inputMappings": [
           {
             "taskField": "company_name",
@@ -1990,7 +2174,7 @@
             "taskField": "pitch_deck_artifact_id",
             "source": "project.field",
             "sourcePath": "pitch_deck_artifact_id",
-            "requiredForActivation": true
+            "requiredForActivation": false
           }
         ],
         "outputMappings": [
@@ -2013,7 +2197,7 @@
         "taskDefinitionTemplateId": "vc.run_investment_screen",
         "taskDefinitionSlug": "run-investment-screen",
         "projectScope": "project_instance",
-        "lifecycleStage": "assessment",
+        "lifecycleStage": "screening",
         "inputMappings": [
           {
             "taskField": "company_name",
@@ -2048,7 +2232,7 @@
         "taskDefinitionTemplateId": "vc.request_founder_materials",
         "taskDefinitionSlug": "request-founder-materials",
         "projectScope": "project_instance",
-        "lifecycleStage": "assessment",
+        "lifecycleStage": "evaluation",
         "inputMappings": [
           {
             "taskField": "company_name",
@@ -2083,7 +2267,7 @@
         "taskDefinitionTemplateId": "vc.prepare_initial_call",
         "taskDefinitionSlug": "prepare-initial-call",
         "projectScope": "project_instance",
-        "lifecycleStage": "assessment",
+        "lifecycleStage": "evaluation",
         "inputMappings": [
           {
             "taskField": "company_name",
@@ -2118,7 +2302,7 @@
         "taskDefinitionTemplateId": "vc.summarize_initial_call",
         "taskDefinitionSlug": "summarize-initial-call",
         "projectScope": "project_instance",
-        "lifecycleStage": "assessment",
+        "lifecycleStage": "evaluation",
         "inputMappings": [
           {
             "taskField": "meeting_record_artifact_ids",
@@ -2136,7 +2320,7 @@
             "taskField": "deal_room_url",
             "source": "project.field",
             "sourcePath": "deal_room_url",
-            "requiredForActivation": true
+            "requiredForActivation": false
           }
         ],
         "outputMappings": [
@@ -2159,7 +2343,7 @@
         "taskDefinitionTemplateId": "vc.run_commercial_dd",
         "taskDefinitionSlug": "run-commercial-dd",
         "projectScope": "project_instance",
-        "lifecycleStage": "diligence",
+        "lifecycleStage": "formal_diligence",
         "inputMappings": [
           {
             "taskField": "company_name",
@@ -2200,7 +2384,7 @@
         "taskDefinitionTemplateId": "vc.run_financial_dd",
         "taskDefinitionSlug": "run-financial-dd",
         "projectScope": "project_instance",
-        "lifecycleStage": "diligence",
+        "lifecycleStage": "formal_diligence",
         "inputMappings": [
           {
             "taskField": "financial_source_artifact_ids",
@@ -2235,7 +2419,7 @@
         "taskDefinitionTemplateId": "vc.run_founder_evaluation",
         "taskDefinitionSlug": "run-founder-evaluation",
         "projectScope": "project_instance",
-        "lifecycleStage": "diligence",
+        "lifecycleStage": "formal_diligence",
         "inputMappings": [
           {
             "taskField": "founder_names",
@@ -2270,7 +2454,7 @@
         "taskDefinitionTemplateId": "vc.run_technical_dd",
         "taskDefinitionSlug": "run-technical-dd",
         "projectScope": "project_instance",
-        "lifecycleStage": "diligence",
+        "lifecycleStage": "formal_diligence",
         "inputMappings": [
           {
             "taskField": "technical_source_artifact_ids",
@@ -2305,7 +2489,7 @@
         "taskDefinitionTemplateId": "vc.run_follow_up_evaluation",
         "taskDefinitionSlug": "run-follow-up-evaluation",
         "projectScope": "project_instance",
-        "lifecycleStage": "assessment",
+        "lifecycleStage": "evaluation",
         "inputMappings": [
           {
             "taskField": "company_name",
@@ -2346,7 +2530,7 @@
         "taskDefinitionTemplateId": "vc.generate_diligence_questions",
         "taskDefinitionSlug": "generate-diligence-questions",
         "projectScope": "project_instance",
-        "lifecycleStage": "diligence",
+        "lifecycleStage": "evaluation",
         "inputMappings": [
           {
             "taskField": "company_name",
@@ -2381,7 +2565,7 @@
         "taskDefinitionTemplateId": "vc.prepare_team_review_pack",
         "taskDefinitionSlug": "prepare-team-review-pack",
         "projectScope": "project_instance",
-        "lifecycleStage": "review",
+        "lifecycleStage": "decision_review",
         "inputMappings": [
           {
             "taskField": "commercial_dd_artifact_id",
@@ -2434,7 +2618,7 @@
         "taskDefinitionTemplateId": "vc.prepare_partner_review_pack",
         "taskDefinitionSlug": "prepare-partner-review-pack",
         "projectScope": "project_instance",
-        "lifecycleStage": "review",
+        "lifecycleStage": "decision_review",
         "inputMappings": [
           {
             "taskField": "team_review_pack_artifact_id",
@@ -2493,7 +2677,7 @@
         "taskDefinitionTemplateId": "vc.create_ic_memo",
         "taskDefinitionSlug": "create-ic-memo",
         "projectScope": "project_instance",
-        "lifecycleStage": "review",
+        "lifecycleStage": "decision_review",
         "inputMappings": [
           {
             "taskField": "team_review_pack_artifact_id",
@@ -2558,7 +2742,7 @@
         "taskDefinitionTemplateId": "vc.prepare_ic_agenda",
         "taskDefinitionSlug": "prepare-ic-agenda",
         "projectScope": "project_instance",
-        "lifecycleStage": "review",
+        "lifecycleStage": "decision_review",
         "inputMappings": [
           {
             "taskField": "investment_memo_artifact_id",
@@ -2587,7 +2771,7 @@
         "taskDefinitionTemplateId": "vc.review_ic_memo",
         "taskDefinitionSlug": "review-ic-memo",
         "projectScope": "project_instance",
-        "lifecycleStage": "review",
+        "lifecycleStage": "decision_review",
         "inputMappings": [
           {
             "taskField": "investment_memo_artifact_id",
@@ -2622,7 +2806,7 @@
         "taskDefinitionTemplateId": "vc.record_ic_decision",
         "taskDefinitionSlug": "record-ic-decision",
         "projectScope": "project_instance",
-        "lifecycleStage": "review",
+        "lifecycleStage": "decision_review",
         "inputMappings": [
           {
             "taskField": "investment_memo_artifact_id",
@@ -2669,7 +2853,7 @@
         "taskDefinitionTemplateId": "vc.review_term_sheet",
         "taskDefinitionSlug": "review-term-sheet",
         "projectScope": "project_instance",
-        "lifecycleStage": "term_sheet",
+        "lifecycleStage": "deal_structuring",
         "inputMappings": [
           {
             "taskField": "term_sheet_artifact_id",

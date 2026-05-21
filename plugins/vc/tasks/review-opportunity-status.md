@@ -70,7 +70,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Source template: `alludium/task-definition-templates/vc-workflows/review-opportunity-status.yaml`
 - Alludium task ID: `vc.review_opportunity_status`
 - Task family: `pipeline`
-- Lifecycle stage: `assessment`
+- Lifecycle stage: `evaluation`
 - Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
 - Supported project types:
   - `vc_deal_room`

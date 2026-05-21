@@ -64,9 +64,9 @@ Humans own memo circulation, IC decisions, formal decision recording, external s
 - Source template: `alludium/agent-templates/vc_ic_prep_producer.yaml`
 - Alludium template ID: `vc_ic_prep_producer`
 - Display name: IC Prep Producer
-- Version: `1.0.2`
-- Primary stage: Investment Committee
-- Primary Deal Room state: `review`
+- Version: `1.0.3`
+- Primary stage: Decision Review
+- Primary Deal Room state: `decision_review`
 - Supported task definitions:
   - `create-ic-memo`
   - `review-ic-memo`

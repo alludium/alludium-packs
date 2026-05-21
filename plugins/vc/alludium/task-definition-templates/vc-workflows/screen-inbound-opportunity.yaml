@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.screen_inbound_opportunity
-version: 1.0.13
+version: 1.0.14
 title: Screen Inbound Opportunity
 category: Venture Capital
 visibility: workspace
@@ -16,7 +16,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: assessment
+    stage: screening
     taskFamily: screening
     documentRefs:
       - documentId: vc.document.investment_screening_framework

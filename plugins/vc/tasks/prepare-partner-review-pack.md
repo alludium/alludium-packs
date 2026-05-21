@@ -82,7 +82,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Source template: `alludium/task-definition-templates/vc-workflows/prepare-partner-review-pack.yaml`
 - Alludium task ID: `vc.prepare_partner_review_pack`
 - Task family: `diligence`
-- Lifecycle stage: `review`
+- Lifecycle stage: `decision_review`
 - Recommended agent: `vc-diligence-analyst` (Alludium template `vc_diligence_analyst`)
 - Supported project types:
   - `vc_deal_room`

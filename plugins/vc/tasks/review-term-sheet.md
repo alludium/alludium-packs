@@ -82,7 +82,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Source template: `alludium/task-definition-templates/vc-workflows/review-term-sheet.yaml`
 - Alludium task ID: `vc.review_term_sheet`
 - Task family: `closing`
-- Lifecycle stage: `term_sheet`
+- Lifecycle stage: `deal_structuring`
 - Recommended agent: `vc-legal-compliance-desk` (Alludium template `vc_legal_compliance_desk`)
 - Supported project types:
   - `vc_deal_room`

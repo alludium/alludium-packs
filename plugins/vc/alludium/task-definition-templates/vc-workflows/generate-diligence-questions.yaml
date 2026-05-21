@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.generate_diligence_questions
-version: 1.0.12
+version: 1.0.13
 title: Generate Diligence Questions
 category: Venture Capital
 visibility: workspace
@@ -16,7 +16,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: diligence
+    stage: evaluation
     taskFamily: diligence
     documentRefs:
       - documentId: vc.document.investment_diligence_question_framework

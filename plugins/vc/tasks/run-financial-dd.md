@@ -83,7 +83,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Source template: `alludium/task-definition-templates/vc-workflows/run-financial-dd.yaml`
 - Alludium task ID: `vc.run_financial_dd`
 - Task family: `diligence`
-- Lifecycle stage: `diligence`
+- Lifecycle stage: `formal_diligence`
 - Recommended agent: `vc-diligence-analyst` (Alludium template `vc_diligence_analyst`)
 - Supported project types:
   - `vc_deal_room`

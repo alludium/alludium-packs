@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_founder_evaluation
-version: 1.0.9
+version: 1.0.10
 title: Run Founder Evaluation
 category: Venture Capital
 visibility: workspace
@@ -16,7 +16,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: diligence
+    stage: formal_diligence
     taskFamily: diligence
     documentRefs:
       - documentId: vc.document.diligence_report_template

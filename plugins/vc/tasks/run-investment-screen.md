@@ -78,7 +78,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Source template: `alludium/task-definition-templates/vc-workflows/run-investment-screen.yaml`
 - Alludium task ID: `vc.run_investment_screen`
 - Task family: `screening`
-- Lifecycle stage: `assessment`
+- Lifecycle stage: `screening`
 - Recommended agent: `vc-first-look-analyst` (Alludium template `vc_first_look_analyst`)
 - Supported project types:
   - `vc_deal_room`

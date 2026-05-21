@@ -59,9 +59,9 @@ Do not send follow-ups, create calendar events, create tasks, update CRM/deal-sy
 - Source template: `alludium/agent-templates/vc_meeting_operator.yaml`
 - Alludium template ID: `vc_meeting_operator`
 - Display name: Meeting Operator
-- Version: `1.0.3`
+- Version: `1.0.4`
 - Primary stage: Meetings
-- Primary Deal Room state: `assessment`
+- Primary Deal Room state: `evaluation`
 - Supported task definitions:
   - `prepare-initial-call`
   - `summarize-initial-call`

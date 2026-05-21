@@ -1,4 +1,4 @@
-version: "1.0.3"
+version: "1.0.4"
 type: "template"
 platform_managed: false
 id: "vc_pipeline_autopilot"
@@ -14,7 +14,7 @@ metadata:
     - review-opportunity-status
     - prepare-deal-flow-agenda
   primaryStage: "Pipeline"
-  primaryDealRoomState: "assessment"
+  primaryDealRoomState: "evaluation"
   requiredSkills:
     - pipeline-health-and-crm-hygiene
     - vc-task-and-next-step-generation

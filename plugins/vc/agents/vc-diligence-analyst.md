@@ -76,9 +76,9 @@ Humans own investment judgment, founder character judgment, references/contactin
 - Source template: `alludium/agent-templates/vc_diligence_analyst.yaml`
 - Alludium template ID: `vc_diligence_analyst`
 - Display name: Diligence Analyst
-- Version: `1.0.3`
-- Primary stage: Diligence
-- Primary Deal Room state: `diligence`
+- Version: `1.0.4`
+- Primary stage: Formal Diligence
+- Primary Deal Room state: `formal_diligence`
 - Supported task definitions:
   - `run-founder-evaluation`
   - `prepare-team-review-pack`

@@ -78,7 +78,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Source template: `alludium/task-definition-templates/vc-workflows/generate-diligence-questions.yaml`
 - Alludium task ID: `vc.generate_diligence_questions`
 - Task family: `diligence`
-- Lifecycle stage: `diligence`
+- Lifecycle stage: `evaluation`
 - Recommended agent: `vc-first-look-analyst` (Alludium template `vc_first_look_analyst`)
 - Supported project types:
   - `vc_deal_room`

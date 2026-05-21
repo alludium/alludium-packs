@@ -65,9 +65,9 @@ Humans own pass/continue decisions, founder relationship judgment, external send
 - Source template: `alludium/agent-templates/vc_first_look_analyst.yaml`
 - Alludium template ID: `vc_first_look_analyst`
 - Display name: First Look Analyst
-- Version: `1.0.3`
-- Primary stage: Assessment
-- Primary Deal Room state: `assessment`
+- Version: `1.0.4`
+- Primary stage: Screening
+- Primary Deal Room state: `screening`
 - Supported task definitions:
   - `run-investment-screen`
   - `run-follow-up-evaluation`
