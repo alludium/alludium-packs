@@ -266,7 +266,7 @@
     }
   ],
   "initialVersion": {
-    "version": "1.0.6",
+    "version": "1.0.7",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
