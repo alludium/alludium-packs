@@ -87,10 +87,6 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 
 - `citation-enforcement`
 
-## Planned Skills
-
-- `citation-enforcement`
-
 ## Workspace-Configured Methodology Skills
 
 - `investment-diligence-question-framework`: Use only when the workspace explicitly configures this diligence framework.

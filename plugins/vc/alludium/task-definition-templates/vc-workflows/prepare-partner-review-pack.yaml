@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_partner_review_pack
-version: 1.0.12
+version: 1.0.13
 title: Prepare Partner Review Pack
 category: Venture Capital
 visibility: workspace
@@ -27,9 +27,6 @@ definition:
       - documentId: vc.document.template_use_guidance
         usage: operating_guidance
     requiredSkills:
-      - ic-memo-assembly
-      - citation-enforcement
-    plannedRequiredSkills:
       - ic-memo-assembly
       - citation-enforcement
     plannedRecommendedAgentTemplate: vc_diligence_analyst

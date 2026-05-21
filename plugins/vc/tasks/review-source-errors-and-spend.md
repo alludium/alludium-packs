@@ -77,9 +77,3 @@ Review only. Do not retry paid runs, change budgets, disable schedules, or updat
 - `vc-source-error-and-spend-audit`
 - `vc-source-registry-and-state-management`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-source-error-and-spend-audit`
-- `vc-source-registry-and-state-management`
-- `citation-enforcement`

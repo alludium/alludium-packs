@@ -5,6 +5,7 @@ slug: prepare-portfolio-onboarding
 agent: vc-legal-compliance-desk
 skills:
 - citation-enforcement
+- portfolio-onboarding-and-100-day-plan
 ---
 
 > **GENERATED FILE**
@@ -85,8 +86,4 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Required Skills
 
 - `citation-enforcement`
-
-## Planned Skills
-
 - `portfolio-onboarding-and-100-day-plan`
-- `citation-enforcement`

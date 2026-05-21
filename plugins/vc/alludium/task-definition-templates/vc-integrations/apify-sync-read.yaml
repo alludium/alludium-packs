@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.apify_sync_read
-version: 0.1.1
+version: 0.1.2
 title: Preview Apify Origination Results
 category: Venture Capital
 visibility: workspace
@@ -19,9 +19,6 @@ definition:
     vertical: vc
     taskFamily: integration_sync_read
     requiredSkills:
-      - vc-apify-sync-read
-      - citation-enforcement
-    plannedRequiredSkills:
       - vc-apify-sync-read
       - citation-enforcement
     recommendedAgentTemplate: vc_origination_scout

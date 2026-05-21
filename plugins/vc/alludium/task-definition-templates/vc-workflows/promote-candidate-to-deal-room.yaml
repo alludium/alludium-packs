@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.promote_candidate_to_deal_room
-version: 0.1.5
+version: 0.1.6
 title: Promote Candidate to Deal Room
 category: Venture Capital
 visibility: workspace
@@ -28,10 +28,7 @@ definition:
     requiredSkills:
       - vc-origination-deal-room-promotion
       - citation-enforcement
-    plannedRequiredSkills:
-      - vc-origination-deal-room-promotion
       - deal-room-setup-and-source-ingestion
-      - citation-enforcement
     recommendedAgentTemplate: vc_dealflow_concierge
     plannedRecommendedAgentTemplate: vc_dealflow_concierge
     supportedProjectTypes:

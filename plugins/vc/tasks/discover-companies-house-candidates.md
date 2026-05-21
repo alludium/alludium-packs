@@ -71,9 +71,3 @@ Read preview and candidate proposal only. Do not call the Companies House API, i
 - `vc-companies-house-sourcing`
 - `vc-source-registry-and-state-management`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-companies-house-sourcing`
-- `vc-source-registry-and-state-management`
-- `citation-enforcement`

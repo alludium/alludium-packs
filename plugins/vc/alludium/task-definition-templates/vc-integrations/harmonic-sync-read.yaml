@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.harmonic_sync_read
-version: 0.1.1
+version: 0.1.2
 title: Preview Harmonic Search Results
 category: Venture Capital
 visibility: workspace
@@ -18,9 +18,6 @@ definition:
     vertical: vc
     taskFamily: integration_sync_read
     requiredSkills:
-      - vc-harmonic-sync-read
-      - citation-enforcement
-    plannedRequiredSkills:
       - vc-harmonic-sync-read
       - citation-enforcement
     recommendedAgentTemplate: vc_origination_scout

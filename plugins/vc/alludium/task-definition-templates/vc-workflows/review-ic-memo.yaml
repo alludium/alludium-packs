@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.review_ic_memo
-version: 1.0.11
+version: 1.0.12
 title: Review IC Memo
 category: Venture Capital
 visibility: workspace
@@ -29,10 +29,7 @@ definition:
     requiredSkills:
       - citation-enforcement
       - ic-memo-assembly
-    plannedRequiredSkills:
-      - citation-enforcement
       - ic-risk-checklist-and-decision-log
-      - ic-memo-assembly
     plannedRecommendedAgentTemplate: vc_ic_prep_producer
     sourceAnchors:
       - source: investment-management-process-slides

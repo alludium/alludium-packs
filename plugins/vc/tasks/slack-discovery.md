@@ -66,8 +66,3 @@ Discovery only. Do not read messages, post, reply, create channels, or change ch
 
 - `vc-slack-discovery`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-slack-discovery`
-- `citation-enforcement`

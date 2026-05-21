@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_commercial_dd
-version: 1.0.13
+version: 1.0.14
 title: Run Commercial DD
 category: Venture Capital
 visibility: workspace
@@ -28,9 +28,7 @@ definition:
         usage: operating_guidance
     requiredSkills:
       - citation-enforcement
-    plannedRequiredSkills:
       - commercial-diligence-workstream
-      - citation-enforcement
     plannedRecommendedAgentTemplate: vc_diligence_analyst
     recommendedAgentTemplate: vc_diligence_analyst
     supportedProjectTypes:

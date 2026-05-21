@@ -73,9 +73,3 @@ Setup orchestration only. Do not call the Companies House API, import companies,
 - `vc-companies-house-sourcing`
 - `vc-companies-house-sync-read`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-companies-house-sourcing`
-- `vc-companies-house-sync-read`
-- `citation-enforcement`

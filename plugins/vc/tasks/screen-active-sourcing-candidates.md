@@ -6,6 +6,7 @@ agent: vc-first-look-analyst
 skills:
 - vc-sourcing-verdict-and-screening
 - citation-enforcement
+- investment-screening-framework
 ---
 
 > **GENERATED FILE**
@@ -73,9 +74,4 @@ Screening recommendation only unless explicit write approval is granted. Never d
 
 - `vc-sourcing-verdict-and-screening`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-sourcing-verdict-and-screening`
 - `investment-screening-framework`
-- `citation-enforcement`

@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.ingest_manual_sourcing_tip
-version: 0.1.1
+version: 0.1.2
 title: Ingest Manual Sourcing Tip
 category: Venture Capital
 visibility: workspace
@@ -19,10 +19,6 @@ definition:
     stage: source
     taskFamily: origination_manual_tip
     requiredSkills:
-      - vc-manual-tip-ingestion
-      - vc-sourcing-dedupe-and-novelty-check
-      - citation-enforcement
-    plannedRequiredSkills:
       - vc-manual-tip-ingestion
       - vc-sourcing-dedupe-and-novelty-check
       - citation-enforcement

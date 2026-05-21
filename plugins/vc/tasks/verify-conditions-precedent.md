@@ -5,6 +5,7 @@ slug: verify-conditions-precedent
 agent: vc-legal-compliance-desk
 skills:
 - citation-enforcement
+- closing-coordination-and-cp-tracking
 ---
 
 > **GENERATED FILE**
@@ -85,8 +86,4 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Required Skills
 
 - `citation-enforcement`
-
-## Planned Skills
-
 - `closing-coordination-and-cp-tracking`
-- `citation-enforcement`

@@ -7,6 +7,7 @@ skills:
 - vc-source-registry-and-state-management
 - vc-sourcing-dedupe-and-novelty-check
 - citation-enforcement
+- vc-notion-sync-write
 ---
 
 > **GENERATED FILE**
@@ -70,10 +71,4 @@ Default is dry-run proposal. Do not write to Notion, CRM, Slack, ClickUp, or any
 - `vc-source-registry-and-state-management`
 - `vc-sourcing-dedupe-and-novelty-check`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-source-registry-and-state-management`
-- `vc-sourcing-dedupe-and-novelty-check`
 - `vc-notion-sync-write`
-- `citation-enforcement`

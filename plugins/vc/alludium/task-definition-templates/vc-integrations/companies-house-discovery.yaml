@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.companies_house_discovery
-version: 0.1.1
+version: 0.1.2
 title: Explore Companies House Public Register Scope
 category: Venture Capital
 visibility: workspace
@@ -19,9 +19,6 @@ definition:
     vertical: vc
     taskFamily: integration_discovery
     requiredSkills:
-      - vc-companies-house-sourcing
-      - citation-enforcement
-    plannedRequiredSkills:
       - vc-companies-house-sourcing
       - citation-enforcement
     recommendedAgentTemplate: vc_origination_scout

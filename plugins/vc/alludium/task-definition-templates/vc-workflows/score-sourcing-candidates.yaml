@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.score_sourcing_candidates
-version: 0.1.5
+version: 0.1.6
 title: Score Sourcing Candidates
 category: Venture Capital
 visibility: workspace
@@ -25,10 +25,6 @@ definition:
       - documentId: vc.document.template_use_guidance
         usage: operating_guidance
     requiredSkills:
-      - vc-sourcing-verdict-and-screening
-      - vc-sourcing-dedupe-and-novelty-check
-      - citation-enforcement
-    plannedRequiredSkills:
       - vc-sourcing-verdict-and-screening
       - vc-sourcing-dedupe-and-novelty-check
       - citation-enforcement

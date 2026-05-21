@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_technical_dd
-version: 1.0.10
+version: 1.0.11
 title: Run Technical DD
 category: Venture Capital
 visibility: workspace
@@ -30,11 +30,7 @@ definition:
       - team-and-hiring-assessment
       - red-flags-scanner
       - citation-enforcement
-    plannedRequiredSkills:
       - technical-diligence-workstream
-      - team-and-hiring-assessment
-      - red-flags-scanner
-      - citation-enforcement
     plannedRecommendedAgentTemplate: vc_diligence_analyst
     recommendedAgentTemplate: vc_diligence_analyst
     supportedProjectTypes:

@@ -390,8 +390,9 @@ def render_task(path: Path) -> tuple[Path, str]:
         body += "".join(f"  - `{value}`\n" for value in project_scopes)
     body += "\n## Required Skills\n\n"
     body += bullet_list(required_skills)
-    body += "\n## Planned Skills\n\n"
-    body += bullet_list(planned_skills)
+    if planned_skills:
+        body += "\n## Planned Skills\n\n"
+        body += bullet_list(planned_skills)
 
     methodology_skills = definition_json.get("workspaceConfiguredMethodologySkills")
     if isinstance(methodology_skills, list) and methodology_skills:

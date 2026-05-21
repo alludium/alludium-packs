@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_follow_up_evaluation
-version: 1.0.11
+version: 1.0.12
 title: Run Opportunity Evaluation
 category: Venture Capital
 visibility: workspace
@@ -27,9 +27,6 @@ definition:
       - documentId: vc.document.template_use_guidance
         usage: operating_guidance
     requiredSkills:
-      - red-flags-scanner
-      - citation-enforcement
-    plannedRequiredSkills:
       - red-flags-scanner
       - citation-enforcement
     plannedRecommendedAgentTemplate: vc_first_look_analyst

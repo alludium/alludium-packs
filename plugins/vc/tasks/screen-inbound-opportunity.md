@@ -7,6 +7,7 @@ skills:
 - deal-room-setup-and-source-ingestion
 - company-research-and-enrichment
 - citation-enforcement
+- pitch-deck-explainer
 ---
 
 > **GENERATED FILE**
@@ -91,10 +92,4 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - `deal-room-setup-and-source-ingestion`
 - `company-research-and-enrichment`
 - `citation-enforcement`
-
-## Planned Skills
-
 - `pitch-deck-explainer`
-- `deal-room-setup-and-source-ingestion`
-- `company-research-and-enrichment`
-- `citation-enforcement`

@@ -70,9 +70,3 @@ Public read and inbox proposal only. Do not comment, message, import into the ma
 - `vc-reddit-builder-signal-discovery`
 - `vc-source-registry-and-state-management`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-reddit-builder-signal-discovery`
-- `vc-source-registry-and-state-management`
-- `citation-enforcement`

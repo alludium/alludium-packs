@@ -6,6 +6,7 @@ agent: vc-legal-compliance-desk
 skills:
 - red-flags-scanner
 - citation-enforcement
+- closing-coordination-and-cp-tracking
 ---
 
 > **GENERATED FILE**
@@ -91,9 +92,4 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 
 - `red-flags-scanner`
 - `citation-enforcement`
-
-## Planned Skills
-
 - `closing-coordination-and-cp-tracking`
-- `red-flags-scanner`
-- `citation-enforcement`

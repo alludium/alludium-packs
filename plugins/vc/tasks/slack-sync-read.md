@@ -66,8 +66,3 @@ Read preview only. Do not ingest broad history, post, reply, delete, or update m
 
 - `vc-slack-sync-read`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-slack-sync-read`
-- `citation-enforcement`

@@ -7,6 +7,7 @@ skills:
 - team-and-hiring-assessment
 - red-flags-scanner
 - citation-enforcement
+- technical-diligence-workstream
 ---
 
 > **GENERATED FILE**
@@ -92,10 +93,4 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - `team-and-hiring-assessment`
 - `red-flags-scanner`
 - `citation-enforcement`
-
-## Planned Skills
-
 - `technical-diligence-workstream`
-- `team-and-hiring-assessment`
-- `red-flags-scanner`
-- `citation-enforcement`

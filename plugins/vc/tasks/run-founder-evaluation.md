@@ -7,6 +7,7 @@ skills:
 - team-and-hiring-assessment
 - red-flags-scanner
 - citation-enforcement
+- founder-evaluation-and-reference-checking
 ---
 
 > **GENERATED FILE**
@@ -90,10 +91,4 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - `team-and-hiring-assessment`
 - `red-flags-scanner`
 - `citation-enforcement`
-
-## Planned Skills
-
 - `founder-evaluation-and-reference-checking`
-- `team-and-hiring-assessment`
-- `red-flags-scanner`
-- `citation-enforcement`

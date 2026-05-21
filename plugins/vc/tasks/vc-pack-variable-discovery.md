@@ -70,7 +70,3 @@ No separate external-action policy is declared. Do not take external or persiste
 ## Required Skills
 
 - None declared
-
-## Planned Skills
-
-- None declared

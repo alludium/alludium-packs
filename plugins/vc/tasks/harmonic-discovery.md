@@ -67,8 +67,3 @@ Discovery only. Do not process company results, mark search results as seen, upd
 
 - `vc-harmonic-discovery`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-harmonic-discovery`
-- `citation-enforcement`

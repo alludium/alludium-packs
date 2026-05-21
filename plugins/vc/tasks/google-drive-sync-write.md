@@ -66,8 +66,3 @@ Draft only. Do not create files, upload files, create folders, copy files, share
 
 - `vc-google-drive-sync-write`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-google-drive-sync-write`
-- `citation-enforcement`

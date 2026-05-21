@@ -89,11 +89,6 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - `company-research-and-enrichment`
 - `citation-enforcement`
 
-## Planned Skills
-
-- `company-research-and-enrichment`
-- `citation-enforcement`
-
 ## Workspace-Configured Methodology Skills
 
 - `market-map-building`: Use only when the workspace explicitly configures this market mapping method.

@@ -70,9 +70,3 @@ Public/source read only. Do not open issues, star repos, contact maintainers, im
 - `vc-github-builder-signal-discovery`
 - `vc-source-registry-and-state-management`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-github-builder-signal-discovery`
-- `vc-source-registry-and-state-management`
-- `citation-enforcement`

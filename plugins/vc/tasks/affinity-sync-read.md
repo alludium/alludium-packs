@@ -67,8 +67,3 @@ Preview/import design only. Do not import records or enable recurring sync witho
 
 - `vc-affinity-sync-read`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-affinity-sync-read`
-- `citation-enforcement`

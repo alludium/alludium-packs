@@ -67,8 +67,3 @@ Discovery only. Do not call authenticated Companies House APIs, import companies
 
 - `vc-companies-house-sourcing`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-companies-house-sourcing`
-- `citation-enforcement`

@@ -72,8 +72,3 @@ Draft only. Do not create Notion pages, documents, external records, or Deal Roo
 
 - `vc-origination-ic-summary-preparation`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-origination-ic-summary-preparation`
-- `citation-enforcement`

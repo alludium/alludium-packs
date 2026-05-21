@@ -90,12 +90,6 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - `founder-outreach-and-intro-paths`
 - `citation-enforcement`
 
-## Planned Skills
-
-- `company-research-and-enrichment`
-- `founder-outreach-and-intro-paths`
-- `citation-enforcement`
-
 ## Workspace-Configured Methodology Skills
 
 - `market-map-building`: Use only when the workspace explicitly configures this market mapping method.

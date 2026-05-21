@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_ic_agenda
-version: 1.0.10
+version: 1.0.11
 title: Prepare IC Agenda
 category: Venture Capital
 visibility: workspace
@@ -27,10 +27,7 @@ definition:
     requiredSkills:
       - meeting-prep-and-summary
       - citation-enforcement
-    plannedRequiredSkills:
       - ic-risk-checklist-and-decision-log
-      - meeting-prep-and-summary
-      - citation-enforcement
     plannedRecommendedAgentTemplate: vc_ic_prep_producer
     recommendedAgentTemplate: vc_ic_prep_producer
     supportedProjectTypes:

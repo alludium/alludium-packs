@@ -5,6 +5,7 @@ slug: review-opportunity-status
 agent: vc-pipeline-autopilot
 skills:
 - citation-enforcement
+- vc-task-and-next-step-generation
 ---
 
 > **GENERATED FILE**
@@ -78,11 +79,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Required Skills
 
 - `citation-enforcement`
-
-## Planned Skills
-
 - `vc-task-and-next-step-generation`
-- `citation-enforcement`
 
 ## Workspace-Configured Methodology Skills
 

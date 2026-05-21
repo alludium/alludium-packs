@@ -71,9 +71,3 @@ Discovery proposal only. Do not scrape unapproved profiles, bypass platform poli
 - `vc-apify-linkedin-founder-discovery`
 - `vc-source-registry-and-state-management`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-apify-linkedin-founder-discovery`
-- `vc-source-registry-and-state-management`
-- `citation-enforcement`

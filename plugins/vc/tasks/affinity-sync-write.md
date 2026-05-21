@@ -65,8 +65,3 @@ Draft only. Do not write notes, update fields, move stages, or change list entri
 
 - `vc-affinity-sync-write`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-affinity-sync-write`
-- `citation-enforcement`

@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.apify_setup
-version: 0.1.5
+version: 0.1.6
 title: Set Up Apify for VC Origination
 category: Venture Capital
 visibility: workspace
@@ -19,10 +19,6 @@ definition:
     vertical: vc
     taskFamily: integration_setup
     requiredSkills:
-      - vc-apify-discovery
-      - vc-apify-sync-read
-      - citation-enforcement
-    plannedRequiredSkills:
       - vc-apify-discovery
       - vc-apify-sync-read
       - citation-enforcement

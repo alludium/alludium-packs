@@ -67,8 +67,3 @@ Read preview only. Do not create Deal Rooms, import companies, mark net-new resu
 
 - `vc-harmonic-sync-read`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-harmonic-sync-read`
-- `citation-enforcement`

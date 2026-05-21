@@ -590,7 +590,7 @@ Status: implemented in this branch.
 
 ### Slice 4: Required Skills Cleanup
 
-Status: follows task contract cleanup.
+Status: implemented in this branch.
 
 - Promote existing planned skills into `requiredSkills`.
 - Remove stale `plannedRequiredSkills` where they duplicate real skills.

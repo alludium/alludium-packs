@@ -68,8 +68,3 @@ Discovery only. Do not read broad page contents, create pages, create databases,
 
 - `vc-notion-discovery`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-notion-discovery`
-- `citation-enforcement`

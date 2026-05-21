@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.configure_origination_pipeline
-version: 0.1.8
+version: 0.1.9
 title: Configure VC Origination Pipeline
 category: Venture Capital
 visibility: workspace
@@ -27,9 +27,6 @@ definition:
       - documentId: vc.document.template_use_guidance
         usage: operating_guidance
     requiredSkills:
-      - vc-origination-pipeline-orchestration
-      - citation-enforcement
-    plannedRequiredSkills:
       - vc-origination-pipeline-orchestration
       - citation-enforcement
     recommendedAgentTemplate: vc_pipeline_autopilot

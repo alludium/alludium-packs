@@ -5,6 +5,7 @@ slug: request-founder-materials
 agent: vc-dealflow-concierge
 skills:
 - citation-enforcement
+- founder-materials-request
 ---
 
 > **GENERATED FILE**
@@ -86,8 +87,4 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Required Skills
 
 - `citation-enforcement`
-
-## Planned Skills
-
 - `founder-materials-request`
-- `citation-enforcement`

@@ -5,6 +5,7 @@ slug: run-commercial-dd
 agent: vc-diligence-analyst
 skills:
 - citation-enforcement
+- commercial-diligence-workstream
 ---
 
 > **GENERATED FILE**
@@ -92,11 +93,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Required Skills
 
 - `citation-enforcement`
-
-## Planned Skills
-
 - `commercial-diligence-workstream`
-- `citation-enforcement`
 
 ## Workspace-Configured Methodology Skills
 

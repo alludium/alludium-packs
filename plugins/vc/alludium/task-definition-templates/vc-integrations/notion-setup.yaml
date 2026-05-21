@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.notion_setup
-version: 0.1.1
+version: 0.1.2
 title: Set Up Notion for VC Deal Rooms
 category: Venture Capital
 visibility: workspace
@@ -18,11 +18,6 @@ definition:
     vertical: vc
     taskFamily: integration_setup
     requiredSkills:
-      - vc-notion-discovery
-      - vc-notion-sync-read
-      - vc-notion-sync-write
-      - citation-enforcement
-    plannedRequiredSkills:
       - vc-notion-discovery
       - vc-notion-sync-read
       - vc-notion-sync-write

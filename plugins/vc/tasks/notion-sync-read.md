@@ -67,8 +67,3 @@ Read preview only. Do not attach, import, create pages, create databases, update
 
 - `vc-notion-sync-read`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-notion-sync-read`
-- `citation-enforcement`

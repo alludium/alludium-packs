@@ -67,8 +67,3 @@ Read preview only. Do not call authenticated Companies House APIs, import compan
 
 - `vc-companies-house-sync-read`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-companies-house-sync-read`
-- `citation-enforcement`

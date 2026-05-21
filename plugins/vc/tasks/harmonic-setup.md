@@ -73,9 +73,3 @@ Setup orchestration only. Do not import companies or people, create watchlists, 
 - `vc-harmonic-discovery`
 - `vc-harmonic-sync-read`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-harmonic-discovery`
-- `vc-harmonic-sync-read`
-- `citation-enforcement`

@@ -68,8 +68,3 @@ Read-only discovery. Do not import, sync, update CRM fields, write notes, move s
 
 - `vc-affinity-discovery`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-affinity-discovery`
-- `citation-enforcement`

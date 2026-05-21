@@ -67,8 +67,3 @@ Read preview only. Do not enable scheduled runs, import candidates, write candid
 
 - `vc-apify-sync-read`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-apify-sync-read`
-- `citation-enforcement`

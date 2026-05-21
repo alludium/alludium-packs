@@ -6,6 +6,7 @@ agent: vc-first-look-analyst
 skills:
 - vc-portfolio-overlap-review
 - citation-enforcement
+- vc-relationship-context-check
 ---
 
 > **GENERATED FILE**
@@ -67,9 +68,4 @@ Review and annotate proposal only. Do not change candidate status, pass candidat
 
 - `vc-portfolio-overlap-review`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-portfolio-overlap-review`
 - `vc-relationship-context-check`
-- `citation-enforcement`

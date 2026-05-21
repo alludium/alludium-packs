@@ -67,8 +67,3 @@ Read-only relationship check. Do not create organizations, list entries, notes, 
 
 - `vc-relationship-context-check`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-relationship-context-check`
-- `citation-enforcement`

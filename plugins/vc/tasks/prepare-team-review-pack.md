@@ -90,11 +90,6 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - `ic-memo-assembly`
 - `citation-enforcement`
 
-## Planned Skills
-
-- `ic-memo-assembly`
-- `citation-enforcement`
-
 ## Workspace-Configured Methodology Skills
 
 - `investment-diligence-question-framework`: Use only when the workspace explicitly configures this diligence framework.

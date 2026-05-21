@@ -68,9 +68,3 @@ Internal candidate normalization only. Do not contact founders, write CRM record
 - `vc-manual-tip-ingestion`
 - `vc-sourcing-dedupe-and-novelty-check`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-manual-tip-ingestion`
-- `vc-sourcing-dedupe-and-novelty-check`
-- `citation-enforcement`

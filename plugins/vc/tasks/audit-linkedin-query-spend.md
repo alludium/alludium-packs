@@ -75,9 +75,3 @@ Read-only audit. Do not edit query lists, actor inputs, budgets, or schedules.
 - `vc-linkedin-query-spend-audit`
 - `vc-source-registry-and-state-management`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-linkedin-query-spend-audit`
-- `vc-source-registry-and-state-management`
-- `citation-enforcement`

@@ -92,11 +92,6 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - `ic-memo-assembly`
 - `citation-enforcement`
 
-## Planned Skills
-
-- `ic-memo-assembly`
-- `citation-enforcement`
-
 ## Workspace-Configured Methodology Skills
 
 - `market-map-building`: Use only when the workspace explicitly configures this market mapping method.

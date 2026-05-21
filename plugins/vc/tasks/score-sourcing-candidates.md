@@ -78,9 +78,3 @@ Scoring only. Do not sync external records, change manual decisions, send outrea
 - `vc-sourcing-verdict-and-screening`
 - `vc-sourcing-dedupe-and-novelty-check`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-sourcing-verdict-and-screening`
-- `vc-sourcing-dedupe-and-novelty-check`
-- `citation-enforcement`

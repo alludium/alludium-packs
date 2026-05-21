@@ -66,8 +66,3 @@ Draft only. Do not create pages, create databases, update pages, update database
 
 - `vc-notion-sync-write`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-notion-sync-write`
-- `citation-enforcement`

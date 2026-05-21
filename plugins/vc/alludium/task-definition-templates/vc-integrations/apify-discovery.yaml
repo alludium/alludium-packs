@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.apify_discovery
-version: 0.1.1
+version: 0.1.2
 title: Explore Apify Origination Sources
 category: Venture Capital
 visibility: workspace
@@ -19,9 +19,6 @@ definition:
     vertical: vc
     taskFamily: integration_discovery
     requiredSkills:
-      - vc-apify-discovery
-      - citation-enforcement
-    plannedRequiredSkills:
       - vc-apify-discovery
       - citation-enforcement
     recommendedAgentTemplate: vc_origination_scout

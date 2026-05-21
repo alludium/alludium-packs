@@ -67,8 +67,3 @@ Discovery only. Do not start actor runs, import candidates, persist candidate st
 
 - `vc-apify-discovery`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-apify-discovery`
-- `citation-enforcement`

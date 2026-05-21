@@ -71,9 +71,3 @@ Read/enrich only. Do not write CRM rows, create Notion pages, score final verdic
 - `vc-sourcing-candidate-enrichment`
 - `vc-sourcing-dedupe-and-novelty-check`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-sourcing-candidate-enrichment`
-- `vc-sourcing-dedupe-and-novelty-check`
-- `citation-enforcement`

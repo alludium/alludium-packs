@@ -83,8 +83,3 @@ Configuration only. No external reads beyond connection-readiness checks, no sch
 
 - `vc-origination-pipeline-orchestration`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-origination-pipeline-orchestration`
-- `citation-enforcement`

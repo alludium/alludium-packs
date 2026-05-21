@@ -87,9 +87,3 @@ Read, score, draft, and propose only unless a child task has explicit human appr
 - `vc-origination-pipeline-orchestration`
 - `vc-source-registry-and-state-management`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-origination-pipeline-orchestration`
-- `vc-source-registry-and-state-management`
-- `citation-enforcement`

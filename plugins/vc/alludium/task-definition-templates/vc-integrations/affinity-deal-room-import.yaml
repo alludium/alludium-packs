@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.affinity_deal_room_import
-version: 0.1.1
+version: 0.1.2
 title: Import Affinity Deal Room Seed
 category: Venture Capital
 visibility: workspace
@@ -20,11 +20,6 @@ definition:
     stage: intake
     taskFamily: integration_project_import
     requiredSkills:
-      - vc-affinity-deal-room-import
-      - vc-affinity-sync-read
-      - deal-room-setup-and-source-ingestion
-      - citation-enforcement
-    plannedRequiredSkills:
       - vc-affinity-deal-room-import
       - vc-affinity-sync-read
       - deal-room-setup-and-source-ingestion

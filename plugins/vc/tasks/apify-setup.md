@@ -73,9 +73,3 @@ Setup orchestration only. Do not run scheduled sourcing, import candidates, writ
 - `vc-apify-discovery`
 - `vc-apify-sync-read`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-apify-discovery`
-- `vc-apify-sync-read`
-- `citation-enforcement`

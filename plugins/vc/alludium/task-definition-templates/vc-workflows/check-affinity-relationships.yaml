@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.check_affinity_relationships
-version: 0.1.1
+version: 0.1.2
 title: Check Affinity Relationship Context
 category: Venture Capital
 visibility: workspace
@@ -20,9 +20,6 @@ definition:
     stage: enrich
     taskFamily: origination_relationship_check
     requiredSkills:
-      - vc-relationship-context-check
-      - citation-enforcement
-    plannedRequiredSkills:
       - vc-relationship-context-check
       - citation-enforcement
     recommendedAgentTemplate: vc_origination_scout

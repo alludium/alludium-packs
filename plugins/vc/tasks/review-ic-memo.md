@@ -6,6 +6,7 @@ agent: vc-ic-prep-producer
 skills:
 - citation-enforcement
 - ic-memo-assembly
+- ic-risk-checklist-and-decision-log
 ---
 
 > **GENERATED FILE**
@@ -88,9 +89,4 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 
 - `citation-enforcement`
 - `ic-memo-assembly`
-
-## Planned Skills
-
-- `citation-enforcement`
 - `ic-risk-checklist-and-decision-log`
-- `ic-memo-assembly`

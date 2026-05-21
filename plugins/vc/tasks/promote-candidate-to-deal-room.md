@@ -6,6 +6,7 @@ agent: vc-dealflow-concierge
 skills:
 - vc-origination-deal-room-promotion
 - citation-enforcement
+- deal-room-setup-and-source-ingestion
 ---
 
 > **GENERATED FILE**
@@ -72,9 +73,4 @@ Promotion package by default. Deal Room creation/update, CRM changes, document c
 
 - `vc-origination-deal-room-promotion`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-origination-deal-room-promotion`
 - `deal-room-setup-and-source-ingestion`
-- `citation-enforcement`

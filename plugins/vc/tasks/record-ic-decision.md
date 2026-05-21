@@ -5,6 +5,8 @@ slug: record-ic-decision
 agent: vc-ic-prep-producer
 skills:
 - citation-enforcement
+- ic-risk-checklist-and-decision-log
+- vc-task-and-next-step-generation
 ---
 
 > **GENERATED FILE**
@@ -89,9 +91,5 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Required Skills
 
 - `citation-enforcement`
-
-## Planned Skills
-
 - `ic-risk-checklist-and-decision-log`
 - `vc-task-and-next-step-generation`
-- `citation-enforcement`

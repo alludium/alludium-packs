@@ -68,8 +68,3 @@ Discovery only. Do not download file contents, create files, create folders, sha
 
 - `vc-google-drive-discovery`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-google-drive-discovery`
-- `citation-enforcement`

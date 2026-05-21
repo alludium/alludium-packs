@@ -67,8 +67,3 @@ Read preview only. Do not attach, import, create, upload, copy, share, move, del
 
 - `vc-google-drive-sync-read`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-google-drive-sync-read`
-- `citation-enforcement`

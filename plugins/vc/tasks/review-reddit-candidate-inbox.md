@@ -70,9 +70,3 @@ Approval proposal only unless explicit write approval is granted. Do not mark ro
 - `vc-reddit-inbox-approval`
 - `vc-sourcing-dedupe-and-novelty-check`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-reddit-inbox-approval`
-- `vc-sourcing-dedupe-and-novelty-check`
-- `citation-enforcement`

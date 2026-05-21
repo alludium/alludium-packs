@@ -64,8 +64,3 @@ Draft only. Do not post, reply, create channels, archive channels, delete messag
 
 - `vc-slack-sync-write`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-slack-sync-write`
-- `citation-enforcement`

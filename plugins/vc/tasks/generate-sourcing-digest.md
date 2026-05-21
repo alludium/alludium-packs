@@ -72,8 +72,3 @@ Draft digest only unless explicit channel-post approval is granted.
 
 - `vc-sourcing-digest-generation`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-sourcing-digest-generation`
-- `citation-enforcement`

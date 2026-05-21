@@ -90,11 +90,6 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - `red-flags-scanner`
 - `citation-enforcement`
 
-## Planned Skills
-
-- `red-flags-scanner`
-- `citation-enforcement`
-
 ## Workspace-Configured Methodology Skills
 
 - `investment-screening-framework`: Use only when the workspace explicitly configures this screening framework.

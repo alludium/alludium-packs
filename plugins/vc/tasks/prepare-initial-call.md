@@ -7,6 +7,7 @@ skills:
 - meeting-prep-and-summary
 - company-research-and-enrichment
 - citation-enforcement
+- pitch-deck-explainer
 ---
 
 > **GENERATED FILE**
@@ -91,13 +92,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - `meeting-prep-and-summary`
 - `company-research-and-enrichment`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `meeting-prep-and-summary`
-- `company-research-and-enrichment`
 - `pitch-deck-explainer`
-- `citation-enforcement`
 
 ## Workspace-Configured Methodology Skills
 

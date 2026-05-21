@@ -71,9 +71,3 @@ Public-signal read and candidate proposal only. Do not engage authors, import ca
 - `vc-apify-x-founder-discovery`
 - `vc-source-registry-and-state-management`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-apify-x-founder-discovery`
-- `vc-source-registry-and-state-management`
-- `citation-enforcement`

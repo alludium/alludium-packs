@@ -6,6 +6,7 @@ agent: vc-dealflow-concierge
 skills:
 - vc-outreach-draft-queue
 - citation-enforcement
+- founder-outreach-and-intro-paths
 ---
 
 > **GENERATED FILE**
@@ -73,9 +74,4 @@ Draft only. Do not send messages, insert browser-extension notes, mark outreach 
 
 - `vc-outreach-draft-queue`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-outreach-draft-queue`
 - `founder-outreach-and-intro-paths`
-- `citation-enforcement`
