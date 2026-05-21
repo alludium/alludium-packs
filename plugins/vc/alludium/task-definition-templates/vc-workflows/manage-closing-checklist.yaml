@@ -86,23 +86,35 @@ fields:
       required: true
       position: 3
       config: {}
+    - key: legal_diligence_artifact_id
+      name: Legal Diligence
+      fieldType: file
+      required: false
+      position: 4
+      config: {}
+    - key: investment_document_review_artifact_id
+      name: Investment Document Review
+      fieldType: file
+      required: false
+      position: 5
+      config: {}
     - key: owners
       name: Owners
       fieldType: json
       required: false
-      position: 4
+      position: 6
       config: {}
     - key: deadlines
       name: Deadlines
       fieldType: json
       required: false
-      position: 5
+      position: 7
       config: {}
     - key: blockers
       name: Blockers
       fieldType: json
       required: false
-      position: 6
+      position: 8
       config: {}
 
   output:

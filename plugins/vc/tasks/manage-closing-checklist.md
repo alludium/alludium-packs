@@ -48,6 +48,8 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `term_sheet_review_artifact_id` | Term Sheet Review | `file` | yes |
 | `closing_source_artifact_ids` | Closing Source Artifact IDs | `string` | yes |
 | `legal_document_status` | Legal Document Status | `string` | yes |
+| `legal_diligence_artifact_id` | Legal Diligence | `file` | no |
+| `investment_document_review_artifact_id` | Investment Document Review | `file` | no |
 | `owners` | Owners | `json` | no |
 | `deadlines` | Deadlines | `json` | no |
 | `blockers` | Blockers | `json` | no |

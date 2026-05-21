@@ -319,6 +319,34 @@
       "status": "source"
     },
     {
+      "id": "vc.document.deal_terms_analysis_template",
+      "title": "Deal Terms Analysis Template",
+      "description": "Reusable commercial review format for valuation, ownership, dilution, ESOP, and round construction analysis.",
+      "documentType": "template",
+      "path": "deal-room/deal-terms-analysis-template.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "analyze-deal-terms"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.term_sheet_negotiation_brief_template",
+      "title": "Term Sheet Negotiation Brief Template",
+      "description": "Reusable internal brief for open terms, give/get options, counsel questions, and approval points.",
+      "documentType": "template",
+      "path": "deal-room/term-sheet-negotiation-brief-template.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "track-term-sheet-negotiation"
+      ],
+      "status": "source"
+    },
+    {
       "id": "vc.document.term_sheet_review_template",
       "title": "Term Sheet Review Template",
       "description": "Reusable business review format for term-sheet deviations, red flags, and counsel questions.",
@@ -329,6 +357,34 @@
       ],
       "relatedTaskDefinitionSlugs": [
         "review-term-sheet"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.legal_diligence_tracker_template",
+      "title": "Legal Diligence Tracker Template",
+      "description": "Reusable tracker for legal document indexing, issue registers, counsel questions, and showstopper-risk review support.",
+      "documentType": "template",
+      "path": "deal-room/legal-diligence-tracker-template.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "run-legal-diligence"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.investment_document_review_template",
+      "title": "Investment Document Review Template",
+      "description": "Reusable review-support format for mapping investment documents back to approved terms and open counsel issues.",
+      "documentType": "template",
+      "path": "deal-room/investment-document-review-template.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "review-investment-documents"
       ],
       "status": "source"
     },
@@ -357,6 +413,20 @@
       ],
       "relatedTaskDefinitionSlugs": [
         "verify-conditions-precedent"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.completion_tracker_template",
+      "title": "Completion Tracker Template",
+      "description": "Reusable tracker for capital call status, funds transfer readiness, completion evidence, and portfolio handoff triggers.",
+      "documentType": "template",
+      "path": "deal-room/completion-tracker-template.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "coordinate-capital-call-and-completion"
       ],
       "status": "source"
     },

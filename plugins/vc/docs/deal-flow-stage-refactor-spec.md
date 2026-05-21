@@ -1,6 +1,6 @@
 # VC Deal Flow Stage and Task Contract Refactor Spec
 
-Status: implementation slice in progress
+Status: implementation slices 1-5 complete; release metadata pending
 Owner surface: `plugins/vc/alludium`
 Primary project type: `vc_deal_room`
 Related project type: `vc_origination_pipeline`
@@ -599,7 +599,7 @@ Status: implemented in this branch.
 
 ### Slice 5: New Deal Structuring, Legal, And Closing Tasks
 
-Status: later slice; do not start until the existing lifecycle and task contracts are coherent.
+Status: implemented in this branch.
 
 - Add `analyze-deal-terms`.
 - Add `track-term-sheet-negotiation`.

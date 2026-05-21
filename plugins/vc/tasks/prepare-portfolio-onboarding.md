@@ -46,6 +46,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `ic_decision_record_artifact_id` | IC Decision Record | `file` | yes |
 | `closing_checklist_artifact_id` | Closing Checklist | `file` | yes |
 | `conditions_precedent_verification_artifact_id` | Conditions Precedent Verification | `file` | yes |
+| `completion_tracker_artifact_id` | Completion Tracker | `file` | no |
 
 ## Outputs
 

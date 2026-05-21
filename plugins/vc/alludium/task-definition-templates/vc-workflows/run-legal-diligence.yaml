@@ -1,0 +1,210 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.run_legal_diligence
+version: 0.1.0
+title: Run Legal Diligence
+category: Venture Capital
+visibility: workspace
+tags:
+  - vc
+  - contracts
+  - legal-diligence
+  - counsel
+definition:
+  name: Run Legal Diligence
+  slug: run-legal-diligence
+  description: Coordinate legal diligence document indexing, issue tracking, counsel questions, and showstopper-risk review support without providing legal advice.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: contracts
+    taskFamily: contracts
+    documentRefs:
+      - documentId: vc.document.legal_diligence_tracker_template
+        usage: output_template
+        outputFieldKey: legal_diligence_artifact_id
+      - documentId: vc.document.evidence_citation_style_guide
+        usage: style_guide
+      - documentId: vc.document.template_use_guidance
+        usage: operating_guidance
+    requiredSkills:
+      - legal-diligence-coordination
+      - red-flags-scanner
+      - citation-enforcement
+    plannedRecommendedAgentTemplate: vc_legal_compliance_desk
+    recommendedAgentTemplate: vc_legal_compliance_desk
+    supportedProjectTypes:
+      - vc_deal_room
+    sourceAnchors:
+      - source: investment-management-process-slides
+        anchor: slide-32
+        note: Term sheet/legal execution
+      - source: atomic-agents
+        anchor: worksheet-atomic-agents
+        note: Legal and closing support rows
+      - source: public-pattern-review
+        anchor: deal-flow-stage-refactor-spec-public-pattern-review
+        note: Legal-review support with strict non-advice boundary
+    instructions:
+      executionInstructions: >-
+        Coordinate legal diligence by indexing legal source artifacts, tracking issues, drafting counsel questions, and surfacing showstopper risks for human review. Separate factual document gaps from legal conclusions. Cite material claims, separate assumptions from evidence, and do not provide legal advice, clear legal risks, approve legal sufficiency, send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a durable project file artifact named Legal Diligence Tracker and attach it to the required output field `legal_diligence_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+      missingInputPolicy: Ask for legal source artifacts and company name before producing a legal diligence tracker.
+      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
+      completionCriteria:
+        - Required input gaps are resolved or listed as assumptions/open questions.
+        - Issue register separates factual gaps from counsel/human legal judgments.
+        - Counsel questions identify owner, dependency, and required human approval point.
+    humanDecisionPoints:
+      - Approve legal conclusions, counsel communications, founder requests, showstopper classification, and stage movement.
+      - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+    orchestration:
+      parentTaskPolicy: none
+      suggestedChildTasks: []
+fields:
+  input:
+    - key: legal_source_artifact_ids
+      name: Legal Source Artifact IDs
+      fieldType: string
+      required: true
+      position: 0
+      config: {}
+    - key: company_name
+      name: Company Name
+      fieldType: string
+      required: true
+      position: 1
+      config: {}
+    - key: counsel_requirements
+      name: Counsel Requirements
+      fieldType: json
+      required: false
+      position: 2
+      config: {}
+    - key: ip_artifact_ids
+      name: IP Artifact IDs
+      fieldType: string
+      required: false
+      position: 3
+      config: {}
+    - key: corporate_structure_artifact_id
+      name: Corporate Structure Artifact
+      fieldType: file
+      required: false
+      position: 4
+      config: {}
+    - key: employment_contract_artifact_ids
+      name: Employment Contract Artifact IDs
+      fieldType: string
+      required: false
+      position: 5
+      config: {}
+    - key: litigation_search_artifact_ids
+      name: Litigation Search Artifact IDs
+      fieldType: string
+      required: false
+      position: 6
+      config: {}
+
+  output:
+    - key: legal_diligence_artifact_id
+      name: Legal Diligence Tracker
+      fieldType: file
+      required: true
+      position: 0
+      config:
+        documentRefId: vc.document.legal_diligence_tracker_template
+    - key: legal_document_index
+      name: Legal Document Index
+      fieldType: json
+      required: false
+      position: 1
+      config: {}
+    - key: issue_register
+      name: Issue Register
+      fieldType: json
+      required: false
+      position: 2
+      config: {}
+    - key: counsel_questions
+      name: Counsel Questions
+      fieldType: json
+      required: false
+      position: 3
+      config: {}
+    - key: showstopper_risks
+      name: Showstopper Risks
+      fieldType: json
+      required: false
+      position: 4
+      config: {}
+    - key: summary
+      name: Summary
+      fieldType: richtext
+      required: false
+      position: 5
+      config:
+        rows: 5
+    - key: recommendation
+      name: Recommendation
+      fieldType: string
+      required: false
+      position: 6
+      config: {}
+    - key: source_links
+      name: Source Links
+      fieldType: string
+      required: false
+      position: 7
+      config: {}
+    - key: assumptions
+      name: Assumptions
+      fieldType: string
+      required: false
+      position: 8
+      config: {}
+    - key: evidence_quality
+      name: Evidence Quality
+      fieldType: json
+      required: false
+      position: 9
+      config: {}
+    - key: open_questions
+      name: Open Questions
+      fieldType: json
+      required: false
+      position: 10
+      config: {}
+    - key: risks
+      name: Risks
+      fieldType: json
+      required: false
+      position: 11
+      config: {}
+    - key: human_decision_points
+      name: Human Decision Points
+      fieldType: string
+      required: false
+      position: 12
+      config: {}
+    - key: next_actions
+      name: Next Actions
+      fieldType: json
+      required: false
+      position: 13
+      config: {}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc-workflows
+      taskKind: run_legal_diligence
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    requiresHumanConfirmationToComplete: true
+    preferredMode: review
+    preferredAgentType: vc_legal_compliance_desk
+ui:
+  renderer: generic
+  surfaceKey: null
+  frameRef: null

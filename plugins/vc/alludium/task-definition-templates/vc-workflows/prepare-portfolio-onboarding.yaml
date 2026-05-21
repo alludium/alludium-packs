@@ -79,6 +79,12 @@ fields:
       required: true
       position: 2
       config: {}
+    - key: completion_tracker_artifact_id
+      name: Completion Tracker
+      fieldType: file
+      required: false
+      position: 3
+      config: {}
 
   output:
     - key: portfolio_onboarding_plan_artifact_id

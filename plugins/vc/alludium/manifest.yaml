@@ -28,6 +28,7 @@ surfaces:
       - closing-coordination-and-cp-tracking
       - commercial-diligence-workstream
       - company-research-and-enrichment
+      - deal-terms-analysis
       - deal-room-setup-and-source-ingestion
       - financial-diligence-workstream
       - founder-evaluation-and-reference-checking
@@ -37,6 +38,7 @@ surfaces:
       - ic-risk-checklist-and-decision-log
       - investment-diligence-question-framework
       - investment-screening-framework
+      - legal-diligence-coordination
       - market-map-building
       - meeting-prep-and-summary
       - pipeline-health-and-crm-hygiene
@@ -44,6 +46,7 @@ surfaces:
       - portfolio-onboarding-and-100-day-plan
       - red-flags-scanner
       - team-and-hiring-assessment
+      - term-sheet-negotiation-brief
       - technical-diligence-workstream
       - traction-and-saas-unit-economics
       - vc-task-and-next-step-generation
@@ -132,9 +135,14 @@ surfaces:
       - vc.document.diligence_report_template
       - vc.document.review_pack_checklist
       - vc.document.ic_memo_review_template
+      - vc.document.deal_terms_analysis_template
+      - vc.document.term_sheet_negotiation_brief_template
       - vc.document.term_sheet_review_template
+      - vc.document.legal_diligence_tracker_template
+      - vc.document.investment_document_review_template
       - vc.document.closing_checklist
       - vc.document.conditions_precedent_tracker_template
+      - vc.document.completion_tracker_template
       - vc.document.portfolio_onboarding_plan_template
       - vc.document.origination_pipeline_sop
       - vc.document.source_registry_template
@@ -183,9 +191,14 @@ surfaces:
       - vc.review_ic_memo
       - vc.prepare_ic_agenda
       - vc.record_ic_decision
+      - vc.analyze_deal_terms
+      - vc.track_term_sheet_negotiation
       - vc.review_term_sheet
+      - vc.run_legal_diligence
+      - vc.review_investment_documents
       - vc.manage_closing_checklist
       - vc.verify_conditions_precedent
+      - vc.coordinate_capital_call_and_completion
       - vc.prepare_portfolio_onboarding
       - vc.configure_origination_pipeline
       - vc.run_sourcing_pipeline

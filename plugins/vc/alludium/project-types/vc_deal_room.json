@@ -288,9 +288,14 @@
         "vc.document.diligence_report_template",
         "vc.document.review_pack_checklist",
         "vc.document.ic_memo_review_template",
+        "vc.document.deal_terms_analysis_template",
+        "vc.document.term_sheet_negotiation_brief_template",
         "vc.document.term_sheet_review_template",
+        "vc.document.legal_diligence_tracker_template",
+        "vc.document.investment_document_review_template",
         "vc.document.closing_checklist",
         "vc.document.conditions_precedent_tracker_template",
+        "vc.document.completion_tracker_template",
         "vc.document.portfolio_onboarding_plan_template"
       ]
     },
@@ -922,6 +927,62 @@
         "description": "Current proposed investment terms to review against the term sheet artifact."
       },
       {
+        "id": "field-proposed-investment-amount",
+        "key": "proposed_investment_amount",
+        "label": "Proposed Investment Amount",
+        "kind": "text",
+        "required": false,
+        "description": "Current proposed investment amount for deal terms analysis."
+      },
+      {
+        "id": "field-valuation",
+        "key": "valuation",
+        "label": "Valuation",
+        "kind": "text",
+        "required": false,
+        "description": "Current proposed valuation for deal terms analysis."
+      },
+      {
+        "id": "field-round-size",
+        "key": "round_size",
+        "label": "Round Size",
+        "kind": "text",
+        "required": false,
+        "description": "Current proposed round size for deal terms analysis."
+      },
+      {
+        "id": "field-open-commercial-terms",
+        "key": "open_commercial_terms",
+        "label": "Open Commercial Terms",
+        "kind": "text",
+        "required": false,
+        "description": "Open commercial terms produced by deal terms analysis and used for negotiation tracking."
+      },
+      {
+        "id": "field-legal-source-artifact-ids",
+        "key": "legal_source_artifact_ids",
+        "label": "Legal Source Artifact IDs",
+        "kind": "text",
+        "required": false,
+        "description": "Compact list of legal diligence source artifacts, data-room documents, counsel notes, and legal search results."
+      },
+      {
+        "id": "field-investment-document-artifact-ids",
+        "key": "investment_document_artifact_ids",
+        "label": "Investment Document Artifact IDs",
+        "kind": "text",
+        "required": false,
+        "description": "Compact list of investment document artifacts for post-term-sheet document review."
+      },
+      {
+        "id": "field-transaction-bible-artifact-id",
+        "key": "transaction_bible_artifact_id",
+        "label": "Transaction Bible",
+        "kind": "text",
+        "required": false,
+        "description": "Transaction bible or completion bundle artifact used for final closing administration."
+      },
+      {
         "id": "field-closing-source-artifact-ids",
         "key": "closing_source_artifact_ids",
         "label": "Closing Source Artifact IDs",
@@ -1296,6 +1357,38 @@
         "description": "Term sheet review artifact produced by review-term-sheet."
       },
       {
+        "id": "field-deal-terms-analysis-artifact-id",
+        "key": "deal_terms_analysis_artifact_id",
+        "label": "Deal terms analysis",
+        "kind": "text",
+        "required": false,
+        "description": "Deal terms analysis artifact produced by analyze-deal-terms."
+      },
+      {
+        "id": "field-negotiation-brief-artifact-id",
+        "key": "negotiation_brief_artifact_id",
+        "label": "Negotiation brief",
+        "kind": "text",
+        "required": false,
+        "description": "Term sheet negotiation brief artifact produced by track-term-sheet-negotiation."
+      },
+      {
+        "id": "field-legal-diligence-artifact-id",
+        "key": "legal_diligence_artifact_id",
+        "label": "Legal diligence",
+        "kind": "text",
+        "required": false,
+        "description": "Legal diligence tracker artifact produced by run-legal-diligence."
+      },
+      {
+        "id": "field-investment-document-review-artifact-id",
+        "key": "investment_document_review_artifact_id",
+        "label": "Investment document review",
+        "kind": "text",
+        "required": false,
+        "description": "Investment document review artifact produced by review-investment-documents."
+      },
+      {
         "id": "field-closing-checklist-artifact-id",
         "key": "closing_checklist_artifact_id",
         "label": "Closing checklist",
@@ -1310,6 +1403,14 @@
         "kind": "text",
         "required": false,
         "description": "Conditions precedent verification artifact produced by verify-conditions-precedent."
+      },
+      {
+        "id": "field-completion-tracker-artifact-id",
+        "key": "completion_tracker_artifact_id",
+        "label": "Completion tracker",
+        "kind": "text",
+        "required": false,
+        "description": "Completion tracker artifact produced by coordinate-capital-call-and-completion."
       },
       {
         "id": "field-portfolio-onboarding-plan-artifact-id",
@@ -1960,6 +2061,48 @@
           "stageKey": "decision_review"
         },
         {
+          "key": "deal_terms_analysis",
+          "title": "Deal terms analysis",
+          "description": "Ownership model, valuation sensitivity, open commercial terms, and IC questions",
+          "artifactOutputs": [
+            {
+              "key": "deal_terms_analysis",
+              "title": "Deal terms analysis",
+              "producerTaskDefinitionSlug": "analyze-deal-terms",
+              "outputFieldKey": "deal_terms_analysis_artifact_id",
+              "reviewTaskDefinitionSlugs": [
+                "track-term-sheet-negotiation",
+                "review-term-sheet"
+              ],
+              "reviewInputFieldKeys": [
+                "deal_terms_analysis_artifact_id"
+              ]
+            }
+          ],
+          "stageKey": "deal_structuring"
+        },
+        {
+          "key": "term_sheet_negotiation_brief",
+          "title": "Term sheet negotiation brief",
+          "description": "Open terms, give/get options, counsel escalations, and approval points",
+          "artifactOutputs": [
+            {
+              "key": "term_sheet_negotiation_brief",
+              "title": "Term sheet negotiation brief",
+              "producerTaskDefinitionSlug": "track-term-sheet-negotiation",
+              "outputFieldKey": "negotiation_brief_artifact_id",
+              "reviewTaskDefinitionSlugs": [
+                "review-term-sheet",
+                "review-investment-documents"
+              ],
+              "reviewInputFieldKeys": [
+                "negotiation_brief_artifact_id"
+              ]
+            }
+          ],
+          "stageKey": "deal_structuring"
+        },
+        {
           "key": "term_sheet_review",
           "title": "Term sheet review",
           "description": "Term summary, deviations, red flags, and counsel review questions",
@@ -1978,6 +2121,48 @@
             }
           ],
           "stageKey": "deal_structuring"
+        },
+        {
+          "key": "legal_diligence",
+          "title": "Legal diligence",
+          "description": "Legal document index, issue register, counsel questions, and showstopper-risk review support",
+          "artifactOutputs": [
+            {
+              "key": "legal_diligence",
+              "title": "Legal diligence",
+              "producerTaskDefinitionSlug": "run-legal-diligence",
+              "outputFieldKey": "legal_diligence_artifact_id",
+              "reviewTaskDefinitionSlugs": [
+                "review-investment-documents",
+                "manage-closing-checklist"
+              ],
+              "reviewInputFieldKeys": [
+                "legal_diligence_artifact_id"
+              ]
+            }
+          ],
+          "stageKey": "contracts"
+        },
+        {
+          "key": "investment_document_review",
+          "title": "Investment document review",
+          "description": "Term-to-document mapping, open document issues, counsel questions, and closing readiness notes",
+          "artifactOutputs": [
+            {
+              "key": "investment_document_review",
+              "title": "Investment document review",
+              "producerTaskDefinitionSlug": "review-investment-documents",
+              "outputFieldKey": "investment_document_review_artifact_id",
+              "reviewTaskDefinitionSlugs": [
+                "manage-closing-checklist",
+                "verify-conditions-precedent"
+              ],
+              "reviewInputFieldKeys": [
+                "investment_document_review_artifact_id"
+              ]
+            }
+          ],
+          "stageKey": "contracts"
         },
         {
           "key": "closing_checklist",
@@ -2015,6 +2200,26 @@
               ],
               "reviewInputFieldKeys": [
                 "conditions_precedent_verification_artifact_id"
+              ]
+            }
+          ],
+          "stageKey": "closing"
+        },
+        {
+          "key": "completion_tracker",
+          "title": "Completion tracker",
+          "description": "Capital call status, funds transfer readiness, share-certificate receipt, and portfolio handoff trigger",
+          "artifactOutputs": [
+            {
+              "key": "completion_tracker",
+              "title": "Completion tracker",
+              "producerTaskDefinitionSlug": "coordinate-capital-call-and-completion",
+              "outputFieldKey": "completion_tracker_artifact_id",
+              "reviewTaskDefinitionSlugs": [
+                "prepare-portfolio-onboarding"
+              ],
+              "reviewInputFieldKeys": [
+                "completion_tracker_artifact_id"
               ]
             }
           ],
@@ -2861,6 +3066,106 @@
         }
       },
       {
+        "id": "map-analyze-deal-terms",
+        "taskDefinitionTemplateId": "vc.analyze_deal_terms",
+        "taskDefinitionSlug": "analyze-deal-terms",
+        "projectScope": "project_instance",
+        "lifecycleStage": "deal_structuring",
+        "inputMappings": [
+          {
+            "taskField": "proposed_investment_amount",
+            "source": "project.field",
+            "sourcePath": "proposed_investment_amount",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "valuation",
+            "source": "project.field",
+            "sourcePath": "valuation",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "round_size",
+            "source": "project.field",
+            "sourcePath": "round_size",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "cap_table_artifact_id",
+            "source": "project.field",
+            "sourcePath": "cap_table_artifact_id",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "deal_terms_analysis_artifact_id",
+            "target": "project.field",
+            "targetPath": "deal_terms_analysis_artifact_id",
+            "requiredForCompletion": true
+          },
+          {
+            "taskField": "open_commercial_terms",
+            "target": "project.field",
+            "targetPath": "open_commercial_terms",
+            "requiredForCompletion": false
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-track-term-sheet-negotiation",
+        "taskDefinitionTemplateId": "vc.track_term_sheet_negotiation",
+        "taskDefinitionSlug": "track-term-sheet-negotiation",
+        "projectScope": "project_instance",
+        "lifecycleStage": "deal_structuring",
+        "inputMappings": [
+          {
+            "taskField": "term_sheet_artifact_id",
+            "source": "project.field",
+            "sourcePath": "current_term_sheet_artifact_id",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "current_open_terms",
+            "source": "project.field",
+            "sourcePath": "open_commercial_terms",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "ic_constraints",
+            "source": "project.field",
+            "sourcePath": "active_conditions",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "deal_terms_analysis_artifact_id",
+            "source": "project.field",
+            "sourcePath": "deal_terms_analysis_artifact_id",
+            "requiredForActivation": false
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "negotiation_brief_artifact_id",
+            "target": "project.field",
+            "targetPath": "negotiation_brief_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
         "id": "map-review-term-sheet",
         "taskDefinitionTemplateId": "vc.review_term_sheet",
         "taskDefinitionSlug": "review-term-sheet",
@@ -2878,6 +3183,12 @@
             "source": "project.field",
             "sourcePath": "deal_terms",
             "requiredForActivation": true
+          },
+          {
+            "taskField": "deal_terms_analysis_artifact_id",
+            "source": "project.field",
+            "sourcePath": "deal_terms_analysis_artifact_id",
+            "requiredForActivation": false
           }
         ],
         "outputMappings": [
@@ -2885,6 +3196,88 @@
             "taskField": "term_sheet_review_artifact_id",
             "target": "project.field",
             "targetPath": "term_sheet_review_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-run-legal-diligence",
+        "taskDefinitionTemplateId": "vc.run_legal_diligence",
+        "taskDefinitionSlug": "run-legal-diligence",
+        "projectScope": "project_instance",
+        "lifecycleStage": "contracts",
+        "inputMappings": [
+          {
+            "taskField": "legal_source_artifact_ids",
+            "source": "project.field",
+            "sourcePath": "legal_source_artifact_ids",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "company_name",
+            "source": "project.field",
+            "sourcePath": "company_name",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "legal_diligence_artifact_id",
+            "target": "project.field",
+            "targetPath": "legal_diligence_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-review-investment-documents",
+        "taskDefinitionTemplateId": "vc.review_investment_documents",
+        "taskDefinitionSlug": "review-investment-documents",
+        "projectScope": "project_instance",
+        "lifecycleStage": "contracts",
+        "inputMappings": [
+          {
+            "taskField": "investment_document_artifact_ids",
+            "source": "project.field",
+            "sourcePath": "investment_document_artifact_ids",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "term_sheet_review_artifact_id",
+            "source": "project.field",
+            "sourcePath": "term_sheet_review_artifact_id",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "negotiation_brief_artifact_id",
+            "source": "project.field",
+            "sourcePath": "negotiation_brief_artifact_id",
+            "requiredForActivation": false
+          },
+          {
+            "taskField": "legal_diligence_artifact_id",
+            "source": "project.field",
+            "sourcePath": "legal_diligence_artifact_id",
+            "requiredForActivation": false
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "investment_document_review_artifact_id",
+            "target": "project.field",
+            "targetPath": "investment_document_review_artifact_id",
             "requiredForCompletion": true
           }
         ],
@@ -2925,6 +3318,18 @@
             "source": "project.field",
             "sourcePath": "legal_document_status",
             "requiredForActivation": true
+          },
+          {
+            "taskField": "legal_diligence_artifact_id",
+            "source": "project.field",
+            "sourcePath": "legal_diligence_artifact_id",
+            "requiredForActivation": false
+          },
+          {
+            "taskField": "investment_document_review_artifact_id",
+            "source": "project.field",
+            "sourcePath": "investment_document_review_artifact_id",
+            "requiredForActivation": false
           }
         ],
         "outputMappings": [
@@ -2978,6 +3383,47 @@
         }
       },
       {
+        "id": "map-coordinate-capital-call-and-completion",
+        "taskDefinitionTemplateId": "vc.coordinate_capital_call_and_completion",
+        "taskDefinitionSlug": "coordinate-capital-call-and-completion",
+        "projectScope": "project_instance",
+        "lifecycleStage": "closing",
+        "inputMappings": [
+          {
+            "taskField": "conditions_precedent_verification_artifact_id",
+            "source": "project.field",
+            "sourcePath": "conditions_precedent_verification_artifact_id",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "closing_checklist_artifact_id",
+            "source": "project.field",
+            "sourcePath": "closing_checklist_artifact_id",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "transaction_bible_artifact_id",
+            "source": "project.field",
+            "sourcePath": "transaction_bible_artifact_id",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "completion_tracker_artifact_id",
+            "target": "project.field",
+            "targetPath": "completion_tracker_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
         "id": "map-prepare-portfolio-onboarding",
         "taskDefinitionTemplateId": "vc.prepare_portfolio_onboarding",
         "taskDefinitionSlug": "prepare-portfolio-onboarding",
@@ -3001,6 +3447,12 @@
             "source": "project.field",
             "sourcePath": "conditions_precedent_verification_artifact_id",
             "requiredForActivation": true
+          },
+          {
+            "taskField": "completion_tracker_artifact_id",
+            "source": "project.field",
+            "sourcePath": "completion_tracker_artifact_id",
+            "requiredForActivation": false
           }
         ],
         "outputMappings": [

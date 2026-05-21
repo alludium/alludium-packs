@@ -311,9 +311,14 @@ VC_ARTIFACT_OUTPUTS = {
     "review-ic-memo": ["ic_memo_review_artifact_id"],
     "prepare-ic-agenda": ["ic_agenda_artifact_id"],
     "record-ic-decision": ["ic_decision_record_artifact_id"],
+    "analyze-deal-terms": ["deal_terms_analysis_artifact_id"],
+    "track-term-sheet-negotiation": ["negotiation_brief_artifact_id"],
     "review-term-sheet": ["term_sheet_review_artifact_id"],
+    "run-legal-diligence": ["legal_diligence_artifact_id"],
+    "review-investment-documents": ["investment_document_review_artifact_id"],
     "manage-closing-checklist": ["closing_checklist_artifact_id"],
     "verify-conditions-precedent": ["conditions_precedent_verification_artifact_id"],
+    "coordinate-capital-call-and-completion": ["completion_tracker_artifact_id"],
     "prepare-portfolio-onboarding": ["portfolio_onboarding_plan_artifact_id"],
     "affinity-deal-room-import": ["affinity_import_receipt_artifact_id"],
 }
@@ -355,6 +360,9 @@ VC_ARTIFACT_INPUTS = {
         "investment_memo_artifact_id",
         "ic_agenda_artifact_id",
     ],
+    "analyze-deal-terms": ["cap_table_artifact_id"],
+    "track-term-sheet-negotiation": ["term_sheet_artifact_id"],
+    "review-investment-documents": ["term_sheet_review_artifact_id"],
     "manage-closing-checklist": [
         "ic_decision_record_artifact_id",
         "term_sheet_review_artifact_id",
@@ -365,6 +373,11 @@ VC_ARTIFACT_INPUTS = {
         "closing_source_artifact_ids",
     ],
     "review-term-sheet": ["term_sheet_artifact_id"],
+    "coordinate-capital-call-and-completion": [
+        "conditions_precedent_verification_artifact_id",
+        "closing_checklist_artifact_id",
+        "transaction_bible_artifact_id",
+    ],
     "prepare-portfolio-onboarding": [
         "ic_decision_record_artifact_id",
         "closing_checklist_artifact_id",
@@ -373,6 +386,22 @@ VC_ARTIFACT_INPUTS = {
 }
 OPTIONAL_ARTIFACT_INPUTS = {
     "prepare-initial-call": {"pitch_deck_artifact_id"},
+    "analyze-deal-terms": {"financial_forecast_artifact_id"},
+    "track-term-sheet-negotiation": {"cap_table_artifact_id", "deal_terms_analysis_artifact_id"},
+    "review-term-sheet": {"deal_terms_analysis_artifact_id"},
+    "run-legal-diligence": {"corporate_structure_artifact_id"},
+    "review-investment-documents": {
+        "board_minutes_artifact_id",
+        "cap_table_artifact_id",
+        "disclosure_letter_artifact_id",
+        "legal_diligence_artifact_id",
+        "negotiation_brief_artifact_id",
+    },
+    "manage-closing-checklist": {
+        "investment_document_review_artifact_id",
+        "legal_diligence_artifact_id",
+    },
+    "prepare-portfolio-onboarding": {"completion_tracker_artifact_id"},
     "run-investment-screen": {"opportunity_intake_artifact_id", "pitch_deck_artifact_id"},
     "screen-inbound-opportunity": {"pitch_deck_artifact_id"},
 }

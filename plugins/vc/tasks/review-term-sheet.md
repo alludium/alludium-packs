@@ -48,6 +48,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `deal_terms` | Deal Terms | `json` | yes |
 | `standard_terms_reference` | Standard Terms Reference | `json` | no |
 | `counsel_notes` | Counsel Notes | `richtext` | no |
+| `deal_terms_analysis_artifact_id` | Deal Terms Analysis | `file` | no |
 
 ## Outputs
 
