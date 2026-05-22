@@ -151,6 +151,28 @@ TASK_TEMPLATE_AGENT_TEMPLATE_REFERENCE_FIELDS = [
 ]
 TASK_TEMPLATE_PLATFORM_CAPABILITY = "external-task-definition-template-ingest"
 PROJECT_TYPE_PLATFORM_CAPABILITY = "external-project-type-ingest"
+PROJECT_MANAGER_OVERLAY_SHORT_TEXT_MAX = 120
+PROJECT_MANAGER_OVERLAY_LONG_TEXT_MAX = 1000
+PROJECT_MANAGER_OVERLAY_SUFFIX_TEXT_MAX = 80
+PROJECT_MANAGER_OVERLAY_LIST_LIMIT = 12
+PROJECT_MANAGER_OVERLAY_STARTER_LIMIT = 8
+PROJECT_MANAGER_OVERLAY_ROOT_KEYS = {"displayName", "labels", "identity", "greeting"}
+PROJECT_MANAGER_OVERLAY_LABEL_KEYS = {
+    "shortName",
+    "chatTitleSuffix",
+    "roleNoun",
+    "projectNoun",
+    "collectionNoun",
+    "taskShortcutLabel",
+}
+PROJECT_MANAGER_OVERLAY_IDENTITY_KEYS = {
+    "roleDescription",
+    "tone",
+    "instructions",
+    "responsibilities",
+    "boundaries",
+}
+PROJECT_MANAGER_OVERLAY_GREETING_KEYS = {"message", "instructions", "starterPrompts"}
 DOCUMENT_SURFACE_STATUS = "pack-native-document-sources"
 DOCUMENT_CATALOG_PATH = "alludium/documents/catalog.v1.json"
 DOCUMENT_TYPES = {"checklist", "methodology", "policy", "sop", "style_guide", "template"}
@@ -1469,6 +1491,147 @@ def validate_project_type_field(project_type_id: str, field: Any) -> tuple[str, 
     return field_id, field_key
 
 
+def validate_project_manager_overlay_text(
+    value: Any,
+    context: str,
+    *,
+    max_length: int,
+) -> str:
+    if not isinstance(value, str):
+        fail(f"{context} must be a string")
+    if not value.strip():
+        fail(f"{context} must not be blank")
+    if len(value) > max_length:
+        fail(f"{context} must be {max_length} characters or fewer")
+    return value
+
+
+def validate_project_manager_overlay_text_list(
+    value: Any,
+    context: str,
+    *,
+    max_items: int,
+    max_length: int,
+) -> list[str]:
+    if not isinstance(value, list):
+        fail(f"{context} must be a list")
+    if len(value) > max_items:
+        fail(f"{context} must contain {max_items} items or fewer")
+    values = [
+        validate_project_manager_overlay_text(
+            entry,
+            f"{context}[{index}]",
+            max_length=max_length,
+        )
+        for index, entry in enumerate(value)
+    ]
+    if len(values) != len(set(values)):
+        fail(f"{context} must not contain duplicate entries")
+    return values
+
+
+def validate_project_manager_overlay_object(
+    value: Any,
+    context: str,
+    *,
+    allowed_keys: set[str],
+) -> dict[str, Any]:
+    if not isinstance(value, dict):
+        fail(f"{context} must be an object")
+    unknown_keys = sorted(set(value) - allowed_keys)
+    if unknown_keys:
+        fail(f"{context} contains unknown keys: {unknown_keys}")
+    return value
+
+
+def validate_project_manager_overlay(project_type_id: str, initial_version: dict[str, Any]) -> None:
+    if "projectManager" not in initial_version:
+        return
+
+    context = f"Project type {project_type_id} initialVersion.projectManager"
+    project_manager = validate_project_manager_overlay_object(
+        initial_version["projectManager"],
+        context,
+        allowed_keys=PROJECT_MANAGER_OVERLAY_ROOT_KEYS,
+    )
+    if "displayName" not in project_manager:
+        fail(f"{context}.displayName must be declared")
+    validate_project_manager_overlay_text(
+        project_manager["displayName"],
+        f"{context}.displayName",
+        max_length=PROJECT_MANAGER_OVERLAY_SHORT_TEXT_MAX,
+    )
+
+    labels = project_manager.get("labels")
+    if labels is not None:
+        labels = validate_project_manager_overlay_object(
+            labels,
+            f"{context}.labels",
+            allowed_keys=PROJECT_MANAGER_OVERLAY_LABEL_KEYS,
+        )
+        for field_name, field_value in labels.items():
+            max_length = (
+                PROJECT_MANAGER_OVERLAY_SUFFIX_TEXT_MAX
+                if field_name == "chatTitleSuffix"
+                else PROJECT_MANAGER_OVERLAY_SHORT_TEXT_MAX
+            )
+            validate_project_manager_overlay_text(
+                field_value,
+                f"{context}.labels.{field_name}",
+                max_length=max_length,
+            )
+
+    identity = project_manager.get("identity")
+    if identity is not None:
+        identity = validate_project_manager_overlay_object(
+            identity,
+            f"{context}.identity",
+            allowed_keys=PROJECT_MANAGER_OVERLAY_IDENTITY_KEYS,
+        )
+        for field_name in ["roleDescription", "tone"]:
+            if field_name in identity:
+                validate_project_manager_overlay_text(
+                    identity[field_name],
+                    f"{context}.identity.{field_name}",
+                    max_length=PROJECT_MANAGER_OVERLAY_LONG_TEXT_MAX,
+                )
+        for field_name in ["instructions", "responsibilities", "boundaries"]:
+            if field_name in identity:
+                validate_project_manager_overlay_text_list(
+                    identity[field_name],
+                    f"{context}.identity.{field_name}",
+                    max_items=PROJECT_MANAGER_OVERLAY_LIST_LIMIT,
+                    max_length=PROJECT_MANAGER_OVERLAY_LONG_TEXT_MAX,
+                )
+
+    greeting = project_manager.get("greeting")
+    if greeting is not None:
+        greeting = validate_project_manager_overlay_object(
+            greeting,
+            f"{context}.greeting",
+            allowed_keys=PROJECT_MANAGER_OVERLAY_GREETING_KEYS,
+        )
+        if "message" in greeting:
+            validate_project_manager_overlay_text(
+                greeting["message"],
+                f"{context}.greeting.message",
+                max_length=PROJECT_MANAGER_OVERLAY_LONG_TEXT_MAX,
+            )
+        if "instructions" in greeting:
+            validate_project_manager_overlay_text(
+                greeting["instructions"],
+                f"{context}.greeting.instructions",
+                max_length=PROJECT_MANAGER_OVERLAY_LONG_TEXT_MAX,
+            )
+        if "starterPrompts" in greeting:
+            validate_project_manager_overlay_text_list(
+                greeting["starterPrompts"],
+                f"{context}.greeting.starterPrompts",
+                max_items=PROJECT_MANAGER_OVERLAY_STARTER_LIMIT,
+                max_length=240,
+            )
+
+
 def validate_vc_deal_room_command_view(project_type_id: str, initial_version: dict[str, Any]) -> None:
     command_view = initial_version.get("commandView")
     if not isinstance(command_view, dict):
@@ -2260,6 +2423,8 @@ def validate_project_type_file(path: Path, expected_id: str) -> str:
         transition_pairs.append((from_state, to_state))
     if len(transition_pairs) != len(set(transition_pairs)):
         fail(f"Project type {expected_id} has duplicate lifecycle transitions")
+
+    validate_project_manager_overlay(expected_id, initial_version)
 
     if expected_id == "vc_deal_room":
         validate_vc_deal_room_command_view(expected_id, initial_version)
