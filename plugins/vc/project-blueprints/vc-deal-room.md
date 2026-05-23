@@ -18,11 +18,11 @@ This blueprint lists the project stages, mapped tasks, recommended agents, and t
 
 | Task | Agent | Skills | Task ID |
 | --- | --- | --- | --- |
-| `project-source-choice` | [VC Deal Room Setup Guide](../agents/vc-deal-room-setup-guide.md) | None declared | Pack task not found; likely platform-owned setup task. |
-| `project-variable-review` | [VC Deal Room Setup Guide](../agents/vc-deal-room-setup-guide.md) | None declared | Pack task not found; likely platform-owned setup task. |
-| `project-schedule-review` | [VC Deal Room Setup Guide](../agents/vc-deal-room-setup-guide.md) | None declared | Pack task not found; likely platform-owned setup task. |
-| `project-team-invite` | [VC Deal Room Setup Guide](../agents/vc-deal-room-setup-guide.md) | None declared | Pack task not found; likely platform-owned setup task. |
-| `project-source-setup` | [VC Deal Room Setup Guide](../agents/vc-deal-room-setup-guide.md) | None declared | Pack task not found; likely platform-owned setup task. |
+| Project Source Choice | [VC Deal Room Setup Guide](../agents/vc-deal-room-setup-guide.md) | None declared | `alludium.project_source_choice` |
+| Project Variable Review | [VC Deal Room Setup Guide](../agents/vc-deal-room-setup-guide.md) | None declared | `alludium.project_variable_review` |
+| Project Schedule Review | [VC Deal Room Setup Guide](../agents/vc-deal-room-setup-guide.md) | None declared | `alludium.project_schedule_review` |
+| Project Team Invite Review | [VC Deal Room Setup Guide](../agents/vc-deal-room-setup-guide.md) | None declared | `alludium.project_team_invite` |
+| Project Source Setup | [VC Deal Room Setup Guide](../agents/vc-deal-room-setup-guide.md) | None declared | `alludium.project_source_setup` |
 | [VC Pack Variable Discovery](../tasks/vc-pack-variable-discovery.md) | [VC Deal Room Setup Guide](../agents/vc-deal-room-setup-guide.md) | None declared | `vc.pack_variable_discovery` |
 | [Set Up Affinity for VC Deal Rooms](../tasks/affinity-setup.md) | [VC Deal Room Setup Guide](../agents/vc-deal-room-setup-guide.md) | [`vc-affinity-discovery`](../skills/vc-affinity-discovery/SKILL.md)<br>[`vc-affinity-sync-read`](../skills/vc-affinity-sync-read/SKILL.md)<br>[`vc-affinity-sync-write`](../skills/vc-affinity-sync-write/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.affinity_setup` |
 | [Preview Affinity Pipeline Import](../tasks/affinity-sync-read.md) | [Pipeline Autopilot](../agents/vc-pipeline-autopilot.md) | [`vc-affinity-sync-read`](../skills/vc-affinity-sync-read/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.affinity_sync_read` |

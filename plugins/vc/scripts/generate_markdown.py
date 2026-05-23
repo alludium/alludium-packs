@@ -21,6 +21,29 @@ TASK_OUTPUT_ROOT = PACK_ROOT / "tasks"
 BLUEPRINT_OUTPUT_ROOT = PACK_ROOT / "project-blueprints"
 MANIFEST_PATH = PACK_ROOT / "alludium" / "manifest.yaml"
 
+PLATFORM_TASK_DEFINITIONS: dict[str, dict[str, str]] = {
+    "project-source-choice": {
+        "id": "alludium.project_source_choice",
+        "title": "Project Source Choice",
+    },
+    "project-source-setup": {
+        "id": "alludium.project_source_setup",
+        "title": "Project Source Setup",
+    },
+    "project-variable-review": {
+        "id": "alludium.project_variable_review",
+        "title": "Project Variable Review",
+    },
+    "project-schedule-review": {
+        "id": "alludium.project_schedule_review",
+        "title": "Project Schedule Review",
+    },
+    "project-team-invite": {
+        "id": "alludium.project_team_invite",
+        "title": "Project Team Invite Review",
+    },
+}
+
 
 def fail(message: str) -> None:
     print(f"ERROR: {message}", file=sys.stderr)
@@ -496,6 +519,12 @@ def blueprint_task_row(
 ) -> str:
     task = task_by_slug.get(slug)
     if task is None:
+        platform_task = PLATFORM_TASK_DEFINITIONS.get(slug)
+        if platform_task is not None:
+            return (
+                f"| {markdown_escape(platform_task['title'])} | {agent_link(fallback_agent_id, agent_names)} | "
+                f"None declared | `{markdown_escape(platform_task['id'])}` |\n"
+            )
         return (
             f"| `{markdown_escape(slug)}` | {agent_link(fallback_agent_id, agent_names)} | "
             "None declared | Pack task not found; likely platform-owned setup task. |\n"

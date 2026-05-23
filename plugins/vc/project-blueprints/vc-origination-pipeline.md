@@ -18,10 +18,10 @@ This blueprint lists the project stages, mapped tasks, recommended agents, and t
 
 | Task | Agent | Skills | Task ID |
 | --- | --- | --- | --- |
-| `project-source-choice` | [Origination Scout](../agents/vc-origination-scout.md) | None declared | Pack task not found; likely platform-owned setup task. |
-| `project-variable-review` | [Origination Scout](../agents/vc-origination-scout.md) | None declared | Pack task not found; likely platform-owned setup task. |
-| `project-schedule-review` | [Origination Scout](../agents/vc-origination-scout.md) | None declared | Pack task not found; likely platform-owned setup task. |
-| `project-source-setup` | [Origination Scout](../agents/vc-origination-scout.md) | None declared | Pack task not found; likely platform-owned setup task. |
+| Project Source Choice | [Origination Scout](../agents/vc-origination-scout.md) | None declared | `alludium.project_source_choice` |
+| Project Variable Review | [Origination Scout](../agents/vc-origination-scout.md) | None declared | `alludium.project_variable_review` |
+| Project Schedule Review | [Origination Scout](../agents/vc-origination-scout.md) | None declared | `alludium.project_schedule_review` |
+| Project Source Setup | [Origination Scout](../agents/vc-origination-scout.md) | None declared | `alludium.project_source_setup` |
 | [VC Pack Variable Discovery](../tasks/vc-pack-variable-discovery.md) | [Origination Scout](../agents/vc-origination-scout.md) | None declared | `vc.pack_variable_discovery` |
 | [Set Up Apify for VC Origination](../tasks/apify-setup.md) | [Pipeline Autopilot](../agents/vc-pipeline-autopilot.md) | [`vc-apify-discovery`](../skills/vc-apify-discovery/SKILL.md)<br>[`vc-apify-sync-read`](../skills/vc-apify-sync-read/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.apify_setup` |
 | [Configure Companies House Public Register Preview](../tasks/companies-house-setup.md) | [Pipeline Autopilot](../agents/vc-pipeline-autopilot.md) | [`vc-companies-house-sourcing`](../skills/vc-companies-house-sourcing/SKILL.md)<br>[`vc-companies-house-sync-read`](../skills/vc-companies-house-sync-read/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.companies_house_setup` |
