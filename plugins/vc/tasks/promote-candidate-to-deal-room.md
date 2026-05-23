@@ -2,7 +2,7 @@
 id: vc.promote_candidate_to_deal_room
 title: Promote Candidate to Deal Room
 slug: promote-candidate-to-deal-room
-agent: vc-dealflow-concierge
+agent: vc-sourcing-operator
 skills:
 - vc-origination-deal-room-promotion
 - citation-enforcement
@@ -64,7 +64,7 @@ Promotion package by default. Deal Room creation/update, CRM changes, document c
 - Alludium task ID: `vc.promote_candidate_to_deal_room`
 - Task family: `origination_promotion`
 - Lifecycle stage: `promote`
-- Recommended agent: `vc-dealflow-concierge` (Alludium template `vc_dealflow_concierge`)
+- Recommended agent: `vc-sourcing-operator` (Alludium template `vc_sourcing_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:

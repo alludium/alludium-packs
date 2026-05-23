@@ -2,7 +2,7 @@
 id: vc.sync_sourcing_candidates
 title: Sync Sourcing Candidates
 slug: sync-sourcing-candidates
-agent: vc-dealflow-concierge
+agent: vc-sourcing-operator
 skills:
 - vc-source-registry-and-state-management
 - vc-sourcing-dedupe-and-novelty-check
@@ -60,7 +60,7 @@ Default is dry-run proposal. Do not write to Notion, CRM, Slack, ClickUp, or any
 - Alludium task ID: `vc.sync_sourcing_candidates`
 - Task family: `origination_candidate_sync`
 - Lifecycle stage: `review`
-- Recommended agent: `vc-dealflow-concierge` (Alludium template `vc_dealflow_concierge`)
+- Recommended agent: `vc-sourcing-operator` (Alludium template `vc_sourcing_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:

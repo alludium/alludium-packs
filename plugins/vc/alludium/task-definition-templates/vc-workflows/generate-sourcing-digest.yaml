@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.generate_sourcing_digest
-version: 0.1.7
+version: 0.1.8
 title: Generate Sourcing Digest
 category: Venture Capital
 visibility: workspace
@@ -27,8 +27,8 @@ definition:
     requiredSkills:
       - vc-sourcing-digest-generation
       - citation-enforcement
-    recommendedAgentTemplate: vc_pipeline_autopilot
-    plannedRecommendedAgentTemplate: vc_pipeline_autopilot
+    recommendedAgentTemplate: vc_sourcing_operator
+    plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
       - vc_origination_pipeline
     supportedProjectScopes:

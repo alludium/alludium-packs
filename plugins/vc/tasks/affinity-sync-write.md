@@ -2,7 +2,7 @@
 id: vc.affinity_sync_write
 title: Draft Affinity Write-Back Proposals
 slug: affinity-sync-write
-agent: vc-pipeline-autopilot
+agent: vc-integration-operator
 skills:
 - vc-affinity-sync-write
 - citation-enforcement
@@ -55,7 +55,7 @@ Draft only. Do not write notes, update fields, move stages, or change list entri
 - Source template: `alludium/task-definition-templates/vc-integrations/affinity-sync-write.yaml`
 - Alludium task ID: `vc.affinity_sync_write`
 - Task family: `integration_sync_write`
-- Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
+- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
 - Supported project types:
   - `vc_deal_room`
 - Supported project scopes:

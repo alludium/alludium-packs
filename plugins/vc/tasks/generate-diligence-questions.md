@@ -4,6 +4,7 @@ title: Generate Diligence Questions
 slug: generate-diligence-questions
 agent: vc-evaluation-analyst
 skills:
+- investment-diligence-question-framework
 - citation-enforcement
 ---
 
@@ -93,6 +94,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 
 ## Required Skills
 
+- `investment-diligence-question-framework`
 - `citation-enforcement`
 
 ## Workspace-Configured Methodology Skills

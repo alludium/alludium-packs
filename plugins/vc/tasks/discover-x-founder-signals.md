@@ -2,7 +2,7 @@
 id: vc.discover_x_founder_signals
 title: Discover X Founder Signals
 slug: discover-x-founder-signals
-agent: vc-origination-scout
+agent: vc-sourcing-operator
 skills:
 - vc-apify-x-founder-discovery
 - vc-source-registry-and-state-management
@@ -60,7 +60,7 @@ Public-signal read and candidate proposal only. Do not engage authors, import ca
 - Alludium task ID: `vc.discover_x_founder_signals`
 - Task family: `origination_source_discovery`
 - Lifecycle stage: `source`
-- Recommended agent: `vc-origination-scout` (Alludium template `vc_origination_scout`)
+- Recommended agent: `vc-sourcing-operator` (Alludium template `vc_sourcing_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:

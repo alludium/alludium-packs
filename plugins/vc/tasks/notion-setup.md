@@ -2,7 +2,7 @@
 id: vc.notion_setup
 title: Set Up Notion for VC Deal Rooms
 slug: notion-setup
-agent: vc-pipeline-autopilot
+agent: vc-integration-operator
 skills:
 - vc-notion-discovery
 - vc-notion-sync-read
@@ -63,7 +63,7 @@ Setup orchestration only. Do not import databases, write pages, change permissio
 - Source template: `alludium/task-definition-templates/vc-integrations/notion-setup.yaml`
 - Alludium task ID: `vc.notion_setup`
 - Task family: `integration_setup`
-- Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
+- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
 - Supported project types:
   - `vc_deal_room`
 - Supported project scopes:

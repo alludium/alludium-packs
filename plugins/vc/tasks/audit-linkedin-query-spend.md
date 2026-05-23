@@ -2,7 +2,7 @@
 id: vc.audit_linkedin_query_spend
 title: Audit LinkedIn Query Spend
 slug: audit-linkedin-query-spend
-agent: vc-pipeline-autopilot
+agent: vc-sourcing-operator
 skills:
 - vc-linkedin-query-spend-audit
 - vc-source-registry-and-state-management
@@ -64,7 +64,7 @@ Read-only audit. Do not edit query lists, actor inputs, budgets, or schedules.
 - Alludium task ID: `vc.audit_linkedin_query_spend`
 - Task family: `origination_spend_audit`
 - Lifecycle stage: `operate`
-- Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
+- Recommended agent: `vc-sourcing-operator` (Alludium template `vc_sourcing_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:

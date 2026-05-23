@@ -2,7 +2,7 @@
 id: vc.discover_github_builder_signals
 title: Discover GitHub Builder Signals
 slug: discover-github-builder-signals
-agent: vc-origination-scout
+agent: vc-sourcing-operator
 skills:
 - vc-github-builder-signal-discovery
 - vc-source-registry-and-state-management
@@ -59,7 +59,7 @@ Public/source read only. Do not open issues, star repos, contact maintainers, im
 - Alludium task ID: `vc.discover_github_builder_signals`
 - Task family: `origination_source_discovery`
 - Lifecycle stage: `source`
-- Recommended agent: `vc-origination-scout` (Alludium template `vc_origination_scout`)
+- Recommended agent: `vc-sourcing-operator` (Alludium template `vc_sourcing_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:

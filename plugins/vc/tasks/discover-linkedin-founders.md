@@ -2,7 +2,7 @@
 id: vc.discover_linkedin_founders
 title: Discover LinkedIn Founder Candidates
 slug: discover-linkedin-founders
-agent: vc-origination-scout
+agent: vc-sourcing-operator
 skills:
 - vc-apify-linkedin-founder-discovery
 - vc-source-registry-and-state-management
@@ -60,7 +60,7 @@ Discovery proposal only. Do not scrape unapproved profiles, bypass platform poli
 - Alludium task ID: `vc.discover_linkedin_founders`
 - Task family: `origination_source_discovery`
 - Lifecycle stage: `source`
-- Recommended agent: `vc-origination-scout` (Alludium template `vc_origination_scout`)
+- Recommended agent: `vc-sourcing-operator` (Alludium template `vc_sourcing_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:

@@ -2,7 +2,7 @@
 id: vc.slack_sync_write
 title: Draft Slack Handoff Notifications
 slug: slack-sync-write
-agent: vc-pipeline-autopilot
+agent: vc-integration-operator
 skills:
 - vc-slack-sync-write
 - citation-enforcement
@@ -54,7 +54,7 @@ Draft only. Do not post, reply, create channels, archive channels, delete messag
 - Source template: `alludium/task-definition-templates/vc-integrations/slack-sync-write.yaml`
 - Alludium task ID: `vc.slack_sync_write`
 - Task family: `integration_sync_write`
-- Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
+- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
 - Supported project types:
   - `vc_deal_room`
 - Supported project scopes:

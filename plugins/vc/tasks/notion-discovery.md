@@ -2,7 +2,7 @@
 id: vc.notion_discovery
 title: Explore Notion Pages and Databases
 slug: notion-discovery
-agent: vc-pipeline-autopilot
+agent: vc-integration-operator
 skills:
 - vc-notion-discovery
 - citation-enforcement
@@ -58,7 +58,7 @@ Discovery only. Do not read broad page contents, create pages, create databases,
 - Source template: `alludium/task-definition-templates/vc-integrations/notion-discovery.yaml`
 - Alludium task ID: `vc.notion_discovery`
 - Task family: `integration_discovery`
-- Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
+- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
 - Supported project types:
   - `vc_deal_room`
 - Supported project scopes:

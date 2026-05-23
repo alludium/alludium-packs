@@ -2,7 +2,7 @@
 id: vc.affinity_sync_read
 title: Preview Affinity Pipeline Import
 slug: affinity-sync-read
-agent: vc-pipeline-autopilot
+agent: vc-integration-operator
 skills:
 - vc-affinity-sync-read
 - citation-enforcement
@@ -57,7 +57,7 @@ Preview/import design only. Do not import records or enable recurring sync witho
 - Source template: `alludium/task-definition-templates/vc-integrations/affinity-sync-read.yaml`
 - Alludium task ID: `vc.affinity_sync_read`
 - Task family: `integration_sync_read`
-- Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
+- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
 - Supported project types:
   - `vc_deal_room`
 - Supported project scopes:

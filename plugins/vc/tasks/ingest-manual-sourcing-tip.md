@@ -2,7 +2,7 @@
 id: vc.ingest_manual_sourcing_tip
 title: Ingest Manual Sourcing Tip
 slug: ingest-manual-sourcing-tip
-agent: vc-origination-scout
+agent: vc-sourcing-operator
 skills:
 - vc-manual-tip-ingestion
 - vc-sourcing-dedupe-and-novelty-check
@@ -57,7 +57,7 @@ Internal candidate normalization only. Do not contact founders, write CRM record
 - Alludium task ID: `vc.ingest_manual_sourcing_tip`
 - Task family: `origination_manual_tip`
 - Lifecycle stage: `source`
-- Recommended agent: `vc-origination-scout` (Alludium template `vc_origination_scout`)
+- Recommended agent: `vc-sourcing-operator` (Alludium template `vc_sourcing_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:

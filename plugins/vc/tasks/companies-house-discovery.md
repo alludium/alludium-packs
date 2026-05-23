@@ -2,7 +2,7 @@
 id: vc.companies_house_discovery
 title: Explore Companies House Public Register Scope
 slug: companies-house-discovery
-agent: vc-origination-scout
+agent: vc-integration-operator
 skills:
 - vc-companies-house-sourcing
 - citation-enforcement
@@ -57,7 +57,7 @@ Discovery only. Do not call authenticated Companies House APIs, import companies
 - Source template: `alludium/task-definition-templates/vc-integrations/companies-house-discovery.yaml`
 - Alludium task ID: `vc.companies_house_discovery`
 - Task family: `integration_discovery`
-- Recommended agent: `vc-origination-scout` (Alludium template `vc_origination_scout`)
+- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:

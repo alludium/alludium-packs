@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.generate_diligence_questions
-version: 1.0.17
+version: 1.0.18
 title: Generate Diligence Questions
 category: Venture Capital
 visibility: workspace
@@ -43,6 +43,7 @@ definition:
       - documentId: vc.document.template_use_guidance
         usage: operating_guidance
     requiredSkills:
+      - investment-diligence-question-framework
       - citation-enforcement
     plannedRecommendedAgentTemplate: vc_evaluation_analyst
     recommendedAgentTemplate: vc_evaluation_analyst

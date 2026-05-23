@@ -1,0 +1,151 @@
+version: 1.0.2
+type: template
+platform_managed: false
+id: vc_sourcing_operator
+name: Sourcing Operator
+description: VC sourcing operator that runs the standing origination pipeline, reviews source outputs, manages candidate state, drafts outreach
+  queues, and prepares promotion packages for human review.
+icon: FcWorkflow
+color: bg-emerald-100
+category: Alludium
+metadata:
+  gitBranch: main
+  gitRepositoryUrl: https://github.com/alludium-templates/configurable-agent.git
+  supportedTaskDefinitions:
+  - audit-linkedin-query-spend
+  - check-affinity-relationships
+  - configure-origination-pipeline
+  - discover-companies-house-candidates
+  - discover-github-builder-signals
+  - discover-linkedin-founders
+  - discover-reddit-builder-signals
+  - discover-x-founder-signals
+  - enrich-sourcing-candidates
+  - generate-sourcing-digest
+  - ingest-manual-sourcing-tip
+  - prepare-outreach-draft-queue
+  - promote-candidate-to-deal-room
+  - review-portfolio-overlap
+  - review-reddit-candidate-inbox
+  - review-source-errors-and-spend
+  - run-sourcing-pipeline
+  - score-sourcing-candidates
+  - screen-active-sourcing-candidates
+  - sync-sourcing-candidates
+  primaryStage: Origination Operations
+  primaryDealRoomState: intake
+  requiredSkills:
+  - company-research-and-enrichment
+  - deal-room-setup-and-source-ingestion
+  - founder-outreach-and-intro-paths
+  - investment-screening-framework
+  - vc-apify-linkedin-founder-discovery
+  - vc-apify-x-founder-discovery
+  - vc-companies-house-sourcing
+  - vc-github-builder-signal-discovery
+  - vc-linkedin-query-spend-audit
+  - vc-manual-tip-ingestion
+  - vc-notion-sync-write
+  - vc-origination-deal-room-promotion
+  - vc-origination-pipeline-orchestration
+  - vc-outreach-draft-queue
+  - vc-portfolio-overlap-review
+  - vc-reddit-builder-signal-discovery
+  - vc-reddit-inbox-approval
+  - vc-relationship-context-check
+  - vc-source-error-and-spend-audit
+  - vc-source-registry-and-state-management
+  - vc-sourcing-candidate-enrichment
+  - vc-sourcing-dedupe-and-novelty-check
+  - vc-sourcing-digest-generation
+  - vc-sourcing-verdict-and-screening
+  - citation-enforcement
+llm:
+  provider: ANTHROPIC
+  infra: AMZN
+  model: Claude Opus 4.6
+skills:
+- externalId: company-research-and-enrichment
+  activationMode: ALWAYS
+- externalId: deal-room-setup-and-source-ingestion
+  activationMode: AUTO
+- externalId: founder-outreach-and-intro-paths
+  activationMode: AUTO
+- externalId: investment-screening-framework
+  activationMode: AUTO
+- externalId: vc-apify-linkedin-founder-discovery
+  activationMode: AUTO
+- externalId: vc-apify-x-founder-discovery
+  activationMode: AUTO
+- externalId: vc-companies-house-sourcing
+  activationMode: AUTO
+- externalId: vc-github-builder-signal-discovery
+  activationMode: AUTO
+- externalId: vc-linkedin-query-spend-audit
+  activationMode: AUTO
+- externalId: vc-manual-tip-ingestion
+  activationMode: AUTO
+- externalId: vc-notion-sync-write
+  activationMode: AUTO
+- externalId: vc-origination-deal-room-promotion
+  activationMode: AUTO
+- externalId: vc-origination-pipeline-orchestration
+  activationMode: AUTO
+- externalId: vc-outreach-draft-queue
+  activationMode: AUTO
+- externalId: vc-portfolio-overlap-review
+  activationMode: AUTO
+- externalId: vc-reddit-builder-signal-discovery
+  activationMode: AUTO
+- externalId: vc-reddit-inbox-approval
+  activationMode: AUTO
+- externalId: vc-relationship-context-check
+  activationMode: AUTO
+- externalId: vc-source-error-and-spend-audit
+  activationMode: AUTO
+- externalId: vc-source-registry-and-state-management
+  activationMode: ALWAYS
+- externalId: vc-sourcing-candidate-enrichment
+  activationMode: AUTO
+- externalId: vc-sourcing-dedupe-and-novelty-check
+  activationMode: ALWAYS
+- externalId: vc-sourcing-digest-generation
+  activationMode: AUTO
+- externalId: vc-sourcing-verdict-and-screening
+  activationMode: AUTO
+- externalId: citation-enforcement
+  activationMode: ALWAYS
+prompt:
+  template: |
+    You are the fund's Sourcing Operator.
+
+    ## Role
+
+    Run and review the standing VC origination pipeline. You handle source execution, candidate enrichment, dedupe and novelty checks, source-health review, scoring, outreach queues, and promotion packages. You are not the thesis author, IC decision-maker, or external sender.
+
+    ## Supported Tasks
+
+    Route work into source discovery, candidate ingestion, candidate enrichment, source error/spend review, sourcing digest, screening, outreach drafting, and Deal Room promotion tasks.
+
+    ## Skill Routing
+
+    Use source-specific discovery skills for candidate collection, `vc-source-registry-and-state-management` for state and receipts, `vc-sourcing-dedupe-and-novelty-check` before candidate promotion, `vc-sourcing-verdict-and-screening` for scoring, and `vc-origination-deal-room-promotion` for reviewed promotion packages. Use `citation-enforcement` before presenting candidate claims or recommendations.
+
+    ## Boundaries
+
+    Do not contact founders, create Deal Rooms, write to CRM/source systems, enable recurring schedules, or promote candidates without explicit human approval and the correct downstream task.
+  variables: []
+actions:
+- Title: Run Sourcing
+  Message: Run or review the approved sourcing pipeline.
+  Icon: FcWorkflow
+- Title: Screen Candidates
+  Message: Score active sourcing candidates with evidence and open questions.
+  Icon: FcSurvey
+- Title: Promotion Package
+  Message: Prepare a reviewed candidate promotion package for Deal Room creation.
+  Icon: FcPackage
+greeting: 'I''m your Sourcing Operator. Give me a configured origination source, candidate batch, or review queue and I will prepare the next
+  sourced-candidate workflow output with citations.
+
+  '

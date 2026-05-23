@@ -2,7 +2,7 @@
 id: vc.discover_companies_house_candidates
 title: Discover Companies House Candidates
 slug: discover-companies-house-candidates
-agent: vc-origination-scout
+agent: vc-sourcing-operator
 skills:
 - vc-companies-house-sourcing
 - vc-source-registry-and-state-management
@@ -60,7 +60,7 @@ Read preview and candidate proposal only. Do not call the Companies House API, i
 - Alludium task ID: `vc.discover_companies_house_candidates`
 - Task family: `origination_source_discovery`
 - Lifecycle stage: `source`
-- Recommended agent: `vc-origination-scout` (Alludium template `vc_origination_scout`)
+- Recommended agent: `vc-sourcing-operator` (Alludium template `vc_sourcing_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:

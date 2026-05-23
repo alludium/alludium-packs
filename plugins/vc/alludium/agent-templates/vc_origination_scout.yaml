@@ -1,4 +1,4 @@
-version: "1.0.3"
+version: "1.0.4"
 type: "template"
 platform_managed: false
 id: "vc_origination_scout"

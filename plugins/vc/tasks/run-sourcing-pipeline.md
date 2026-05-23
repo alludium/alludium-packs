@@ -2,7 +2,7 @@
 id: vc.run_sourcing_pipeline
 title: Run VC Sourcing Pipeline
 slug: run-sourcing-pipeline
-agent: vc-pipeline-autopilot
+agent: vc-sourcing-operator
 skills:
 - vc-origination-pipeline-orchestration
 - vc-source-registry-and-state-management
@@ -77,7 +77,7 @@ Read, score, draft, and propose only unless a child task has explicit human appr
 - Alludium task ID: `vc.run_sourcing_pipeline`
 - Task family: `origination_pipeline_run`
 - Lifecycle stage: `source`
-- Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
+- Recommended agent: `vc-sourcing-operator` (Alludium template `vc_sourcing_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:

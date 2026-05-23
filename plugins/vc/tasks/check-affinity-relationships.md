@@ -2,7 +2,7 @@
 id: vc.check_affinity_relationships
 title: Check Affinity Relationship Context
 slug: check-affinity-relationships
-agent: vc-origination-scout
+agent: vc-sourcing-operator
 skills:
 - vc-relationship-context-check
 - citation-enforcement
@@ -57,7 +57,7 @@ Read-only relationship check. Do not create organizations, list entries, notes, 
 - Alludium task ID: `vc.check_affinity_relationships`
 - Task family: `origination_relationship_check`
 - Lifecycle stage: `enrich`
-- Recommended agent: `vc-origination-scout` (Alludium template `vc_origination_scout`)
+- Recommended agent: `vc-sourcing-operator` (Alludium template `vc_sourcing_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:

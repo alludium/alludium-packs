@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_outreach_draft_queue
-version: 0.1.7
+version: 0.1.8
 title: Prepare Outreach Draft Queue
 category: Venture Capital
 visibility: workspace
@@ -28,8 +28,8 @@ definition:
       - vc-outreach-draft-queue
       - citation-enforcement
       - founder-outreach-and-intro-paths
-    recommendedAgentTemplate: vc_dealflow_concierge
-    plannedRecommendedAgentTemplate: vc_dealflow_concierge
+    recommendedAgentTemplate: vc_sourcing_operator
+    plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
       - vc_origination_pipeline
     supportedProjectScopes:

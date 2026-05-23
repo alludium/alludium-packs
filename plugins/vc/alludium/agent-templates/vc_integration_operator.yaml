@@ -1,0 +1,138 @@
+version: 1.0.0
+type: template
+platform_managed: false
+id: vc_integration_operator
+name: Integration Operator
+description: VC integration operator that handles source setup, discovery, read previews, and write-back proposals for approved Deal Room and
+  Origination integrations without taking external action unless a human approves it.
+icon: FcDataConfiguration
+color: bg-indigo-100
+category: Alludium
+metadata:
+  gitBranch: main
+  gitRepositoryUrl: https://github.com/alludium-templates/configurable-agent.git
+  supportedTaskDefinitions:
+  - affinity-discovery
+  - affinity-setup
+  - affinity-sync-read
+  - affinity-sync-write
+  - apify-discovery
+  - apify-setup
+  - apify-sync-read
+  - companies-house-discovery
+  - companies-house-setup
+  - companies-house-sync-read
+  - google-drive-discovery
+  - google-drive-setup
+  - google-drive-sync-read
+  - google-drive-sync-write
+  - harmonic-discovery
+  - harmonic-setup
+  - harmonic-sync-read
+  - notion-discovery
+  - notion-setup
+  - notion-sync-read
+  - notion-sync-write
+  - slack-discovery
+  - slack-setup
+  - slack-sync-read
+  - slack-sync-write
+  primaryStage: Integration Management
+  primaryDealRoomState: intake
+  requiredSkills:
+  - vc-affinity-discovery
+  - vc-affinity-sync-read
+  - vc-affinity-sync-write
+  - vc-apify-discovery
+  - vc-apify-sync-read
+  - vc-companies-house-sourcing
+  - vc-companies-house-sync-read
+  - vc-google-drive-discovery
+  - vc-google-drive-sync-read
+  - vc-google-drive-sync-write
+  - vc-harmonic-discovery
+  - vc-harmonic-sync-read
+  - vc-notion-discovery
+  - vc-notion-sync-read
+  - vc-notion-sync-write
+  - vc-slack-discovery
+  - vc-slack-sync-read
+  - vc-slack-sync-write
+  - citation-enforcement
+llm:
+  provider: ANTHROPIC
+  infra: AMZN
+  model: Claude Opus 4.6
+skills:
+- externalId: vc-affinity-discovery
+  activationMode: AUTO
+- externalId: vc-affinity-sync-read
+  activationMode: AUTO
+- externalId: vc-affinity-sync-write
+  activationMode: AUTO
+- externalId: vc-apify-discovery
+  activationMode: AUTO
+- externalId: vc-apify-sync-read
+  activationMode: AUTO
+- externalId: vc-companies-house-sourcing
+  activationMode: AUTO
+- externalId: vc-companies-house-sync-read
+  activationMode: AUTO
+- externalId: vc-google-drive-discovery
+  activationMode: AUTO
+- externalId: vc-google-drive-sync-read
+  activationMode: AUTO
+- externalId: vc-google-drive-sync-write
+  activationMode: AUTO
+- externalId: vc-harmonic-discovery
+  activationMode: AUTO
+- externalId: vc-harmonic-sync-read
+  activationMode: AUTO
+- externalId: vc-notion-discovery
+  activationMode: AUTO
+- externalId: vc-notion-sync-read
+  activationMode: AUTO
+- externalId: vc-notion-sync-write
+  activationMode: AUTO
+- externalId: vc-slack-discovery
+  activationMode: AUTO
+- externalId: vc-slack-sync-read
+  activationMode: AUTO
+- externalId: vc-slack-sync-write
+  activationMode: AUTO
+- externalId: citation-enforcement
+  activationMode: ALWAYS
+prompt:
+  template: |
+    You are the fund's Integration Operator.
+
+    ## Role
+
+    Coordinate approved VC data-source setup, scoped discovery, read previews, and write-back proposals. Your work is operational and evidence-preserving: confirm connection readiness, inspect only approved scopes, produce previews or proposals, and keep external writes disabled unless a human explicitly approves a separate write task.
+
+    ## Supported Tasks
+
+    Route work into integration setup, discovery, read-preview, and write-proposal tasks for Affinity, Apify, Companies House, Google Drive, Harmonic, Notion, and Slack.
+
+    ## Skill Routing
+
+    Use the provider-specific discovery skill for source exploration, the provider-specific sync-read skill for previews, and the provider-specific sync-write skill only for draft proposals. Use `citation-enforcement` for claims about source contents, mappings, or proposed changes.
+
+    ## Boundaries
+
+    Do not create projects, enable recurring sync, send messages, change sharing, mutate CRM records, or write to external systems unless the active task explicitly permits it and a human has approved the action.
+  variables: []
+actions:
+- Title: Source Discovery
+  Message: Explore the approved integration scope and summarize available source context.
+  Icon: FcSearch
+- Title: Read Preview
+  Message: Build a read-only preview from the approved integration scope.
+  Icon: FcViewDetails
+- Title: Write Proposal
+  Message: Draft a reviewed write-back proposal without applying it.
+  Icon: FcEditImage
+greeting: 'I''m your Integration Operator. Give me the approved source, scope, and task and I will produce a scoped setup, preview, or write-back
+  proposal without taking external action.
+
+  '

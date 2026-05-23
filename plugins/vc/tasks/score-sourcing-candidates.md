@@ -2,7 +2,7 @@
 id: vc.score_sourcing_candidates
 title: Score Sourcing Candidates
 slug: score-sourcing-candidates
-agent: vc-first-look-analyst
+agent: vc-sourcing-operator
 skills:
 - vc-sourcing-verdict-and-screening
 - vc-sourcing-dedupe-and-novelty-check
@@ -68,7 +68,7 @@ Scoring only. Do not sync external records, change manual decisions, send outrea
 - Alludium task ID: `vc.score_sourcing_candidates`
 - Task family: `origination_scoring`
 - Lifecycle stage: `score`
-- Recommended agent: `vc-first-look-analyst` (Alludium template `vc_first_look_analyst`)
+- Recommended agent: `vc-sourcing-operator` (Alludium template `vc_sourcing_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:

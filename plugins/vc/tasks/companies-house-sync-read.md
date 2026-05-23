@@ -2,7 +2,7 @@
 id: vc.companies_house_sync_read
 title: Preview Companies House Public Register Results
 slug: companies-house-sync-read
-agent: vc-origination-scout
+agent: vc-integration-operator
 skills:
 - vc-companies-house-sync-read
 - citation-enforcement
@@ -57,7 +57,7 @@ Read preview only. Do not call authenticated Companies House APIs, import compan
 - Source template: `alludium/task-definition-templates/vc-integrations/companies-house-sync-read.yaml`
 - Alludium task ID: `vc.companies_house_sync_read`
 - Task family: `integration_sync_read`
-- Recommended agent: `vc-origination-scout` (Alludium template `vc_origination_scout`)
+- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:

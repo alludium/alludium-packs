@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_sourcing_pipeline
-version: 0.1.10
+version: 0.1.11
 title: Run VC Sourcing Pipeline
 category: Venture Capital
 visibility: workspace
@@ -33,8 +33,8 @@ definition:
       - vc-origination-pipeline-orchestration
       - vc-source-registry-and-state-management
       - citation-enforcement
-    recommendedAgentTemplate: vc_pipeline_autopilot
-    plannedRecommendedAgentTemplate: vc_pipeline_autopilot
+    recommendedAgentTemplate: vc_sourcing_operator
+    plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
       - vc_origination_pipeline
     supportedProjectScopes:

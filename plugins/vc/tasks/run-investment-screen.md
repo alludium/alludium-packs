@@ -4,6 +4,7 @@ title: Run Investment Fit Screen
 slug: run-investment-screen
 agent: vc-first-look-analyst
 skills:
+- investment-screening-framework
 - red-flags-scanner
 - citation-enforcement
 ---
@@ -87,6 +88,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 
 ## Required Skills
 
+- `investment-screening-framework`
 - `red-flags-scanner`
 - `citation-enforcement`
 

@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.enrich_sourcing_candidates
-version: 0.1.2
+version: 0.1.3
 title: Enrich Sourcing Candidates
 category: Venture Capital
 visibility: workspace
@@ -22,8 +22,8 @@ definition:
       - vc-sourcing-candidate-enrichment
       - vc-sourcing-dedupe-and-novelty-check
       - citation-enforcement
-    recommendedAgentTemplate: vc_origination_scout
-    plannedRecommendedAgentTemplate: vc_origination_scout
+    recommendedAgentTemplate: vc_sourcing_operator
+    plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
       - vc_origination_pipeline
     supportedProjectScopes:

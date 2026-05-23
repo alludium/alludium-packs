@@ -13,6 +13,7 @@ skills:
 - team-and-hiring-assessment
 - market-map-building
 - investment-diligence-question-framework
+- ic-memo-assembly
 - red-flags-scanner
 - citation-enforcement
 ---
@@ -76,7 +77,7 @@ Humans own investment judgment, founder character judgment, references/contactin
 - Source template: `alludium/agent-templates/vc_diligence_analyst.yaml`
 - Alludium template ID: `vc_diligence_analyst`
 - Display name: Diligence Analyst
-- Version: `1.0.4`
+- Version: `1.0.5`
 - Primary stage: Formal Diligence
 - Primary Deal Room state: `formal_diligence`
 - Supported task definitions:
@@ -98,6 +99,7 @@ Humans own investment judgment, founder character judgment, references/contactin
 - `team-and-hiring-assessment` (AUTO)
 - `market-map-building` (AUTO)
 - `investment-diligence-question-framework` (AUTO)
+- `ic-memo-assembly` (AUTO)
 - `red-flags-scanner` (AUTO)
 - `citation-enforcement` (ALWAYS)
 

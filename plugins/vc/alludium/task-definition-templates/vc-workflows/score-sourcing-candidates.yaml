@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.score_sourcing_candidates
-version: 0.1.7
+version: 0.1.8
 title: Score Sourcing Candidates
 category: Venture Capital
 visibility: workspace
@@ -30,8 +30,8 @@ definition:
       - vc-sourcing-verdict-and-screening
       - vc-sourcing-dedupe-and-novelty-check
       - citation-enforcement
-    recommendedAgentTemplate: vc_first_look_analyst
-    plannedRecommendedAgentTemplate: vc_first_look_analyst
+    recommendedAgentTemplate: vc_sourcing_operator
+    plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
       - vc_origination_pipeline
     supportedProjectScopes:

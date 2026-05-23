@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.apify_setup
-version: 0.1.6
+version: 0.1.7
 title: Set Up Apify for VC Origination
 category: Venture Capital
 visibility: workspace
@@ -22,8 +22,8 @@ definition:
       - vc-apify-discovery
       - vc-apify-sync-read
       - citation-enforcement
-    recommendedAgentTemplate: vc_pipeline_autopilot
-    plannedRecommendedAgentTemplate: vc_pipeline_autopilot
+    recommendedAgentTemplate: vc_integration_operator
+    plannedRecommendedAgentTemplate: vc_integration_operator
     supportedProjectTypes:
       - vc_origination_pipeline
     supportedProjectScopes:

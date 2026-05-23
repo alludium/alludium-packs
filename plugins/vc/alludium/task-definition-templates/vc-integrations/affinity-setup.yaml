@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.affinity_setup
-version: 0.1.9
+version: 0.1.10
 title: Set Up Affinity for VC Deal Rooms
 category: Venture Capital
 visibility: workspace
@@ -22,8 +22,8 @@ definition:
       - vc-affinity-sync-read
       - vc-affinity-sync-write
       - citation-enforcement
-    recommendedAgentTemplate: vc_deal_room_setup_guide
-    plannedRecommendedAgentTemplate: vc_deal_room_setup_guide
+    recommendedAgentTemplate: vc_integration_operator
+    plannedRecommendedAgentTemplate: vc_integration_operator
     supportedProjectTypes:
       - vc_deal_room
     supportedProjectScopes:
@@ -128,6 +128,6 @@ runtime:
         connectionScope: USER_CONFIGURED
   executionProfile:
     agentStartsImmediately: true
-    preferredAgentType: vc_deal_room_setup_guide
+    preferredAgentType: vc_integration_operator
     preferredMode: guided_integration_setup
     requiresHumanConfirmationToComplete: true

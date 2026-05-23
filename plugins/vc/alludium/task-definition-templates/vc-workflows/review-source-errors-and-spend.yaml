@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.review_source_errors_and_spend
-version: 0.1.7
+version: 0.1.8
 title: Review Source Errors and Spend
 category: Venture Capital
 visibility: workspace
@@ -31,8 +31,8 @@ definition:
       - vc-source-error-and-spend-audit
       - vc-source-registry-and-state-management
       - citation-enforcement
-    recommendedAgentTemplate: vc_pipeline_autopilot
-    plannedRecommendedAgentTemplate: vc_pipeline_autopilot
+    recommendedAgentTemplate: vc_sourcing_operator
+    plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
       - vc_origination_pipeline
     supportedProjectScopes:
