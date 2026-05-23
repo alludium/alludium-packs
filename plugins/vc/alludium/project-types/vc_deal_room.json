@@ -266,7 +266,7 @@
     }
   ],
   "initialVersion": {
-    "version": "1.0.10",
+    "version": "1.0.11",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -1320,6 +1320,142 @@
         "kind": "text",
         "required": false,
         "description": "Team evaluation artifact produced by run-team-evaluation."
+      },
+      {
+        "id": "field-opportunity-evidence-artifact-ids",
+        "key": "opportunity_evidence_artifact_ids",
+        "label": "Opportunity evidence artifacts",
+        "kind": "text",
+        "required": false,
+        "description": "Optional evidence artifact IDs used by focused evaluation workstreams."
+      },
+      {
+        "id": "field-customer-or-market-evidence",
+        "key": "customer_or_market_evidence",
+        "label": "Customer or market evidence",
+        "kind": "text",
+        "required": false,
+        "description": "Optional customer, market, pricing, GTM, pipeline, or competition evidence for commercial evaluation."
+      },
+      {
+        "id": "field-product-or-technical-evidence",
+        "key": "product_or_technical_evidence",
+        "label": "Product or technical evidence",
+        "kind": "text",
+        "required": false,
+        "description": "Optional product, demo, architecture, roadmap, IP, data, or technical-team evidence for technical evaluation."
+      },
+      {
+        "id": "field-financial-or-financing-evidence",
+        "key": "financial_or_financing_evidence",
+        "label": "Financial or financing evidence",
+        "kind": "text",
+        "required": false,
+        "description": "Optional model, revenue, burn, runway, valuation, cap-table, use-of-funds, or financing-path evidence for financial evaluation."
+      },
+      {
+        "id": "field-team-or-founder-evidence",
+        "key": "team_or_founder_evidence",
+        "label": "Team or founder evidence",
+        "kind": "text",
+        "required": false,
+        "description": "Optional founder, team, hiring, adviser, reference, relationship, or public-profile evidence for team evaluation."
+      },
+      {
+        "id": "field-main-commercial-hypothesis",
+        "key": "main_commercial_hypothesis",
+        "label": "Main commercial hypothesis",
+        "kind": "text",
+        "required": false,
+        "description": "Summary output produced by run-commercial-evaluation."
+      },
+      {
+        "id": "field-commercial-gating-risk",
+        "key": "commercial_gating_risk",
+        "label": "Commercial gating risk",
+        "kind": "text",
+        "required": false,
+        "description": "Gating-risk output produced by run-commercial-evaluation."
+      },
+      {
+        "id": "field-next-commercial-proof-needed",
+        "key": "next_commercial_proof_needed",
+        "label": "Next commercial proof needed",
+        "kind": "text",
+        "required": false,
+        "description": "Next-proof output produced by run-commercial-evaluation."
+      },
+      {
+        "id": "field-main-technical-hypothesis",
+        "key": "main_technical_hypothesis",
+        "label": "Main technical hypothesis",
+        "kind": "text",
+        "required": false,
+        "description": "Summary output produced by run-technical-evaluation."
+      },
+      {
+        "id": "field-technical-gating-risk",
+        "key": "technical_gating_risk",
+        "label": "Technical gating risk",
+        "kind": "text",
+        "required": false,
+        "description": "Gating-risk output produced by run-technical-evaluation."
+      },
+      {
+        "id": "field-next-technical-proof-needed",
+        "key": "next_technical_proof_needed",
+        "label": "Next technical proof needed",
+        "kind": "text",
+        "required": false,
+        "description": "Next-proof output produced by run-technical-evaluation."
+      },
+      {
+        "id": "field-main-financial-hypothesis",
+        "key": "main_financial_hypothesis",
+        "label": "Main financial hypothesis",
+        "kind": "text",
+        "required": false,
+        "description": "Summary output produced by run-financial-evaluation."
+      },
+      {
+        "id": "field-financial-gating-risk",
+        "key": "financial_gating_risk",
+        "label": "Financial gating risk",
+        "kind": "text",
+        "required": false,
+        "description": "Gating-risk output produced by run-financial-evaluation."
+      },
+      {
+        "id": "field-next-financial-proof-needed",
+        "key": "next_financial_proof_needed",
+        "label": "Next financial proof needed",
+        "kind": "text",
+        "required": false,
+        "description": "Next-proof output produced by run-financial-evaluation."
+      },
+      {
+        "id": "field-main-team-hypothesis",
+        "key": "main_team_hypothesis",
+        "label": "Main team hypothesis",
+        "kind": "text",
+        "required": false,
+        "description": "Summary output produced by run-team-evaluation."
+      },
+      {
+        "id": "field-team-gating-risk",
+        "key": "team_gating_risk",
+        "label": "Team gating risk",
+        "kind": "text",
+        "required": false,
+        "description": "Gating-risk output produced by run-team-evaluation."
+      },
+      {
+        "id": "field-next-team-proof-needed",
+        "key": "next_team_proof_needed",
+        "label": "Next team proof needed",
+        "kind": "text",
+        "required": false,
+        "description": "Next-proof output produced by run-team-evaluation."
       },
       {
         "id": "field-diligence-question-bank-artifact-id",
@@ -2893,6 +3029,18 @@
             "source": "project.field",
             "sourcePath": "follow_up_evaluation_artifact_id",
             "requiredForActivation": false
+          },
+          {
+            "taskField": "opportunity_evidence_artifact_ids",
+            "source": "project.field",
+            "sourcePath": "opportunity_evidence_artifact_ids",
+            "requiredForActivation": false
+          },
+          {
+            "taskField": "customer_or_market_evidence",
+            "source": "project.field",
+            "sourcePath": "customer_or_market_evidence",
+            "requiredForActivation": false
           }
         ],
         "outputMappings": [
@@ -2901,6 +3049,24 @@
             "target": "project.field",
             "targetPath": "commercial_evaluation_artifact_id",
             "requiredForCompletion": true
+          },
+          {
+            "taskField": "main_commercial_hypothesis",
+            "target": "project.field",
+            "targetPath": "main_commercial_hypothesis",
+            "requiredForCompletion": false
+          },
+          {
+            "taskField": "commercial_gating_risk",
+            "target": "project.field",
+            "targetPath": "commercial_gating_risk",
+            "requiredForCompletion": false
+          },
+          {
+            "taskField": "next_commercial_proof_needed",
+            "target": "project.field",
+            "targetPath": "next_commercial_proof_needed",
+            "requiredForCompletion": false
           }
         ],
         "activationPolicy": {
@@ -2928,6 +3094,18 @@
             "source": "project.field",
             "sourcePath": "follow_up_evaluation_artifact_id",
             "requiredForActivation": false
+          },
+          {
+            "taskField": "opportunity_evidence_artifact_ids",
+            "source": "project.field",
+            "sourcePath": "opportunity_evidence_artifact_ids",
+            "requiredForActivation": false
+          },
+          {
+            "taskField": "product_or_technical_evidence",
+            "source": "project.field",
+            "sourcePath": "product_or_technical_evidence",
+            "requiredForActivation": false
           }
         ],
         "outputMappings": [
@@ -2936,6 +3114,24 @@
             "target": "project.field",
             "targetPath": "technical_evaluation_artifact_id",
             "requiredForCompletion": true
+          },
+          {
+            "taskField": "main_technical_hypothesis",
+            "target": "project.field",
+            "targetPath": "main_technical_hypothesis",
+            "requiredForCompletion": false
+          },
+          {
+            "taskField": "technical_gating_risk",
+            "target": "project.field",
+            "targetPath": "technical_gating_risk",
+            "requiredForCompletion": false
+          },
+          {
+            "taskField": "next_technical_proof_needed",
+            "target": "project.field",
+            "targetPath": "next_technical_proof_needed",
+            "requiredForCompletion": false
           }
         ],
         "activationPolicy": {
@@ -2963,6 +3159,18 @@
             "source": "project.field",
             "sourcePath": "follow_up_evaluation_artifact_id",
             "requiredForActivation": false
+          },
+          {
+            "taskField": "opportunity_evidence_artifact_ids",
+            "source": "project.field",
+            "sourcePath": "opportunity_evidence_artifact_ids",
+            "requiredForActivation": false
+          },
+          {
+            "taskField": "financial_or_financing_evidence",
+            "source": "project.field",
+            "sourcePath": "financial_or_financing_evidence",
+            "requiredForActivation": false
           }
         ],
         "outputMappings": [
@@ -2971,6 +3179,24 @@
             "target": "project.field",
             "targetPath": "financial_evaluation_artifact_id",
             "requiredForCompletion": true
+          },
+          {
+            "taskField": "main_financial_hypothesis",
+            "target": "project.field",
+            "targetPath": "main_financial_hypothesis",
+            "requiredForCompletion": false
+          },
+          {
+            "taskField": "financial_gating_risk",
+            "target": "project.field",
+            "targetPath": "financial_gating_risk",
+            "requiredForCompletion": false
+          },
+          {
+            "taskField": "next_financial_proof_needed",
+            "target": "project.field",
+            "targetPath": "next_financial_proof_needed",
+            "requiredForCompletion": false
           }
         ],
         "activationPolicy": {
@@ -2998,6 +3224,18 @@
             "source": "project.field",
             "sourcePath": "follow_up_evaluation_artifact_id",
             "requiredForActivation": false
+          },
+          {
+            "taskField": "opportunity_evidence_artifact_ids",
+            "source": "project.field",
+            "sourcePath": "opportunity_evidence_artifact_ids",
+            "requiredForActivation": false
+          },
+          {
+            "taskField": "team_or_founder_evidence",
+            "source": "project.field",
+            "sourcePath": "team_or_founder_evidence",
+            "requiredForActivation": false
           }
         ],
         "outputMappings": [
@@ -3006,6 +3244,24 @@
             "target": "project.field",
             "targetPath": "team_evaluation_artifact_id",
             "requiredForCompletion": true
+          },
+          {
+            "taskField": "main_team_hypothesis",
+            "target": "project.field",
+            "targetPath": "main_team_hypothesis",
+            "requiredForCompletion": false
+          },
+          {
+            "taskField": "team_gating_risk",
+            "target": "project.field",
+            "targetPath": "team_gating_risk",
+            "requiredForCompletion": false
+          },
+          {
+            "taskField": "next_team_proof_needed",
+            "target": "project.field",
+            "targetPath": "next_team_proof_needed",
+            "requiredForCompletion": false
           }
         ],
         "activationPolicy": {
