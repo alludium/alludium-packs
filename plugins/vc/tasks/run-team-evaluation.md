@@ -2,7 +2,7 @@
 id: vc.run_team_evaluation
 title: Run Team Evaluation
 slug: run-team-evaluation
-agent: vc-first-look-analyst
+agent: vc-evaluation-analyst
 skills:
 - team-evaluation-and-founder-risk
 - red-flags-scanner
@@ -72,7 +72,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Alludium task ID: `vc.run_team_evaluation`
 - Task family: `evaluation`
 - Lifecycle stage: `evaluation`
-- Recommended agent: `vc-first-look-analyst` (Alludium template `vc_first_look_analyst`)
+- Recommended agent: `vc-evaluation-analyst` (Alludium template `vc_evaluation_analyst`)
 - Supported project types:
   - `vc_deal_room`
 

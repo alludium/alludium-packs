@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_technical_evaluation
-version: 0.1.0
+version: 0.1.1
 title: Run Technical Evaluation
 category: Venture Capital
 visibility: workspace
@@ -36,8 +36,8 @@ definition:
       - technical-evaluation-and-product-risk
       - red-flags-scanner
       - citation-enforcement
-    plannedRecommendedAgentTemplate: vc_first_look_analyst
-    recommendedAgentTemplate: vc_first_look_analyst
+    plannedRecommendedAgentTemplate: vc_evaluation_analyst
+    recommendedAgentTemplate: vc_evaluation_analyst
     supportedProjectTypes:
       - vc_deal_room
     sourceAnchors:
@@ -129,7 +129,7 @@ runtime:
     agentStartsImmediately: true
     requiresHumanConfirmationToComplete: true
     preferredMode: guided_execution
-    preferredAgentType: vc_first_look_analyst
+    preferredAgentType: vc_evaluation_analyst
 ui:
   renderer: generic
   surfaceKey: null

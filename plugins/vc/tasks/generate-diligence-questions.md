@@ -2,7 +2,7 @@
 id: vc.generate_diligence_questions
 title: Generate Diligence Questions
 slug: generate-diligence-questions
-agent: vc-first-look-analyst
+agent: vc-evaluation-analyst
 skills:
 - citation-enforcement
 ---
@@ -87,7 +87,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Alludium task ID: `vc.generate_diligence_questions`
 - Task family: `diligence`
 - Lifecycle stage: `evaluation`
-- Recommended agent: `vc-first-look-analyst` (Alludium template `vc_first_look_analyst`)
+- Recommended agent: `vc-evaluation-analyst` (Alludium template `vc_evaluation_analyst`)
 - Supported project types:
   - `vc_deal_room`
 

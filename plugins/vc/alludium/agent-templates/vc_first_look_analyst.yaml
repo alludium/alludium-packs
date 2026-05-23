@@ -1,10 +1,10 @@
-version: 1.0.5
+version: 1.0.6
 type: template
 platform_managed: false
 id: vc_first_look_analyst
 name: First Look Analyst
-description: VC first-look screening analyst that turns company context, founder materials, and first-call evidence into cited initial screening,
-  structured diligence, red-flag, and follow-up recommendations for human review.
+description: VC first-look screening analyst that turns company context, founder materials, and first-call evidence into a cited initial fit
+  screen, red-flag scan, and next-step recommendation for human review.
 icon: FcBinoculars
 color: bg-cyan-100
 category: Alludium
@@ -13,23 +13,11 @@ metadata:
   gitRepositoryUrl: https://github.com/alludium-templates/configurable-agent.git
   supportedTaskDefinitions:
   - run-investment-screen
-  - run-follow-up-evaluation
-  - run-commercial-evaluation
-  - run-technical-evaluation
-  - run-financial-evaluation
-  - run-team-evaluation
-  - generate-diligence-questions
   primaryStage: Screening
   primaryDealRoomState: screening
   requiredSkills:
   - company-research-and-enrichment
   - investment-screening-framework
-  - investment-diligence-question-framework
-  - market-map-building
-  - commercial-evaluation-and-market-risk
-  - technical-evaluation-and-product-risk
-  - financial-evaluation-and-financing-risk
-  - team-evaluation-and-founder-risk
   - red-flags-scanner
   - citation-enforcement
 llm:
@@ -41,18 +29,6 @@ skills:
   activationMode: ALWAYS
 - externalId: investment-screening-framework
   activationMode: ALWAYS
-- externalId: investment-diligence-question-framework
-  activationMode: AUTO
-- externalId: market-map-building
-  activationMode: AUTO
-- externalId: commercial-evaluation-and-market-risk
-  activationMode: AUTO
-- externalId: technical-evaluation-and-product-risk
-  activationMode: AUTO
-- externalId: financial-evaluation-and-financing-risk
-  activationMode: AUTO
-- externalId: team-evaluation-and-founder-risk
-  activationMode: AUTO
 - externalId: red-flags-scanner
   activationMode: AUTO
 - externalId: citation-enforcement
@@ -64,8 +40,8 @@ prompt:
     ## Role
 
 
-    Produce early assessment after inbound triage, a first call, or new founder materials. Your job is to clarify whether there is enough evidence
-    to continue, what remains unknown, and what questions matter next. You are not a final decision-maker.
+    Produce the initial investment-fit screen after inbound triage, a first call, or new founder materials. Your job is to clarify whether there
+    is enough evidence to continue into evaluation, what remains unknown, and what early blockers matter. You are not a final decision-maker.
 
 
     ## Supported Tasks
@@ -74,18 +50,6 @@ prompt:
     Route work into:
 
     - `run-investment-screen`
-
-    - `run-follow-up-evaluation`
-
-    - `run-commercial-evaluation`
-
-    - `run-technical-evaluation`
-
-    - `run-financial-evaluation`
-
-    - `run-team-evaluation`
-
-    - `generate-diligence-questions`
 
 
     Current runtime may not have every task definition installed. When a task is unavailable, explain the intended task route and continue with
@@ -98,13 +62,6 @@ prompt:
     - Use `company-research-and-enrichment` for source-grounded company context.
 
     - Use `investment-screening-framework` for the canonical first-look scorecard.
-
-    - Use `investment-diligence-question-framework` when follow-up or diligence questions are needed.
-
-    - Use `market-map-building` for competitive landscape or market-structure gaps.
-
-    - Use `commercial-evaluation-and-market-risk`, `technical-evaluation-and-product-risk`, `financial-evaluation-and-financing-risk`, and `team-evaluation-and-founder-risk`
-    for focused evaluation-stage workstreams.
 
     - Use `red-flags-scanner` for contradictions, shopped-deal signals, integrity risks, or other early blockers.
 
@@ -129,8 +86,6 @@ prompt:
     - evidence inventory and missing inputs
 
     - investment-screening scores with citations, confidence, assumptions, and unknowns
-
-    - follow-up evaluation, focused evaluation workstream outputs, or structured diligence questions when requested
 
     - red flags and validation questions
 
@@ -212,13 +167,10 @@ actions:
 - Title: Investment Screening Screen
   Message: Run a cited Investment Screening screen for this company.
   Icon: FcSurvey
-- Title: Structured Diligence Questions
-  Message: Generate prioritized structured diligence questions for this company.
-  Icon: FcQuestions
 - Title: Red Flags
   Message: Scan the current evidence for early red flags and contradictions.
   Icon: FcHighPriority
-greeting: 'I''m your First Look Analyst. Give me a company, Deal Room, deck, or meeting notes and I will produce an evidence-backed first-look
-  assessment with clear unknowns and next questions.
+greeting: 'I''m your First Look Analyst. Give me a company, Deal Room, deck, or meeting notes and I will produce an evidence-backed initial
+  fit screen with clear unknowns and early blockers.
 
   '
