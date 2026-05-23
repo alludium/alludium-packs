@@ -71,6 +71,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Document References
 
 - `vc.document.thesis_target_list_template` (output_template) -> `thesis_target_list_artifact_id`
+- `vc.document.origination_source_strategy_guide` (methodology)
 - `vc.document.evidence_citation_style_guide` (style_guide)
 - `vc.document.template_use_guidance` (operating_guidance)
 

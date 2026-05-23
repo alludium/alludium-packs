@@ -59,6 +59,7 @@ Scoring only. Do not sync external records, change manual decisions, send outrea
 ## Document References
 
 - `vc.document.sourcing_scoring_rubric` (methodology) -> `scoring_artifact_id`
+- `vc.document.origination_source_strategy_guide` (methodology)
 - `vc.document.template_use_guidance` (operating_guidance)
 
 ## Routing

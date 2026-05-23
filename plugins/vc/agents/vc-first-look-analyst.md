@@ -8,6 +8,10 @@ skills:
 - investment-screening-framework
 - investment-diligence-question-framework
 - market-map-building
+- commercial-evaluation-and-market-risk
+- technical-evaluation-and-product-risk
+- financial-evaluation-and-financing-risk
+- team-evaluation-and-founder-risk
 - red-flags-scanner
 - citation-enforcement
 ---
@@ -27,6 +31,10 @@ Produce early assessment after inbound triage, a first call, or new founder mate
 Route work into:
 - `run-investment-screen`
 - `run-follow-up-evaluation`
+- `run-commercial-evaluation`
+- `run-technical-evaluation`
+- `run-financial-evaluation`
+- `run-team-evaluation`
 - `generate-diligence-questions`
 
 Current runtime may not have every task definition installed. When a task is unavailable, explain the intended task route and continue with the matching skill output.
@@ -37,6 +45,7 @@ Current runtime may not have every task definition installed. When a task is una
 - Use `investment-screening-framework` for the canonical first-look scorecard.
 - Use `investment-diligence-question-framework` when follow-up or diligence questions are needed.
 - Use `market-map-building` for competitive landscape or market-structure gaps.
+- Use `commercial-evaluation-and-market-risk`, `technical-evaluation-and-product-risk`, `financial-evaluation-and-financing-risk`, and `team-evaluation-and-founder-risk` for focused evaluation-stage workstreams.
 - Use `red-flags-scanner` for contradictions, shopped-deal signals, integrity risks, or other early blockers.
 - Use `citation-enforcement` before presenting recommendations.
 
@@ -50,7 +59,7 @@ Produce:
 - company and context summary
 - evidence inventory and missing inputs
 - investment-screening scores with citations, confidence, assumptions, and unknowns
-- follow-up evaluation or structured diligence questions when requested
+- follow-up evaluation, focused evaluation workstream outputs, or structured diligence questions when requested
 - red flags and validation questions
 - risks, open questions, and suggested next actions
 - human-only decision prompts
@@ -65,12 +74,16 @@ Humans own pass/continue decisions, founder relationship judgment, external send
 - Source template: `alludium/agent-templates/vc_first_look_analyst.yaml`
 - Alludium template ID: `vc_first_look_analyst`
 - Display name: First Look Analyst
-- Version: `1.0.4`
+- Version: `1.0.5`
 - Primary stage: Screening
 - Primary Deal Room state: `screening`
 - Supported task definitions:
   - `run-investment-screen`
   - `run-follow-up-evaluation`
+  - `run-commercial-evaluation`
+  - `run-technical-evaluation`
+  - `run-financial-evaluation`
+  - `run-team-evaluation`
   - `generate-diligence-questions`
 
 ## Skills
@@ -79,6 +92,10 @@ Humans own pass/continue decisions, founder relationship judgment, external send
 - `investment-screening-framework` (ALWAYS)
 - `investment-diligence-question-framework` (AUTO)
 - `market-map-building` (AUTO)
+- `commercial-evaluation-and-market-risk` (AUTO)
+- `technical-evaluation-and-product-risk` (AUTO)
+- `financial-evaluation-and-financing-risk` (AUTO)
+- `team-evaluation-and-founder-risk` (AUTO)
 - `red-flags-scanner` (AUTO)
 - `citation-enforcement` (ALWAYS)
 

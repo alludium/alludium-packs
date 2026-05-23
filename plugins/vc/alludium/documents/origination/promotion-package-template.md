@@ -25,11 +25,13 @@ summary: Reusable package for promoting a sourced candidate to Deal Room review.
 | --- | --- | --- |
 | Company snapshot | Product, customer, stage, geography |  |
 | Source path | How the candidate surfaced |  |
+| Source quality | Source family, freshness, owner, relationship path, and evidence quality |  |
 | Thesis fit | Why it fits the fund |  |
 | Screening result | Score and rationale |  |
 | Novelty / dedupe | New, existing, ambiguous, prior reject |  |
 | Relationship context | Warm intro, known contact, no path |  |
 | Risks and unknowns | Top open issues |  |
+| Suggested Deal Room posture | Intake, screening, evaluation, watch, or pass recommendation |  |
 
 ## Downstream Setup
 

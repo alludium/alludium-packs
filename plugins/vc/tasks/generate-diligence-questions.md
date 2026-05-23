@@ -70,6 +70,14 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Document References
 
 - `vc.document.investment_diligence_question_framework` (methodology) -> `diligence_question_bank_artifact_id`
+- `vc.document.opportunity_evaluation_framework` (methodology)
+- `vc.document.evaluation_workstream_guide` (methodology)
+- `vc.document.commercial_evaluation_guide` (methodology)
+- `vc.document.technical_evaluation_guide` (methodology)
+- `vc.document.financial_evaluation_guide` (methodology)
+- `vc.document.formal_diligence_workstream_guide` (methodology)
+- `vc.document.formal_diligence_checklist` (checklist)
+- `vc.document.legal_diligence_guide` (methodology)
 - `vc.document.evidence_citation_style_guide` (style_guide)
 - `vc.document.template_use_guidance` (operating_guidance)
 

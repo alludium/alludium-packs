@@ -1,166 +1,224 @@
-version: "1.0.4"
-type: "template"
+version: 1.0.5
+type: template
 platform_managed: false
-id: "vc_first_look_analyst"
-name: "First Look Analyst"
-description: "VC first-look screening analyst that turns company context, founder materials, and first-call evidence into cited initial screening, structured diligence, red-flag, and follow-up recommendations for human review."
-icon: "FcBinoculars"
-color: "bg-cyan-100"
-category: "Alludium"
+id: vc_first_look_analyst
+name: First Look Analyst
+description: VC first-look screening analyst that turns company context, founder materials, and first-call evidence into cited initial screening,
+  structured diligence, red-flag, and follow-up recommendations for human review.
+icon: FcBinoculars
+color: bg-cyan-100
+category: Alludium
 metadata:
   gitBranch: main
   gitRepositoryUrl: https://github.com/alludium-templates/configurable-agent.git
   supportedTaskDefinitions:
-    - run-investment-screen
-    - run-follow-up-evaluation
-    - generate-diligence-questions
-  primaryStage: "Screening"
-  primaryDealRoomState: "screening"
+  - run-investment-screen
+  - run-follow-up-evaluation
+  - run-commercial-evaluation
+  - run-technical-evaluation
+  - run-financial-evaluation
+  - run-team-evaluation
+  - generate-diligence-questions
+  primaryStage: Screening
+  primaryDealRoomState: screening
   requiredSkills:
-    - company-research-and-enrichment
-    - investment-screening-framework
-    - investment-diligence-question-framework
-    - market-map-building
-    - red-flags-scanner
-    - citation-enforcement
-
+  - company-research-and-enrichment
+  - investment-screening-framework
+  - investment-diligence-question-framework
+  - market-map-building
+  - commercial-evaluation-and-market-risk
+  - technical-evaluation-and-product-risk
+  - financial-evaluation-and-financing-risk
+  - team-evaluation-and-founder-risk
+  - red-flags-scanner
+  - citation-enforcement
 llm:
-  provider: "ANTHROPIC"
-  infra: "AMZN"
-  model: "Claude Opus 4.6"
-
+  provider: ANTHROPIC
+  infra: AMZN
+  model: Claude Opus 4.6
 skills:
-  - externalId: "company-research-and-enrichment"
-    activationMode: "ALWAYS"
-  - externalId: "investment-screening-framework"
-    activationMode: "ALWAYS"
-  - externalId: "investment-diligence-question-framework"
-    activationMode: "AUTO"
-  - externalId: "market-map-building"
-    activationMode: "AUTO"
-  - externalId: "red-flags-scanner"
-    activationMode: "AUTO"
-  - externalId: "citation-enforcement"
-    activationMode: "ALWAYS"
-
+- externalId: company-research-and-enrichment
+  activationMode: ALWAYS
+- externalId: investment-screening-framework
+  activationMode: ALWAYS
+- externalId: investment-diligence-question-framework
+  activationMode: AUTO
+- externalId: market-map-building
+  activationMode: AUTO
+- externalId: commercial-evaluation-and-market-risk
+  activationMode: AUTO
+- externalId: technical-evaluation-and-product-risk
+  activationMode: AUTO
+- externalId: financial-evaluation-and-financing-risk
+  activationMode: AUTO
+- externalId: team-evaluation-and-founder-risk
+  activationMode: AUTO
+- externalId: red-flags-scanner
+  activationMode: AUTO
+- externalId: citation-enforcement
+  activationMode: ALWAYS
 prompt:
-  template: |
-    You are the fund's First Look Analyst.
+  template: 'You are the fund''s First Look Analyst.
+
 
     ## Role
 
-    Produce early assessment after inbound triage, a first call, or new founder materials. Your job is to clarify whether there is enough evidence to continue, what remains unknown, and what questions matter next. You are not a final decision-maker.
+
+    Produce early assessment after inbound triage, a first call, or new founder materials. Your job is to clarify whether there is enough evidence
+    to continue, what remains unknown, and what questions matter next. You are not a final decision-maker.
+
 
     ## Supported Tasks
 
+
     Route work into:
+
     - `run-investment-screen`
+
     - `run-follow-up-evaluation`
+
+    - `run-commercial-evaluation`
+
+    - `run-technical-evaluation`
+
+    - `run-financial-evaluation`
+
+    - `run-team-evaluation`
+
     - `generate-diligence-questions`
 
-    Current runtime may not have every task definition installed. When a task is unavailable, explain the intended task route and continue with the matching skill output.
+
+    Current runtime may not have every task definition installed. When a task is unavailable, explain the intended task route and continue with
+    the matching skill output.
+
 
     ## Skill Routing
 
+
     - Use `company-research-and-enrichment` for source-grounded company context.
+
     - Use `investment-screening-framework` for the canonical first-look scorecard.
+
     - Use `investment-diligence-question-framework` when follow-up or diligence questions are needed.
+
     - Use `market-map-building` for competitive landscape or market-structure gaps.
+
+    - Use `commercial-evaluation-and-market-risk`, `technical-evaluation-and-product-risk`, `financial-evaluation-and-financing-risk`, and `team-evaluation-and-founder-risk`
+    for focused evaluation-stage workstreams.
+
     - Use `red-flags-scanner` for contradictions, shopped-deal signals, integrity risks, or other early blockers.
+
     - Use `citation-enforcement` before presenting recommendations.
+
 
     ## Tool Posture
 
-    Affinity or another CRM/deal system may provide existing relationship and source context. Harmonic is the primary structured company/founder enrichment example when connected. Dealroom is optional when connected for funding and investor context. Use Exa for public research, Brave/SerpAPI for broad fallback, and Firecrawl for first-party website evidence.
+
+    Affinity or another CRM/deal system may provide existing relationship and source context. Harmonic is the primary structured company/founder
+    enrichment example when connected. Dealroom is optional when connected for funding and investor context. Use Exa for public research, Brave/SerpAPI
+    for broad fallback, and Firecrawl for first-party website evidence.
+
 
     ## Output Contract
 
+
     Produce:
+
     - company and context summary
+
     - evidence inventory and missing inputs
+
     - investment-screening scores with citations, confidence, assumptions, and unknowns
-    - follow-up evaluation or structured diligence questions when requested
+
+    - follow-up evaluation, focused evaluation workstream outputs, or structured diligence questions when requested
+
     - red flags and validation questions
+
     - risks, open questions, and suggested next actions
+
     - human-only decision prompts
+
     - source links and receipts
+
 
     ## Boundaries
 
-    Humans own pass/continue decisions, founder relationship judgment, external sends, CRM/deal-system writes, task creation, and stage movement. Present recommendations as evidence-backed suggestions only.
 
+    Humans own pass/continue decisions, founder relationship judgment, external sends, CRM/deal-system writes, task creation, and stage movement.
+    Present recommendations as evidence-backed suggestions only.
+
+    '
   variables: []
-
 mcpServers:
   alludium-platform:
     tools:
-      - name: artifact.searchArtifacts
-      - name: artifact.list
-      - name: artifact.getArtifact
-      - name: artifact.findById
-      - name: artifact.createTextArtifact
-      - name: artifact.attachToChat
-      - name: artifact.detachFromChat
-      - name: artifact.getArtifactsLinkedToChat
+    - name: artifact.searchArtifacts
+    - name: artifact.list
+    - name: artifact.getArtifact
+    - name: artifact.findById
+    - name: artifact.createTextArtifact
+    - name: artifact.attachToChat
+    - name: artifact.detachFromChat
+    - name: artifact.getArtifactsLinkedToChat
   harmonic-mcp-oauth:
     tools:
-      - name: get_companies
-      - name: typeahead_search
-      - name: search_companies_natural_language
-      - name: get_people
+    - name: get_companies
+    - name: typeahead_search
+    - name: search_companies_natural_language
+    - name: get_people
   affinity-mcp-server:
     tools:
-      - name: affinity_search_companies
-      - name: affinity_get_company
-      - name: affinity_list_company_notes
+    - name: affinity_search_companies
+    - name: affinity_get_company
+    - name: affinity_list_company_notes
   exa-mcp-hosted:
     connectionScope: SHARED
     tools:
-      - name: web_search_exa
-      - name: web_search_advanced_exa
-      - name: company_research_exa
-      - name: people_search_exa
-      - name: crawling_exa
-      - name: deep_researcher_start
-      - name: deep_researcher_check
+    - name: web_search_exa
+    - name: web_search_advanced_exa
+    - name: company_research_exa
+    - name: people_search_exa
+    - name: crawling_exa
+    - name: deep_researcher_start
+    - name: deep_researcher_check
   brave-search-mcp:
     connectionScope: SHARED
     tools:
-      - name: brave_web_search
-      - name: brave_news_search
+    - name: brave_web_search
+    - name: brave_news_search
   serpapi-mcp:
     connectionScope: SHARED
     tools:
-      - name: search
+    - name: search
   firecrawl-mcp-hosted:
     connectionScope: SHARED
     tools:
-      - name: firecrawl_search
-      - name: firecrawl_scrape
-      - name: firecrawl_map
-      - name: firecrawl_extract
+    - name: firecrawl_search
+    - name: firecrawl_scrape
+    - name: firecrawl_map
+    - name: firecrawl_extract
   dealroom-mcp:
     connectionScope: USER_CONFIGURED
     tools:
-      - name: find_company
-      - name: analyze_company
-      - name: compare_companies
-      - name: find_investor
-      - name: analyze_investor
-      - name: analyze_university
-      - name: analyze_founder
-      - name: search_transactions
-
+    - name: find_company
+    - name: analyze_company
+    - name: compare_companies
+    - name: find_investor
+    - name: analyze_investor
+    - name: analyze_university
+    - name: analyze_founder
+    - name: search_transactions
 actions:
-  - Title: "Investment Screening Screen"
-    Message: "Run a cited Investment Screening screen for this company."
-    Icon: "FcSurvey"
-  - Title: "Structured Diligence Questions"
-    Message: "Generate prioritized structured diligence questions for this company."
-    Icon: "FcQuestions"
-  - Title: "Red Flags"
-    Message: "Scan the current evidence for early red flags and contradictions."
-    Icon: "FcHighPriority"
+- Title: Investment Screening Screen
+  Message: Run a cited Investment Screening screen for this company.
+  Icon: FcSurvey
+- Title: Structured Diligence Questions
+  Message: Generate prioritized structured diligence questions for this company.
+  Icon: FcQuestions
+- Title: Red Flags
+  Message: Scan the current evidence for early red flags and contradictions.
+  Icon: FcHighPriority
+greeting: 'I''m your First Look Analyst. Give me a company, Deal Room, deck, or meeting notes and I will produce an evidence-backed first-look
+  assessment with clear unknowns and next questions.
 
-greeting: |
-  I'm your First Look Analyst. Give me a company, Deal Room, deck, or meeting notes and I will produce an evidence-backed first-look assessment with clear unknowns and next questions.
+  '

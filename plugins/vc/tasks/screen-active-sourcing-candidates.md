@@ -55,6 +55,7 @@ Screening recommendation only unless explicit write approval is granted. Never d
 ## Document References
 
 - `vc.document.sourcing_scoring_rubric` (methodology) -> `screening_artifact_id`
+- `vc.document.origination_source_strategy_guide` (methodology)
 - `vc.document.dedupe_novelty_policy` (policy)
 - `vc.document.template_use_guidance` (operating_guidance)
 

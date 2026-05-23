@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.generate_diligence_questions
-version: 1.0.14
+version: 1.0.16
 title: Generate Diligence Questions
 category: Venture Capital
 visibility: workspace
@@ -22,6 +22,22 @@ definition:
       - documentId: vc.document.investment_diligence_question_framework
         usage: methodology
         outputFieldKey: diligence_question_bank_artifact_id
+      - documentId: vc.document.opportunity_evaluation_framework
+        usage: methodology
+      - documentId: vc.document.evaluation_workstream_guide
+        usage: methodology
+      - documentId: vc.document.commercial_evaluation_guide
+        usage: methodology
+      - documentId: vc.document.technical_evaluation_guide
+        usage: methodology
+      - documentId: vc.document.financial_evaluation_guide
+        usage: methodology
+      - documentId: vc.document.formal_diligence_workstream_guide
+        usage: methodology
+      - documentId: vc.document.formal_diligence_checklist
+        usage: checklist
+      - documentId: vc.document.legal_diligence_guide
+        usage: methodology
       - documentId: vc.document.evidence_citation_style_guide
         usage: style_guide
       - documentId: vc.document.template_use_guidance

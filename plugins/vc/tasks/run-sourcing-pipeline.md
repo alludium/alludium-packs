@@ -68,6 +68,7 @@ Read, score, draft, and propose only unless a child task has explicit human appr
 
 - `vc.document.candidate_batch_template` (output_template) -> `candidate_batch_artifact_id`
 - `vc.document.origination_pipeline_sop` (operating_guidance)
+- `vc.document.origination_source_strategy_guide` (methodology)
 - `vc.document.template_use_guidance` (operating_guidance)
 
 ## Routing

@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.review_investment_documents
-version: 0.1.0
+version: 0.1.1
 title: Review Investment Documents
 category: Venture Capital
 visibility: workspace
@@ -23,6 +23,8 @@ definition:
       - documentId: vc.document.investment_document_review_template
         usage: output_template
         outputFieldKey: investment_document_review_artifact_id
+      - documentId: vc.document.legal_diligence_guide
+        usage: methodology
       - documentId: vc.document.evidence_citation_style_guide
         usage: style_guide
       - documentId: vc.document.template_use_guidance

@@ -77,6 +77,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Document References
 
 - `vc.document.closing_checklist` (output_template) -> `closing_checklist_artifact_id`
+- `vc.document.legal_diligence_guide` (methodology)
 - `vc.document.template_use_guidance` (operating_guidance)
 
 ## Routing

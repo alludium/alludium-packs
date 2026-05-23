@@ -19,6 +19,10 @@
         "vc-workflows/summarize-initial-call.yaml",
         "vc-workflows/run-investment-screen.yaml",
         "vc-workflows/run-follow-up-evaluation.yaml",
+        "vc-workflows/run-commercial-evaluation.yaml",
+        "vc-workflows/run-technical-evaluation.yaml",
+        "vc-workflows/run-financial-evaluation.yaml",
+        "vc-workflows/run-team-evaluation.yaml",
         "vc-workflows/generate-diligence-questions.yaml",
         "vc-workflows/run-founder-evaluation.yaml",
         "vc-workflows/prepare-team-review-pack.yaml",
@@ -88,7 +92,10 @@
         "vc-integrations/companies-house-sync-read.yaml"
       ],
       "title": "VC Workflows",
-      "verticalKeys": ["venture_capital", "vc"]
+      "verticalKeys": [
+        "venture_capital",
+        "vc"
+      ]
     }
   ]
 }

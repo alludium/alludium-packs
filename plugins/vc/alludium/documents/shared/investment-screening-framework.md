@@ -19,14 +19,16 @@ Use this framework to create a first-look investment screen for one company or a
 | Dimension | What To Assess | Evidence To Look For | Rating |
 | --- | --- | --- | --- |
 | Thesis fit | Fit to fund mandate, stage, geography, sector, and timing | Fund thesis, source context, company description | Strong / Mixed / Weak / Unknown |
-| Market pull | Urgency, budget, category momentum, buyer pain | Customer evidence, market reports, sales notes | Strong / Mixed / Weak / Unknown |
-| Product clarity | Clear product, workflow, differentiation, and adoption path | Demo, pitch deck, product notes, usage evidence | Strong / Mixed / Weak / Unknown |
-| Team | Founder-market fit, hiring gaps, operating credibility | Founder bios, references, prior outcomes | Strong / Mixed / Weak / Unknown |
-| Traction | Revenue, usage, retention, pipeline, or credible proxy signals | Metrics, CRM notes, customer claims | Strong / Mixed / Weak / Unknown |
-| Economics | Pricing power, margins, burn, runway, payback, or path to quality revenue | Financial model, ARR bridge, unit economics | Strong / Mixed / Weak / Unknown |
-| Competition | Differentiation, defensibility, category crowding, switching costs | Competitor map, customer alternatives | Strong / Mixed / Weak / Unknown |
-| Financing fit | Round size, ownership path, valuation reasonableness, syndicate fit | Fundraise materials, cap table, terms | Strong / Mixed / Weak / Unknown |
-| Risks and unknowns | Disqualifying issues, missing evidence, and what would change the answer | Red flags, contradictions, open questions | Clear / Manageable / Severe / Unknown |
+| Problem | Pain severity, urgency, buyer owner, and whether the problem is worth solving now | Customer evidence, founder materials, market notes, intro context | Strong / Mixed / Weak / Unknown |
+| Product | Clear product, workflow, customer value, differentiation, and adoption path | Demo, pitch deck, product notes, usage evidence | Strong / Mixed / Weak / Unknown |
+| Market | Category size, growth, budget pool, timing, and route to first segment | Market reports, customer notes, source thesis, public research | Strong / Mixed / Weak / Unknown |
+| Business model | Pricing, gross margin potential, sales motion, and revenue-quality path | Pricing notes, contracts, pipeline, model, customer claims | Strong / Mixed / Weak / Unknown |
+| Funding requirement | Stage, cheque size, valuation, ownership path, reserves, and syndicate fit | Fundraise materials, cap table, round plan, terms | Strong / Mixed / Weak / Unknown |
+| Value creation | Edge or asset that can compound into durable enterprise value | Product evidence, IP, data, distribution, workflow lock-in, customer proof | Strong / Mixed / Weak / Unknown |
+| Competition | Differentiation, defensibility, category crowding, incumbent risk, switching costs | Competitor map, customer alternatives, public sources | Strong / Mixed / Weak / Unknown |
+| Exit | Plausible acquirers, IPO logic, strategic value, and fund-return relevance | Comparable exits, buyer map, category consolidation, return model | Strong / Mixed / Weak / Unknown |
+| Risks and unknowns | Disqualifying issues, missing evidence, contradictions, and what would change the answer | Red flags, source gaps, disconfirming evidence, open questions | Clear / Manageable / Severe / Unknown |
+| Team | Founder-market fit, integrity, ambition, hiring gaps, commercial ability, and coachability | Founder bios, references, prior outcomes, role coverage | Strong / Mixed / Weak / Unknown |
 
 ## Recommendation Bands
 
@@ -37,6 +39,16 @@ Use this framework to create a first-look investment screen for one company or a
 | Pass | Fund fit, evidence quality, risk, or timing is materially weak | Record concise pass rationale |
 | Promote | Sourcing candidate has enough evidence for Deal Room review | Prepare promotion package and require human approval |
 | Needs partner judgment | Evidence is incomplete but strategic relevance may override the screen | Escalate exact tradeoff, not a generic "maybe" |
+
+## Routing Notes
+
+Use the screen to route work, not to imply diligence is complete.
+
+- `too early`: strong thesis fit but evidence, product, team, or financing path is not ready.
+- `too late`: mature stage, valuation, ownership path, or round dynamics do not fit the fund.
+- `out of thesis`: company may be credible but does not fit mandate, geography, sector, stage, or return model.
+- `watchlist`: attractive but waiting on a trigger such as customer proof, fundraise timing, hiring, regulatory event, or category inflection.
+- `promote`: enough evidence exists for a human to approve downstream Deal Room review.
 
 ## Output Standard
 

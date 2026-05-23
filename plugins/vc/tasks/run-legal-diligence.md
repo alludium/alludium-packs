@@ -74,6 +74,9 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Document References
 
 - `vc.document.legal_diligence_tracker_template` (output_template) -> `legal_diligence_artifact_id`
+- `vc.document.legal_diligence_guide` (methodology)
+- `vc.document.formal_diligence_workstream_guide` (methodology)
+- `vc.document.formal_diligence_checklist` (checklist)
 - `vc.document.evidence_citation_style_guide` (style_guide)
 - `vc.document.template_use_guidance` (operating_guidance)
 
@@ -81,8 +84,8 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 
 - Source template: `alludium/task-definition-templates/vc-workflows/run-legal-diligence.yaml`
 - Alludium task ID: `vc.run_legal_diligence`
-- Task family: `contracts`
-- Lifecycle stage: `contracts`
+- Task family: `diligence`
+- Lifecycle stage: `formal_diligence`
 - Recommended agent: `vc-legal-compliance-desk` (Alludium template `vc_legal_compliance_desk`)
 - Supported project types:
   - `vc_deal_room`

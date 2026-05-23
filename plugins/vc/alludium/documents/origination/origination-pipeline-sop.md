@@ -17,11 +17,15 @@ Use this SOP to operate a standing sourcing machine. Origination finds, enriches
 
 | Step | Output | Approval Gate |
 | --- | --- | --- |
-| Configure thesis, geography, stage, source scope, review policy, and budgets | Source registry | Human confirms scope |
-| Run discovery and read-preview tasks | Setup and preview artifacts | Human approves source readiness |
-| Batch candidates for enrichment, dedupe, scoring, and relationship checks | Candidate batch | Human reviews batch quality |
+| Configure thesis, geography, stage, source scope, review policy, budgets, and source taxonomy | Source registry | Human confirms scope |
+| Run discovery and read-preview tasks | Setup and preview artifacts with source provenance | Human approves source readiness |
+| Batch candidates for enrichment, dedupe, scoring, and relationship checks | Candidate batch with source family, freshness, and evidence quality | Human reviews batch quality |
 | Produce digests and outreach queues | Sourcing digest and outreach queue | Human approves outreach or follow-up |
-| Promote qualified candidates | Promotion package | Human approves Deal Room creation or update |
+| Promote qualified candidates | Promotion package with thesis rationale, source path, screening result, risks, and recommended Deal Room posture | Human approves Deal Room creation or update |
+
+## Source Provenance
+
+Every candidate should preserve source family, source detail, owner, freshness, relationship path, thesis rationale, evidence quality, dedupe state, and promotion rationale. Promotion should carry that trail into the downstream Deal Room.
 
 ## Controls
 

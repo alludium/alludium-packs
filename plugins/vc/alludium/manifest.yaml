@@ -1,105 +1,106 @@
-schemaVersion: "0.1"
+schemaVersion: '0.1'
 pack:
   id: vc
   name: Alludium VC
-  version: "0.5.10"
-  description: >
-    Public VC workflow plugin and pack seed for Alludium, published as the
-    first bundle in the broader Alludium packs catalog. This release contains
-    VC skills, Alludium runtime agent templates, VC task-definition templates,
-    VC Deal Room and VC Origination Pipeline project type definitions,
-    workspace variable declarations, application recommendation metadata,
-    single-entry integration setup task recommendations, pack-native project
-    methodology documents, and per-project creation metadata for VC project
-    instances.
+  version: 0.5.13
+  description: 'Public VC workflow plugin and pack seed for Alludium, published as the first bundle in the broader Alludium packs catalog. This
+    release contains VC skills, Alludium runtime agent templates, VC task-definition templates, VC Deal Room and VC Origination Pipeline project
+    type definitions, workspace variable declarations, application recommendation metadata, single-entry integration setup task recommendations,
+    pack-native project methodology documents, and per-project creation metadata for VC project instances.
+
+    '
   publisher: Alludium
   license: Apache-2.0
   repository: https://github.com/alludium/alludium-packs
 compatibility:
-  minPlatformVersion: "0.2.1"
+  minPlatformVersion: 0.2.1
   pluginFormats:
-    - claude-plugin
-    - codex-plugin
+  - claude-plugin
+  - codex-plugin
 surfaces:
   skills:
     path: skills
     ids:
-      - citation-enforcement
-      - closing-coordination-and-cp-tracking
-      - commercial-diligence-workstream
-      - company-research-and-enrichment
-      - deal-terms-analysis
-      - deal-room-setup-and-source-ingestion
-      - financial-diligence-workstream
-      - founder-evaluation-and-reference-checking
-      - founder-materials-request
-      - founder-outreach-and-intro-paths
-      - ic-memo-assembly
-      - ic-risk-checklist-and-decision-log
-      - investment-diligence-question-framework
-      - investment-screening-framework
-      - legal-diligence-coordination
-      - market-map-building
-      - meeting-prep-and-summary
-      - pipeline-health-and-crm-hygiene
-      - pitch-deck-explainer
-      - portfolio-onboarding-and-100-day-plan
-      - red-flags-scanner
-      - team-and-hiring-assessment
-      - term-sheet-negotiation-brief
-      - technical-diligence-workstream
-      - traction-and-saas-unit-economics
-      - vc-task-and-next-step-generation
-      - vc-affinity-discovery
-      - vc-affinity-deal-room-import
-      - vc-affinity-sync-read
-      - vc-affinity-sync-write
-      - vc-slack-discovery
-      - vc-slack-sync-read
-      - vc-slack-sync-write
-      - vc-google-drive-discovery
-      - vc-google-drive-sync-read
-      - vc-google-drive-sync-write
-      - vc-notion-discovery
-      - vc-notion-sync-read
-      - vc-notion-sync-write
-      - vc-harmonic-discovery
-      - vc-harmonic-sync-read
-      - vc-origination-pipeline-orchestration
-      - vc-source-registry-and-state-management
-      - vc-apify-discovery
-      - vc-apify-sync-read
-      - vc-apify-linkedin-founder-discovery
-      - vc-apify-x-founder-discovery
-      - vc-companies-house-sourcing
-      - vc-companies-house-sync-read
-      - vc-github-builder-signal-discovery
-      - vc-reddit-builder-signal-discovery
-      - vc-reddit-inbox-approval
-      - vc-sourcing-candidate-enrichment
-      - vc-sourcing-dedupe-and-novelty-check
-      - vc-relationship-context-check
-      - vc-sourcing-verdict-and-screening
-      - vc-portfolio-overlap-review
-      - vc-outreach-draft-queue
-      - vc-sourcing-digest-generation
-      - vc-manual-tip-ingestion
-      - vc-origination-deal-room-promotion
-      - vc-linkedin-query-spend-audit
-      - vc-source-error-and-spend-audit
-      - vc-origination-ic-summary-preparation
+    - citation-enforcement
+    - closing-coordination-and-cp-tracking
+    - commercial-diligence-workstream
+    - commercial-evaluation-and-market-risk
+    - company-research-and-enrichment
+    - deal-terms-analysis
+    - deal-room-setup-and-source-ingestion
+    - financial-diligence-workstream
+    - financial-evaluation-and-financing-risk
+    - founder-evaluation-and-reference-checking
+    - founder-materials-request
+    - founder-outreach-and-intro-paths
+    - ic-memo-assembly
+    - ic-risk-checklist-and-decision-log
+    - investment-diligence-question-framework
+    - investment-screening-framework
+    - legal-diligence-coordination
+    - market-map-building
+    - meeting-prep-and-summary
+    - pipeline-health-and-crm-hygiene
+    - pitch-deck-explainer
+    - portfolio-onboarding-and-100-day-plan
+    - red-flags-scanner
+    - team-and-hiring-assessment
+    - team-evaluation-and-founder-risk
+    - term-sheet-negotiation-brief
+    - technical-diligence-workstream
+    - technical-evaluation-and-product-risk
+    - traction-and-saas-unit-economics
+    - vc-task-and-next-step-generation
+    - vc-affinity-discovery
+    - vc-affinity-deal-room-import
+    - vc-affinity-sync-read
+    - vc-affinity-sync-write
+    - vc-slack-discovery
+    - vc-slack-sync-read
+    - vc-slack-sync-write
+    - vc-google-drive-discovery
+    - vc-google-drive-sync-read
+    - vc-google-drive-sync-write
+    - vc-notion-discovery
+    - vc-notion-sync-read
+    - vc-notion-sync-write
+    - vc-harmonic-discovery
+    - vc-harmonic-sync-read
+    - vc-origination-pipeline-orchestration
+    - vc-source-registry-and-state-management
+    - vc-apify-discovery
+    - vc-apify-sync-read
+    - vc-apify-linkedin-founder-discovery
+    - vc-apify-x-founder-discovery
+    - vc-companies-house-sourcing
+    - vc-companies-house-sync-read
+    - vc-github-builder-signal-discovery
+    - vc-reddit-builder-signal-discovery
+    - vc-reddit-inbox-approval
+    - vc-sourcing-candidate-enrichment
+    - vc-sourcing-dedupe-and-novelty-check
+    - vc-relationship-context-check
+    - vc-sourcing-verdict-and-screening
+    - vc-portfolio-overlap-review
+    - vc-outreach-draft-queue
+    - vc-sourcing-digest-generation
+    - vc-manual-tip-ingestion
+    - vc-origination-deal-room-promotion
+    - vc-linkedin-query-spend-audit
+    - vc-source-error-and-spend-audit
+    - vc-origination-ic-summary-preparation
   alludiumAgentTemplates:
     path: alludium/agent-templates
     ids:
-      - vc_dealflow_concierge
-      - vc_diligence_analyst
-      - vc_first_look_analyst
-      - vc_ic_prep_producer
-      - vc_legal_compliance_desk
-      - vc_meeting_operator
-      - vc_origination_scout
-      - vc_pipeline_autopilot
-      - vc_deal_room_setup_guide
+    - vc_dealflow_concierge
+    - vc_diligence_analyst
+    - vc_first_look_analyst
+    - vc_ic_prep_producer
+    - vc_legal_compliance_desk
+    - vc_meeting_operator
+    - vc_origination_scout
+    - vc_pipeline_autopilot
+    - vc_deal_room_setup_guide
   mcpServers:
     path: .mcp.json
     status: installable-plugin-definitions
@@ -117,150 +118,165 @@ surfaces:
     status: pack-native-document-sources
     catalog: catalog.v1.json
     ids:
-      - vc.document.investment_screening_framework
-      - vc.document.investment_diligence_question_framework
-      - vc.document.evidence_citation_style_guide
-      - vc.document.template_use_guidance
-      - vc.document.file_naming_source_index_sop
-      - vc.document.deal_room_sop
-      - vc.document.founder_materials_request_template
-      - vc.document.thesis_target_list_template
-      - vc.document.lead_generation_packet_template
-      - vc.document.initial_call_brief_template
-      - vc.document.customer_insights_summary_template
-      - vc.document.follow_up_evaluation_template
-      - vc.document.investment_memo_template
-      - vc.document.ic_agenda_template
-      - vc.document.ic_decision_record_template
-      - vc.document.diligence_report_template
-      - vc.document.review_pack_checklist
-      - vc.document.ic_memo_review_template
-      - vc.document.deal_terms_analysis_template
-      - vc.document.term_sheet_negotiation_brief_template
-      - vc.document.term_sheet_review_template
-      - vc.document.legal_diligence_tracker_template
-      - vc.document.investment_document_review_template
-      - vc.document.closing_checklist
-      - vc.document.conditions_precedent_tracker_template
-      - vc.document.completion_tracker_template
-      - vc.document.portfolio_onboarding_plan_template
-      - vc.document.origination_pipeline_sop
-      - vc.document.source_registry_template
-      - vc.document.candidate_batch_template
-      - vc.document.sourcing_scoring_rubric
-      - vc.document.source_health_review_checklist
-      - vc.document.paid_source_spend_audit_checklist
-      - vc.document.sourcing_digest_template
-      - vc.document.outreach_queue_template
-      - vc.document.promotion_package_template
-      - vc.document.sourcing_ic_summary_template
-      - vc.document.dedupe_novelty_policy
-      - vc.document.apify_source_setup_checklist
-      - vc.document.companies_house_source_setup_checklist
+    - vc.document.investment_screening_framework
+    - vc.document.investment_diligence_question_framework
+    - vc.document.opportunity_evaluation_framework
+    - vc.document.evaluation_workstream_guide
+    - vc.document.commercial_evaluation_guide
+    - vc.document.technical_evaluation_guide
+    - vc.document.financial_evaluation_guide
+    - vc.document.evidence_citation_style_guide
+    - vc.document.template_use_guidance
+    - vc.document.file_naming_source_index_sop
+    - vc.document.deal_room_sop
+    - vc.document.founder_materials_request_template
+    - vc.document.thesis_target_list_template
+    - vc.document.lead_generation_packet_template
+    - vc.document.initial_call_brief_template
+    - vc.document.customer_insights_summary_template
+    - vc.document.follow_up_evaluation_template
+    - vc.document.commercial_evaluation_template
+    - vc.document.technical_evaluation_template
+    - vc.document.financial_evaluation_template
+    - vc.document.team_evaluation_template
+    - vc.document.investment_memo_template
+    - vc.document.ic_agenda_template
+    - vc.document.ic_decision_record_template
+    - vc.document.diligence_report_template
+    - vc.document.formal_diligence_workstream_guide
+    - vc.document.formal_diligence_checklist
+    - vc.document.review_pack_checklist
+    - vc.document.ic_memo_review_template
+    - vc.document.deal_terms_analysis_template
+    - vc.document.term_sheet_negotiation_brief_template
+    - vc.document.term_sheet_review_template
+    - vc.document.legal_diligence_tracker_template
+    - vc.document.legal_diligence_guide
+    - vc.document.investment_document_review_template
+    - vc.document.closing_checklist
+    - vc.document.conditions_precedent_tracker_template
+    - vc.document.completion_tracker_template
+    - vc.document.portfolio_onboarding_plan_template
+    - vc.document.origination_pipeline_sop
+    - vc.document.origination_source_strategy_guide
+    - vc.document.source_registry_template
+    - vc.document.candidate_batch_template
+    - vc.document.sourcing_scoring_rubric
+    - vc.document.source_health_review_checklist
+    - vc.document.paid_source_spend_audit_checklist
+    - vc.document.sourcing_digest_template
+    - vc.document.outreach_queue_template
+    - vc.document.promotion_package_template
+    - vc.document.sourcing_ic_summary_template
+    - vc.document.dedupe_novelty_policy
+    - vc.document.apify_source_setup_checklist
+    - vc.document.companies_house_source_setup_checklist
   taskDefinitionTemplates:
     path: alludium/task-definition-templates
     platformIngest:
       status: requires-platform-support
       requiresCapability: external-task-definition-template-ingest
-      minimumPlatformVersion: "0.2.1"
-      note: >
-        Platform versions that only support external pack skills and Alludium
-        agent templates will ignore this surface. Use this surface only with a
-        platform release that declares external task-definition-template ingest
-        support.
+      minimumPlatformVersion: 0.2.1
+      note: 'Platform versions that only support external pack skills and Alludium agent templates will ignore this surface. Use this surface
+        only with a platform release that declares external task-definition-template ingest support.
+
+        '
     ids:
-      - vc.pack_variable_discovery
-      - vc.review_opportunity_status
-      - vc.source_thesis_targets
-      - vc.prepare_lead_gen_packet
-      - vc.prepare_deal_flow_agenda
-      - vc.screen_inbound_opportunity
-      - vc.request_founder_materials
-      - vc.prepare_initial_call
-      - vc.summarize_initial_call
-      - vc.run_investment_screen
-      - vc.run_follow_up_evaluation
-      - vc.generate_diligence_questions
-      - vc.run_founder_evaluation
-      - vc.prepare_team_review_pack
-      - vc.prepare_partner_review_pack
-      - vc.run_commercial_dd
-      - vc.run_technical_dd
-      - vc.run_financial_dd
-      - vc.create_ic_memo
-      - vc.review_ic_memo
-      - vc.prepare_ic_agenda
-      - vc.record_ic_decision
-      - vc.analyze_deal_terms
-      - vc.track_term_sheet_negotiation
-      - vc.review_term_sheet
-      - vc.run_legal_diligence
-      - vc.review_investment_documents
-      - vc.manage_closing_checklist
-      - vc.verify_conditions_precedent
-      - vc.coordinate_capital_call_and_completion
-      - vc.prepare_portfolio_onboarding
-      - vc.configure_origination_pipeline
-      - vc.run_sourcing_pipeline
-      - vc.discover_companies_house_candidates
-      - vc.discover_linkedin_founders
-      - vc.discover_x_founder_signals
-      - vc.discover_github_builder_signals
-      - vc.discover_reddit_builder_signals
-      - vc.review_reddit_candidate_inbox
-      - vc.ingest_manual_sourcing_tip
-      - vc.enrich_sourcing_candidates
-      - vc.check_affinity_relationships
-      - vc.score_sourcing_candidates
-      - vc.sync_sourcing_candidates
-      - vc.review_portfolio_overlap
-      - vc.screen_active_sourcing_candidates
-      - vc.prepare_sourcing_ic_summary
-      - vc.prepare_outreach_draft_queue
-      - vc.promote_candidate_to_deal_room
-      - vc.generate_sourcing_digest
-      - vc.audit_linkedin_query_spend
-      - vc.review_source_errors_and_spend
-      - vc.affinity_setup
-      - vc.affinity_discovery
-      - vc.affinity_sync_read
-      - vc.affinity_deal_room_import
-      - vc.affinity_sync_write
-      - vc.slack_setup
-      - vc.slack_discovery
-      - vc.slack_sync_read
-      - vc.slack_sync_write
-      - vc.google_drive_setup
-      - vc.google_drive_discovery
-      - vc.google_drive_sync_read
-      - vc.google_drive_sync_write
-      - vc.notion_setup
-      - vc.notion_discovery
-      - vc.notion_sync_read
-      - vc.notion_sync_write
-      - vc.harmonic_setup
-      - vc.harmonic_discovery
-      - vc.harmonic_sync_read
-      - vc.apify_setup
-      - vc.apify_discovery
-      - vc.apify_sync_read
-      - vc.companies_house_setup
-      - vc.companies_house_discovery
-      - vc.companies_house_sync_read
+    - vc.pack_variable_discovery
+    - vc.review_opportunity_status
+    - vc.source_thesis_targets
+    - vc.prepare_lead_gen_packet
+    - vc.prepare_deal_flow_agenda
+    - vc.screen_inbound_opportunity
+    - vc.request_founder_materials
+    - vc.prepare_initial_call
+    - vc.summarize_initial_call
+    - vc.run_investment_screen
+    - vc.run_follow_up_evaluation
+    - vc.run_commercial_evaluation
+    - vc.run_technical_evaluation
+    - vc.run_financial_evaluation
+    - vc.run_team_evaluation
+    - vc.generate_diligence_questions
+    - vc.run_founder_evaluation
+    - vc.prepare_team_review_pack
+    - vc.prepare_partner_review_pack
+    - vc.run_commercial_dd
+    - vc.run_technical_dd
+    - vc.run_financial_dd
+    - vc.create_ic_memo
+    - vc.review_ic_memo
+    - vc.prepare_ic_agenda
+    - vc.record_ic_decision
+    - vc.analyze_deal_terms
+    - vc.track_term_sheet_negotiation
+    - vc.review_term_sheet
+    - vc.run_legal_diligence
+    - vc.review_investment_documents
+    - vc.manage_closing_checklist
+    - vc.verify_conditions_precedent
+    - vc.coordinate_capital_call_and_completion
+    - vc.prepare_portfolio_onboarding
+    - vc.configure_origination_pipeline
+    - vc.run_sourcing_pipeline
+    - vc.discover_companies_house_candidates
+    - vc.discover_linkedin_founders
+    - vc.discover_x_founder_signals
+    - vc.discover_github_builder_signals
+    - vc.discover_reddit_builder_signals
+    - vc.review_reddit_candidate_inbox
+    - vc.ingest_manual_sourcing_tip
+    - vc.enrich_sourcing_candidates
+    - vc.check_affinity_relationships
+    - vc.score_sourcing_candidates
+    - vc.sync_sourcing_candidates
+    - vc.review_portfolio_overlap
+    - vc.screen_active_sourcing_candidates
+    - vc.prepare_sourcing_ic_summary
+    - vc.prepare_outreach_draft_queue
+    - vc.promote_candidate_to_deal_room
+    - vc.generate_sourcing_digest
+    - vc.audit_linkedin_query_spend
+    - vc.review_source_errors_and_spend
+    - vc.affinity_setup
+    - vc.affinity_discovery
+    - vc.affinity_sync_read
+    - vc.affinity_deal_room_import
+    - vc.affinity_sync_write
+    - vc.slack_setup
+    - vc.slack_discovery
+    - vc.slack_sync_read
+    - vc.slack_sync_write
+    - vc.google_drive_setup
+    - vc.google_drive_discovery
+    - vc.google_drive_sync_read
+    - vc.google_drive_sync_write
+    - vc.notion_setup
+    - vc.notion_discovery
+    - vc.notion_sync_read
+    - vc.notion_sync_write
+    - vc.harmonic_setup
+    - vc.harmonic_discovery
+    - vc.harmonic_sync_read
+    - vc.apify_setup
+    - vc.apify_discovery
+    - vc.apify_sync_read
+    - vc.companies_house_setup
+    - vc.companies_house_discovery
+    - vc.companies_house_sync_read
   projectTypes:
     path: alludium/project-types
     platformIngest:
       status: requires-platform-support
       requiresCapability: external-project-type-ingest
-      minimumPlatformVersion: "0.3.0"
-      note: >
-        Platform versions without external project-type ingest support should
-        ignore this surface and continue using platform-local project types.
-        Use this surface only with a platform release that declares external
-        project-type ingest support.
+      minimumPlatformVersion: 0.3.0
+      note: 'Platform versions without external project-type ingest support should ignore this surface and continue using platform-local project
+        types. Use this surface only with a platform release that declares external project-type ingest support.
+
+        '
     ids:
-      - vc_deal_room
-      - vc_origination_pipeline
+    - vc_deal_room
+    - vc_origination_pipeline
 boundaries:
   publicSafe: true
   secretsAllowed: false

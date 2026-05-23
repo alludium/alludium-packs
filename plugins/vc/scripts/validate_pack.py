@@ -292,6 +292,10 @@ VC_ARTIFACT_OUTPUTS = {
     "prepare-initial-call": ["initial_call_brief_artifact_id"],
     "summarize-initial-call": ["customer_insights_artifact_id"],
     "run-follow-up-evaluation": ["follow_up_evaluation_artifact_id"],
+    "run-commercial-evaluation": ["commercial_evaluation_artifact_id"],
+    "run-technical-evaluation": ["technical_evaluation_artifact_id"],
+    "run-financial-evaluation": ["financial_evaluation_artifact_id"],
+    "run-team-evaluation": ["team_evaluation_artifact_id"],
     "run-investment-screen": ["investment_screen_scorecard_artifact_id"],
     "generate-diligence-questions": ["diligence_question_bank_artifact_id"],
     "run-founder-evaluation": ["founder_evaluation_artifact_id"],
@@ -331,26 +335,38 @@ VC_ARTIFACT_INPUTS = {
     "run-financial-dd": ["financial_source_artifact_ids"],
     "run-technical-dd": ["technical_source_artifact_ids"],
     "prepare-team-review-pack": [
+        "commercial_evaluation_artifact_id",
+        "technical_evaluation_artifact_id",
+        "financial_evaluation_artifact_id",
+        "team_evaluation_artifact_id",
+        "diligence_question_bank_artifact_id",
         "commercial_dd_artifact_id",
         "financial_dd_artifact_id",
         "founder_evaluation_artifact_id",
         "technical_dd_artifact_id",
-        "diligence_question_bank_artifact_id",
     ],
     "prepare-partner-review-pack": [
+        "commercial_evaluation_artifact_id",
+        "technical_evaluation_artifact_id",
+        "financial_evaluation_artifact_id",
+        "team_evaluation_artifact_id",
+        "diligence_question_bank_artifact_id",
         "commercial_dd_artifact_id",
         "financial_dd_artifact_id",
         "founder_evaluation_artifact_id",
         "technical_dd_artifact_id",
-        "diligence_question_bank_artifact_id",
         "team_review_pack_artifact_id",
     ],
     "create-ic-memo": [
+        "commercial_evaluation_artifact_id",
+        "technical_evaluation_artifact_id",
+        "financial_evaluation_artifact_id",
+        "team_evaluation_artifact_id",
+        "diligence_question_bank_artifact_id",
         "commercial_dd_artifact_id",
         "financial_dd_artifact_id",
         "founder_evaluation_artifact_id",
         "technical_dd_artifact_id",
-        "diligence_question_bank_artifact_id",
         "team_review_pack_artifact_id",
         "partner_review_pack_artifact_id",
     ],
@@ -386,6 +402,28 @@ VC_ARTIFACT_INPUTS = {
 }
 OPTIONAL_ARTIFACT_INPUTS = {
     "prepare-initial-call": {"pitch_deck_artifact_id"},
+    "run-commercial-evaluation": {"follow_up_evaluation_artifact_id"},
+    "run-technical-evaluation": {"follow_up_evaluation_artifact_id"},
+    "run-financial-evaluation": {"follow_up_evaluation_artifact_id"},
+    "run-team-evaluation": {"follow_up_evaluation_artifact_id"},
+    "prepare-team-review-pack": {
+        "commercial_dd_artifact_id",
+        "financial_dd_artifact_id",
+        "founder_evaluation_artifact_id",
+        "technical_dd_artifact_id",
+    },
+    "prepare-partner-review-pack": {
+        "commercial_dd_artifact_id",
+        "financial_dd_artifact_id",
+        "founder_evaluation_artifact_id",
+        "technical_dd_artifact_id",
+    },
+    "create-ic-memo": {
+        "commercial_dd_artifact_id",
+        "financial_dd_artifact_id",
+        "founder_evaluation_artifact_id",
+        "technical_dd_artifact_id",
+    },
     "analyze-deal-terms": {"financial_forecast_artifact_id"},
     "track-term-sheet-negotiation": {"cap_table_artifact_id", "deal_terms_analysis_artifact_id"},
     "review-term-sheet": {"deal_terms_analysis_artifact_id"},
@@ -1312,7 +1350,12 @@ def validate_required_artifact_fields(
         field = input_fields.get(key)
         if field is None:
             fail(f"Task template {template_id} ({slug}) is missing required artifact input {key}")
-        validate_artifact_field_shape(template_id, "input", field)
+        validate_artifact_field_shape(
+            template_id,
+            "input",
+            field,
+            require_required=key not in OPTIONAL_ARTIFACT_INPUTS.get(slug, set()),
+        )
 
     for key in VC_ARTIFACT_OUTPUTS.get(slug, []):
         field = output_fields.get(key)

@@ -75,6 +75,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Document References
 
 - `vc.document.investment_document_review_template` (output_template) -> `investment_document_review_artifact_id`
+- `vc.document.legal_diligence_guide` (methodology)
 - `vc.document.evidence_citation_style_guide` (style_guide)
 - `vc.document.template_use_guidance` (operating_guidance)
 

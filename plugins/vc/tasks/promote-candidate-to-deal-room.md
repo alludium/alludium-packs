@@ -55,6 +55,7 @@ Promotion package by default. Deal Room creation/update, CRM changes, document c
 ## Document References
 
 - `vc.document.promotion_package_template` (output_template) -> `promotion_package_artifact_id`
+- `vc.document.origination_source_strategy_guide` (methodology)
 - `vc.document.template_use_guidance` (operating_guidance)
 
 ## Routing

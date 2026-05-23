@@ -64,6 +64,7 @@ Configuration only. No external reads beyond connection-readiness checks, no sch
 ## Document References
 
 - `vc.document.origination_pipeline_sop` (operating_guidance)
+- `vc.document.origination_source_strategy_guide` (methodology)
 - `vc.document.source_registry_template` (operating_guidance)
 - `vc.document.template_use_guidance` (operating_guidance)
 

@@ -1,13 +1,13 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_legal_diligence
-version: 0.1.0
+version: 0.1.2
 title: Run Legal Diligence
 category: Venture Capital
 visibility: workspace
 tags:
   - vc
-  - contracts
+  - diligence
   - legal-diligence
   - counsel
 definition:
@@ -17,12 +17,18 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: contracts
-    taskFamily: contracts
+    stage: formal_diligence
+    taskFamily: diligence
     documentRefs:
       - documentId: vc.document.legal_diligence_tracker_template
         usage: output_template
         outputFieldKey: legal_diligence_artifact_id
+      - documentId: vc.document.legal_diligence_guide
+        usage: methodology
+      - documentId: vc.document.formal_diligence_workstream_guide
+        usage: methodology
+      - documentId: vc.document.formal_diligence_checklist
+        usage: checklist
       - documentId: vc.document.evidence_citation_style_guide
         usage: style_guide
       - documentId: vc.document.template_use_guidance
@@ -37,8 +43,8 @@ definition:
       - vc_deal_room
     sourceAnchors:
       - source: investment-management-process-slides
-        anchor: slide-32
-        note: Term sheet/legal execution
+        anchor: slide-22
+        note: Formal diligence workstreams
       - source: atomic-agents
         anchor: worksheet-atomic-agents
         note: Legal and closing support rows

@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_sourcing_ic_summary
-version: 0.1.5
+version: 0.1.6
 title: Prepare Sourcing IC Summary
 category: Venture Capital
 visibility: workspace
@@ -22,6 +22,8 @@ definition:
       - documentId: vc.document.sourcing_ic_summary_template
         usage: output_template
         outputFieldKey: ic_summary_artifact_id
+      - documentId: vc.document.origination_source_strategy_guide
+        usage: methodology
       - documentId: vc.document.evidence_citation_style_guide
         usage: style_guide
       - documentId: vc.document.template_use_guidance

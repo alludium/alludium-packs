@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.promote_candidate_to_deal_room
-version: 0.1.6
+version: 0.1.7
 title: Promote Candidate to Deal Room
 category: Venture Capital
 visibility: workspace
@@ -23,6 +23,8 @@ definition:
       - documentId: vc.document.promotion_package_template
         usage: output_template
         outputFieldKey: promotion_package_artifact_id
+      - documentId: vc.document.origination_source_strategy_guide
+        usage: methodology
       - documentId: vc.document.template_use_guidance
         usage: operating_guidance
     requiredSkills:
