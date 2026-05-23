@@ -44,6 +44,14 @@ PLATFORM_TASK_DEFINITIONS: dict[str, dict[str, str]] = {
     },
 }
 
+GENERAL_TASK_SLUGS_BY_PROJECT_TYPE: dict[str, list[str]] = {
+    "vc_deal_room": [
+        "prepare-initial-call",
+        "summarize-initial-call",
+        "review-opportunity-status",
+    ],
+}
+
 
 def fail(message: str) -> None:
     print(f"ERROR: {message}", file=sys.stderr)
@@ -569,15 +577,90 @@ def collect_setup_task_slugs(project_type: dict[str, Any]) -> list[tuple[str, st
         if isinstance(task, dict):
             add_slug(task.get("taskDefinitionSlug"))
 
+    return collected
+
+
+def task_supports_project_type(task: dict[str, Any], project_key: str) -> bool:
+    definition_json = task.get("definitionJson")
+    if not isinstance(definition_json, dict):
+        return False
+    supported_project_types = string_list(definition_json.get("supportedProjectTypes"))
+    return project_key in supported_project_types
+
+
+def task_supports_project_management(task: dict[str, Any]) -> bool:
+    definition_json = task.get("definitionJson")
+    if not isinstance(definition_json, dict):
+        return False
+    supported_scopes = string_list(definition_json.get("supportedProjectScopes"))
+    return "project_management" in supported_scopes
+
+
+def collect_general_task_slugs(project_key: str, task_by_slug: dict[str, dict[str, Any]]) -> list[tuple[str, str | None]]:
+    collected: list[tuple[str, str | None]] = []
+    for slug in GENERAL_TASK_SLUGS_BY_PROJECT_TYPE.get(project_key, []):
+        task = task_by_slug.get(slug)
+        if isinstance(task, dict) and task_supports_project_type(task, project_key):
+            collected.append((slug, None))
+    return collected
+
+
+def collect_schedule_task_slugs(project_type: dict[str, Any]) -> list[tuple[str, str | None]]:
+    setup = project_type.get("projectSetup")
+    if not isinstance(setup, dict):
+        return []
+
+    collected: list[tuple[str, str | None]] = []
     for group in setup.get("scheduleGroups", []):
         if not isinstance(group, dict):
             continue
         slugs = group.get("taskDefinitionSlugs")
-        if isinstance(slugs, list):
-            for slug in slugs:
-                add_slug(slug, None)
+        if not isinstance(slugs, list):
+            continue
+        for slug in slugs:
+            if isinstance(slug, str) and slug and (slug, None) not in collected:
+                collected.append((slug, None))
+    return collected
+
+
+def collect_management_task_slugs(
+    project_key: str,
+    project_type: dict[str, Any],
+    task_by_slug: dict[str, dict[str, Any]],
+    excluded_slugs: set[str],
+) -> list[tuple[str, str | None]]:
+    collected: list[tuple[str, str | None]] = []
+
+    def add_slug(slug: str) -> None:
+        if slug in excluded_slugs or (slug, None) in collected:
+            return
+        task = task_by_slug.get(slug)
+        if isinstance(task, dict) and task_supports_project_type(task, project_key):
+            collected.append((slug, None))
+
+    for slug, _agent_id in collect_schedule_task_slugs(project_type):
+        add_slug(slug)
+
+    for slug, task in sorted(task_by_slug.items(), key=lambda item: item[1]["title"]):
+        if task_supports_project_type(task, project_key) and task_supports_project_management(task):
+            add_slug(slug)
 
     return collected
+
+
+def blueprint_task_table(
+    rows: list[tuple[str, str | None]],
+    task_by_slug: dict[str, dict[str, Any]],
+    agent_names: dict[str, str],
+) -> str:
+    body = "| Task | Agent | Skills | Task ID |\n| --- | --- | --- | --- |\n"
+    if not rows:
+        return body + "| None mapped | None declared | None declared |  |\n"
+    body += "".join(
+        blueprint_task_row(slug, task_by_slug, agent_names, fallback_agent)
+        for slug, fallback_agent in rows
+    )
+    return body
 
 
 def render_blueprint(
@@ -600,24 +683,48 @@ def render_blueprint(
     body += generated_notice(project_type_path)
     body += f"# {project_name} Blueprint\n\n"
     body += f"{description}\n\n"
-    body += "This blueprint lists the project stages, mapped tasks, recommended agents, and task-referenced skills for this project type.\n\n"
-    body += "## Project Setup / General\n\n"
-    body += "| Task | Agent | Skills | Task ID |\n| --- | --- | --- | --- |\n"
-    setup_rows = [
-        blueprint_task_row(slug, task_by_slug, agent_names, fallback_agent)
-        for slug, fallback_agent in collect_setup_task_slugs(project_type)
-    ]
-    body += "".join(setup_rows) if setup_rows else "| None mapped | None declared | None declared |  |\n"
+    body += (
+        "This blueprint lists setup, general, management, and lifecycle-stage tasks with the recommended "
+        "agents and task-referenced skills for this project type. Setup, General, and Management are "
+        "blueprint categories rather than lifecycle states.\n\n"
+    )
+
+    setup_rows = collect_setup_task_slugs(project_type)
+    general_rows = collect_general_task_slugs(project_key, task_by_slug)
+    setup_slugs = {slug for slug, _agent_id in setup_rows}
+    general_slugs = {slug for slug, _agent_id in general_rows}
+    management_rows = collect_management_task_slugs(
+        project_key,
+        project_type,
+        task_by_slug,
+        setup_slugs | general_slugs,
+    )
+    management_slugs = {slug for slug, _agent_id in management_rows}
+
+    body += "## Setup\n\n"
+    body += "Project-type setup and configuration tasks used before normal project execution.\n\n"
+    body += blueprint_task_table(setup_rows, task_by_slug, agent_names)
+
+    body += "\n## General\n\n"
+    body += "Reusable project-instance tasks that can be useful across multiple lifecycle stages.\n\n"
+    body += blueprint_task_table(general_rows, task_by_slug, agent_names)
+
+    body += "\n## Management\n\n"
+    body += "Project-management tasks that operate across a project suite, source pipeline, or recurring sync/reporting flow.\n\n"
+    body += blueprint_task_table(management_rows, task_by_slug, agent_names)
 
     mappings = initial_version.get("projectTaskMappings")
     if not isinstance(mappings, list):
         mappings = []
+    blueprint_category_slugs = setup_slugs | general_slugs | management_slugs
     mappings_by_stage: dict[str, list[str]] = {}
     for mapping in mappings:
         if not isinstance(mapping, dict):
             continue
         slug = mapping.get("taskDefinitionSlug")
         if not isinstance(slug, str) or not slug:
+            continue
+        if slug in blueprint_category_slugs:
             continue
         stage = mapping.get("lifecycleStage")
         if not isinstance(stage, str) or not stage:

@@ -12,9 +12,11 @@ source: alludium/project-types/vc_deal_room.json
 
 Project context for one venture investment opportunity from sourcing through portfolio handoff.
 
-This blueprint lists the project stages, mapped tasks, recommended agents, and task-referenced skills for this project type.
+This blueprint lists setup, general, management, and lifecycle-stage tasks with the recommended agents and task-referenced skills for this project type. Setup, General, and Management are blueprint categories rather than lifecycle states.
 
-## Project Setup / General
+## Setup
+
+Project-type setup and configuration tasks used before normal project execution.
 
 | Task | Agent | Skills | Task ID |
 | --- | --- | --- | --- |
@@ -25,7 +27,43 @@ This blueprint lists the project stages, mapped tasks, recommended agents, and t
 | Project Source Setup | [VC Deal Room Setup Guide](../agents/vc-deal-room-setup-guide.md) | None declared | `alludium.project_source_setup` |
 | [VC Pack Variable Discovery](../tasks/vc-pack-variable-discovery.md) | [VC Deal Room Setup Guide](../agents/vc-deal-room-setup-guide.md) | None declared | `vc.pack_variable_discovery` |
 | [Set Up Affinity for VC Deal Rooms](../tasks/affinity-setup.md) | [VC Deal Room Setup Guide](../agents/vc-deal-room-setup-guide.md) | [`vc-affinity-discovery`](../skills/vc-affinity-discovery/SKILL.md)<br>[`vc-affinity-sync-read`](../skills/vc-affinity-sync-read/SKILL.md)<br>[`vc-affinity-sync-write`](../skills/vc-affinity-sync-write/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.affinity_setup` |
+
+## General
+
+Reusable project-instance tasks that can be useful across multiple lifecycle stages.
+
+| Task | Agent | Skills | Task ID |
+| --- | --- | --- | --- |
+| [Prepare Meeting](../tasks/prepare-initial-call.md) | [Meeting Operator](../agents/vc-meeting-operator.md) | [`meeting-prep-and-summary`](../skills/meeting-prep-and-summary/SKILL.md)<br>[`company-research-and-enrichment`](../skills/company-research-and-enrichment/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md)<br>[`pitch-deck-explainer`](../skills/pitch-deck-explainer/SKILL.md) | `vc.prepare_initial_call` |
+| [Summarize Meeting Records](../tasks/summarize-initial-call.md) | [Meeting Operator](../agents/vc-meeting-operator.md) | [`meeting-prep-and-summary`](../skills/meeting-prep-and-summary/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md)<br>[`vc-task-and-next-step-generation`](../skills/vc-task-and-next-step-generation/SKILL.md) | `vc.summarize_initial_call` |
+| [Review Opportunity Status](../tasks/review-opportunity-status.md) | [Pipeline Autopilot](../agents/vc-pipeline-autopilot.md) | [`citation-enforcement`](../skills/citation-enforcement/SKILL.md)<br>[`vc-task-and-next-step-generation`](../skills/vc-task-and-next-step-generation/SKILL.md) | `vc.review_opportunity_status` |
+
+## Management
+
+Project-management tasks that operate across a project suite, source pipeline, or recurring sync/reporting flow.
+
+| Task | Agent | Skills | Task ID |
+| --- | --- | --- | --- |
 | [Preview Affinity Pipeline Import](../tasks/affinity-sync-read.md) | [Pipeline Autopilot](../agents/vc-pipeline-autopilot.md) | [`vc-affinity-sync-read`](../skills/vc-affinity-sync-read/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.affinity_sync_read` |
+| [Draft Affinity Write-Back Proposals](../tasks/affinity-sync-write.md) | [Pipeline Autopilot](../agents/vc-pipeline-autopilot.md) | [`vc-affinity-sync-write`](../skills/vc-affinity-sync-write/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.affinity_sync_write` |
+| [Draft Google Drive File Proposals](../tasks/google-drive-sync-write.md) | [Pipeline Autopilot](../agents/vc-pipeline-autopilot.md) | [`vc-google-drive-sync-write`](../skills/vc-google-drive-sync-write/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.google_drive_sync_write` |
+| [Draft Notion Update Proposals](../tasks/notion-sync-write.md) | [Pipeline Autopilot](../agents/vc-pipeline-autopilot.md) | [`vc-notion-sync-write`](../skills/vc-notion-sync-write/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.notion_sync_write` |
+| [Draft Slack Handoff Notifications](../tasks/slack-sync-write.md) | [Pipeline Autopilot](../agents/vc-pipeline-autopilot.md) | [`vc-slack-sync-write`](../skills/vc-slack-sync-write/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.slack_sync_write` |
+| [Explore Affinity Lists and Stages](../tasks/affinity-discovery.md) | [Pipeline Autopilot](../agents/vc-pipeline-autopilot.md) | [`vc-affinity-discovery`](../skills/vc-affinity-discovery/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.affinity_discovery` |
+| [Explore Google Drive Sources](../tasks/google-drive-discovery.md) | [Pipeline Autopilot](../agents/vc-pipeline-autopilot.md) | [`vc-google-drive-discovery`](../skills/vc-google-drive-discovery/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.google_drive_discovery` |
+| [Explore Harmonic Source Scopes](../tasks/harmonic-discovery.md) | [Origination Scout](../agents/vc-origination-scout.md) | [`vc-harmonic-discovery`](../skills/vc-harmonic-discovery/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.harmonic_discovery` |
+| [Explore Notion Pages and Databases](../tasks/notion-discovery.md) | [Pipeline Autopilot](../agents/vc-pipeline-autopilot.md) | [`vc-notion-discovery`](../skills/vc-notion-discovery/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.notion_discovery` |
+| [Explore Slack Channels for VC Context](../tasks/slack-discovery.md) | [Pipeline Autopilot](../agents/vc-pipeline-autopilot.md) | [`vc-slack-discovery`](../skills/vc-slack-discovery/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.slack_discovery` |
+| [Prepare Deal Flow Agenda](../tasks/prepare-deal-flow-agenda.md) | [Pipeline Autopilot](../agents/vc-pipeline-autopilot.md) | [`citation-enforcement`](../skills/citation-enforcement/SKILL.md)<br>[`vc-task-and-next-step-generation`](../skills/vc-task-and-next-step-generation/SKILL.md) | `vc.prepare_deal_flow_agenda` |
+| [Prepare Lead Gen Packet](../tasks/prepare-lead-gen-packet.md) | [Origination Scout](../agents/vc-origination-scout.md) | [`company-research-and-enrichment`](../skills/company-research-and-enrichment/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.prepare_lead_gen_packet` |
+| [Preview Google Drive Context](../tasks/google-drive-sync-read.md) | [Pipeline Autopilot](../agents/vc-pipeline-autopilot.md) | [`vc-google-drive-sync-read`](../skills/vc-google-drive-sync-read/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.google_drive_sync_read` |
+| [Preview Harmonic Search Results](../tasks/harmonic-sync-read.md) | [Origination Scout](../agents/vc-origination-scout.md) | [`vc-harmonic-sync-read`](../skills/vc-harmonic-sync-read/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.harmonic_sync_read` |
+| [Preview Notion Context](../tasks/notion-sync-read.md) | [Pipeline Autopilot](../agents/vc-pipeline-autopilot.md) | [`vc-notion-sync-read`](../skills/vc-notion-sync-read/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.notion_sync_read` |
+| [Preview Slack Deal Context](../tasks/slack-sync-read.md) | [Pipeline Autopilot](../agents/vc-pipeline-autopilot.md) | [`vc-slack-sync-read`](../skills/vc-slack-sync-read/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.slack_sync_read` |
+| [Set Up Google Drive for VC Deal Rooms](../tasks/google-drive-setup.md) | [Pipeline Autopilot](../agents/vc-pipeline-autopilot.md) | [`vc-google-drive-discovery`](../skills/vc-google-drive-discovery/SKILL.md)<br>[`vc-google-drive-sync-read`](../skills/vc-google-drive-sync-read/SKILL.md)<br>[`vc-google-drive-sync-write`](../skills/vc-google-drive-sync-write/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.google_drive_setup` |
+| [Set Up Harmonic for VC Deal Rooms](../tasks/harmonic-setup.md) | [Pipeline Autopilot](../agents/vc-pipeline-autopilot.md) | [`vc-harmonic-discovery`](../skills/vc-harmonic-discovery/SKILL.md)<br>[`vc-harmonic-sync-read`](../skills/vc-harmonic-sync-read/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.harmonic_setup` |
+| [Set Up Notion for VC Deal Rooms](../tasks/notion-setup.md) | [Pipeline Autopilot](../agents/vc-pipeline-autopilot.md) | [`vc-notion-discovery`](../skills/vc-notion-discovery/SKILL.md)<br>[`vc-notion-sync-read`](../skills/vc-notion-sync-read/SKILL.md)<br>[`vc-notion-sync-write`](../skills/vc-notion-sync-write/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.notion_setup` |
+| [Set Up Slack for VC Deal Rooms](../tasks/slack-setup.md) | [Pipeline Autopilot](../agents/vc-pipeline-autopilot.md) | [`vc-slack-discovery`](../skills/vc-slack-discovery/SKILL.md)<br>[`vc-slack-sync-read`](../skills/vc-slack-sync-read/SKILL.md)<br>[`vc-slack-sync-write`](../skills/vc-slack-sync-write/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.slack_setup` |
 
 ## Intake
 
@@ -46,8 +84,6 @@ This blueprint lists the project stages, mapped tasks, recommended agents, and t
 | Task | Agent | Skills | Task ID |
 | --- | --- | --- | --- |
 | [Request Founder Materials](../tasks/request-founder-materials.md) | [Dealflow Concierge](../agents/vc-dealflow-concierge.md) | [`citation-enforcement`](../skills/citation-enforcement/SKILL.md)<br>[`founder-materials-request`](../skills/founder-materials-request/SKILL.md) | `vc.request_founder_materials` |
-| [Prepare Meeting](../tasks/prepare-initial-call.md) | [Meeting Operator](../agents/vc-meeting-operator.md) | [`meeting-prep-and-summary`](../skills/meeting-prep-and-summary/SKILL.md)<br>[`company-research-and-enrichment`](../skills/company-research-and-enrichment/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md)<br>[`pitch-deck-explainer`](../skills/pitch-deck-explainer/SKILL.md) | `vc.prepare_initial_call` |
-| [Summarize Meeting Records](../tasks/summarize-initial-call.md) | [Meeting Operator](../agents/vc-meeting-operator.md) | [`meeting-prep-and-summary`](../skills/meeting-prep-and-summary/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md)<br>[`vc-task-and-next-step-generation`](../skills/vc-task-and-next-step-generation/SKILL.md) | `vc.summarize_initial_call` |
 | [Run Opportunity Evaluation](../tasks/run-follow-up-evaluation.md) | [First Look Analyst](../agents/vc-first-look-analyst.md) | [`red-flags-scanner`](../skills/red-flags-scanner/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.run_follow_up_evaluation` |
 | [Run Commercial Evaluation](../tasks/run-commercial-evaluation.md) | [First Look Analyst](../agents/vc-first-look-analyst.md) | [`commercial-evaluation-and-market-risk`](../skills/commercial-evaluation-and-market-risk/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.run_commercial_evaluation` |
 | [Run Technical Evaluation](../tasks/run-technical-evaluation.md) | [First Look Analyst](../agents/vc-first-look-analyst.md) | [`technical-evaluation-and-product-risk`](../skills/technical-evaluation-and-product-risk/SKILL.md)<br>[`red-flags-scanner`](../skills/red-flags-scanner/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | `vc.run_technical_evaluation` |
