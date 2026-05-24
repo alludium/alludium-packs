@@ -36,7 +36,7 @@ Use this skill only inside a created `vc_deal_room` project, after the user has 
 - Target Deal Room project ID from the platform-created project.
 - Approved source scope from Affinity setup.
 - Accepted stage mapping from Affinity setup.
-- One approved seed deal for this project, including source object IDs, source URL, company identity, owner, and source stage when available.
+- One approved seed deal for this project, including source object IDs, source URL, company identity, owner, source stage, associated person IDs, and logo/enrichment fields when available.
 - Approval metadata including approving user, approval time, and setup task or preview reference.
 
 ## Process
@@ -44,8 +44,9 @@ Use this skill only inside a created `vc_deal_room` project, after the user has 
 1. Confirm the task is project-scoped and the target project already exists.
 2. Confirm the seed deal was selected from reviewed setup evidence or an approved preview.
 3. Read only the approved Affinity records needed to complete the import receipt and project field map.
-4. Map source fields to Deal Room fields such as company, domain, source system, source object, CRM URL, owner, source/referrer, and initial investment stage.
-5. Produce an import receipt with provenance and unresolved gaps.
+4. Map source fields to Deal Room fields such as company, domain, optional logo URL, source system, source object, CRM URL, owner, source/referrer, and initial investment stage.
+5. When Affinity exposes people associated with the company or opportunity, read only the approved associated person records needed for founder identity. Populate `founder_names` and `founder_profiles` from confirmed founders or likely founder contacts. Prefer `founder_profiles` as a JSON array of objects with `name`, `email`, `linkedinUrl`, `sourcePersonId`, `title`, and `sourceUrl` keys; omit unknown keys rather than inventing data. `sourcePersonId` is the CRM/source person record ID; `sourceUrl` is the external person/profile URL when available.
+6. Produce an import receipt with provenance and unresolved gaps.
 
 ## Output Contract
 
