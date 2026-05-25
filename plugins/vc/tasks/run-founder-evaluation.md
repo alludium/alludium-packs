@@ -46,7 +46,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | Key | Name | Type | Required |
 | --- | --- | --- | --- |
 | `founder_names` | Founder Names | `string` | yes |
-| `linkedin_profiles` | Linkedin Profiles | `string` | yes |
+| `founder_profiles` | Founder Profiles | `string` | yes |
 | `reference_inputs` | Reference Inputs | `string` | no |
 
 ## Outputs

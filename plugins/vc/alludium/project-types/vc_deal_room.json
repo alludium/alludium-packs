@@ -339,7 +339,8 @@
         "label": "Company Logo URL",
         "kind": "text",
         "required": false,
-        "description": "Optional company logo image URL from Affinity enrichment or another approved source."
+        "description": "Optional company logo image URL from Affinity enrichment or another approved source.",
+        "placeholder": "https://example.com/logo.png"
       },
       {
         "id": "field-deal-source",
@@ -2962,7 +2963,7 @@
             "requiredForActivation": true
           },
           {
-            "taskField": "linkedin_profiles",
+            "taskField": "founder_profiles",
             "source": "project.field",
             "sourcePath": "founder_profiles",
             "requiredForActivation": true
