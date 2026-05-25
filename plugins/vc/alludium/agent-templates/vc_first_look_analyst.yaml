@@ -1,5 +1,5 @@
-version: 1.0.6
-type: template
+version: "1.0.6"
+type: "template"
 platform_managed: false
 id: vc_first_look_analyst
 name: First Look Analyst
@@ -21,9 +21,9 @@ metadata:
   - red-flags-scanner
   - citation-enforcement
 llm:
-  provider: ANTHROPIC
-  infra: AMZN
-  model: Claude Opus 4.6
+  provider: "ANTHROPIC"
+  infra: "AMZN"
+  model: "Claude Sonnet 4.6"
 skills:
 - externalId: company-research-and-enrichment
   activationMode: ALWAYS

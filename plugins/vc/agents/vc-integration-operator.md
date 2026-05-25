@@ -2,7 +2,7 @@
 name: vc-integration-operator
 description: VC integration operator that handles source setup, discovery, read previews, and write-back proposals for approved
   Deal Room and Origination integrations without taking external action unless a human approves it.
-model: opus
+model: sonnet
 skills:
 - vc-affinity-discovery
 - vc-affinity-sync-read

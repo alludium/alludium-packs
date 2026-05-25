@@ -2,7 +2,7 @@
 name: vc-diligence-analyst
 description: VC diligence agent that coordinates founder, commercial, technical, and financial workstreams, assembles cited
   diligence artifacts, and separates evidence gathering from human investment judgment.
-model: opus
+model: sonnet
 skills:
 - company-research-and-enrichment
 - founder-evaluation-and-reference-checking

@@ -2,7 +2,7 @@
 name: vc-first-look-analyst
 description: VC first-look screening analyst that turns company context, founder materials, and first-call evidence into a
   cited initial fit screen, red-flag scan, and next-step recommendation for human review.
-model: opus
+model: sonnet
 skills:
 - company-research-and-enrichment
 - investment-screening-framework

@@ -2,7 +2,7 @@
 name: vc-ic-prep-producer
 description: Investment committee preparation agent that assembles IC memos from Deal Room artifacts, enforces citations,
   prepares agendas, records decision-log drafts, and generates approval-gated follow-up actions.
-model: opus
+model: sonnet
 skills:
 - ic-memo-assembly
 - ic-risk-checklist-and-decision-log

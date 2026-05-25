@@ -2,7 +2,7 @@
 name: vc-sourcing-operator
 description: VC sourcing operator that runs the standing origination pipeline, reviews source outputs, manages candidate state,
   drafts outreach queues, and prepares promotion packages for human review.
-model: opus
+model: sonnet
 skills:
 - company-research-and-enrichment
 - deal-room-setup-and-source-ingestion

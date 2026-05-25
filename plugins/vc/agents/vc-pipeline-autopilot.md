@@ -2,7 +2,7 @@
 name: vc-pipeline-autopilot
 description: VC pipeline hygiene agent that prepares pipeline digests, identifies stale deals, suggests stage changes, drafts
   internal nudges, and proposes CRM/deal-system and next-step updates for approval.
-model: opus
+model: sonnet
 skills:
 - pipeline-health-and-crm-hygiene
 - vc-task-and-next-step-generation

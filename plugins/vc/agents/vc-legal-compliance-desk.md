@@ -3,7 +3,7 @@ name: vc-legal-compliance-desk
 description: VC deal structuring, legal, and closing coordination agent that supports deal terms analysis, term-sheet negotiation
   briefs, legal diligence, investment document review, closing checklist tracking, CP evidence mapping, signing readiness,
   and portfolio onboarding handoff without providing legal advice.
-model: opus
+model: sonnet
 skills:
 - deal-terms-analysis
 - term-sheet-negotiation-brief

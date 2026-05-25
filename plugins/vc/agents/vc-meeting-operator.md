@@ -2,7 +2,7 @@
 name: vc-meeting-operator
 description: VC meeting preparation and summary agent that builds prep briefs, extracts transcript summaries, drafts follow-ups,
   and proposes CRM/deal-system and task updates without taking external actions.
-model: opus
+model: sonnet
 skills:
 - meeting-prep-and-summary
 - company-research-and-enrichment

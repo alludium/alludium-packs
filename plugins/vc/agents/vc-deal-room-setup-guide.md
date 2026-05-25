@@ -2,7 +2,7 @@
 name: vc-deal-room-setup-guide
 description: Project-specific onboarding agent for VC Deal Room source setup, CRM discovery, stage mapping, seed selection,
   and sync-readiness review.
-model: opus
+model: sonnet
 skills:
 - deal-room-setup-and-source-ingestion
 - vc-affinity-deal-room-import

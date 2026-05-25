@@ -36,7 +36,7 @@ metadata:
 llm:
   provider: "ANTHROPIC"
   infra: "AMZN"
-  model: "Claude Opus 4.6"
+  model: "Claude Sonnet 4.6"
 
 skills:
   - externalId: "company-research-and-enrichment"

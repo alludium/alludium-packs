@@ -2,7 +2,7 @@
 name: vc-evaluation-analyst
 description: VC evaluation-stage analyst that turns screening output, founder materials, meeting evidence, and public research
   into cited opportunity, commercial, technical, financial, team, and diligence-question workstreams before formal diligence.
-model: opus
+model: sonnet
 skills:
 - company-research-and-enrichment
 - investment-diligence-question-framework
