@@ -85,6 +85,11 @@ That check keeps pack versions monotonic against both `origin/main` and the late
 
 Because generated `agents/` and `tasks/` files are public release artifacts, YAML changes that regenerate Markdown are release-content changes. Those PRs must bump the pack/plugin version and mention the new version in `plugins/vc/README.md` and `plugins/vc/alludium/inventory.md`.
 
+Release tags are created after merge, not during PR preparation. A PR may declare the intended next
+pack version in the manifest and docs, but the matching `vX.Y.Z` tag must be created only after the
+PR merges, on the merge commit reachable from `origin/main`. Do not create early tags to satisfy
+paired platform external-pack validation.
+
 ## Contributing
 
 This repository is maintained by Alludium. New packs should follow the existing `plugins/vc/` structure and include validation before they are proposed for review.

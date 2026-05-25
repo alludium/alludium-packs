@@ -20,7 +20,7 @@ Import one approved Affinity seed deal into an already-created VC Deal Room proj
 
 ## Instructions
 
-Import only the approved Affinity seed deal represented by the `import_payload` into the current VC Deal Room project. Confirm the platform has already created the target project, verify the payload contains reviewed source scope, accepted stage mapping, selected seed deal, and approval metadata, then perform the smallest approved Affinity reads needed to populate source provenance and field mapping. Produce a durable import receipt artifact and compact summaries of imported fields, source records read, duplicate handling, unresolved gaps, and recommended next Deal Room tasks. Do not create projects, import unapproved records, enable recurring sync, write to Affinity, move stages, create notes, update external records, send notifications, or create follow-up tasks.
+Import only the approved Affinity seed deal represented by the `import_payload` into the current VC Deal Room project. Confirm the platform has already created the target project, verify the payload contains reviewed source scope, accepted stage mapping, selected seed deal, and approval metadata, then perform the smallest approved Affinity reads needed to populate source provenance and field mapping. Map company identity into company_name, company_domain, optional company_logo_url when an approved Affinity/enrichment field provides a usable image URL, source reference fields, owner/source fields, and initial investment stage. When approved associated person IDs are available on the Affinity organization or opportunity, read only those person records needed to identify founders or founder contacts, then populate founder_names and founder_profiles. Prefer founder_profiles as a JSON array of objects with name, email, linkedinUrl, sourcePersonId, title, and sourceUrl keys, omitting unknown keys. sourcePersonId is the external person record ID from the source CRM; sourceUrl is the external person/profile URL when available. Produce a durable import receipt artifact and compact summaries of imported fields, source records read, duplicate handling, unresolved gaps, and recommended next Deal Room tasks. Do not create projects, import unapproved records, enable recurring sync, write to Affinity, move stages, create notes, update external records, send notifications, or create follow-up tasks.
 
 ## Missing Input Policy
 
@@ -35,6 +35,7 @@ Project-scoped import only. Reads are limited to approved Affinity records. Exte
 - The target Deal Room project already exists and is named in the receipt.
 - The approved Affinity seed deal, source scope, stage mapping, and approval metadata are recorded.
 - Imported project-field values list source IDs, source URLs, confidence, and gaps.
+- Founder identity output uses founder_names plus structured founder_profiles when associated Affinity person records or approved seed fields provide enough evidence.
 - Duplicate handling states that the platform-created project is the canonical target for this seed deal.
 - No external writes, recurring schedules, or additional project creations were performed.
 

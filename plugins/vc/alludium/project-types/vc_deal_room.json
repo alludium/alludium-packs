@@ -209,9 +209,12 @@
     ],
     "recommendedFieldKeys": [
       "company_domain",
+      "company_logo_url",
       "deal_source",
       "investment_stage",
       "lead_partner",
+      "founder_names",
+      "founder_profiles",
       "pitch_deck_artifact_id",
       "confidentiality_level"
     ],
@@ -266,7 +269,7 @@
     }
   ],
   "initialVersion": {
-    "version": "1.0.11",
+    "version": "1.0.12",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -329,6 +332,15 @@
         "required": false,
         "description": "Company website or primary domain when known.",
         "placeholder": "acme.ai"
+      },
+      {
+        "id": "field-company-logo-url",
+        "key": "company_logo_url",
+        "label": "Company Logo URL",
+        "kind": "text",
+        "required": false,
+        "description": "Optional company logo image URL from Affinity enrichment or another approved source.",
+        "placeholder": "https://example.com/logo.png"
       },
       {
         "id": "field-deal-source",
@@ -833,7 +845,7 @@
         "label": "Founder Profiles",
         "kind": "text",
         "required": false,
-        "description": "Founder profile links or compact identity references."
+        "description": "JSON array of founder identity objects when available. Preferred shape: [{\"name\":\"Jane Doe\",\"email\":\"jane@example.com\",\"linkedinUrl\":\"https://linkedin.com/in/janedoe\",\"sourcePersonId\":\"123\",\"title\":\"CEO\",\"sourceUrl\":\"https://crm.example.com/people/123\"}]. sourcePersonId is the external person record ID from the connected CRM or source system; sourceUrl is the external profile or record URL. Plain text or newline-separated profile links are acceptable fallbacks."
       },
       {
         "id": "field-known-claims",
@@ -1809,7 +1821,7 @@
       "collectionLabel": "Deals",
       "overviewTitle": "Deal overview",
       "overviewAriaLabel": "Open deal data",
-      "overviewFallback": "Add thesis signal and deal context in Data.",
+      "overviewFallback": "Add company, founder, and deal context in Data.",
       "executionTitle": "Alludium is executing",
       "activityHealthLabel": "Teams aligned",
       "activityHealthValue": "On track",
@@ -2566,14 +2578,14 @@
         }
       ],
       "primarySummaryField": {
-        "key": "round",
-        "label": "Round",
-        "fieldKey": "round"
+        "key": "company_name",
+        "label": "Company",
+        "fieldKey": "company_name"
       },
       "secondarySummaryField": {
-        "key": "signal",
-        "label": "Signal",
-        "contextKey": "signal"
+        "key": "company_domain",
+        "label": "Domain",
+        "fieldKey": "company_domain"
       },
       "scoreField": {
         "key": "score",
@@ -2581,6 +2593,11 @@
         "contextKey": "score"
       },
       "badgeFields": [
+        {
+          "key": "founder_names",
+          "label": "Founders",
+          "fieldKey": "founder_names"
+        },
         {
           "key": "company_domain",
           "label": "Domain",
@@ -2946,7 +2963,7 @@
             "requiredForActivation": true
           },
           {
-            "taskField": "linkedin_profiles",
+            "taskField": "founder_profiles",
             "source": "project.field",
             "sourcePath": "founder_profiles",
             "requiredForActivation": true
