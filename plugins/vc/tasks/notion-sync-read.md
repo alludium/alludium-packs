@@ -2,7 +2,7 @@
 id: vc.notion_sync_read
 title: Preview Notion Context
 slug: notion-sync-read
-agent: vc-pipeline-autopilot
+agent: vc-integration-operator
 skills:
 - vc-notion-sync-read
 - citation-enforcement
@@ -57,18 +57,13 @@ Read preview only. Do not attach, import, create pages, create databases, update
 - Source template: `alludium/task-definition-templates/vc-integrations/notion-sync-read.yaml`
 - Alludium task ID: `vc.notion_sync_read`
 - Task family: `integration_sync_read`
-- Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
+- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
 - Supported project types:
   - `vc_deal_room`
 - Supported project scopes:
   - `project_management`
 
 ## Required Skills
-
-- `vc-notion-sync-read`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `vc-notion-sync-read`
 - `citation-enforcement`

@@ -2,7 +2,7 @@
 id: vc.discover_reddit_builder_signals
 title: Discover Reddit Builder Signals
 slug: discover-reddit-builder-signals
-agent: vc-origination-scout
+agent: vc-sourcing-operator
 skills:
 - vc-reddit-builder-signal-discovery
 - vc-source-registry-and-state-management
@@ -59,19 +59,13 @@ Public read and inbox proposal only. Do not comment, message, import into the ma
 - Alludium task ID: `vc.discover_reddit_builder_signals`
 - Task family: `origination_source_discovery`
 - Lifecycle stage: `source`
-- Recommended agent: `vc-origination-scout` (Alludium template `vc_origination_scout`)
+- Recommended agent: `vc-sourcing-operator` (Alludium template `vc_sourcing_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:
   - `project_instance`
 
 ## Required Skills
-
-- `vc-reddit-builder-signal-discovery`
-- `vc-source-registry-and-state-management`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `vc-reddit-builder-signal-discovery`
 - `vc-source-registry-and-state-management`

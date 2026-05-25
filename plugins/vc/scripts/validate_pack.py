@@ -273,11 +273,14 @@ PROJECT_CREATION_VARIABLE_FIELD_ALIASES = {
 }
 VC_DEAL_ROOM_LIFECYCLE_STAGES = {
     "intake",
-    "assessment",
-    "diligence",
-    "review",
-    "term_sheet",
+    "screening",
+    "evaluation",
+    "decision_review",
+    "deal_structuring",
+    "formal_diligence",
+    "contracts",
     "closing",
+    "watchlist",
 }
 VC_DEAL_ROOM_REPLACED_TASK_FIELDS = {"pitch_deck_url", "meeting_transcript_url"}
 VC_DEAL_ROOM_FORBIDDEN_TASK_FIELDS = {
@@ -306,11 +309,15 @@ ARTIFACT_FIELD_KEY_PATTERN = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+)*_artifact_id$
 VC_ARTIFACT_OUTPUTS = {
     "source-thesis-targets": ["thesis_target_list_artifact_id"],
     "prepare-lead-gen-packet": ["lead_generation_packet_artifact_id"],
-    "screen-inbound-opportunity": ["first_look_scorecard_artifact_id"],
+    "screen-inbound-opportunity": ["opportunity_intake_artifact_id"],
     "request-founder-materials": ["founder_materials_request_artifact_id"],
     "prepare-initial-call": ["initial_call_brief_artifact_id"],
     "summarize-initial-call": ["customer_insights_artifact_id"],
     "run-follow-up-evaluation": ["follow_up_evaluation_artifact_id"],
+    "run-commercial-evaluation": ["commercial_evaluation_artifact_id"],
+    "run-technical-evaluation": ["technical_evaluation_artifact_id"],
+    "run-financial-evaluation": ["financial_evaluation_artifact_id"],
+    "run-team-evaluation": ["team_evaluation_artifact_id"],
     "run-investment-screen": ["investment_screen_scorecard_artifact_id"],
     "generate-diligence-questions": ["diligence_question_bank_artifact_id"],
     "run-founder-evaluation": ["founder_evaluation_artifact_id"],
@@ -330,44 +337,58 @@ VC_ARTIFACT_OUTPUTS = {
     "review-ic-memo": ["ic_memo_review_artifact_id"],
     "prepare-ic-agenda": ["ic_agenda_artifact_id"],
     "record-ic-decision": ["ic_decision_record_artifact_id"],
+    "analyze-deal-terms": ["deal_terms_analysis_artifact_id"],
+    "track-term-sheet-negotiation": ["negotiation_brief_artifact_id"],
     "review-term-sheet": ["term_sheet_review_artifact_id"],
+    "run-legal-diligence": ["legal_diligence_artifact_id"],
+    "review-investment-documents": ["investment_document_review_artifact_id"],
     "manage-closing-checklist": ["closing_checklist_artifact_id"],
     "verify-conditions-precedent": ["conditions_precedent_verification_artifact_id"],
+    "coordinate-capital-call-and-completion": ["completion_tracker_artifact_id"],
     "prepare-portfolio-onboarding": ["portfolio_onboarding_plan_artifact_id"],
     "affinity-deal-room-import": ["affinity_import_receipt_artifact_id"],
 }
 VC_ARTIFACT_INPUTS = {
-    "screen-inbound-opportunity": ["pitch_deck_artifact_id"],
-    "prepare-initial-call": ["pitch_deck_artifact_id"],
     "summarize-initial-call": ["meeting_record_artifact_ids"],
     "run-follow-up-evaluation": [
-        "first_look_scorecard_artifact_id",
+        "investment_screen_scorecard_artifact_id",
         "customer_insights_artifact_id",
     ],
-    "run-investment-screen": ["pitch_deck_artifact_id"],
     "run-financial-dd": ["financial_source_artifact_ids"],
     "run-technical-dd": ["technical_source_artifact_ids"],
     "prepare-team-review-pack": [
+        "commercial_evaluation_artifact_id",
+        "technical_evaluation_artifact_id",
+        "financial_evaluation_artifact_id",
+        "team_evaluation_artifact_id",
+        "diligence_question_bank_artifact_id",
         "commercial_dd_artifact_id",
         "financial_dd_artifact_id",
         "founder_evaluation_artifact_id",
         "technical_dd_artifact_id",
-        "diligence_question_bank_artifact_id",
     ],
     "prepare-partner-review-pack": [
+        "commercial_evaluation_artifact_id",
+        "technical_evaluation_artifact_id",
+        "financial_evaluation_artifact_id",
+        "team_evaluation_artifact_id",
+        "diligence_question_bank_artifact_id",
         "commercial_dd_artifact_id",
         "financial_dd_artifact_id",
         "founder_evaluation_artifact_id",
         "technical_dd_artifact_id",
-        "diligence_question_bank_artifact_id",
         "team_review_pack_artifact_id",
     ],
     "create-ic-memo": [
+        "commercial_evaluation_artifact_id",
+        "technical_evaluation_artifact_id",
+        "financial_evaluation_artifact_id",
+        "team_evaluation_artifact_id",
+        "diligence_question_bank_artifact_id",
         "commercial_dd_artifact_id",
         "financial_dd_artifact_id",
         "founder_evaluation_artifact_id",
         "technical_dd_artifact_id",
-        "diligence_question_bank_artifact_id",
         "team_review_pack_artifact_id",
         "partner_review_pack_artifact_id",
     ],
@@ -377,6 +398,9 @@ VC_ARTIFACT_INPUTS = {
         "investment_memo_artifact_id",
         "ic_agenda_artifact_id",
     ],
+    "analyze-deal-terms": ["cap_table_artifact_id"],
+    "track-term-sheet-negotiation": ["term_sheet_artifact_id"],
+    "review-investment-documents": ["term_sheet_review_artifact_id"],
     "manage-closing-checklist": [
         "ic_decision_record_artifact_id",
         "term_sheet_review_artifact_id",
@@ -387,11 +411,59 @@ VC_ARTIFACT_INPUTS = {
         "closing_source_artifact_ids",
     ],
     "review-term-sheet": ["term_sheet_artifact_id"],
+    "coordinate-capital-call-and-completion": [
+        "conditions_precedent_verification_artifact_id",
+        "closing_checklist_artifact_id",
+        "transaction_bible_artifact_id",
+    ],
     "prepare-portfolio-onboarding": [
         "ic_decision_record_artifact_id",
         "closing_checklist_artifact_id",
         "conditions_precedent_verification_artifact_id",
     ],
+}
+OPTIONAL_ARTIFACT_INPUTS = {
+    "prepare-initial-call": {"pitch_deck_artifact_id"},
+    "run-commercial-evaluation": {"follow_up_evaluation_artifact_id"},
+    "run-technical-evaluation": {"follow_up_evaluation_artifact_id"},
+    "run-financial-evaluation": {"follow_up_evaluation_artifact_id"},
+    "run-team-evaluation": {"follow_up_evaluation_artifact_id"},
+    "prepare-team-review-pack": {
+        "commercial_dd_artifact_id",
+        "financial_dd_artifact_id",
+        "founder_evaluation_artifact_id",
+        "technical_dd_artifact_id",
+    },
+    "prepare-partner-review-pack": {
+        "commercial_dd_artifact_id",
+        "financial_dd_artifact_id",
+        "founder_evaluation_artifact_id",
+        "technical_dd_artifact_id",
+    },
+    "create-ic-memo": {
+        "commercial_dd_artifact_id",
+        "financial_dd_artifact_id",
+        "founder_evaluation_artifact_id",
+        "technical_dd_artifact_id",
+    },
+    "analyze-deal-terms": {"financial_forecast_artifact_id"},
+    "track-term-sheet-negotiation": {"cap_table_artifact_id", "deal_terms_analysis_artifact_id"},
+    "review-term-sheet": {"deal_terms_analysis_artifact_id"},
+    "run-legal-diligence": {"corporate_structure_artifact_id"},
+    "review-investment-documents": {
+        "board_minutes_artifact_id",
+        "cap_table_artifact_id",
+        "disclosure_letter_artifact_id",
+        "legal_diligence_artifact_id",
+        "negotiation_brief_artifact_id",
+    },
+    "manage-closing-checklist": {
+        "investment_document_review_artifact_id",
+        "legal_diligence_artifact_id",
+    },
+    "prepare-portfolio-onboarding": {"completion_tracker_artifact_id"},
+    "run-investment-screen": {"opportunity_intake_artifact_id", "pitch_deck_artifact_id"},
+    "screen-inbound-opportunity": {"pitch_deck_artifact_id"},
 }
 
 
@@ -1255,6 +1327,8 @@ def validate_artifact_field_shape(
     template_id: str,
     section_name: str,
     field: dict[str, Any],
+    *,
+    require_required: bool = True,
 ) -> None:
     key = field["key"]
     is_artifact_key = key.endswith("_artifact_id")
@@ -1268,7 +1342,7 @@ def validate_artifact_field_shape(
         )
     if field.get("fieldType") != "file":
         fail(f"Task template {template_id} fields.{section_name}.{key} must use fieldType: file")
-    if field.get("required") is not True:
+    if require_required and field.get("required") is not True:
         fail(f"Task template {template_id} fields.{section_name}.{key} must set required: true")
 
 
@@ -1286,13 +1360,24 @@ def validate_required_artifact_fields(
         ("output", output_fields),
     ]:
         for field in mapped_fields.values():
-            validate_artifact_field_shape(template_id, section_name, field)
+            optional_inputs = OPTIONAL_ARTIFACT_INPUTS.get(slug, set())
+            validate_artifact_field_shape(
+                template_id,
+                section_name,
+                field,
+                require_required=not (section_name == "input" and field["key"] in optional_inputs),
+            )
 
     for key in VC_ARTIFACT_INPUTS.get(slug, []):
         field = input_fields.get(key)
         if field is None:
             fail(f"Task template {template_id} ({slug}) is missing required artifact input {key}")
-        validate_artifact_field_shape(template_id, "input", field)
+        validate_artifact_field_shape(
+            template_id,
+            "input",
+            field,
+            require_required=key not in OPTIONAL_ARTIFACT_INPUTS.get(slug, set()),
+        )
 
     for key in VC_ARTIFACT_OUTPUTS.get(slug, []):
         field = output_fields.get(key)

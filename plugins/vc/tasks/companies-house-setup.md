@@ -2,7 +2,7 @@
 id: vc.companies_house_setup
 title: Configure Companies House Public Register Preview
 slug: companies-house-setup
-agent: vc-pipeline-autopilot
+agent: vc-integration-operator
 skills:
 - vc-companies-house-sourcing
 - vc-companies-house-sync-read
@@ -62,19 +62,13 @@ Setup orchestration only. Do not call the Companies House API, import companies,
 - Source template: `alludium/task-definition-templates/vc-integrations/companies-house-setup.yaml`
 - Alludium task ID: `vc.companies_house_setup`
 - Task family: `integration_setup`
-- Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
+- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:
   - `project_management`
 
 ## Required Skills
-
-- `vc-companies-house-sourcing`
-- `vc-companies-house-sync-read`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `vc-companies-house-sourcing`
 - `vc-companies-house-sync-read`

@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_deal_flow_agenda
-version: 1.0.5
+version: 1.0.7
 title: Prepare Deal Flow Agenda
 category: Venture Capital
 visibility: workspace
@@ -16,13 +16,11 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: assessment
+    stage: evaluation
     taskFamily: pipeline
     requiredSkills:
       - citation-enforcement
-    plannedRequiredSkills:
       - vc-task-and-next-step-generation
-      - citation-enforcement
     plannedRecommendedAgentTemplate: vc_pipeline_autopilot
     recommendedAgentTemplate: vc_pipeline_autopilot
     supportedProjectTypes:

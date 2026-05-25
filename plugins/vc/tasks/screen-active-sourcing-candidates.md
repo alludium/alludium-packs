@@ -2,10 +2,11 @@
 id: vc.screen_active_sourcing_candidates
 title: Screen Active Sourcing Candidates
 slug: screen-active-sourcing-candidates
-agent: vc-first-look-analyst
+agent: vc-sourcing-operator
 skills:
 - vc-sourcing-verdict-and-screening
 - citation-enforcement
+- investment-screening-framework
 ---
 
 > **GENERATED FILE**
@@ -54,6 +55,7 @@ Screening recommendation only unless explicit write approval is granted. Never d
 ## Document References
 
 - `vc.document.sourcing_scoring_rubric` (methodology) -> `screening_artifact_id`
+- `vc.document.origination_source_strategy_guide` (methodology)
 - `vc.document.dedupe_novelty_policy` (policy)
 - `vc.document.template_use_guidance` (operating_guidance)
 
@@ -63,7 +65,7 @@ Screening recommendation only unless explicit write approval is granted. Never d
 - Alludium task ID: `vc.screen_active_sourcing_candidates`
 - Task family: `origination_screening`
 - Lifecycle stage: `review`
-- Recommended agent: `vc-first-look-analyst` (Alludium template `vc_first_look_analyst`)
+- Recommended agent: `vc-sourcing-operator` (Alludium template `vc_sourcing_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:
@@ -73,9 +75,4 @@ Screening recommendation only unless explicit write approval is granted. Never d
 
 - `vc-sourcing-verdict-and-screening`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-sourcing-verdict-and-screening`
 - `investment-screening-framework`
-- `citation-enforcement`

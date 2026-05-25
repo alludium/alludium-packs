@@ -2,8 +2,9 @@
 id: vc.generate_diligence_questions
 title: Generate Diligence Questions
 slug: generate-diligence-questions
-agent: vc-first-look-analyst
+agent: vc-evaluation-analyst
 skills:
+- investment-diligence-question-framework
 - citation-enforcement
 ---
 
@@ -70,6 +71,14 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Document References
 
 - `vc.document.investment_diligence_question_framework` (methodology) -> `diligence_question_bank_artifact_id`
+- `vc.document.opportunity_evaluation_framework` (methodology)
+- `vc.document.evaluation_workstream_guide` (methodology)
+- `vc.document.commercial_evaluation_guide` (methodology)
+- `vc.document.technical_evaluation_guide` (methodology)
+- `vc.document.financial_evaluation_guide` (methodology)
+- `vc.document.formal_diligence_workstream_guide` (methodology)
+- `vc.document.formal_diligence_checklist` (checklist)
+- `vc.document.legal_diligence_guide` (methodology)
 - `vc.document.evidence_citation_style_guide` (style_guide)
 - `vc.document.template_use_guidance` (operating_guidance)
 
@@ -78,17 +87,14 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Source template: `alludium/task-definition-templates/vc-workflows/generate-diligence-questions.yaml`
 - Alludium task ID: `vc.generate_diligence_questions`
 - Task family: `diligence`
-- Lifecycle stage: `diligence`
-- Recommended agent: `vc-first-look-analyst` (Alludium template `vc_first_look_analyst`)
+- Lifecycle stage: `evaluation`
+- Recommended agent: `vc-evaluation-analyst` (Alludium template `vc_evaluation_analyst`)
 - Supported project types:
   - `vc_deal_room`
 
 ## Required Skills
 
-- `citation-enforcement`
-
-## Planned Skills
-
+- `investment-diligence-question-framework`
 - `citation-enforcement`
 
 ## Workspace-Configured Methodology Skills

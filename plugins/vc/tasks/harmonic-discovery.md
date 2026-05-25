@@ -2,7 +2,7 @@
 id: vc.harmonic_discovery
 title: Explore Harmonic Source Scopes
 slug: harmonic-discovery
-agent: vc-origination-scout
+agent: vc-integration-operator
 skills:
 - vc-harmonic-discovery
 - citation-enforcement
@@ -57,18 +57,13 @@ Discovery only. Do not process company results, mark search results as seen, upd
 - Source template: `alludium/task-definition-templates/vc-integrations/harmonic-discovery.yaml`
 - Alludium task ID: `vc.harmonic_discovery`
 - Task family: `integration_discovery`
-- Recommended agent: `vc-origination-scout` (Alludium template `vc_origination_scout`)
+- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
 - Supported project types:
   - `vc_deal_room`
 - Supported project scopes:
   - `project_management`
 
 ## Required Skills
-
-- `vc-harmonic-discovery`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `vc-harmonic-discovery`
 - `citation-enforcement`

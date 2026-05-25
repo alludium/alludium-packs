@@ -2,7 +2,7 @@
 id: vc.apify_discovery
 title: Explore Apify Origination Sources
 slug: apify-discovery
-agent: vc-origination-scout
+agent: vc-integration-operator
 skills:
 - vc-apify-discovery
 - citation-enforcement
@@ -57,18 +57,13 @@ Discovery only. Do not start actor runs, import candidates, persist candidate st
 - Source template: `alludium/task-definition-templates/vc-integrations/apify-discovery.yaml`
 - Alludium task ID: `vc.apify_discovery`
 - Task family: `integration_discovery`
-- Recommended agent: `vc-origination-scout` (Alludium template `vc_origination_scout`)
+- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:
   - `project_management`
 
 ## Required Skills
-
-- `vc-apify-discovery`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `vc-apify-discovery`
 - `citation-enforcement`

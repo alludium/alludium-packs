@@ -6,6 +6,7 @@ agent: vc-ic-prep-producer
 skills:
 - citation-enforcement
 - ic-memo-assembly
+- ic-risk-checklist-and-decision-log
 ---
 
 > **GENERATED FILE**
@@ -71,6 +72,10 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Document References
 
 - `vc.document.ic_memo_review_template` (output_template) -> `ic_memo_review_artifact_id`
+- `vc.document.opportunity_evaluation_framework` (methodology)
+- `vc.document.evaluation_workstream_guide` (methodology)
+- `vc.document.formal_diligence_workstream_guide` (methodology)
+- `vc.document.formal_diligence_checklist` (checklist)
 - `vc.document.evidence_citation_style_guide` (style_guide)
 - `vc.document.template_use_guidance` (operating_guidance)
 
@@ -79,7 +84,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Source template: `alludium/task-definition-templates/vc-workflows/review-ic-memo.yaml`
 - Alludium task ID: `vc.review_ic_memo`
 - Task family: `ic`
-- Lifecycle stage: `review`
+- Lifecycle stage: `decision_review`
 - Recommended agent: `vc-ic-prep-producer` (Alludium template `vc_ic_prep_producer`)
 - Supported project types:
   - `vc_deal_room`
@@ -88,9 +93,4 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 
 - `citation-enforcement`
 - `ic-memo-assembly`
-
-## Planned Skills
-
-- `citation-enforcement`
 - `ic-risk-checklist-and-decision-log`
-- `ic-memo-assembly`

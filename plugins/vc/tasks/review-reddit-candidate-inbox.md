@@ -2,7 +2,7 @@
 id: vc.review_reddit_candidate_inbox
 title: Review Reddit Candidate Inbox
 slug: review-reddit-candidate-inbox
-agent: vc-origination-scout
+agent: vc-sourcing-operator
 skills:
 - vc-reddit-inbox-approval
 - vc-sourcing-dedupe-and-novelty-check
@@ -59,19 +59,13 @@ Approval proposal only unless explicit write approval is granted. Do not mark ro
 - Alludium task ID: `vc.review_reddit_candidate_inbox`
 - Task family: `origination_reddit_approval`
 - Lifecycle stage: `review`
-- Recommended agent: `vc-origination-scout` (Alludium template `vc_origination_scout`)
+- Recommended agent: `vc-sourcing-operator` (Alludium template `vc_sourcing_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:
   - `project_instance`
 
 ## Required Skills
-
-- `vc-reddit-inbox-approval`
-- `vc-sourcing-dedupe-and-novelty-check`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `vc-reddit-inbox-approval`
 - `vc-sourcing-dedupe-and-novelty-check`

@@ -1,4 +1,4 @@
-version: "1.0.3"
+version: "1.0.4"
 type: "template"
 platform_managed: false
 id: "vc_ic_prep_producer"
@@ -14,16 +14,18 @@ metadata:
     - create-ic-memo
     - review-ic-memo
     - prepare-ic-agenda
+    - prepare-sourcing-ic-summary
     - record-ic-decision
   installedTaskTemplateIds:
     - vc.create_ic_memo
     - vc.review_ic_memo
-  primaryStage: "Investment Committee"
-  primaryDealRoomState: "review"
+  primaryStage: "Decision Review"
+  primaryDealRoomState: "decision_review"
   requiredSkills:
     - ic-memo-assembly
     - ic-risk-checklist-and-decision-log
     - meeting-prep-and-summary
+    - vc-origination-ic-summary-preparation
     - vc-task-and-next-step-generation
     - citation-enforcement
 
@@ -38,6 +40,8 @@ skills:
   - externalId: "ic-risk-checklist-and-decision-log"
     activationMode: "AUTO"
   - externalId: "meeting-prep-and-summary"
+    activationMode: "AUTO"
+  - externalId: "vc-origination-ic-summary-preparation"
     activationMode: "AUTO"
   - externalId: "vc-task-and-next-step-generation"
     activationMode: "AUTO"

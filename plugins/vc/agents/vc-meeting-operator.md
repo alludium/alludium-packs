@@ -61,7 +61,7 @@ Do not send follow-ups, create calendar events, create tasks, update CRM/deal-sy
 - Display name: Meeting Operator
 - Version: `1.0.4`
 - Primary stage: Meetings
-- Primary Deal Room state: `assessment`
+- Primary Deal Room state: `evaluation`
 - Supported task definitions:
   - `prepare-initial-call`
   - `summarize-initial-call`

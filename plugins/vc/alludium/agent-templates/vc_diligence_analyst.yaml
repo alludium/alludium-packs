@@ -1,4 +1,4 @@
-version: "1.0.4"
+version: "1.0.5"
 type: "template"
 platform_managed: false
 id: "vc_diligence_analyst"
@@ -17,8 +17,8 @@ metadata:
     - run-commercial-dd
     - run-technical-dd
     - run-financial-dd
-  primaryStage: "Diligence"
-  primaryDealRoomState: "diligence"
+  primaryStage: "Formal Diligence"
+  primaryDealRoomState: "formal_diligence"
   requiredSkills:
     - company-research-and-enrichment
     - founder-evaluation-and-reference-checking
@@ -29,6 +29,7 @@ metadata:
     - team-and-hiring-assessment
     - market-map-building
     - investment-diligence-question-framework
+    - ic-memo-assembly
     - red-flags-scanner
     - citation-enforcement
 
@@ -55,6 +56,8 @@ skills:
   - externalId: "market-map-building"
     activationMode: "AUTO"
   - externalId: "investment-diligence-question-framework"
+    activationMode: "AUTO"
+  - externalId: "ic-memo-assembly"
     activationMode: "AUTO"
   - externalId: "red-flags-scanner"
     activationMode: "AUTO"

@@ -1,14 +1,14 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_partner_review_pack
-version: 1.0.11
+version: 1.0.16
 title: Prepare Partner Review Pack
 category: Venture Capital
 visibility: workspace
 tags:
-  - vc
-  - partner-review
-  - diligence
+- vc
+- partner-review
+- diligence
 definition:
   name: Prepare Partner Review Pack
   slug: prepare-partner-review-pack
@@ -16,196 +16,236 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: review
+    stage: decision_review
     taskFamily: diligence
     documentRefs:
-      - documentId: vc.document.review_pack_checklist
-        usage: output_template
-        outputFieldKey: partner_review_pack_artifact_id
-      - documentId: vc.document.evidence_citation_style_guide
-        usage: style_guide
-      - documentId: vc.document.template_use_guidance
-        usage: operating_guidance
+    - documentId: vc.document.review_pack_checklist
+      usage: output_template
+      outputFieldKey: partner_review_pack_artifact_id
+    - documentId: vc.document.opportunity_evaluation_framework
+      usage: methodology
+    - documentId: vc.document.evaluation_workstream_guide
+      usage: methodology
+    - documentId: vc.document.formal_diligence_workstream_guide
+      usage: methodology
+    - documentId: vc.document.formal_diligence_checklist
+      usage: checklist
+    - documentId: vc.document.evidence_citation_style_guide
+      usage: style_guide
+    - documentId: vc.document.template_use_guidance
+      usage: operating_guidance
     requiredSkills:
-      - ic-memo-assembly
-      - citation-enforcement
-    plannedRequiredSkills:
-      - ic-memo-assembly
-      - citation-enforcement
+    - ic-memo-assembly
+    - citation-enforcement
     plannedRecommendedAgentTemplate: vc_diligence_analyst
     recommendedAgentTemplate: vc_diligence_analyst
     supportedProjectTypes:
-      - vc_deal_room
+    - vc_deal_room
     sourceAnchors:
-      - source: investment-management-process-slides
-        anchor: slide-19
-        note: Team/partner review stage
-      - source: investment-management-process-slides
-        anchor: slide-20
-        note: Team/partner review AI map
-      - source: investment-management-process-slides
-        anchor: slide-39
-        note: Decision hierarchy
-      - source: investment-management-process-slides
-        anchor: slide-34
-        note: Roles
+    - source: investment-management-process-slides
+      anchor: slide-19
+      note: Team/partner review stage
+    - source: investment-management-process-slides
+      anchor: slide-20
+      note: Team/partner review AI map
+    - source: investment-management-process-slides
+      anchor: slide-39
+      note: Decision hierarchy
+    - source: investment-management-process-slides
+      anchor: slide-34
+      note: Roles
     instructions:
-      executionInstructions: >-
-        Prepare the Partner Review pack with investment thesis, strategic fit, proposed DD scope, workstream owners, key risks, and decision ask. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Use the required input file artifacts `commercial_dd_artifact_id`, `financial_dd_artifact_id`, `founder_evaluation_artifact_id`, `technical_dd_artifact_id`, and `diligence_question_bank_artifact_id` as the review subjects for the partner review pack. Use the required input file artifact `team_review_pack_artifact_id` as the team review pack being escalated to partner review. Create or update a durable project file artifact named Partner Review Pack and attach it to the required output field `partner_review_pack_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+      executionInstructions: 'Prepare the Partner Review pack from the team review pack, evaluation-stage workstream outputs, the diligence question
+        bank, available formal diligence outputs, key risks, proposed diligence scope, and decision ask. Cite material claims, separate assumptions
+        from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit
+        human approval. Use required evaluation input file artifacts `commercial_evaluation_artifact_id`, `technical_evaluation_artifact_id`,
+        `financial_evaluation_artifact_id`, `team_evaluation_artifact_id`, and `diligence_question_bank_artifact_id` as the decision-review source
+        set. Use formal diligence artifacts `commercial_dd_artifact_id`, `financial_dd_artifact_id`, `founder_evaluation_artifact_id`, and `technical_dd_artifact_id`
+        when present, but do not block evaluation-stage review on them. Use the required input file artifact `team_review_pack_artifact_id` as
+        the team review pack being escalated to partner review. Create or update a durable project file artifact named Partner Review Pack and
+        attach it to the required output field `partner_review_pack_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference
+        contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic,
+        `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance`
+        or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document
+        and preserve the document ID alongside the output artifact.'
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
-      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
+      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation,
+        or stage transition.
       completionCriteria:
-        - Required input gaps are resolved or listed as assumptions/open questions.
-        - Material conclusions include source links or are labeled as human judgment calls.
-        - Next actions identify owner, dependency, and required human approval point.
+      - Required input gaps are resolved or listed as assumptions/open questions.
+      - Material conclusions include source links or are labeled as human judgment calls.
+      - Next actions identify owner, dependency, and required human approval point.
     humanDecisionPoints:
-      - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
-      - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+    - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
+    - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
     orchestration:
       parentTaskPolicy: none
       suggestedChildTasks: []
     workspaceConfiguredMethodologySkills:
-      - skill: market-map-building
-        note: Use only when the workspace explicitly configures this market mapping method.
+    - skill: market-map-building
+      note: Use only when the workspace explicitly configures this market mapping method.
 fields:
   input:
-    - key: team_review_pack_artifact_id
-      name: Team Review Pack
-      fieldType: file
-      required: true
-      position: 0
-      config: {}
-    - key: commercial_dd_artifact_id
-      name: Commercial DD Report
-      fieldType: file
-      required: true
-      position: 1
-      config: {}
-    - key: financial_dd_artifact_id
-      name: Financial DD Report
-      fieldType: file
-      required: true
-      position: 2
-      config: {}
-    - key: founder_evaluation_artifact_id
-      name: Founder Evaluation
-      fieldType: file
-      required: true
-      position: 3
-      config: {}
-    - key: technical_dd_artifact_id
-      name: Technical DD Report
-      fieldType: file
-      required: true
-      position: 4
-      config: {}
-    - key: diligence_question_bank_artifact_id
-      name: Structured Diligence Question Bank
-      fieldType: file
-      required: true
-      position: 5
-      config: {}
-
+  - key: team_review_pack_artifact_id
+    name: Team Review Pack
+    fieldType: file
+    required: true
+    position: 0
+    config: {}
+  - key: commercial_evaluation_artifact_id
+    name: Commercial Evaluation
+    fieldType: file
+    required: true
+    position: 1
+    config: {}
+  - key: technical_evaluation_artifact_id
+    name: Technical Evaluation
+    fieldType: file
+    required: true
+    position: 2
+    config: {}
+  - key: financial_evaluation_artifact_id
+    name: Financial Evaluation
+    fieldType: file
+    required: true
+    position: 3
+    config: {}
+  - key: team_evaluation_artifact_id
+    name: Team Evaluation
+    fieldType: file
+    required: true
+    position: 4
+    config: {}
+  - key: diligence_question_bank_artifact_id
+    name: Structured Diligence Question Bank
+    fieldType: file
+    required: true
+    position: 5
+    config: {}
+  - key: commercial_dd_artifact_id
+    name: Commercial DD Report
+    fieldType: file
+    required: false
+    position: 6
+    config: {}
+  - key: financial_dd_artifact_id
+    name: Financial DD Report
+    fieldType: file
+    required: false
+    position: 7
+    config: {}
+  - key: founder_evaluation_artifact_id
+    name: Founder Evaluation
+    fieldType: file
+    required: false
+    position: 8
+    config: {}
+  - key: technical_dd_artifact_id
+    name: Technical DD Report
+    fieldType: file
+    required: false
+    position: 9
+    config: {}
   output:
-    - key: partner_review_pack_artifact_id
-      name: Partner Review Pack
-      fieldType: file
-      required: true
-      position: 0
-      config:
-        documentRefId: vc.document.review_pack_checklist
-    - key: investment_thesis_summary
-      name: Investment Thesis Summary
-      fieldType: richtext
-      required: false
-      position: 1
-      config:
-        rows: 5
-    - key: strategic_fit
-      name: Strategic Fit
-      fieldType: string
-      required: false
-      position: 2
-      config: {}
-    - key: proposed_dd_scope
-      name: Proposed Dd Scope
-      fieldType: string
-      required: false
-      position: 3
-      config: {}
-    - key: workstream_owners
-      name: Workstream Owners
-      fieldType: json
-      required: false
-      position: 4
-      config: {}
-    - key: key_risks
-      name: Key Risks
-      fieldType: json
-      required: false
-      position: 5
-      config: {}
-    - key: decision_ask
-      name: Decision Ask
-      fieldType: string
-      required: false
-      position: 6
-      config: {}
-    - key: summary
-      name: Summary
-      fieldType: richtext
-      required: false
-      position: 7
-      config:
-        rows: 5
-    - key: recommendation
-      name: Recommendation
-      fieldType: string
-      required: false
-      position: 8
-      config: {}
-    - key: source_links
-      name: Source Links
-      fieldType: string
-      required: false
-      position: 9
-      config: {}
-    - key: assumptions
-      name: Assumptions
-      fieldType: string
-      required: false
-      position: 10
-      config: {}
-    - key: evidence_quality
-      name: Evidence Quality
-      fieldType: json
-      required: false
-      position: 11
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: false
-      position: 12
-      config: {}
-    - key: risks
-      name: Risks
-      fieldType: json
-      required: false
-      position: 13
-      config: {}
-    - key: human_decision_points
-      name: Human Decision Points
-      fieldType: string
-      required: false
-      position: 14
-      config: {}
-    - key: next_actions
-      name: Next Actions
-      fieldType: json
-      required: false
-      position: 15
-      config: {}
+  - key: partner_review_pack_artifact_id
+    name: Partner Review Pack
+    fieldType: file
+    required: true
+    position: 0
+    config:
+      documentRefId: vc.document.review_pack_checklist
+  - key: investment_thesis_summary
+    name: Investment Thesis Summary
+    fieldType: richtext
+    required: false
+    position: 1
+    config:
+      rows: 5
+  - key: strategic_fit
+    name: Strategic Fit
+    fieldType: string
+    required: false
+    position: 2
+    config: {}
+  - key: proposed_dd_scope
+    name: Proposed Dd Scope
+    fieldType: string
+    required: false
+    position: 3
+    config: {}
+  - key: workstream_owners
+    name: Workstream Owners
+    fieldType: json
+    required: false
+    position: 4
+    config: {}
+  - key: key_risks
+    name: Key Risks
+    fieldType: json
+    required: false
+    position: 5
+    config: {}
+  - key: decision_ask
+    name: Decision Ask
+    fieldType: string
+    required: false
+    position: 6
+    config: {}
+  - key: summary
+    name: Summary
+    fieldType: richtext
+    required: false
+    position: 7
+    config:
+      rows: 5
+  - key: recommendation
+    name: Recommendation
+    fieldType: string
+    required: false
+    position: 8
+    config: {}
+  - key: source_links
+    name: Source Links
+    fieldType: string
+    required: false
+    position: 9
+    config: {}
+  - key: assumptions
+    name: Assumptions
+    fieldType: string
+    required: false
+    position: 10
+    config: {}
+  - key: evidence_quality
+    name: Evidence Quality
+    fieldType: json
+    required: false
+    position: 11
+    config: {}
+  - key: open_questions
+    name: Open Questions
+    fieldType: json
+    required: false
+    position: 12
+    config: {}
+  - key: risks
+    name: Risks
+    fieldType: json
+    required: false
+    position: 13
+    config: {}
+  - key: human_decision_points
+    name: Human Decision Points
+    fieldType: string
+    required: false
+    position: 14
+    config: {}
+  - key: next_actions
+    name: Next Actions
+    fieldType: json
+    required: false
+    position: 15
+    config: {}
 runtime:
   defaultExecutionContext:
     sourceMetadata:

@@ -2,7 +2,7 @@
 id: vc.google_drive_sync_read
 title: Preview Google Drive Context
 slug: google-drive-sync-read
-agent: vc-pipeline-autopilot
+agent: vc-integration-operator
 skills:
 - vc-google-drive-sync-read
 - citation-enforcement
@@ -57,18 +57,13 @@ Read preview only. Do not attach, import, create, upload, copy, share, move, del
 - Source template: `alludium/task-definition-templates/vc-integrations/google-drive-sync-read.yaml`
 - Alludium task ID: `vc.google_drive_sync_read`
 - Task family: `integration_sync_read`
-- Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
+- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
 - Supported project types:
   - `vc_deal_room`
 - Supported project scopes:
   - `project_management`
 
 ## Required Skills
-
-- `vc-google-drive-sync-read`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `vc-google-drive-sync-read`
 - `citation-enforcement`

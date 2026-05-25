@@ -5,6 +5,7 @@ slug: request-founder-materials
 agent: vc-dealflow-concierge
 skills:
 - citation-enforcement
+- founder-materials-request
 ---
 
 > **GENERATED FILE**
@@ -78,7 +79,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Source template: `alludium/task-definition-templates/vc-workflows/request-founder-materials.yaml`
 - Alludium task ID: `vc.request_founder_materials`
 - Task family: `deal_room`
-- Lifecycle stage: `assessment`
+- Lifecycle stage: `evaluation`
 - Recommended agent: `vc-dealflow-concierge` (Alludium template `vc_dealflow_concierge`)
 - Supported project types:
   - `vc_deal_room`
@@ -86,8 +87,4 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Required Skills
 
 - `citation-enforcement`
-
-## Planned Skills
-
 - `founder-materials-request`
-- `citation-enforcement`

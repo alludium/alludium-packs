@@ -71,6 +71,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Document References
 
 - `vc.document.thesis_target_list_template` (output_template) -> `thesis_target_list_artifact_id`
+- `vc.document.origination_source_strategy_guide` (methodology)
 - `vc.document.evidence_citation_style_guide` (style_guide)
 - `vc.document.template_use_guidance` (operating_guidance)
 
@@ -79,18 +80,12 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Source template: `alludium/task-definition-templates/vc-workflows/source-thesis-targets.yaml`
 - Alludium task ID: `vc.source_thesis_targets`
 - Task family: `pipeline`
-- Lifecycle stage: `assessment`
+- Lifecycle stage: `intake`
 - Recommended agent: `vc-origination-scout` (Alludium template `vc_origination_scout`)
 - Supported project types:
   - `vc_deal_room`
 
 ## Required Skills
-
-- `company-research-and-enrichment`
-- `founder-outreach-and-intro-paths`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `company-research-and-enrichment`
 - `founder-outreach-and-intro-paths`

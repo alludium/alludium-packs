@@ -246,7 +246,7 @@ Match effort to purpose:
 | Depth        | When                                  | What to Query                                                    |
 | ------------ | ------------------------------------- | ---------------------------------------------------------------- |
 | **Quick**    | Origination check, triage             | Affinity + Harmonic, then official website if needed             |
-| **Standard** | Ten-factor screening, first-call prep | Affinity + Harmonic + Dealroom if connected + Exa                |
+| **Standard** | Investment Screening, first-call prep | Affinity + Harmonic + Dealroom if connected + Exa                |
 | **Deep**     | IC prep, deep diligence               | All relevant sources including Firecrawl and deeper Exa research |
 
 If the requesting workflow does not specify depth, default to Standard.

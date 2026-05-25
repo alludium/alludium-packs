@@ -2,7 +2,7 @@
 id: vc.harmonic_setup
 title: Set Up Harmonic for VC Deal Rooms
 slug: harmonic-setup
-agent: vc-pipeline-autopilot
+agent: vc-integration-operator
 skills:
 - vc-harmonic-discovery
 - vc-harmonic-sync-read
@@ -62,19 +62,13 @@ Setup orchestration only. Do not import companies or people, create watchlists, 
 - Source template: `alludium/task-definition-templates/vc-integrations/harmonic-setup.yaml`
 - Alludium task ID: `vc.harmonic_setup`
 - Task family: `integration_setup`
-- Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
+- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
 - Supported project types:
   - `vc_deal_room`
 - Supported project scopes:
   - `project_management`
 
 ## Required Skills
-
-- `vc-harmonic-discovery`
-- `vc-harmonic-sync-read`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `vc-harmonic-discovery`
 - `vc-harmonic-sync-read`

@@ -2,7 +2,7 @@
 id: vc.review_source_errors_and_spend
 title: Review Source Errors and Spend
 slug: review-source-errors-and-spend
-agent: vc-pipeline-autopilot
+agent: vc-sourcing-operator
 skills:
 - vc-source-error-and-spend-audit
 - vc-source-registry-and-state-management
@@ -66,19 +66,13 @@ Review only. Do not retry paid runs, change budgets, disable schedules, or updat
 - Alludium task ID: `vc.review_source_errors_and_spend`
 - Task family: `origination_source_health`
 - Lifecycle stage: `operate`
-- Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
+- Recommended agent: `vc-sourcing-operator` (Alludium template `vc_sourcing_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:
   - `project_instance`
 
 ## Required Skills
-
-- `vc-source-error-and-spend-audit`
-- `vc-source-registry-and-state-management`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `vc-source-error-and-spend-audit`
 - `vc-source-registry-and-state-management`

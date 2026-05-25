@@ -39,6 +39,102 @@
       "status": "source"
     },
     {
+      "id": "vc.document.opportunity_evaluation_framework",
+      "title": "Opportunity Evaluation Framework",
+      "description": "Evidence-led post-screening opportunity evaluation methodology with scoring, thesis tension, gating risk, and meeting/data-room planning standards.",
+      "documentType": "methodology",
+      "path": "shared/opportunity-evaluation-framework.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "create-ic-memo",
+        "generate-diligence-questions",
+        "prepare-partner-review-pack",
+        "prepare-team-review-pack",
+        "review-opportunity-status",
+        "review-ic-memo",
+        "run-follow-up-evaluation",
+        "run-team-evaluation",
+        "run-financial-evaluation",
+        "run-technical-evaluation",
+        "run-commercial-evaluation"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.evaluation_workstream_guide",
+      "title": "Evaluation Workstream Guide",
+      "description": "Lightweight commercial, technical, financial, and team evaluation guidance for post-screening work before formal diligence.",
+      "documentType": "methodology",
+      "path": "shared/evaluation-workstream-guide.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "create-ic-memo",
+        "generate-diligence-questions",
+        "prepare-partner-review-pack",
+        "prepare-team-review-pack",
+        "review-ic-memo",
+        "review-opportunity-status",
+        "run-follow-up-evaluation",
+        "run-team-evaluation",
+        "run-financial-evaluation",
+        "run-technical-evaluation",
+        "run-commercial-evaluation"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.commercial_evaluation_guide",
+      "title": "Commercial Evaluation Guide",
+      "description": "Lightweight commercial evaluation guidance for market, customer, GTM, pricing, and competition hypotheses.",
+      "documentType": "methodology",
+      "path": "deal-room/commercial-evaluation-guide.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "generate-diligence-questions",
+        "run-follow-up-evaluation",
+        "run-commercial-evaluation"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.technical_evaluation_guide",
+      "title": "Technical Evaluation Guide",
+      "description": "Lightweight technical evaluation guidance for product, architecture, technical edge, IP, data, and roadmap hypotheses.",
+      "documentType": "methodology",
+      "path": "deal-room/technical-evaluation-guide.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "generate-diligence-questions",
+        "run-follow-up-evaluation",
+        "run-technical-evaluation"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.financial_evaluation_guide",
+      "title": "Financial Evaluation Guide",
+      "description": "Lightweight financial evaluation guidance for forecast plausibility, burn, runway, use of funds, valuation, ownership, and financing risk.",
+      "documentType": "methodology",
+      "path": "deal-room/financial-evaluation-guide.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "generate-diligence-questions",
+        "run-follow-up-evaluation",
+        "run-financial-evaluation"
+      ],
+      "status": "source"
+    },
+    {
       "id": "vc.document.evidence_citation_style_guide",
       "title": "Evidence And Citation Style Guide",
       "description": "Pack-level style guide for citations, assumptions, source confidence, and claim hygiene across VC documents.",
@@ -61,7 +157,11 @@
         "run-investment-screen",
         "run-sourcing-pipeline",
         "run-technical-dd",
-        "screen-inbound-opportunity"
+        "screen-inbound-opportunity",
+        "run-commercial-evaluation",
+        "run-technical-evaluation",
+        "run-financial-evaluation",
+        "run-team-evaluation"
       ],
       "status": "source"
     },
@@ -99,6 +199,10 @@
         "run-commercial-dd",
         "run-financial-dd",
         "run-follow-up-evaluation",
+        "run-team-evaluation",
+        "run-financial-evaluation",
+        "run-technical-evaluation",
+        "run-commercial-evaluation",
         "run-founder-evaluation",
         "run-investment-screen",
         "run-sourcing-pipeline",
@@ -217,8 +321,8 @@
     },
     {
       "id": "vc.document.follow_up_evaluation_template",
-      "title": "Follow-Up Evaluation Template",
-      "description": "Reusable follow-up evaluation after first-call or first-look work.",
+      "title": "Opportunity Evaluation Template",
+      "description": "Reusable deeper opportunity evaluation after investment screening and early evidence collection.",
       "documentType": "template",
       "path": "deal-room/follow-up-evaluation-template.md",
       "supportedProjectTypes": [
@@ -226,6 +330,62 @@
       ],
       "relatedTaskDefinitionSlugs": [
         "run-follow-up-evaluation"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.team_evaluation_template",
+      "title": "Team Evaluation Template",
+      "description": "Output template for lightweight team and founder evaluation before formal diligence.",
+      "documentType": "template",
+      "path": "deal-room/team-evaluation-template.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "run-team-evaluation"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.financial_evaluation_template",
+      "title": "Financial Evaluation Template",
+      "description": "Output template for lightweight financial and financing evaluation before formal diligence.",
+      "documentType": "template",
+      "path": "deal-room/financial-evaluation-template.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "run-financial-evaluation"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.technical_evaluation_template",
+      "title": "Technical Evaluation Template",
+      "description": "Output template for lightweight technical and product evaluation before formal diligence.",
+      "documentType": "template",
+      "path": "deal-room/technical-evaluation-template.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "run-technical-evaluation"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.commercial_evaluation_template",
+      "title": "Commercial Evaluation Template",
+      "description": "Output template for lightweight commercial evaluation before formal diligence.",
+      "documentType": "template",
+      "path": "deal-room/commercial-evaluation-template.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "run-commercial-evaluation"
       ],
       "status": "source"
     },
@@ -290,6 +450,52 @@
       "status": "source"
     },
     {
+      "id": "vc.document.formal_diligence_workstream_guide",
+      "title": "Formal Diligence Workstream Guide",
+      "description": "Verification-oriented diligence workstream methodology for commercial, financial, technical, founder/team, legal, market, terms, and exit review.",
+      "documentType": "methodology",
+      "path": "deal-room/formal-diligence-workstream-guide.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "create-ic-memo",
+        "generate-diligence-questions",
+        "prepare-partner-review-pack",
+        "prepare-team-review-pack",
+        "review-ic-memo",
+        "run-commercial-dd",
+        "run-financial-dd",
+        "run-founder-evaluation",
+        "run-legal-diligence",
+        "run-technical-dd"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.formal_diligence_checklist",
+      "title": "Formal Diligence Checklist",
+      "description": "Full formal diligence checklist covering leadership, technical, commercial, market, financial, legal, deal-terms, exit, and company-structure workstreams.",
+      "documentType": "checklist",
+      "path": "deal-room/formal-diligence-checklist.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "create-ic-memo",
+        "generate-diligence-questions",
+        "prepare-partner-review-pack",
+        "prepare-team-review-pack",
+        "review-ic-memo",
+        "run-commercial-dd",
+        "run-financial-dd",
+        "run-founder-evaluation",
+        "run-legal-diligence",
+        "run-technical-dd"
+      ],
+      "status": "source"
+    },
+    {
       "id": "vc.document.review_pack_checklist",
       "title": "Review Pack Checklist",
       "description": "Checklist for team review and partner review packs before escalation to IC materials.",
@@ -319,6 +525,34 @@
       "status": "source"
     },
     {
+      "id": "vc.document.deal_terms_analysis_template",
+      "title": "Deal Terms Analysis Template",
+      "description": "Reusable commercial review format for valuation, ownership, dilution, ESOP, and round construction analysis.",
+      "documentType": "template",
+      "path": "deal-room/deal-terms-analysis-template.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "analyze-deal-terms"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.term_sheet_negotiation_brief_template",
+      "title": "Term Sheet Negotiation Brief Template",
+      "description": "Reusable internal brief for open terms, give/get options, counsel questions, and approval points.",
+      "documentType": "template",
+      "path": "deal-room/term-sheet-negotiation-brief-template.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "track-term-sheet-negotiation"
+      ],
+      "status": "source"
+    },
+    {
       "id": "vc.document.term_sheet_review_template",
       "title": "Term Sheet Review Template",
       "description": "Reusable business review format for term-sheet deviations, red flags, and counsel questions.",
@@ -329,6 +563,51 @@
       ],
       "relatedTaskDefinitionSlugs": [
         "review-term-sheet"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.legal_diligence_tracker_template",
+      "title": "Legal Diligence Tracker Template",
+      "description": "Reusable tracker for legal document indexing, issue registers, counsel questions, and showstopper-risk review support.",
+      "documentType": "template",
+      "path": "deal-room/legal-diligence-tracker-template.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "run-legal-diligence"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.legal_diligence_guide",
+      "title": "Legal Diligence Guide",
+      "description": "Legal diligence guidance for document indexing, issue tracking, counsel questions, and legal-risk escalation without legal advice.",
+      "documentType": "methodology",
+      "path": "deal-room/legal-diligence-guide.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "run-legal-diligence",
+        "review-investment-documents",
+        "manage-closing-checklist",
+        "verify-conditions-precedent"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.investment_document_review_template",
+      "title": "Investment Document Review Template",
+      "description": "Reusable review-support format for mapping investment documents back to approved terms and open counsel issues.",
+      "documentType": "template",
+      "path": "deal-room/investment-document-review-template.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "review-investment-documents"
       ],
       "status": "source"
     },
@@ -361,6 +640,20 @@
       "status": "source"
     },
     {
+      "id": "vc.document.completion_tracker_template",
+      "title": "Completion Tracker Template",
+      "description": "Reusable tracker for capital call status, funds transfer readiness, completion evidence, and portfolio handoff triggers.",
+      "documentType": "template",
+      "path": "deal-room/completion-tracker-template.md",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "coordinate-capital-call-and-completion"
+      ],
+      "status": "source"
+    },
+    {
       "id": "vc.document.portfolio_onboarding_plan_template",
       "title": "Portfolio Onboarding Plan Template",
       "description": "Reusable post-close onboarding plan covering owners, first 100 days, reporting, board setup, and operating cadence.",
@@ -387,6 +680,28 @@
         "configure-origination-pipeline",
         "promote-candidate-to-deal-room",
         "run-sourcing-pipeline"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.origination_source_strategy_guide",
+      "title": "Origination Source Strategy Guide",
+      "description": "Source strategy, source provenance, source quality, and promotion-readiness methodology for venture origination pipelines.",
+      "documentType": "methodology",
+      "path": "origination/origination-source-strategy-guide.md",
+      "supportedProjectTypes": [
+        "vc_deal_room",
+        "vc_origination_pipeline"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "configure-origination-pipeline",
+        "prepare-lead-gen-packet",
+        "prepare-sourcing-ic-summary",
+        "promote-candidate-to-deal-room",
+        "run-sourcing-pipeline",
+        "score-sourcing-candidates",
+        "screen-active-sourcing-candidates",
+        "source-thesis-targets"
       ],
       "status": "source"
     },

@@ -2,7 +2,7 @@
 id: vc.enrich_sourcing_candidates
 title: Enrich Sourcing Candidates
 slug: enrich-sourcing-candidates
-agent: vc-origination-scout
+agent: vc-sourcing-operator
 skills:
 - vc-sourcing-candidate-enrichment
 - vc-sourcing-dedupe-and-novelty-check
@@ -60,19 +60,13 @@ Read/enrich only. Do not write CRM rows, create Notion pages, score final verdic
 - Alludium task ID: `vc.enrich_sourcing_candidates`
 - Task family: `origination_enrichment`
 - Lifecycle stage: `enrich`
-- Recommended agent: `vc-origination-scout` (Alludium template `vc_origination_scout`)
+- Recommended agent: `vc-sourcing-operator` (Alludium template `vc_sourcing_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:
   - `project_instance`
 
 ## Required Skills
-
-- `vc-sourcing-candidate-enrichment`
-- `vc-sourcing-dedupe-and-novelty-check`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `vc-sourcing-candidate-enrichment`
 - `vc-sourcing-dedupe-and-novelty-check`

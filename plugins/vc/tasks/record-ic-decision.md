@@ -5,6 +5,8 @@ slug: record-ic-decision
 agent: vc-ic-prep-producer
 skills:
 - citation-enforcement
+- ic-risk-checklist-and-decision-log
+- vc-task-and-next-step-generation
 ---
 
 > **GENERATED FILE**
@@ -81,7 +83,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Source template: `alludium/task-definition-templates/vc-workflows/record-ic-decision.yaml`
 - Alludium task ID: `vc.record_ic_decision`
 - Task family: `ic`
-- Lifecycle stage: `review`
+- Lifecycle stage: `decision_review`
 - Recommended agent: `vc-ic-prep-producer` (Alludium template `vc_ic_prep_producer`)
 - Supported project types:
   - `vc_deal_room`
@@ -89,9 +91,5 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Required Skills
 
 - `citation-enforcement`
-
-## Planned Skills
-
 - `ic-risk-checklist-and-decision-log`
 - `vc-task-and-next-step-generation`
-- `citation-enforcement`

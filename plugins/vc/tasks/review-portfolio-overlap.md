@@ -2,10 +2,11 @@
 id: vc.review_portfolio_overlap
 title: Review Portfolio Overlap
 slug: review-portfolio-overlap
-agent: vc-first-look-analyst
+agent: vc-sourcing-operator
 skills:
 - vc-portfolio-overlap-review
 - citation-enforcement
+- vc-relationship-context-check
 ---
 
 > **GENERATED FILE**
@@ -57,7 +58,7 @@ Review and annotate proposal only. Do not change candidate status, pass candidat
 - Alludium task ID: `vc.review_portfolio_overlap`
 - Task family: `origination_portfolio_overlap`
 - Lifecycle stage: `review`
-- Recommended agent: `vc-first-look-analyst` (Alludium template `vc_first_look_analyst`)
+- Recommended agent: `vc-sourcing-operator` (Alludium template `vc_sourcing_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:
@@ -67,9 +68,4 @@ Review and annotate proposal only. Do not change candidate status, pass candidat
 
 - `vc-portfolio-overlap-review`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-portfolio-overlap-review`
 - `vc-relationship-context-check`
-- `citation-enforcement`

@@ -2,7 +2,7 @@
 id: vc.slack_discovery
 title: Explore Slack Channels for VC Context
 slug: slack-discovery
-agent: vc-pipeline-autopilot
+agent: vc-integration-operator
 skills:
 - vc-slack-discovery
 - citation-enforcement
@@ -56,18 +56,13 @@ Discovery only. Do not read messages, post, reply, create channels, or change ch
 - Source template: `alludium/task-definition-templates/vc-integrations/slack-discovery.yaml`
 - Alludium task ID: `vc.slack_discovery`
 - Task family: `integration_discovery`
-- Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
+- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
 - Supported project types:
   - `vc_deal_room`
 - Supported project scopes:
   - `project_management`
 
 ## Required Skills
-
-- `vc-slack-discovery`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `vc-slack-discovery`
 - `citation-enforcement`

@@ -2,7 +2,7 @@
 id: vc.generate_sourcing_digest
 title: Generate Sourcing Digest
 slug: generate-sourcing-digest
-agent: vc-pipeline-autopilot
+agent: vc-sourcing-operator
 skills:
 - vc-sourcing-digest-generation
 - citation-enforcement
@@ -62,18 +62,13 @@ Draft digest only unless explicit channel-post approval is granted.
 - Alludium task ID: `vc.generate_sourcing_digest`
 - Task family: `origination_digest`
 - Lifecycle stage: `operate`
-- Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
+- Recommended agent: `vc-sourcing-operator` (Alludium template `vc_sourcing_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:
   - `project_instance`
 
 ## Required Skills
-
-- `vc-sourcing-digest-generation`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `vc-sourcing-digest-generation`
 - `citation-enforcement`

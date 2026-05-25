@@ -6,6 +6,7 @@ agent: vc-ic-prep-producer
 skills:
 - meeting-prep-and-summary
 - citation-enforcement
+- ic-risk-checklist-and-decision-log
 ---
 
 > **GENERATED FILE**
@@ -75,7 +76,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Source template: `alludium/task-definition-templates/vc-workflows/prepare-ic-agenda.yaml`
 - Alludium task ID: `vc.prepare_ic_agenda`
 - Task family: `ic`
-- Lifecycle stage: `review`
+- Lifecycle stage: `decision_review`
 - Recommended agent: `vc-ic-prep-producer` (Alludium template `vc_ic_prep_producer`)
 - Supported project types:
   - `vc_deal_room`
@@ -84,9 +85,4 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 
 - `meeting-prep-and-summary`
 - `citation-enforcement`
-
-## Planned Skills
-
 - `ic-risk-checklist-and-decision-log`
-- `meeting-prep-and-summary`
-- `citation-enforcement`

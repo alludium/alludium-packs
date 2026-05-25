@@ -2,7 +2,7 @@
 id: vc.slack_sync_read
 title: Preview Slack Deal Context
 slug: slack-sync-read
-agent: vc-pipeline-autopilot
+agent: vc-integration-operator
 skills:
 - vc-slack-sync-read
 - citation-enforcement
@@ -56,18 +56,13 @@ Read preview only. Do not ingest broad history, post, reply, delete, or update m
 - Source template: `alludium/task-definition-templates/vc-integrations/slack-sync-read.yaml`
 - Alludium task ID: `vc.slack_sync_read`
 - Task family: `integration_sync_read`
-- Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
+- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
 - Supported project types:
   - `vc_deal_room`
 - Supported project scopes:
   - `project_management`
 
 ## Required Skills
-
-- `vc-slack-sync-read`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `vc-slack-sync-read`
 - `citation-enforcement`

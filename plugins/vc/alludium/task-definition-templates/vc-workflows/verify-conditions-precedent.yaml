@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.verify_conditions_precedent
-version: 1.0.9
+version: 1.0.11
 title: Verify Conditions Precedent
 category: Venture Capital
 visibility: workspace
@@ -22,13 +22,13 @@ definition:
       - documentId: vc.document.conditions_precedent_tracker_template
         usage: output_template
         outputFieldKey: conditions_precedent_verification_artifact_id
+      - documentId: vc.document.legal_diligence_guide
+        usage: methodology
       - documentId: vc.document.template_use_guidance
         usage: operating_guidance
     requiredSkills:
       - citation-enforcement
-    plannedRequiredSkills:
       - closing-coordination-and-cp-tracking
-      - citation-enforcement
     plannedRecommendedAgentTemplate: vc_legal_compliance_desk
     recommendedAgentTemplate: vc_legal_compliance_desk
     supportedProjectTypes:

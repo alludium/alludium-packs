@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.source_thesis_targets
-version: 1.0.9
+version: 1.0.12
 title: Source Thesis Targets
 category: Venture Capital
 visibility: workspace
@@ -16,21 +16,19 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: assessment
+    stage: intake
     taskFamily: pipeline
     documentRefs:
       - documentId: vc.document.thesis_target_list_template
         usage: output_template
         outputFieldKey: thesis_target_list_artifact_id
+      - documentId: vc.document.origination_source_strategy_guide
+        usage: methodology
       - documentId: vc.document.evidence_citation_style_guide
         usage: style_guide
       - documentId: vc.document.template_use_guidance
         usage: operating_guidance
     requiredSkills:
-      - company-research-and-enrichment
-      - founder-outreach-and-intro-paths
-      - citation-enforcement
-    plannedRequiredSkills:
       - company-research-and-enrichment
       - founder-outreach-and-intro-paths
       - citation-enforcement

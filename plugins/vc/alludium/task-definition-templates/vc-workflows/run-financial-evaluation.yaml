@@ -1,0 +1,138 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.run_financial_evaluation
+version: 0.1.1
+title: Run Financial Evaluation
+category: Venture Capital
+visibility: workspace
+tags:
+  - vc
+  - evaluation
+  - financial
+definition:
+  name: Run Financial Evaluation
+  slug: run-financial-evaluation
+  description: Run an evaluation-stage financial and financing workstream for one venture-capital opportunity, identifying model evidence, financing risk, and next proof needed before formal diligence.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: evaluation
+    taskFamily: evaluation
+    documentRefs:
+      - documentId: vc.document.financial_evaluation_template
+        usage: output_template
+        outputFieldKey: financial_evaluation_artifact_id
+      - documentId: vc.document.evaluation_workstream_guide
+        usage: methodology
+      - documentId: vc.document.financial_evaluation_guide
+        usage: methodology
+      - documentId: vc.document.opportunity_evaluation_framework
+        usage: methodology
+      - documentId: vc.document.evidence_citation_style_guide
+        usage: style_guide
+      - documentId: vc.document.template_use_guidance
+        usage: operating_guidance
+    requiredSkills:
+      - financial-evaluation-and-financing-risk
+      - citation-enforcement
+    plannedRecommendedAgentTemplate: vc_evaluation_analyst
+    recommendedAgentTemplate: vc_evaluation_analyst
+    supportedProjectTypes:
+      - vc_deal_room
+    sourceAnchors:
+      - source: investment-management-process-slides
+        anchor: slide-15
+        note: Follow-up stage
+      - source: investment-management-process-slides
+        anchor: slide-35
+        note: structured diligence dimensions
+    instructions:
+      executionInstructions: >-
+        Run a financial evaluation covering business model, forecast plausibility, revenue quality, burn, runway, use of funds, valuation, ownership, financing path, and financial gating risk. Use this as evaluation-stage work, not formal financial diligence, accounting advice, tax advice, or legal advice. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a durable project file artifact named Financial Evaluation and attach it to the required output field `financial_evaluation_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+      missingInputPolicy: Ask for the company name and at least one relevant source such as a deck, screen, model extract, burn/runway context, valuation or cap-table context, revenue evidence, pricing notes, or use-of-funds narrative before producing the evaluation.
+      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
+      completionCriteria:
+        - Required input gaps are resolved or listed as assumptions/open questions.
+        - Material conclusions include source links or are labeled as human judgment calls.
+        - Next actions identify owner, dependency, and required human approval point.
+    humanDecisionPoints:
+      - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
+      - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+    orchestration:
+      parentTaskPolicy: none
+      suggestedChildTasks: []
+    workspaceConfiguredMethodologySkills:
+      - skill: traction-and-saas-unit-economics
+        note: Use only for SaaS deals or workspaces that select this metric pack.
+fields:
+  input:
+    - key: company_name
+      name: Company Name
+      fieldType: string
+      required: true
+      position: 0
+      config: {}
+    - key: follow_up_evaluation_artifact_id
+      name: Opportunity Evaluation
+      fieldType: file
+      required: false
+      position: 1
+      config: {}
+    - key: opportunity_evidence_artifact_ids
+      name: Opportunity Evidence Artifacts
+      fieldType: json
+      required: false
+      position: 2
+      config: {}
+    - key: financial_or_financing_evidence
+      name: Financial Or Financing Evidence
+      fieldType: json
+      required: false
+      position: 3
+      config: {}
+
+  output:
+    - key: financial_evaluation_artifact_id
+      name: Financial Evaluation
+      fieldType: file
+      required: true
+      position: 0
+      config:
+        documentRefId: vc.document.financial_evaluation_template
+    - key: main_financial_hypothesis
+      name: Main Financial Hypothesis
+      fieldType: richtext
+      required: false
+      position: 1
+      config:
+        rows: 5
+    - key: financial_gating_risk
+      name: Financial Gating Risk
+      fieldType: richtext
+      required: false
+      position: 2
+      config:
+        rows: 5
+    - key: next_financial_proof_needed
+      name: Next Financial Proof Needed
+      fieldType: richtext
+      required: false
+      position: 3
+      config:
+        rows: 5
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc-workflows
+      taskKind: run_financial_evaluation
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    requiresHumanConfirmationToComplete: true
+    preferredMode: guided_execution
+    preferredAgentType: vc_evaluation_analyst
+ui:
+  renderer: generic
+  surfaceKey: null
+  frameRef: null

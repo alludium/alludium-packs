@@ -6,6 +6,7 @@ agent: vc-legal-compliance-desk
 skills:
 - red-flags-scanner
 - citation-enforcement
+- closing-coordination-and-cp-tracking
 ---
 
 > **GENERATED FILE**
@@ -47,6 +48,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `deal_terms` | Deal Terms | `json` | yes |
 | `standard_terms_reference` | Standard Terms Reference | `json` | no |
 | `counsel_notes` | Counsel Notes | `richtext` | no |
+| `deal_terms_analysis_artifact_id` | Deal Terms Analysis | `file` | no |
 
 ## Outputs
 
@@ -82,7 +84,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Source template: `alludium/task-definition-templates/vc-workflows/review-term-sheet.yaml`
 - Alludium task ID: `vc.review_term_sheet`
 - Task family: `closing`
-- Lifecycle stage: `term_sheet`
+- Lifecycle stage: `deal_structuring`
 - Recommended agent: `vc-legal-compliance-desk` (Alludium template `vc_legal_compliance_desk`)
 - Supported project types:
   - `vc_deal_room`
@@ -91,9 +93,4 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 
 - `red-flags-scanner`
 - `citation-enforcement`
-
-## Planned Skills
-
 - `closing-coordination-and-cp-tracking`
-- `red-flags-scanner`
-- `citation-enforcement`

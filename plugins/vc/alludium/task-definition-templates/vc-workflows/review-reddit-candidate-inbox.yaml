@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.review_reddit_candidate_inbox
-version: 0.1.1
+version: 0.1.3
 title: Review Reddit Candidate Inbox
 category: Venture Capital
 visibility: workspace
@@ -23,12 +23,8 @@ definition:
       - vc-reddit-inbox-approval
       - vc-sourcing-dedupe-and-novelty-check
       - citation-enforcement
-    plannedRequiredSkills:
-      - vc-reddit-inbox-approval
-      - vc-sourcing-dedupe-and-novelty-check
-      - citation-enforcement
-    recommendedAgentTemplate: vc_origination_scout
-    plannedRecommendedAgentTemplate: vc_origination_scout
+    recommendedAgentTemplate: vc_sourcing_operator
+    plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
       - vc_origination_pipeline
     supportedProjectScopes:

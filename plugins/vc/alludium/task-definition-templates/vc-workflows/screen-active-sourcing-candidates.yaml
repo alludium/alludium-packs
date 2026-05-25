@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.screen_active_sourcing_candidates
-version: 0.1.7
+version: 0.1.10
 title: Screen Active Sourcing Candidates
 category: Venture Capital
 visibility: workspace
@@ -22,6 +22,8 @@ definition:
       - documentId: vc.document.sourcing_scoring_rubric
         usage: methodology
         outputFieldKey: screening_artifact_id
+      - documentId: vc.document.origination_source_strategy_guide
+        usage: methodology
       - documentId: vc.document.dedupe_novelty_policy
         usage: policy
       - documentId: vc.document.template_use_guidance
@@ -29,12 +31,9 @@ definition:
     requiredSkills:
       - vc-sourcing-verdict-and-screening
       - citation-enforcement
-    plannedRequiredSkills:
-      - vc-sourcing-verdict-and-screening
       - investment-screening-framework
-      - citation-enforcement
-    recommendedAgentTemplate: vc_first_look_analyst
-    plannedRecommendedAgentTemplate: vc_first_look_analyst
+    recommendedAgentTemplate: vc_sourcing_operator
+    plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
       - vc_origination_pipeline
     supportedProjectScopes:

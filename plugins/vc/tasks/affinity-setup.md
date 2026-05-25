@@ -2,7 +2,7 @@
 id: vc.affinity_setup
 title: Set Up Affinity for VC Deal Rooms
 slug: affinity-setup
-agent: vc-deal-room-setup-guide
+agent: vc-integration-operator
 skills:
 - vc-affinity-discovery
 - vc-affinity-sync-read
@@ -70,20 +70,13 @@ Setup orchestration only. Do not import records, enable recurring sync, update C
 - Source template: `alludium/task-definition-templates/vc-integrations/affinity-setup.yaml`
 - Alludium task ID: `vc.affinity_setup`
 - Task family: `integration_setup`
-- Recommended agent: `vc-deal-room-setup-guide` (Alludium template `vc_deal_room_setup_guide`)
+- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
 - Supported project types:
   - `vc_deal_room`
 - Supported project scopes:
   - `project_management`
 
 ## Required Skills
-
-- `vc-affinity-discovery`
-- `vc-affinity-sync-read`
-- `vc-affinity-sync-write`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `vc-affinity-discovery`
 - `vc-affinity-sync-read`

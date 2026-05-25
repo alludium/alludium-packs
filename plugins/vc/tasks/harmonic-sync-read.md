@@ -2,7 +2,7 @@
 id: vc.harmonic_sync_read
 title: Preview Harmonic Search Results
 slug: harmonic-sync-read
-agent: vc-origination-scout
+agent: vc-integration-operator
 skills:
 - vc-harmonic-sync-read
 - citation-enforcement
@@ -57,18 +57,13 @@ Read preview only. Do not create Deal Rooms, import companies, mark net-new resu
 - Source template: `alludium/task-definition-templates/vc-integrations/harmonic-sync-read.yaml`
 - Alludium task ID: `vc.harmonic_sync_read`
 - Task family: `integration_sync_read`
-- Recommended agent: `vc-origination-scout` (Alludium template `vc_origination_scout`)
+- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
 - Supported project types:
   - `vc_deal_room`
 - Supported project scopes:
   - `project_management`
 
 ## Required Skills
-
-- `vc-harmonic-sync-read`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `vc-harmonic-sync-read`
 - `citation-enforcement`

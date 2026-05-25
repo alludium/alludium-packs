@@ -1,8 +1,8 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_investment_screen
-version: 1.0.12
-title: Run Initial Investment Screen
+version: 1.0.16
+title: Run Investment Fit Screen
 category: Venture Capital
 visibility: workspace
 tags:
@@ -10,13 +10,13 @@ tags:
   - screening
   - investment-screening
 definition:
-  name: Run Initial Investment Screen
+  name: Run Investment Fit Screen
   slug: run-investment-screen
-  description: Run an initial investment screen for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
+  description: Run a fast investment fit screen for one venture-capital opportunity using configured criteria, available evidence, human review gates, and next-action recommendations.
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: assessment
+    stage: screening
     taskFamily: screening
     documentRefs:
       - documentId: vc.document.investment_screening_framework
@@ -27,9 +27,7 @@ definition:
       - documentId: vc.document.template_use_guidance
         usage: operating_guidance
     requiredSkills:
-      - red-flags-scanner
-      - citation-enforcement
-    plannedRequiredSkills:
+      - investment-screening-framework
       - red-flags-scanner
       - citation-enforcement
     plannedRecommendedAgentTemplate: vc_first_look_analyst
@@ -48,8 +46,8 @@ definition:
         note: Initial call AI map
     instructions:
       executionInstructions: >-
-        Score each configured screening criterion with rationale, source links, unknowns, and human-review prompts before recommending continue or pass. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Initial Investment Screen Scorecard and attach it to the required output field `investment_screen_scorecard_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
-      missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
+        Score each configured investment-fit criterion with rationale, source links, unknowns, red flags, and human-review prompts before recommending continue, watch, or pass. Use a pitch deck, source material, source thread, opportunity intake artifact, meeting notes, or source links as evidence; do not require a pitch deck when another source is sufficient. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Investment Fit Screen Scorecard and attach it to the required output field `investment_screen_scorecard_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+      missingInputPolicy: Ask for at least one evidence source before producing an investment fit recommendation.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
         - Required input gaps are resolved or listed as assumptions/open questions.
@@ -75,7 +73,7 @@ fields:
     - key: pitch_deck_artifact_id
       name: Pitch Deck Artifact
       fieldType: file
-      required: true
+      required: false
       position: 1
       config: {}
     - key: meeting_notes
@@ -91,17 +89,29 @@ fields:
       required: false
       position: 3
       config: {}
+    - key: opportunity_intake_artifact_id
+      name: Opportunity Intake Summary
+      fieldType: file
+      required: false
+      position: 4
+      config: {}
+    - key: source_material_artifact_ids
+      name: Source Material Artifact IDs
+      fieldType: string
+      required: false
+      position: 5
+      config: {}
 
   output:
     - key: investment_screen_scorecard_artifact_id
-      name: Initial Investment Screen Scorecard
+      name: Investment Fit Screen Scorecard
       fieldType: file
       required: true
       position: 0
       config:
         documentRefId: vc.document.investment_screening_framework
     - key: factor_scores
-      name: Factor Scores
+      name: Criterion Scores
       fieldType: json
       required: false
       position: 1

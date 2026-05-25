@@ -14,7 +14,7 @@ metadata:
     - prepare-initial-call
     - summarize-initial-call
   primaryStage: "Meetings"
-  primaryDealRoomState: "assessment"
+  primaryDealRoomState: "evaluation"
   requiredSkills:
     - meeting-prep-and-summary
     - company-research-and-enrichment

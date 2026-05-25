@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.request_founder_materials
-version: 1.0.9
+version: 1.0.11
 title: Request Founder Materials
 category: Venture Capital
 visibility: workspace
@@ -16,7 +16,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: assessment
+    stage: evaluation
     taskFamily: deal_room
     documentRefs:
       - documentId: vc.document.founder_materials_request_template
@@ -28,9 +28,7 @@ definition:
         usage: operating_guidance
     requiredSkills:
       - citation-enforcement
-    plannedRequiredSkills:
       - founder-materials-request
-      - citation-enforcement
     plannedRecommendedAgentTemplate: vc_dealflow_concierge
     recommendedAgentTemplate: vc_dealflow_concierge
     supportedProjectTypes:

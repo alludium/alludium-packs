@@ -69,6 +69,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Document References
 
 - `vc.document.lead_generation_packet_template` (output_template) -> `lead_generation_packet_artifact_id`
+- `vc.document.origination_source_strategy_guide` (methodology)
 - `vc.document.evidence_citation_style_guide` (style_guide)
 - `vc.document.template_use_guidance` (operating_guidance)
 
@@ -77,7 +78,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Source template: `alludium/task-definition-templates/vc-workflows/prepare-lead-gen-packet.yaml`
 - Alludium task ID: `vc.prepare_lead_gen_packet`
 - Task family: `pipeline`
-- Lifecycle stage: `assessment`
+- Lifecycle stage: `intake`
 - Recommended agent: `vc-origination-scout` (Alludium template `vc_origination_scout`)
 - Supported project types:
   - `vc_deal_room`
@@ -85,11 +86,6 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
   - `project_management`
 
 ## Required Skills
-
-- `company-research-and-enrichment`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `company-research-and-enrichment`
 - `citation-enforcement`

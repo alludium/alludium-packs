@@ -53,6 +53,7 @@ Draft only. Do not create Notion pages, documents, external records, or Deal Roo
 ## Document References
 
 - `vc.document.sourcing_ic_summary_template` (output_template) -> `ic_summary_artifact_id`
+- `vc.document.origination_source_strategy_guide` (methodology)
 - `vc.document.evidence_citation_style_guide` (style_guide)
 - `vc.document.template_use_guidance` (operating_guidance)
 
@@ -69,11 +70,6 @@ Draft only. Do not create Notion pages, documents, external records, or Deal Roo
   - `project_instance`
 
 ## Required Skills
-
-- `vc-origination-ic-summary-preparation`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `vc-origination-ic-summary-preparation`
 - `citation-enforcement`

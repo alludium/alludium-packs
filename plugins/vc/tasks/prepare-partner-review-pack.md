@@ -18,7 +18,7 @@ Prepare Partner Review Pack for one venture-capital opportunity with evidence ca
 
 ## Instructions
 
-Prepare the Partner Review pack with investment thesis, strategic fit, proposed DD scope, workstream owners, key risks, and decision ask. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Use the required input file artifacts `commercial_dd_artifact_id`, `financial_dd_artifact_id`, `founder_evaluation_artifact_id`, `technical_dd_artifact_id`, and `diligence_question_bank_artifact_id` as the review subjects for the partner review pack. Use the required input file artifact `team_review_pack_artifact_id` as the team review pack being escalated to partner review. Create or update a durable project file artifact named Partner Review Pack and attach it to the required output field `partner_review_pack_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+Prepare the Partner Review pack from the team review pack, evaluation-stage workstream outputs, the diligence question bank, available formal diligence outputs, key risks, proposed diligence scope, and decision ask. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use required evaluation input file artifacts `commercial_evaluation_artifact_id`, `technical_evaluation_artifact_id`, `financial_evaluation_artifact_id`, `team_evaluation_artifact_id`, and `diligence_question_bank_artifact_id` as the decision-review source set. Use formal diligence artifacts `commercial_dd_artifact_id`, `financial_dd_artifact_id`, `founder_evaluation_artifact_id`, and `technical_dd_artifact_id` when present, but do not block evaluation-stage review on them. Use the required input file artifact `team_review_pack_artifact_id` as the team review pack being escalated to partner review. Create or update a durable project file artifact named Partner Review Pack and attach it to the required output field `partner_review_pack_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -44,11 +44,15 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | Key | Name | Type | Required |
 | --- | --- | --- | --- |
 | `team_review_pack_artifact_id` | Team Review Pack | `file` | yes |
-| `commercial_dd_artifact_id` | Commercial DD Report | `file` | yes |
-| `financial_dd_artifact_id` | Financial DD Report | `file` | yes |
-| `founder_evaluation_artifact_id` | Founder Evaluation | `file` | yes |
-| `technical_dd_artifact_id` | Technical DD Report | `file` | yes |
+| `commercial_evaluation_artifact_id` | Commercial Evaluation | `file` | yes |
+| `technical_evaluation_artifact_id` | Technical Evaluation | `file` | yes |
+| `financial_evaluation_artifact_id` | Financial Evaluation | `file` | yes |
+| `team_evaluation_artifact_id` | Team Evaluation | `file` | yes |
 | `diligence_question_bank_artifact_id` | Structured Diligence Question Bank | `file` | yes |
+| `commercial_dd_artifact_id` | Commercial DD Report | `file` | no |
+| `financial_dd_artifact_id` | Financial DD Report | `file` | no |
+| `founder_evaluation_artifact_id` | Founder Evaluation | `file` | no |
+| `technical_dd_artifact_id` | Technical DD Report | `file` | no |
 
 ## Outputs
 
@@ -74,6 +78,10 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Document References
 
 - `vc.document.review_pack_checklist` (output_template) -> `partner_review_pack_artifact_id`
+- `vc.document.opportunity_evaluation_framework` (methodology)
+- `vc.document.evaluation_workstream_guide` (methodology)
+- `vc.document.formal_diligence_workstream_guide` (methodology)
+- `vc.document.formal_diligence_checklist` (checklist)
 - `vc.document.evidence_citation_style_guide` (style_guide)
 - `vc.document.template_use_guidance` (operating_guidance)
 
@@ -82,17 +90,12 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Source template: `alludium/task-definition-templates/vc-workflows/prepare-partner-review-pack.yaml`
 - Alludium task ID: `vc.prepare_partner_review_pack`
 - Task family: `diligence`
-- Lifecycle stage: `review`
+- Lifecycle stage: `decision_review`
 - Recommended agent: `vc-diligence-analyst` (Alludium template `vc_diligence_analyst`)
 - Supported project types:
   - `vc_deal_room`
 
 ## Required Skills
-
-- `ic-memo-assembly`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `ic-memo-assembly`
 - `citation-enforcement`

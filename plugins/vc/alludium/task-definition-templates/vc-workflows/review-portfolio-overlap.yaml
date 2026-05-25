@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.review_portfolio_overlap
-version: 0.1.2
+version: 0.1.4
 title: Review Portfolio Overlap
 category: Venture Capital
 visibility: workspace
@@ -22,12 +22,9 @@ definition:
     requiredSkills:
       - vc-portfolio-overlap-review
       - citation-enforcement
-    plannedRequiredSkills:
-      - vc-portfolio-overlap-review
       - vc-relationship-context-check
-      - citation-enforcement
-    recommendedAgentTemplate: vc_first_look_analyst
-    plannedRecommendedAgentTemplate: vc_first_look_analyst
+    recommendedAgentTemplate: vc_sourcing_operator
+    plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
       - vc_origination_pipeline
     supportedProjectScopes:

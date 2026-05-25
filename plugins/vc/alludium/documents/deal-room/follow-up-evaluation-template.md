@@ -1,17 +1,28 @@
 ---
 id: vc.document.follow_up_evaluation_template
-title: Follow-Up Evaluation Template
+title: Opportunity Evaluation Template
 documentType: template
 supportedProjectTypes:
   - vc_deal_room
-summary: Reusable follow-up evaluation after first-call or first-look work.
+summary: Reusable deeper opportunity evaluation after investment screening and early evidence collection.
 ---
 
-# Follow-Up Evaluation Template
+# Opportunity Evaluation Template
 
 ## Evaluation Objective
 
-State the decision this follow-up should support: continue diligence, request materials, pass, watch, or escalate to partner judgment.
+State the decision this evaluation should support: continue diligence, request materials, pass, watch, or escalate to partner judgment.
+
+## Executive View
+
+| Field | Content |
+| --- | --- |
+| Current posture | Pass / Watch / Targeted diligence / Decision-review preparation / Term-sheet consideration |
+| Evidence-weighted score | Conservative score or qualitative posture |
+| Best case | The strongest underwritable version of the investment case |
+| Base case | The current evidence-led view |
+| Main gating risk | The risk that most directly decides progression |
+| Single most important question | The question the next interaction or data-room request must answer |
 
 ## Evidence Reviewed
 
@@ -19,15 +30,38 @@ State the decision this follow-up should support: continue diligence, request ma
 | --- | --- | --- |
 | Initial screen, call notes, customer evidence, deck, model, source links |  | High / Medium / Low |
 
-## What Changed Since Prior Review
+## What Is Attractive
 
-| Area | Prior View | New Evidence | Updated View |
-| --- | --- | --- | --- |
-| Product |  |  |  |
-| Market |  |  |  |
-| Team |  |  |  |
-| Traction |  |  |  |
-| Risk |  |  |  |
+Summarize the strongest positive evidence and why it could matter for fund returns.
+
+## What Must Be Proved
+
+List the assumptions that must become evidence before the opportunity can move forward.
+
+## Narrative Evaluation
+
+| Lens | Current View | Evidence | Confidence | Gap |
+| --- | --- | --- | --- | --- |
+| Team |  |  | High / Medium / Low |  |
+| Micro market |  |  | High / Medium / Low |  |
+| Macro market |  |  | High / Medium / Low |  |
+| Macro industry |  |  | High / Medium / Low |  |
+| Micro industry |  |  | High / Medium / Low |  |
+| Timing |  |  | High / Medium / Low |  |
+| Scalability |  |  | High / Medium / Low |  |
+| Next-round readiness |  |  | High / Medium / Low |  |
+| Financial and ownership fit |  |  | High / Medium / Low |  |
+| Legal, regulatory, and IP |  |  | High / Medium / Low |  |
+
+## Central Thesis Tension
+
+State the one or two assumptions that decide whether this is venture-backable.
+
+## Evaluation Tracker
+
+| Criterion | Score | Confidence | Evidence | Gap | Decision Impact |
+| --- | --- | --- | --- | --- | --- |
+|  |  | High / Medium / Low |  |  |  |
 
 ## Readiness Recommendation
 
@@ -35,12 +69,12 @@ State the decision this follow-up should support: continue diligence, request ma
 | --- | --- | --- |
 | Continue / Watch / Pass / Request materials / Partner review |  |  |
 
-## Open Questions Before Diligence
+## Meeting Agenda And Data-Room Request
 
-| Question | Owner | Evidence Needed |
-| --- | --- | --- |
-|  |  |  |
+| Priority | Question / Request | Evidence Needed | Owner | Decision Impact |
+| --- | --- | --- | --- | --- |
+| Must answer / Should answer / Optional |  |  |  |  |
 
 ## Standard
 
-Show what changed since the prior screen or call. Do not re-score the opportunity without explaining the new evidence that moved the view.
+Show what changed since the prior screen or call. Do not re-score the opportunity without explaining the new evidence that moved the view. Separate company claims, verified evidence, inference, and missing proof.

@@ -1,0 +1,66 @@
+---
+id: vc.document.technical_evaluation_template
+title: Technical Evaluation Template
+documentType: template
+supportedProjectTypes:
+  - vc_deal_room
+summary: Output template for lightweight technical and product evaluation before formal diligence.
+---
+
+# Technical Evaluation Template
+
+## Workstream Header
+
+| Field | Content |
+| --- | --- |
+| Company |  |
+| Evaluation run | First run / rerun |
+| New evidence since prior run |  |
+| Decision supported | Continue evaluation / targeted diligence / decision review / pass / watch |
+
+## Current Technical View
+
+| Area | View | Evidence | Confidence | Gap |
+| --- | --- | --- | --- | --- |
+| Product depth |  |  | High / Medium / Low |  |
+| Architecture plausibility |  |  | High / Medium / Low |  |
+| Technical edge |  |  | High / Medium / Low |  |
+| IP or data defensibility |  |  | High / Medium / Low |  |
+| Roadmap realism |  |  | High / Medium / Low |  |
+| Technical team coverage |  |  | High / Medium / Low |  |
+
+## Main Technical Hypothesis
+
+State the product, architecture, IP, data, or technical execution belief that must be true for the opportunity to proceed.
+
+## Evidence Reviewed
+
+| Source | What It Supports | Quality | Recency |
+| --- | --- | --- | --- |
+|  |  | High / Medium / Low |  |
+
+## Company Claims And Verification Gaps
+
+| Claim | Current Support | Gap | Decision Impact |
+| --- | --- | --- | --- |
+|  | Verified / Partially supported / Company claim / Unsupported |  |  |
+
+## Gating Technical Risk
+
+State the technical risk most likely to change the investment posture.
+
+## Next Proof Needed
+
+| Priority | Evidence Request / Question | Owner | Success Threshold |
+| --- | --- | --- | --- |
+| Must answer / Should answer / Optional |  |  |  |
+
+## Decision Impact
+
+| Recommendation | Rationale | Conditions |
+| --- | --- | --- |
+| Continue / Watch / Pass / Targeted diligence / Decision review |  |  |
+
+## Standard
+
+Separate company claims, verified evidence, inference, and missing proof. Do not imply code review, security review, expert validation, or IP clearance unless those inputs were actually reviewed.

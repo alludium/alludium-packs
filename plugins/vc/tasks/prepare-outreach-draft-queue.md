@@ -2,10 +2,11 @@
 id: vc.prepare_outreach_draft_queue
 title: Prepare Outreach Draft Queue
 slug: prepare-outreach-draft-queue
-agent: vc-dealflow-concierge
+agent: vc-sourcing-operator
 skills:
 - vc-outreach-draft-queue
 - citation-enforcement
+- founder-outreach-and-intro-paths
 ---
 
 > **GENERATED FILE**
@@ -63,7 +64,7 @@ Draft only. Do not send messages, insert browser-extension notes, mark outreach 
 - Alludium task ID: `vc.prepare_outreach_draft_queue`
 - Task family: `origination_outreach_drafts`
 - Lifecycle stage: `engage`
-- Recommended agent: `vc-dealflow-concierge` (Alludium template `vc_dealflow_concierge`)
+- Recommended agent: `vc-sourcing-operator` (Alludium template `vc_sourcing_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:
@@ -73,9 +74,4 @@ Draft only. Do not send messages, insert browser-extension notes, mark outreach 
 
 - `vc-outreach-draft-queue`
 - `citation-enforcement`
-
-## Planned Skills
-
-- `vc-outreach-draft-queue`
 - `founder-outreach-and-intro-paths`
-- `citation-enforcement`

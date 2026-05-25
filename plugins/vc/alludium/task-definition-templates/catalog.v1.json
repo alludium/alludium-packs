@@ -19,6 +19,10 @@
         "vc-workflows/summarize-initial-call.yaml",
         "vc-workflows/run-investment-screen.yaml",
         "vc-workflows/run-follow-up-evaluation.yaml",
+        "vc-workflows/run-commercial-evaluation.yaml",
+        "vc-workflows/run-technical-evaluation.yaml",
+        "vc-workflows/run-financial-evaluation.yaml",
+        "vc-workflows/run-team-evaluation.yaml",
         "vc-workflows/generate-diligence-questions.yaml",
         "vc-workflows/run-founder-evaluation.yaml",
         "vc-workflows/prepare-team-review-pack.yaml",
@@ -30,9 +34,14 @@
         "vc-workflows/review-ic-memo.yaml",
         "vc-workflows/prepare-ic-agenda.yaml",
         "vc-workflows/record-ic-decision.yaml",
+        "vc-workflows/analyze-deal-terms.yaml",
+        "vc-workflows/track-term-sheet-negotiation.yaml",
         "vc-workflows/review-term-sheet.yaml",
+        "vc-workflows/run-legal-diligence.yaml",
+        "vc-workflows/review-investment-documents.yaml",
         "vc-workflows/manage-closing-checklist.yaml",
         "vc-workflows/verify-conditions-precedent.yaml",
+        "vc-workflows/coordinate-capital-call-and-completion.yaml",
         "vc-workflows/prepare-portfolio-onboarding.yaml",
         "vc-workflows/configure-origination-pipeline.yaml",
         "vc-workflows/run-sourcing-pipeline.yaml",
@@ -83,7 +92,10 @@
         "vc-integrations/companies-house-sync-read.yaml"
       ],
       "title": "VC Workflows",
-      "verticalKeys": ["venture_capital", "vc"]
+      "verticalKeys": [
+        "venture_capital",
+        "vc"
+      ]
     }
   ]
 }

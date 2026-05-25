@@ -5,6 +5,7 @@ slug: run-commercial-dd
 agent: vc-diligence-analyst
 skills:
 - citation-enforcement
+- commercial-diligence-workstream
 ---
 
 > **GENERATED FILE**
@@ -76,6 +77,8 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Document References
 
 - `vc.document.diligence_report_template` (output_template) -> `commercial_dd_artifact_id`
+- `vc.document.formal_diligence_workstream_guide` (methodology)
+- `vc.document.formal_diligence_checklist` (checklist)
 - `vc.document.evidence_citation_style_guide` (style_guide)
 - `vc.document.template_use_guidance` (operating_guidance)
 
@@ -84,7 +87,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Source template: `alludium/task-definition-templates/vc-workflows/run-commercial-dd.yaml`
 - Alludium task ID: `vc.run_commercial_dd`
 - Task family: `diligence`
-- Lifecycle stage: `diligence`
+- Lifecycle stage: `formal_diligence`
 - Recommended agent: `vc-diligence-analyst` (Alludium template `vc_diligence_analyst`)
 - Supported project types:
   - `vc_deal_room`
@@ -92,11 +95,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Required Skills
 
 - `citation-enforcement`
-
-## Planned Skills
-
 - `commercial-diligence-workstream`
-- `citation-enforcement`
 
 ## Workspace-Configured Methodology Skills
 

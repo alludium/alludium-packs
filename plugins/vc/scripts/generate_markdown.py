@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
 from pathlib import Path
@@ -14,9 +15,43 @@ THIS_FILE = Path(__file__).resolve()
 PACK_ROOT = THIS_FILE.parents[1]
 AGENT_TEMPLATE_ROOT = PACK_ROOT / "alludium" / "agent-templates"
 TASK_TEMPLATE_ROOT = PACK_ROOT / "alludium" / "task-definition-templates"
+PROJECT_TYPE_ROOT = PACK_ROOT / "alludium" / "project-types"
 AGENT_OUTPUT_ROOT = PACK_ROOT / "agents"
 TASK_OUTPUT_ROOT = PACK_ROOT / "tasks"
+BLUEPRINT_OUTPUT_ROOT = PACK_ROOT / "project-blueprints"
 MANIFEST_PATH = PACK_ROOT / "alludium" / "manifest.yaml"
+
+PLATFORM_TASK_DEFINITIONS: dict[str, dict[str, str]] = {
+    "project-source-choice": {
+        "id": "alludium.project_source_choice",
+        "title": "Project Source Choice",
+    },
+    "project-source-setup": {
+        "id": "alludium.project_source_setup",
+        "title": "Project Source Setup",
+    },
+    "project-variable-review": {
+        "id": "alludium.project_variable_review",
+        "title": "Project Variable Review",
+    },
+    "project-schedule-review": {
+        "id": "alludium.project_schedule_review",
+        "title": "Project Schedule Review",
+    },
+    "project-team-invite": {
+        "id": "alludium.project_team_invite",
+        "title": "Project Team Invite Review",
+    },
+}
+
+GENERAL_TASK_SLUGS_BY_PROJECT_TYPE: dict[str, list[str]] = {
+    "vc_deal_room": [
+        "prepare-initial-call",
+        "request-founder-materials",
+        "summarize-initial-call",
+        "review-opportunity-status",
+    ],
+}
 
 
 def fail(message: str) -> None:
@@ -31,6 +66,16 @@ def read_yaml(path: Path) -> dict[str, Any]:
         fail(f"Failed to parse YAML {path.relative_to(PACK_ROOT)}: {exc}")
     if not isinstance(parsed, dict):
         fail(f"{path.relative_to(PACK_ROOT)} must be a YAML object")
+    return parsed
+
+
+def read_json(path: Path) -> dict[str, Any]:
+    try:
+        parsed = json.loads(path.read_text(encoding="utf-8"))
+    except Exception as exc:  # pragma: no cover - defensive CLI guard
+        fail(f"Failed to parse JSON {path.relative_to(PACK_ROOT)}: {exc}")
+    if not isinstance(parsed, dict):
+        fail(f"{path.relative_to(PACK_ROOT)} must be a JSON object")
     return parsed
 
 
@@ -97,6 +142,15 @@ def plain_bullet_list(values: list[str]) -> str:
     return "".join(f"- {value}\n" for value in values)
 
 
+def markdown_escape(value: Any) -> str:
+    text = str(value) if value is not None else ""
+    return text.replace("|", "\\|").replace("\n", " ").strip()
+
+
+def title_from_key(value: str) -> str:
+    return value.replace("_", " ").replace("-", " ").title()
+
+
 def field_table(fields: list[dict[str, Any]]) -> str:
     if not fields:
         return "None declared.\n"
@@ -108,6 +162,26 @@ def field_table(fields: list[dict[str, Any]]) -> str:
         required = "yes" if field.get("required") is True else "no"
         lines.append(f"| `{key}` | {name} | `{field_type}` | {required} |")
     return "\n".join(lines) + "\n"
+
+
+def task_link(slug: str, title: str | None = None) -> str:
+    label = markdown_escape(title or title_from_key(slug))
+    return f"[{label}](../tasks/{slug}.md)"
+
+
+def agent_link(agent_id: str | None, agent_names: dict[str, str]) -> str:
+    if not agent_id:
+        return "None declared"
+    label = markdown_escape(agent_names.get(agent_id, title_from_key(agent_id)))
+    return f"[{label}](../agents/{slugify(agent_id)}.md)"
+
+
+def skill_links(skills: list[str]) -> str:
+    if not skills:
+        return "None declared"
+    return "<br>".join(
+        f"[`{markdown_escape(skill)}`](../skills/{skill}/SKILL.md)" for skill in skills
+    )
 
 
 def action_list(actions: list[dict[str, Any]]) -> str:
@@ -390,8 +464,9 @@ def render_task(path: Path) -> tuple[Path, str]:
         body += "".join(f"  - `{value}`\n" for value in project_scopes)
     body += "\n## Required Skills\n\n"
     body += bullet_list(required_skills)
-    body += "\n## Planned Skills\n\n"
-    body += bullet_list(planned_skills)
+    if planned_skills:
+        body += "\n## Planned Skills\n\n"
+        body += bullet_list(planned_skills)
 
     methodology_skills = definition_json.get("workspaceConfiguredMethodologySkills")
     if isinstance(methodology_skills, list) and methodology_skills:
@@ -407,6 +482,278 @@ def render_task(path: Path) -> tuple[Path, str]:
                 body += f"- `{skill}`\n"
 
     return TASK_OUTPUT_ROOT / f"{slug}.md", body
+
+
+def load_task_templates() -> tuple[dict[str, dict[str, Any]], dict[str, dict[str, Any]]]:
+    by_slug: dict[str, dict[str, Any]] = {}
+    by_id: dict[str, dict[str, Any]] = {}
+    for path in sorted(TASK_TEMPLATE_ROOT.glob("*/*.yaml")):
+        template = read_yaml(path)
+        template_id = require_string(template.get("id"), f"{path.relative_to(PACK_ROOT)}.id")
+        definition = require_mapping(template.get("definition"), f"{path.relative_to(PACK_ROOT)}.definition")
+        slug = require_string(definition.get("slug"), f"{path.relative_to(PACK_ROOT)}.definition.slug")
+        entry = {
+            "path": path,
+            "id": template_id,
+            "slug": slug,
+            "title": require_string(template.get("title"), f"{path.relative_to(PACK_ROOT)}.title"),
+            "definitionJson": require_mapping(
+                definition.get("definitionJson"),
+                f"{path.relative_to(PACK_ROOT)}.definition.definitionJson",
+            ),
+        }
+        if slug in by_slug:
+            fail(f"Duplicate task definition slug in YAML: {slug}")
+        if template_id in by_id:
+            fail(f"Duplicate task definition ID in YAML: {template_id}")
+        by_slug[slug] = entry
+        by_id[template_id] = entry
+    return by_slug, by_id
+
+
+def load_agent_names() -> dict[str, str]:
+    names: dict[str, str] = {}
+    for path in sorted(AGENT_TEMPLATE_ROOT.glob("*.yaml")):
+        template = read_yaml(path)
+        agent_id = require_string(template.get("id"), f"{path.relative_to(PACK_ROOT)}.id")
+        names[agent_id] = require_string(template.get("name"), f"{path.relative_to(PACK_ROOT)}.name")
+    return names
+
+
+def blueprint_task_row(
+    slug: str,
+    task_by_slug: dict[str, dict[str, Any]],
+    agent_names: dict[str, str],
+    fallback_agent_id: str | None = None,
+) -> str:
+    task = task_by_slug.get(slug)
+    if task is None:
+        platform_task = PLATFORM_TASK_DEFINITIONS.get(slug)
+        if platform_task is not None:
+            return (
+                f"| {markdown_escape(platform_task['title'])} | {agent_link(fallback_agent_id, agent_names)} | "
+                f"None declared | `{markdown_escape(platform_task['id'])}` |\n"
+            )
+        return (
+            f"| `{markdown_escape(slug)}` | {agent_link(fallback_agent_id, agent_names)} | "
+            "None declared | Pack task not found; likely platform-owned setup task. |\n"
+        )
+    definition_json = task["definitionJson"]
+    agent_id = definition_json.get("recommendedAgentTemplate")
+    if not isinstance(agent_id, str):
+        agent_id = definition_json.get("plannedRecommendedAgentTemplate")
+    if not isinstance(agent_id, str):
+        agent_id = fallback_agent_id
+    skills = string_list(definition_json.get("requiredSkills"))
+    return (
+        f"| {task_link(slug, task['title'])} | {agent_link(agent_id, agent_names)} | "
+        f"{skill_links(skills)} | `{markdown_escape(task['id'])}` |\n"
+    )
+
+
+def collect_setup_task_slugs(project_type: dict[str, Any]) -> list[tuple[str, str | None]]:
+    setup = project_type.get("projectSetup")
+    if not isinstance(setup, dict):
+        return []
+    fallback_agent = setup.get("recommendedSetupAgent")
+    if not isinstance(fallback_agent, str):
+        fallback_agent = None
+
+    collected: list[tuple[str, str | None]] = []
+
+    def add_slug(value: Any, agent_id: str | None = fallback_agent) -> None:
+        if isinstance(value, str) and value and (value, agent_id) not in collected:
+            collected.append((value, agent_id))
+
+    for step in setup.get("setupSteps", []):
+        if isinstance(step, dict):
+            add_slug(step.get("taskDefinitionSlug"))
+
+    for key in ["defaultChildTask", "variableDiscoveryTask"]:
+        item = setup.get(key)
+        if isinstance(item, dict):
+            add_slug(item.get("taskDefinitionSlug"))
+
+    for task in setup.get("sourceSetupTasks", []):
+        if isinstance(task, dict):
+            add_slug(task.get("taskDefinitionSlug"))
+
+    return collected
+
+
+def task_supports_project_type(task: dict[str, Any], project_key: str) -> bool:
+    definition_json = task.get("definitionJson")
+    if not isinstance(definition_json, dict):
+        return False
+    supported_project_types = string_list(definition_json.get("supportedProjectTypes"))
+    return project_key in supported_project_types
+
+
+def task_supports_project_management(task: dict[str, Any]) -> bool:
+    definition_json = task.get("definitionJson")
+    if not isinstance(definition_json, dict):
+        return False
+    supported_scopes = string_list(definition_json.get("supportedProjectScopes"))
+    return "project_management" in supported_scopes
+
+
+def collect_general_task_slugs(project_key: str, task_by_slug: dict[str, dict[str, Any]]) -> list[tuple[str, str | None]]:
+    collected: list[tuple[str, str | None]] = []
+    for slug in GENERAL_TASK_SLUGS_BY_PROJECT_TYPE.get(project_key, []):
+        task = task_by_slug.get(slug)
+        if isinstance(task, dict) and task_supports_project_type(task, project_key):
+            collected.append((slug, None))
+    return collected
+
+
+def collect_schedule_task_slugs(project_type: dict[str, Any]) -> list[tuple[str, str | None]]:
+    setup = project_type.get("projectSetup")
+    if not isinstance(setup, dict):
+        return []
+
+    collected: list[tuple[str, str | None]] = []
+    for group in setup.get("scheduleGroups", []):
+        if not isinstance(group, dict):
+            continue
+        slugs = group.get("taskDefinitionSlugs")
+        if not isinstance(slugs, list):
+            continue
+        for slug in slugs:
+            if isinstance(slug, str) and slug and (slug, None) not in collected:
+                collected.append((slug, None))
+    return collected
+
+
+def collect_management_task_slugs(
+    project_key: str,
+    project_type: dict[str, Any],
+    task_by_slug: dict[str, dict[str, Any]],
+    excluded_slugs: set[str],
+) -> list[tuple[str, str | None]]:
+    collected: list[tuple[str, str | None]] = []
+
+    def add_slug(slug: str) -> None:
+        if slug in excluded_slugs or (slug, None) in collected:
+            return
+        task = task_by_slug.get(slug)
+        if isinstance(task, dict) and task_supports_project_type(task, project_key):
+            collected.append((slug, None))
+
+    for slug, _agent_id in collect_schedule_task_slugs(project_type):
+        add_slug(slug)
+
+    for slug, task in sorted(task_by_slug.items(), key=lambda item: item[1]["title"]):
+        if task_supports_project_type(task, project_key) and task_supports_project_management(task):
+            add_slug(slug)
+
+    return collected
+
+
+def blueprint_task_table(
+    rows: list[tuple[str, str | None]],
+    task_by_slug: dict[str, dict[str, Any]],
+    agent_names: dict[str, str],
+) -> str:
+    body = "| Task | Agent | Skills | Task ID |\n| --- | --- | --- | --- |\n"
+    if not rows:
+        return body + "| None mapped | None declared | None declared |  |\n"
+    body += "".join(
+        blueprint_task_row(slug, task_by_slug, agent_names, fallback_agent)
+        for slug, fallback_agent in rows
+    )
+    return body
+
+
+def render_blueprint(
+    project_type_path: Path,
+    task_by_slug: dict[str, dict[str, Any]],
+    agent_names: dict[str, str],
+) -> tuple[Path, str]:
+    project_type = read_json(project_type_path)
+    project_key = require_string(project_type.get("key"), f"{project_type_path.name}.key")
+    project_name = require_string(project_type.get("name"), f"{project_type_path.name}.name")
+    description = require_string(project_type.get("description"), f"{project_type_path.name}.description")
+    initial_version = require_mapping(project_type.get("initialVersion"), f"{project_type_path.name}.initialVersion")
+
+    frontmatter = {
+        "projectType": project_key,
+        "title": f"{project_name} Blueprint",
+        "source": str(project_type_path.relative_to(PACK_ROOT)),
+    }
+    body = yaml_frontmatter(frontmatter)
+    body += generated_notice(project_type_path)
+    body += f"# {project_name} Blueprint\n\n"
+    body += f"{description}\n\n"
+    body += (
+        "This blueprint lists setup, general, management, and lifecycle-stage tasks with the recommended "
+        "agents and task-referenced skills for this project type. Setup, General, and Management are "
+        "blueprint categories rather than lifecycle states.\n\n"
+    )
+
+    setup_rows = collect_setup_task_slugs(project_type)
+    general_rows = collect_general_task_slugs(project_key, task_by_slug)
+    setup_slugs = {slug for slug, _agent_id in setup_rows}
+    general_slugs = {slug for slug, _agent_id in general_rows}
+    management_rows = collect_management_task_slugs(
+        project_key,
+        project_type,
+        task_by_slug,
+        setup_slugs | general_slugs,
+    )
+    management_slugs = {slug for slug, _agent_id in management_rows}
+
+    body += "## Setup\n\n"
+    body += "Project-type setup and configuration tasks used before normal project execution.\n\n"
+    body += blueprint_task_table(setup_rows, task_by_slug, agent_names)
+
+    body += "\n## General\n\n"
+    body += "Reusable project-instance tasks that can be useful across multiple lifecycle stages.\n\n"
+    body += blueprint_task_table(general_rows, task_by_slug, agent_names)
+
+    body += "\n## Management\n\n"
+    body += "Project-management tasks that operate across a project suite, source pipeline, or recurring sync/reporting flow.\n\n"
+    body += blueprint_task_table(management_rows, task_by_slug, agent_names)
+
+    mappings = initial_version.get("projectTaskMappings")
+    if not isinstance(mappings, list):
+        mappings = []
+    blueprint_category_slugs = setup_slugs | general_slugs | management_slugs
+    mappings_by_stage: dict[str, list[str]] = {}
+    for mapping in mappings:
+        if not isinstance(mapping, dict):
+            continue
+        slug = mapping.get("taskDefinitionSlug")
+        if not isinstance(slug, str) or not slug:
+            continue
+        if slug in blueprint_category_slugs:
+            continue
+        stage = mapping.get("lifecycleStage")
+        if not isinstance(stage, str) or not stage:
+            task = task_by_slug.get(slug)
+            definition_json = task.get("definitionJson") if isinstance(task, dict) else {}
+            stage = definition_json.get("stage") if isinstance(definition_json, dict) else None
+        if not isinstance(stage, str) or not stage:
+            stage = "general"
+        mappings_by_stage.setdefault(stage, []).append(slug)
+
+    lifecycle_states = initial_version.get("lifecycleStates")
+    stage_order = [state for state in lifecycle_states if isinstance(state, str)] if isinstance(lifecycle_states, list) else []
+    for stage in sorted(mappings_by_stage):
+        if stage not in stage_order and stage != "general":
+            stage_order.append(stage)
+    if "general" in mappings_by_stage:
+        stage_order.insert(0, "general")
+
+    for stage in stage_order:
+        body += f"\n## {title_from_key(stage)}\n\n"
+        body += "| Task | Agent | Skills | Task ID |\n| --- | --- | --- | --- |\n"
+        rows = [
+            blueprint_task_row(slug, task_by_slug, agent_names)
+            for slug in mappings_by_stage.get(stage, [])
+        ]
+        body += "".join(rows) if rows else "| None mapped | None declared | None declared |  |\n"
+
+    return BLUEPRINT_OUTPUT_ROOT / f"{slugify(project_key)}.md", body
 
 
 def read_manifest() -> dict[str, Any]:
@@ -443,12 +790,19 @@ def expected_outputs() -> dict[Path, str]:
         surfaces.get("taskDefinitionTemplates"),
         "alludium/manifest.yaml surfaces.taskDefinitionTemplates",
     )
+    project_types_surface = require_mapping(
+        surfaces.get("projectTypes"),
+        "alludium/manifest.yaml surfaces.projectTypes",
+    )
     agent_template_ids = agent_templates_surface.get("ids")
     if not isinstance(agent_template_ids, list):
         fail("alludium/manifest.yaml surfaces.alludiumAgentTemplates.ids must be a list")
     task_template_ids = task_templates_surface.get("ids")
     if not isinstance(task_template_ids, list):
         fail("alludium/manifest.yaml surfaces.taskDefinitionTemplates.ids must be a list")
+    project_type_ids = project_types_surface.get("ids")
+    if not isinstance(project_type_ids, list):
+        fail("alludium/manifest.yaml surfaces.projectTypes.ids must be a list")
 
     outputs: dict[Path, str] = {}
     sources: dict[Path, Path] = {}
@@ -497,14 +851,38 @@ def expected_outputs() -> dict[Path, str]:
     if extra_task_ids:
         fail(f"Task template YAML present on disk but missing from manifest: {extra_task_ids}")
 
+    task_by_slug, _task_by_id = load_task_templates()
+    agent_names = load_agent_names()
+    discovered_project_paths = {
+        path.name for path in PROJECT_TYPE_ROOT.glob("*.json") if path.name != "catalog.v1.json"
+    }
+    declared_project_paths: set[str] = set()
+    for project_type_id in project_type_ids:
+        if not isinstance(project_type_id, str) or not project_type_id:
+            fail("alludium/manifest.yaml project type IDs must be non-empty strings")
+        declared_project_paths.add(f"{project_type_id}.json")
+        path = PROJECT_TYPE_ROOT / f"{project_type_id}.json"
+        if not path.exists():
+            fail(f"Manifest project type missing JSON: {project_type_id}")
+        output_path, body = render_blueprint(path, task_by_slug, agent_names)
+        add_expected_output(outputs, sources, output_path, body, path)
+
+    extra_project_paths = sorted(discovered_project_paths - declared_project_paths)
+    if extra_project_paths:
+        fail(f"Project type JSON present on disk but missing from manifest: {extra_project_paths}")
+
     return outputs
 
 
 def write_outputs(outputs: dict[Path, str]) -> None:
-    for directory in [AGENT_OUTPUT_ROOT, TASK_OUTPUT_ROOT]:
+    for directory in [AGENT_OUTPUT_ROOT, TASK_OUTPUT_ROOT, BLUEPRINT_OUTPUT_ROOT]:
         directory.mkdir(parents=True, exist_ok=True)
     expected_paths = set(outputs)
-    actual_paths = set(AGENT_OUTPUT_ROOT.glob("*.md")) | set(TASK_OUTPUT_ROOT.glob("*.md"))
+    actual_paths = (
+        set(AGENT_OUTPUT_ROOT.glob("*.md"))
+        | set(TASK_OUTPUT_ROOT.glob("*.md"))
+        | set(BLUEPRINT_OUTPUT_ROOT.glob("*.md"))
+    )
     for path in sorted(actual_paths - expected_paths):
         path.unlink()
     for path, body in outputs.items():
@@ -514,7 +892,11 @@ def write_outputs(outputs: dict[Path, str]) -> None:
 def check_outputs(outputs: dict[Path, str]) -> None:
     failures: list[str] = []
     expected_paths = set(outputs)
-    actual_paths = set(AGENT_OUTPUT_ROOT.glob("*.md")) | set(TASK_OUTPUT_ROOT.glob("*.md"))
+    actual_paths = (
+        set(AGENT_OUTPUT_ROOT.glob("*.md"))
+        | set(TASK_OUTPUT_ROOT.glob("*.md"))
+        | set(BLUEPRINT_OUTPUT_ROOT.glob("*.md"))
+    )
     for path in sorted(expected_paths):
         if not path.exists():
             failures.append(f"Missing generated file: {path.relative_to(PACK_ROOT)}")
@@ -545,7 +927,8 @@ def main() -> None:
     print(
         "Generated Markdown: "
         f"{len(list(AGENT_TEMPLATE_ROOT.glob('*.yaml')))} agents, "
-        f"{len(list(TASK_TEMPLATE_ROOT.glob('*/*.yaml')))} tasks"
+        f"{len(list(TASK_TEMPLATE_ROOT.glob('*/*.yaml')))} tasks, "
+        f"{len([path for path in PROJECT_TYPE_ROOT.glob('*.json') if path.name != 'catalog.v1.json'])} project blueprints"
     )
 
 

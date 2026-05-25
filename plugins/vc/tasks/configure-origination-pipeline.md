@@ -2,7 +2,7 @@
 id: vc.configure_origination_pipeline
 title: Configure VC Origination Pipeline
 slug: configure-origination-pipeline
-agent: vc-pipeline-autopilot
+agent: vc-sourcing-operator
 skills:
 - vc-origination-pipeline-orchestration
 - citation-enforcement
@@ -64,6 +64,7 @@ Configuration only. No external reads beyond connection-readiness checks, no sch
 ## Document References
 
 - `vc.document.origination_pipeline_sop` (operating_guidance)
+- `vc.document.origination_source_strategy_guide` (methodology)
 - `vc.document.source_registry_template` (operating_guidance)
 - `vc.document.template_use_guidance` (operating_guidance)
 
@@ -73,18 +74,13 @@ Configuration only. No external reads beyond connection-readiness checks, no sch
 - Alludium task ID: `vc.configure_origination_pipeline`
 - Task family: `origination_pipeline_setup`
 - Lifecycle stage: `setup`
-- Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
+- Recommended agent: `vc-sourcing-operator` (Alludium template `vc_sourcing_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:
   - `project_instance`
 
 ## Required Skills
-
-- `vc-origination-pipeline-orchestration`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `vc-origination-pipeline-orchestration`
 - `citation-enforcement`

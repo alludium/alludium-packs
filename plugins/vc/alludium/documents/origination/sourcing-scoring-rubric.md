@@ -19,7 +19,9 @@ summary: Rubric for scoring sourced company fit and promotion readiness.
 | Timing | Active fundraise, hiring, launch, or trigger event | No visible urgency | Now / Watch / Not now |
 | Founder / company quality | Relevant background, credible execution, strong signal | Thin evidence, mismatch, unclear owner | Strong / Mixed / Weak |
 | Source reliability | Trusted source or verified source run | Noisy, partial, or paid-source artifact without review | High / Medium / Low |
+| Source provenance | Specific source family, source detail, freshness, and owner are preserved | Company appears without traceable source context | Complete / Partial / Missing |
 | Relationship path | Clear warm intro or owned route | No credible route | Clear / Possible / None |
+| Promotion rationale | Clear reason to create or update a Deal Room | Next action is generic or unsupported | Clear / Partial / Missing |
 | Evidence completeness | Enough to justify next action | Missing critical source, identity, or fit evidence | Complete / Partial / Weak |
 | Promotion readiness | Human can decide whether to create or update Deal Room | Too little context for downstream action | Ready / Not ready |
 

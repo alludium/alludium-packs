@@ -1,14 +1,14 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.summarize_initial_call
-version: 1.0.10
+version: 1.0.12
 title: Summarize Meeting Records
 category: Venture Capital
 visibility: workspace
 tags:
   - vc
-  - initial-call
   - summary
+  - meeting-records
 definition:
   name: Summarize Meeting Records
   slug: summarize-initial-call
@@ -16,7 +16,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: assessment
+    stage: evaluation
     taskFamily: meeting
     documentRefs:
       - documentId: vc.document.customer_insights_summary_template
@@ -29,10 +29,7 @@ definition:
     requiredSkills:
       - meeting-prep-and-summary
       - citation-enforcement
-    plannedRequiredSkills:
-      - meeting-prep-and-summary
       - vc-task-and-next-step-generation
-      - citation-enforcement
     plannedRecommendedAgentTemplate: vc_meeting_operator
     recommendedAgentTemplate: vc_meeting_operator
     supportedProjectTypes:
@@ -43,8 +40,8 @@ definition:
         note: Initial call AI map
     instructions:
       executionInstructions: >-
-        Summarize or ingest the available meeting records for this opportunity, including transcript artifacts, meeting-summary artifacts, recording exports, notes, or meeting-source links represented in the supplied artifact list. Extract claims and gaps, capture action items, draft a CRM-neutral update, and recommend pass or follow-up. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Customer Insights Summary and attach it to the required output field `customer_insights_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
-      missingInputPolicy: Require meeting_record_artifact_ids and company_name before producing the call summary. Use meeting_notes as optional supporting context when provided.
+        Summarize or ingest the available meeting records for this opportunity, including founder, management, advisor, customer, expert, partner, IC, legal, or closing meetings represented by transcript artifacts, meeting-summary artifacts, recording exports, notes, or meeting-source links. Extract claims and gaps, capture action items, draft a CRM-neutral update, identify open questions, and recommend next actions or stage considerations without moving the deal. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Meeting Records Summary and attach it to the required output field `customer_insights_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+      missingInputPolicy: Require meeting_record_artifact_ids and company_name before producing the meeting summary. Use meeting_notes as optional supporting context when provided.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
         - Required input gaps are resolved or listed as assumptions/open questions.
@@ -83,13 +80,13 @@ fields:
     - key: deal_room_url
       name: Deal Room Url
       fieldType: string
-      required: true
+      required: false
       position: 3
       config: {}
 
   output:
     - key: customer_insights_artifact_id
-      name: Customer Insights Summary
+      name: Meeting Records Summary
       fieldType: file
       required: true
       position: 0
@@ -121,13 +118,13 @@ fields:
       position: 4
       config: {}
     - key: draft_crm_update
-      name: Draft CRM Update
+      name: CRM Update Draft
       fieldType: string
       required: false
       position: 5
       config: {}
     - key: pass_follow_up_recommendation
-      name: Pass Follow Up Recommendation
+      name: Stage Recommendation
       fieldType: string
       required: false
       position: 6

@@ -2,7 +2,7 @@
 id: vc.google_drive_sync_write
 title: Draft Google Drive File Proposals
 slug: google-drive-sync-write
-agent: vc-pipeline-autopilot
+agent: vc-integration-operator
 skills:
 - vc-google-drive-sync-write
 - citation-enforcement
@@ -56,18 +56,13 @@ Draft only. Do not create files, upload files, create folders, copy files, share
 - Source template: `alludium/task-definition-templates/vc-integrations/google-drive-sync-write.yaml`
 - Alludium task ID: `vc.google_drive_sync_write`
 - Task family: `integration_sync_write`
-- Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
+- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
 - Supported project types:
   - `vc_deal_room`
 - Supported project scopes:
   - `project_management`
 
 ## Required Skills
-
-- `vc-google-drive-sync-write`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `vc-google-drive-sync-write`
 - `citation-enforcement`

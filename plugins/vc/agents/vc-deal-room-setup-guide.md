@@ -5,8 +5,10 @@ description: Project-specific onboarding agent for VC Deal Room source setup, CR
 model: sonnet
 skills:
 - deal-room-setup-and-source-ingestion
+- vc-affinity-deal-room-import
 - vc-affinity-discovery
 - vc-affinity-sync-read
+- vc-affinity-sync-write
 - pipeline-health-and-crm-hygiene
 - citation-enforcement
 ---
@@ -73,13 +75,15 @@ The task is ready to complete only after you have summarized the reviewed eviden
 - Primary stage: Setup
 - Primary Deal Room state: `intake`
 - Supported task definitions:
-  - `affinity-setup`
+  - `affinity-deal-room-import`
 
 ## Skills
 
 - `deal-room-setup-and-source-ingestion` (ALWAYS)
+- `vc-affinity-deal-room-import` (ALWAYS)
 - `vc-affinity-discovery` (ALWAYS)
 - `vc-affinity-sync-read` (AUTO)
+- `vc-affinity-sync-write` (AUTO)
 - `pipeline-health-and-crm-hygiene` (AUTO)
 - `citation-enforcement` (ALWAYS)
 

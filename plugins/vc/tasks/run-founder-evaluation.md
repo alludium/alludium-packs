@@ -7,6 +7,7 @@ skills:
 - team-and-hiring-assessment
 - red-flags-scanner
 - citation-enforcement
+- founder-evaluation-and-reference-checking
 ---
 
 > **GENERATED FILE**
@@ -72,6 +73,8 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Document References
 
 - `vc.document.diligence_report_template` (output_template) -> `founder_evaluation_artifact_id`
+- `vc.document.formal_diligence_workstream_guide` (methodology)
+- `vc.document.formal_diligence_checklist` (checklist)
 - `vc.document.evidence_citation_style_guide` (style_guide)
 - `vc.document.template_use_guidance` (operating_guidance)
 
@@ -80,7 +83,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Source template: `alludium/task-definition-templates/vc-workflows/run-founder-evaluation.yaml`
 - Alludium task ID: `vc.run_founder_evaluation`
 - Task family: `diligence`
-- Lifecycle stage: `diligence`
+- Lifecycle stage: `formal_diligence`
 - Recommended agent: `vc-diligence-analyst` (Alludium template `vc_diligence_analyst`)
 - Supported project types:
   - `vc_deal_room`
@@ -90,10 +93,4 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - `team-and-hiring-assessment`
 - `red-flags-scanner`
 - `citation-enforcement`
-
-## Planned Skills
-
 - `founder-evaluation-and-reference-checking`
-- `team-and-hiring-assessment`
-- `red-flags-scanner`
-- `citation-enforcement`

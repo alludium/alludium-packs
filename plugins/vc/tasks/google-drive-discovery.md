@@ -2,7 +2,7 @@
 id: vc.google_drive_discovery
 title: Explore Google Drive Sources
 slug: google-drive-discovery
-agent: vc-pipeline-autopilot
+agent: vc-integration-operator
 skills:
 - vc-google-drive-discovery
 - citation-enforcement
@@ -58,18 +58,13 @@ Discovery only. Do not download file contents, create files, create folders, sha
 - Source template: `alludium/task-definition-templates/vc-integrations/google-drive-discovery.yaml`
 - Alludium task ID: `vc.google_drive_discovery`
 - Task family: `integration_discovery`
-- Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
+- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
 - Supported project types:
   - `vc_deal_room`
 - Supported project scopes:
   - `project_management`
 
 ## Required Skills
-
-- `vc-google-drive-discovery`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `vc-google-drive-discovery`
 - `citation-enforcement`

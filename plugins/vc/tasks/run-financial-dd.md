@@ -5,6 +5,7 @@ slug: run-financial-dd
 agent: vc-diligence-analyst
 skills:
 - citation-enforcement
+- financial-diligence-workstream
 ---
 
 > **GENERATED FILE**
@@ -74,6 +75,8 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Document References
 
 - `vc.document.diligence_report_template` (output_template) -> `financial_dd_artifact_id`
+- `vc.document.formal_diligence_workstream_guide` (methodology)
+- `vc.document.formal_diligence_checklist` (checklist)
 - `vc.document.diligence_report_template` (output_template) -> `unit_economics_artifact_id`
 - `vc.document.evidence_citation_style_guide` (style_guide)
 - `vc.document.template_use_guidance` (operating_guidance)
@@ -83,7 +86,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Source template: `alludium/task-definition-templates/vc-workflows/run-financial-dd.yaml`
 - Alludium task ID: `vc.run_financial_dd`
 - Task family: `diligence`
-- Lifecycle stage: `diligence`
+- Lifecycle stage: `formal_diligence`
 - Recommended agent: `vc-diligence-analyst` (Alludium template `vc_diligence_analyst`)
 - Supported project types:
   - `vc_deal_room`
@@ -91,11 +94,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Required Skills
 
 - `citation-enforcement`
-
-## Planned Skills
-
 - `financial-diligence-workstream`
-- `citation-enforcement`
 
 ## Workspace-Configured Methodology Skills
 

@@ -5,6 +5,7 @@ slug: prepare-deal-flow-agenda
 agent: vc-pipeline-autopilot
 skills:
 - citation-enforcement
+- vc-task-and-next-step-generation
 ---
 
 > **GENERATED FILE**
@@ -70,7 +71,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Source template: `alludium/task-definition-templates/vc-workflows/prepare-deal-flow-agenda.yaml`
 - Alludium task ID: `vc.prepare_deal_flow_agenda`
 - Task family: `pipeline`
-- Lifecycle stage: `assessment`
+- Lifecycle stage: `evaluation`
 - Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
 - Supported project types:
   - `vc_deal_room`
@@ -80,11 +81,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Required Skills
 
 - `citation-enforcement`
-
-## Planned Skills
-
 - `vc-task-and-next-step-generation`
-- `citation-enforcement`
 
 ## Workspace-Configured Methodology Skills
 

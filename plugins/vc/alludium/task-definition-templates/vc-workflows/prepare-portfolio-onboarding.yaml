@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_portfolio_onboarding
-version: 1.0.9
+version: 1.0.11
 title: Prepare Portfolio Onboarding
 category: Venture Capital
 visibility: workspace
@@ -26,9 +26,7 @@ definition:
         usage: operating_guidance
     requiredSkills:
       - citation-enforcement
-    plannedRequiredSkills:
       - portfolio-onboarding-and-100-day-plan
-      - citation-enforcement
     plannedRecommendedAgentTemplate: vc_legal_compliance_desk
     recommendedAgentTemplate: vc_legal_compliance_desk
     supportedProjectTypes:
@@ -80,6 +78,12 @@ fields:
       fieldType: file
       required: true
       position: 2
+      config: {}
+    - key: completion_tracker_artifact_id
+      name: Completion Tracker
+      fieldType: file
+      required: false
+      position: 3
       config: {}
 
   output:

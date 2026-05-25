@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.review_ic_memo
-version: 1.0.10
+version: 1.0.14
 title: Review IC Memo
 category: Venture Capital
 visibility: workspace
@@ -16,12 +16,20 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: review
+    stage: decision_review
     taskFamily: ic
     documentRefs:
       - documentId: vc.document.ic_memo_review_template
         usage: output_template
         outputFieldKey: ic_memo_review_artifact_id
+      - documentId: vc.document.opportunity_evaluation_framework
+        usage: methodology
+      - documentId: vc.document.evaluation_workstream_guide
+        usage: methodology
+      - documentId: vc.document.formal_diligence_workstream_guide
+        usage: methodology
+      - documentId: vc.document.formal_diligence_checklist
+        usage: checklist
       - documentId: vc.document.evidence_citation_style_guide
         usage: style_guide
       - documentId: vc.document.template_use_guidance
@@ -29,10 +37,7 @@ definition:
     requiredSkills:
       - citation-enforcement
       - ic-memo-assembly
-    plannedRequiredSkills:
-      - citation-enforcement
       - ic-risk-checklist-and-decision-log
-      - ic-memo-assembly
     plannedRecommendedAgentTemplate: vc_ic_prep_producer
     sourceAnchors:
       - source: investment-management-process-slides

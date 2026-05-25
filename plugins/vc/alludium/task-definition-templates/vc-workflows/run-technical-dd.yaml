@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_technical_dd
-version: 1.0.9
+version: 1.0.13
 title: Run Technical DD
 category: Venture Capital
 visibility: workspace
@@ -16,12 +16,16 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: diligence
+    stage: formal_diligence
     taskFamily: diligence
     documentRefs:
       - documentId: vc.document.diligence_report_template
         usage: output_template
         outputFieldKey: technical_dd_artifact_id
+      - documentId: vc.document.formal_diligence_workstream_guide
+        usage: methodology
+      - documentId: vc.document.formal_diligence_checklist
+        usage: checklist
       - documentId: vc.document.evidence_citation_style_guide
         usage: style_guide
       - documentId: vc.document.template_use_guidance
@@ -30,11 +34,7 @@ definition:
       - team-and-hiring-assessment
       - red-flags-scanner
       - citation-enforcement
-    plannedRequiredSkills:
       - technical-diligence-workstream
-      - team-and-hiring-assessment
-      - red-flags-scanner
-      - citation-enforcement
     plannedRecommendedAgentTemplate: vc_diligence_analyst
     recommendedAgentTemplate: vc_diligence_analyst
     supportedProjectTypes:

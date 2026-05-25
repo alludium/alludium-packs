@@ -2,7 +2,7 @@
 id: vc.affinity_discovery
 title: Explore Affinity Lists and Stages
 slug: affinity-discovery
-agent: vc-pipeline-autopilot
+agent: vc-integration-operator
 skills:
 - vc-affinity-discovery
 - citation-enforcement
@@ -58,18 +58,13 @@ Read-only discovery. Do not import, sync, update CRM fields, write notes, move s
 - Source template: `alludium/task-definition-templates/vc-integrations/affinity-discovery.yaml`
 - Alludium task ID: `vc.affinity_discovery`
 - Task family: `integration_discovery`
-- Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
+- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
 - Supported project types:
   - `vc_deal_room`
 - Supported project scopes:
   - `project_management`
 
 ## Required Skills
-
-- `vc-affinity-discovery`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `vc-affinity-discovery`
 - `citation-enforcement`

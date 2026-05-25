@@ -2,7 +2,7 @@
 id: vc.google_drive_setup
 title: Set Up Google Drive for VC Deal Rooms
 slug: google-drive-setup
-agent: vc-pipeline-autopilot
+agent: vc-integration-operator
 skills:
 - vc-google-drive-discovery
 - vc-google-drive-sync-read
@@ -63,20 +63,13 @@ Setup orchestration only. Do not import files, change sharing, create folders, w
 - Source template: `alludium/task-definition-templates/vc-integrations/google-drive-setup.yaml`
 - Alludium task ID: `vc.google_drive_setup`
 - Task family: `integration_setup`
-- Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
+- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
 - Supported project types:
   - `vc_deal_room`
 - Supported project scopes:
   - `project_management`
 
 ## Required Skills
-
-- `vc-google-drive-discovery`
-- `vc-google-drive-sync-read`
-- `vc-google-drive-sync-write`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `vc-google-drive-discovery`
 - `vc-google-drive-sync-read`

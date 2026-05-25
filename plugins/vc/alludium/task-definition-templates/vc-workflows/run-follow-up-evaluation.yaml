@@ -1,39 +1,47 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_follow_up_evaluation
-version: 1.0.9
-title: Run Follow-Up Evaluation
+version: 1.0.16
+title: Run Opportunity Evaluation
 category: Venture Capital
 visibility: workspace
 tags:
   - vc
-  - follow-up
-  - diligence
+  - evaluation
+  - opportunity-evaluation
 definition:
-  name: Run Follow-Up Evaluation
+  name: Run Opportunity Evaluation
   slug: run-follow-up-evaluation
-  description: Run Follow-Up Evaluation for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
+  description: Run a deeper opportunity evaluation after screening for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: assessment
-    taskFamily: diligence
+    stage: evaluation
+    taskFamily: evaluation
     documentRefs:
       - documentId: vc.document.follow_up_evaluation_template
         usage: output_template
         outputFieldKey: follow_up_evaluation_artifact_id
+      - documentId: vc.document.opportunity_evaluation_framework
+        usage: methodology
+      - documentId: vc.document.evaluation_workstream_guide
+        usage: methodology
+      - documentId: vc.document.commercial_evaluation_guide
+        usage: methodology
+      - documentId: vc.document.technical_evaluation_guide
+        usage: methodology
+      - documentId: vc.document.financial_evaluation_guide
+        usage: methodology
       - documentId: vc.document.evidence_citation_style_guide
         usage: style_guide
       - documentId: vc.document.template_use_guidance
         usage: operating_guidance
     requiredSkills:
+      - investment-diligence-question-framework
       - red-flags-scanner
       - citation-enforcement
-    plannedRequiredSkills:
-      - red-flags-scanner
-      - citation-enforcement
-    plannedRecommendedAgentTemplate: vc_first_look_analyst
-    recommendedAgentTemplate: vc_first_look_analyst
+    plannedRecommendedAgentTemplate: vc_evaluation_analyst
+    recommendedAgentTemplate: vc_evaluation_analyst
     supportedProjectTypes:
       - vc_deal_room
     sourceAnchors:
@@ -48,8 +56,8 @@ definition:
         note: structured diligence dimensions
     instructions:
       executionInstructions: >-
-        Build the follow-up evaluation workspace with document requests, competitive landscape, early risks, and readiness recommendation. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Follow-Up Evaluation and attach it to the required output field `follow_up_evaluation_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
-      missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
+        Build an opportunity evaluation from the investment fit screen, meeting records, founder materials, customer evidence, market sources, technical sources, financial sources, and existing questions. Produce a deeper evaluation scorecard, key claims register, critical unknowns, initial diligence recommendations, and recommended decision path. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Opportunity Evaluation and attach it to the required output field `follow_up_evaluation_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+      missingInputPolicy: Ask for the investment screen and at least one meeting, founder-material, customer, market, technical, or financial evidence source before producing the evaluation.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
         - Required input gaps are resolved or listed as assumptions/open questions.
@@ -74,14 +82,14 @@ fields:
       required: true
       position: 0
       config: {}
-    - key: first_look_scorecard_artifact_id
-      name: First-Look Scorecard
+    - key: investment_screen_scorecard_artifact_id
+      name: Investment Fit Screen Scorecard
       fieldType: file
       required: true
       position: 1
       config: {}
     - key: customer_insights_artifact_id
-      name: Customer Insights Summary
+      name: Meeting Records Summary
       fieldType: file
       required: true
       position: 2
@@ -89,7 +97,7 @@ fields:
 
   output:
     - key: follow_up_evaluation_artifact_id
-      name: Follow-Up Evaluation
+      name: Opportunity Evaluation
       fieldType: file
       required: true
       position: 0
@@ -106,7 +114,7 @@ runtime:
     agentStartsImmediately: true
     requiresHumanConfirmationToComplete: true
     preferredMode: guided_execution
-    preferredAgentType: vc_first_look_analyst
+    preferredAgentType: vc_evaluation_analyst
 ui:
   renderer: generic
   surfaceKey: null

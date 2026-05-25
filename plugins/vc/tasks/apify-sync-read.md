@@ -2,7 +2,7 @@
 id: vc.apify_sync_read
 title: Preview Apify Origination Results
 slug: apify-sync-read
-agent: vc-origination-scout
+agent: vc-integration-operator
 skills:
 - vc-apify-sync-read
 - citation-enforcement
@@ -57,18 +57,13 @@ Read preview only. Do not enable scheduled runs, import candidates, write candid
 - Source template: `alludium/task-definition-templates/vc-integrations/apify-sync-read.yaml`
 - Alludium task ID: `vc.apify_sync_read`
 - Task family: `integration_sync_read`
-- Recommended agent: `vc-origination-scout` (Alludium template `vc_origination_scout`)
+- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:
   - `project_management`
 
 ## Required Skills
-
-- `vc-apify-sync-read`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `vc-apify-sync-read`
 - `citation-enforcement`

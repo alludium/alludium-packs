@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.review_term_sheet
-version: 1.0.8
+version: 1.0.11
 title: Review Term Sheet
 category: Venture Capital
 visibility: workspace
@@ -16,7 +16,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: term_sheet
+    stage: deal_structuring
     taskFamily: closing
     documentRefs:
       - documentId: vc.document.term_sheet_review_template
@@ -29,10 +29,7 @@ definition:
     requiredSkills:
       - red-flags-scanner
       - citation-enforcement
-    plannedRequiredSkills:
       - closing-coordination-and-cp-tracking
-      - red-flags-scanner
-      - citation-enforcement
     plannedRecommendedAgentTemplate: vc_legal_compliance_desk
     sourceAnchors:
       - source: investment-management-process-slides
@@ -93,6 +90,12 @@ fields:
       position: 3
       config:
         rows: 5
+    - key: deal_terms_analysis_artifact_id
+      name: Deal Terms Analysis
+      fieldType: file
+      required: false
+      position: 4
+      config: {}
 
   output:
     - key: term_sheet_review_artifact_id

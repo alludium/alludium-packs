@@ -2,7 +2,7 @@
 id: vc.slack_setup
 title: Set Up Slack for VC Deal Rooms
 slug: slack-setup
-agent: vc-pipeline-autopilot
+agent: vc-integration-operator
 skills:
 - vc-slack-discovery
 - vc-slack-sync-read
@@ -63,20 +63,13 @@ Setup orchestration only. Do not read broad channel history, post messages, crea
 - Source template: `alludium/task-definition-templates/vc-integrations/slack-setup.yaml`
 - Alludium task ID: `vc.slack_setup`
 - Task family: `integration_setup`
-- Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
+- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
 - Supported project types:
   - `vc_deal_room`
 - Supported project scopes:
   - `project_management`
 
 ## Required Skills
-
-- `vc-slack-discovery`
-- `vc-slack-sync-read`
-- `vc-slack-sync-write`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `vc-slack-discovery`
 - `vc-slack-sync-read`

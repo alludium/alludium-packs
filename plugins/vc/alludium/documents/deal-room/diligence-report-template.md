@@ -36,6 +36,12 @@ summary: Reusable report format for diligence workstreams.
 | --- | --- | --- | --- |
 |  |  | High / Medium / Low | Positive / Negative / Neutral / Unknown |
 
+## Verification Status
+
+| Claim / Assumption | Status | Evidence | Gap | Decision Impact |
+| --- | --- | --- | --- | --- |
+|  | Verified / Partially verified / Founder claim / Unsupported |  |  |  |
+
 ## Detailed Analysis
 
 Use short subsections for the workstream-specific analysis. For financial diligence, include revenue quality, margin profile, burn, runway, forecast realism, and unit economics. For commercial diligence, include customer need, market pull, sales motion, pricing, retention, and competition. For technical diligence, include architecture, product depth, data/AI dependencies, security, scalability, and technical debt.
@@ -48,9 +54,9 @@ Use short subsections for the workstream-specific analysis. For financial dilige
 
 ## Open Questions
 
-| Question | Priority | Owner | Expected Evidence |
-| --- | --- | --- | --- |
-|  | Must answer / Should answer / Optional |  |  |
+| Question | Priority | Owner | Expected Evidence | Success Threshold |
+| --- | --- | --- | --- | --- |
+|  | Must answer / Should answer / Optional |  |  |  |
 
 ## Risk Rating
 

@@ -59,7 +59,9 @@
       "applyVariables": {
         "enabled": true,
         "label": "Apply reviewed origination variables",
-        "sourceEvidenceKeys": ["variables"],
+        "sourceEvidenceKeys": [
+          "variables"
+        ],
         "target": "workspace_and_project_setup_context",
         "actionMode": "platform_variable_application",
         "requiresReviewedUserApproval": true,
@@ -76,7 +78,9 @@
       "enableSchedules": {
         "enabled": true,
         "label": "Enable approved origination schedules",
-        "sourceEvidenceKeys": ["schedules"],
+        "sourceEvidenceKeys": [
+          "schedules"
+        ],
         "target": "configuredProject",
         "scheduleGroupsRef": "projectSetup.scheduleGroups",
         "defaultEnabled": false,
@@ -127,7 +131,9 @@
         "key": "spend_controls",
         "label": "Spend controls",
         "description": "Optional recurring paid-source spend audit for LinkedIn/Apify query management.",
-        "taskDefinitionSlugs": ["audit-linkedin-query-spend"],
+        "taskDefinitionSlugs": [
+          "audit-linkedin-query-spend"
+        ],
         "defaultExpanded": false,
         "advanced": true
       }
@@ -164,10 +170,18 @@
   "projectCreation": {
     "launcherLabel": "Create VC Origination Pipeline",
     "starterId": "create-vc-origination-pipeline-project",
-    "aliases": ["origination pipeline", "sourcing pipeline", "deal sourcing"],
-    "requiredFieldKeys": ["pipeline_name"],
+    "aliases": [
+      "origination pipeline",
+      "sourcing pipeline",
+      "deal sourcing"
+    ],
+    "requiredFieldKeys": [
+      "pipeline_name"
+    ],
     "recommendedFieldKeys": [],
-    "advancedFieldKeys": ["confidentiality_level"],
+    "advancedFieldKeys": [
+      "confidentiality_level"
+    ],
     "defaultState": "draft",
     "guidedTask": {
       "taskDefinitionTemplateId": "vc.configure_origination_pipeline",
@@ -188,6 +202,7 @@
         "vc.document.template_use_guidance",
         "vc.document.file_naming_source_index_sop",
         "vc.document.origination_pipeline_sop",
+        "vc.document.origination_source_strategy_guide",
         "vc.document.source_registry_template",
         "vc.document.candidate_batch_template",
         "vc.document.sourcing_scoring_rubric",
@@ -624,27 +639,41 @@
         {
           "key": "setup",
           "label": "Setup",
-          "states": ["draft", "configured", "needs_credentials"]
+          "states": [
+            "draft",
+            "configured",
+            "needs_credentials"
+          ]
         },
         {
           "key": "source",
           "label": "Source",
-          "states": ["active", "source_degraded"]
+          "states": [
+            "active",
+            "source_degraded"
+          ]
         },
         {
           "key": "review",
           "label": "Review",
-          "states": ["review_backlog"]
+          "states": [
+            "review_backlog"
+          ]
         },
         {
           "key": "operate",
           "label": "Operate",
-          "states": ["paused", "migration_in_progress"]
+          "states": [
+            "paused",
+            "migration_in_progress"
+          ]
         },
         {
           "key": "outcomes",
           "label": "Outcomes",
-          "states": ["archived"]
+          "states": [
+            "archived"
+          ]
         }
       ],
       "fallbackAgents": [

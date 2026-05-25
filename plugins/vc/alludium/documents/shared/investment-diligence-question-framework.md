@@ -24,14 +24,19 @@ Use this framework to turn known facts, risk hypotheses, and evidence gaps into 
 
 | Workstream | Example Focus Areas |
 | --- | --- |
-| Market and customer | Market urgency, buyer pain, budget owner, category growth, customer proof |
-| Product and technology | Product depth, defensibility, roadmap, security, AI or data dependencies |
-| Team and governance | Founder quality, hiring plan, board needs, references, key-person risk |
-| Financial and unit economics | Revenue quality, gross margin, burn, runway, payback, forecast realism |
-| Commercial motion | Pipeline, sales cycle, pricing power, retention, expansion, channel risk |
-| Legal and regulatory | IP, contracts, privacy, employment, regulatory exposure, counsel items |
-| Fund fit and ownership | Round dynamics, valuation, reserves, ownership path, exit logic |
+| Market and customer | Market urgency, buyer pain, budget owner, category growth, customer proof, customer concentration |
+| Product and technology | Product depth, architecture, defensibility, roadmap, security, AI or data dependencies, scalability |
+| Team and governance | Founder quality, hiring plan, board needs, references, key-person risk, role coverage |
+| Financial and unit economics | Revenue quality, gross margin, burn, runway, payback, forecast realism, use of funds |
+| Commercial motion | Pipeline, sales cycle, pricing power, retention, expansion, channel risk, partner dependencies |
+| Legal and regulatory | IP, contracts, privacy, employment, regulatory exposure, licenses, counsel items |
+| Company structure and deal terms | Cap table, option pool, shareholder rights, round dynamics, valuation, reserves, ownership path |
+| Exit and return fit | Acquirer logic, comparable exits, exit timing, fund-return sensitivity |
 
 ## Prioritization
 
 Use `must answer` for questions that can change proceed/pass, valuation, terms, or approval conditions. Use `should answer` for questions that affect conviction or workstream planning. Use `optional` only for useful context that should not block the investment decision. End with the top five unanswered questions and the decision each one informs.
+
+## Evidence Request Standard
+
+For each must-answer question, state the requested artifact or interaction. Good outputs do not only ask "what is the traction?" They ask for the specific pipeline export, customer reference, model bridge, contract, architecture diagram, cap table, IP assignment, counsel note, or expert call needed to resolve the decision.

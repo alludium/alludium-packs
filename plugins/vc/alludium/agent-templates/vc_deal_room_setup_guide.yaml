@@ -11,13 +11,15 @@ metadata:
   gitBranch: main
   gitRepositoryUrl: https://github.com/alludium-templates/configurable-agent.git
   supportedTaskDefinitions:
-    - affinity-setup
+    - affinity-deal-room-import
   primaryStage: "Setup"
   primaryDealRoomState: "intake"
   requiredSkills:
     - deal-room-setup-and-source-ingestion
+    - vc-affinity-deal-room-import
     - vc-affinity-discovery
     - vc-affinity-sync-read
+    - vc-affinity-sync-write
     - pipeline-health-and-crm-hygiene
     - citation-enforcement
 
@@ -29,9 +31,13 @@ llm:
 skills:
   - externalId: "deal-room-setup-and-source-ingestion"
     activationMode: "ALWAYS"
+  - externalId: "vc-affinity-deal-room-import"
+    activationMode: "ALWAYS"
   - externalId: "vc-affinity-discovery"
     activationMode: "ALWAYS"
   - externalId: "vc-affinity-sync-read"
+    activationMode: "AUTO"
+  - externalId: "vc-affinity-sync-write"
     activationMode: "AUTO"
   - externalId: "pipeline-health-and-crm-hygiene"
     activationMode: "AUTO"

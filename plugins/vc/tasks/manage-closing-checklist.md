@@ -5,6 +5,8 @@ slug: manage-closing-checklist
 agent: vc-legal-compliance-desk
 skills:
 - citation-enforcement
+- closing-coordination-and-cp-tracking
+- vc-task-and-next-step-generation
 ---
 
 > **GENERATED FILE**
@@ -46,6 +48,8 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `term_sheet_review_artifact_id` | Term Sheet Review | `file` | yes |
 | `closing_source_artifact_ids` | Closing Source Artifact IDs | `string` | yes |
 | `legal_document_status` | Legal Document Status | `string` | yes |
+| `legal_diligence_artifact_id` | Legal Diligence | `file` | no |
+| `investment_document_review_artifact_id` | Investment Document Review | `file` | no |
 | `owners` | Owners | `json` | no |
 | `deadlines` | Deadlines | `json` | no |
 | `blockers` | Blockers | `json` | no |
@@ -73,6 +77,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Document References
 
 - `vc.document.closing_checklist` (output_template) -> `closing_checklist_artifact_id`
+- `vc.document.legal_diligence_guide` (methodology)
 - `vc.document.template_use_guidance` (operating_guidance)
 
 ## Routing
@@ -88,9 +93,5 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Required Skills
 
 - `citation-enforcement`
-
-## Planned Skills
-
 - `closing-coordination-and-cp-tracking`
 - `vc-task-and-next-step-generation`
-- `citation-enforcement`

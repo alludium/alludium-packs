@@ -2,7 +2,7 @@
 id: vc.apify_setup
 title: Set Up Apify for VC Origination
 slug: apify-setup
-agent: vc-pipeline-autopilot
+agent: vc-integration-operator
 skills:
 - vc-apify-discovery
 - vc-apify-sync-read
@@ -62,19 +62,13 @@ Setup orchestration only. Do not run scheduled sourcing, import candidates, writ
 - Source template: `alludium/task-definition-templates/vc-integrations/apify-setup.yaml`
 - Alludium task ID: `vc.apify_setup`
 - Task family: `integration_setup`
-- Recommended agent: `vc-pipeline-autopilot` (Alludium template `vc_pipeline_autopilot`)
+- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
 - Supported project types:
   - `vc_origination_pipeline`
 - Supported project scopes:
   - `project_management`
 
 ## Required Skills
-
-- `vc-apify-discovery`
-- `vc-apify-sync-read`
-- `citation-enforcement`
-
-## Planned Skills
 
 - `vc-apify-discovery`
 - `vc-apify-sync-read`

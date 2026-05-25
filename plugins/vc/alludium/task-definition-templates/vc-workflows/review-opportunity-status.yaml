@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.review_opportunity_status
-version: 1.0.6
+version: 1.0.10
 title: Review Opportunity Status
 category: Venture Capital
 visibility: workspace
@@ -16,13 +16,22 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: assessment
+    stage: evaluation
     taskFamily: pipeline
+    documentRefs:
+      - documentId: vc.document.deal_room_sop
+        usage: operating_guidance
+      - documentId: vc.document.opportunity_evaluation_framework
+        usage: methodology
+      - documentId: vc.document.evaluation_workstream_guide
+        usage: methodology
+      - documentId: vc.document.evidence_citation_style_guide
+        usage: style_guide
+      - documentId: vc.document.template_use_guidance
+        usage: operating_guidance
     requiredSkills:
       - citation-enforcement
-    plannedRequiredSkills:
       - vc-task-and-next-step-generation
-      - citation-enforcement
     plannedRecommendedAgentTemplate: vc_pipeline_autopilot
     recommendedAgentTemplate: vc_pipeline_autopilot
     supportedProjectTypes:
@@ -30,7 +39,7 @@ definition:
     sourceAnchors:
       - source: investment-management-process-slides
         anchor: slide-12
-        note: Assessment stages
+        note: Screening and evaluation stages
       - source: investment-management-process-slides
         anchor: slide-34
         note: Human and AI role split
@@ -56,7 +65,8 @@ definition:
         anchor: page-7
         note: Workflow vision
     instructions:
-      executionInstructions: Review the supplied stage snapshot and current Deal Room state, identify missing inputs, recommend stage movement, and list next task suggestions using the workspace configured stage graph; do not create tasks automatically. This is a status/control helper, not a formal investment evaluation memo. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it.
+      executionInstructions: >-
+        Review the supplied stage snapshot and current Deal Room state, identify missing inputs, recommend stage movement, and list next task suggestions using the workspace configured stage graph; do not create tasks automatically. This is a status/control helper, not a formal investment evaluation memo. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:
