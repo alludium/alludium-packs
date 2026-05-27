@@ -12,7 +12,7 @@ source: alludium/project-types/vc_investment_management.json
 
 Project context for formal diligence, investment contracts, closing, completion, and portfolio handoff after a deal has moved beyond deal structuring.
 
-This blueprint lists setup, management, and workflow-stage tasks with the recommended agents, task-referenced skills, document references, and integration surfaces for this project type. General and management sections are included only when they contain cross-cutting tasks that are not already mapped to a workflow stage.
+This blueprint lists setup, support, and workflow-stage tasks with the recommended agents, task-referenced skills, document references, and integration surfaces for this project type. General and support sections are included only when they contain cross-cutting tasks that are not already mapped to a workflow stage.
 
 ## Setup
 

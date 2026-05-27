@@ -55,6 +55,24 @@ GENERAL_TASK_SLUGS_BY_PROJECT_TYPE: dict[str, list[str]] = {
     ],
 }
 
+SUPPORT_BLUEPRINT_CATEGORIES: dict[str, dict[str, str]] = {
+    "integration_support": {
+        "label": "Integration Support",
+        "description": (
+            "Connector discovery, preview, and read-only integration support tasks used to configure or inspect "
+            "source surfaces without making them part of the VC workflow."
+        ),
+    },
+    "pipeline_management": {
+        "label": "Pipeline Management",
+        "description": (
+            "VC-specific operating and management tasks that support pipeline health, source operations, or review "
+            "artifacts outside the candidate workflow."
+        ),
+    },
+}
+SUPPORT_BLUEPRINT_CATEGORY_ORDER = ["integration_support", "pipeline_management"]
+
 
 def fail(message: str) -> None:
     print(f"ERROR: {message}", file=sys.stderr)
@@ -803,6 +821,32 @@ def collect_management_task_slugs(
     return collected
 
 
+def support_blueprint_category(task: dict[str, Any]) -> str:
+    definition_json = task.get("definitionJson")
+    if isinstance(definition_json, dict):
+        category = definition_json.get("blueprintCategory")
+        if isinstance(category, str) and category in SUPPORT_BLUEPRINT_CATEGORIES:
+            return category
+
+    path = task.get("path")
+    if isinstance(path, Path) and path.parent.name == "vc-integrations":
+        return "integration_support"
+
+    return "pipeline_management"
+
+
+def group_support_task_rows(
+    rows: list[tuple[str, str | None]],
+    task_by_slug: dict[str, dict[str, Any]],
+) -> dict[str, list[tuple[str, str | None]]]:
+    grouped: dict[str, list[tuple[str, str | None]]] = {}
+    for slug, fallback_agent in rows:
+        task = task_by_slug.get(slug)
+        category = support_blueprint_category(task) if isinstance(task, dict) else "pipeline_management"
+        grouped.setdefault(category, []).append((slug, fallback_agent))
+    return grouped
+
+
 def blueprint_task_table(
     rows: list[tuple[str, str | None]],
     task_by_slug: dict[str, dict[str, Any]],
@@ -843,9 +887,9 @@ def render_blueprint(
     body += f"# {project_name} Blueprint\n\n"
     body += f"{description}\n\n"
     body += (
-        "This blueprint lists setup, management, and workflow-stage tasks with the recommended agents, "
+        "This blueprint lists setup, support, and workflow-stage tasks with the recommended agents, "
         "task-referenced skills, document references, and integration surfaces for this project type. "
-        "General and management sections are included only when they contain cross-cutting tasks that "
+        "General and support sections are included only when they contain cross-cutting tasks that "
         "are not already mapped to a workflow stage.\n\n"
     )
 
@@ -895,10 +939,25 @@ def render_blueprint(
         body += "Reusable project-instance tasks that can be useful across multiple lifecycle stages.\n\n"
         body += blueprint_task_table(general_rows, task_by_slug, agent_templates, documents, skill_names)
 
-    if management_rows:
-        body += "\n## Management\n\n"
-        body += "Project-management tasks that operate across a project suite, source pipeline, or recurring sync/reporting flow.\n\n"
-        body += blueprint_task_table(management_rows, task_by_slug, agent_templates, documents, skill_names)
+    support_rows_by_category = group_support_task_rows(management_rows, task_by_slug)
+    for category in SUPPORT_BLUEPRINT_CATEGORY_ORDER:
+        rows = support_rows_by_category.pop(category, [])
+        if not rows:
+            continue
+        metadata = SUPPORT_BLUEPRINT_CATEGORIES[category]
+        body += f"\n## {metadata['label']}\n\n"
+        body += f"{metadata['description']}\n\n"
+        body += blueprint_task_table(rows, task_by_slug, agent_templates, documents, skill_names)
+    for category, rows in sorted(support_rows_by_category.items()):
+        if not rows:
+            continue
+        metadata = SUPPORT_BLUEPRINT_CATEGORIES.get(category)
+        label = metadata["label"] if isinstance(metadata, dict) else title_from_key(category)
+        description = metadata.get("description") if isinstance(metadata, dict) else None
+        body += f"\n## {label}\n\n"
+        if isinstance(description, str) and description:
+            body += f"{description}\n\n"
+        body += blueprint_task_table(rows, task_by_slug, agent_templates, documents, skill_names)
 
     blueprint_category_slugs = setup_slugs | general_slugs
     mappings_by_stage: dict[str, list[str]] = {}

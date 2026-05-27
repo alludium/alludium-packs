@@ -12,7 +12,7 @@ source: alludium/project-types/vc_deal_room.json
 
 Project context for one venture investment opportunity from source capture through deal structuring.
 
-This blueprint lists setup, management, and workflow-stage tasks with the recommended agents, task-referenced skills, document references, and integration surfaces for this project type. General and management sections are included only when they contain cross-cutting tasks that are not already mapped to a workflow stage.
+This blueprint lists setup, support, and workflow-stage tasks with the recommended agents, task-referenced skills, document references, and integration surfaces for this project type. General and support sections are included only when they contain cross-cutting tasks that are not already mapped to a workflow stage.
 
 ## Setup
 
@@ -41,9 +41,9 @@ Reusable project-instance tasks that can be useful across multiple lifecycle sta
 | [Summarize Meeting Records](../tasks/summarize-initial-call.md) | [Meeting Operator](../agents/vc-meeting-operator.md) | [Meeting Prep & Summary](../skills/meeting-prep-and-summary/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md)<br>[VC Task & Next-Step Generation](../skills/vc-task-and-next-step-generation/SKILL.md) | [Customer Insights Summary Template](../alludium/documents/deal-room/customer-insights-summary-template.md) (output_template, to `customer_insights_artifact_id`)<br>[Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md) (style_guide)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | `alludium-platform`<br>`harmonic-mcp-oauth`<br>`affinity-mcp-server`<br>`exa-mcp-hosted`<br>`brave-search-mcp`<br>`serpapi-mcp`<br>`firecrawl-mcp-hosted`<br>`dealroom-mcp`<br>`granola-mcp`<br>`google_drive` |
 | [Review Opportunity Status](../tasks/review-opportunity-status.md) | [Pipeline Autopilot](../agents/vc-pipeline-autopilot.md) | [Citation Enforcement](../skills/citation-enforcement/SKILL.md)<br>[VC Task & Next-Step Generation](../skills/vc-task-and-next-step-generation/SKILL.md) | [Deal Pipeline Operating SOP](../alludium/documents/deal-room/deal-room-sop.md) (operating_guidance)<br>[Opportunity Evaluation Framework](../alludium/documents/shared/opportunity-evaluation-framework.md) (methodology)<br>[Evaluation Workstream Guide](../alludium/documents/shared/evaluation-workstream-guide.md) (methodology)<br>[Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md) (style_guide)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | `alludium-platform`<br>`affinity-mcp-server`<br>`exa-mcp-hosted`<br>`brave-search-mcp`<br>`serpapi-mcp`<br>`dealroom-mcp` |
 
-## Management
+## Integration Support
 
-Project-management tasks that operate across a project suite, source pipeline, or recurring sync/reporting flow.
+Connector discovery, preview, and read-only integration support tasks used to configure or inspect source surfaces without making them part of the VC workflow.
 
 | Task | Agent | Skills | Documents | Integrations |
 | --- | --- | --- | --- | --- |
@@ -57,7 +57,6 @@ Project-management tasks that operate across a project suite, source pipeline, o
 | [Explore Harmonic Source Scopes](../tasks/harmonic-discovery.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Harmonic Discovery](../skills/vc-harmonic-discovery/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | None declared |
 | [Explore Notion Pages and Databases](../tasks/notion-discovery.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Notion Discovery](../skills/vc-notion-discovery/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | None declared |
 | [Explore Slack Channels for VC Context](../tasks/slack-discovery.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Slack Discovery](../skills/vc-slack-discovery/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | None declared |
-| [Prepare Deal Flow Agenda](../tasks/prepare-deal-flow-agenda.md) | [Pipeline Autopilot](../agents/vc-pipeline-autopilot.md) | [Citation Enforcement](../skills/citation-enforcement/SKILL.md)<br>[VC Task & Next-Step Generation](../skills/vc-task-and-next-step-generation/SKILL.md) | None declared | `alludium-platform`<br>`affinity-mcp-server`<br>`exa-mcp-hosted`<br>`brave-search-mcp`<br>`serpapi-mcp`<br>`dealroom-mcp` |
 | [Preview Google Drive Context](../tasks/google-drive-sync-read.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Google Drive Sync Read](../skills/vc-google-drive-sync-read/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | None declared |
 | [Preview Harmonic Search Results](../tasks/harmonic-sync-read.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Harmonic Sync Read](../skills/vc-harmonic-sync-read/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | None declared |
 | [Preview Notion Context](../tasks/notion-sync-read.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Notion Sync Read](../skills/vc-notion-sync-read/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | None declared |
@@ -66,6 +65,14 @@ Project-management tasks that operate across a project suite, source pipeline, o
 | [Set Up Harmonic for Deal Pipelines](../tasks/harmonic-setup.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Harmonic Discovery](../skills/vc-harmonic-discovery/SKILL.md)<br>[VC Harmonic Sync Read](../skills/vc-harmonic-sync-read/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | `harmonic-mcp-oauth` |
 | [Set Up Notion for Deal Pipelines](../tasks/notion-setup.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Notion Discovery](../skills/vc-notion-discovery/SKILL.md)<br>[VC Notion Sync Read](../skills/vc-notion-sync-read/SKILL.md)<br>[VC Notion Sync Write](../skills/vc-notion-sync-write/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | `notion` |
 | [Set Up Slack for Deal Pipelines](../tasks/slack-setup.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Slack Discovery](../skills/vc-slack-discovery/SKILL.md)<br>[VC Slack Sync Read](../skills/vc-slack-sync-read/SKILL.md)<br>[VC Slack Sync Write](../skills/vc-slack-sync-write/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | `slack_v2` |
+
+## Pipeline Management
+
+VC-specific operating and management tasks that support pipeline health, source operations, or review artifacts outside the candidate workflow.
+
+| Task | Agent | Skills | Documents | Integrations |
+| --- | --- | --- | --- | --- |
+| [Prepare Deal Flow Agenda](../tasks/prepare-deal-flow-agenda.md) | [Pipeline Autopilot](../agents/vc-pipeline-autopilot.md) | [Citation Enforcement](../skills/citation-enforcement/SKILL.md)<br>[VC Task & Next-Step Generation](../skills/vc-task-and-next-step-generation/SKILL.md) | None declared | `alludium-platform`<br>`affinity-mcp-server`<br>`exa-mcp-hosted`<br>`brave-search-mcp`<br>`serpapi-mcp`<br>`dealroom-mcp` |
 
 ## Intake
 
