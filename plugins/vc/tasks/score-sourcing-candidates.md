@@ -1,6 +1,6 @@
 ---
 id: vc.score_sourcing_candidates
-title: Score Sourcing Candidates
+title: Score Sourcing Candidate
 slug: score-sourcing-candidates
 agent: vc-sourcing-operator
 skills:
@@ -13,7 +13,7 @@ skills:
 > Source: `alludium/task-definition-templates/vc-workflows/score-sourcing-candidates.yaml`
 > Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
-# Score Sourcing Candidates
+# Score Sourcing Candidate
 
 Produce Meet/Watch/Pass verdicts and urgency scores for enriched origination candidates.
 

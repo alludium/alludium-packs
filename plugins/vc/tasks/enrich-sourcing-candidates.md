@@ -1,6 +1,6 @@
 ---
 id: vc.enrich_sourcing_candidates
-title: Enrich Sourcing Candidates
+title: Enrich Sourcing Candidate
 slug: enrich-sourcing-candidates
 agent: vc-sourcing-operator
 skills:
@@ -13,7 +13,7 @@ skills:
 > Source: `alludium/task-definition-templates/vc-workflows/enrich-sourcing-candidates.yaml`
 > Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
-# Enrich Sourcing Candidates
+# Enrich Sourcing Candidate
 
 Normalize and enrich candidate records with web, LinkedIn, founder, website, and evidence context before scoring.
 

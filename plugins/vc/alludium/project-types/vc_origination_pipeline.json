@@ -2103,27 +2103,7 @@
         ]
       }
     ],
-    "lifecycleStageDefinitions": [
-      {
-        "key": "draft",
-        "label": "Draft",
-        "description": "Capture setup intent before the origination pipeline is configured."
-      },
-      {
-        "key": "configured",
-        "label": "Configured",
-        "description": "Source scope, review policy, and schedules are configured but normal sourcing has not started."
-      },
-      {
-        "key": "needs_credentials",
-        "label": "Needs Credentials",
-        "description": "Resolve missing source, CRM, or enrichment access before running pipeline work."
-      },
-      {
-        "key": "source_degraded",
-        "label": "Source Degraded",
-        "description": "Investigate failed sources, spend limits, rate limits, or stale source state."
-      },
+    "stageDefinitions": [
       {
         "key": "source",
         "label": "Source",
@@ -2166,8 +2146,8 @@
       },
       {
         "key": "promoted_to_deal_pipeline",
-        "label": "Promoted To Deal Pipeline",
-        "description": "Prepare the human-approved handoff into a Deal Pipeline project."
+        "label": "Added To Deal Pipeline",
+        "description": "Candidate has engaged and is handed into a Deal Pipeline project with an approved promotion package."
       },
       {
         "key": "no_response",
@@ -2183,21 +2163,6 @@
         "key": "watchlist",
         "label": "Watchlist",
         "description": "Hold candidates worth revisiting but not active for outreach now."
-      },
-      {
-        "key": "paused",
-        "label": "Paused",
-        "description": "Pipeline work is intentionally paused."
-      },
-      {
-        "key": "migration_in_progress",
-        "label": "Migration In Progress",
-        "description": "Pipeline configuration or state is being migrated."
-      },
-      {
-        "key": "archived",
-        "label": "Archived",
-        "description": "Pipeline or candidate workflow is closed and retained for reference."
       }
     ]
   }

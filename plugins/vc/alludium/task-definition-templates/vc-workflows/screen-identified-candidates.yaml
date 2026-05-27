@@ -1,8 +1,8 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.screen_identified_candidates
-version: 0.1.0
-title: Screen Identified Candidates
+version: 0.1.1
+title: Screen Identified Candidate
 category: Venture Capital
 visibility: workspace
 tags:
@@ -10,7 +10,7 @@ tags:
 - origination
 - screening
 definition:
-  name: Screen Identified Candidates
+  name: Screen Identified Candidate
   slug: screen-identified-candidates
   description: Run a lightweight first-pass fit screen on newly identified origination candidates before marking them of interest.
   allowSubtasks: false

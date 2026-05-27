@@ -1,6 +1,6 @@
 ---
 id: vc.screen_founder_connected_candidates
-title: Screen Founder-Connected Candidates
+title: Screen Founder-Connected Candidate
 slug: screen-founder-connected-candidates
 agent: vc-sourcing-operator
 skills:
@@ -14,7 +14,7 @@ skills:
 > Source: `alludium/task-definition-templates/vc-workflows/screen-founder-connected-candidates.yaml`
 > Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
-# Screen Founder-Connected Candidates
+# Screen Founder-Connected Candidate
 
 Re-screen candidates after a founder connection adds direct context, before continuing outbound or promotion.
 

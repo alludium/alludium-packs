@@ -1,8 +1,8 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.sync_sourcing_candidates
-version: 0.1.3
-title: Sync Sourcing Candidates
+version: 0.1.4
+title: Sync Sourcing Candidate
 category: Venture Capital
 visibility: workspace
 tags:
@@ -10,7 +10,7 @@ tags:
   - origination
   - sync
 definition:
-  name: Sync Sourcing Candidates
+  name: Sync Sourcing Candidate
   slug: sync-sourcing-candidates
   description: Prepare or apply reviewed candidate state sync while preserving manual workflow decisions.
   allowSubtasks: false

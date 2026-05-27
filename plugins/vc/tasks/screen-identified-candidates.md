@@ -1,6 +1,6 @@
 ---
 id: vc.screen_identified_candidates
-title: Screen Identified Candidates
+title: Screen Identified Candidate
 slug: screen-identified-candidates
 agent: vc-sourcing-operator
 skills:
@@ -13,7 +13,7 @@ skills:
 > Source: `alludium/task-definition-templates/vc-workflows/screen-identified-candidates.yaml`
 > Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
-# Screen Identified Candidates
+# Screen Identified Candidate
 
 Run a lightweight first-pass fit screen on newly identified origination candidates before marking them of interest.
 

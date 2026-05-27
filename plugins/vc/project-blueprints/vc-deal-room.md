@@ -12,7 +12,7 @@ source: alludium/project-types/vc_deal_room.json
 
 Project context for one venture investment opportunity from source capture through deal structuring.
 
-This blueprint lists setup, general, management, and lifecycle-stage tasks with the recommended agents, task-referenced skills, document references, and integration surfaces for this project type. Setup, General, and Management are blueprint categories rather than lifecycle states.
+This blueprint lists setup, management, and workflow-stage tasks with the recommended agents, task-referenced skills, document references, and integration surfaces for this project type. General and management sections are included only when they contain cross-cutting tasks that are not already mapped to a workflow stage.
 
 ## Setup
 
@@ -24,6 +24,7 @@ Project-type setup and configuration tasks used before normal project execution.
 | Project Variable Review | [Deal Pipeline Setup Guide](../agents/vc-deal-room-setup-guide.md) | None declared | None declared | None declared |
 | Project Schedule Review | [Deal Pipeline Setup Guide](../agents/vc-deal-room-setup-guide.md) | None declared | None declared | None declared |
 | Project Team Invite Review | [Deal Pipeline Setup Guide](../agents/vc-deal-room-setup-guide.md) | None declared | None declared | None declared |
+| [Capture Opportunity Intake](../tasks/screen-inbound-opportunity.md) | [Dealflow Concierge](../agents/vc-dealflow-concierge.md) | [Deal Pipeline Setup & Source Ingestion](../skills/deal-room-setup-and-source-ingestion/SKILL.md)<br>[Company Research & Enrichment](../skills/company-research-and-enrichment/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md)<br>[Pitch Deck Explainer](../skills/pitch-deck-explainer/SKILL.md) | [Deal Pipeline Operating SOP](../alludium/documents/deal-room/deal-room-sop.md) (operating_guidance)<br>[Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md) (style_guide)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | `alludium-platform`<br>`harmonic-mcp-oauth`<br>`affinity-mcp-server`<br>`exa-mcp-hosted`<br>`brave-search-mcp`<br>`serpapi-mcp`<br>`firecrawl-mcp-hosted`<br>`dealroom-mcp`<br>`google_drive` |
 | Project Source Setup | [Deal Pipeline Setup Guide](../agents/vc-deal-room-setup-guide.md) | None declared | None declared | None declared |
 | [VC Pack Variable Discovery](../tasks/vc-pack-variable-discovery.md) | [Deal Pipeline Setup Guide](../agents/vc-deal-room-setup-guide.md) | None declared | None declared | `alludium-platform`<br>`affinity-mcp-server` |
 | [Set Up Affinity for Deal Pipelines](../tasks/affinity-setup.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Affinity Discovery](../skills/vc-affinity-discovery/SKILL.md)<br>[VC Affinity Sync Read](../skills/vc-affinity-sync-read/SKILL.md)<br>[VC Affinity Sync Write](../skills/vc-affinity-sync-write/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | `affinity-mcp-server` |
@@ -70,7 +71,7 @@ Project-management tasks that operate across a project suite, source pipeline, o
 
 | Task | Agent | Skills | Documents | Integrations |
 | --- | --- | --- | --- | --- |
-| [Capture Opportunity Intake](../tasks/screen-inbound-opportunity.md) | [Dealflow Concierge](../agents/vc-dealflow-concierge.md) | [Deal Pipeline Setup & Source Ingestion](../skills/deal-room-setup-and-source-ingestion/SKILL.md)<br>[Company Research & Enrichment](../skills/company-research-and-enrichment/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md)<br>[Pitch Deck Explainer](../skills/pitch-deck-explainer/SKILL.md) | [Deal Pipeline Operating SOP](../alludium/documents/deal-room/deal-room-sop.md) (operating_guidance)<br>[Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md) (style_guide)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | `alludium-platform`<br>`harmonic-mcp-oauth`<br>`affinity-mcp-server`<br>`exa-mcp-hosted`<br>`brave-search-mcp`<br>`serpapi-mcp`<br>`firecrawl-mcp-hosted`<br>`dealroom-mcp`<br>`google_drive` |
+| None mapped | None declared | None declared | None declared | None declared |
 
 ## Screening
 

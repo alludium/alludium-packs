@@ -1,6 +1,6 @@
 ---
 id: vc.screen_active_sourcing_candidates
-title: Screen Active Sourcing Candidates
+title: Screen Active Sourcing Candidate
 slug: screen-active-sourcing-candidates
 agent: vc-sourcing-operator
 skills:
@@ -13,7 +13,7 @@ skills:
 > Source: `alludium/task-definition-templates/vc-workflows/screen-active-sourcing-candidates.yaml`
 > Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
-# Screen Active Sourcing Candidates
+# Screen Active Sourcing Candidate
 
 Run an origination-specific thesis screen on active Meet, IC-Summary, or Reach out candidates.
 

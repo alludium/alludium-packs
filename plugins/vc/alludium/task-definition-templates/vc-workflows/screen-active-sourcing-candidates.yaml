@@ -1,8 +1,8 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.screen_active_sourcing_candidates
-version: 0.1.11
-title: Screen Active Sourcing Candidates
+version: 0.1.12
+title: Screen Active Sourcing Candidate
 category: Venture Capital
 visibility: workspace
 tags:
@@ -10,7 +10,7 @@ tags:
 - origination
 - screening
 definition:
-  name: Screen Active Sourcing Candidates
+  name: Screen Active Sourcing Candidate
   slug: screen-active-sourcing-candidates
   description: Run an origination-specific thesis screen on active Meet, IC-Summary, or Reach out candidates.
   allowSubtasks: false

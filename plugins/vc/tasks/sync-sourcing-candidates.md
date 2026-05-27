@@ -1,6 +1,6 @@
 ---
 id: vc.sync_sourcing_candidates
-title: Sync Sourcing Candidates
+title: Sync Sourcing Candidate
 slug: sync-sourcing-candidates
 agent: vc-sourcing-operator
 skills:
@@ -14,7 +14,7 @@ skills:
 > Source: `alludium/task-definition-templates/vc-workflows/sync-sourcing-candidates.yaml`
 > Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
-# Sync Sourcing Candidates
+# Sync Sourcing Candidate
 
 Prepare or apply reviewed candidate state sync while preserving manual workflow decisions.
 

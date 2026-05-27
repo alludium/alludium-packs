@@ -1,8 +1,8 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.screen_founder_connected_candidates
-version: 0.1.0
-title: Screen Founder-Connected Candidates
+version: 0.1.1
+title: Screen Founder-Connected Candidate
 category: Venture Capital
 visibility: workspace
 tags:
@@ -11,7 +11,7 @@ tags:
 - screening
 - outreach
 definition:
-  name: Screen Founder-Connected Candidates
+  name: Screen Founder-Connected Candidate
   slug: screen-founder-connected-candidates
   description: Re-screen candidates after a founder connection adds direct context, before continuing outbound or promotion.
   allowSubtasks: false

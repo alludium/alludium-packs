@@ -1,8 +1,8 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.score_sourcing_candidates
-version: 0.1.9
-title: Score Sourcing Candidates
+version: 0.1.10
+title: Score Sourcing Candidate
 category: Venture Capital
 visibility: workspace
 tags:
@@ -10,7 +10,7 @@ tags:
 - origination
 - scoring
 definition:
-  name: Score Sourcing Candidates
+  name: Score Sourcing Candidate
   slug: score-sourcing-candidates
   description: Produce Meet/Watch/Pass verdicts and urgency scores for enriched origination candidates.
   allowSubtasks: false

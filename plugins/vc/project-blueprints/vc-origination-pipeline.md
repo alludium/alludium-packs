@@ -12,7 +12,7 @@ source: alludium/project-types/vc_origination_pipeline.json
 
 Project context for a standing venture sourcing pipeline that configures source coverage, credential readiness, review policy, and promotion thresholds before recurring sourcing work is enabled.
 
-This blueprint lists setup, general, management, and lifecycle-stage tasks with the recommended agents, task-referenced skills, document references, and integration surfaces for this project type. Setup, General, and Management are blueprint categories rather than lifecycle states.
+This blueprint lists setup, management, and workflow-stage tasks with the recommended agents, task-referenced skills, document references, and integration surfaces for this project type. General and management sections are included only when they contain cross-cutting tasks that are not already mapped to a workflow stage.
 
 ## Setup
 
@@ -23,18 +23,11 @@ Project-type setup and configuration tasks used before normal project execution.
 | Project Source Choice | [Origination Scout](../agents/vc-origination-scout.md) | None declared | None declared | None declared |
 | Project Variable Review | [Origination Scout](../agents/vc-origination-scout.md) | None declared | None declared | None declared |
 | Project Schedule Review | [Origination Scout](../agents/vc-origination-scout.md) | None declared | None declared | None declared |
+| [Configure Origination Pipeline](../tasks/configure-origination-pipeline.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [Origination Pipeline Orchestration](../skills/vc-origination-pipeline-orchestration/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | [Origination Pipeline Operating SOP](../alludium/documents/origination/origination-pipeline-sop.md) (operating_guidance)<br>[Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md) (methodology)<br>[Source Registry Template](../alludium/documents/origination/source-registry-template.md) (operating_guidance)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
 | Project Source Setup | [Origination Scout](../agents/vc-origination-scout.md) | None declared | None declared | None declared |
 | [VC Pack Variable Discovery](../tasks/vc-pack-variable-discovery.md) | [Origination Scout](../agents/vc-origination-scout.md) | None declared | None declared | `alludium-platform`<br>`harmonic-mcp-oauth`<br>`affinity-mcp-server`<br>`exa-mcp-hosted`<br>`brave-search-mcp`<br>`serpapi-mcp`<br>`firecrawl-mcp-hosted`<br>`dealroom-mcp`<br>`linkedin` |
 | [Set Up Apify for Origination](../tasks/apify-setup.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Apify Discovery](../skills/vc-apify-discovery/SKILL.md)<br>[VC Apify Sync Read](../skills/vc-apify-sync-read/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | `apify-actors-mcp` |
 | [Configure Companies House Public Register Preview](../tasks/companies-house-setup.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Companies House Sourcing](../skills/vc-companies-house-sourcing/SKILL.md)<br>[VC Companies House Sync Read](../skills/vc-companies-house-sync-read/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | `firecrawl-mcp-hosted` |
-
-## General
-
-Reusable project-instance tasks that can be useful across multiple lifecycle stages.
-
-| Task | Agent | Skills | Documents | Integrations |
-| --- | --- | --- | --- | --- |
-| None mapped | None declared | None declared | None declared | None declared |
 
 ## Management
 
@@ -42,59 +35,12 @@ Project-management tasks that operate across a project suite, source pipeline, o
 
 | Task | Agent | Skills | Documents | Integrations |
 | --- | --- | --- | --- | --- |
-| [Run VC Sourcing Pipeline](../tasks/run-sourcing-pipeline.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [Origination Pipeline Orchestration](../skills/vc-origination-pipeline-orchestration/SKILL.md)<br>[VC Source Registry & State Management](../skills/vc-source-registry-and-state-management/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | [Candidate Batch Template](../alludium/documents/origination/candidate-batch-template.md) (output_template, to `candidate_batch_artifact_id`)<br>[Origination Pipeline Operating SOP](../alludium/documents/origination/origination-pipeline-sop.md) (operating_guidance)<br>[Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md) (methodology)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
-| [Generate Sourcing Digest](../tasks/generate-sourcing-digest.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Sourcing Digest Generation](../skills/vc-sourcing-digest-generation/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | [Sourcing Digest Template](../alludium/documents/origination/sourcing-digest-template.md) (output_template, to `sourcing_digest_artifact_id`)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
 | [Review Source Errors and Spend](../tasks/review-source-errors-and-spend.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Source Error & Spend Audit](../skills/vc-source-error-and-spend-audit/SKILL.md)<br>[VC Source Registry & State Management](../skills/vc-source-registry-and-state-management/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | [Source Health Review Checklist](../alludium/documents/origination/source-health-review-checklist.md) (output_template, to `source_health_artifact_id`)<br>[Paid Source Spend Audit Checklist](../alludium/documents/origination/paid-source-spend-audit-checklist.md) (checklist)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
-| [Discover Companies House Candidates](../tasks/discover-companies-house-candidates.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Companies House Sourcing](../skills/vc-companies-house-sourcing/SKILL.md)<br>[VC Source Registry & State Management](../skills/vc-source-registry-and-state-management/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | None declared |
-| [Discover X Founder Signals](../tasks/discover-x-founder-signals.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Apify X Founder Discovery](../skills/vc-apify-x-founder-discovery/SKILL.md)<br>[VC Source Registry & State Management](../skills/vc-source-registry-and-state-management/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | None declared |
-| [Discover GitHub Builder Signals](../tasks/discover-github-builder-signals.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC GitHub Builder Signal Discovery](../skills/vc-github-builder-signal-discovery/SKILL.md)<br>[VC Source Registry & State Management](../skills/vc-source-registry-and-state-management/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | None declared |
-| [Discover LinkedIn Founder Candidates](../tasks/discover-linkedin-founders.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Apify LinkedIn Founder Discovery](../skills/vc-apify-linkedin-founder-discovery/SKILL.md)<br>[VC Source Registry & State Management](../skills/vc-source-registry-and-state-management/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | None declared |
-| [Discover Reddit Builder Signals](../tasks/discover-reddit-builder-signals.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Reddit Builder Signal Discovery](../skills/vc-reddit-builder-signal-discovery/SKILL.md)<br>[VC Source Registry & State Management](../skills/vc-source-registry-and-state-management/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | None declared |
-| [Review Portfolio Overlap](../tasks/review-portfolio-overlap.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Portfolio Overlap Review](../skills/vc-portfolio-overlap-review/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md)<br>[VC Relationship Context Check](../skills/vc-relationship-context-check/SKILL.md) | None declared | None declared |
-| [Screen Identified Candidates](../tasks/screen-identified-candidates.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Sourcing Verdict & Screening](../skills/vc-sourcing-verdict-and-screening/SKILL.md)<br>[VC Sourcing Dedupe & Novelty Check](../skills/vc-sourcing-dedupe-and-novelty-check/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | [Sourcing Scoring Rubric](../alludium/documents/origination/sourcing-scoring-rubric.md) (methodology, to `identified_screen_artifact_id`)<br>[Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md) (methodology)<br>[Dedupe And Novelty Policy](../alludium/documents/origination/dedupe-novelty-policy.md) (policy)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
-| [Run Deal Fit Analysis](../tasks/run-deal-fit-analysis.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Sourcing Verdict & Screening](../skills/vc-sourcing-verdict-and-screening/SKILL.md)<br>[Investment Screening Framework](../skills/investment-screening-framework/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | [Sourcing Scoring Rubric](../alludium/documents/origination/sourcing-scoring-rubric.md) (methodology, to `deal_fit_artifact_id`)<br>[Investment Screening Framework](../alludium/documents/shared/investment-screening-framework.md) (methodology)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
-| [Screen Active Sourcing Candidates](../tasks/screen-active-sourcing-candidates.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Sourcing Verdict & Screening](../skills/vc-sourcing-verdict-and-screening/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md)<br>[Investment Screening Framework](../skills/investment-screening-framework/SKILL.md) | [Sourcing Scoring Rubric](../alludium/documents/origination/sourcing-scoring-rubric.md) (methodology, to `screening_artifact_id`)<br>[Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md) (methodology)<br>[Dedupe And Novelty Policy](../alludium/documents/origination/dedupe-novelty-policy.md) (policy)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
-| [Review Unicorn Signature](../tasks/review-unicorn-signature.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Sourcing Verdict & Screening](../skills/vc-sourcing-verdict-and-screening/SKILL.md)<br>[Origination Prospect Summary Preparation](../skills/vc-origination-ic-summary-preparation/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | [Sourcing Scoring Rubric](../alludium/documents/origination/sourcing-scoring-rubric.md) (methodology, to `unicorn_signature_artifact_id`)<br>[Prospect Summary Template](../alludium/documents/origination/sourcing-ic-summary-template.md) (operating_guidance)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
-| [Screen Founder-Connected Candidates](../tasks/screen-founder-connected-candidates.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Sourcing Verdict & Screening](../skills/vc-sourcing-verdict-and-screening/SKILL.md)<br>[VC Outreach Draft Queue](../skills/vc-outreach-draft-queue/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md)<br>[Investment Screening Framework](../skills/investment-screening-framework/SKILL.md) | [Sourcing Scoring Rubric](../alludium/documents/origination/sourcing-scoring-rubric.md) (methodology, to `founder_connected_screen_artifact_id`)<br>[Outreach Queue Template](../alludium/documents/origination/outreach-queue-template.md) (output_template)<br>[Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md) (methodology)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
-| [Prepare Outreach Draft Queue](../tasks/prepare-outreach-draft-queue.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Outreach Draft Queue](../skills/vc-outreach-draft-queue/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md)<br>[Founder Outreach & Intro Paths](../skills/founder-outreach-and-intro-paths/SKILL.md) | [Outreach Queue Template](../alludium/documents/origination/outreach-queue-template.md) (output_template, to `outreach_queue_artifact_id`)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
-| [Audit LinkedIn Query Spend](../tasks/audit-linkedin-query-spend.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC LinkedIn Query Spend Audit](../skills/vc-linkedin-query-spend-audit/SKILL.md)<br>[VC Source Registry & State Management](../skills/vc-source-registry-and-state-management/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | [Paid Source Spend Audit Checklist](../alludium/documents/origination/paid-source-spend-audit-checklist.md) (output_template, to `linkedin_spend_audit_artifact_id`)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
 | [Explore Apify Origination Sources](../tasks/apify-discovery.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Apify Discovery](../skills/vc-apify-discovery/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | None declared |
 | [Explore Companies House Public Register Scope](../tasks/companies-house-discovery.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Companies House Sourcing](../skills/vc-companies-house-sourcing/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | None declared |
 | [Prepare Lead Gen Packet](../tasks/prepare-lead-gen-packet.md) | [Origination Scout](../agents/vc-origination-scout.md) | [Company Research & Enrichment](../skills/company-research-and-enrichment/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | [Lead Generation Packet Template](../alludium/documents/deal-room/lead-generation-packet-template.md) (output_template, to `lead_generation_packet_artifact_id`)<br>[Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md) (methodology)<br>[Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md) (style_guide)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | `alludium-platform`<br>`harmonic-mcp-oauth`<br>`affinity-mcp-server`<br>`exa-mcp-hosted`<br>`brave-search-mcp`<br>`serpapi-mcp`<br>`firecrawl-mcp-hosted`<br>`dealroom-mcp`<br>`linkedin` |
 | [Preview Apify Origination Results](../tasks/apify-sync-read.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Apify Sync Read](../skills/vc-apify-sync-read/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | None declared |
 | [Preview Companies House Public Register Results](../tasks/companies-house-sync-read.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Companies House Sync Read](../skills/vc-companies-house-sync-read/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | None declared |
-
-## Draft
-
-Capture setup intent before the origination pipeline is configured.
-
-| Task | Agent | Skills | Documents | Integrations |
-| --- | --- | --- | --- | --- |
-| [Configure Origination Pipeline](../tasks/configure-origination-pipeline.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [Origination Pipeline Orchestration](../skills/vc-origination-pipeline-orchestration/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | [Origination Pipeline Operating SOP](../alludium/documents/origination/origination-pipeline-sop.md) (operating_guidance)<br>[Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md) (methodology)<br>[Source Registry Template](../alludium/documents/origination/source-registry-template.md) (operating_guidance)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
-
-## Configured
-
-Source scope, review policy, and schedules are configured but normal sourcing has not started.
-
-| Task | Agent | Skills | Documents | Integrations |
-| --- | --- | --- | --- | --- |
-| None mapped | None declared | None declared | None declared | None declared |
-
-## Needs Credentials
-
-Resolve missing source, CRM, or enrichment access before running pipeline work.
-
-| Task | Agent | Skills | Documents | Integrations |
-| --- | --- | --- | --- | --- |
-| None mapped | None declared | None declared | None declared | None declared |
-
-## Source Degraded
-
-Investigate failed sources, spend limits, rate limits, or stale source state.
-
-| Task | Agent | Skills | Documents | Integrations |
-| --- | --- | --- | --- | --- |
-| [Review Source Errors and Spend](../tasks/review-source-errors-and-spend.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Source Error & Spend Audit](../skills/vc-source-error-and-spend-audit/SKILL.md)<br>[VC Source Registry & State Management](../skills/vc-source-registry-and-state-management/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | [Source Health Review Checklist](../alludium/documents/origination/source-health-review-checklist.md) (output_template, to `source_health_artifact_id`)<br>[Paid Source Spend Audit Checklist](../alludium/documents/origination/paid-source-spend-audit-checklist.md) (checklist)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
 
 ## Source
 
@@ -120,7 +66,7 @@ Normalize raw leads into candidate records with stable identity and dedupe conte
 | --- | --- | --- | --- | --- |
 | [Review Reddit Candidate Inbox](../tasks/review-reddit-candidate-inbox.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Reddit Inbox Approval](../skills/vc-reddit-inbox-approval/SKILL.md)<br>[VC Sourcing Dedupe & Novelty Check](../skills/vc-sourcing-dedupe-and-novelty-check/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | None declared |
 | [Ingest Manual Sourcing Tip](../tasks/ingest-manual-sourcing-tip.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Manual Tip Ingestion](../skills/vc-manual-tip-ingestion/SKILL.md)<br>[VC Sourcing Dedupe & Novelty Check](../skills/vc-sourcing-dedupe-and-novelty-check/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | None declared |
-| [Sync Sourcing Candidates](../tasks/sync-sourcing-candidates.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Source Registry & State Management](../skills/vc-source-registry-and-state-management/SKILL.md)<br>[VC Sourcing Dedupe & Novelty Check](../skills/vc-sourcing-dedupe-and-novelty-check/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md)<br>[VC Notion Sync Write](../skills/vc-notion-sync-write/SKILL.md) | None declared | None declared |
+| [Sync Sourcing Candidate](../tasks/sync-sourcing-candidates.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Source Registry & State Management](../skills/vc-source-registry-and-state-management/SKILL.md)<br>[VC Sourcing Dedupe & Novelty Check](../skills/vc-sourcing-dedupe-and-novelty-check/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md)<br>[VC Notion Sync Write](../skills/vc-notion-sync-write/SKILL.md) | None declared | None declared |
 
 ## Enrich
 
@@ -128,7 +74,7 @@ Add web, founder, relationship, CRM, and evidence context before judgment.
 
 | Task | Agent | Skills | Documents | Integrations |
 | --- | --- | --- | --- | --- |
-| [Enrich Sourcing Candidates](../tasks/enrich-sourcing-candidates.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Sourcing Candidate Enrichment](../skills/vc-sourcing-candidate-enrichment/SKILL.md)<br>[VC Sourcing Dedupe & Novelty Check](../skills/vc-sourcing-dedupe-and-novelty-check/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | None declared |
+| [Enrich Sourcing Candidate](../tasks/enrich-sourcing-candidates.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Sourcing Candidate Enrichment](../skills/vc-sourcing-candidate-enrichment/SKILL.md)<br>[VC Sourcing Dedupe & Novelty Check](../skills/vc-sourcing-dedupe-and-novelty-check/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | None declared |
 | [Check Affinity Relationship Context](../tasks/check-affinity-relationships.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Relationship Context Check](../skills/vc-relationship-context-check/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | None declared |
 
 ## Initial Screen
@@ -137,8 +83,8 @@ Apply a lightweight thesis, stage, geography, and hard-exclusion screen.
 
 | Task | Agent | Skills | Documents | Integrations |
 | --- | --- | --- | --- | --- |
-| [Score Sourcing Candidates](../tasks/score-sourcing-candidates.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Sourcing Verdict & Screening](../skills/vc-sourcing-verdict-and-screening/SKILL.md)<br>[VC Sourcing Dedupe & Novelty Check](../skills/vc-sourcing-dedupe-and-novelty-check/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | [Sourcing Scoring Rubric](../alludium/documents/origination/sourcing-scoring-rubric.md) (methodology, to `scoring_artifact_id`)<br>[Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md) (methodology)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
-| [Screen Identified Candidates](../tasks/screen-identified-candidates.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Sourcing Verdict & Screening](../skills/vc-sourcing-verdict-and-screening/SKILL.md)<br>[VC Sourcing Dedupe & Novelty Check](../skills/vc-sourcing-dedupe-and-novelty-check/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | [Sourcing Scoring Rubric](../alludium/documents/origination/sourcing-scoring-rubric.md) (methodology, to `identified_screen_artifact_id`)<br>[Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md) (methodology)<br>[Dedupe And Novelty Policy](../alludium/documents/origination/dedupe-novelty-policy.md) (policy)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
+| [Score Sourcing Candidate](../tasks/score-sourcing-candidates.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Sourcing Verdict & Screening](../skills/vc-sourcing-verdict-and-screening/SKILL.md)<br>[VC Sourcing Dedupe & Novelty Check](../skills/vc-sourcing-dedupe-and-novelty-check/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | [Sourcing Scoring Rubric](../alludium/documents/origination/sourcing-scoring-rubric.md) (methodology, to `scoring_artifact_id`)<br>[Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md) (methodology)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
+| [Screen Identified Candidate](../tasks/screen-identified-candidates.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Sourcing Verdict & Screening](../skills/vc-sourcing-verdict-and-screening/SKILL.md)<br>[VC Sourcing Dedupe & Novelty Check](../skills/vc-sourcing-dedupe-and-novelty-check/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | [Sourcing Scoring Rubric](../alludium/documents/origination/sourcing-scoring-rubric.md) (methodology, to `identified_screen_artifact_id`)<br>[Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md) (methodology)<br>[Dedupe And Novelty Policy](../alludium/documents/origination/dedupe-novelty-policy.md) (policy)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
 
 ## Prioritize
 
@@ -148,7 +94,7 @@ Rank and stress-test screened candidates for active outreach.
 | --- | --- | --- | --- | --- |
 | [Review Portfolio Overlap](../tasks/review-portfolio-overlap.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Portfolio Overlap Review](../skills/vc-portfolio-overlap-review/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md)<br>[VC Relationship Context Check](../skills/vc-relationship-context-check/SKILL.md) | None declared | None declared |
 | [Run Deal Fit Analysis](../tasks/run-deal-fit-analysis.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Sourcing Verdict & Screening](../skills/vc-sourcing-verdict-and-screening/SKILL.md)<br>[Investment Screening Framework](../skills/investment-screening-framework/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | [Sourcing Scoring Rubric](../alludium/documents/origination/sourcing-scoring-rubric.md) (methodology, to `deal_fit_artifact_id`)<br>[Investment Screening Framework](../alludium/documents/shared/investment-screening-framework.md) (methodology)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
-| [Screen Active Sourcing Candidates](../tasks/screen-active-sourcing-candidates.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Sourcing Verdict & Screening](../skills/vc-sourcing-verdict-and-screening/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md)<br>[Investment Screening Framework](../skills/investment-screening-framework/SKILL.md) | [Sourcing Scoring Rubric](../alludium/documents/origination/sourcing-scoring-rubric.md) (methodology, to `screening_artifact_id`)<br>[Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md) (methodology)<br>[Dedupe And Novelty Policy](../alludium/documents/origination/dedupe-novelty-policy.md) (policy)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
+| [Screen Active Sourcing Candidate](../tasks/screen-active-sourcing-candidates.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Sourcing Verdict & Screening](../skills/vc-sourcing-verdict-and-screening/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md)<br>[Investment Screening Framework](../skills/investment-screening-framework/SKILL.md) | [Sourcing Scoring Rubric](../alludium/documents/origination/sourcing-scoring-rubric.md) (methodology, to `screening_artifact_id`)<br>[Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md) (methodology)<br>[Dedupe And Novelty Policy](../alludium/documents/origination/dedupe-novelty-policy.md) (policy)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
 | [Review Unicorn Signature](../tasks/review-unicorn-signature.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Sourcing Verdict & Screening](../skills/vc-sourcing-verdict-and-screening/SKILL.md)<br>[Origination Prospect Summary Preparation](../skills/vc-origination-ic-summary-preparation/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | [Sourcing Scoring Rubric](../alludium/documents/origination/sourcing-scoring-rubric.md) (methodology, to `unicorn_signature_artifact_id`)<br>[Prospect Summary Template](../alludium/documents/origination/sourcing-ic-summary-template.md) (operating_guidance)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
 
 ## Outreach Prep
@@ -176,12 +122,12 @@ Re-screen after founder response, connection, or direct relationship context add
 
 | Task | Agent | Skills | Documents | Integrations |
 | --- | --- | --- | --- | --- |
-| [Screen Founder-Connected Candidates](../tasks/screen-founder-connected-candidates.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Sourcing Verdict & Screening](../skills/vc-sourcing-verdict-and-screening/SKILL.md)<br>[VC Outreach Draft Queue](../skills/vc-outreach-draft-queue/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md)<br>[Investment Screening Framework](../skills/investment-screening-framework/SKILL.md) | [Sourcing Scoring Rubric](../alludium/documents/origination/sourcing-scoring-rubric.md) (methodology, to `founder_connected_screen_artifact_id`)<br>[Outreach Queue Template](../alludium/documents/origination/outreach-queue-template.md) (output_template)<br>[Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md) (methodology)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
+| [Screen Founder-Connected Candidate](../tasks/screen-founder-connected-candidates.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [VC Sourcing Verdict & Screening](../skills/vc-sourcing-verdict-and-screening/SKILL.md)<br>[VC Outreach Draft Queue](../skills/vc-outreach-draft-queue/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md)<br>[Investment Screening Framework](../skills/investment-screening-framework/SKILL.md) | [Sourcing Scoring Rubric](../alludium/documents/origination/sourcing-scoring-rubric.md) (methodology, to `founder_connected_screen_artifact_id`)<br>[Outreach Queue Template](../alludium/documents/origination/outreach-queue-template.md) (output_template)<br>[Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md) (methodology)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
 | [Review Outreach Outcome](../tasks/review-outreach-outcome.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [Origination Deal Pipeline Promotion](../skills/vc-origination-deal-room-promotion/SKILL.md)<br>[VC Outreach Draft Queue](../skills/vc-outreach-draft-queue/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | [Promotion Package Template](../alludium/documents/origination/promotion-package-template.md) (output_template, to `outreach_outcome_artifact_id`)<br>[Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md) (methodology)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
 
-## Promoted To Deal Pipeline
+## Added To Deal Pipeline
 
-Prepare the human-approved handoff into a Deal Pipeline project.
+Candidate has engaged and is handed into a Deal Pipeline project with an approved promotion package.
 
 | Task | Agent | Skills | Documents | Integrations |
 | --- | --- | --- | --- | --- |
@@ -206,30 +152,6 @@ Terminal no-fit or not-now outcome with cited rationale.
 ## Watchlist
 
 Hold candidates worth revisiting but not active for outreach now.
-
-| Task | Agent | Skills | Documents | Integrations |
-| --- | --- | --- | --- | --- |
-| None mapped | None declared | None declared | None declared | None declared |
-
-## Paused
-
-Pipeline work is intentionally paused.
-
-| Task | Agent | Skills | Documents | Integrations |
-| --- | --- | --- | --- | --- |
-| None mapped | None declared | None declared | None declared | None declared |
-
-## Migration In Progress
-
-Pipeline configuration or state is being migrated.
-
-| Task | Agent | Skills | Documents | Integrations |
-| --- | --- | --- | --- | --- |
-| None mapped | None declared | None declared | None declared | None declared |
-
-## Archived
-
-Pipeline or candidate workflow is closed and retained for reference.
 
 | Task | Agent | Skills | Documents | Integrations |
 | --- | --- | --- | --- | --- |

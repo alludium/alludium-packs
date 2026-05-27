@@ -12,7 +12,7 @@ source: alludium/project-types/vc_investment_management.json
 
 Project context for formal diligence, investment contracts, closing, completion, and portfolio handoff after a deal has moved beyond deal structuring.
 
-This blueprint lists setup, general, management, and lifecycle-stage tasks with the recommended agents, task-referenced skills, document references, and integration surfaces for this project type. Setup, General, and Management are blueprint categories rather than lifecycle states.
+This blueprint lists setup, management, and workflow-stage tasks with the recommended agents, task-referenced skills, document references, and integration surfaces for this project type. General and management sections are included only when they contain cross-cutting tasks that are not already mapped to a workflow stage.
 
 ## Setup
 
@@ -22,23 +22,8 @@ Project-type setup and configuration tasks used before normal project execution.
 | --- | --- | --- | --- | --- |
 | Project Variable Review | [Legal & Compliance Desk](../agents/vc-legal-compliance-desk.md) | None declared | None declared | None declared |
 | Project Team Invite Review | [Legal & Compliance Desk](../agents/vc-legal-compliance-desk.md) | None declared | None declared | None declared |
+| [Capture Investment Management Handoff](../tasks/capture-investment-management-handoff.md) | [Legal & Compliance Desk](../agents/vc-legal-compliance-desk.md) | [Citation Enforcement](../skills/citation-enforcement/SKILL.md)<br>[VC Task & Next-Step Generation](../skills/vc-task-and-next-step-generation/SKILL.md) | [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md) (style_guide)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | `alludium-platform`<br>`affinity-mcp-server`<br>`exa-mcp-hosted`<br>`brave-search-mcp`<br>`dealroom-mcp`<br>`google_drive` |
 | [VC Pack Variable Discovery](../tasks/vc-pack-variable-discovery.md) | [Legal & Compliance Desk](../agents/vc-legal-compliance-desk.md) | None declared | None declared | `alludium-platform`<br>`affinity-mcp-server`<br>`exa-mcp-hosted`<br>`brave-search-mcp`<br>`dealroom-mcp`<br>`google_drive` |
-
-## General
-
-Reusable project-instance tasks that can be useful across multiple lifecycle stages.
-
-| Task | Agent | Skills | Documents | Integrations |
-| --- | --- | --- | --- | --- |
-| None mapped | None declared | None declared | None declared | None declared |
-
-## Management
-
-Project-management tasks that operate across a project suite, source pipeline, or recurring sync/reporting flow.
-
-| Task | Agent | Skills | Documents | Integrations |
-| --- | --- | --- | --- | --- |
-| None mapped | None declared | None declared | None declared | None declared |
 
 ## Formal Diligence
 

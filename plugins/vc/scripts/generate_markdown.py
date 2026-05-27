@@ -709,6 +709,12 @@ def collect_setup_task_slugs(project_type: dict[str, Any]) -> list[tuple[str, st
         if isinstance(step, dict):
             add_slug(step.get("taskDefinitionSlug"))
 
+    project_creation = project_type.get("projectCreation")
+    if isinstance(project_creation, dict):
+        guided_task = project_creation.get("guidedTask")
+        if isinstance(guided_task, dict):
+            add_slug(guided_task.get("taskDefinitionSlug"))
+
     for key in ["defaultChildTask", "variableDiscoveryTask"]:
         item = setup.get(key)
         if isinstance(item, dict):
@@ -837,41 +843,63 @@ def render_blueprint(
     body += f"# {project_name} Blueprint\n\n"
     body += f"{description}\n\n"
     body += (
-        "This blueprint lists setup, general, management, and lifecycle-stage tasks with the recommended "
-        "agents, task-referenced skills, document references, and integration surfaces for this project type. "
-        "Setup, General, and Management are blueprint categories rather than lifecycle states.\n\n"
+        "This blueprint lists setup, management, and workflow-stage tasks with the recommended agents, "
+        "task-referenced skills, document references, and integration surfaces for this project type. "
+        "General and management sections are included only when they contain cross-cutting tasks that "
+        "are not already mapped to a workflow stage.\n\n"
     )
 
     setup_rows = collect_setup_task_slugs(project_type)
     general_rows = collect_general_task_slugs(project_key, task_by_slug)
     setup_slugs = {slug for slug, _agent_id in setup_rows}
     general_slugs = {slug for slug, _agent_id in general_rows}
+
+    mappings = initial_version.get("projectTaskMappings")
+    if not isinstance(mappings, list):
+        mappings = []
+    stage_definitions = [
+        definition
+        for definition in initial_version.get("stageDefinitions", [])
+        if isinstance(definition, dict) and isinstance(definition.get("key"), str)
+    ]
+    stage_definition_by_key = {definition["key"]: definition for definition in stage_definitions}
+    lifecycle_states = initial_version.get("lifecycleStates")
+    defined_stage_order = [definition["key"] for definition in stage_definitions]
+    rendered_stage_order = (
+        defined_stage_order
+        if defined_stage_order
+        else [state for state in lifecycle_states if isinstance(state, str)] if isinstance(lifecycle_states, list) else []
+    )
+    rendered_stage_keys = set(rendered_stage_order)
+    lifecycle_stage_mapped_slugs = {
+        slug
+        for mapping in mappings
+        if isinstance(mapping, dict)
+        for slug in [mapping.get("taskDefinitionSlug")]
+        if isinstance(slug, str) and slug
+        and mapping.get("lifecycleStage") in rendered_stage_keys
+    }
     management_rows = collect_management_task_slugs(
         project_key,
         project_type,
         task_by_slug,
-        setup_slugs | general_slugs,
+        setup_slugs | general_slugs | lifecycle_stage_mapped_slugs,
     )
-    management_slugs = {slug for slug, _agent_id in management_rows}
 
     body += "## Setup\n\n"
     body += "Project-type setup and configuration tasks used before normal project execution.\n\n"
     body += blueprint_task_table(setup_rows, task_by_slug, agent_templates, documents, skill_names)
 
-    body += "\n## General\n\n"
-    body += "Reusable project-instance tasks that can be useful across multiple lifecycle stages.\n\n"
-    body += blueprint_task_table(general_rows, task_by_slug, agent_templates, documents, skill_names)
+    if general_rows:
+        body += "\n## General\n\n"
+        body += "Reusable project-instance tasks that can be useful across multiple lifecycle stages.\n\n"
+        body += blueprint_task_table(general_rows, task_by_slug, agent_templates, documents, skill_names)
 
-    body += "\n## Management\n\n"
-    body += "Project-management tasks that operate across a project suite, source pipeline, or recurring sync/reporting flow.\n\n"
-    body += blueprint_task_table(management_rows, task_by_slug, agent_templates, documents, skill_names)
+    if management_rows:
+        body += "\n## Management\n\n"
+        body += "Project-management tasks that operate across a project suite, source pipeline, or recurring sync/reporting flow.\n\n"
+        body += blueprint_task_table(management_rows, task_by_slug, agent_templates, documents, skill_names)
 
-    mappings = initial_version.get("projectTaskMappings")
-    if not isinstance(mappings, list):
-        mappings = []
-    # Management is a cross-cutting view for schedulable and project-management tasks.
-    # Keep those tasks in their lifecycle sections too, otherwise stage blueprints hide
-    # the actual funnel work for projects where most operational tasks are schedulable.
     blueprint_category_slugs = setup_slugs | general_slugs
     mappings_by_stage: dict[str, list[str]] = {}
     for mapping in mappings:
@@ -891,21 +919,16 @@ def render_blueprint(
             stage = "general"
         mappings_by_stage.setdefault(stage, []).append(slug)
 
-    stage_definitions = {
-        definition["key"]: definition
-        for definition in initial_version.get("lifecycleStageDefinitions", [])
-        if isinstance(definition, dict) and isinstance(definition.get("key"), str)
-    }
-    lifecycle_states = initial_version.get("lifecycleStates")
-    stage_order = [state for state in lifecycle_states if isinstance(state, str)] if isinstance(lifecycle_states, list) else []
-    for stage in sorted(mappings_by_stage):
-        if stage not in stage_order and stage != "general":
-            stage_order.append(stage)
+    stage_order = list(rendered_stage_order)
+    if not defined_stage_order:
+        for stage in sorted(mappings_by_stage):
+            if stage not in stage_order and stage != "general":
+                stage_order.append(stage)
     if "general" in mappings_by_stage:
         stage_order.insert(0, "general")
 
     for stage in stage_order:
-        stage_definition = stage_definitions.get(stage, {})
+        stage_definition = stage_definition_by_key.get(stage, {})
         stage_label = stage_definition.get("label") if isinstance(stage_definition, dict) else None
         stage_description = stage_definition.get("description") if isinstance(stage_definition, dict) else None
         body += f"\n## {markdown_escape(stage_label if isinstance(stage_label, str) else title_from_key(stage))}\n\n"
