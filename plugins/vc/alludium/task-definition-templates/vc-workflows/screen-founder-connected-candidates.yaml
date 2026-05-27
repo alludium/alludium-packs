@@ -1,0 +1,113 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.screen_founder_connected_candidates
+version: 0.1.0
+title: Screen Founder-Connected Candidates
+category: Venture Capital
+visibility: workspace
+tags:
+- vc
+- origination
+- screening
+- outreach
+definition:
+  name: Screen Founder-Connected Candidates
+  slug: screen-founder-connected-candidates
+  description: Re-screen candidates after a founder connection adds direct context, before continuing outbound or promotion.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    stage: engage
+    taskFamily: origination_founder_connected_screening
+    documentRefs:
+    - documentId: vc.document.sourcing_scoring_rubric
+      usage: methodology
+      outputFieldKey: founder_connected_screen_artifact_id
+    - documentId: vc.document.outreach_queue_template
+      usage: output_template
+    - documentId: vc.document.origination_source_strategy_guide
+      usage: methodology
+    - documentId: vc.document.template_use_guidance
+      usage: operating_guidance
+    requiredSkills:
+    - vc-sourcing-verdict-and-screening
+    - vc-outreach-draft-queue
+    - citation-enforcement
+    - investment-screening-framework
+    recommendedAgentTemplate: vc_sourcing_operator
+    plannedRecommendedAgentTemplate: vc_sourcing_operator
+    supportedProjectTypes:
+    - vc_origination_pipeline
+    supportedProjectScopes:
+    - project_instance
+    scheduleDefaults:
+      enabledByDefault: false
+      requiresHumanApprovalToEnable: true
+      cadence: daily
+      localTime: 09:10
+      dryRunFirst: true
+    scheduling:
+      schedulable: true
+      showInProjectSetup: true
+      setupStep: schedules
+      scheduleType: cron
+      defaultScheduleRef: scheduleDefaults
+      requiresHumanApprovalToEnable: true
+      canCreateTestRun: true
+      testRunCreatesVisibleTask: true
+      dryRunFirst: true
+      safety:
+        externalWritesRequireApproval: true
+    instructions:
+      executionInstructions: 'Re-screen candidates only after a founder connection, reply, or direct relationship signal adds
+        new context beyond the first-pass screen. Compare founder-provided context, current enrichment, relationship warmth,
+        thesis fit, portfolio overlap, deal-fit score where available, and remaining evidence gaps. Recommend continue
+        outbound, watchlist, pass, or engaged-ready-for-Deal-Pipeline handoff. Do not treat connection acceptance alone as
+        investment fit. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference
+        by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist`
+        must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and
+        `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce
+        that output from the referenced pack document and preserve the document ID alongside the output artifact.'
+      missingInputPolicy: Ask for the connection record, founder reply/context, latest enrichment and screen artifacts,
+        portfolio overlap, deal-fit context if available, and allowed next states before screening.
+      externalActionPolicy: Recommendation and draft-prep only. Do not send messages, update CRM/list stages, or create Deal
+        Pipeline projects without explicit human approval.
+      completionCriteria:
+      - Recommendation distinguishes new founder-context evidence from earlier sourced evidence.
+      - Continue, pass, watchlist, or engaged handoff recommendation is explicit and cited.
+      - If outreach should continue, the next message angle and unresolved validation questions are listed.
+fields:
+  input:
+  - key: founder_connection_context
+    name: Founder Connection Context
+    fieldType: json
+    required: true
+    position: 0
+    config: {}
+  - key: prior_screen_artifacts
+    name: Prior Screen Artifacts
+    fieldType: file[]
+    required: false
+    position: 1
+    config: {}
+  output:
+  - key: founder_connected_screen_artifact_id
+    name: Founder Connected Screen Artifact
+    fieldType: file
+    required: true
+    position: 0
+    config:
+      documentRefId: vc.document.sourcing_scoring_rubric
+  - key: founder_connected_screen_recommendation
+    name: Founder Connected Screen Recommendation
+    fieldType: string
+    required: false
+    position: 1
+    config: {}
+  - key: founder_connected_screen_report
+    name: Founder Connected Screen Report
+    fieldType: richtext
+    required: false
+    position: 2
+    config:
+      rows: 8

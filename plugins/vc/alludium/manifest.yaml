@@ -236,12 +236,16 @@ surfaces:
     - vc.enrich_sourcing_candidates
     - vc.check_affinity_relationships
     - vc.score_sourcing_candidates
+    - vc.screen_identified_candidates
     - vc.sync_sourcing_candidates
     - vc.review_portfolio_overlap
+    - vc.run_deal_fit_analysis
     - vc.screen_active_sourcing_candidates
+    - vc.review_unicorn_signature
     - vc.prepare_sourcing_ic_summary
     - vc.prepare_outreach_draft_queue
     - vc.record_linkedin_connection_attempt
+    - vc.screen_founder_connected_candidates
     - vc.prepare_initial_linkedin_reachout
     - vc.prepare_second_reachout_email
     - vc.review_outreach_outcome

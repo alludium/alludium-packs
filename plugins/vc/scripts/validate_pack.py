@@ -3568,14 +3568,15 @@ def validate_project_task_mapping_contracts() -> None:
 
 ORIGINATION_STAGE_LIFECYCLE_STAGES = {
     "setup": {"draft", "configured", "needs_credentials"},
-    "source": {"active"},
-    "enrich": {"review_backlog"},
-    "score": {"review_backlog"},
-    "review": {"review_backlog"},
+    "source": {"active", "identified"},
+    "enrich": {"identified", "review_backlog"},
+    "score": {"screened", "review_backlog"},
+    "review": {"identified", "screened", "review_backlog", "of_interest"},
     "engage": {
         "review_backlog",
         "of_interest",
         "connecting_on_linkedin",
+        "founder_connected",
         "initial_reachout_linkedin",
         "second_reachout_email",
     },

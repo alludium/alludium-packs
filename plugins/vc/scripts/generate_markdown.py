@@ -820,7 +820,10 @@ def render_blueprint(
     mappings = initial_version.get("projectTaskMappings")
     if not isinstance(mappings, list):
         mappings = []
-    blueprint_category_slugs = setup_slugs | general_slugs | management_slugs
+    # Management is a cross-cutting view for schedulable and project-management tasks.
+    # Keep those tasks in their lifecycle sections too, otherwise stage blueprints hide
+    # the actual funnel work for projects where most operational tasks are schedulable.
+    blueprint_category_slugs = setup_slugs | general_slugs
     mappings_by_stage: dict[str, list[str]] = {}
     for mapping in mappings:
         if not isinstance(mapping, dict):
