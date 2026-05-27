@@ -1,13 +1,13 @@
 ---
 id: vc-origination-ic-summary-preparation
-name: "Origination IC Summary Preparation"
+name: "Origination Prospect Summary Preparation"
 description: >
-  Prepare a lightweight IC-style summary for Meet or Watch origination candidates
-  without creating pages or promoting to a Deal Pipeline automatically.
+  Prepare a concise prospect-level sourcing summary for prioritized origination
+  candidates without creating pages or promoting to a Deal Pipeline automatically.
 tags:
   - vc
   - origination
-  - ic-summary
+  - prospect-summary
 capability:
   dependencies:
     - kind: skill-assignment
@@ -17,15 +17,15 @@ capability:
     preferredSurface: skill
 ---
 
-# Origination IC Summary Preparation
+# Origination Prospect Summary Preparation
 
-Use this skill for Meet or Watch candidates that need a concise partner-review artifact before Deal Pipeline promotion.
+Use this skill for prioritized candidates that need a concise sourcing summary before outreach, founder follow-up, or Deal Pipeline promotion.
 
 ## Inputs
 
 Use enriched candidate data, verdict output, relationship context, source receipts, website evidence, and open questions.
 
-## Summary
+## Prospect Summary
 
 Include:
 
@@ -40,8 +40,11 @@ Include:
 - Risks and unknowns
 - Recommended next step
 
+Scope the output to exactly one prospect/candidate. Portfolio-wide or batch-level summaries belong in sourcing digests.
+
 ## Boundaries
 
 - Do not create Notion pages or documents without approval.
+- Do not label the output as an IC memo or IC-ready recommendation.
 - Do not promote into a Deal Pipeline.
 - Do not overwrite candidate status.

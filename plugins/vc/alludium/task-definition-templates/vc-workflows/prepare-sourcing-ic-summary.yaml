@@ -1,27 +1,27 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_sourcing_ic_summary
-version: 0.1.7
-title: Prepare Sourcing IC Summary
+version: 0.1.8
+title: Prepare Prospect Summary
 category: Venture Capital
 visibility: workspace
 tags:
 - vc
 - origination
-- ic-summary
+- prospect-summary
 definition:
-  name: Prepare Sourcing IC Summary
+  name: Prepare Prospect Summary
   slug: prepare-sourcing-ic-summary
-  description: Prepare a lightweight IC-style summary for a reviewed origination candidate before Deal Pipeline promotion.
+  description: Prepare a concise prospect-level sourcing summary for one prioritized origination candidate before outreach or promotion.
   allowSubtasks: false
   definitionJson:
     vertical: vc
     stage: review
-    taskFamily: origination_ic_summary
+    taskFamily: origination_prospect_summary
     documentRefs:
     - documentId: vc.document.sourcing_ic_summary_template
       usage: output_template
-      outputFieldKey: ic_summary_artifact_id
+      outputFieldKey: prospect_summary_artifact_id
     - documentId: vc.document.origination_source_strategy_guide
       usage: methodology
     - documentId: vc.document.evidence_citation_style_guide
@@ -31,52 +31,53 @@ definition:
     requiredSkills:
     - vc-origination-ic-summary-preparation
     - citation-enforcement
-    recommendedAgentTemplate: vc_ic_prep_producer
-    plannedRecommendedAgentTemplate: vc_ic_prep_producer
+    recommendedAgentTemplate: vc_sourcing_operator
+    plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
     - vc_origination_pipeline
     supportedProjectScopes:
     - project_instance
     instructions:
-      executionInstructions: 'Prepare a concise IC-style summary for Meet or Watch candidates using enriched candidate evidence,
-        verdict, relationship context, portfolio-overlap result, source receipts, risks, and open questions. This replaces
-        direct page-creation behavior from the reference implementation with a reviewable summary artifact. Use `definitionJson.documentRefs`
+      executionInstructions: 'Prepare a concise prospect summary for one prioritized candidate using enriched candidate evidence,
+        verdict, relationship context, portfolio-overlap result, source receipts, risks, and open questions. This is a sourcing
+        and outreach-prep artifact, not an IC memo or IC-ready recommendation. Use `definitionJson.documentRefs`
         as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton,
         `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner,
         `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval
         boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the
         document ID alongside the output artifact.'
-      missingInputPolicy: Ask for candidate evidence, verdict, relationship context, overlap review, source receipts, and
-        target audience.
+      missingInputPolicy: Ask for candidate evidence, verdict, relationship context, overlap review, source receipts, outreach
+        audience, and the intended next action.
       externalActionPolicy: Draft only. Do not create Notion pages, documents, external records, or Deal Pipelines without
         explicit approval.
       completionCriteria:
+      - Summary covers exactly one prospect/candidate.
       - Summary includes identity, product, thesis fit, founder signal, market/customer signal, relationship context, risks,
         unknowns, evidence quality, and recommended next step.
 fields:
   input:
-  - key: ic_summary_candidate
-    name: IC Summary Candidate
+  - key: prospect_summary_candidate
+    name: Prospect Summary Candidate
     fieldType: json
     required: true
     position: 0
     config: {}
   output:
-  - key: ic_summary_artifact_id
-    name: IC Summary Artifact
+  - key: prospect_summary_artifact_id
+    name: Prospect Summary Artifact
     fieldType: file
     required: true
     position: 0
     config:
       documentRefId: vc.document.sourcing_ic_summary_template
-  - key: ic_summary_status
-    name: IC Summary Status
+  - key: prospect_summary_status
+    name: Prospect Summary Status
     fieldType: string
     required: false
     position: 1
     config: {}
-  - key: ic_summary
-    name: IC Summary
+  - key: prospect_summary
+    name: Prospect Summary
     fieldType: richtext
     required: false
     position: 2

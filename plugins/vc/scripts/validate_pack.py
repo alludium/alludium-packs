@@ -3568,20 +3568,17 @@ def validate_project_task_mapping_contracts() -> None:
 
 ORIGINATION_STAGE_LIFECYCLE_STAGES = {
     "setup": {"draft", "configured", "needs_credentials"},
-    "source": {"active", "identified"},
-    "enrich": {"identified", "review_backlog"},
-    "score": {"screened", "review_backlog"},
-    "review": {"identified", "screened", "review_backlog", "of_interest"},
+    "source": {"source", "identified", "source_degraded"},
+    "enrich": {"enriched"},
+    "score": {"initial_screen", "prioritized"},
+    "review": {"identified", "initial_screen", "prioritized", "outreach_prep", "engagement_screen"},
     "engage": {
-        "review_backlog",
-        "of_interest",
-        "connecting_on_linkedin",
-        "founder_connected",
-        "initial_reachout_linkedin",
-        "second_reachout_email",
+        "outreach_prep",
+        "contact_attempts",
+        "engagement_screen",
     },
-    "promote": {"review_backlog", "engaged_added_to_deal_funnel"},
-    "operate": {"active", "source_degraded", "paused", "migration_in_progress"},
+    "promote": {"promoted_to_deal_pipeline"},
+    "operate": {"source", "source_degraded", "paused", "migration_in_progress"},
 }
 
 

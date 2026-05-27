@@ -19,7 +19,7 @@ Run a lightweight first-pass fit screen on newly identified origination candidat
 
 ## Instructions
 
-Screen newly identified candidates with the lightest useful evidence set: source receipt, normalized identity, stage/geography fit, obvious hard exclusions, basic AI/native software signal, founder signal, and duplicate/known-relationship status. This is not the full active-candidate screen; recommend only Of Interest, Watchlist, or Pass, and list what must be enriched before outreach. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+Screen newly identified candidates with the lightest useful evidence set: source receipt, normalized identity, stage/geography fit, obvious hard exclusions, basic AI/native software signal, founder signal, and duplicate/known-relationship status. This is not the full active-candidate screen; recommend only prioritize for outreach, watchlist, or pass, and list what must be enriched before outreach. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -32,7 +32,7 @@ Screening recommendation only. Do not contact founders, write CRM/list records, 
 ## Completion Criteria
 
 - Every pass or watchlist recommendation names the evidence gap or exclusion rule.
-- Of-interest recommendations include the next enrichment or outreach-prep evidence needed.
+- Outreach-ready recommendations include the next enrichment or outreach-prep evidence needed.
 
 ## Human Decision Points
 
@@ -50,7 +50,7 @@ Screening recommendation only. Do not contact founders, write CRM/list records, 
 | Key | Name | Type | Required |
 | --- | --- | --- | --- |
 | `identified_screen_artifact_id` | Identified Screen Artifact | `file` | yes |
-| `of_interest_count` | Of Interest Count | `number` | no |
+| `outreach_ready_count` | Outreach Ready Count | `number` | no |
 | `watchlist_count` | Watchlist Count | `number` | no |
 | `pass_count` | Pass Count | `number` | no |
 | `identified_screen_report` | Identified Screen Report | `richtext` | no |

@@ -13,7 +13,7 @@ tags:
 definition:
   name: Review Unicorn Signature
   slug: review-unicorn-signature
-  description: Stress-test strong origination candidates for venture-scale shape before IC-summary preparation.
+  description: Stress-test strong origination candidates for venture-scale shape before prospect-summary preparation.
   allowSubtasks: false
   definitionJson:
     vertical: vc
@@ -57,8 +57,8 @@ definition:
         externalWritesRequireApproval: true
     instructions:
       executionInstructions: 'Stress-test candidates that survived deal-fit and active screening for genuine venture-scale
-        shape before creating an IC-style summary. Classify the candidate as genuine, strong, on-pattern, or off-shape, and
-        recommend whether to proceed to IC summary, watchlist, or pass. Use market/category context only to support the
+        shape before creating a prospect summary. Classify the candidate as genuine, strong, on-pattern, or off-shape, and
+        recommend whether to proceed to prospect summary, watchlist, or pass. Use market/category context only to support the
         classification; do not fabricate market size or traction. Use `definitionJson.documentRefs` as the durable document
         reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies
         scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs
@@ -71,7 +71,7 @@ definition:
         or create Deal Pipeline projects without explicit approval.
       completionCriteria:
       - Classification is one of genuine, strong, on-pattern, or off-shape.
-      - Recommendation states whether to proceed to IC summary, watchlist, or pass.
+      - Recommendation states whether to proceed to prospect summary, watchlist, or pass.
       - Evidence gaps and validation questions are listed.
 fields:
   input:

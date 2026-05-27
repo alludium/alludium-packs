@@ -1,4 +1,4 @@
-version: 1.0.2
+version: 1.0.3
 type: template
 platform_managed: false
 id: vc_sourcing_operator
@@ -23,14 +23,23 @@ metadata:
   - enrich-sourcing-candidates
   - generate-sourcing-digest
   - ingest-manual-sourcing-tip
+  - prepare-sourcing-ic-summary
   - prepare-outreach-draft-queue
+  - prepare-initial-linkedin-reachout
+  - prepare-second-reachout-email
   - promote-candidate-to-deal-room
+  - record-linkedin-connection-attempt
+  - review-outreach-outcome
   - review-portfolio-overlap
   - review-reddit-candidate-inbox
   - review-source-errors-and-spend
+  - review-unicorn-signature
+  - run-deal-fit-analysis
   - run-sourcing-pipeline
   - score-sourcing-candidates
   - screen-active-sourcing-candidates
+  - screen-founder-connected-candidates
+  - screen-identified-candidates
   - sync-sourcing-candidates
   primaryStage: Origination Operations
   primaryDealRoomState: intake
@@ -48,6 +57,7 @@ metadata:
   - vc-notion-sync-write
   - vc-origination-deal-room-promotion
   - vc-origination-pipeline-orchestration
+  - vc-origination-ic-summary-preparation
   - vc-outreach-draft-queue
   - vc-portfolio-overlap-review
   - vc-reddit-builder-signal-discovery
@@ -90,6 +100,8 @@ skills:
 - externalId: vc-origination-deal-room-promotion
   activationMode: AUTO
 - externalId: vc-origination-pipeline-orchestration
+  activationMode: AUTO
+- externalId: vc-origination-ic-summary-preparation
   activationMode: AUTO
 - externalId: vc-outreach-draft-queue
   activationMode: AUTO

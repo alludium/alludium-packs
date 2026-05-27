@@ -117,8 +117,8 @@
       },
       {
         "key": "review_and_engagement",
-        "label": "Review and engagement prep",
-        "description": "Optional review, screening, outbound-state, and outreach-draft tasks that operate on approved candidate batches.",
+        "label": "Qualification and outreach prep",
+        "description": "Optional screen, prioritization, prospect-summary, engagement-screen, and outreach-prep tasks for approved candidate batches.",
         "taskDefinitionSlugs": [
           "review-portfolio-overlap",
           "screen-identified-candidates",
@@ -196,7 +196,7 @@
     }
   },
   "initialVersion": {
-    "version": "0.2.2",
+    "version": "0.2.3",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -431,6 +431,14 @@
         "description": "Artifact ID for the latest review, screen, relationship, overlap, or IC-summary artifact."
       },
       {
+        "id": "field-latest-prospect-summary-artifact-id",
+        "key": "latest_prospect_summary_artifact_id",
+        "label": "Latest Prospect Summary Artifact ID",
+        "kind": "text",
+        "required": false,
+        "description": "Artifact ID for the latest prospect-level sourcing summary."
+      },
+      {
         "id": "field-latest-identified-screen-artifact-id",
         "key": "latest_identified_screen_artifact_id",
         "label": "Latest Identified Screen Artifact ID",
@@ -476,43 +484,43 @@
         "label": "Origination Candidate Status",
         "kind": "enum",
         "required": false,
-        "description": "Current candidate state across identification, screening, outbound, and origination outcomes.",
+        "description": "Current candidate state across sourcing, qualification, outreach, and origination outcomes.",
         "options": [
           {
             "value": "identified",
-            "label": "Identified"
+            "label": "Identify"
           },
           {
-            "value": "screened",
-            "label": "Screened"
+            "value": "enriched",
+            "label": "Enrich"
           },
           {
-            "value": "of_interest",
-            "label": "Of Interest"
+            "value": "initial_screen",
+            "label": "Initial Screen"
           },
           {
-            "value": "connecting_on_linkedin",
-            "label": "Connecting on LinkedIn"
+            "value": "prioritized",
+            "label": "Prioritize"
           },
           {
-            "value": "founder_connected",
-            "label": "Founder Connected"
+            "value": "outreach_prep",
+            "label": "Outreach Prep"
           },
           {
-            "value": "initial_reachout_linkedin",
-            "label": "Initial Reachout - LinkedIn"
+            "value": "contact_attempts",
+            "label": "Contact Attempts"
           },
           {
-            "value": "second_reachout_email",
-            "label": "2nd Reachout - Email"
+            "value": "engagement_screen",
+            "label": "Founder Engagement Screen"
+          },
+          {
+            "value": "promoted_to_deal_pipeline",
+            "label": "Promoted To Deal Pipeline"
           },
           {
             "value": "no_response",
             "label": "No Response"
-          },
-          {
-            "value": "engaged_added_to_deal_funnel",
-            "label": "Engaged - Added to Deal Funnel"
           },
           {
             "value": "pass",
@@ -702,19 +710,18 @@
     "lifecycleStates": [
       "draft",
       "configured",
-      "active",
       "needs_credentials",
       "source_degraded",
-      "review_backlog",
+      "source",
       "identified",
-      "screened",
-      "of_interest",
-      "connecting_on_linkedin",
-      "founder_connected",
-      "initial_reachout_linkedin",
-      "second_reachout_email",
+      "enriched",
+      "initial_screen",
+      "prioritized",
+      "outreach_prep",
+      "contact_attempts",
+      "engagement_screen",
+      "promoted_to_deal_pipeline",
       "no_response",
-      "engaged_added_to_deal_funnel",
       "pass",
       "watchlist",
       "paused",
@@ -731,100 +738,68 @@
         "to": "needs_credentials"
       },
       {
-        "from": "configured",
-        "to": "active"
-      },
-      {
-        "from": "configured",
-        "to": "needs_credentials"
-      },
-      {
-        "from": "active",
-        "to": "source_degraded"
-      },
-      {
-        "from": "active",
-        "to": "review_backlog"
-      },
-      {
-        "from": "active",
-        "to": "identified"
-      },
-      {
-        "from": "active",
-        "to": "paused"
-      },
-      {
-        "from": "source_degraded",
-        "to": "active"
-      },
-      {
-        "from": "source_degraded",
-        "to": "needs_credentials"
-      },
-      {
-        "from": "needs_credentials",
-        "to": "configured"
-      },
-      {
-        "from": "review_backlog",
-        "to": "active"
-      },
-      {
-        "from": "paused",
-        "to": "active"
-      },
-      {
         "from": "draft",
         "to": "migration_in_progress"
       },
       {
-        "from": "migration_in_progress",
-        "to": "configured"
-      },
-      {
         "from": "draft",
         "to": "archived"
+      },
+      {
+        "from": "configured",
+        "to": "source"
+      },
+      {
+        "from": "configured",
+        "to": "needs_credentials"
       },
       {
         "from": "configured",
         "to": "archived"
       },
       {
-        "from": "active",
+        "from": "source",
+        "to": "source_degraded"
+      },
+      {
+        "from": "source",
+        "to": "identified"
+      },
+      {
+        "from": "source",
+        "to": "paused"
+      },
+      {
+        "from": "source",
         "to": "archived"
       },
       {
-        "from": "needs_credentials",
-        "to": "archived"
+        "from": "source_degraded",
+        "to": "source"
+      },
+      {
+        "from": "source_degraded",
+        "to": "needs_credentials"
       },
       {
         "from": "source_degraded",
         "to": "archived"
       },
       {
-        "from": "review_backlog",
+        "from": "needs_credentials",
+        "to": "configured"
+      },
+      {
+        "from": "needs_credentials",
         "to": "archived"
-      },
-      {
-        "from": "paused",
-        "to": "archived"
-      },
-      {
-        "from": "migration_in_progress",
-        "to": "archived"
-      },
-      {
-        "from": "review_backlog",
-        "to": "of_interest"
-      },
-      {
-        "from": "review_backlog",
-        "to": "identified"
       },
       {
         "from": "identified",
-        "to": "screened"
+        "to": "enriched"
+      },
+      {
+        "from": "identified",
+        "to": "initial_screen"
       },
       {
         "from": "identified",
@@ -835,127 +810,139 @@
         "to": "watchlist"
       },
       {
-        "from": "screened",
-        "to": "of_interest"
+        "from": "identified",
+        "to": "archived"
       },
       {
-        "from": "screened",
+        "from": "enriched",
+        "to": "initial_screen"
+      },
+      {
+        "from": "enriched",
         "to": "pass"
       },
       {
-        "from": "screened",
+        "from": "enriched",
         "to": "watchlist"
       },
       {
-        "from": "review_backlog",
+        "from": "enriched",
+        "to": "archived"
+      },
+      {
+        "from": "initial_screen",
+        "to": "prioritized"
+      },
+      {
+        "from": "initial_screen",
+        "to": "outreach_prep"
+      },
+      {
+        "from": "initial_screen",
         "to": "pass"
       },
       {
-        "from": "review_backlog",
+        "from": "initial_screen",
         "to": "watchlist"
       },
       {
-        "from": "of_interest",
-        "to": "connecting_on_linkedin"
+        "from": "initial_screen",
+        "to": "archived"
       },
       {
-        "from": "of_interest",
+        "from": "prioritized",
+        "to": "outreach_prep"
+      },
+      {
+        "from": "prioritized",
         "to": "pass"
       },
       {
-        "from": "of_interest",
+        "from": "prioritized",
         "to": "watchlist"
       },
       {
-        "from": "connecting_on_linkedin",
-        "to": "initial_reachout_linkedin"
+        "from": "prioritized",
+        "to": "archived"
       },
       {
-        "from": "connecting_on_linkedin",
-        "to": "founder_connected"
+        "from": "outreach_prep",
+        "to": "contact_attempts"
       },
       {
-        "from": "founder_connected",
-        "to": "initial_reachout_linkedin"
-      },
-      {
-        "from": "founder_connected",
-        "to": "engaged_added_to_deal_funnel"
-      },
-      {
-        "from": "founder_connected",
+        "from": "outreach_prep",
         "to": "pass"
       },
       {
-        "from": "founder_connected",
+        "from": "outreach_prep",
         "to": "watchlist"
       },
       {
-        "from": "connecting_on_linkedin",
+        "from": "outreach_prep",
+        "to": "archived"
+      },
+      {
+        "from": "contact_attempts",
+        "to": "engagement_screen"
+      },
+      {
+        "from": "contact_attempts",
         "to": "no_response"
       },
       {
-        "from": "connecting_on_linkedin",
+        "from": "contact_attempts",
         "to": "pass"
       },
       {
-        "from": "connecting_on_linkedin",
+        "from": "contact_attempts",
         "to": "watchlist"
       },
       {
-        "from": "initial_reachout_linkedin",
-        "to": "second_reachout_email"
+        "from": "contact_attempts",
+        "to": "archived"
       },
       {
-        "from": "initial_reachout_linkedin",
-        "to": "engaged_added_to_deal_funnel"
+        "from": "engagement_screen",
+        "to": "promoted_to_deal_pipeline"
       },
       {
-        "from": "initial_reachout_linkedin",
+        "from": "engagement_screen",
+        "to": "contact_attempts"
+      },
+      {
+        "from": "engagement_screen",
         "to": "no_response"
       },
       {
-        "from": "initial_reachout_linkedin",
+        "from": "engagement_screen",
         "to": "pass"
       },
       {
-        "from": "initial_reachout_linkedin",
+        "from": "engagement_screen",
         "to": "watchlist"
       },
       {
-        "from": "second_reachout_email",
-        "to": "engaged_added_to_deal_funnel"
+        "from": "engagement_screen",
+        "to": "archived"
       },
       {
-        "from": "second_reachout_email",
-        "to": "no_response"
-      },
-      {
-        "from": "second_reachout_email",
-        "to": "pass"
-      },
-      {
-        "from": "second_reachout_email",
-        "to": "watchlist"
+        "from": "promoted_to_deal_pipeline",
+        "to": "archived"
       },
       {
         "from": "no_response",
         "to": "watchlist"
       },
       {
-        "from": "watchlist",
-        "to": "of_interest"
-      },
-      {
-        "from": "watchlist",
-        "to": "screened"
-      },
-      {
-        "from": "engaged_added_to_deal_funnel",
+        "from": "no_response",
         "to": "archived"
       },
       {
-        "from": "no_response",
+        "from": "watchlist",
+        "to": "prioritized"
+      },
+      {
+        "from": "watchlist",
         "to": "archived"
       },
       {
@@ -963,35 +950,19 @@
         "to": "archived"
       },
       {
-        "from": "watchlist",
+        "from": "paused",
+        "to": "source"
+      },
+      {
+        "from": "paused",
         "to": "archived"
       },
       {
-        "from": "of_interest",
-        "to": "archived"
+        "from": "migration_in_progress",
+        "to": "configured"
       },
       {
-        "from": "identified",
-        "to": "archived"
-      },
-      {
-        "from": "screened",
-        "to": "archived"
-      },
-      {
-        "from": "connecting_on_linkedin",
-        "to": "archived"
-      },
-      {
-        "from": "founder_connected",
-        "to": "archived"
-      },
-      {
-        "from": "initial_reachout_linkedin",
-        "to": "archived"
-      },
-      {
-        "from": "second_reachout_email",
+        "from": "migration_in_progress",
         "to": "archived"
       }
     ],
@@ -1017,28 +988,27 @@
           "key": "source",
           "label": "Source",
           "states": [
-            "active",
+            "source",
             "source_degraded"
           ]
         },
         {
-          "key": "review",
-          "label": "Review",
+          "key": "qualify",
+          "label": "Qualify",
           "states": [
-            "review_backlog",
             "identified",
-            "screened",
-            "of_interest"
+            "enriched",
+            "initial_screen",
+            "prioritized"
           ]
         },
         {
-          "key": "outbound",
-          "label": "Outbound",
+          "key": "outreach",
+          "label": "Outreach",
           "states": [
-            "connecting_on_linkedin",
-            "founder_connected",
-            "initial_reachout_linkedin",
-            "second_reachout_email"
+            "outreach_prep",
+            "contact_attempts",
+            "engagement_screen"
           ]
         },
         {
@@ -1053,8 +1023,8 @@
           "key": "outcomes",
           "label": "Outcomes",
           "states": [
+            "promoted_to_deal_pipeline",
             "no_response",
-            "engaged_added_to_deal_funnel",
             "pass",
             "watchlist",
             "archived"
@@ -1124,7 +1094,7 @@
         "id": "mapping-run-sourcing-pipeline",
         "taskDefinitionSlug": "run-sourcing-pipeline",
         "taskDefinitionTemplateId": "vc.run_sourcing_pipeline",
-        "lifecycleStage": "active",
+        "lifecycleStage": "source",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -1188,7 +1158,7 @@
         "id": "mapping-discover-companies-house-candidates",
         "taskDefinitionSlug": "discover-companies-house-candidates",
         "taskDefinitionTemplateId": "vc.discover_companies_house_candidates",
-        "lifecycleStage": "identified",
+        "lifecycleStage": "source",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -1221,7 +1191,7 @@
         "id": "mapping-discover-linkedin-founders",
         "taskDefinitionSlug": "discover-linkedin-founders",
         "taskDefinitionTemplateId": "vc.discover_linkedin_founders",
-        "lifecycleStage": "identified",
+        "lifecycleStage": "source",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -1254,7 +1224,7 @@
         "id": "mapping-discover-x-founder-signals",
         "taskDefinitionSlug": "discover-x-founder-signals",
         "taskDefinitionTemplateId": "vc.discover_x_founder_signals",
-        "lifecycleStage": "identified",
+        "lifecycleStage": "source",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -1287,7 +1257,7 @@
         "id": "mapping-discover-github-builder-signals",
         "taskDefinitionSlug": "discover-github-builder-signals",
         "taskDefinitionTemplateId": "vc.discover_github_builder_signals",
-        "lifecycleStage": "identified",
+        "lifecycleStage": "source",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -1320,7 +1290,7 @@
         "id": "mapping-discover-reddit-builder-signals",
         "taskDefinitionSlug": "discover-reddit-builder-signals",
         "taskDefinitionTemplateId": "vc.discover_reddit_builder_signals",
-        "lifecycleStage": "identified",
+        "lifecycleStage": "source",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -1414,7 +1384,7 @@
         "id": "mapping-enrich-sourcing-candidates",
         "taskDefinitionSlug": "enrich-sourcing-candidates",
         "taskDefinitionTemplateId": "vc.enrich_sourcing_candidates",
-        "lifecycleStage": "identified",
+        "lifecycleStage": "enriched",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -1442,7 +1412,7 @@
         "id": "mapping-check-affinity-relationships",
         "taskDefinitionSlug": "check-affinity-relationships",
         "taskDefinitionTemplateId": "vc.check_affinity_relationships",
-        "lifecycleStage": "identified",
+        "lifecycleStage": "enriched",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -1470,7 +1440,7 @@
         "id": "mapping-score-sourcing-candidates",
         "taskDefinitionSlug": "score-sourcing-candidates",
         "taskDefinitionTemplateId": "vc.score_sourcing_candidates",
-        "lifecycleStage": "screened",
+        "lifecycleStage": "initial_screen",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -1509,7 +1479,7 @@
         "id": "mapping-screen-identified-candidates",
         "taskDefinitionSlug": "screen-identified-candidates",
         "taskDefinitionTemplateId": "vc.screen_identified_candidates",
-        "lifecycleStage": "screened",
+        "lifecycleStage": "initial_screen",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -1538,7 +1508,7 @@
             "targetPath": "latest_identified_screen_artifact_id"
           },
           {
-            "taskField": "of_interest_count",
+            "taskField": "outreach_ready_count",
             "target": "project.field",
             "targetPath": "promotion_ready_count"
           }
@@ -1548,7 +1518,7 @@
         "id": "mapping-sync-sourcing-candidates",
         "taskDefinitionSlug": "sync-sourcing-candidates",
         "taskDefinitionTemplateId": "vc.sync_sourcing_candidates",
-        "lifecycleStage": "screened",
+        "lifecycleStage": "identified",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -1576,7 +1546,7 @@
         "id": "mapping-review-portfolio-overlap",
         "taskDefinitionSlug": "review-portfolio-overlap",
         "taskDefinitionTemplateId": "vc.review_portfolio_overlap",
-        "lifecycleStage": "screened",
+        "lifecycleStage": "prioritized",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -1604,7 +1574,7 @@
         "id": "mapping-run-deal-fit-analysis",
         "taskDefinitionSlug": "run-deal-fit-analysis",
         "taskDefinitionTemplateId": "vc.run_deal_fit_analysis",
-        "lifecycleStage": "screened",
+        "lifecycleStage": "prioritized",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -1637,7 +1607,7 @@
         "id": "mapping-screen-active-sourcing-candidates",
         "taskDefinitionSlug": "screen-active-sourcing-candidates",
         "taskDefinitionTemplateId": "vc.screen_active_sourcing_candidates",
-        "lifecycleStage": "screened",
+        "lifecycleStage": "prioritized",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -1670,7 +1640,7 @@
         "id": "mapping-review-unicorn-signature",
         "taskDefinitionSlug": "review-unicorn-signature",
         "taskDefinitionTemplateId": "vc.review_unicorn_signature",
-        "lifecycleStage": "screened",
+        "lifecycleStage": "prioritized",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -1703,7 +1673,7 @@
         "id": "mapping-prepare-sourcing-ic-summary",
         "taskDefinitionSlug": "prepare-sourcing-ic-summary",
         "taskDefinitionTemplateId": "vc.prepare_sourcing_ic_summary",
-        "lifecycleStage": "of_interest",
+        "lifecycleStage": "outreach_prep",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -1713,7 +1683,7 @@
         },
         "inputMappings": [
           {
-            "taskField": "ic_summary_candidate",
+            "taskField": "prospect_summary_candidate",
             "source": "project.field",
             "sourcePath": "latest_unicorn_signature_artifact_id",
             "requiredForActivation": true
@@ -1721,9 +1691,9 @@
         ],
         "outputMappings": [
           {
-            "taskField": "ic_summary_artifact_id",
+            "taskField": "prospect_summary_artifact_id",
             "target": "project.field",
-            "targetPath": "latest_review_artifact_id"
+            "targetPath": "latest_prospect_summary_artifact_id"
           }
         ]
       },
@@ -1731,7 +1701,7 @@
         "id": "mapping-prepare-outreach-draft-queue",
         "taskDefinitionSlug": "prepare-outreach-draft-queue",
         "taskDefinitionTemplateId": "vc.prepare_outreach_draft_queue",
-        "lifecycleStage": "of_interest",
+        "lifecycleStage": "outreach_prep",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -1764,7 +1734,7 @@
         "id": "mapping-promote-candidate-to-deal-room",
         "taskDefinitionSlug": "promote-candidate-to-deal-room",
         "taskDefinitionTemplateId": "vc.promote_candidate_to_deal_room",
-        "lifecycleStage": "engaged_added_to_deal_funnel",
+        "lifecycleStage": "promoted_to_deal_pipeline",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -1792,7 +1762,7 @@
         "id": "mapping-generate-sourcing-digest",
         "taskDefinitionSlug": "generate-sourcing-digest",
         "taskDefinitionTemplateId": "vc.generate_sourcing_digest",
-        "lifecycleStage": "active",
+        "lifecycleStage": "source",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -1820,7 +1790,7 @@
         "id": "mapping-audit-linkedin-query-spend",
         "taskDefinitionSlug": "audit-linkedin-query-spend",
         "taskDefinitionTemplateId": "vc.audit_linkedin_query_spend",
-        "lifecycleStage": "active",
+        "lifecycleStage": "source",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -1931,7 +1901,7 @@
         "taskDefinitionTemplateId": "vc.source_thesis_targets",
         "taskDefinitionSlug": "source-thesis-targets",
         "projectScope": "project_instance",
-        "lifecycleStage": "active",
+        "lifecycleStage": "source",
         "inputMappings": [
           {
             "taskField": "thesis_area",
@@ -1965,7 +1935,7 @@
         "id": "mapping-record-linkedin-connection-attempt",
         "taskDefinitionSlug": "record-linkedin-connection-attempt",
         "taskDefinitionTemplateId": "vc.record_linkedin_connection_attempt",
-        "lifecycleStage": "connecting_on_linkedin",
+        "lifecycleStage": "contact_attempts",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -1998,7 +1968,7 @@
         "id": "mapping-prepare-initial-linkedin-reachout",
         "taskDefinitionSlug": "prepare-initial-linkedin-reachout",
         "taskDefinitionTemplateId": "vc.prepare_initial_linkedin_reachout",
-        "lifecycleStage": "initial_reachout_linkedin",
+        "lifecycleStage": "contact_attempts",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -2031,7 +2001,7 @@
         "id": "mapping-screen-founder-connected-candidates",
         "taskDefinitionSlug": "screen-founder-connected-candidates",
         "taskDefinitionTemplateId": "vc.screen_founder_connected_candidates",
-        "lifecycleStage": "founder_connected",
+        "lifecycleStage": "engagement_screen",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -2070,7 +2040,7 @@
         "id": "mapping-prepare-second-reachout-email",
         "taskDefinitionSlug": "prepare-second-reachout-email",
         "taskDefinitionTemplateId": "vc.prepare_second_reachout_email",
-        "lifecycleStage": "second_reachout_email",
+        "lifecycleStage": "contact_attempts",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -2103,7 +2073,7 @@
         "id": "mapping-review-outreach-outcome",
         "taskDefinitionSlug": "review-outreach-outcome",
         "taskDefinitionTemplateId": "vc.review_outreach_outcome",
-        "lifecycleStage": "second_reachout_email",
+        "lifecycleStage": "engagement_screen",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -2115,7 +2085,7 @@
           {
             "taskField": "outreach_state",
             "source": "project.field",
-            "sourcePath": "latest_second_reachout_email_artifact_id",
+            "sourcePath": "latest_founder_connected_screen_artifact_id",
             "requiredForActivation": true
           }
         ],
@@ -2131,6 +2101,103 @@
             "targetPath": "outbound_status"
           }
         ]
+      }
+    ],
+    "lifecycleStageDefinitions": [
+      {
+        "key": "draft",
+        "label": "Draft",
+        "description": "Capture setup intent before the origination pipeline is configured."
+      },
+      {
+        "key": "configured",
+        "label": "Configured",
+        "description": "Source scope, review policy, and schedules are configured but normal sourcing has not started."
+      },
+      {
+        "key": "needs_credentials",
+        "label": "Needs Credentials",
+        "description": "Resolve missing source, CRM, or enrichment access before running pipeline work."
+      },
+      {
+        "key": "source_degraded",
+        "label": "Source Degraded",
+        "description": "Investigate failed sources, spend limits, rate limits, or stale source state."
+      },
+      {
+        "key": "source",
+        "label": "Source",
+        "description": "Run approved sourcing routes and produce raw candidate batches."
+      },
+      {
+        "key": "identified",
+        "label": "Identify",
+        "description": "Normalize raw leads into candidate records with stable identity and dedupe context."
+      },
+      {
+        "key": "enriched",
+        "label": "Enrich",
+        "description": "Add web, founder, relationship, CRM, and evidence context before judgment."
+      },
+      {
+        "key": "initial_screen",
+        "label": "Initial Screen",
+        "description": "Apply a lightweight thesis, stage, geography, and hard-exclusion screen."
+      },
+      {
+        "key": "prioritized",
+        "label": "Prioritize",
+        "description": "Rank and stress-test screened candidates for active outreach."
+      },
+      {
+        "key": "outreach_prep",
+        "label": "Outreach Prep",
+        "description": "Prepare prospect summaries and approved outreach queues before contact attempts."
+      },
+      {
+        "key": "contact_attempts",
+        "label": "Contact Attempts",
+        "description": "Track human-approved outreach attempts across LinkedIn, email, warm intros, or other channels."
+      },
+      {
+        "key": "engagement_screen",
+        "label": "Founder Engagement Screen",
+        "description": "Re-screen after founder response, connection, or direct relationship context adds new evidence."
+      },
+      {
+        "key": "promoted_to_deal_pipeline",
+        "label": "Promoted To Deal Pipeline",
+        "description": "Prepare the human-approved handoff into a Deal Pipeline project."
+      },
+      {
+        "key": "no_response",
+        "label": "No Response",
+        "description": "Candidate has not responded after the approved contact sequence."
+      },
+      {
+        "key": "pass",
+        "label": "Pass",
+        "description": "Terminal no-fit or not-now outcome with cited rationale."
+      },
+      {
+        "key": "watchlist",
+        "label": "Watchlist",
+        "description": "Hold candidates worth revisiting but not active for outreach now."
+      },
+      {
+        "key": "paused",
+        "label": "Paused",
+        "description": "Pipeline work is intentionally paused."
+      },
+      {
+        "key": "migration_in_progress",
+        "label": "Migration In Progress",
+        "description": "Pipeline configuration or state is being migrated."
+      },
+      {
+        "key": "archived",
+        "label": "Archived",
+        "description": "Pipeline or candidate workflow is closed and retained for reference."
       }
     ]
   }

@@ -831,8 +831,8 @@
     },
     {
       "id": "vc.document.sourcing_ic_summary_template",
-      "title": "Sourcing IC Summary Template",
-      "description": "Reusable lightweight IC-style summary for sourced candidates before Deal Pipeline promotion.",
+      "title": "Prospect Summary Template",
+      "description": "Reusable prospect-level sourcing summary for one prioritized candidate before outreach or Deal Pipeline promotion.",
       "documentType": "template",
       "path": "origination/sourcing-ic-summary-template.md",
       "supportedProjectTypes": [

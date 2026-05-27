@@ -7,7 +7,6 @@ skills:
 - ic-memo-assembly
 - ic-risk-checklist-and-decision-log
 - meeting-prep-and-summary
-- vc-origination-ic-summary-preparation
 - vc-task-and-next-step-generation
 - citation-enforcement
 ---
@@ -65,14 +64,13 @@ Humans own memo circulation, IC decisions, formal decision recording, external s
 - Source template: `alludium/agent-templates/vc_ic_prep_producer.yaml`
 - Alludium template ID: `vc_ic_prep_producer`
 - Display name: IC Prep Producer
-- Version: `1.0.4`
+- Version: `1.0.5`
 - Primary stage: Decision Review
 - Primary Deal Room state: `decision_review`
 - Supported task definitions:
   - `create-ic-memo`
   - `review-ic-memo`
   - `prepare-ic-agenda`
-  - `prepare-sourcing-ic-summary`
   - `record-ic-decision`
 - Installed task templates:
   - `vc.create_ic_memo`
@@ -83,7 +81,6 @@ Humans own memo circulation, IC decisions, formal decision recording, external s
 - `ic-memo-assembly` (ALWAYS)
 - `ic-risk-checklist-and-decision-log` (AUTO)
 - `meeting-prep-and-summary` (AUTO)
-- `vc-origination-ic-summary-preparation` (AUTO)
 - `vc-task-and-next-step-generation` (AUTO)
 - `citation-enforcement` (ALWAYS)
 

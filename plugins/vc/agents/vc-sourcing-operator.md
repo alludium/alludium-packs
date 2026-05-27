@@ -17,6 +17,7 @@ skills:
 - vc-notion-sync-write
 - vc-origination-deal-room-promotion
 - vc-origination-pipeline-orchestration
+- vc-origination-ic-summary-preparation
 - vc-outreach-draft-queue
 - vc-portfolio-overlap-review
 - vc-reddit-builder-signal-discovery
@@ -58,7 +59,7 @@ Do not contact founders, create Deal Pipelines, write to CRM/source systems, ena
 - Source template: `alludium/agent-templates/vc_sourcing_operator.yaml`
 - Alludium template ID: `vc_sourcing_operator`
 - Display name: Sourcing Operator
-- Version: `1.0.2`
+- Version: `1.0.3`
 - Primary stage: Origination Operations
 - Primary Deal Room state: `intake`
 - Supported task definitions:
@@ -73,14 +74,23 @@ Do not contact founders, create Deal Pipelines, write to CRM/source systems, ena
   - `enrich-sourcing-candidates`
   - `generate-sourcing-digest`
   - `ingest-manual-sourcing-tip`
+  - `prepare-sourcing-ic-summary`
   - `prepare-outreach-draft-queue`
+  - `prepare-initial-linkedin-reachout`
+  - `prepare-second-reachout-email`
   - `promote-candidate-to-deal-room`
+  - `record-linkedin-connection-attempt`
+  - `review-outreach-outcome`
   - `review-portfolio-overlap`
   - `review-reddit-candidate-inbox`
   - `review-source-errors-and-spend`
+  - `review-unicorn-signature`
+  - `run-deal-fit-analysis`
   - `run-sourcing-pipeline`
   - `score-sourcing-candidates`
   - `screen-active-sourcing-candidates`
+  - `screen-founder-connected-candidates`
+  - `screen-identified-candidates`
   - `sync-sourcing-candidates`
 
 ## Skills
@@ -98,6 +108,7 @@ Do not contact founders, create Deal Pipelines, write to CRM/source systems, ena
 - `vc-notion-sync-write` (AUTO)
 - `vc-origination-deal-room-promotion` (AUTO)
 - `vc-origination-pipeline-orchestration` (AUTO)
+- `vc-origination-ic-summary-preparation` (AUTO)
 - `vc-outreach-draft-queue` (AUTO)
 - `vc-portfolio-overlap-review` (AUTO)
 - `vc-reddit-builder-signal-discovery` (AUTO)

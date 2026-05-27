@@ -21,6 +21,7 @@ TASK_OUTPUT_ROOT = PACK_ROOT / "tasks"
 BLUEPRINT_OUTPUT_ROOT = PACK_ROOT / "project-blueprints"
 MANIFEST_PATH = PACK_ROOT / "alludium" / "manifest.yaml"
 DOCUMENT_CATALOG_PATH = PACK_ROOT / "alludium" / "documents" / "catalog.v1.json"
+SKILL_ROOT = PACK_ROOT / "skills"
 
 PLATFORM_TASK_DEFINITIONS: dict[str, dict[str, str]] = {
     "project-source-choice": {
@@ -179,15 +180,16 @@ def agent_link(agent_id: str | None, agent_templates: dict[str, dict[str, Any]])
     return f"[{label}](../agents/{slugify(agent_id)}.md)"
 
 
-def skill_links(skills: list[str]) -> str:
+def skill_links(skills: list[str], skill_names: dict[str, str] | None = None) -> str:
     if not skills:
         return "None declared"
+    names = skill_names or {}
     return "<br>".join(
-        f"[`{markdown_escape(skill)}`](../skills/{skill}/SKILL.md)" for skill in skills
+        f"[{markdown_escape(names.get(skill, skill))}](../skills/{skill}/SKILL.md)" for skill in skills
     )
 
 
-def document_refs_inline(refs: Any, document_paths: dict[str, str]) -> str:
+def document_refs_inline(refs: Any, documents: dict[str, dict[str, str]]) -> str:
     if not isinstance(refs, list) or not refs:
         return "None declared"
     lines: list[str] = []
@@ -197,8 +199,10 @@ def document_refs_inline(refs: Any, document_paths: dict[str, str]) -> str:
         document_id = ref.get("documentId")
         if not isinstance(document_id, str) or not document_id:
             continue
-        document_label = f"`{markdown_escape(document_id)}`"
-        document_path = document_paths.get(document_id)
+        document = documents.get(document_id, {})
+        document_title = document.get("title")
+        document_label = markdown_escape(document_title if isinstance(document_title, str) else document_id)
+        document_path = document.get("path")
         if isinstance(document_path, str) and document_path:
             document_label = f"[{document_label}](../alludium/documents/{markdown_escape(document_path)})"
         suffix_parts: list[str] = []
@@ -611,11 +615,54 @@ def load_document_paths() -> dict[str, str]:
     return paths
 
 
+def load_document_metadata() -> dict[str, dict[str, str]]:
+    catalog = read_json(DOCUMENT_CATALOG_PATH)
+    documents = catalog.get("documents")
+    if not isinstance(documents, list):
+        fail(f"{DOCUMENT_CATALOG_PATH.relative_to(PACK_ROOT)} documents must be a list")
+    metadata: dict[str, dict[str, str]] = {}
+    for document in documents:
+        if not isinstance(document, dict):
+            continue
+        document_id = document.get("id")
+        document_path = document.get("path")
+        title = document.get("title")
+        if isinstance(document_id, str):
+            metadata[document_id] = {
+                "path": document_path if isinstance(document_path, str) else "",
+                "title": title if isinstance(title, str) else document_id,
+            }
+    return metadata
+
+
+def load_skill_names() -> dict[str, str]:
+    names: dict[str, str] = {}
+    for path in sorted(SKILL_ROOT.glob("*/SKILL.md")):
+        text = path.read_text(encoding="utf-8")
+        if not text.startswith("---"):
+            continue
+        parts = text.split("---", 2)
+        if len(parts) < 3:
+            continue
+        try:
+            frontmatter = yaml.safe_load(parts[1]) or {}
+        except Exception:
+            continue
+        if not isinstance(frontmatter, dict):
+            continue
+        skill_id = frontmatter.get("id")
+        skill_name = frontmatter.get("name")
+        if isinstance(skill_id, str) and isinstance(skill_name, str):
+            names[skill_id] = skill_name
+    return names
+
+
 def blueprint_task_row(
     slug: str,
     task_by_slug: dict[str, dict[str, Any]],
     agent_templates: dict[str, dict[str, Any]],
-    document_paths: dict[str, str],
+    documents: dict[str, dict[str, str]],
+    skill_names: dict[str, str],
     fallback_agent_id: str | None = None,
 ) -> str:
     task = task_by_slug.get(slug)
@@ -639,7 +686,7 @@ def blueprint_task_row(
     skills = string_list(definition_json.get("requiredSkills"))
     return (
         f"| {task_link(slug, task['title'])} | {agent_link(agent_id, agent_templates)} | "
-        f"{skill_links(skills)} | {document_refs_inline(definition_json.get('documentRefs'), document_paths)} | "
+        f"{skill_links(skills, skill_names)} | {document_refs_inline(definition_json.get('documentRefs'), documents)} | "
         f"{integration_refs_inline(definition_json, task, agent_id, agent_templates)} |\n"
     )
 
@@ -754,13 +801,14 @@ def blueprint_task_table(
     rows: list[tuple[str, str | None]],
     task_by_slug: dict[str, dict[str, Any]],
     agent_templates: dict[str, dict[str, Any]],
-    document_paths: dict[str, str],
+    documents: dict[str, dict[str, str]],
+    skill_names: dict[str, str],
 ) -> str:
     body = "| Task | Agent | Skills | Documents | Integrations |\n| --- | --- | --- | --- | --- |\n"
     if not rows:
         return body + "| None mapped | None declared | None declared | None declared | None declared |\n"
     body += "".join(
-        blueprint_task_row(slug, task_by_slug, agent_templates, document_paths, fallback_agent)
+        blueprint_task_row(slug, task_by_slug, agent_templates, documents, skill_names, fallback_agent)
         for slug, fallback_agent in rows
     )
     return body
@@ -770,7 +818,8 @@ def render_blueprint(
     project_type_path: Path,
     task_by_slug: dict[str, dict[str, Any]],
     agent_templates: dict[str, dict[str, Any]],
-    document_paths: dict[str, str],
+    documents: dict[str, dict[str, str]],
+    skill_names: dict[str, str],
 ) -> tuple[Path, str]:
     project_type = read_json(project_type_path)
     project_key = require_string(project_type.get("key"), f"{project_type_path.name}.key")
@@ -807,15 +856,15 @@ def render_blueprint(
 
     body += "## Setup\n\n"
     body += "Project-type setup and configuration tasks used before normal project execution.\n\n"
-    body += blueprint_task_table(setup_rows, task_by_slug, agent_templates, document_paths)
+    body += blueprint_task_table(setup_rows, task_by_slug, agent_templates, documents, skill_names)
 
     body += "\n## General\n\n"
     body += "Reusable project-instance tasks that can be useful across multiple lifecycle stages.\n\n"
-    body += blueprint_task_table(general_rows, task_by_slug, agent_templates, document_paths)
+    body += blueprint_task_table(general_rows, task_by_slug, agent_templates, documents, skill_names)
 
     body += "\n## Management\n\n"
     body += "Project-management tasks that operate across a project suite, source pipeline, or recurring sync/reporting flow.\n\n"
-    body += blueprint_task_table(management_rows, task_by_slug, agent_templates, document_paths)
+    body += blueprint_task_table(management_rows, task_by_slug, agent_templates, documents, skill_names)
 
     mappings = initial_version.get("projectTaskMappings")
     if not isinstance(mappings, list):
@@ -842,6 +891,11 @@ def render_blueprint(
             stage = "general"
         mappings_by_stage.setdefault(stage, []).append(slug)
 
+    stage_definitions = {
+        definition["key"]: definition
+        for definition in initial_version.get("lifecycleStageDefinitions", [])
+        if isinstance(definition, dict) and isinstance(definition.get("key"), str)
+    }
     lifecycle_states = initial_version.get("lifecycleStates")
     stage_order = [state for state in lifecycle_states if isinstance(state, str)] if isinstance(lifecycle_states, list) else []
     for stage in sorted(mappings_by_stage):
@@ -851,10 +905,15 @@ def render_blueprint(
         stage_order.insert(0, "general")
 
     for stage in stage_order:
-        body += f"\n## {title_from_key(stage)}\n\n"
+        stage_definition = stage_definitions.get(stage, {})
+        stage_label = stage_definition.get("label") if isinstance(stage_definition, dict) else None
+        stage_description = stage_definition.get("description") if isinstance(stage_definition, dict) else None
+        body += f"\n## {markdown_escape(stage_label if isinstance(stage_label, str) else title_from_key(stage))}\n\n"
+        if isinstance(stage_description, str) and stage_description:
+            body += f"{markdown_escape(stage_description)}\n\n"
         body += "| Task | Agent | Skills | Documents | Integrations |\n| --- | --- | --- | --- | --- |\n"
         rows = [
-            blueprint_task_row(slug, task_by_slug, agent_templates, document_paths)
+            blueprint_task_row(slug, task_by_slug, agent_templates, documents, skill_names)
             for slug in mappings_by_stage.get(stage, [])
         ]
         body += "".join(rows) if rows else "| None mapped | None declared | None declared | None declared | None declared |\n"
@@ -959,7 +1018,8 @@ def expected_outputs() -> dict[Path, str]:
 
     task_by_slug, _task_by_id = load_task_templates()
     agent_templates = load_agent_templates()
-    document_paths = load_document_paths()
+    documents = load_document_metadata()
+    skill_names = load_skill_names()
     discovered_project_paths = {
         path.name for path in PROJECT_TYPE_ROOT.glob("*.json") if path.name != "catalog.v1.json"
     }
@@ -971,7 +1031,7 @@ def expected_outputs() -> dict[Path, str]:
         path = PROJECT_TYPE_ROOT / f"{project_type_id}.json"
         if not path.exists():
             fail(f"Manifest project type missing JSON: {project_type_id}")
-        output_path, body = render_blueprint(path, task_by_slug, agent_templates, document_paths)
+        output_path, body = render_blueprint(path, task_by_slug, agent_templates, documents, skill_names)
         add_expected_output(outputs, sources, output_path, body, path)
 
     extra_project_paths = sorted(discovered_project_paths - declared_project_paths)

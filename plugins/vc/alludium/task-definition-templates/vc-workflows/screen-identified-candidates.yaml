@@ -59,8 +59,8 @@ definition:
     instructions:
       executionInstructions: 'Screen newly identified candidates with the lightest useful evidence set: source receipt,
         normalized identity, stage/geography fit, obvious hard exclusions, basic AI/native software signal, founder signal,
-        and duplicate/known-relationship status. This is not the full active-candidate screen; recommend only Of Interest,
-        Watchlist, or Pass, and list what must be enriched before outreach. Use `definitionJson.documentRefs` as the durable
+        and duplicate/known-relationship status. This is not the full active-candidate screen; recommend only prioritize
+        for outreach, watchlist, or pass, and list what must be enriched before outreach. Use `definitionJson.documentRefs` as the durable
         document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology`
         supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide`
         governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries.
@@ -71,9 +71,9 @@ definition:
       externalActionPolicy: Screening recommendation only. Do not contact founders, write CRM/list records, send outreach,
         or create Deal Pipeline projects.
       completionCriteria:
-      - Each candidate has a first-pass disposition: of interest, watchlist, or pass.
+      - Each candidate has a first-pass disposition: prioritize for outreach, watchlist, or pass.
       - Every pass or watchlist recommendation names the evidence gap or exclusion rule.
-      - Of-interest recommendations include the next enrichment or outreach-prep evidence needed.
+      - Outreach-ready recommendations include the next enrichment or outreach-prep evidence needed.
 fields:
   input:
   - key: identified_candidate_batch
@@ -96,8 +96,8 @@ fields:
     position: 0
     config:
       documentRefId: vc.document.sourcing_scoring_rubric
-  - key: of_interest_count
-    name: Of Interest Count
+  - key: outreach_ready_count
+    name: Outreach Ready Count
     fieldType: number
     required: false
     position: 1

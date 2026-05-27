@@ -15,11 +15,11 @@ skills:
 
 # Review Unicorn Signature
 
-Stress-test strong origination candidates for venture-scale shape before IC-summary preparation.
+Stress-test strong origination candidates for venture-scale shape before prospect-summary preparation.
 
 ## Instructions
 
-Stress-test candidates that survived deal-fit and active screening for genuine venture-scale shape before creating an IC-style summary. Classify the candidate as genuine, strong, on-pattern, or off-shape, and recommend whether to proceed to IC summary, watchlist, or pass. Use market/category context only to support the classification; do not fabricate market size or traction. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+Stress-test candidates that survived deal-fit and active screening for genuine venture-scale shape before creating a prospect summary. Classify the candidate as genuine, strong, on-pattern, or off-shape, and recommend whether to proceed to prospect summary, watchlist, or pass. Use market/category context only to support the classification; do not fabricate market size or traction. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
@@ -32,7 +32,7 @@ Review only. Do not demote protected manual decisions, write external systems, s
 ## Completion Criteria
 
 - Classification is one of genuine, strong, on-pattern, or off-shape.
-- Recommendation states whether to proceed to IC summary, watchlist, or pass.
+- Recommendation states whether to proceed to prospect summary, watchlist, or pass.
 - Evidence gaps and validation questions are listed.
 
 ## Human Decision Points
