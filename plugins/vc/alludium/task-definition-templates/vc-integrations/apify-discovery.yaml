@@ -1,62 +1,68 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.apify_discovery
-version: 0.1.3
+version: 0.1.4
 title: Explore Apify Origination Sources
 category: Venture Capital
 visibility: workspace
 tags:
-  - vc
-  - apify
-  - discovery
-  - origination
+- vc
+- apify
+- discovery
+- origination
 definition:
   name: Explore Apify Origination Sources
   slug: apify-discovery
-  description: Discover approved Apify actors, input schemas, source scope, and run-cost guardrails before any VC origination read preview.
+  description: Discover approved Apify actors, input schemas, source scope, and run-cost guardrails before any VC origination
+    read preview.
   allowSubtasks: false
   definitionJson:
     vertical: vc
     taskFamily: integration_discovery
     requiredSkills:
-      - vc-apify-discovery
-      - citation-enforcement
+    - vc-apify-discovery
+    - citation-enforcement
     recommendedAgentTemplate: vc_integration_operator
     plannedRecommendedAgentTemplate: vc_integration_operator
     supportedProjectTypes:
-      - vc_origination_pipeline
+    - vc_origination_pipeline
     supportedProjectScopes:
-      - project_management
+    - project_management
     instructions:
-      executionInstructions: Use the connected `apify-actors-mcp` application only after authorization and tool discovery. Enumerate approved actors, input requirements, estimated cost controls, and safe sample-read options. If live tools are not available, produce the missing-tool discovery checklist and ask for an approved actor inventory instead of inventing actor IDs.
-      missingInputPolicy: Ask for authorization, actor allowlist, source policy, or supplied actor inventory when live discovery is unavailable.
-      externalActionPolicy: Discovery only. Do not start actor runs, import candidates, persist candidate state, score candidates, contact founders, update external systems, or create Deal Pipeline projects.
+      executionInstructions: Use the connected `apify-actors-mcp` application only after authorization and tool discovery.
+        Enumerate approved actors, input requirements, estimated cost controls, and safe sample-read options. If live tools
+        are not available, produce the missing-tool discovery checklist and ask for an approved actor inventory instead of
+        inventing actor IDs.
+      missingInputPolicy: Ask for authorization, actor allowlist, source policy, or supplied actor inventory when live discovery
+        is unavailable.
+      externalActionPolicy: Discovery only. Do not start actor runs, import candidates, persist candidate state, score candidates,
+        contact founders, update external systems, or create Deal Pipeline projects.
       completionCriteria:
-        - Available or supplied Apify actors are listed with source purpose and read-preview requirements.
-        - Tool discovery status and any missing authorization are explicit.
-        - User choices needed before sync read are explicit.
+      - Available or supplied Apify actors are listed with source purpose and read-preview requirements.
+      - Tool discovery status and any missing authorization are explicit.
+      - User choices needed before sync read are explicit.
     humanDecisionPoints:
-      - Choose approved actors and source policy before sync read.
-      - Approve sample-run budget and result scope separately.
+    - Choose approved actors and source policy before sync read.
+    - Approve sample-run budget and result scope separately.
 fields:
   input:
-    - key: discovery_goal
-      name: Discovery Goal
-      fieldType: string
-      required: true
-      position: 0
-      config: {}
+  - key: discovery_goal
+    name: Discovery Goal
+    fieldType: string
+    required: true
+    position: 0
+    config: {}
   output:
-    - key: apify_discovery_report
-      name: Apify Discovery Report
-      fieldType: richtext
-      required: false
-      position: 0
-      config:
-        rows: 8
-    - key: source_scope_questions
-      name: Source Scope Questions
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
+  - key: apify_discovery_report
+    name: Apify Discovery Report
+    fieldType: richtext
+    required: false
+    position: 0
+    config:
+      rows: 8
+  - key: source_scope_questions
+    name: Source Scope Questions
+    fieldType: json
+    required: false
+    position: 1
+    config: {}

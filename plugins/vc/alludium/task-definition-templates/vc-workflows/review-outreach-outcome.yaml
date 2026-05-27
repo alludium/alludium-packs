@@ -1,0 +1,85 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.review_outreach_outcome
+version: 0.1.0
+title: Review Outreach Outcome
+category: Venture Capital
+visibility: workspace
+tags:
+- vc
+- origination
+- outreach
+- review
+definition:
+  name: Review Outreach Outcome
+  slug: review-outreach-outcome
+  description: Classify outbound outcomes after LinkedIn and email attempts into no response, engaged, pass, or watchlist.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    stage: outbound_outcome
+    taskFamily: origination_outbound_state
+    documentRefs:
+    - documentId: vc.document.promotion_package_template
+      usage: output_template
+      outputFieldKey: outreach_outcome_artifact_id
+    - documentId: vc.document.origination_source_strategy_guide
+      usage: methodology
+    - documentId: vc.document.template_use_guidance
+      usage: operating_guidance
+    requiredSkills:
+    - vc-origination-deal-room-promotion
+    - vc-outreach-draft-queue
+    - citation-enforcement
+    recommendedAgentTemplate: vc_sourcing_operator
+    plannedRecommendedAgentTemplate: vc_sourcing_operator
+    supportedProjectTypes:
+    - vc_origination_pipeline
+    supportedProjectScopes:
+    - project_instance
+    instructions:
+      executionInstructions: 'Review the latest outreach state, response evidence, CRM/list context, and candidate screening
+        artifacts. Recommend one outcome: no response, engaged and ready to add to the Deal Pipeline, pass, or watchlist.
+        If engaged, prepare the promotion handoff context but do not create a Deal Pipeline or mutate CRM/list stages without
+        explicit human approval. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each
+        reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic,
+        `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language,
+        and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce
+        that output from the referenced pack document and preserve the document ID alongside the output artifact.'
+      missingInputPolicy: Ask for outreach history, response evidence, latest screening artifact, owner decision policy, and
+        target system before classifying.
+      externalActionPolicy: Review and recommendation only. Deal Pipeline creation, CRM stage changes, pass/watchlist updates,
+        and notifications require explicit human approval.
+      completionCriteria:
+      - Outcome recommendation is one of no_response, engaged_added_to_deal_funnel, pass, or watchlist.
+      - Recommendation cites outreach evidence, response state, and screening rationale.
+      - Engaged outcomes include promotion readiness and unresolved blockers.
+fields:
+  input:
+  - key: outreach_state
+    name: Outreach State
+    fieldType: json
+    required: true
+    position: 0
+    config: {}
+  output:
+  - key: outreach_outcome_artifact_id
+    name: Outreach Outcome Artifact
+    fieldType: file
+    required: true
+    position: 0
+    config:
+      documentRefId: vc.document.promotion_package_template
+  - key: recommended_terminal_state
+    name: Recommended Terminal State
+    fieldType: string
+    required: true
+    position: 1
+    config: {}
+  - key: outreach_outcome_summary
+    name: Outreach Outcome Summary
+    fieldType: richtext
+    required: false
+    position: 2
+    config:
+      rows: 8

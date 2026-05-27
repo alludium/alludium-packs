@@ -1,15 +1,15 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.discover_x_founder_signals
-version: 0.1.4
+version: 0.1.5
 title: Discover X Founder Signals
 category: Venture Capital
 visibility: workspace
 tags:
-  - vc
-  - origination
-  - x
-  - apify
+- vc
+- origination
+- x
+- apify
 definition:
   name: Discover X Founder Signals
   slug: discover-x-founder-signals
@@ -20,20 +20,20 @@ definition:
     stage: source
     taskFamily: origination_source_discovery
     requiredSkills:
-      - vc-apify-x-founder-discovery
-      - vc-source-registry-and-state-management
-      - citation-enforcement
+    - vc-apify-x-founder-discovery
+    - vc-source-registry-and-state-management
+    - citation-enforcement
     recommendedAgentTemplate: vc_sourcing_operator
     plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
-      - vc_origination_pipeline
+    - vc_origination_pipeline
     supportedProjectScopes:
-      - project_instance
+    - project_instance
     scheduleDefaults:
       enabledByDefault: false
       requiresHumanApprovalToEnable: true
       cadence: daily
-      localTime: "07:25"
+      localTime: 07:25
       dryRunFirst: true
       defaultLookbackDays: 7
       defaultResultLimit: 50
@@ -51,44 +51,49 @@ definition:
       safety:
         externalWritesRequireApproval: true
     instructions:
-      executionInstructions: Use approved X/Twitter actor scope only. Mirror the reference pipeline's target pattern for build-in-public, first-person launch/building language, AI/LLM/product terms, UK/Ireland location signals, B2B/enterprise hints, product URLs, engagement, and founder-author evidence. Reject media, VC, newsletter, aggregator, and third-party news accounts.
-      missingInputPolicy: Ask for approved search terms, lookback window, budget/result cap, actor authorization, and seen-tweet state before discovery.
-      externalActionPolicy: Public-signal read and candidate proposal only. Do not engage authors, import candidates, sync to external systems, or create Deal Pipelines.
+      executionInstructions: Use approved X/Twitter actor scope only. Mirror the reference pipeline's target pattern for build-in-public,
+        first-person launch/building language, AI/LLM/product terms, UK/Ireland location signals, B2B/enterprise hints, product
+        URLs, engagement, and founder-author evidence. Reject media, VC, newsletter, aggregator, and third-party news accounts.
+      missingInputPolicy: Ask for approved search terms, lookback window, budget/result cap, actor authorization, and seen-tweet
+        state before discovery.
+      externalActionPolicy: Public-signal read and candidate proposal only. Do not engage authors, import candidates, sync
+        to external systems, or create Deal Pipelines.
       completionCriteria:
-        - Candidate preview includes tweet URL, author handle, founder/company identity, product URL, location signal, score reasons, and source receipt.
-        - Source-state update includes seen tweet IDs and rejected/noise counts.
-        - Cost/run metadata or missing cost metadata is explicit.
+      - Candidate preview includes tweet URL, author handle, founder/company identity, product URL, location signal, score
+        reasons, and source receipt.
+      - Source-state update includes seen tweet IDs and rejected/noise counts.
+      - Cost/run metadata or missing cost metadata is explicit.
 fields:
   input:
-    - key: x_discovery_scope
-      name: X Discovery Scope
-      fieldType: json
-      required: true
-      position: 0
-      config: {}
+  - key: x_discovery_scope
+    name: X Discovery Scope
+    fieldType: json
+    required: true
+    position: 0
+    config: {}
   output:
-    - key: x_founder_discovery_artifact_id
-      name: X Founder Discovery Artifact
-      fieldType: file
-      required: true
-      position: 0
-      config: {}
-    - key: discovery_report
-      name: Discovery Report
-      fieldType: richtext
-      required: false
-      position: 1
-      config:
-        rows: 8
-    - key: source_result_count
-      name: Source Result Count
-      fieldType: number
-      required: false
-      position: 2
-      config: {}
-    - key: source_state_summary
-      name: Source State Summary
-      fieldType: string
-      required: false
-      position: 3
-      config: {}
+  - key: x_founder_discovery_artifact_id
+    name: X Founder Discovery Artifact
+    fieldType: file
+    required: true
+    position: 0
+    config: {}
+  - key: discovery_report
+    name: Discovery Report
+    fieldType: richtext
+    required: false
+    position: 1
+    config:
+      rows: 8
+  - key: source_result_count
+    name: Source Result Count
+    fieldType: number
+    required: false
+    position: 2
+    config: {}
+  - key: source_state_summary
+    name: Source State Summary
+    fieldType: string
+    required: false
+    position: 3
+    config: {}

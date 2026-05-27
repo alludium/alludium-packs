@@ -1,33 +1,34 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.notion_setup
-version: 0.1.3
+version: 0.1.4
 title: Set Up Notion for Deal Pipelines
 category: Venture Capital
 visibility: workspace
 tags:
-  - vc
-  - notion
-  - setup
+- vc
+- notion
+- setup
 definition:
   name: Set Up Notion for Deal Pipelines
   slug: notion-setup
-  description: Coordinate Notion connection readiness, page/database discovery, read-preview policy, and optional update-proposal scope for Deal Pipeline setup.
+  description: Coordinate Notion connection readiness, page/database discovery, read-preview policy, and optional update-proposal
+    scope for Deal Pipeline setup.
   allowSubtasks: true
   definitionJson:
     vertical: vc
     taskFamily: integration_setup
     requiredSkills:
-      - vc-notion-discovery
-      - vc-notion-sync-read
-      - vc-notion-sync-write
-      - citation-enforcement
+    - vc-notion-discovery
+    - vc-notion-sync-read
+    - vc-notion-sync-write
+    - citation-enforcement
     recommendedAgentTemplate: vc_integration_operator
     plannedRecommendedAgentTemplate: vc_integration_operator
     supportedProjectTypes:
-      - vc_deal_room
+    - vc_deal_room
     supportedProjectScopes:
-      - project_management
+    - project_management
     integrationSetup:
       applicationExternalId: notion
       childTaskDefinitionTemplateIds:
@@ -35,59 +36,64 @@ definition:
         syncRead: vc.notion_sync_read
         syncWrite: vc.notion_sync_write
       defaultFlow:
-        - kind: discovery
-          taskDefinitionTemplateId: vc.notion_discovery
-          label: Explore Notion pages and databases
-        - kind: sync_read
-          taskDefinitionTemplateId: vc.notion_sync_read
-          label: Preview selected Notion context
-        - kind: sync_write
-          taskDefinitionTemplateId: vc.notion_sync_write
-          label: Draft update proposals
+      - kind: discovery
+        taskDefinitionTemplateId: vc.notion_discovery
+        label: Explore Notion pages and databases
+      - kind: sync_read
+        taskDefinitionTemplateId: vc.notion_sync_read
+        label: Preview selected Notion context
+      - kind: sync_write
+        taskDefinitionTemplateId: vc.notion_sync_write
+        label: Draft update proposals
     instructions:
-      executionInstructions: Confirm that Notion is a selected workspace/document source, check connection readiness, then coordinate page/database discovery and reviewed read-preview setup. Create child tasks from the declared integrationSetup flow only when the user chooses that step. Keep database imports, recurring sync, page writes, and update proposals disabled unless a later human approval explicitly creates that task.
-      missingInputPolicy: If Notion is not authorized or no page/database scope is selected, keep setup incomplete and ask for connection authorization, a supplied workspace map, or the source-scope decision needed for discovery.
-      externalActionPolicy: Setup orchestration only. Do not import databases, write pages, change permissions, enable recurring sync, or create Deal Pipeline projects from this setup task.
+      executionInstructions: Confirm that Notion is a selected workspace/document source, check connection readiness, then
+        coordinate page/database discovery and reviewed read-preview setup. Create child tasks from the declared integrationSetup
+        flow only when the user chooses that step. Keep database imports, recurring sync, page writes, and update proposals
+        disabled unless a later human approval explicitly creates that task.
+      missingInputPolicy: If Notion is not authorized or no page/database scope is selected, keep setup incomplete and ask
+        for connection authorization, a supplied workspace map, or the source-scope decision needed for discovery.
+      externalActionPolicy: Setup orchestration only. Do not import databases, write pages, change permissions, enable recurring
+        sync, or create Deal Pipeline projects from this setup task.
       completionCriteria:
-        - Connection readiness or missing-authorization evidence is recorded.
-        - Candidate page/database scope is complete or the unanswered scope questions are explicit.
-        - Read-preview and optional update-proposal policies are recorded without enabling external writes.
-        - The accepted connection scope states whether access is personal, project-shared, or workspace-shared.
+      - Connection readiness or missing-authorization evidence is recorded.
+      - Candidate page/database scope is complete or the unanswered scope questions are explicit.
+      - Read-preview and optional update-proposal policies are recorded without enabling external writes.
+      - The accepted connection scope states whether access is personal, project-shared, or workspace-shared.
     humanDecisionPoints:
-      - Choose whether the Notion connection is personal, project-shared, or workspace-shared.
-      - Choose the page, database, or workspace scope.
-      - Approve any read-preview, import, recurring sync, or write task separately.
+    - Choose whether the Notion connection is personal, project-shared, or workspace-shared.
+    - Choose the page, database, or workspace scope.
+    - Approve any read-preview, import, recurring sync, or write task separately.
 fields:
   input:
-    - key: setup_goal
-      name: Setup Goal
-      fieldType: string
-      required: true
-      position: 0
-      config: {}
+  - key: setup_goal
+    name: Setup Goal
+    fieldType: string
+    required: true
+    position: 0
+    config: {}
   output:
-    - key: setup_summary
-      name: Setup Summary
-      fieldType: richtext
-      required: false
-      position: 0
-      config:
-        rows: 8
-    - key: accepted_connection_scope
-      name: Accepted Connection Scope
-      fieldType: string
-      required: false
-      position: 1
-      config: {}
-    - key: child_task_plan
-      name: Child Task Plan
-      fieldType: json
-      required: false
-      position: 2
-      config: {}
-    - key: sync_policy
-      name: Sync Policy
-      fieldType: json
-      required: false
-      position: 3
-      config: {}
+  - key: setup_summary
+    name: Setup Summary
+    fieldType: richtext
+    required: false
+    position: 0
+    config:
+      rows: 8
+  - key: accepted_connection_scope
+    name: Accepted Connection Scope
+    fieldType: string
+    required: false
+    position: 1
+    config: {}
+  - key: child_task_plan
+    name: Child Task Plan
+    fieldType: json
+    required: false
+    position: 2
+    config: {}
+  - key: sync_policy
+    name: Sync Policy
+    fieldType: json
+    required: false
+    position: 3
+    config: {}

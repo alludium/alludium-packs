@@ -1,0 +1,87 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.prepare_second_reachout_email
+version: 0.1.0
+title: Prepare Second Reachout Email
+category: Venture Capital
+visibility: workspace
+tags:
+- vc
+- origination
+- outreach
+- email
+definition:
+  name: Prepare Second Reachout Email
+  slug: prepare-second-reachout-email
+  description: Draft a second-touch email for candidates with LinkedIn outreach sent and no response after the configured
+    wait period.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    stage: second_reachout_email
+    taskFamily: origination_outreach_drafts
+    documentRefs:
+    - documentId: vc.document.outreach_queue_template
+      usage: output_template
+      outputFieldKey: second_reachout_email_artifact_id
+    - documentId: vc.document.origination_source_strategy_guide
+      usage: methodology
+    - documentId: vc.document.template_use_guidance
+      usage: operating_guidance
+    requiredSkills:
+    - vc-outreach-draft-queue
+    - founder-outreach-and-intro-paths
+    - citation-enforcement
+    recommendedAgentTemplate: vc_sourcing_operator
+    plannedRecommendedAgentTemplate: vc_sourcing_operator
+    supportedProjectTypes:
+    - vc_origination_pipeline
+    supportedProjectScopes:
+    - project_instance
+    instructions:
+      executionInstructions: 'Draft a second-touch email only for candidates with a recorded LinkedIn reachout, no reply,
+        and an approved wait period. Use one concrete hook and a simple call request. Treat the email as a draft artifact
+        only; do not send email, set outreach status, or mutate external CRM/list stages without explicit human approval.
+        Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template`
+        sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status,
+        evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains
+        process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document
+        and preserve the document ID alongside the output artifact.'
+      missingInputPolicy: Ask for the prior LinkedIn reachout record, no-response date/window, founder email or email-finding
+        policy, candidate evidence, and approved sender before drafting.
+      externalActionPolicy: Draft only. Sending email, updating Outreach Status, and moving CRM stages require explicit human
+        approval.
+      completionCriteria:
+      - Email draft includes subject, body, evidence hook, recipient, prior-reachout reference, and no-response timing.
+      - Draft explains whether the candidate should remain active, move to no-response, watchlist, pass, or engaged outcome
+        review.
+      - No external send or status mutation occurs without explicit approval.
+fields:
+  input:
+  - key: second_reachout_scope
+    name: Second Reachout Scope
+    fieldType: json
+    required: true
+    position: 0
+    config: {}
+  output:
+  - key: second_reachout_email_artifact_id
+    name: Second Reachout Email Artifact
+    fieldType: file
+    required: true
+    position: 0
+    config:
+      documentRefId: vc.document.outreach_queue_template
+  - key: second_reachout_draft_count
+    name: Second Reachout Draft Count
+    fieldType: number
+    required: false
+    position: 1
+    config: {}
+  - key: second_reachout_summary
+    name: Second Reachout Summary
+    fieldType: richtext
+    required: false
+    position: 2
+    config:
+      rows: 8

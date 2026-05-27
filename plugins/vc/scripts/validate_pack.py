@@ -3572,8 +3572,14 @@ ORIGINATION_STAGE_LIFECYCLE_STAGES = {
     "enrich": {"review_backlog"},
     "score": {"review_backlog"},
     "review": {"review_backlog"},
-    "engage": {"review_backlog"},
-    "promote": {"review_backlog"},
+    "engage": {
+        "review_backlog",
+        "of_interest",
+        "connecting_on_linkedin",
+        "initial_reachout_linkedin",
+        "second_reachout_email",
+    },
+    "promote": {"review_backlog", "engaged_added_to_deal_funnel"},
     "operate": {"active", "source_degraded", "paused", "migration_in_progress"},
 }
 

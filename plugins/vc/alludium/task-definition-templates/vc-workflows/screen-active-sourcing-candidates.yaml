@@ -1,14 +1,14 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.screen_active_sourcing_candidates
-version: 0.1.10
+version: 0.1.11
 title: Screen Active Sourcing Candidates
 category: Venture Capital
 visibility: workspace
 tags:
-  - vc
-  - origination
-  - screening
+- vc
+- origination
+- screening
 definition:
   name: Screen Active Sourcing Candidates
   slug: screen-active-sourcing-candidates
@@ -19,30 +19,30 @@ definition:
     stage: review
     taskFamily: origination_screening
     documentRefs:
-      - documentId: vc.document.sourcing_scoring_rubric
-        usage: methodology
-        outputFieldKey: screening_artifact_id
-      - documentId: vc.document.origination_source_strategy_guide
-        usage: methodology
-      - documentId: vc.document.dedupe_novelty_policy
-        usage: policy
-      - documentId: vc.document.template_use_guidance
-        usage: operating_guidance
+    - documentId: vc.document.sourcing_scoring_rubric
+      usage: methodology
+      outputFieldKey: screening_artifact_id
+    - documentId: vc.document.origination_source_strategy_guide
+      usage: methodology
+    - documentId: vc.document.dedupe_novelty_policy
+      usage: policy
+    - documentId: vc.document.template_use_guidance
+      usage: operating_guidance
     requiredSkills:
-      - vc-sourcing-verdict-and-screening
-      - citation-enforcement
-      - investment-screening-framework
+    - vc-sourcing-verdict-and-screening
+    - citation-enforcement
+    - investment-screening-framework
     recommendedAgentTemplate: vc_sourcing_operator
     plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
-      - vc_origination_pipeline
+    - vc_origination_pipeline
     supportedProjectScopes:
-      - project_instance
+    - project_instance
     scheduleDefaults:
       enabledByDefault: false
       requiresHumanApprovalToEnable: true
       cadence: daily
-      localTime: "08:20"
+      localTime: 08:20
       dryRunFirst: true
     scheduling:
       schedulable: true
@@ -57,39 +57,49 @@ definition:
       safety:
         externalWritesRequireApproval: true
     instructions:
-      executionInstructions: >-
-        Screen active origination candidates using the reference pipeline's fast thesis filter rather than the downstream Deal Pipeline first-look task. Assess stage, geography, enterprise software, AI-native depth, named buyer, moat, and founder balance. Return PROCEED_TO_IC, DIG_FURTHER, or PASS and map those to review actions without downgrading protected manual decisions. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
-      missingInputPolicy: Ask for active candidate batch, current manual actions, thesis policy, protected-action list, and approved write mode before screening.
-      externalActionPolicy: Screening recommendation only unless explicit write approval is granted. Never downgrade protected manual decisions such as IC-Summary or Pass.
+      executionInstructions: 'Screen active origination candidates using the reference pipeline''s fast thesis filter rather
+        than the downstream Deal Pipeline first-look task. Assess stage, geography, enterprise software, AI-native depth,
+        named buyer, moat, and founder balance. Return PROCEED_TO_IC, DIG_FURTHER, or PASS and map those to review actions
+        without downgrading protected manual decisions. Use `definitionJson.documentRefs` as the durable document reference
+        contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring
+        or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations
+        and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with
+        `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the
+        output artifact.'
+      missingInputPolicy: Ask for active candidate batch, current manual actions, thesis policy, protected-action list, and
+        approved write mode before screening.
+      externalActionPolicy: Screening recommendation only unless explicit write approval is granted. Never downgrade protected
+        manual decisions such as IC-Summary or Pass.
       completionCriteria:
-        - Each screened candidate has thesis pillar statuses, key signals, verdict, verdict reason, protected-action handling, and receipts.
-        - Manual decision preservation is explicit.
+      - Each screened candidate has thesis pillar statuses, key signals, verdict, verdict reason, protected-action handling,
+        and receipts.
+      - Manual decision preservation is explicit.
 fields:
   input:
-    - key: screening_scope
-      name: Screening Scope
-      fieldType: json
-      required: true
-      position: 0
-      config: {}
+  - key: screening_scope
+    name: Screening Scope
+    fieldType: json
+    required: true
+    position: 0
+    config: {}
   output:
-    - key: screening_artifact_id
-      name: Screening Artifact
-      fieldType: file
-      required: true
-      position: 0
-      config:
-        documentRefId: vc.document.sourcing_scoring_rubric
-    - key: promotion_ready_count
-      name: Promotion Ready Count
-      fieldType: number
-      required: false
-      position: 1
-      config: {}
-    - key: screening_report
-      name: Screening Report
-      fieldType: richtext
-      required: false
-      position: 2
-      config:
-        rows: 8
+  - key: screening_artifact_id
+    name: Screening Artifact
+    fieldType: file
+    required: true
+    position: 0
+    config:
+      documentRefId: vc.document.sourcing_scoring_rubric
+  - key: promotion_ready_count
+    name: Promotion Ready Count
+    fieldType: number
+    required: false
+    position: 1
+    config: {}
+  - key: screening_report
+    name: Screening Report
+    fieldType: richtext
+    required: false
+    position: 2
+    config:
+      rows: 8

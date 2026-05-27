@@ -1,198 +1,209 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.coordinate_capital_call_and_completion
-version: 0.1.0
+version: 0.1.1
 title: Coordinate Capital Call And Completion
 category: Venture Capital
 visibility: workspace
 tags:
-  - vc
-  - closing
-  - capital-call
-  - completion
+- vc
+- closing
+- capital-call
+- completion
 definition:
   name: Coordinate Capital Call And Completion
   slug: coordinate-capital-call-and-completion
-  description: Track final closing administration, capital call status, funds transfer readiness, share-certificate receipt, and portfolio handoff triggers without initiating banking or legal completion actions.
+  description: Track final closing administration, capital call status, funds transfer readiness, share-certificate receipt,
+    and portfolio handoff triggers without initiating banking or legal completion actions.
   allowSubtasks: true
   definitionJson:
     vertical: vc
     stage: closing
     taskFamily: closing
     documentRefs:
-      - documentId: vc.document.completion_tracker_template
-        usage: output_template
-        outputFieldKey: completion_tracker_artifact_id
-      - documentId: vc.document.evidence_citation_style_guide
-        usage: style_guide
-      - documentId: vc.document.template_use_guidance
-        usage: operating_guidance
+    - documentId: vc.document.completion_tracker_template
+      usage: output_template
+      outputFieldKey: completion_tracker_artifact_id
+    - documentId: vc.document.evidence_citation_style_guide
+      usage: style_guide
+    - documentId: vc.document.template_use_guidance
+      usage: operating_guidance
     requiredSkills:
-      - closing-coordination-and-cp-tracking
-      - vc-task-and-next-step-generation
-      - citation-enforcement
+    - closing-coordination-and-cp-tracking
+    - vc-task-and-next-step-generation
+    - citation-enforcement
     plannedRecommendedAgentTemplate: vc_legal_compliance_desk
     recommendedAgentTemplate: vc_legal_compliance_desk
     supportedProjectTypes:
-      - vc_investment_management
+    - vc_investment_management
     sourceAnchors:
-      - source: investment-management-process-slides
-        anchor: slide-31
-        note: Closing process
-      - source: investment-management-process-slides
-        anchor: slide-33
-        note: Closing AI map
-      - source: public-pattern-review
-        anchor: deal-flow-stage-refactor-spec-public-pattern-review
-        note: Closing coordination with strict external-action boundaries
+    - source: investment-management-process-slides
+      anchor: slide-31
+      note: Closing process
+    - source: investment-management-process-slides
+      anchor: slide-33
+      note: Closing AI map
+    - source: public-pattern-review
+      anchor: deal-flow-stage-refactor-spec-public-pattern-review
+      note: Closing coordination with strict external-action boundaries
     instructions:
-      executionInstructions: >-
-        Track the final administrative closing sequence from conditions precedent verification, closing checklist, transaction bible, administrator status, capital call status, funds transfer status, and share certificate status. Produce completion status, readiness notes, blockers, and portfolio handoff trigger recommendations. Cite material claims, separate assumptions from evidence, and do not initiate banking, administrator instructions, legal completion actions, external messages, CRM writes, folder/project creation, child task creation, or stage movement without explicit human approval. Create or update a durable project file artifact named Completion Tracker and attach it to the required output field `completion_tracker_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+      executionInstructions: 'Track the final administrative closing sequence from conditions precedent verification, closing
+        checklist, transaction bible, administrator status, capital call status, funds transfer status, and share certificate
+        status. Produce completion status, readiness notes, blockers, and portfolio handoff trigger recommendations. Cite
+        material claims, separate assumptions from evidence, and do not initiate banking, administrator instructions, legal
+        completion actions, external messages, CRM writes, folder/project creation, child task creation, or stage movement
+        without explicit human approval. Create or update a durable project file artifact named Completion Tracker and attach
+        it to the required output field `completion_tracker_artifact_id`. Use `definitionJson.documentRefs` as the durable
+        document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology`
+        supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide`
+        governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries.
+        For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID
+        alongside the output artifact.'
       missingInputPolicy: Ask for CP verification, closing checklist, and transaction bible before producing completion readiness.
-      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, stage transition, administrator instruction, or banking action.
+      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation,
+        child task creation, stage transition, administrator instruction, or banking action.
       completionCriteria:
-        - Required input gaps are resolved or listed as assumptions/open questions.
-        - Completion tracker separates evidence-backed status from human/counsel/finance signoff.
-        - Handoff trigger identifies owner, dependency, and required human approval point.
+      - Required input gaps are resolved or listed as assumptions/open questions.
+      - Completion tracker separates evidence-backed status from human/counsel/finance signoff.
+      - Handoff trigger identifies owner, dependency, and required human approval point.
     humanDecisionPoints:
-      - Approve banking actions, administrator instructions, completion status, portfolio handoff, and stage movement.
-      - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+    - Approve banking actions, administrator instructions, completion status, portfolio handoff, and stage movement.
+    - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
     orchestration:
       parentTaskPolicy: none
       suggestedChildTasks: []
 fields:
   input:
-    - key: conditions_precedent_verification_artifact_id
-      name: Conditions Precedent Verification
-      fieldType: file
-      required: true
-      position: 0
-      config: {}
-    - key: closing_checklist_artifact_id
-      name: Closing Checklist
-      fieldType: file
-      required: true
-      position: 1
-      config: {}
-    - key: transaction_bible_artifact_id
-      name: Transaction Bible
-      fieldType: file
-      required: true
-      position: 2
-      config: {}
-    - key: administrator_contact
-      name: Administrator Contact
-      fieldType: string
-      required: false
-      position: 3
-      config: {}
-    - key: capital_call_status
-      name: Capital Call Status
-      fieldType: string
-      required: false
-      position: 4
-      config: {}
-    - key: funds_transfer_status
-      name: Funds Transfer Status
-      fieldType: string
-      required: false
-      position: 5
-      config: {}
-    - key: share_certificate_status
-      name: Share Certificate Status
-      fieldType: string
-      required: false
-      position: 6
-      config: {}
-
+  - key: conditions_precedent_verification_artifact_id
+    name: Conditions Precedent Verification
+    fieldType: file
+    required: true
+    position: 0
+    config: {}
+  - key: closing_checklist_artifact_id
+    name: Closing Checklist
+    fieldType: file
+    required: true
+    position: 1
+    config: {}
+  - key: transaction_bible_artifact_id
+    name: Transaction Bible
+    fieldType: file
+    required: true
+    position: 2
+    config: {}
+  - key: administrator_contact
+    name: Administrator Contact
+    fieldType: string
+    required: false
+    position: 3
+    config: {}
+  - key: capital_call_status
+    name: Capital Call Status
+    fieldType: string
+    required: false
+    position: 4
+    config: {}
+  - key: funds_transfer_status
+    name: Funds Transfer Status
+    fieldType: string
+    required: false
+    position: 5
+    config: {}
+  - key: share_certificate_status
+    name: Share Certificate Status
+    fieldType: string
+    required: false
+    position: 6
+    config: {}
   output:
-    - key: completion_tracker_artifact_id
-      name: Completion Tracker
-      fieldType: file
-      required: true
-      position: 0
-      config:
-        documentRefId: vc.document.completion_tracker_template
-    - key: capital_call_status_summary
-      name: Capital Call Status Summary
-      fieldType: richtext
-      required: false
-      position: 1
-      config:
-        rows: 4
-    - key: funds_transfer_readiness
-      name: Funds Transfer Readiness
-      fieldType: string
-      required: false
-      position: 2
-      config: {}
-    - key: share_certificate_receipt_status
-      name: Share Certificate Receipt Status
-      fieldType: string
-      required: false
-      position: 3
-      config: {}
-    - key: portfolio_handoff_trigger
-      name: Portfolio Handoff Trigger
-      fieldType: string
-      required: false
-      position: 4
-      config: {}
-    - key: summary
-      name: Summary
-      fieldType: richtext
-      required: false
-      position: 5
-      config:
-        rows: 5
-    - key: recommendation
-      name: Recommendation
-      fieldType: string
-      required: false
-      position: 6
-      config: {}
-    - key: source_links
-      name: Source Links
-      fieldType: string
-      required: false
-      position: 7
-      config: {}
-    - key: assumptions
-      name: Assumptions
-      fieldType: string
-      required: false
-      position: 8
-      config: {}
-    - key: evidence_quality
-      name: Evidence Quality
-      fieldType: json
-      required: false
-      position: 9
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: false
-      position: 10
-      config: {}
-    - key: risks
-      name: Risks
-      fieldType: json
-      required: false
-      position: 11
-      config: {}
-    - key: human_decision_points
-      name: Human Decision Points
-      fieldType: string
-      required: false
-      position: 12
-      config: {}
-    - key: next_actions
-      name: Next Actions
-      fieldType: json
-      required: false
-      position: 13
-      config: {}
+  - key: completion_tracker_artifact_id
+    name: Completion Tracker
+    fieldType: file
+    required: true
+    position: 0
+    config:
+      documentRefId: vc.document.completion_tracker_template
+  - key: capital_call_status_summary
+    name: Capital Call Status Summary
+    fieldType: richtext
+    required: false
+    position: 1
+    config:
+      rows: 4
+  - key: funds_transfer_readiness
+    name: Funds Transfer Readiness
+    fieldType: string
+    required: false
+    position: 2
+    config: {}
+  - key: share_certificate_receipt_status
+    name: Share Certificate Receipt Status
+    fieldType: string
+    required: false
+    position: 3
+    config: {}
+  - key: portfolio_handoff_trigger
+    name: Portfolio Handoff Trigger
+    fieldType: string
+    required: false
+    position: 4
+    config: {}
+  - key: summary
+    name: Summary
+    fieldType: richtext
+    required: false
+    position: 5
+    config:
+      rows: 5
+  - key: recommendation
+    name: Recommendation
+    fieldType: string
+    required: false
+    position: 6
+    config: {}
+  - key: source_links
+    name: Source Links
+    fieldType: string
+    required: false
+    position: 7
+    config: {}
+  - key: assumptions
+    name: Assumptions
+    fieldType: string
+    required: false
+    position: 8
+    config: {}
+  - key: evidence_quality
+    name: Evidence Quality
+    fieldType: json
+    required: false
+    position: 9
+    config: {}
+  - key: open_questions
+    name: Open Questions
+    fieldType: json
+    required: false
+    position: 10
+    config: {}
+  - key: risks
+    name: Risks
+    fieldType: json
+    required: false
+    position: 11
+    config: {}
+  - key: human_decision_points
+    name: Human Decision Points
+    fieldType: string
+    required: false
+    position: 12
+    config: {}
+  - key: next_actions
+    name: Next Actions
+    fieldType: json
+    required: false
+    position: 13
+    config: {}
 runtime:
   defaultExecutionContext:
     sourceMetadata:

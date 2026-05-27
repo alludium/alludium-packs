@@ -118,7 +118,7 @@
       {
         "key": "review_and_engagement",
         "label": "Review and engagement prep",
-        "description": "Optional review, screening, portfolio-overlap, and outreach-draft tasks that operate on approved candidate batches.",
+        "description": "Optional review, screening, outbound-state, and outreach-draft tasks that operate on approved candidate batches.",
         "taskDefinitionSlugs": [
           "review-portfolio-overlap",
           "screen-active-sourcing-candidates",
@@ -192,7 +192,7 @@
     }
   },
   "initialVersion": {
-    "version": "0.2.0",
+    "version": "0.2.1",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -371,6 +371,14 @@
         "description": "Number of candidates currently recommended for promotion review."
       },
       {
+        "id": "field-outreach-draft-count",
+        "key": "outreach_draft_count",
+        "label": "Outreach Draft Count",
+        "kind": "number",
+        "required": false,
+        "description": "Number of current outbound draft records produced for approved origination candidates."
+      },
+      {
         "id": "field-latest-run-receipt-artifact-id",
         "key": "latest_run_receipt_artifact_id",
         "label": "Latest Run Receipt Artifact ID",
@@ -433,6 +441,80 @@
         "kind": "text",
         "required": false,
         "description": "Artifact ID for the latest outreach draft queue."
+      },
+      {
+        "id": "field-outbound-status",
+        "key": "outbound_status",
+        "label": "Outbound Status",
+        "kind": "enum",
+        "required": false,
+        "description": "Current outbound relationship state for approved origination candidates.",
+        "options": [
+          {
+            "value": "of_interest",
+            "label": "Of Interest"
+          },
+          {
+            "value": "connecting_on_linkedin",
+            "label": "Connecting on LinkedIn"
+          },
+          {
+            "value": "initial_reachout_linkedin",
+            "label": "Initial Reachout - LinkedIn"
+          },
+          {
+            "value": "second_reachout_email",
+            "label": "2nd Reachout - Email"
+          },
+          {
+            "value": "no_response",
+            "label": "No Response"
+          },
+          {
+            "value": "engaged_added_to_deal_funnel",
+            "label": "Engaged - Added to Deal Funnel"
+          },
+          {
+            "value": "pass",
+            "label": "Pass"
+          },
+          {
+            "value": "watchlist",
+            "label": "Watchlist"
+          }
+        ]
+      },
+      {
+        "id": "field-latest-connection-record-artifact-id",
+        "key": "latest_connection_record_artifact_id",
+        "label": "Latest Connection Record Artifact ID",
+        "kind": "text",
+        "required": false,
+        "description": "Artifact ID for the latest recorded LinkedIn connection attempt."
+      },
+      {
+        "id": "field-latest-initial-linkedin-reachout-artifact-id",
+        "key": "latest_initial_linkedin_reachout_artifact_id",
+        "label": "Latest Initial LinkedIn Reachout Artifact ID",
+        "kind": "text",
+        "required": false,
+        "description": "Artifact ID for the latest initial LinkedIn reachout draft."
+      },
+      {
+        "id": "field-latest-second-reachout-email-artifact-id",
+        "key": "latest_second_reachout_email_artifact_id",
+        "label": "Latest 2nd Reachout Email Artifact ID",
+        "kind": "text",
+        "required": false,
+        "description": "Artifact ID for the latest second-touch email draft."
+      },
+      {
+        "id": "field-latest-outreach-outcome-artifact-id",
+        "key": "latest_outreach_outcome_artifact_id",
+        "label": "Latest Outreach Outcome Artifact ID",
+        "kind": "text",
+        "required": false,
+        "description": "Artifact ID for the latest no-response, engaged, pass, or watchlist outcome review."
       },
       {
         "id": "field-latest-promotion-package-artifact-id",
@@ -535,7 +617,7 @@
         "description": "Latest thesis target list artifact produced by source-thesis-targets."
       }
     ],
-    "instructionTemplate": "This project is a VC origination pipeline for configuring and operating upstream sourcing. Treat source credentials, actor allowlists, company registry previews, and review policy as setup evidence. Do not run scheduled sourcing, score candidates, write to external systems, send outreach, or promote candidates into Deal Pipelines without a separate human-approved task.",
+    "instructionTemplate": "This project is a VC origination pipeline for configuring and operating upstream sourcing plus approved outbound follow-up. Treat source credentials, actor allowlists, company registry previews, review policy, and outbound state as setup/project evidence. Do not run scheduled sourcing, score candidates, write to external systems, send outreach, or promote candidates into Deal Pipelines without a separate human-approved task.",
     "projectManager": {
       "displayName": "Origination Manager",
       "labels": {
@@ -548,23 +630,24 @@
         "roleDescription": "Source-readiness and sourcing-operations coordinator for a standing VC origination pipeline.",
         "tone": "Operational, cautious about spend and credentials, and clear about human approval gates.",
         "responsibilities": [
-          "keep thesis, source registry, review policy, and credential readiness clear",
-          "surface source health, spend, backlog, and promotion-readiness issues",
-          "coordinate approved origination tasks and setup tasks",
+          "keep thesis, source registry, review policy, credential readiness, and outbound state clear",
+          "surface source health, spend, backlog, outbound follow-up, and promotion-readiness issues",
+          "coordinate approved origination tasks, setup tasks, and outbound drafting tasks",
           "separate upstream sourcing recommendations from downstream Deal Pipeline promotion"
         ],
         "boundaries": [
           "do not run scheduled sourcing, score candidates, write to external systems, send outreach, or promote candidates into Deal Pipelines without a separate human-approved task",
-          "do not assume provider credentials, actor allowlists, source scopes, or budgets are ready unless project data says so"
+          "do not assume provider credentials, actor allowlists, source scopes, budgets, outbound status, or response state are ready unless project data says so"
         ]
       },
       "greeting": {
-        "message": "I'm your **Origination Manager** for this origination pipeline. I can help track source readiness, credential gaps, sourcing operations, and promotion blockers while keeping spend, outreach, and Deal Pipeline promotion behind explicit approval.",
+        "message": "I'm your **Origination Manager** for this origination pipeline. I can help track source readiness, credential gaps, sourcing operations, outbound follow-up, and promotion blockers while keeping spend, outreach sends, CRM writes, and Deal Pipeline promotion behind explicit approval.",
         "starterPrompts": [
           "Summarize this origination pipeline and its readiness.",
           "What source or credential issues need attention?",
           "Suggest the next setup tasks for this pipeline.",
-          "Review promotion-ready candidates and blockers."
+          "Review promotion-ready candidates and blockers.",
+          "Review outbound follow-up status and next actions."
         ]
       }
     },
@@ -575,6 +658,14 @@
       "needs_credentials",
       "source_degraded",
       "review_backlog",
+      "of_interest",
+      "connecting_on_linkedin",
+      "initial_reachout_linkedin",
+      "second_reachout_email",
+      "no_response",
+      "engaged_added_to_deal_funnel",
+      "pass",
+      "watchlist",
       "paused",
       "migration_in_progress",
       "archived"
@@ -667,6 +758,122 @@
       {
         "from": "migration_in_progress",
         "to": "archived"
+      },
+      {
+        "from": "review_backlog",
+        "to": "of_interest"
+      },
+      {
+        "from": "review_backlog",
+        "to": "pass"
+      },
+      {
+        "from": "review_backlog",
+        "to": "watchlist"
+      },
+      {
+        "from": "of_interest",
+        "to": "connecting_on_linkedin"
+      },
+      {
+        "from": "of_interest",
+        "to": "pass"
+      },
+      {
+        "from": "of_interest",
+        "to": "watchlist"
+      },
+      {
+        "from": "connecting_on_linkedin",
+        "to": "initial_reachout_linkedin"
+      },
+      {
+        "from": "connecting_on_linkedin",
+        "to": "no_response"
+      },
+      {
+        "from": "connecting_on_linkedin",
+        "to": "pass"
+      },
+      {
+        "from": "connecting_on_linkedin",
+        "to": "watchlist"
+      },
+      {
+        "from": "initial_reachout_linkedin",
+        "to": "second_reachout_email"
+      },
+      {
+        "from": "initial_reachout_linkedin",
+        "to": "engaged_added_to_deal_funnel"
+      },
+      {
+        "from": "initial_reachout_linkedin",
+        "to": "no_response"
+      },
+      {
+        "from": "initial_reachout_linkedin",
+        "to": "pass"
+      },
+      {
+        "from": "initial_reachout_linkedin",
+        "to": "watchlist"
+      },
+      {
+        "from": "second_reachout_email",
+        "to": "engaged_added_to_deal_funnel"
+      },
+      {
+        "from": "second_reachout_email",
+        "to": "no_response"
+      },
+      {
+        "from": "second_reachout_email",
+        "to": "pass"
+      },
+      {
+        "from": "second_reachout_email",
+        "to": "watchlist"
+      },
+      {
+        "from": "no_response",
+        "to": "watchlist"
+      },
+      {
+        "from": "watchlist",
+        "to": "of_interest"
+      },
+      {
+        "from": "engaged_added_to_deal_funnel",
+        "to": "archived"
+      },
+      {
+        "from": "no_response",
+        "to": "archived"
+      },
+      {
+        "from": "pass",
+        "to": "archived"
+      },
+      {
+        "from": "watchlist",
+        "to": "archived"
+      },
+      {
+        "from": "of_interest",
+        "to": "archived"
+      },
+      {
+        "from": "connecting_on_linkedin",
+        "to": "archived"
+      },
+      {
+        "from": "initial_reachout_linkedin",
+        "to": "archived"
+      },
+      {
+        "from": "second_reachout_email",
+        "to": "archived"
       }
     ],
     "commandView": {
@@ -675,7 +882,7 @@
       "collectionLabel": "Origination Pipelines",
       "overviewTitle": "Origination overview",
       "overviewAriaLabel": "Open origination pipeline data",
-      "overviewFallback": "Configure thesis, source scope, and credential readiness in Data.",
+      "overviewFallback": "Configure thesis, source scope, credential readiness, and outbound state in Data.",
       "executionTitle": "Alludium is preparing origination setup",
       "stageGroups": [
         {
@@ -699,7 +906,17 @@
           "key": "review",
           "label": "Review",
           "states": [
-            "review_backlog"
+            "review_backlog",
+            "of_interest"
+          ]
+        },
+        {
+          "key": "outbound",
+          "label": "Outbound",
+          "states": [
+            "connecting_on_linkedin",
+            "initial_reachout_linkedin",
+            "second_reachout_email"
           ]
         },
         {
@@ -714,6 +931,10 @@
           "key": "outcomes",
           "label": "Outcomes",
           "states": [
+            "no_response",
+            "engaged_added_to_deal_funnel",
+            "pass",
+            "watchlist",
             "archived"
           ]
         }
@@ -1283,7 +1504,7 @@
         "id": "mapping-prepare-outreach-draft-queue",
         "taskDefinitionSlug": "prepare-outreach-draft-queue",
         "taskDefinitionTemplateId": "vc.prepare_outreach_draft_queue",
-        "lifecycleStage": "review_backlog",
+        "lifecycleStage": "of_interest",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -1304,6 +1525,11 @@
             "taskField": "outreach_queue_artifact_id",
             "target": "project.field",
             "targetPath": "latest_outreach_queue_artifact_id"
+          },
+          {
+            "taskField": "outreach_draft_count",
+            "target": "project.field",
+            "targetPath": "outreach_draft_count"
           }
         ]
       },
@@ -1311,7 +1537,7 @@
         "id": "mapping-promote-candidate-to-deal-room",
         "taskDefinitionSlug": "promote-candidate-to-deal-room",
         "taskDefinitionTemplateId": "vc.promote_candidate_to_deal_room",
-        "lifecycleStage": "review_backlog",
+        "lifecycleStage": "engaged_added_to_deal_funnel",
         "projectScope": "project_instance",
         "activationPolicy": {
           "mode": "manual_review",
@@ -1507,6 +1733,138 @@
           "requiresHumanApproval": true,
           "createTaskWhenLifecycleStageEntered": false
         }
+      },
+      {
+        "id": "mapping-record-linkedin-connection-attempt",
+        "taskDefinitionSlug": "record-linkedin-connection-attempt",
+        "taskDefinitionTemplateId": "vc.record_linkedin_connection_attempt",
+        "lifecycleStage": "connecting_on_linkedin",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "connection_attempt",
+            "source": "project.field",
+            "sourcePath": "latest_outreach_queue_artifact_id",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "connection_record_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_connection_record_artifact_id"
+          },
+          {
+            "taskField": "outbound_status",
+            "target": "project.field",
+            "targetPath": "outbound_status"
+          }
+        ]
+      },
+      {
+        "id": "mapping-prepare-initial-linkedin-reachout",
+        "taskDefinitionSlug": "prepare-initial-linkedin-reachout",
+        "taskDefinitionTemplateId": "vc.prepare_initial_linkedin_reachout",
+        "lifecycleStage": "initial_reachout_linkedin",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "initial_reachout_scope",
+            "source": "project.field",
+            "sourcePath": "latest_connection_record_artifact_id",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "initial_linkedin_reachout_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_initial_linkedin_reachout_artifact_id"
+          },
+          {
+            "taskField": "initial_reachout_draft_count",
+            "target": "project.field",
+            "targetPath": "outreach_draft_count"
+          }
+        ]
+      },
+      {
+        "id": "mapping-prepare-second-reachout-email",
+        "taskDefinitionSlug": "prepare-second-reachout-email",
+        "taskDefinitionTemplateId": "vc.prepare_second_reachout_email",
+        "lifecycleStage": "second_reachout_email",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "second_reachout_scope",
+            "source": "project.field",
+            "sourcePath": "latest_initial_linkedin_reachout_artifact_id",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "second_reachout_email_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_second_reachout_email_artifact_id"
+          },
+          {
+            "taskField": "second_reachout_draft_count",
+            "target": "project.field",
+            "targetPath": "outreach_draft_count"
+          }
+        ]
+      },
+      {
+        "id": "mapping-review-outreach-outcome",
+        "taskDefinitionSlug": "review-outreach-outcome",
+        "taskDefinitionTemplateId": "vc.review_outreach_outcome",
+        "lifecycleStage": "second_reachout_email",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "outreach_state",
+            "source": "project.field",
+            "sourcePath": "latest_second_reachout_email_artifact_id",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "outreach_outcome_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_outreach_outcome_artifact_id"
+          },
+          {
+            "taskField": "recommended_terminal_state",
+            "target": "project.field",
+            "targetPath": "outbound_status"
+          }
+        ]
       }
     ]
   }

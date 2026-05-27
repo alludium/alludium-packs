@@ -1,15 +1,15 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.discover_linkedin_founders
-version: 0.1.4
+version: 0.1.5
 title: Discover LinkedIn Founder Candidates
 category: Venture Capital
 visibility: workspace
 tags:
-  - vc
-  - origination
-  - linkedin
-  - apify
+- vc
+- origination
+- linkedin
+- apify
 definition:
   name: Discover LinkedIn Founder Candidates
   slug: discover-linkedin-founders
@@ -20,21 +20,21 @@ definition:
     stage: source
     taskFamily: origination_source_discovery
     requiredSkills:
-      - vc-apify-linkedin-founder-discovery
-      - vc-source-registry-and-state-management
-      - citation-enforcement
+    - vc-apify-linkedin-founder-discovery
+    - vc-source-registry-and-state-management
+    - citation-enforcement
     recommendedAgentTemplate: vc_sourcing_operator
     plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
-      - vc_origination_pipeline
+    - vc_origination_pipeline
     supportedProjectScopes:
-      - project_instance
+    - project_instance
     scheduleDefaults:
       enabledByDefault: false
       requiresHumanApprovalToEnable: true
       cadence: weekly
       dayOfWeek: sunday
-      localTime: "07:20"
+      localTime: 07:20
       dryRunFirst: true
       defaultResultLimit: 200
       budgetGuardrail: require_apify_budget
@@ -51,44 +51,51 @@ definition:
       safety:
         externalWritesRequireApproval: true
     instructions:
-      executionInstructions: Use only approved Apify LinkedIn actor scopes. Mirror the reference pipeline's four-track model covering active AI founders, pedigree founders, exited or serial founders, and academic spinouts. Preserve per-query pagination/offsets, exhaustion locks, seen profile IDs, company URL slug dedupe, and quarantine rows without stable company identifiers. Treat LinkedIn people discovery as weekly by default because it is the expensive source.
-      missingInputPolicy: Ask for actor allowlist, track selection, geography, result caps, query budget, dedupe-state availability, and whether this is a weekly full run or forced override.
-      externalActionPolicy: Discovery proposal only. Do not scrape unapproved profiles, bypass platform policy, import candidates, write CRM records, send outreach, or create Deal Pipelines.
+      executionInstructions: Use only approved Apify LinkedIn actor scopes. Mirror the reference pipeline's four-track model
+        covering active AI founders, pedigree founders, exited or serial founders, and academic spinouts. Preserve per-query
+        pagination/offsets, exhaustion locks, seen profile IDs, company URL slug dedupe, and quarantine rows without stable
+        company identifiers. Treat LinkedIn people discovery as weekly by default because it is the expensive source.
+      missingInputPolicy: Ask for actor allowlist, track selection, geography, result caps, query budget, dedupe-state availability,
+        and whether this is a weekly full run or forced override.
+      externalActionPolicy: Discovery proposal only. Do not scrape unapproved profiles, bypass platform policy, import candidates,
+        write CRM records, send outreach, or create Deal Pipelines.
       completionCriteria:
-        - Candidate preview includes track, founder profile URL, company name, company LinkedIn URL or stable key, founder role, geography evidence, score reasons, and source receipt.
-        - Source-state update includes seen profile IDs, company slugs, query offsets, exhaustion/rewind notes, and quarantine rows.
-        - Cost/run metadata or missing cost metadata is explicit.
+      - Candidate preview includes track, founder profile URL, company name, company LinkedIn URL or stable key, founder role,
+        geography evidence, score reasons, and source receipt.
+      - Source-state update includes seen profile IDs, company slugs, query offsets, exhaustion/rewind notes, and quarantine
+        rows.
+      - Cost/run metadata or missing cost metadata is explicit.
 fields:
   input:
-    - key: linkedin_discovery_scope
-      name: LinkedIn Discovery Scope
-      fieldType: json
-      required: true
-      position: 0
-      config: {}
+  - key: linkedin_discovery_scope
+    name: LinkedIn Discovery Scope
+    fieldType: json
+    required: true
+    position: 0
+    config: {}
   output:
-    - key: linkedin_discovery_artifact_id
-      name: LinkedIn Discovery Artifact
-      fieldType: file
-      required: true
-      position: 0
-      config: {}
-    - key: discovery_report
-      name: Discovery Report
-      fieldType: richtext
-      required: false
-      position: 1
-      config:
-        rows: 8
-    - key: source_result_count
-      name: Source Result Count
-      fieldType: number
-      required: false
-      position: 2
-      config: {}
-    - key: source_state_summary
-      name: Source State Summary
-      fieldType: string
-      required: false
-      position: 3
-      config: {}
+  - key: linkedin_discovery_artifact_id
+    name: LinkedIn Discovery Artifact
+    fieldType: file
+    required: true
+    position: 0
+    config: {}
+  - key: discovery_report
+    name: Discovery Report
+    fieldType: richtext
+    required: false
+    position: 1
+    config:
+      rows: 8
+  - key: source_result_count
+    name: Source Result Count
+    fieldType: number
+    required: false
+    position: 2
+    config: {}
+  - key: source_state_summary
+    name: Source State Summary
+    fieldType: string
+    required: false
+    position: 3
+    config: {}

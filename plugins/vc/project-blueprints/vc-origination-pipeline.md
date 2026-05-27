@@ -101,7 +101,55 @@ Project-management tasks that operate across a project suite, source pipeline, o
 | [Score Sourcing Candidates](../tasks/score-sourcing-candidates.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [`vc-sourcing-verdict-and-screening`](../skills/vc-sourcing-verdict-and-screening/SKILL.md)<br>[`vc-sourcing-dedupe-and-novelty-check`](../skills/vc-sourcing-dedupe-and-novelty-check/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | [`vc.document.sourcing_scoring_rubric`](../alludium/documents/origination/sourcing-scoring-rubric.md) (methodology, to `scoring_artifact_id`)<br>[`vc.document.origination_source_strategy_guide`](../alludium/documents/origination/origination-source-strategy-guide.md) (methodology)<br>[`vc.document.template_use_guidance`](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
 | [Sync Sourcing Candidates](../tasks/sync-sourcing-candidates.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [`vc-source-registry-and-state-management`](../skills/vc-source-registry-and-state-management/SKILL.md)<br>[`vc-sourcing-dedupe-and-novelty-check`](../skills/vc-sourcing-dedupe-and-novelty-check/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md)<br>[`vc-notion-sync-write`](../skills/vc-notion-sync-write/SKILL.md) | None declared | None declared |
 | [Prepare Sourcing IC Summary](../tasks/prepare-sourcing-ic-summary.md) | [IC Prep Producer](../agents/vc-ic-prep-producer.md) | [`vc-origination-ic-summary-preparation`](../skills/vc-origination-ic-summary-preparation/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | [`vc.document.sourcing_ic_summary_template`](../alludium/documents/origination/sourcing-ic-summary-template.md) (output_template, to `ic_summary_artifact_id`)<br>[`vc.document.origination_source_strategy_guide`](../alludium/documents/origination/origination-source-strategy-guide.md) (methodology)<br>[`vc.document.evidence_citation_style_guide`](../alludium/documents/shared/evidence-citation-style-guide.md) (style_guide)<br>[`vc.document.template_use_guidance`](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | `alludium-platform`<br>`exa-mcp-hosted`<br>`brave-search-mcp`<br>`serpapi-mcp`<br>`dealroom-mcp`<br>`google_drive` |
+
+## Of Interest
+
+| Task | Agent | Skills | Documents | Integrations |
+| --- | --- | --- | --- | --- |
+| None mapped | None declared | None declared | None declared | None declared |
+
+## Connecting On Linkedin
+
+| Task | Agent | Skills | Documents | Integrations |
+| --- | --- | --- | --- | --- |
+| [Record LinkedIn Connection Attempt](../tasks/record-linkedin-connection-attempt.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [`vc-outreach-draft-queue`](../skills/vc-outreach-draft-queue/SKILL.md)<br>[`founder-outreach-and-intro-paths`](../skills/founder-outreach-and-intro-paths/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | [`vc.document.outreach_queue_template`](../alludium/documents/origination/outreach-queue-template.md) (output_template, to `connection_record_artifact_id`)<br>[`vc.document.template_use_guidance`](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
+
+## Initial Reachout Linkedin
+
+| Task | Agent | Skills | Documents | Integrations |
+| --- | --- | --- | --- | --- |
+| [Prepare Initial LinkedIn Reachout](../tasks/prepare-initial-linkedin-reachout.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [`vc-outreach-draft-queue`](../skills/vc-outreach-draft-queue/SKILL.md)<br>[`founder-outreach-and-intro-paths`](../skills/founder-outreach-and-intro-paths/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | [`vc.document.outreach_queue_template`](../alludium/documents/origination/outreach-queue-template.md) (output_template, to `initial_linkedin_reachout_artifact_id`)<br>[`vc.document.origination_source_strategy_guide`](../alludium/documents/origination/origination-source-strategy-guide.md) (methodology)<br>[`vc.document.template_use_guidance`](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
+
+## Second Reachout Email
+
+| Task | Agent | Skills | Documents | Integrations |
+| --- | --- | --- | --- | --- |
+| [Prepare Second Reachout Email](../tasks/prepare-second-reachout-email.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [`vc-outreach-draft-queue`](../skills/vc-outreach-draft-queue/SKILL.md)<br>[`founder-outreach-and-intro-paths`](../skills/founder-outreach-and-intro-paths/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | [`vc.document.outreach_queue_template`](../alludium/documents/origination/outreach-queue-template.md) (output_template, to `second_reachout_email_artifact_id`)<br>[`vc.document.origination_source_strategy_guide`](../alludium/documents/origination/origination-source-strategy-guide.md) (methodology)<br>[`vc.document.template_use_guidance`](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
+| [Review Outreach Outcome](../tasks/review-outreach-outcome.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [`vc-origination-deal-room-promotion`](../skills/vc-origination-deal-room-promotion/SKILL.md)<br>[`vc-outreach-draft-queue`](../skills/vc-outreach-draft-queue/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md) | [`vc.document.promotion_package_template`](../alludium/documents/origination/promotion-package-template.md) (output_template, to `outreach_outcome_artifact_id`)<br>[`vc.document.origination_source_strategy_guide`](../alludium/documents/origination/origination-source-strategy-guide.md) (methodology)<br>[`vc.document.template_use_guidance`](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
+
+## No Response
+
+| Task | Agent | Skills | Documents | Integrations |
+| --- | --- | --- | --- | --- |
+| None mapped | None declared | None declared | None declared | None declared |
+
+## Engaged Added To Deal Funnel
+
+| Task | Agent | Skills | Documents | Integrations |
+| --- | --- | --- | --- | --- |
 | [Promote Candidate to Deal Pipeline](../tasks/promote-candidate-to-deal-room.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [`vc-origination-deal-room-promotion`](../skills/vc-origination-deal-room-promotion/SKILL.md)<br>[`citation-enforcement`](../skills/citation-enforcement/SKILL.md)<br>[`deal-room-setup-and-source-ingestion`](../skills/deal-room-setup-and-source-ingestion/SKILL.md) | [`vc.document.promotion_package_template`](../alludium/documents/origination/promotion-package-template.md) (output_template, to `promotion_package_artifact_id`)<br>[`vc.document.origination_source_strategy_guide`](../alludium/documents/origination/origination-source-strategy-guide.md) (methodology)<br>[`vc.document.template_use_guidance`](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | None declared |
+
+## Pass
+
+| Task | Agent | Skills | Documents | Integrations |
+| --- | --- | --- | --- | --- |
+| None mapped | None declared | None declared | None declared | None declared |
+
+## Watchlist
+
+| Task | Agent | Skills | Documents | Integrations |
+| --- | --- | --- | --- | --- |
+| None mapped | None declared | None declared | None declared | None declared |
 
 ## Paused
 

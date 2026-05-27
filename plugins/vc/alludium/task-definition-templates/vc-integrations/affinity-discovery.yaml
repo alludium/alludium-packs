@@ -1,14 +1,14 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.affinity_discovery
-version: 0.1.3
+version: 0.1.4
 title: Explore Affinity Lists and Stages
 category: Venture Capital
 visibility: workspace
 tags:
-  - vc
-  - affinity
-  - discovery
+- vc
+- affinity
+- discovery
 definition:
   name: Explore Affinity Lists and Stages
   slug: affinity-discovery
@@ -18,45 +18,50 @@ definition:
     vertical: vc
     taskFamily: integration_discovery
     requiredSkills:
-      - vc-affinity-discovery
-      - citation-enforcement
+    - vc-affinity-discovery
+    - citation-enforcement
     recommendedAgentTemplate: vc_integration_operator
     plannedRecommendedAgentTemplate: vc_integration_operator
     supportedProjectTypes:
-      - vc_deal_room
+    - vc_deal_room
     supportedProjectScopes:
-      - project_management
+    - project_management
     instructions:
-      executionInstructions: Use the connected `affinity-mcp-server` application to enumerate Affinity lists, stages/status fields, key CRM fields, and object counts. Expected tools include `affinity_list_opportunities`, `affinity_get_opportunity`, `affinity_get_list_entries`, `affinity_get_field_values`, and `affinity_get_field_value_changes` when discovered. Ask the user to choose the list/source and active stages before any import or sync-read task.
-      missingInputPolicy: If Affinity has no authorized connection or no discovered tools, report the setup gap and ask for connection authorization or an exported snapshot.
-      externalActionPolicy: Read-only discovery. Do not import, sync, update CRM fields, write notes, move stages, or create tasks.
+      executionInstructions: Use the connected `affinity-mcp-server` application to enumerate Affinity lists, stages/status
+        fields, key CRM fields, and object counts. Expected tools include `affinity_list_opportunities`, `affinity_get_opportunity`,
+        `affinity_get_list_entries`, `affinity_get_field_values`, and `affinity_get_field_value_changes` when discovered.
+        Ask the user to choose the list/source and active stages before any import or sync-read task.
+      missingInputPolicy: If Affinity has no authorized connection or no discovered tools, report the setup gap and ask for
+        connection authorization or an exported snapshot.
+      externalActionPolicy: Read-only discovery. Do not import, sync, update CRM fields, write notes, move stages, or create
+        tasks.
       completionCriteria:
-        - Candidate Affinity lists/sources and stages are listed with counts when available.
-        - The report names the Affinity tool IDs used or missing.
-        - User choices needed before import are explicit.
+      - Candidate Affinity lists/sources and stages are listed with counts when available.
+      - The report names the Affinity tool IDs used or missing.
+      - User choices needed before import are explicit.
     humanDecisionPoints:
-      - Choose the Affinity list/source scope.
-      - Choose which stages count as active pipeline.
-      - Approve any later import or recurring sync separately.
+    - Choose the Affinity list/source scope.
+    - Choose which stages count as active pipeline.
+    - Approve any later import or recurring sync separately.
 fields:
   input:
-    - key: discovery_goal
-      name: Discovery Goal
-      fieldType: string
-      required: true
-      position: 0
-      config: {}
+  - key: discovery_goal
+    name: Discovery Goal
+    fieldType: string
+    required: true
+    position: 0
+    config: {}
   output:
-    - key: affinity_discovery_report
-      name: Affinity Discovery Report
-      fieldType: richtext
-      required: false
-      position: 0
-      config:
-        rows: 8
-    - key: scope_questions
-      name: Scope Questions
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
+  - key: affinity_discovery_report
+    name: Affinity Discovery Report
+    fieldType: richtext
+    required: false
+    position: 0
+    config:
+      rows: 8
+  - key: scope_questions
+    name: Scope Questions
+    fieldType: json
+    required: false
+    position: 1
+    config: {}

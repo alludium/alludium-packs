@@ -1,14 +1,14 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.ingest_manual_sourcing_tip
-version: 0.1.3
+version: 0.1.4
 title: Ingest Manual Sourcing Tip
 category: Venture Capital
 visibility: workspace
 tags:
-  - vc
-  - origination
-  - manual-tip
+- vc
+- origination
+- manual-tip
 definition:
   name: Ingest Manual Sourcing Tip
   slug: ingest-manual-sourcing-tip
@@ -19,46 +19,52 @@ definition:
     stage: source
     taskFamily: origination_manual_tip
     requiredSkills:
-      - vc-manual-tip-ingestion
-      - vc-sourcing-dedupe-and-novelty-check
-      - citation-enforcement
+    - vc-manual-tip-ingestion
+    - vc-sourcing-dedupe-and-novelty-check
+    - citation-enforcement
     recommendedAgentTemplate: vc_sourcing_operator
     plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
-      - vc_origination_pipeline
+    - vc_origination_pipeline
     supportedProjectScopes:
-      - project_instance
+    - project_instance
     instructions:
-      executionInstructions: Mirror the reference pipeline's manual-tip ingestion by normalizing supplied company, founder, website, LinkedIn, note, and source context into the candidate schema, assigning a stable manual-tip key, setting source and discovery mode, and sending the candidate through enrichment and scoring rather than directly promoting it.
-      missingInputPolicy: Ask for company or founder identity, source of tip, website or profile URL, submitter, and confidence if missing.
-      externalActionPolicy: Internal candidate normalization only. Do not contact founders, write CRM records, or create Deal Pipelines.
+      executionInstructions: Mirror the reference pipeline's manual-tip ingestion by normalizing supplied company, founder,
+        website, LinkedIn, note, and source context into the candidate schema, assigning a stable manual-tip key, setting
+        source and discovery mode, and sending the candidate through enrichment and scoring rather than directly promoting
+        it.
+      missingInputPolicy: Ask for company or founder identity, source of tip, website or profile URL, submitter, and confidence
+        if missing.
+      externalActionPolicy: Internal candidate normalization only. Do not contact founders, write CRM records, or create Deal
+        Pipelines.
       completionCriteria:
-        - Manual tip candidate has stable key, source, submitter/source receipt, identity fields, dedupe decision, and next-step recommendation.
+      - Manual tip candidate has stable key, source, submitter/source receipt, identity fields, dedupe decision, and next-step
+        recommendation.
 fields:
   input:
-    - key: manual_tip
-      name: Manual Tip
-      fieldType: json
-      required: true
-      position: 0
-      config: {}
+  - key: manual_tip
+    name: Manual Tip
+    fieldType: json
+    required: true
+    position: 0
+    config: {}
   output:
-    - key: manual_tip_ingestion_artifact_id
-      name: Manual Tip Ingestion Artifact
-      fieldType: file
-      required: true
-      position: 0
-      config: {}
-    - key: normalized_candidate_key
-      name: Normalized Candidate Key
-      fieldType: string
-      required: false
-      position: 1
-      config: {}
-    - key: ingestion_report
-      name: Ingestion Report
-      fieldType: richtext
-      required: false
-      position: 2
-      config:
-        rows: 6
+  - key: manual_tip_ingestion_artifact_id
+    name: Manual Tip Ingestion Artifact
+    fieldType: file
+    required: true
+    position: 0
+    config: {}
+  - key: normalized_candidate_key
+    name: Normalized Candidate Key
+    fieldType: string
+    required: false
+    position: 1
+    config: {}
+  - key: ingestion_report
+    name: Ingestion Report
+    fieldType: richtext
+    required: false
+    position: 2
+    config:
+      rows: 6
