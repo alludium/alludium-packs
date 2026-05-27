@@ -893,11 +893,6 @@ def render_blueprint(
         "are not already mapped to a workflow stage.\n\n"
     )
 
-    setup_rows = collect_setup_task_slugs(project_type)
-    general_rows = collect_general_task_slugs(project_key, task_by_slug)
-    setup_slugs = {slug for slug, _agent_id in setup_rows}
-    general_slugs = {slug for slug, _agent_id in general_rows}
-
     mappings = initial_version.get("projectTaskMappings")
     if not isinstance(mappings, list):
         mappings = []
@@ -915,6 +910,29 @@ def render_blueprint(
         else [state for state in lifecycle_states if isinstance(state, str)] if isinstance(lifecycle_states, list) else []
     )
     rendered_stage_keys = set(rendered_stage_order)
+    project_creation = project_type.get("projectCreation")
+    guided_task_slug = None
+    if isinstance(project_creation, dict):
+        guided_task = project_creation.get("guidedTask")
+        if isinstance(guided_task, dict) and isinstance(guided_task.get("taskDefinitionSlug"), str):
+            guided_task_slug = guided_task["taskDefinitionSlug"]
+    guided_task_has_workflow_stage = any(
+        mapping.get("taskDefinitionSlug") == guided_task_slug
+        and mapping.get("lifecycleStage") in rendered_stage_keys
+        for mapping in mappings
+        if isinstance(mapping, dict)
+    )
+
+    setup_rows = collect_setup_task_slugs(project_type)
+    if guided_task_has_workflow_stage:
+        setup_rows = [
+            (slug, fallback_agent)
+            for slug, fallback_agent in setup_rows
+            if slug != guided_task_slug
+        ]
+    general_rows = collect_general_task_slugs(project_key, task_by_slug)
+    setup_slugs = {slug for slug, _agent_id in setup_rows}
+    general_slugs = {slug for slug, _agent_id in general_rows}
     lifecycle_stage_mapped_slugs = {
         slug
         for mapping in mappings
