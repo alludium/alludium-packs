@@ -53,7 +53,7 @@ definition:
     instructions:
       executionInstructions: Use approved X/Twitter actor scope only. Mirror the reference pipeline's target pattern for build-in-public, first-person launch/building language, AI/LLM/product terms, UK/Ireland location signals, B2B/enterprise hints, product URLs, engagement, and founder-author evidence. Reject media, VC, newsletter, aggregator, and third-party news accounts.
       missingInputPolicy: Ask for approved search terms, lookback window, budget/result cap, actor authorization, and seen-tweet state before discovery.
-      externalActionPolicy: Public-signal read and candidate proposal only. Do not engage authors, import candidates, sync to external systems, or create Deal Rooms.
+      externalActionPolicy: Public-signal read and candidate proposal only. Do not engage authors, import candidates, sync to external systems, or create Deal Pipelines.
       completionCriteria:
         - Candidate preview includes tweet URL, author handle, founder/company identity, product URL, location signal, score reasons, and source receipt.
         - Source-state update includes seen tweet IDs and rejected/noise counts.

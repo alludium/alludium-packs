@@ -27,7 +27,7 @@ Ask for actor allowlist, track selection, geography, result caps, query budget, 
 
 ## External Action Policy
 
-Discovery proposal only. Do not scrape unapproved profiles, bypass platform policy, import candidates, write CRM records, send outreach, or create Deal Rooms.
+Discovery proposal only. Do not scrape unapproved profiles, bypass platform policy, import candidates, write CRM records, send outreach, or create Deal Pipelines.
 
 ## Completion Criteria
 

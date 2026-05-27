@@ -2,7 +2,7 @@ kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.harmonic_setup
 version: 0.1.3
-title: Set Up Harmonic for VC Deal Rooms
+title: Set Up Harmonic for Deal Pipelines
 category: Venture Capital
 visibility: workspace
 tags:
@@ -10,9 +10,9 @@ tags:
   - harmonic
   - setup
 definition:
-  name: Set Up Harmonic for VC Deal Rooms
+  name: Set Up Harmonic for Deal Pipelines
   slug: harmonic-setup
-  description: Coordinate Harmonic connection readiness, saved-search discovery, and read-preview policy for VC Deal Room setup.
+  description: Coordinate Harmonic connection readiness, saved-search discovery, and read-preview policy for Deal Pipeline setup.
   allowSubtasks: true
   definitionJson:
     vertical: vc
@@ -42,7 +42,7 @@ definition:
     instructions:
       executionInstructions: Confirm that Harmonic is a selected company-intelligence source, check connection readiness, then coordinate saved-search/source discovery and reviewed read-preview setup. Create child tasks from the declared integrationSetup flow only when the user chooses that step. Keep imports, watchlist creation, recurring sync, and external writes disabled unless a later human approval explicitly creates that task.
       missingInputPolicy: If Harmonic is not authorized, has no discovered tools, or no saved-search/source scope is selected, keep setup incomplete and ask for authorization, tool discovery, a supplied inventory, or the source-scope decision needed for discovery.
-      externalActionPolicy: Setup orchestration only. Do not import companies or people, create watchlists, enable recurring sync, write to Harmonic, or create Deal Room projects from this setup task.
+      externalActionPolicy: Setup orchestration only. Do not import companies or people, create watchlists, enable recurring sync, write to Harmonic, or create Deal Pipeline projects from this setup task.
       completionCriteria:
         - Connection readiness or missing-authorization/tool-discovery evidence is recorded.
         - Candidate saved-search/source scope is complete or the unanswered scope questions are explicit.

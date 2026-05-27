@@ -12,7 +12,7 @@ tags:
 definition:
   name: Prepare Sourcing IC Summary
   slug: prepare-sourcing-ic-summary
-  description: Prepare a lightweight IC-style summary for a reviewed origination candidate before Deal Room promotion.
+  description: Prepare a lightweight IC-style summary for a reviewed origination candidate before Deal Pipeline promotion.
   allowSubtasks: false
   definitionJson:
     vertical: vc
@@ -41,7 +41,7 @@ definition:
       executionInstructions: >-
         Prepare a concise IC-style summary for Meet or Watch candidates using enriched candidate evidence, verdict, relationship context, portfolio-overlap result, source receipts, risks, and open questions. This replaces direct page-creation behavior from the reference implementation with a reviewable summary artifact. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
       missingInputPolicy: Ask for candidate evidence, verdict, relationship context, overlap review, source receipts, and target audience.
-      externalActionPolicy: Draft only. Do not create Notion pages, documents, external records, or Deal Rooms without explicit approval.
+      externalActionPolicy: Draft only. Do not create Notion pages, documents, external records, or Deal Pipelines without explicit approval.
       completionCriteria:
         - Summary includes identity, product, thesis fit, founder signal, market/customer signal, relationship context, risks, unknowns, evidence quality, and recommended next step.
 fields:

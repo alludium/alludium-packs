@@ -14,11 +14,11 @@ skills:
 
 # Preview Affinity Pipeline Import
 
-Preview selected Affinity opportunity, company, person, note, and list-entry data before importing it into VC Deal Room context.
+Preview selected Affinity opportunity, company, person, note, and list-entry data before importing it into Deal Pipeline context.
 
 ## Instructions
 
-Build a Deal Room Affinity read-sync preview from the approved list/source and stage scope. Use `affinity_get_list_entries`, `affinity_list_opportunities`, `affinity_get_opportunity`, `affinity_search_companies`, `affinity_get_company`, `affinity_search_persons`, `affinity_get_person`, and `affinity_list_company_notes` only inside approved scope. Show proposed project, field, task, artifact, and setup-context mappings before import. Durable project creation and initial import belong to `affinity-deal-room-import` after reviewed user approval.
+Build a Deal Pipeline Affinity read-sync preview from the approved list/source and stage scope. Use `affinity_get_list_entries`, `affinity_list_opportunities`, `affinity_get_opportunity`, `affinity_search_companies`, `affinity_get_company`, `affinity_search_persons`, `affinity_get_person`, and `affinity_list_company_notes` only inside approved scope. Show proposed project, field, task, artifact, and setup-context mappings before import. Durable project creation and initial import belong to `affinity-deal-room-import` after reviewed user approval.
 
 ## Missing Input Policy
 

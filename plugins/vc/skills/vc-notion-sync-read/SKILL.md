@@ -3,7 +3,7 @@ id: vc-notion-sync-read
 name: "VC Notion Sync Read"
 description: >
   Preview selected Notion page, block, property, and database context for VC
-  Deal Room tasks without broad workspace ingestion.
+  Deal Pipeline tasks without broad workspace ingestion.
 tags:
   - vc
   - notion
@@ -49,7 +49,7 @@ Return:
 
 - page, block, database, or row IDs used
 - summarized content with source provenance
-- suggested target: Deal Room setup context, task context, artifact input, or human reference
+- suggested target: Deal Pipeline setup context, task context, artifact input, or human reference
 - excluded content and reason
 - duplicate or sensitivity caveats
 

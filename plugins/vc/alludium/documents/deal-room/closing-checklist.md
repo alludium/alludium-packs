@@ -3,7 +3,7 @@ id: vc.document.closing_checklist
 title: Closing Checklist
 documentType: checklist
 supportedProjectTypes:
-  - vc_deal_room
+  - vc_investment_management
 summary: Checklist for close-readiness and portfolio handoff.
 ---
 

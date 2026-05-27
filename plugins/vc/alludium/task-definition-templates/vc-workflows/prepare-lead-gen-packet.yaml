@@ -16,7 +16,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: intake
+    stage: source
     taskFamily: pipeline
     documentRefs:
       - documentId: vc.document.lead_generation_packet_template
@@ -34,7 +34,7 @@ definition:
     plannedRecommendedAgentTemplate: vc_origination_scout
     recommendedAgentTemplate: vc_origination_scout
     supportedProjectTypes:
-      - vc_deal_room
+      - vc_origination_pipeline
     supportedProjectScopes:
       - project_management
     sourceAnchors:
@@ -55,7 +55,7 @@ definition:
         note: Benchmark references
     instructions:
       executionInstructions: >-
-        Prepare the lead-generation meeting packet from candidate companies and thesis context; include per-company snapshots, discussion points, and proposed next actions. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable management task file artifact named Lead Generation Packet and attach it to the required output field `lead_generation_packet_artifact_id`; do not assume this project-management scoped output is indexed onto a single Deal Room project. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+        Prepare the lead-generation meeting packet from candidate companies and thesis context; include per-company snapshots, discussion points, and proposed next actions. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable management task file artifact named Lead Generation Packet and attach it to the required output field `lead_generation_packet_artifact_id`; do not assume this project-management scoped output is indexed onto a single Deal Pipeline project. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:

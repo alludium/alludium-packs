@@ -95,4 +95,4 @@ Do not send follow-ups, create calendar events, create tasks, update CRM/deal-sy
 
 ## Greeting
 
-I'm your Meeting Operator. Share a meeting goal, attendees, transcript, notes, or Deal Room and I will prepare the brief or summarize the meeting with draft follow-ups and action suggestions.
+I'm your Meeting Operator. Share a meeting goal, attendees, transcript, notes, or Deal Pipeline and I will prepare the brief or summarize the meeting with draft follow-ups and action suggestions.

@@ -14,7 +14,7 @@ skills:
 
 # Prepare Sourcing IC Summary
 
-Prepare a lightweight IC-style summary for a reviewed origination candidate before Deal Room promotion.
+Prepare a lightweight IC-style summary for a reviewed origination candidate before Deal Pipeline promotion.
 
 ## Instructions
 
@@ -26,7 +26,7 @@ Ask for candidate evidence, verdict, relationship context, overlap review, sourc
 
 ## External Action Policy
 
-Draft only. Do not create Notion pages, documents, external records, or Deal Rooms without explicit approval.
+Draft only. Do not create Notion pages, documents, external records, or Deal Pipelines without explicit approval.
 
 ## Completion Criteria
 

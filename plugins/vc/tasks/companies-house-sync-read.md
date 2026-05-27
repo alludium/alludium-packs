@@ -26,7 +26,7 @@ Ask for selected public search URLs, result limits, selected company numbers, an
 
 ## External Action Policy
 
-Read preview only. Do not call authenticated Companies House APIs, import companies, enable recurring monitoring, score candidates, write candidate records, update external systems, or create Deal Room projects.
+Read preview only. Do not call authenticated Companies House APIs, import companies, enable recurring monitoring, score candidates, write candidate records, update external systems, or create Deal Pipeline projects.
 
 ## Completion Criteria
 

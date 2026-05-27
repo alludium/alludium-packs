@@ -1,6 +1,6 @@
 ---
 id: vc-origination-pipeline-orchestration
-name: "VC Origination Pipeline Orchestration"
+name: "Origination Pipeline Orchestration"
 description: >
   Configure a VC origination pipeline's thesis, source registry, cadence intent,
   budget policy, review thresholds, and setup-task plan without running sourcing
@@ -28,7 +28,7 @@ capability:
       - Configuration records intent and readiness; it does not activate scheduled sourcing.
 ---
 
-# VC Origination Pipeline Orchestration
+# Origination Pipeline Orchestration
 
 Use this skill to configure the standing VC origination pipeline before any sourcing run exists.
 
@@ -55,4 +55,4 @@ Return:
 - Do not create candidate records.
 - Do not enable schedules or recurring jobs.
 - Do not write to external systems.
-- Do not send outreach or create Deal Room projects.
+- Do not send outreach or create Deal Pipeline projects.

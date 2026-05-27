@@ -54,7 +54,7 @@ definition:
     instructions:
       executionInstructions: Discover candidate companies from approved public Companies House search/result pages. Mirror the reference pipeline's two-window intent for recent incorporations and mature/fundraising-age companies. Prioritize active UK companies with software, data, R&D, biotech, AI, robotics, or deep-tech signals; reject mass-registration addresses, service/consultancy language, outside-geography signals, corporate officers, and weak name/location/founder evidence. Use company number as the primary dedupe key.
       missingInputPolicy: Ask for selected public URL patterns, geography/stage/sector scope, result limits, allowed SIC or keyword filters, and Firecrawl availability before extraction.
-      externalActionPolicy: Read preview and candidate proposal only. Do not call the Companies House API, import candidates, score final verdicts, enable recurring monitoring, write CRM rows, or create Deal Rooms.
+      externalActionPolicy: Read preview and candidate proposal only. Do not call the Companies House API, import candidates, score final verdicts, enable recurring monitoring, write CRM rows, or create Deal Pipelines.
       completionCriteria:
         - Candidate preview includes company number, name, status, incorporation date, visible SIC/nature text, address locality, founder/officer hints when visible, source URL, and extraction timestamp.
         - Rejection reasons and dedupe decisions are listed.

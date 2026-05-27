@@ -87,7 +87,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Lifecycle stage: `contracts`
 - Recommended agent: `vc-legal-compliance-desk` (Alludium template `vc_legal_compliance_desk`)
 - Supported project types:
-  - `vc_deal_room`
+  - `vc_investment_management`
 
 ## Required Skills
 

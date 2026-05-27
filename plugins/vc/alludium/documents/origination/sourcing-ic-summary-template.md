@@ -4,7 +4,7 @@ title: Sourcing IC Summary Template
 documentType: template
 supportedProjectTypes:
   - vc_origination_pipeline
-summary: Reusable lightweight IC-style summary for sourced candidates before Deal Room promotion.
+summary: Reusable lightweight IC-style summary for sourced candidates before Deal Pipeline promotion.
 ---
 
 # Sourcing IC Summary Template
@@ -38,4 +38,4 @@ summary: Reusable lightweight IC-style summary for sourced candidates before Dea
 
 ## Standard
 
-Keep the summary promotion-oriented. It should help a human decide whether to create or update a Deal Room, not replace full diligence.
+Keep the summary promotion-oriented. It should help a human decide whether to create or update a Deal Pipeline, not replace full diligence.

@@ -3,7 +3,7 @@ id: vc.document.lead_generation_packet_template
 title: Lead Generation Packet Template
 documentType: template
 supportedProjectTypes:
-  - vc_deal_room
+  - vc_origination_pipeline
 summary: Reusable management-level packet for thesis-led lead generation reviews.
 ---
 

@@ -9,6 +9,7 @@ workspaceVariables:
     key: fundStage
     supportedProjectTypes:
       - vc_deal_room
+      - vc_investment_management
       - vc_origination_pipeline
     label: Fund Stage Focus
     description: Target investment stages for thesis-fit screening and diligence context.
@@ -24,6 +25,7 @@ workspaceVariables:
     key: fundSectors
     supportedProjectTypes:
       - vc_deal_room
+      - vc_investment_management
       - vc_origination_pipeline
     label: Fund Sector Focus
     description: Target sectors, verticals, or themes used for thesis-fit screening.
@@ -39,6 +41,7 @@ workspaceVariables:
     key: fundGeography
     supportedProjectTypes:
       - vc_deal_room
+      - vc_investment_management
       - vc_origination_pipeline
     label: Fund Geography Focus
     description: Target investment geographies or market focus for fund-fit context.
@@ -54,6 +57,7 @@ workspaceVariables:
     key: fundThesis
     supportedProjectTypes:
       - vc_deal_room
+      - vc_investment_management
       - vc_origination_pipeline
     label: Fund Thesis
     description: Workspace-level investment thesis used for thesis-fit screening, lead generation, and review-pack context.
@@ -69,6 +73,7 @@ workspaceVariables:
     key: scoringFramework
     supportedProjectTypes:
       - vc_deal_room
+      - vc_investment_management
       - vc_origination_pipeline
     label: Fund Scoring Framework
     description: Workspace-level scoring or evaluation framework names and rubric notes used when screening and diligence workflows ask for configured methodology.
@@ -84,6 +89,7 @@ workspaceVariables:
     key: firmName
     supportedProjectTypes:
       - vc_deal_room
+      - vc_investment_management
       - vc_origination_pipeline
     label: Firm Name
     description: Workspace-level firm name used in VC workflow context, reporting, and generated project artifacts.
@@ -99,6 +105,7 @@ workspaceVariables:
     key: fundName
     supportedProjectTypes:
       - vc_deal_room
+      - vc_investment_management
       - vc_origination_pipeline
     label: Fund Name
     description: Workspace-level fund name or strategy label used in screening, sourcing, and review context.
@@ -177,7 +184,7 @@ workspaceVariables:
     supportedProjectTypes:
       - vc_origination_pipeline
     label: Origination Promotion Threshold
-    description: Score or priority threshold used to recommend when a sourced candidate is ready for Deal Room promotion.
+    description: Score or priority threshold used to recommend when a sourced candidate is ready for Deal Pipeline promotion.
     valueType: number
     renderMetadata:
       render: number

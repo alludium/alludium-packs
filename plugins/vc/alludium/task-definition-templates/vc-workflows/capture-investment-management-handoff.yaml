@@ -1,0 +1,122 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.capture_investment_management_handoff
+version: 0.1.0
+title: Capture Investment Management Handoff
+category: Venture Capital
+visibility: workspace
+tags:
+  - vc
+  - investment-management
+  - project-creation
+definition:
+  name: Capture Investment Management Handoff
+  slug: capture-investment-management-handoff
+  description: Capture the reviewed deal-structuring handoff needed to create an Investment Management project for formal diligence, contracts, and closing.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: formal_diligence
+    taskFamily: investment_management_setup
+    documentRefs:
+      - documentId: vc.document.evidence_citation_style_guide
+        usage: style_guide
+      - documentId: vc.document.template_use_guidance
+        usage: operating_guidance
+    requiredSkills:
+      - citation-enforcement
+      - vc-task-and-next-step-generation
+    plannedRecommendedAgentTemplate: vc_legal_compliance_desk
+    recommendedAgentTemplate: vc_legal_compliance_desk
+    supportedProjectTypes:
+      - vc_investment_management
+    sourceAnchors:
+      - source: investment-management-process-slides
+        anchor: stage-handoff
+        note: Handoff from deal structuring into formal diligence, contracts, and closing.
+    instructions:
+      executionInstructions: >-
+        Capture the reviewed handoff from Deal Pipeline deal structuring into Investment Management. Confirm company identity, lead owner, IC or partner-review decision context, current term-sheet status, diligence source materials, legal/finance workstream readiness, and missing evidence. Cite material claims, separate assumptions from evidence, and do not create projects, send messages, mutate CRM records, move stages, or start legal/finance work without explicit human approval. When this task is used as a guided project creation task, complete with structured output `projectCreation.fieldValues.company_name` and include any confidently collected declared creation fields. Do not create the project; the platform finalizer owns deterministic project creation after task completion. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `style_guide` governs citations and claim language, and `operating_guidance` constrains process and approval boundaries.
+      missingInputPolicy: Ask for company_name and at least one reviewed handoff source such as an IC decision, term-sheet review, deal-terms artifact, partner review, or counsel note.
+      externalActionPolicy: Draft only unless a human explicitly approves project creation, external communications, CRM writes, Drive changes, legal/counsel actions, capital calls, or stage transitions.
+      completionCriteria:
+        - Required identity and handoff evidence are captured or listed as explicit gaps.
+        - Formal diligence, contracts, and closing readiness are separated from assumptions.
+        - Next actions identify owner, dependency, and required human approval point.
+        - Guided project creation output includes `projectCreation.fieldValues.company_name`.
+    humanDecisionPoints:
+      - Approve creation of the Investment Management project.
+      - Approve legal, finance, counsel, CRM, Drive, task creation, stage movement, and external communication actions separately.
+    orchestration:
+      parentTaskPolicy: none
+      suggestedChildTasks: []
+fields:
+  input:
+    - key: company_name
+      name: Company Name
+      fieldType: string
+      required: true
+      position: 0
+      config: {}
+    - key: lead_partner
+      name: Lead Partner
+      fieldType: string
+      required: false
+      position: 1
+      config: {}
+    - key: handoff_source_artifact_ids
+      name: Handoff Source Artifact IDs
+      fieldType: string
+      required: false
+      position: 2
+      config: {}
+    - key: ic_decision_record_artifact_id
+      name: IC Decision Record
+      fieldType: file
+      required: true
+      position: 3
+      config: {}
+    - key: term_sheet_review_artifact_id
+      name: Term Sheet Review
+      fieldType: file
+      required: true
+      position: 4
+      config: {}
+  output:
+    - key: projectCreation
+      name: Project Creation Payload
+      fieldType: json
+      required: true
+      position: 0
+      config:
+        requiredPaths:
+          - fieldValues.company_name
+    - key: handoff_summary
+      name: Handoff Summary
+      fieldType: richtext
+      required: false
+      position: 1
+      config:
+        rows: 6
+    - key: missing_information
+      name: Missing Information
+      fieldType: string
+      required: false
+      position: 2
+      config: {}
+    - key: next_actions
+      name: Next Actions
+      fieldType: json
+      required: false
+      position: 3
+      config: {}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc
+      taskKind: investment_management_handoff
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    preferredAgentType: vc_legal_compliance_desk

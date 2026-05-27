@@ -1,6 +1,6 @@
 ---
 id: vc.slack_setup
-title: Set Up Slack for VC Deal Rooms
+title: Set Up Slack for Deal Pipelines
 slug: slack-setup
 agent: vc-integration-operator
 skills:
@@ -14,9 +14,9 @@ skills:
 > Source: `alludium/task-definition-templates/vc-integrations/slack-setup.yaml`
 > Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
-# Set Up Slack for VC Deal Rooms
+# Set Up Slack for Deal Pipelines
 
-Coordinate Slack connection readiness, channel discovery, read-preview policy, and optional notification proposal scope for VC Deal Room setup.
+Coordinate Slack connection readiness, channel discovery, read-preview policy, and optional notification proposal scope for Deal Pipeline setup.
 
 ## Instructions
 
@@ -28,7 +28,7 @@ If Slack is not authorized or no channel/thread scope is selected, keep setup in
 
 ## External Action Policy
 
-Setup orchestration only. Do not read broad channel history, post messages, create channels, enable recurring sync, or create Deal Room projects from this setup task.
+Setup orchestration only. Do not read broad channel history, post messages, create channels, enable recurring sync, or create Deal Pipeline projects from this setup task.
 
 ## Completion Criteria
 

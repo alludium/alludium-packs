@@ -3,7 +3,7 @@ id: vc-affinity-sync-read
 name: "VC Affinity Sync Read"
 description: >
   Design and preview read/import sync from a selected Affinity list or pipeline
-  scope into VC Deal Room projects, fields, tasks, and artifacts.
+  scope into Deal Pipeline projects, fields, tasks, and artifacts.
 tags:
   - vc
   - affinity
@@ -34,7 +34,7 @@ Use this skill after Affinity discovery has selected the list/source and stage s
 - Affinity discovery report
 - Selected list or source scope
 - Selected stages/statuses considered active pipeline
-- Target mapping preference: create/update Deal Room projects, project fields, tasks, artifacts, or setup context
+- Target mapping preference: create/update Deal Pipeline projects, project fields, tasks, artifacts, or setup context
 
 ## Tool Plan
 

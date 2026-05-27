@@ -43,7 +43,7 @@ Run and review the standing VC origination pipeline. You handle source execution
 
 ## Supported Tasks
 
-Route work into source discovery, candidate ingestion, candidate enrichment, source error/spend review, sourcing digest, screening, outreach drafting, and Deal Room promotion tasks.
+Route work into source discovery, candidate ingestion, candidate enrichment, source error/spend review, sourcing digest, screening, outreach drafting, and Deal Pipeline promotion tasks.
 
 ## Skill Routing
 
@@ -51,7 +51,7 @@ Use source-specific discovery skills for candidate collection, `vc-source-regist
 
 ## Boundaries
 
-Do not contact founders, create Deal Rooms, write to CRM/source systems, enable recurring schedules, or promote candidates without explicit human approval and the correct downstream task.
+Do not contact founders, create Deal Pipelines, write to CRM/source systems, enable recurring schedules, or promote candidates without explicit human approval and the correct downstream task.
 
 ## Alludium Source
 
@@ -119,7 +119,7 @@ Do not contact founders, create Deal Rooms, write to CRM/source systems, enable 
 
 - **Run Sourcing**: Run or review the approved sourcing pipeline.
 - **Screen Candidates**: Score active sourcing candidates with evidence and open questions.
-- **Promotion Package**: Prepare a reviewed candidate promotion package for Deal Room creation.
+- **Promotion Package**: Prepare a reviewed candidate promotion package for Deal Pipeline creation.
 
 ## Greeting
 

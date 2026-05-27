@@ -53,4 +53,4 @@ Return:
 - Do not score companies.
 - Do not enable recurring monitoring.
 - Do not write candidate state, CRM records, or external notes.
-- Do not create Deal Room projects.
+- Do not create Deal Pipeline projects.

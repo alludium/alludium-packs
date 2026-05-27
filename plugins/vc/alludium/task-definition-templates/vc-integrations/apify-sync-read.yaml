@@ -30,7 +30,7 @@ definition:
     instructions:
       executionInstructions: Build a read preview only after discovery has selected approved actors, input scope, budget limits, and result limits. Process only selected sample results and return identity signals, source receipts, cost/run metadata when available, and suggested mapping into the origination source registry.
       missingInputPolicy: Ask for selected actors, approved input scope, run/result limits, and discovered tool IDs before processing actor output.
-      externalActionPolicy: Read preview only. Do not enable scheduled runs, import candidates, write candidate records, score candidates, contact founders, update external systems, or create Deal Room projects.
+      externalActionPolicy: Read preview only. Do not enable scheduled runs, import candidates, write candidate records, score candidates, contact founders, update external systems, or create Deal Pipeline projects.
       completionCriteria:
         - Preview rows include actor/source IDs, candidate identity signals, source receipts, and rejection reasons when available.
         - Run IDs, dataset IDs, cost metadata, or missing metadata are named.

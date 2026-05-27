@@ -28,7 +28,8 @@
       "path": "shared/investment-diligence-question-framework.md",
       "supportedProjectTypes": [
         "vc_deal_room",
-        "vc_origination_pipeline"
+        "vc_origination_pipeline",
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "generate-diligence-questions",
@@ -142,7 +143,8 @@
       "path": "shared/evidence-citation-style-guide.md",
       "supportedProjectTypes": [
         "vc_deal_room",
-        "vc_origination_pipeline"
+        "vc_origination_pipeline",
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "create-ic-memo",
@@ -173,7 +175,8 @@
       "path": "shared/template-use-guidance.md",
       "supportedProjectTypes": [
         "vc_deal_room",
-        "vc_origination_pipeline"
+        "vc_origination_pipeline",
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "audit-linkedin-query-spend",
@@ -224,7 +227,8 @@
       "path": "shared/file-naming-source-index-sop.md",
       "supportedProjectTypes": [
         "vc_deal_room",
-        "vc_origination_pipeline"
+        "vc_origination_pipeline",
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "request-founder-materials",
@@ -235,8 +239,8 @@
     },
     {
       "id": "vc.document.deal_room_sop",
-      "title": "Deal Room Operating SOP",
-      "description": "End-to-end Deal Room operating method from intake through closing and portfolio handoff.",
+      "title": "Deal Pipeline Operating SOP",
+      "description": "End-to-end Deal Pipeline operating method from intake through closing and portfolio handoff.",
       "documentType": "sop",
       "path": "deal-room/deal-room-sop.md",
       "supportedProjectTypes": [
@@ -270,7 +274,7 @@
       "documentType": "template",
       "path": "deal-room/thesis-target-list-template.md",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_origination_pipeline"
       ],
       "relatedTaskDefinitionSlugs": [
         "source-thesis-targets"
@@ -284,7 +288,7 @@
       "documentType": "template",
       "path": "deal-room/lead-generation-packet-template.md",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_origination_pipeline"
       ],
       "relatedTaskDefinitionSlugs": [
         "prepare-lead-gen-packet"
@@ -439,7 +443,7 @@
       "documentType": "template",
       "path": "deal-room/diligence-report-template.md",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "run-commercial-dd",
@@ -456,7 +460,8 @@
       "documentType": "methodology",
       "path": "deal-room/formal-diligence-workstream-guide.md",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_deal_room",
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "create-ic-memo",
@@ -479,7 +484,8 @@
       "documentType": "checklist",
       "path": "deal-room/formal-diligence-checklist.md",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_deal_room",
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "create-ic-memo",
@@ -573,7 +579,7 @@
       "documentType": "template",
       "path": "deal-room/legal-diligence-tracker-template.md",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "run-legal-diligence"
@@ -587,7 +593,7 @@
       "documentType": "methodology",
       "path": "deal-room/legal-diligence-guide.md",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "run-legal-diligence",
@@ -604,7 +610,7 @@
       "documentType": "template",
       "path": "deal-room/investment-document-review-template.md",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "review-investment-documents"
@@ -618,7 +624,7 @@
       "documentType": "checklist",
       "path": "deal-room/closing-checklist.md",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "manage-closing-checklist"
@@ -632,7 +638,7 @@
       "documentType": "template",
       "path": "deal-room/conditions-precedent-tracker-template.md",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "verify-conditions-precedent"
@@ -646,7 +652,7 @@
       "documentType": "template",
       "path": "deal-room/completion-tracker-template.md",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "coordinate-capital-call-and-completion"
@@ -660,7 +666,7 @@
       "documentType": "template",
       "path": "deal-room/portfolio-onboarding-plan-template.md",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "prepare-portfolio-onboarding"
@@ -811,7 +817,7 @@
     {
       "id": "vc.document.promotion_package_template",
       "title": "Promotion Package Template",
-      "description": "Reusable promotion package for turning a sourced candidate into a Deal Room creation or update recommendation.",
+      "description": "Reusable promotion package for turning a sourced candidate into a Deal Pipeline creation or update recommendation.",
       "documentType": "template",
       "path": "origination/promotion-package-template.md",
       "supportedProjectTypes": [
@@ -826,7 +832,7 @@
     {
       "id": "vc.document.sourcing_ic_summary_template",
       "title": "Sourcing IC Summary Template",
-      "description": "Reusable lightweight IC-style summary for sourced candidates before Deal Room promotion.",
+      "description": "Reusable lightweight IC-style summary for sourced candidates before Deal Pipeline promotion.",
       "documentType": "template",
       "path": "origination/sourcing-ic-summary-template.md",
       "supportedProjectTypes": [

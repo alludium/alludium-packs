@@ -33,7 +33,7 @@ Use this skill after Harmonic discovery has selected a saved search, daily searc
 
 - Harmonic discovery report
 - Selected source scope and discovered tool IDs, or a supplied export
-- Target mapping preference: sourcing context, task context, watchlist candidates, or Deal Room setup context
+- Target mapping preference: sourcing context, task context, watchlist candidates, or Deal Pipeline setup context
 - Dedupe and rejection criteria
 
 ## Tool Plan
@@ -60,7 +60,7 @@ Return:
 
 ## Boundaries
 
-- Do not import companies or create Deal Rooms without preview approval.
+- Do not import companies or create Deal Pipelines without preview approval.
 - Do not mark net-new results as seen.
 - Do not update saved searches, export contacts, or write back to Harmonic.
 - Do not enable recurring monitoring from this task.

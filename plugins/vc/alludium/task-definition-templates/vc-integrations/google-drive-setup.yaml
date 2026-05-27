@@ -2,7 +2,7 @@ kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.google_drive_setup
 version: 0.1.3
-title: Set Up Google Drive for VC Deal Rooms
+title: Set Up Google Drive for Deal Pipelines
 category: Venture Capital
 visibility: workspace
 tags:
@@ -10,9 +10,9 @@ tags:
   - google-drive
   - setup
 definition:
-  name: Set Up Google Drive for VC Deal Rooms
+  name: Set Up Google Drive for Deal Pipelines
   slug: google-drive-setup
-  description: Coordinate Google Drive connection readiness, folder discovery, read-preview policy, and optional file proposal scope for VC Deal Room setup.
+  description: Coordinate Google Drive connection readiness, folder discovery, read-preview policy, and optional file proposal scope for Deal Pipeline setup.
   allowSubtasks: true
   definitionJson:
     vertical: vc
@@ -47,7 +47,7 @@ definition:
     instructions:
       executionInstructions: Confirm that Google Drive is a selected document source, check connection readiness, then coordinate folder/file discovery and reviewed read-preview setup. Create child tasks from the declared integrationSetup flow only when the user chooses that step. Keep file creation, import, broad indexing, recurring sync, sharing changes, and Drive writes disabled unless a later human approval explicitly creates that task.
       missingInputPolicy: If Google Drive is not authorized or no folder/file scope is selected, keep setup incomplete and ask for connection authorization, shared-drive context, or the source-scope decision needed for discovery.
-      externalActionPolicy: Setup orchestration only. Do not import files, change sharing, create folders, write documents, enable recurring sync, or create Deal Room projects from this setup task.
+      externalActionPolicy: Setup orchestration only. Do not import files, change sharing, create folders, write documents, enable recurring sync, or create Deal Pipeline projects from this setup task.
       completionCriteria:
         - Connection readiness or missing-authorization evidence is recorded.
         - Candidate folder/file scope is complete or the unanswered scope questions are explicit.

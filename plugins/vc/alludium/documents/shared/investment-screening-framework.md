@@ -37,7 +37,7 @@ Use this framework to create a first-look investment screen for one company or a
 | Continue | Most core dimensions are strong or answerable and no obvious hard stop exists | Run follow-up evaluation or diligence questions |
 | Watch | Fit is plausible, but timing, traction, or evidence is not yet strong enough | Define watch trigger and owner |
 | Pass | Fund fit, evidence quality, risk, or timing is materially weak | Record concise pass rationale |
-| Promote | Sourcing candidate has enough evidence for Deal Room review | Prepare promotion package and require human approval |
+| Promote | Sourcing candidate has enough evidence for Deal Pipeline review | Prepare promotion package and require human approval |
 | Needs partner judgment | Evidence is incomplete but strategic relevance may override the screen | Escalate exact tradeoff, not a generic "maybe" |
 
 ## Routing Notes
@@ -48,7 +48,7 @@ Use the screen to route work, not to imply diligence is complete.
 - `too late`: mature stage, valuation, ownership path, or round dynamics do not fit the fund.
 - `out of thesis`: company may be credible but does not fit mandate, geography, sector, stage, or return model.
 - `watchlist`: attractive but waiting on a trigger such as customer proof, fundraise timing, hiring, regulatory event, or category inflection.
-- `promote`: enough evidence exists for a human to approve downstream Deal Room review.
+- `promote`: enough evidence exists for a human to approve downstream Deal Pipeline review.
 
 ## Output Standard
 

@@ -26,7 +26,7 @@ Ask for selected actors, approved input scope, run/result limits, and discovered
 
 ## External Action Policy
 
-Read preview only. Do not enable scheduled runs, import candidates, write candidate records, score candidates, contact founders, update external systems, or create Deal Room projects.
+Read preview only. Do not enable scheduled runs, import candidates, write candidate records, score candidates, contact founders, update external systems, or create Deal Pipeline projects.
 
 ## Completion Criteria
 

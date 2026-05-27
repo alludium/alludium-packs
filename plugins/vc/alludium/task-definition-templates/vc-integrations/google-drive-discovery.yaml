@@ -12,7 +12,7 @@ tags:
 definition:
   name: Explore Google Drive Sources
   slug: google-drive-discovery
-  description: Discover Google Drive shared drive, folder, and file scope before selected VC Deal Room context reads.
+  description: Discover Google Drive shared drive, folder, and file scope before selected Deal Pipeline context reads.
   allowSubtasks: false
   definitionJson:
     vertical: vc

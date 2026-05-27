@@ -3,7 +3,7 @@ id: vc.document.legal_diligence_guide
 title: Legal Diligence Guide
 documentType: methodology
 supportedProjectTypes:
-  - vc_deal_room
+  - vc_investment_management
 summary: Legal diligence guidance for document indexing, issue tracking, counsel questions, and legal-risk escalation without legal advice.
 ---
 

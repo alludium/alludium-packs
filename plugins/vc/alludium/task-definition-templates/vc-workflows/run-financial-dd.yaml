@@ -39,7 +39,7 @@ definition:
     plannedRecommendedAgentTemplate: vc_diligence_analyst
     recommendedAgentTemplate: vc_diligence_analyst
     supportedProjectTypes:
-      - vc_deal_room
+      - vc_investment_management
     sourceAnchors:
       - source: investment-management-process-slides
         anchor: slide-22

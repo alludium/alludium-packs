@@ -30,7 +30,7 @@ definition:
     instructions:
       executionInstructions: Use the connected `firecrawl-mcp-hosted` application to inspect only approved public Companies House pages. Construct public search URLs from approved terms and filters, such as `/search/companies?q=<term>` for broad company search and `/advanced-search/get-results?companyNameIncludes=<term>` for table-like advanced results. Prefer HTML or structured extraction when available so company names, company numbers, statuses, addresses, result ranks, and direct `/company/<number>` links can be captured with source receipts.
       missingInputPolicy: Ask for Firecrawl availability, selected search terms, result limits, approved public URL patterns, or a supplied inventory when live extraction is unavailable.
-      externalActionPolicy: Discovery only. Do not call authenticated Companies House APIs, import companies, process candidate queues, persist source state, score candidates, update external systems, or create Deal Room projects.
+      externalActionPolicy: Discovery only. Do not call authenticated Companies House APIs, import companies, process candidate queues, persist source state, score candidates, update external systems, or create Deal Pipeline projects.
       completionCriteria:
         - Approved public Companies House search URLs and source-scope decisions are listed.
         - Firecrawl availability and any missing extraction-tool gap are explicit.

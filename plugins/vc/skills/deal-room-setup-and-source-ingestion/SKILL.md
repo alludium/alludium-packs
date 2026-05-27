@@ -1,6 +1,6 @@
 ---
 id: deal-room-setup-and-source-ingestion
-name: Deal Room Setup & Source Ingestion
+name: Deal Pipeline Setup & Source Ingestion
 description: >
   Plan and index the source materials for a VC deal room. Use this skill when
   turning an inbound opportunity, source thread, uploaded deck, CRM/deal-system
@@ -37,7 +37,7 @@ capability:
       - Use this for deal-room planning and source indexing; actual system changes require explicit approval and connected tools.
 ---
 
-# Deal Room Setup & Source Ingestion
+# Deal Pipeline Setup & Source Ingestion
 
 Turn raw deal inputs into a clean working context for VC evaluation.
 

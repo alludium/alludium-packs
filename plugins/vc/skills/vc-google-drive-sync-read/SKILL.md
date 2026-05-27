@@ -3,7 +3,7 @@ id: vc-google-drive-sync-read
 name: "VC Google Drive Sync Read"
 description: >
   Preview selected Google Drive file, folder, document, and comment context for
-  VC Deal Room tasks before any attachment or import.
+  Deal Pipeline tasks before any attachment or import.
 tags:
   - vc
   - google-drive
@@ -51,7 +51,7 @@ Return:
 
 - source file/folder IDs, names, MIME types, timestamps, and owners when available
 - summarized context with provenance
-- suggested target: Deal Room setup context, task context, artifact input, or human reference
+- suggested target: Deal Pipeline setup context, task context, artifact input, or human reference
 - rejected files and reasons
 - duplicate or sensitivity caveats
 

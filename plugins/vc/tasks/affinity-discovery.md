@@ -14,7 +14,7 @@ skills:
 
 # Explore Affinity Lists and Stages
 
-Discover Affinity list, stage, field, and object-count scope before VC Deal Room import or sync.
+Discover Affinity list, stage, field, and object-count scope before Deal Pipeline import or sync.
 
 ## Instructions
 

@@ -27,7 +27,7 @@ Ask for candidate batch, enrichment budget, approved search/extraction tools, de
 
 ## External Action Policy
 
-Read/enrich only. Do not write CRM rows, create Notion pages, score final verdicts, contact founders, or create Deal Rooms.
+Read/enrich only. Do not write CRM rows, create Notion pages, score final verdicts, contact founders, or create Deal Pipelines.
 
 ## Completion Criteria
 

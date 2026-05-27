@@ -3,7 +3,7 @@ id: vc.document.diligence_report_template
 title: Diligence Report Template
 documentType: template
 supportedProjectTypes:
-  - vc_deal_room
+  - vc_investment_management
 summary: Reusable report format for diligence workstreams.
 ---
 

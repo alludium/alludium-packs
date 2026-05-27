@@ -33,7 +33,7 @@ definition:
     plannedRecommendedAgentTemplate: vc_legal_compliance_desk
     recommendedAgentTemplate: vc_legal_compliance_desk
     supportedProjectTypes:
-      - vc_deal_room
+      - vc_investment_management
     sourceAnchors:
       - source: investment-management-process-slides
         anchor: slide-31

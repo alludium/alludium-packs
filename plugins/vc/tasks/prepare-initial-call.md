@@ -49,7 +49,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `pitch_deck_artifact_id` | Pitch Deck Artifact | `file` | no |
 | `founder_names` | Founder Names | `string` | no |
 | `meeting_datetime` | Meeting Datetime | `string` | no |
-| `deal_room_url` | Deal Room Url | `string` | no |
+| `deal_room_url` | Deal Pipeline Url | `string` | no |
 
 ## Outputs
 

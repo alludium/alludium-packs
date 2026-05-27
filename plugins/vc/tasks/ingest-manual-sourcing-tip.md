@@ -27,7 +27,7 @@ Ask for company or founder identity, source of tip, website or profile URL, subm
 
 ## External Action Policy
 
-Internal candidate normalization only. Do not contact founders, write CRM records, or create Deal Rooms.
+Internal candidate normalization only. Do not contact founders, write CRM records, or create Deal Pipelines.
 
 ## Completion Criteria
 

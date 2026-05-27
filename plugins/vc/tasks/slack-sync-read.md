@@ -14,7 +14,7 @@ skills:
 
 # Preview Slack Deal Context
 
-Preview selected Slack channel, thread, message, and file context for VC Deal Room tasks.
+Preview selected Slack channel, thread, message, and file context for Deal Pipeline tasks.
 
 ## Instructions
 

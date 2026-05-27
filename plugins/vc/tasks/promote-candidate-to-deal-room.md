@@ -1,6 +1,6 @@
 ---
 id: vc.promote_candidate_to_deal_room
-title: Promote Candidate to Deal Room
+title: Promote Candidate to Deal Pipeline
 slug: promote-candidate-to-deal-room
 agent: vc-sourcing-operator
 skills:
@@ -13,25 +13,25 @@ skills:
 > Source: `alludium/task-definition-templates/vc-workflows/promote-candidate-to-deal-room.yaml`
 > Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
-# Promote Candidate to Deal Room
+# Promote Candidate to Deal Pipeline
 
-Prepare a reviewed promotion package for creating or updating a VC Deal Room from an approved origination candidate.
+Prepare a reviewed promotion package for creating or updating a Deal Pipeline from an approved origination candidate.
 
 ## Instructions
 
-Promote only human-approved candidates. Prepare a Deal Room creation/update package with company identity, founder evidence, source receipts, enrichment/verdict/screen summaries, relationship context, outreach state, and open questions. Do not create or update the Deal Room unless the platform action is explicitly approved. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+Promote only human-approved candidates. Prepare a Deal Pipeline creation/update package with company identity, founder evidence, source receipts, enrichment/verdict/screen summaries, relationship context, outreach state, and open questions. Do not create or update the Deal Pipeline unless the platform action is explicitly approved. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
-Ask for approved candidate, target Deal Room policy, promotion threshold evidence, owner, and required source artifacts.
+Ask for approved candidate, target Deal Pipeline policy, promotion threshold evidence, owner, and required source artifacts.
 
 ## External Action Policy
 
-Promotion package by default. Deal Room creation/update, CRM changes, document creation, and notifications require separate explicit approval.
+Promotion package by default. Deal Pipeline creation/update, CRM changes, document creation, and notifications require separate explicit approval.
 
 ## Completion Criteria
 
-- Promotion package includes source receipts, candidate evidence, recommended initial Deal Room state, required tasks, owner, and unresolved risks.
+- Promotion package includes source receipts, candidate evidence, recommended initial Deal Pipeline state, required tasks, owner, and unresolved risks.
 - Human approval boundary for project creation/update is explicit.
 
 ## Human Decision Points

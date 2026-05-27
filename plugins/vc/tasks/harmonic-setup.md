@@ -1,6 +1,6 @@
 ---
 id: vc.harmonic_setup
-title: Set Up Harmonic for VC Deal Rooms
+title: Set Up Harmonic for Deal Pipelines
 slug: harmonic-setup
 agent: vc-integration-operator
 skills:
@@ -13,9 +13,9 @@ skills:
 > Source: `alludium/task-definition-templates/vc-integrations/harmonic-setup.yaml`
 > Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
-# Set Up Harmonic for VC Deal Rooms
+# Set Up Harmonic for Deal Pipelines
 
-Coordinate Harmonic connection readiness, saved-search discovery, and read-preview policy for VC Deal Room setup.
+Coordinate Harmonic connection readiness, saved-search discovery, and read-preview policy for Deal Pipeline setup.
 
 ## Instructions
 
@@ -27,7 +27,7 @@ If Harmonic is not authorized, has no discovered tools, or no saved-search/sourc
 
 ## External Action Policy
 
-Setup orchestration only. Do not import companies or people, create watchlists, enable recurring sync, write to Harmonic, or create Deal Room projects from this setup task.
+Setup orchestration only. Do not import companies or people, create watchlists, enable recurring sync, write to Harmonic, or create Deal Pipeline projects from this setup task.
 
 ## Completion Criteria
 

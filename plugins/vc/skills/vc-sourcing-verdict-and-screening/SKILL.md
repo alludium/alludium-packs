@@ -63,5 +63,5 @@ For active candidates, return `PROCEED_TO_IC`, `DIG_FURTHER`, or `PASS`. Do not 
 
 - Do not sync records.
 - Do not overwrite human decisions.
-- Do not create Deal Rooms.
+- Do not create Deal Pipelines.
 - Do not send outreach.

@@ -1,6 +1,6 @@
 ---
 id: vc.google_drive_setup
-title: Set Up Google Drive for VC Deal Rooms
+title: Set Up Google Drive for Deal Pipelines
 slug: google-drive-setup
 agent: vc-integration-operator
 skills:
@@ -14,9 +14,9 @@ skills:
 > Source: `alludium/task-definition-templates/vc-integrations/google-drive-setup.yaml`
 > Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
-# Set Up Google Drive for VC Deal Rooms
+# Set Up Google Drive for Deal Pipelines
 
-Coordinate Google Drive connection readiness, folder discovery, read-preview policy, and optional file proposal scope for VC Deal Room setup.
+Coordinate Google Drive connection readiness, folder discovery, read-preview policy, and optional file proposal scope for Deal Pipeline setup.
 
 ## Instructions
 
@@ -28,7 +28,7 @@ If Google Drive is not authorized or no folder/file scope is selected, keep setu
 
 ## External Action Policy
 
-Setup orchestration only. Do not import files, change sharing, create folders, write documents, enable recurring sync, or create Deal Room projects from this setup task.
+Setup orchestration only. Do not import files, change sharing, create folders, write documents, enable recurring sync, or create Deal Pipeline projects from this setup task.
 
 ## Completion Criteria
 

@@ -1,6 +1,6 @@
 ---
 id: vc.notion_setup
-title: Set Up Notion for VC Deal Rooms
+title: Set Up Notion for Deal Pipelines
 slug: notion-setup
 agent: vc-integration-operator
 skills:
@@ -14,9 +14,9 @@ skills:
 > Source: `alludium/task-definition-templates/vc-integrations/notion-setup.yaml`
 > Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
-# Set Up Notion for VC Deal Rooms
+# Set Up Notion for Deal Pipelines
 
-Coordinate Notion connection readiness, page/database discovery, read-preview policy, and optional update-proposal scope for VC Deal Room setup.
+Coordinate Notion connection readiness, page/database discovery, read-preview policy, and optional update-proposal scope for Deal Pipeline setup.
 
 ## Instructions
 
@@ -28,7 +28,7 @@ If Notion is not authorized or no page/database scope is selected, keep setup in
 
 ## External Action Policy
 
-Setup orchestration only. Do not import databases, write pages, change permissions, enable recurring sync, or create Deal Room projects from this setup task.
+Setup orchestration only. Do not import databases, write pages, change permissions, enable recurring sync, or create Deal Pipeline projects from this setup task.
 
 ## Completion Criteria
 

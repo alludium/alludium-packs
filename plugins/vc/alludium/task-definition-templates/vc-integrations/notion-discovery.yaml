@@ -12,7 +12,7 @@ tags:
 definition:
   name: Explore Notion Pages and Databases
   slug: notion-discovery
-  description: Discover Notion page, database, and workspace scope before selected VC Deal Room context reads.
+  description: Discover Notion page, database, and workspace scope before selected Deal Pipeline context reads.
   allowSubtasks: false
   definitionJson:
     vertical: vc

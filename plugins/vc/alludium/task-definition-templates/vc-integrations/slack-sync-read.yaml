@@ -12,7 +12,7 @@ tags:
 definition:
   name: Preview Slack Deal Context
   slug: slack-sync-read
-  description: Preview selected Slack channel, thread, message, and file context for VC Deal Room tasks.
+  description: Preview selected Slack channel, thread, message, and file context for Deal Pipeline tasks.
   allowSubtasks: false
   definitionJson:
     vertical: vc

@@ -50,4 +50,4 @@ Return:
 - Do not score candidates.
 - Do not enable recurring actor runs.
 - Do not write candidate state or CRM records.
-- Do not send outreach or create Deal Room projects.
+- Do not send outreach or create Deal Pipeline projects.

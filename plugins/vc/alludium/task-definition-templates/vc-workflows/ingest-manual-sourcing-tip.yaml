@@ -31,7 +31,7 @@ definition:
     instructions:
       executionInstructions: Mirror the reference pipeline's manual-tip ingestion by normalizing supplied company, founder, website, LinkedIn, note, and source context into the candidate schema, assigning a stable manual-tip key, setting source and discovery mode, and sending the candidate through enrichment and scoring rather than directly promoting it.
       missingInputPolicy: Ask for company or founder identity, source of tip, website or profile URL, submitter, and confidence if missing.
-      externalActionPolicy: Internal candidate normalization only. Do not contact founders, write CRM records, or create Deal Rooms.
+      externalActionPolicy: Internal candidate normalization only. Do not contact founders, write CRM records, or create Deal Pipelines.
       completionCriteria:
         - Manual tip candidate has stable key, source, submitter/source receipt, identity fields, dedupe decision, and next-step recommendation.
 fields:

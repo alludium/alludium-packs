@@ -1,9 +1,9 @@
 ---
 id: vc-origination-ic-summary-preparation
-name: "VC Origination IC Summary Preparation"
+name: "Origination IC Summary Preparation"
 description: >
   Prepare a lightweight IC-style summary for Meet or Watch origination candidates
-  without creating pages or promoting to a Deal Room automatically.
+  without creating pages or promoting to a Deal Pipeline automatically.
 tags:
   - vc
   - origination
@@ -17,9 +17,9 @@ capability:
     preferredSurface: skill
 ---
 
-# VC Origination IC Summary Preparation
+# Origination IC Summary Preparation
 
-Use this skill for Meet or Watch candidates that need a concise partner-review artifact before Deal Room promotion.
+Use this skill for Meet or Watch candidates that need a concise partner-review artifact before Deal Pipeline promotion.
 
 ## Inputs
 
@@ -43,5 +43,5 @@ Include:
 ## Boundaries
 
 - Do not create Notion pages or documents without approval.
-- Do not promote into a Deal Room.
+- Do not promote into a Deal Pipeline.
 - Do not overwrite candidate status.

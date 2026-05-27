@@ -5,6 +5,7 @@ documentType: sop
 supportedProjectTypes:
   - vc_deal_room
   - vc_origination_pipeline
+  - vc_investment_management
 summary: Operating convention for naming files and maintaining source indexes.
 ---
 
@@ -12,7 +13,7 @@ summary: Operating convention for naming files and maintaining source indexes.
 
 ## Purpose
 
-Use this SOP to keep Deal Room and Origination artifacts traceable across task outputs, uploaded files, CRM references, and document workspaces.
+Use this SOP to keep Deal Pipeline and Origination artifacts traceable across task outputs, uploaded files, CRM references, and document workspaces.
 
 ## Naming Pattern
 

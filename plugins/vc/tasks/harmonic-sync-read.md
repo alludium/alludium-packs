@@ -18,7 +18,7 @@ Preview selected Harmonic company or saved-search results before using them as V
 
 ## Instructions
 
-Build a Harmonic read preview only after discovery has selected a saved search, daily search, company, or result scope and live tool IDs are known. The current local platform catalog has no trusted Harmonic tool rows, so treat live reads as blocked until tool discovery after authorization succeeds. When tools exist, process only selected company/search results and propose target mapping as sourcing context, task context, watchlist candidates, or Deal Room setup context.
+Build a Harmonic read preview only after discovery has selected a saved search, daily search, company, or result scope and live tool IDs are known. The current local platform catalog has no trusted Harmonic tool rows, so treat live reads as blocked until tool discovery after authorization succeeds. When tools exist, process only selected company/search results and propose target mapping as sourcing context, task context, watchlist candidates, or Deal Pipeline setup context.
 
 ## Missing Input Policy
 
@@ -26,7 +26,7 @@ Ask for selected Harmonic source scope and discovered tool IDs before processing
 
 ## External Action Policy
 
-Read preview only. Do not create Deal Rooms, import companies, mark net-new results as seen, update saved searches, export contacts, or write back to Harmonic.
+Read preview only. Do not create Deal Pipelines, import companies, mark net-new results as seen, update saved searches, export contacts, or write back to Harmonic.
 
 ## Completion Criteria
 

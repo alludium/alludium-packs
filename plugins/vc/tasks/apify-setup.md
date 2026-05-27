@@ -1,6 +1,6 @@
 ---
 id: vc.apify_setup
-title: Set Up Apify for VC Origination
+title: Set Up Apify for Origination
 slug: apify-setup
 agent: vc-integration-operator
 skills:
@@ -13,13 +13,13 @@ skills:
 > Source: `alludium/task-definition-templates/vc-integrations/apify-setup.yaml`
 > Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
-# Set Up Apify for VC Origination
+# Set Up Apify for Origination
 
 Coordinate Apify connection readiness, actor allowlist, discovery scope, and read-preview policy for a VC origination pipeline.
 
 ## Instructions
 
-Confirm that Apify is a selected origination source, then coordinate connection readiness, actor allowlist, run budget, and reviewed discovery scope. Create child tasks from the declared integrationSetup flow only when the user chooses that step. Keep imports, scheduled actor runs, candidate scoring, CRM writes, outreach, and Deal Room promotion disabled unless a later human approval explicitly creates that task.
+Confirm that Apify is a selected origination source, then coordinate connection readiness, actor allowlist, run budget, and reviewed discovery scope. Create child tasks from the declared integrationSetup flow only when the user chooses that step. Keep imports, scheduled actor runs, candidate scoring, CRM writes, outreach, and Deal Pipeline promotion disabled unless a later human approval explicitly creates that task.
 
 ## Missing Input Policy
 
@@ -27,7 +27,7 @@ If Apify is not authorized, no actor allowlist is approved, or no source scope i
 
 ## External Action Policy
 
-Setup orchestration only. Do not run scheduled sourcing, import candidates, write candidate state, contact founders, update external systems, or create Deal Room projects from this setup task.
+Setup orchestration only. Do not run scheduled sourcing, import candidates, write candidate state, contact founders, update external systems, or create Deal Pipeline projects from this setup task.
 
 ## Completion Criteria
 

@@ -12,7 +12,7 @@ tags:
 definition:
   name: Explore Affinity Lists and Stages
   slug: affinity-discovery
-  description: Discover Affinity list, stage, field, and object-count scope before VC Deal Room import or sync.
+  description: Discover Affinity list, stage, field, and object-count scope before Deal Pipeline import or sync.
   allowSubtasks: false
   definitionJson:
     vertical: vc

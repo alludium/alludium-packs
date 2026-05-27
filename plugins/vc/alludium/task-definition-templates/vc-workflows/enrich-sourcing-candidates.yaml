@@ -31,7 +31,7 @@ definition:
     instructions:
       executionInstructions: Enrich only candidates above the configured source-specific floor. Preserve the reference pipeline separation between cheap enrichment and LLM verdict by first gathering search results, website, company LinkedIn URL, founder LinkedIn URLs, founder profile evidence, and receipts; do not make final Meet/Watch/Pass judgments in this task. For LinkedIn-sourced rows, reuse pre-verified founder/company LinkedIn URLs rather than re-searching them.
       missingInputPolicy: Ask for candidate batch, enrichment budget, approved search/extraction tools, dedupe state, and minimum source score before enriching.
-      externalActionPolicy: Read/enrich only. Do not write CRM rows, create Notion pages, score final verdicts, contact founders, or create Deal Rooms.
+      externalActionPolicy: Read/enrich only. Do not write CRM rows, create Notion pages, score final verdicts, contact founders, or create Deal Pipelines.
       completionCriteria:
         - Enriched candidates include normalized identity, source key, website, company LinkedIn, founder LinkedIn evidence, search snippets, receipts, and missing-data flags.
         - Dedupe decisions include company-number, LinkedIn slug, domain, name, repo, post, or tweet keys as applicable.

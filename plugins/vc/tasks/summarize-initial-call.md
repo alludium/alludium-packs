@@ -47,7 +47,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `meeting_record_artifact_ids` | Meeting Record Artifact IDs | `string` | yes |
 | `meeting_notes` | Meeting Notes | `richtext` | no |
 | `company_name` | Company Name | `string` | yes |
-| `deal_room_url` | Deal Room Url | `string` | no |
+| `deal_room_url` | Deal Pipeline Url | `string` | no |
 
 ## Outputs
 

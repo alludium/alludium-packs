@@ -27,7 +27,7 @@ Ask for enriched candidates, thesis, geography/stage policy, relationship contex
 
 ## External Action Policy
 
-Scoring only. Do not sync external records, change manual decisions, send outreach, or create Deal Rooms.
+Scoring only. Do not sync external records, change manual decisions, send outreach, or create Deal Pipelines.
 
 ## Completion Criteria
 

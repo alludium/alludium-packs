@@ -66,4 +66,4 @@ Return repository URL, owner, created date, last activity, stars, topics, langua
 
 - Do not create issues, stars, forks, comments, or pull requests.
 - Do not contact maintainers.
-- Do not sync external records or create Deal Rooms without approval.
+- Do not sync external records or create Deal Pipelines without approval.

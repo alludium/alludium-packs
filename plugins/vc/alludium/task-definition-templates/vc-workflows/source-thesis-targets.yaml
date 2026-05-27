@@ -16,7 +16,7 @@ definition:
   allowSubtasks: true
   definitionJson:
     vertical: vc
-    stage: intake
+    stage: source
     taskFamily: pipeline
     documentRefs:
       - documentId: vc.document.thesis_target_list_template
@@ -35,7 +35,7 @@ definition:
     plannedRecommendedAgentTemplate: vc_origination_scout
     recommendedAgentTemplate: vc_origination_scout
     supportedProjectTypes:
-      - vc_deal_room
+      - vc_origination_pipeline
     sourceAnchors:
       - source: investment-management-process-slides
         anchor: slide-8
@@ -110,7 +110,7 @@ fields:
         documentRefId: vc.document.thesis_target_list_template
     - key: target_company_list
       name: Target Company List
-      fieldType: json
+      fieldType: richtext
       required: false
       position: 1
       config: {}
@@ -160,19 +160,19 @@ fields:
       config: {}
     - key: evidence_quality
       name: Evidence Quality
-      fieldType: json
+      fieldType: string
       required: false
       position: 9
       config: {}
     - key: open_questions
       name: Open Questions
-      fieldType: json
+      fieldType: string
       required: false
       position: 10
       config: {}
     - key: risks
       name: Risks
-      fieldType: json
+      fieldType: string
       required: false
       position: 11
       config: {}
@@ -184,7 +184,7 @@ fields:
       config: {}
     - key: next_actions
       name: Next Actions
-      fieldType: json
+      fieldType: string
       required: false
       position: 13
       config: {}

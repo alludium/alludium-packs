@@ -488,13 +488,19 @@ def read_json(path: Path) -> Any:
         fail(f"Failed to parse JSON {path.relative_to(ROOT)}: {exc}")
 
 
-def load_vc_deal_room_lifecycle_states() -> set[str]:
-    project_type = read_json(ROOT / "alludium" / "project-types" / "vc_deal_room.json")
-    initial_version = project_type.get("initialVersion") or {}
-    return set(require_string_list(
-        initial_version.get("lifecycleStates"),
-        "Project type vc_deal_room initialVersion.lifecycleStates",
-    ))
+def load_vc_project_lifecycle_states() -> set[str]:
+    states: set[str] = set()
+    for project_type_id in ["vc_deal_room", "vc_investment_management"]:
+        project_type_path = ROOT / "alludium" / "project-types" / f"{project_type_id}.json"
+        if not project_type_path.exists():
+            continue
+        project_type = read_json(project_type_path)
+        initial_version = project_type.get("initialVersion") or {}
+        states.update(require_string_list(
+            initial_version.get("lifecycleStates"),
+            f"Project type {project_type_id} initialVersion.lifecycleStates",
+        ))
+    return states
 
 
 def parse_frontmatter(path: Path) -> dict[str, Any]:
@@ -577,7 +583,7 @@ def validate_templates(manifest: dict[str, Any], skill_ids: set[str]) -> None:
     if len(template_ids) != len(set(template_ids)):
         fail("Duplicate Alludium agent-template IDs in alludium/manifest.yaml")
 
-    vc_deal_room_lifecycle_states = load_vc_deal_room_lifecycle_states()
+    vc_project_lifecycle_states = load_vc_project_lifecycle_states()
     for template_id in template_ids:
         template_path = ROOT / "alludium" / "agent-templates" / f"{template_id}.yaml"
         if not template_path.exists():
@@ -596,11 +602,11 @@ def validate_templates(manifest: dict[str, Any], skill_ids: set[str]) -> None:
         primary_deal_room_state = metadata.get("primaryDealRoomState")
         if (
             primary_deal_room_state is not None
-            and primary_deal_room_state not in vc_deal_room_lifecycle_states
+            and primary_deal_room_state not in vc_project_lifecycle_states
         ):
             fail(
                 f"Agent template {template_id} primaryDealRoomState must be one of "
-                f"{sorted(vc_deal_room_lifecycle_states)}"
+                f"{sorted(vc_project_lifecycle_states)}"
             )
 
         prompt = template.get("prompt") or {}

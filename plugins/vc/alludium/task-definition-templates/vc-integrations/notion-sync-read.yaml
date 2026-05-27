@@ -12,7 +12,7 @@ tags:
 definition:
   name: Preview Notion Context
   slug: notion-sync-read
-  description: Preview selected Notion page, block, property, and database content before attaching it to VC Deal Room tasks.
+  description: Preview selected Notion page, block, property, and database content before attaching it to Deal Pipeline tasks.
   allowSubtasks: false
   definitionJson:
     vertical: vc
@@ -27,7 +27,7 @@ definition:
     supportedProjectScopes:
       - project_management
     instructions:
-      executionInstructions: Build a Notion read preview from the approved page or database scope. Use `notion-retrieve-page`, `notion-retrieve-block`, `notion-retrieve-page-property-item`, `notion-retrieve-database-schema`, `notion-retrieve-database-content`, and `notion-query-database` only inside the selected scope. Summarize proposed target mapping as Deal Room setup context, task context, artifact input, or human reference before any attachment or import.
+      executionInstructions: Build a Notion read preview from the approved page or database scope. Use `notion-retrieve-page`, `notion-retrieve-block`, `notion-retrieve-page-property-item`, `notion-retrieve-database-schema`, `notion-retrieve-database-content`, and `notion-query-database` only inside the selected scope. Summarize proposed target mapping as Deal Pipeline setup context, task context, artifact input, or human reference before any attachment or import.
       missingInputPolicy: Ask for approved page or database scope before reading content.
       externalActionPolicy: Read preview only. Do not attach, import, create pages, create databases, update pages, update databases, append blocks, delete blocks, duplicate pages, upload files, or create comments without a separate approval path.
       completionCriteria:

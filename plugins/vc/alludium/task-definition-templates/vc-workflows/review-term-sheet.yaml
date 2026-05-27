@@ -131,7 +131,7 @@ fields:
           - information_rights
           - liquidation_preferences
     - key: deal_room_url
-      name: Deal Room URL
+      name: Deal Pipeline URL
       fieldType: string
       required: false
       position: 4

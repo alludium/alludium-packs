@@ -8,23 +8,23 @@ Baseline: `origin/main` at `01e177376000d8e29862f86f54925a2419c77e0c`
 
 ## Problem
 
-The current VC Deal Room lifecycle collapses several distinct investment workflow phases into `assessment`, then places formal diligence before investment review and term-sheet work. That makes early task routing noisy, blurs the boundary between screening and evaluation, and makes reusable operational tasks look stage-specific when they should be available throughout a live deal.
+The current Deal Pipeline lifecycle collapses several distinct investment workflow phases into `assessment`, then places formal diligence before investment review and term-sheet work. That makes early task routing noisy, blurs the boundary between screening and evaluation, and makes reusable operational tasks look stage-specific when they should be available throughout a live deal.
 
 The pack already has the right high-level product split:
 
-- `vc_origination_pipeline` owns standing sourcing, source configuration, candidate enrichment, outreach drafts, and promotion into a Deal Room.
+- `vc_origination_pipeline` owns standing sourcing, source configuration, candidate enrichment, outreach drafts, and promotion into a Deal Pipeline.
 - `vc_deal_room` owns one promoted investment opportunity from intake through investment, pass, or archive.
 
-The main gap is the Deal Room stage model and task contracts. The pack should preserve generic, reusable VC terminology rather than source-specific methodology names. Fund-specific frameworks can remain documents, workspace configuration, or optional methodology skills.
+The main gap is the Deal Pipeline stage model and task contracts. The pack should preserve generic, reusable VC terminology rather than source-specific methodology names. Fund-specific frameworks can remain documents, workspace configuration, or optional methodology skills.
 
 ## Goals
 
-1. Replace the collapsed Deal Room lifecycle with a generic investment workflow that can represent the underlying process stages without using source-specific labels.
+1. Replace the collapsed Deal Pipeline lifecycle with a generic investment workflow that can represent the underlying process stages without using source-specific labels.
 2. Separate intake, screening, opportunity evaluation, decision review, deal structuring, formal diligence, contracts, and closing.
 3. Rename or reframe meeting tasks so they apply to any relevant call or meeting, not only an initial founder call.
 4. Turn fuzzy task ideas into explicit task contracts with inputs, outputs, stage availability, agent routing, skill dependencies, and hard boundaries.
 5. Remove stale `plannedRequiredSkills` usage from released runtime templates once the referenced skills exist.
-6. Keep upstream origination and single-opportunity Deal Room work distinct.
+6. Keep upstream origination and single-opportunity Deal Pipeline work distinct.
 
 ## Non-Goals
 
@@ -55,19 +55,19 @@ That is too broad. It mixes source/origination work, project creation, fund-fit 
 
 ## Branch Implementation State
 
-This branch is not spec-only. The first implementation slice updates the Deal Room project type toward the target lifecycle by changing:
+This branch is not spec-only. The first implementation slice updates the Deal Pipeline project type toward the target lifecycle by changing:
 
 - `vc_deal_room.initialVersion.lifecycleStates`
 - `vc_deal_room.initialVersion.lifecycleTransitions`
 - command-view `stageGroups`
 - `investment_stage` field options
-- project task mappings for existing Deal Room tasks
+- project task mappings for existing Deal Pipeline tasks
 - relevant agent template primary-stage metadata
 - pack, plugin, inventory, and project-type version metadata
 
 The remaining implementation work should focus on making task contracts match the new lifecycle rather than re-litigating whether the stage model belongs in this branch.
 
-## Target Deal Room Lifecycle
+## Target Deal Pipeline Lifecycle
 
 | State | Label | Purpose |
 | --- | --- | --- |
@@ -113,8 +113,8 @@ The command-view stage groups should use these groups:
 | `request-founder-materials` | all active stages, initial mapping `evaluation` | Treat as a reusable material-request task. |
 | `generate-diligence-questions` | `evaluation`, `formal_diligence`, all active stages when invoked manually | Treat as reusable question generation, not formal diligence only. |
 | `review-opportunity-status` | all active stages | Treat as stage-agnostic operations/status review. |
-| `source-thesis-targets` | primarily `vc_origination_pipeline` | Remove or de-emphasize Deal Room stage mapping unless used for a specific opportunity gap. |
-| `prepare-lead-gen-packet` | primarily `vc_origination_pipeline` | Remove or de-emphasize Deal Room stage mapping. |
+| `source-thesis-targets` | primarily `vc_origination_pipeline` | Remove or de-emphasize Deal Pipeline stage mapping unless used for a specific opportunity gap. |
+| `prepare-lead-gen-packet` | primarily `vc_origination_pipeline` | Remove or de-emphasize Deal Pipeline stage mapping. |
 | `prepare-team-review-pack` | `decision_review` | Keep as decision-review prep unless later split into evaluation pack vs IC pack. |
 | `prepare-partner-review-pack` | `decision_review` | Keep as decision-review prep. |
 | `create-ic-memo` | `decision_review` | Keep. |
@@ -565,7 +565,7 @@ Status: implemented in this branch; needs validation and final review.
 - Update `vc_deal_room.initialVersion.lifecycleTransitions`.
 - Update command-view `stageGroups`.
 - Update `investment_stage` field options.
-- Remap existing Deal Room `projectTaskMappings` to the target states.
+- Remap existing Deal Pipeline `projectTaskMappings` to the target states.
 - Do not add new task templates in this slice.
 - Regenerate generated task/agent Markdown only if YAML changes require it.
 

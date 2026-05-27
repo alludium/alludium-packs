@@ -14,11 +14,11 @@ skills:
 
 # Preview Notion Context
 
-Preview selected Notion page, block, property, and database content before attaching it to VC Deal Room tasks.
+Preview selected Notion page, block, property, and database content before attaching it to Deal Pipeline tasks.
 
 ## Instructions
 
-Build a Notion read preview from the approved page or database scope. Use `notion-retrieve-page`, `notion-retrieve-block`, `notion-retrieve-page-property-item`, `notion-retrieve-database-schema`, `notion-retrieve-database-content`, and `notion-query-database` only inside the selected scope. Summarize proposed target mapping as Deal Room setup context, task context, artifact input, or human reference before any attachment or import.
+Build a Notion read preview from the approved page or database scope. Use `notion-retrieve-page`, `notion-retrieve-block`, `notion-retrieve-page-property-item`, `notion-retrieve-database-schema`, `notion-retrieve-database-content`, and `notion-query-database` only inside the selected scope. Summarize proposed target mapping as Deal Pipeline setup context, task context, artifact input, or human reference before any attachment or import.
 
 ## Missing Input Policy
 

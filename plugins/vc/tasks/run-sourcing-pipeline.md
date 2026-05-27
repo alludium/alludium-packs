@@ -27,7 +27,7 @@ Ask for enabled source registry, cadence policy, budget cap, result limits, revi
 
 ## External Action Policy
 
-Read, score, draft, and propose only unless a child task has explicit human approval for the specific write. Do not send outreach, silently update CRM/manual decisions, or create Deal Room projects.
+Read, score, draft, and propose only unless a child task has explicit human approval for the specific write. Do not send outreach, silently update CRM/manual decisions, or create Deal Pipeline projects.
 
 ## Completion Criteria
 
@@ -41,7 +41,7 @@ Read, score, draft, and propose only unless a child task has explicit human appr
 
 - Approve enabling or changing a recurring schedule.
 - Approve paid-source actor runs and source-specific result limits.
-- Approve sync writes, outreach sending, or Deal Room promotion in separate tasks.
+- Approve sync writes, outreach sending, or Deal Pipeline promotion in separate tasks.
 
 ## Inputs
 

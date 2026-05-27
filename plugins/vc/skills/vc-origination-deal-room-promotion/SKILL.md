@@ -1,6 +1,6 @@
 ---
 id: vc-origination-deal-room-promotion
-name: "VC Origination Deal Room Promotion"
+name: "Origination Deal Pipeline Promotion"
 description: >
   Prepare a human-reviewed promotion package that can create or update a VC Deal
   Room from an approved origination candidate.
@@ -18,14 +18,14 @@ capability:
       importance: recommended
       required: false
       owner: user
-      ownerPath: Confirm promotion threshold, owner, and target Deal Room creation/update policy.
+      ownerPath: Confirm promotion threshold, owner, and target Deal Pipeline creation/update policy.
       confirmationRequired: true
       gracefulDegradation: Produce a promotion-readiness checklist only.
   routingHints:
     preferredSurface: skill
 ---
 
-# VC Origination Deal Room Promotion
+# Origination Deal Pipeline Promotion
 
 Use this skill only after a candidate has human approval for promotion.
 
@@ -40,14 +40,14 @@ Include:
 - Verdict and active screen summary
 - Portfolio overlap result
 - Outreach/contact state
-- Recommended Deal Room fields
+- Recommended Deal Pipeline fields
 - Recommended initial lifecycle state
 - Suggested next tasks
 - Open questions and risks
 
 ## Approval Boundary
 
-The default output is a promotion package. Creating or updating a Deal Room project is a separate explicit platform action.
+The default output is a promotion package. Creating or updating a Deal Pipeline project is a separate explicit platform action.
 
 ## Boundaries
 

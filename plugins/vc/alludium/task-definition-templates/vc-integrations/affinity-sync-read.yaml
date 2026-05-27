@@ -12,7 +12,7 @@ tags:
 definition:
   name: Preview Affinity Pipeline Import
   slug: affinity-sync-read
-  description: Preview selected Affinity opportunity, company, person, note, and list-entry data before importing it into VC Deal Room context.
+  description: Preview selected Affinity opportunity, company, person, note, and list-entry data before importing it into Deal Pipeline context.
   allowSubtasks: false
   definitionJson:
     vertical: vc
@@ -47,7 +47,7 @@ definition:
       safety:
         externalWritesRequireApproval: true
     instructions:
-      executionInstructions: Build a Deal Room Affinity read-sync preview from the approved list/source and stage scope. Use `affinity_get_list_entries`, `affinity_list_opportunities`, `affinity_get_opportunity`, `affinity_search_companies`, `affinity_get_company`, `affinity_search_persons`, `affinity_get_person`, and `affinity_list_company_notes` only inside approved scope. Show proposed project, field, task, artifact, and setup-context mappings before import. Durable project creation and initial import belong to `affinity-deal-room-import` after reviewed user approval.
+      executionInstructions: Build a Deal Pipeline Affinity read-sync preview from the approved list/source and stage scope. Use `affinity_get_list_entries`, `affinity_list_opportunities`, `affinity_get_opportunity`, `affinity_search_companies`, `affinity_get_company`, `affinity_search_persons`, `affinity_get_person`, and `affinity_list_company_notes` only inside approved scope. Show proposed project, field, task, artifact, and setup-context mappings before import. Durable project creation and initial import belong to `affinity-deal-room-import` after reviewed user approval.
       missingInputPolicy: Ask for the selected Affinity source scope before creating a preview.
       externalActionPolicy: Preview/import design only. Do not import records or enable recurring sync without explicit approval.
       completionCriteria:

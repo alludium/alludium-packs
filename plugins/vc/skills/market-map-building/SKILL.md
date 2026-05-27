@@ -180,7 +180,7 @@ separately."**
   question rather than guessing.
 - If a competitor cannot be validated, mark it `Unverified`.
 - If TAM cannot be sourced, list assumptions separately.
-- Check whether the same market map already exists in the Deal Room before creating a new one.
+- Check whether the same market map already exists in the Deal Pipeline before creating a new one.
 
 ## Quality Checks
 

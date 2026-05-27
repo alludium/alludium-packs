@@ -58,7 +58,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `term_summary` | Term Summary | `richtext` | no |
 | `deviation_table` | Deviation Table | `string` | no |
 | `review_focus` | Review Focus | `multiselect` | no |
-| `deal_room_url` | Deal Room URL | `string` | no |
+| `deal_room_url` | Deal Pipeline URL | `string` | no |
 | `recommendation` | Recommendation | `select` | no |
 | `review_notes` | Review Notes | `richtext` | no |
 | `red_flags` | Red Flags | `string` | no |

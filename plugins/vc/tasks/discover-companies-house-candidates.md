@@ -27,7 +27,7 @@ Ask for selected public URL patterns, geography/stage/sector scope, result limit
 
 ## External Action Policy
 
-Read preview and candidate proposal only. Do not call the Companies House API, import candidates, score final verdicts, enable recurring monitoring, write CRM rows, or create Deal Rooms.
+Read preview and candidate proposal only. Do not call the Companies House API, import candidates, score final verdicts, enable recurring monitoring, write CRM rows, or create Deal Pipelines.
 
 ## Completion Criteria
 

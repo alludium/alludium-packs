@@ -30,7 +30,7 @@ definition:
     instructions:
       executionInstructions: Use the connected `apify-actors-mcp` application only after authorization and tool discovery. Enumerate approved actors, input requirements, estimated cost controls, and safe sample-read options. If live tools are not available, produce the missing-tool discovery checklist and ask for an approved actor inventory instead of inventing actor IDs.
       missingInputPolicy: Ask for authorization, actor allowlist, source policy, or supplied actor inventory when live discovery is unavailable.
-      externalActionPolicy: Discovery only. Do not start actor runs, import candidates, persist candidate state, score candidates, contact founders, update external systems, or create Deal Room projects.
+      externalActionPolicy: Discovery only. Do not start actor runs, import candidates, persist candidate state, score candidates, contact founders, update external systems, or create Deal Pipeline projects.
       completionCriteria:
         - Available or supplied Apify actors are listed with source purpose and read-preview requirements.
         - Tool discovery status and any missing authorization are explicit.

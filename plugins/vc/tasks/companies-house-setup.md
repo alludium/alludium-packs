@@ -19,7 +19,7 @@ Configure Firecrawl-backed public Companies House search and company-page previe
 
 ## Instructions
 
-Confirm that Companies House public register preview is a selected origination source, then coordinate Firecrawl readiness, search terms, allowed public URLs, result limits, and reviewed read-preview setup. Use public search URLs such as `https://find-and-update.company-information.service.gov.uk/search/companies?q=<term>` and `https://find-and-update.company-information.service.gov.uk/advanced-search/get-results?companyNameIncludes=<term>` as the approved source surface. Create child tasks from the declared integrationSetup flow only when the user chooses that step. Keep imports, recurring monitoring, candidate scoring, CRM writes, outreach, and Deal Room promotion disabled unless a later human approval explicitly creates that task.
+Confirm that Companies House public register preview is a selected origination source, then coordinate Firecrawl readiness, search terms, allowed public URLs, result limits, and reviewed read-preview setup. Use public search URLs such as `https://find-and-update.company-information.service.gov.uk/search/companies?q=<term>` and `https://find-and-update.company-information.service.gov.uk/advanced-search/get-results?companyNameIncludes=<term>` as the approved source surface. Create child tasks from the declared integrationSetup flow only when the user chooses that step. Keep imports, recurring monitoring, candidate scoring, CRM writes, outreach, and Deal Pipeline promotion disabled unless a later human approval explicitly creates that task.
 
 ## Missing Input Policy
 
@@ -27,7 +27,7 @@ If Firecrawl is not available or no source scope is selected, keep setup incompl
 
 ## External Action Policy
 
-Setup orchestration only. Do not call the Companies House API, import companies, enable recurring sync, write candidate records, update external systems, or create Deal Room projects from this setup task.
+Setup orchestration only. Do not call the Companies House API, import companies, enable recurring sync, write candidate records, update external systems, or create Deal Pipeline projects from this setup task.
 
 ## Completion Criteria
 

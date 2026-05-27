@@ -3,7 +3,7 @@ id: vc.document.legal_diligence_tracker_template
 title: Legal Diligence Tracker Template
 documentType: template
 supportedProjectTypes:
-  - vc_deal_room
+  - vc_investment_management
 summary: Reusable tracker for legal document indexing, issue registers, counsel questions, and showstopper-risk review support.
 ---
 

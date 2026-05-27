@@ -54,7 +54,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | Key | Name | Type | Required |
 | --- | --- | --- | --- |
 | `thesis_target_list_artifact_id` | Thesis Target List | `file` | yes |
-| `target_company_list` | Target Company List | `json` | no |
+| `target_company_list` | Target Company List | `richtext` | no |
 | `fit_rationale` | Fit Rationale | `string` | no |
 | `source_links` | Source Links | `string` | no |
 | `warm_intro_paths` | Warm Intro Paths | `string` | no |
@@ -62,11 +62,11 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `summary` | Summary | `richtext` | no |
 | `recommendation` | Recommendation | `string` | no |
 | `assumptions` | Assumptions | `string` | no |
-| `evidence_quality` | Evidence Quality | `json` | no |
-| `open_questions` | Open Questions | `json` | no |
-| `risks` | Risks | `json` | no |
+| `evidence_quality` | Evidence Quality | `string` | no |
+| `open_questions` | Open Questions | `string` | no |
+| `risks` | Risks | `string` | no |
 | `human_decision_points` | Human Decision Points | `string` | no |
-| `next_actions` | Next Actions | `json` | no |
+| `next_actions` | Next Actions | `string` | no |
 
 ## Document References
 
@@ -80,10 +80,10 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Source template: `alludium/task-definition-templates/vc-workflows/source-thesis-targets.yaml`
 - Alludium task ID: `vc.source_thesis_targets`
 - Task family: `pipeline`
-- Lifecycle stage: `intake`
+- Lifecycle stage: `source`
 - Recommended agent: `vc-origination-scout` (Alludium template `vc_origination_scout`)
 - Supported project types:
-  - `vc_deal_room`
+  - `vc_origination_pipeline`
 
 ## Required Skills
 

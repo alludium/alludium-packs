@@ -61,4 +61,4 @@ Return:
 - Do not persist candidate state.
 - Do not enable recurring monitoring.
 - Do not score candidates.
-- Do not write to external systems or create Deal Room projects.
+- Do not write to external systems or create Deal Pipeline projects.

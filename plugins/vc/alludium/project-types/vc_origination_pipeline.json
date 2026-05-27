@@ -2,14 +2,14 @@
   "kind": "project-type",
   "apiVersion": "alludium/v1alpha1",
   "key": "vc_origination_pipeline",
-  "name": "VC Origination Pipeline",
+  "name": "Origination Pipeline",
   "description": "Project context for a standing venture sourcing pipeline that configures source coverage, credential readiness, review policy, and promotion thresholds before recurring sourcing work is enabled.",
   "projectSetup": {
-    "setupLabel": "VC Origination Pipeline Setup",
+    "setupLabel": "Origination Pipeline Setup",
     "starterId": "create-origination",
     "starterLabel": "Create Origination Setup",
     "starterResumeLabel": "Continue Origination Setup",
-    "starterDescription": "Create or resume the VC Origination Pipeline setup flow.",
+    "starterDescription": "Create or resume the Origination Pipeline setup flow.",
     "recommendedSetupAgent": "vc_origination_scout",
     "requiredEvidence": [
       "source_choice",
@@ -69,7 +69,7 @@
       },
       "importProjects": {
         "enabled": false,
-        "reason": "Origination setup configures an upstream sourcing pipeline. Deal Room creation happens later through an approved promotion task."
+        "reason": "Origination setup configures an upstream sourcing pipeline. Deal Pipeline creation happens later through an approved promotion task."
       },
       "inviteCollaborators": {
         "enabled": false,
@@ -152,7 +152,7 @@
       {
         "applicationRecommendationId": "apify-actors-mcp",
         "applicationExternalId": "apify-actors-mcp",
-        "label": "Set Up Apify for VC Origination",
+        "label": "Set Up Apify for Origination",
         "setupGoal": "Confirm Apify connection readiness, actor allowlist, source scope, and read-preview policy for this origination pipeline.",
         "taskDefinitionTemplateId": "vc.apify_setup",
         "taskDefinitionSlug": "apify-setup"
@@ -168,8 +168,8 @@
     ]
   },
   "projectCreation": {
-    "launcherLabel": "Create VC Origination Pipeline",
-    "starterId": "create-vc-origination-pipeline-project",
+    "launcherLabel": "Create Origination Pipeline",
+    "starterId": "create-origination-pipeline-project",
     "aliases": [
       "origination pipeline",
       "sourcing pipeline",
@@ -192,7 +192,7 @@
     }
   },
   "initialVersion": {
-    "version": "0.1.4",
+    "version": "0.2.0",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -201,6 +201,8 @@
         "vc.document.evidence_citation_style_guide",
         "vc.document.template_use_guidance",
         "vc.document.file_naming_source_index_sop",
+        "vc.document.thesis_target_list_template",
+        "vc.document.lead_generation_packet_template",
         "vc.document.origination_pipeline_sop",
         "vc.document.origination_source_strategy_guide",
         "vc.document.source_registry_template",
@@ -438,7 +440,7 @@
         "label": "Latest Promotion Package Artifact ID",
         "kind": "text",
         "required": false,
-        "description": "Artifact ID for the latest Deal Room promotion package."
+        "description": "Artifact ID for the latest Deal Pipeline promotion package."
       },
       {
         "id": "field-latest-digest-artifact-id",
@@ -491,9 +493,49 @@
             "label": "Partner Only"
           }
         ]
+      },
+      {
+        "id": "field-thesis-area",
+        "key": "thesis_area",
+        "label": "Thesis Area",
+        "kind": "text",
+        "required": false,
+        "description": "Primary thesis area for thesis-led sourcing."
+      },
+      {
+        "id": "field-geography",
+        "key": "geography",
+        "label": "Geography",
+        "kind": "text",
+        "required": false,
+        "description": "Geographic sourcing focus for thesis-led target discovery."
+      },
+      {
+        "id": "field-stage-focus",
+        "key": "stage_focus",
+        "label": "Stage Focus",
+        "kind": "text",
+        "required": false,
+        "description": "Investment stage focus for thesis-led sourcing."
+      },
+      {
+        "id": "field-market-filters",
+        "key": "market_filters",
+        "label": "Market Filters",
+        "kind": "text",
+        "required": false,
+        "description": "Compact market filters or exclusions used for thesis-led sourcing."
+      },
+      {
+        "id": "field-latest-thesis-target-list-artifact-id",
+        "key": "latest_thesis_target_list_artifact_id",
+        "label": "Latest Thesis Target List",
+        "kind": "text",
+        "required": false,
+        "description": "Latest thesis target list artifact produced by source-thesis-targets."
       }
     ],
-    "instructionTemplate": "This project is a VC origination pipeline for configuring and operating upstream sourcing. Treat source credentials, actor allowlists, company registry previews, and review policy as setup evidence. Do not run scheduled sourcing, score candidates, write to external systems, send outreach, or promote candidates into Deal Rooms without a separate human-approved task.",
+    "instructionTemplate": "This project is a VC origination pipeline for configuring and operating upstream sourcing. Treat source credentials, actor allowlists, company registry previews, and review policy as setup evidence. Do not run scheduled sourcing, score candidates, write to external systems, send outreach, or promote candidates into Deal Pipelines without a separate human-approved task.",
     "projectManager": {
       "displayName": "Origination Manager",
       "labels": {
@@ -509,15 +551,15 @@
           "keep thesis, source registry, review policy, and credential readiness clear",
           "surface source health, spend, backlog, and promotion-readiness issues",
           "coordinate approved origination tasks and setup tasks",
-          "separate upstream sourcing recommendations from downstream Deal Room promotion"
+          "separate upstream sourcing recommendations from downstream Deal Pipeline promotion"
         ],
         "boundaries": [
-          "do not run scheduled sourcing, score candidates, write to external systems, send outreach, or promote candidates into Deal Rooms without a separate human-approved task",
+          "do not run scheduled sourcing, score candidates, write to external systems, send outreach, or promote candidates into Deal Pipelines without a separate human-approved task",
           "do not assume provider credentials, actor allowlists, source scopes, or budgets are ready unless project data says so"
         ]
       },
       "greeting": {
-        "message": "I'm your **Origination Manager** for this origination pipeline. I can help track source readiness, credential gaps, sourcing operations, and promotion blockers while keeping spend, outreach, and Deal Room promotion behind explicit approval.",
+        "message": "I'm your **Origination Manager** for this origination pipeline. I can help track source readiness, credential gaps, sourcing operations, and promotion blockers while keeping spend, outreach, and Deal Pipeline promotion behind explicit approval.",
         "starterPrompts": [
           "Summarize this origination pipeline and its readiness.",
           "What source or credential issues need attention?",
@@ -629,7 +671,7 @@
     ],
     "commandView": {
       "key": "vc-origination-pipeline",
-      "typeLabel": "VC Origination Pipeline",
+      "typeLabel": "Origination Pipeline",
       "collectionLabel": "Origination Pipelines",
       "overviewTitle": "Origination overview",
       "overviewAriaLabel": "Open origination pipeline data",
@@ -1430,6 +1472,41 @@
           }
         ],
         "outputMappings": []
+      },
+      {
+        "id": "map-source-thesis-targets",
+        "taskDefinitionTemplateId": "vc.source_thesis_targets",
+        "taskDefinitionSlug": "source-thesis-targets",
+        "projectScope": "project_instance",
+        "lifecycleStage": "active",
+        "inputMappings": [
+          {
+            "taskField": "thesis_area",
+            "source": "project.field",
+            "sourcePath": "thesis_area",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "geography",
+            "source": "project.field",
+            "sourcePath": "geography",
+            "requiredForActivation": true
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "thesis_target_list_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_thesis_target_list_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
       }
     ]
   }

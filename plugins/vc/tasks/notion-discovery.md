@@ -14,7 +14,7 @@ skills:
 
 # Explore Notion Pages and Databases
 
-Discover Notion page, database, and workspace scope before selected VC Deal Room context reads.
+Discover Notion page, database, and workspace scope before selected Deal Pipeline context reads.
 
 ## Instructions
 

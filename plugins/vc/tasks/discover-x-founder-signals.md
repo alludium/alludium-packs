@@ -27,7 +27,7 @@ Ask for approved search terms, lookback window, budget/result cap, actor authori
 
 ## External Action Policy
 
-Public-signal read and candidate proposal only. Do not engage authors, import candidates, sync to external systems, or create Deal Rooms.
+Public-signal read and candidate proposal only. Do not engage authors, import candidates, sync to external systems, or create Deal Pipelines.
 
 ## Completion Criteria
 

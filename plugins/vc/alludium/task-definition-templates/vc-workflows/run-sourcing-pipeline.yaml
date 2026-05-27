@@ -69,7 +69,7 @@ definition:
       executionInstructions: >-
         Run only approved origination sources and preserve the reference workflow order across Companies House recent and mature windows, GitHub builder signals, X/Twitter builder signals, cheap enrichment, Affinity relationship check, first verdict, LinkedIn company enrichment only for Meet or Watch, second verdict for fresh LinkedIn company data, sync proposal, portfolio-overlap review, screen, outreach drafts, and digest. LinkedIn people discovery is weekly by default or explicit override only. Create child tasks for the enabled steps; keep each child within its own source/action boundary. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
       missingInputPolicy: Ask for enabled source registry, cadence policy, budget cap, result limits, review thresholds, and credential readiness before running. If paid-source budget is missing, run only no-cost previews or produce a dry-run plan.
-      externalActionPolicy: Read, score, draft, and propose only unless a child task has explicit human approval for the specific write. Do not send outreach, silently update CRM/manual decisions, or create Deal Room projects.
+      externalActionPolicy: Read, score, draft, and propose only unless a child task has explicit human approval for the specific write. Do not send outreach, silently update CRM/manual decisions, or create Deal Pipeline projects.
       humanConfirmationPolicy: always_before_external_write_or_schedule_enablement
       completionCriteria:
         - Run receipt lists enabled sources, skipped sources, cadence mode, result limits, cost metadata or missing cost metadata, and degraded-source notes.
@@ -80,7 +80,7 @@ definition:
     humanDecisionPoints:
       - Approve enabling or changing a recurring schedule.
       - Approve paid-source actor runs and source-specific result limits.
-      - Approve sync writes, outreach sending, or Deal Room promotion in separate tasks.
+      - Approve sync writes, outreach sending, or Deal Pipeline promotion in separate tasks.
 fields:
   input:
     - key: sourcing_run_scope

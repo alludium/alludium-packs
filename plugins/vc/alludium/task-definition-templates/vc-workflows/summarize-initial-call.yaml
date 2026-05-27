@@ -78,7 +78,7 @@ fields:
       position: 2
       config: {}
     - key: deal_room_url
-      name: Deal Room Url
+      name: Deal Pipeline Url
       fieldType: string
       required: false
       position: 3

@@ -12,7 +12,7 @@ tags:
 definition:
   name: Preview Google Drive Context
   slug: google-drive-sync-read
-  description: Preview selected Google Drive file, folder, and document context before attaching or importing it into VC Deal Room tasks.
+  description: Preview selected Google Drive file, folder, and document context before attaching or importing it into Deal Pipeline tasks.
   allowSubtasks: false
   definitionJson:
     vertical: vc
@@ -27,7 +27,7 @@ definition:
     supportedProjectScopes:
       - project_management
     instructions:
-      executionInstructions: Build a read preview from the approved Google Drive source scope. Use `google_drive-list-files`, `google_drive-get-file-by-id`, `google_drive-download-file`, `google_drive-list-comments`, and `google_drive-get-comment` only for selected folders or files. Summarize proposed target mapping as Deal Room setup context, task context, artifact input, or human reference before any attachment or import.
+      executionInstructions: Build a read preview from the approved Google Drive source scope. Use `google_drive-list-files`, `google_drive-get-file-by-id`, `google_drive-download-file`, `google_drive-list-comments`, and `google_drive-get-comment` only for selected folders or files. Summarize proposed target mapping as Deal Pipeline setup context, task context, artifact input, or human reference before any attachment or import.
       missingInputPolicy: Ask for approved shared drive, folder, or file scope before reading contents or comments.
       externalActionPolicy: Read preview only. Do not attach, import, create, upload, copy, share, move, delete, trash, update, or change permissions without a separate approval path.
       completionCriteria:

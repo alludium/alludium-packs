@@ -86,7 +86,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Lifecycle stage: `formal_diligence`
 - Recommended agent: `vc-diligence-analyst` (Alludium template `vc_diligence_analyst`)
 - Supported project types:
-  - `vc_deal_room`
+  - `vc_investment_management`
 
 ## Required Skills
 

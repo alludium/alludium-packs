@@ -53,7 +53,7 @@ definition:
     instructions:
       executionInstructions: Use only approved Apify LinkedIn actor scopes. Mirror the reference pipeline's four-track model covering active AI founders, pedigree founders, exited or serial founders, and academic spinouts. Preserve per-query pagination/offsets, exhaustion locks, seen profile IDs, company URL slug dedupe, and quarantine rows without stable company identifiers. Treat LinkedIn people discovery as weekly by default because it is the expensive source.
       missingInputPolicy: Ask for actor allowlist, track selection, geography, result caps, query budget, dedupe-state availability, and whether this is a weekly full run or forced override.
-      externalActionPolicy: Discovery proposal only. Do not scrape unapproved profiles, bypass platform policy, import candidates, write CRM records, send outreach, or create Deal Rooms.
+      externalActionPolicy: Discovery proposal only. Do not scrape unapproved profiles, bypass platform policy, import candidates, write CRM records, send outreach, or create Deal Pipelines.
       completionCriteria:
         - Candidate preview includes track, founder profile URL, company name, company LinkedIn URL or stable key, founder role, geography evidence, score reasons, and source receipt.
         - Source-state update includes seen profile IDs, company slugs, query offsets, exhaustion/rewind notes, and quarantine rows.

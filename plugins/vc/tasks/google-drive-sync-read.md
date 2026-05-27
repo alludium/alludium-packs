@@ -14,11 +14,11 @@ skills:
 
 # Preview Google Drive Context
 
-Preview selected Google Drive file, folder, and document context before attaching or importing it into VC Deal Room tasks.
+Preview selected Google Drive file, folder, and document context before attaching or importing it into Deal Pipeline tasks.
 
 ## Instructions
 
-Build a read preview from the approved Google Drive source scope. Use `google_drive-list-files`, `google_drive-get-file-by-id`, `google_drive-download-file`, `google_drive-list-comments`, and `google_drive-get-comment` only for selected folders or files. Summarize proposed target mapping as Deal Room setup context, task context, artifact input, or human reference before any attachment or import.
+Build a read preview from the approved Google Drive source scope. Use `google_drive-list-files`, `google_drive-get-file-by-id`, `google_drive-download-file`, `google_drive-list-comments`, and `google_drive-get-comment` only for selected folders or files. Summarize proposed target mapping as Deal Pipeline setup context, task context, artifact input, or human reference before any attachment or import.
 
 ## Missing Input Policy
 

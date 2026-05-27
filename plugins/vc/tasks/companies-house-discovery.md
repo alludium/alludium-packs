@@ -26,7 +26,7 @@ Ask for Firecrawl availability, selected search terms, result limits, approved p
 
 ## External Action Policy
 
-Discovery only. Do not call authenticated Companies House APIs, import companies, process candidate queues, persist source state, score candidates, update external systems, or create Deal Room projects.
+Discovery only. Do not call authenticated Companies House APIs, import companies, process candidate queues, persist source state, score candidates, update external systems, or create Deal Pipeline projects.
 
 ## Completion Criteria
 

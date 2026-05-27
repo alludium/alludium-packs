@@ -14,7 +14,7 @@ skills:
 
 # Explore Google Drive Sources
 
-Discover Google Drive shared drive, folder, and file scope before selected VC Deal Room context reads.
+Discover Google Drive shared drive, folder, and file scope before selected Deal Pipeline context reads.
 
 ## Instructions
 
