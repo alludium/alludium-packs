@@ -240,12 +240,18 @@ def integration_refs_inline(
     task: dict[str, Any],
     agent_id: str | None,
     agent_templates: dict[str, dict[str, Any]],
+    integration_refs_by_task_id: dict[str, list[str]],
 ) -> str:
     refs: list[str] = []
 
     def add_ref(value: Any) -> None:
         if isinstance(value, str) and value and value not in refs:
             refs.append(value)
+
+    task_id = task.get("id")
+    if isinstance(task_id, str):
+        for ref in integration_refs_by_task_id.get(task_id, []):
+            add_ref(ref)
 
     integration_setup = definition_json.get("integrationSetup")
     if isinstance(integration_setup, dict):
@@ -607,6 +613,40 @@ def load_task_templates() -> tuple[dict[str, dict[str, Any]], dict[str, dict[str
     return by_slug, by_id
 
 
+def collect_integration_refs_by_task_id(task_by_slug: dict[str, dict[str, Any]]) -> dict[str, list[str]]:
+    refs_by_task_id: dict[str, list[str]] = {}
+
+    def add_ref(task_id: Any, ref: Any) -> None:
+        if not isinstance(task_id, str) or not task_id:
+            return
+        if not isinstance(ref, str) or not ref:
+            return
+        refs = refs_by_task_id.setdefault(task_id, [])
+        if ref not in refs:
+            refs.append(ref)
+
+    for task in task_by_slug.values():
+        definition_json = task.get("definitionJson")
+        if not isinstance(definition_json, dict):
+            continue
+        integration_setup = definition_json.get("integrationSetup")
+        if not isinstance(integration_setup, dict):
+            continue
+        application_external_id = integration_setup.get("applicationExternalId")
+        add_ref(task.get("id"), application_external_id)
+        child_task_ids = integration_setup.get("childTaskDefinitionTemplateIds")
+        if isinstance(child_task_ids, dict):
+            for child_task_id in child_task_ids.values():
+                add_ref(child_task_id, application_external_id)
+        default_flow = integration_setup.get("defaultFlow")
+        if isinstance(default_flow, list):
+            for step in default_flow:
+                if isinstance(step, dict):
+                    add_ref(step.get("taskDefinitionTemplateId"), application_external_id)
+
+    return refs_by_task_id
+
+
 def load_agent_templates() -> dict[str, dict[str, Any]]:
     templates: dict[str, dict[str, Any]] = {}
     for path in sorted(AGENT_TEMPLATE_ROOT.glob("*.yaml")):
@@ -681,6 +721,7 @@ def blueprint_task_row(
     agent_templates: dict[str, dict[str, Any]],
     documents: dict[str, dict[str, str]],
     skill_names: dict[str, str],
+    integration_refs_by_task_id: dict[str, list[str]],
     fallback_agent_id: str | None = None,
 ) -> str:
     task = task_by_slug.get(slug)
@@ -705,7 +746,7 @@ def blueprint_task_row(
     return (
         f"| {task_link(slug, task['title'])} | {agent_link(agent_id, agent_templates)} | "
         f"{skill_links(skills, skill_names)} | {document_refs_inline(definition_json.get('documentRefs'), documents)} | "
-        f"{integration_refs_inline(definition_json, task, agent_id, agent_templates)} |\n"
+        f"{integration_refs_inline(definition_json, task, agent_id, agent_templates, integration_refs_by_task_id)} |\n"
     )
 
 
@@ -855,12 +896,21 @@ def blueprint_task_table(
     agent_templates: dict[str, dict[str, Any]],
     documents: dict[str, dict[str, str]],
     skill_names: dict[str, str],
+    integration_refs_by_task_id: dict[str, list[str]],
 ) -> str:
     body = "| Task | Agent | Skills | Documents | Integrations |\n| --- | --- | --- | --- | --- |\n"
     if not rows:
         return body + "| None mapped | None declared | None declared | None declared | None declared |\n"
     body += "".join(
-        blueprint_task_row(slug, task_by_slug, agent_templates, documents, skill_names, fallback_agent)
+        blueprint_task_row(
+            slug,
+            task_by_slug,
+            agent_templates,
+            documents,
+            skill_names,
+            integration_refs_by_task_id,
+            fallback_agent,
+        )
         for slug, fallback_agent in rows
     )
     return body
@@ -878,6 +928,7 @@ def render_blueprint(
     project_name = require_string(project_type.get("name"), f"{project_type_path.name}.name")
     description = require_string(project_type.get("description"), f"{project_type_path.name}.description")
     initial_version = require_mapping(project_type.get("initialVersion"), f"{project_type_path.name}.initialVersion")
+    integration_refs = collect_integration_refs_by_task_id(task_by_slug)
 
     frontmatter = {
         "projectType": project_key,
@@ -952,12 +1003,12 @@ def render_blueprint(
 
     body += "## Setup\n\n"
     body += "Project-type setup and configuration tasks used before normal project execution.\n\n"
-    body += blueprint_task_table(setup_rows, task_by_slug, agent_templates, documents, skill_names)
+    body += blueprint_task_table(setup_rows, task_by_slug, agent_templates, documents, skill_names, integration_refs)
 
     if general_rows:
         body += "\n## General\n\n"
         body += "Reusable project-instance tasks that can be useful across multiple lifecycle stages.\n\n"
-        body += blueprint_task_table(general_rows, task_by_slug, agent_templates, documents, skill_names)
+        body += blueprint_task_table(general_rows, task_by_slug, agent_templates, documents, skill_names, integration_refs)
 
     support_rows_by_category = group_support_task_rows(management_rows, task_by_slug)
     for category in SUPPORT_BLUEPRINT_CATEGORY_ORDER:
@@ -967,7 +1018,7 @@ def render_blueprint(
         metadata = SUPPORT_BLUEPRINT_CATEGORIES[category]
         body += f"\n## {metadata['label']}\n\n"
         body += f"{metadata['description']}\n\n"
-        body += blueprint_task_table(rows, task_by_slug, agent_templates, documents, skill_names)
+        body += blueprint_task_table(rows, task_by_slug, agent_templates, documents, skill_names, integration_refs)
     for category, rows in sorted(support_rows_by_category.items()):
         if not rows:
             continue
@@ -977,7 +1028,7 @@ def render_blueprint(
         body += f"\n## {label}\n\n"
         if isinstance(description, str) and description:
             body += f"{description}\n\n"
-        body += blueprint_task_table(rows, task_by_slug, agent_templates, documents, skill_names)
+        body += blueprint_task_table(rows, task_by_slug, agent_templates, documents, skill_names, integration_refs)
 
     blueprint_category_slugs = setup_slugs | general_slugs
     mappings_by_stage: dict[str, list[str]] = {}
@@ -1015,7 +1066,7 @@ def render_blueprint(
             body += f"{markdown_escape(stage_description)}\n\n"
         body += "| Task | Agent | Skills | Documents | Integrations |\n| --- | --- | --- | --- | --- |\n"
         rows = [
-            blueprint_task_row(slug, task_by_slug, agent_templates, documents, skill_names)
+            blueprint_task_row(slug, task_by_slug, agent_templates, documents, skill_names, integration_refs)
             for slug in mappings_by_stage.get(stage, [])
         ]
         body += "".join(rows) if rows else "| None mapped | None declared | None declared | None declared | None declared |\n"

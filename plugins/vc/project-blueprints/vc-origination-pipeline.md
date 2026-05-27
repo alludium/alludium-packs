@@ -31,10 +31,10 @@ Connector discovery, preview, and read-only integration support tasks used to co
 
 | Task | Agent | Skills | Documents | Integrations |
 | --- | --- | --- | --- | --- |
-| [Explore Apify Origination Sources](../tasks/apify-discovery.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Apify Discovery](../skills/vc-apify-discovery/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | None declared |
-| [Explore Companies House Public Register Scope](../tasks/companies-house-discovery.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Companies House Sourcing](../skills/vc-companies-house-sourcing/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | None declared |
-| [Preview Apify Origination Results](../tasks/apify-sync-read.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Apify Sync Read](../skills/vc-apify-sync-read/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | None declared |
-| [Preview Companies House Public Register Results](../tasks/companies-house-sync-read.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Companies House Sync Read](../skills/vc-companies-house-sync-read/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | None declared |
+| [Explore Apify Origination Sources](../tasks/apify-discovery.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Apify Discovery](../skills/vc-apify-discovery/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | `apify-actors-mcp` |
+| [Explore Companies House Public Register Scope](../tasks/companies-house-discovery.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Companies House Sourcing](../skills/vc-companies-house-sourcing/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | `firecrawl-mcp-hosted` |
+| [Preview Apify Origination Results](../tasks/apify-sync-read.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Apify Sync Read](../skills/vc-apify-sync-read/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | `apify-actors-mcp` |
+| [Preview Companies House Public Register Results](../tasks/companies-house-sync-read.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Companies House Sync Read](../skills/vc-companies-house-sync-read/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | `firecrawl-mcp-hosted` |
 
 ## Pipeline Management
 
