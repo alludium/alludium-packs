@@ -16,26 +16,26 @@ skills:
 
 # Capture Opportunity Intake
 
-Capture source context, known fields, missing information, and guided project-creation values for one venture-capital opportunity before formal screening.
+Hydrate and assess a created Deal Pipeline from available source context before formal screening.
 
 ## Instructions
 
-Capture the inbound or promoted opportunity's source context, known project fields, missing setup information, source index, and recommended next task before formal screening. Use a pitch deck, intro note, source thread, CRM/source record, or other supplied material when available, but do not require a pitch deck when another source explains the opportunity. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a durable project file artifact named Opportunity Intake Summary and attach it to the required output field `opportunity_intake_artifact_id`. When this task is used as a guided project creation task, complete with structured output `projectCreation.fieldValues.company_name`, include `projectCreation.fieldValues.pitch_deck_artifact_id` when a pitch deck is available, and include only other declared Deal Pipeline creation fields that were confidently collected. Do not create the project; the platform finalizer owns deterministic project creation after task completion. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+Hydrate the created Deal Pipeline from the best available source context: CRM/source record, company domain, pitch deck, intro note, source thread, founder material, origination promotion package, or other supplied evidence. Capture known project fields, source index, missing information, evidence quality, and recommended readiness for formal screening. Do not require a pitch deck when another source explains the opportunity. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a durable project file artifact named Opportunity Intake Summary and attach it to the required output field `opportunity_intake_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
 
 ## Missing Input Policy
 
-Ask for company_name plus at least one source note, source artifact, source record, pitch deck, or source thread before completing intake.
+Ask for the minimum missing context needed to identify the company and cite at least one source. If company identity and one credible source are present, complete intake and list missing enrichment or screening inputs instead of blocking.
 
 ## External Action Policy
 
-Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
+Draft only unless a human explicitly approves the send, CRM write, Drive change, child task creation, or stage transition.
 
 ## Completion Criteria
 
 - Required input gaps are resolved or listed as assumptions/open questions.
 - Material conclusions include source links or are labeled as human judgment calls.
 - Next actions identify owner, dependency, and required human approval point.
-- Guided project creation output includes `projectCreation.fieldValues.company_name` and any confidently collected declared creation fields.
+- Intake recommendation clearly states whether the project is ready for screening, needs more context, should be watched, or should be passed.
 
 ## Human Decision Points
 
@@ -48,6 +48,13 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | --- | --- | --- | --- |
 | `company_name` | Company Name | `string` | yes |
 | `pitch_deck_artifact_id` | Pitch Deck Artifact | `file` | no |
+| `company_domain` | Company Domain | `string` | no |
+| `source_system` | Source System | `string` | no |
+| `source_object_url` | Source Object URL | `string` | no |
+| `source_thread_url` | Source Thread URL | `string` | no |
+| `source_thread_artifact_id` | Source Thread Artifact | `file` | no |
+| `source_material_artifact_ids` | Source Material Artifacts | `string` | no |
+| `founder_materials_artifact_ids` | Founder Materials Artifacts | `string` | no |
 | `referrer` | Referrer | `string` | no |
 
 ## Outputs
@@ -69,7 +76,6 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 | `open_questions` | Open Questions | `json` | no |
 | `risks` | Risks | `json` | no |
 | `human_decision_points` | Human Decision Points | `string` | no |
-| `projectCreation` | Project Creation Field Values | `json` | yes |
 
 ## Document References
 

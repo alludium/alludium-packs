@@ -238,8 +238,8 @@
     },
     "defaultState": "intake",
     "guidedTask": {
-      "taskDefinitionTemplateId": "vc.screen_inbound_opportunity",
-      "taskDefinitionSlug": "screen-inbound-opportunity"
+      "taskDefinitionTemplateId": "vc.create_deal_pipeline_project",
+      "taskDefinitionSlug": "create-deal-pipeline-project"
     },
     "postCreate": {
       "triggerInitialStateTasks": true
@@ -2309,6 +2309,54 @@
             "taskField": "pitch_deck_artifact_id",
             "source": "project.field",
             "sourcePath": "pitch_deck_artifact_id",
+            "requiredForActivation": false
+          },
+          {
+            "taskField": "company_domain",
+            "source": "project.field",
+            "sourcePath": "company_domain",
+            "requiredForActivation": false
+          },
+          {
+            "taskField": "source_system",
+            "source": "project.field",
+            "sourcePath": "source_system",
+            "requiredForActivation": false
+          },
+          {
+            "taskField": "source_object_url",
+            "source": "project.field",
+            "sourcePath": "source_object_url",
+            "requiredForActivation": false
+          },
+          {
+            "taskField": "source_thread_url",
+            "source": "project.field",
+            "sourcePath": "source_thread_url",
+            "requiredForActivation": false
+          },
+          {
+            "taskField": "source_thread_artifact_id",
+            "source": "project.field",
+            "sourcePath": "source_thread_artifact_id",
+            "requiredForActivation": false
+          },
+          {
+            "taskField": "source_material_artifact_ids",
+            "source": "project.field",
+            "sourcePath": "source_material_artifact_ids",
+            "requiredForActivation": false
+          },
+          {
+            "taskField": "founder_materials_artifact_ids",
+            "source": "project.field",
+            "sourcePath": "founder_materials_artifact_ids",
+            "requiredForActivation": false
+          },
+          {
+            "taskField": "referrer",
+            "source": "project.field",
+            "sourcePath": "referrer",
             "requiredForActivation": false
           }
         ],

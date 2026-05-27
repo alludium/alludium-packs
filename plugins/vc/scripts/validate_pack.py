@@ -462,8 +462,9 @@ OPTIONAL_ARTIFACT_INPUTS = {
         "legal_diligence_artifact_id",
     },
     "prepare-portfolio-onboarding": {"completion_tracker_artifact_id"},
+    "create-deal-pipeline-project": {"pitch_deck_artifact_id"},
     "run-investment-screen": {"opportunity_intake_artifact_id", "pitch_deck_artifact_id"},
-    "screen-inbound-opportunity": {"pitch_deck_artifact_id"},
+    "screen-inbound-opportunity": {"pitch_deck_artifact_id", "source_thread_artifact_id"},
 }
 
 
@@ -1405,10 +1406,13 @@ def validate_vc_deal_room_task_template_shape(
 
     if DEFAULT_PROJECT_SCOPE in supported_project_scopes:
         stage = definition_json.get("stage")
-        if stage not in VC_DEAL_ROOM_LIFECYCLE_STAGES:
+        allowed_stages = set(VC_DEAL_ROOM_LIFECYCLE_STAGES)
+        if definition_json.get("taskFamily") == "deal_pipeline_project_creation":
+            allowed_stages.add("setup")
+        if stage not in allowed_stages:
             fail(
                 f"Task template {template_id} ({slug}) definitionJson.stage must be one of "
-                f"{sorted(VC_DEAL_ROOM_LIFECYCLE_STAGES)} for vc_deal_room project_instance tasks"
+                f"{sorted(allowed_stages)} for vc_deal_room project_instance tasks"
             )
 
     for section_name in ["input", "context", "output"]:
