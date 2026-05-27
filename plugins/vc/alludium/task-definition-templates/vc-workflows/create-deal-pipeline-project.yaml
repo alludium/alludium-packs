@@ -2,7 +2,7 @@ kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.create_deal_pipeline_project
 version: 1.0.0
-title: Create Deal Pipeline Project
+title: Create Deal
 category: Venture Capital
 visibility: workspace
 tags:
@@ -11,7 +11,7 @@ tags:
 - project-creation
 - intake
 definition:
-  name: Create Deal Pipeline Project
+  name: Create Deal
   slug: create-deal-pipeline-project
   description: Gather enough structured context from chat, inbox material, CRM references, source notes, domains, decks, or
     origination handoffs to create one Deal Pipeline project.

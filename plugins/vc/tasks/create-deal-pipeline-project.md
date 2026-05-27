@@ -1,6 +1,6 @@
 ---
 id: vc.create_deal_pipeline_project
-title: Create Deal Pipeline Project
+title: Create Deal
 slug: create-deal-pipeline-project
 agent: vc-dealflow-concierge
 skills:
@@ -14,7 +14,7 @@ skills:
 > Source: `alludium/task-definition-templates/vc-workflows/create-deal-pipeline-project.yaml`
 > Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
-# Create Deal Pipeline Project
+# Create Deal
 
 Gather enough structured context from chat, inbox material, CRM references, source notes, domains, decks, or origination handoffs to create one Deal Pipeline project.
 

@@ -720,6 +720,8 @@ def collect_setup_task_slugs(project_type: dict[str, Any]) -> list[tuple[str, st
     collected: list[tuple[str, str | None]] = []
 
     def add_slug(value: Any, agent_id: str | None = fallback_agent) -> None:
+        if value in PLATFORM_TASK_DEFINITIONS:
+            return
         if isinstance(value, str) and value and (value, agent_id) not in collected:
             collected.append((value, agent_id))
 
