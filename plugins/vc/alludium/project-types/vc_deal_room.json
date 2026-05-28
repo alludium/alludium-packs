@@ -198,7 +198,7 @@
   },
   "projectCreation": {
     "launcherLabel": "Create Deal Pipeline",
-    "starterId": "create-deal-pipeline-project",
+    "starterId": "create-deal",
     "aliases": [
       "deal pipeline",
       "investment opportunity",
@@ -239,7 +239,7 @@
     "defaultState": "intake",
     "guidedTask": {
       "taskDefinitionTemplateId": "vc.create_deal_pipeline_project",
-      "taskDefinitionSlug": "create-deal-pipeline-project"
+      "taskDefinitionSlug": "create-deal"
     },
     "postCreate": {
       "triggerInitialStateTasks": true
@@ -1193,7 +1193,7 @@
         "label": "Opportunity intake summary",
         "kind": "text",
         "required": false,
-        "description": "Opportunity intake summary artifact produced by screen-inbound-opportunity."
+        "description": "Opportunity intake summary artifact produced by capture-opportunity-intake."
       },
       {
         "id": "field-investment-screen-scorecard-artifact-id",
@@ -1201,7 +1201,7 @@
         "label": "Investment fit screen scorecard",
         "kind": "text",
         "required": false,
-        "description": "Investment fit screen scorecard artifact produced by run-investment-screen."
+        "description": "Investment fit screen scorecard artifact produced by run-investment-fit-screen."
       },
       {
         "id": "field-founder-materials-request-artifact-id",
@@ -1217,7 +1217,7 @@
         "label": "Initial call brief",
         "kind": "text",
         "required": false,
-        "description": "Initial call brief artifact produced by prepare-initial-call."
+        "description": "Initial call brief artifact produced by prepare-meeting."
       },
       {
         "id": "field-customer-insights-artifact-id",
@@ -1225,7 +1225,7 @@
         "label": "Customer insights summary",
         "kind": "text",
         "required": false,
-        "description": "Customer insights summary artifact produced by summarize-initial-call."
+        "description": "Customer insights summary artifact produced by summarize-meeting-records."
       },
       {
         "id": "field-commercial-dd-artifact-id",
@@ -1289,7 +1289,7 @@
         "label": "Opportunity Evaluation",
         "kind": "text",
         "required": false,
-        "description": "Opportunity evaluation artifact produced by run-follow-up-evaluation."
+        "description": "Opportunity evaluation artifact produced by run-opportunity-evaluation."
       },
       {
         "id": "field-commercial-evaluation-artifact-id",
@@ -1832,7 +1832,7 @@
             {
               "key": "opportunity_intake",
               "title": "Opportunity intake",
-              "producerTaskDefinitionSlug": "screen-inbound-opportunity",
+              "producerTaskDefinitionSlug": "capture-opportunity-intake",
               "outputFieldKey": "opportunity_intake_artifact_id"
             }
           ],
@@ -1846,7 +1846,7 @@
             {
               "key": "investment_screen_scorecard",
               "title": "Initial investment screen scorecard",
-              "producerTaskDefinitionSlug": "run-investment-screen",
+              "producerTaskDefinitionSlug": "run-investment-fit-screen",
               "outputFieldKey": "investment_screen_scorecard_artifact_id"
             }
           ],
@@ -1874,7 +1874,7 @@
             {
               "key": "initial_call_brief",
               "title": "Initial call brief",
-              "producerTaskDefinitionSlug": "prepare-initial-call",
+              "producerTaskDefinitionSlug": "prepare-meeting",
               "outputFieldKey": "initial_call_brief_artifact_id"
             }
           ],
@@ -1888,7 +1888,7 @@
             {
               "key": "customer_insights",
               "title": "Customer insights summary",
-              "producerTaskDefinitionSlug": "summarize-initial-call",
+              "producerTaskDefinitionSlug": "summarize-meeting-records",
               "outputFieldKey": "customer_insights_artifact_id"
             }
           ],
@@ -1902,7 +1902,7 @@
             {
               "key": "follow_up_evaluation",
               "title": "Follow-up evaluation",
-              "producerTaskDefinitionSlug": "run-follow-up-evaluation",
+              "producerTaskDefinitionSlug": "run-opportunity-evaluation",
               "outputFieldKey": "follow_up_evaluation_artifact_id"
             }
           ],
@@ -2293,9 +2293,9 @@
         }
       },
       {
-        "id": "map-screen-inbound-opportunity",
+        "id": "map-capture-opportunity-intake",
         "taskDefinitionTemplateId": "vc.screen_inbound_opportunity",
-        "taskDefinitionSlug": "screen-inbound-opportunity",
+        "taskDefinitionSlug": "capture-opportunity-intake",
         "projectScope": "project_instance",
         "lifecycleStage": "intake",
         "inputMappings": [
@@ -2376,9 +2376,9 @@
         }
       },
       {
-        "id": "map-run-investment-screen",
+        "id": "map-run-investment-fit-screen",
         "taskDefinitionTemplateId": "vc.run_investment_screen",
-        "taskDefinitionSlug": "run-investment-screen",
+        "taskDefinitionSlug": "run-investment-fit-screen",
         "projectScope": "project_instance",
         "lifecycleStage": "screening",
         "inputMappings": [
@@ -2458,9 +2458,9 @@
         }
       },
       {
-        "id": "map-prepare-initial-call",
+        "id": "map-prepare-meeting",
         "taskDefinitionTemplateId": "vc.prepare_initial_call",
-        "taskDefinitionSlug": "prepare-initial-call",
+        "taskDefinitionSlug": "prepare-meeting",
         "projectScope": "project_instance",
         "lifecycleStage": "evaluation",
         "inputMappings": [
@@ -2493,9 +2493,9 @@
         }
       },
       {
-        "id": "map-summarize-initial-call",
+        "id": "map-summarize-meeting-records",
         "taskDefinitionTemplateId": "vc.summarize_initial_call",
-        "taskDefinitionSlug": "summarize-initial-call",
+        "taskDefinitionSlug": "summarize-meeting-records",
         "projectScope": "project_instance",
         "lifecycleStage": "evaluation",
         "inputMappings": [
@@ -2534,9 +2534,9 @@
         }
       },
       {
-        "id": "map-run-follow-up-evaluation",
+        "id": "map-run-opportunity-evaluation",
         "taskDefinitionTemplateId": "vc.run_follow_up_evaluation",
-        "taskDefinitionSlug": "run-follow-up-evaluation",
+        "taskDefinitionSlug": "run-opportunity-evaluation",
         "projectScope": "project_instance",
         "lifecycleStage": "evaluation",
         "inputMappings": [

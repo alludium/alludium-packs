@@ -1038,7 +1038,7 @@
         "label": "Opportunity intake summary",
         "kind": "text",
         "required": false,
-        "description": "Opportunity intake summary artifact produced by screen-inbound-opportunity."
+        "description": "Opportunity intake summary artifact produced by capture-opportunity-intake."
       },
       {
         "id": "field-investment-screen-scorecard-artifact-id",
@@ -1046,7 +1046,7 @@
         "label": "Investment fit screen scorecard",
         "kind": "text",
         "required": false,
-        "description": "Investment fit screen scorecard artifact produced by run-investment-screen."
+        "description": "Investment fit screen scorecard artifact produced by run-investment-fit-screen."
       },
       {
         "id": "field-founder-materials-request-artifact-id",
@@ -1062,7 +1062,7 @@
         "label": "Initial call brief",
         "kind": "text",
         "required": false,
-        "description": "Initial call brief artifact produced by prepare-initial-call."
+        "description": "Initial call brief artifact produced by prepare-meeting."
       },
       {
         "id": "field-customer-insights-artifact-id",
@@ -1070,7 +1070,7 @@
         "label": "Customer insights summary",
         "kind": "text",
         "required": false,
-        "description": "Customer insights summary artifact produced by summarize-initial-call."
+        "description": "Customer insights summary artifact produced by summarize-meeting-records."
       },
       {
         "id": "field-commercial-dd-artifact-id",
@@ -1134,7 +1134,7 @@
         "label": "Opportunity Evaluation",
         "kind": "text",
         "required": false,
-        "description": "Opportunity evaluation artifact produced by run-follow-up-evaluation."
+        "description": "Opportunity evaluation artifact produced by run-opportunity-evaluation."
       },
       {
         "id": "field-commercial-evaluation-artifact-id",

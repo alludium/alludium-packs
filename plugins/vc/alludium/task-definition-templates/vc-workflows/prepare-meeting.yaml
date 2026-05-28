@@ -1,0 +1,222 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.prepare_initial_call
+version: 1.0.13
+title: Prepare Meeting
+category: Venture Capital
+visibility: workspace
+tags:
+- vc
+- meeting
+- meeting-prep
+definition:
+  name: Prepare Meeting
+  slug: prepare-meeting
+  description: Prepare a founder, management, advisor, customer, expert, partner, IC, legal, or closing meeting for one venture-capital
+    opportunity with evidence capture, human review gates, and next-action recommendations.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: evaluation
+    taskFamily: meeting
+    documentRefs:
+    - documentId: vc.document.initial_call_brief_template
+      usage: output_template
+      outputFieldKey: initial_call_brief_artifact_id
+    - documentId: vc.document.evidence_citation_style_guide
+      usage: style_guide
+    - documentId: vc.document.template_use_guidance
+      usage: operating_guidance
+    requiredSkills:
+    - meeting-prep-and-summary
+    - company-research-and-enrichment
+    - citation-enforcement
+    - pitch-deck-explainer
+    plannedRecommendedAgentTemplate: vc_meeting_operator
+    recommendedAgentTemplate: vc_meeting_operator
+    supportedProjectTypes:
+    - vc_deal_room
+    sourceAnchors:
+    - source: investment-management-process-slides
+      anchor: slide-13
+      note: Initial call stage
+    - source: investment-management-process-slides
+      anchor: slide-14
+      note: Initial call AI map
+    - source: atomic-agents
+      anchor: worksheet-atomic-agents
+      note: Spreadsheet row 15
+    instructions:
+      executionInstructions: 'Prepare the meeting brief, relationship context, concise company and evidence summary, stage-relevant
+        agenda, risk prompts, and questions by topic for the requested meeting type. Use the pitch deck, prior task artifacts,
+        meeting goal, calendar context, CRM context, or other supplied source material when available, but do not require
+        a pitch deck when another evidence source is sufficient. Cite material claims, separate assumptions from evidence,
+        and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without
+        explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric
+        packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it.
+        Create or update a durable project file artifact named Meeting Brief and attach it to the required output field `initial_call_brief_artifact_id`.
+        Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template`
+        sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status,
+        evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains
+        process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document
+        and preserve the document ID alongside the output artifact.'
+      missingInputPolicy: Ask for the meeting type, meeting goal, and missing source material before producing the meeting
+        brief when they are not clear from project context.
+      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation,
+        child task creation, or stage transition.
+      completionCriteria:
+      - Required input gaps are resolved or listed as assumptions/open questions.
+      - Material conclusions include source links or are labeled as human judgment calls.
+      - Next actions identify owner, dependency, and required human approval point.
+    humanDecisionPoints:
+    - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
+    - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+    orchestration:
+      parentTaskPolicy: none
+      suggestedChildTasks: []
+    workspaceConfiguredMethodologySkills:
+    - skill: investment-screening-framework
+      note: Use only when the workspace explicitly configures this screening framework.
+fields:
+  input:
+  - key: company_name
+    name: Company Name
+    fieldType: string
+    required: true
+    position: 0
+    config: {}
+  - key: pitch_deck_artifact_id
+    name: Pitch Deck Artifact
+    fieldType: file
+    required: false
+    position: 1
+    config: {}
+  - key: founder_names
+    name: Founder Names
+    fieldType: string
+    required: false
+    position: 2
+    config: {}
+  - key: meeting_datetime
+    name: Meeting Datetime
+    fieldType: string
+    required: false
+    position: 3
+    config: {}
+  - key: deal_room_url
+    name: Deal Pipeline Url
+    fieldType: string
+    required: false
+    position: 4
+    config: {}
+  output:
+  - key: initial_call_brief_artifact_id
+    name: Meeting Brief
+    fieldType: file
+    required: true
+    position: 0
+    config:
+      documentRefId: vc.document.initial_call_brief_template
+  - key: pre_call_brief
+    name: Meeting Brief
+    fieldType: richtext
+    required: false
+    position: 1
+    config:
+      rows: 5
+  - key: founder_company_summary
+    name: Founder Company Summary
+    fieldType: richtext
+    required: false
+    position: 2
+    config:
+      rows: 5
+  - key: competitor_funding_activity
+    name: Competitor Funding Activity
+    fieldType: string
+    required: false
+    position: 3
+    config: {}
+  - key: starter_investment_screen_scorecard
+    name: Stage-Relevant Scorecard Notes
+    fieldType: string
+    required: false
+    position: 4
+    config: {}
+  - key: questions_by_topic
+    name: Questions By Topic
+    fieldType: json
+    required: false
+    position: 5
+    config: {}
+  - key: summary
+    name: Summary
+    fieldType: richtext
+    required: false
+    position: 6
+    config:
+      rows: 5
+  - key: recommendation
+    name: Recommendation
+    fieldType: string
+    required: false
+    position: 7
+    config: {}
+  - key: source_links
+    name: Source Links
+    fieldType: string
+    required: false
+    position: 8
+    config: {}
+  - key: assumptions
+    name: Assumptions
+    fieldType: string
+    required: false
+    position: 9
+    config: {}
+  - key: evidence_quality
+    name: Evidence Quality
+    fieldType: json
+    required: false
+    position: 10
+    config: {}
+  - key: open_questions
+    name: Open Questions
+    fieldType: json
+    required: false
+    position: 11
+    config: {}
+  - key: risks
+    name: Risks
+    fieldType: json
+    required: false
+    position: 12
+    config: {}
+  - key: human_decision_points
+    name: Human Decision Points
+    fieldType: string
+    required: false
+    position: 13
+    config: {}
+  - key: next_actions
+    name: Next Actions
+    fieldType: json
+    required: false
+    position: 14
+    config: {}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc-workflows
+      taskKind: prepare_initial_call
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    requiresHumanConfirmationToComplete: true
+    preferredMode: guided_execution
+    preferredAgentType: vc_meeting_operator
+ui:
+  renderer: generic
+  surfaceKey: null
+  frameRef: null

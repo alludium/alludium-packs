@@ -92,14 +92,14 @@ definition:
       parentTaskPolicy: suggest_next_stage
       stageGraphSource: workspace_configuration
       defaultSuggestedTaskPool:
-      - screen-inbound-opportunity
+      - capture-opportunity-intake
       - prepare-lead-gen-packet
       - prepare-deal-flow-agenda
       - request-founder-materials
-      - prepare-initial-call
-      - summarize-initial-call
-      - run-investment-screen
-      - run-follow-up-evaluation
+      - prepare-meeting
+      - summarize-meeting-records
+      - run-investment-fit-screen
+      - run-opportunity-evaluation
       - generate-diligence-questions
       - run-founder-evaluation
       - prepare-team-review-pack

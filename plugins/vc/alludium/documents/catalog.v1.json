@@ -13,10 +13,10 @@
         "vc_origination_pipeline"
       ],
       "relatedTaskDefinitionSlugs": [
-        "run-investment-screen",
-        "score-sourcing-candidates",
-        "screen-active-sourcing-candidates",
-        "screen-inbound-opportunity"
+        "run-investment-fit-screen",
+        "score-sourcing-candidate",
+        "screen-active-sourcing-candidate",
+        "capture-opportunity-intake"
       ],
       "status": "source"
     },
@@ -55,7 +55,7 @@
         "prepare-team-review-pack",
         "review-opportunity-status",
         "review-ic-memo",
-        "run-follow-up-evaluation",
+        "run-opportunity-evaluation",
         "run-team-evaluation",
         "run-financial-evaluation",
         "run-technical-evaluation",
@@ -79,7 +79,7 @@
         "prepare-team-review-pack",
         "review-ic-memo",
         "review-opportunity-status",
-        "run-follow-up-evaluation",
+        "run-opportunity-evaluation",
         "run-team-evaluation",
         "run-financial-evaluation",
         "run-technical-evaluation",
@@ -98,7 +98,7 @@
       ],
       "relatedTaskDefinitionSlugs": [
         "generate-diligence-questions",
-        "run-follow-up-evaluation",
+        "run-opportunity-evaluation",
         "run-commercial-evaluation"
       ],
       "status": "source"
@@ -114,7 +114,7 @@
       ],
       "relatedTaskDefinitionSlugs": [
         "generate-diligence-questions",
-        "run-follow-up-evaluation",
+        "run-opportunity-evaluation",
         "run-technical-evaluation"
       ],
       "status": "source"
@@ -130,7 +130,7 @@
       ],
       "relatedTaskDefinitionSlugs": [
         "generate-diligence-questions",
-        "run-follow-up-evaluation",
+        "run-opportunity-evaluation",
         "run-financial-evaluation"
       ],
       "status": "source"
@@ -150,16 +150,16 @@
         "create-ic-memo",
         "generate-diligence-questions",
         "prepare-partner-review-pack",
-        "prepare-sourcing-ic-summary",
+        "prepare-prospect-summary",
         "prepare-team-review-pack",
         "record-ic-decision",
         "run-commercial-dd",
         "run-financial-dd",
         "run-founder-evaluation",
-        "run-investment-screen",
-        "run-sourcing-pipeline",
+        "run-investment-fit-screen",
+        "run-vc-sourcing-pipeline",
         "run-technical-dd",
-        "screen-inbound-opportunity",
+        "capture-opportunity-intake",
         "run-commercial-evaluation",
         "run-technical-evaluation",
         "run-financial-evaluation",
@@ -186,14 +186,14 @@
         "generate-sourcing-digest",
         "manage-closing-checklist",
         "prepare-ic-agenda",
-        "prepare-initial-call",
+        "prepare-meeting",
         "prepare-lead-gen-packet",
         "prepare-outreach-draft-queue",
         "prepare-partner-review-pack",
         "prepare-portfolio-onboarding",
-        "prepare-sourcing-ic-summary",
+        "prepare-prospect-summary",
         "prepare-team-review-pack",
-        "promote-candidate-to-deal-room",
+        "promote-candidate-to-deal-pipeline",
         "record-ic-decision",
         "request-founder-materials",
         "review-ic-memo",
@@ -201,20 +201,20 @@
         "review-term-sheet",
         "run-commercial-dd",
         "run-financial-dd",
-        "run-follow-up-evaluation",
+        "run-opportunity-evaluation",
         "run-team-evaluation",
         "run-financial-evaluation",
         "run-technical-evaluation",
         "run-commercial-evaluation",
         "run-founder-evaluation",
-        "run-investment-screen",
-        "run-sourcing-pipeline",
+        "run-investment-fit-screen",
+        "run-vc-sourcing-pipeline",
         "run-technical-dd",
-        "score-sourcing-candidates",
-        "screen-active-sourcing-candidates",
-        "screen-inbound-opportunity",
+        "score-sourcing-candidate",
+        "screen-active-sourcing-candidate",
+        "capture-opportunity-intake",
         "source-thesis-targets",
-        "summarize-initial-call",
+        "summarize-meeting-records",
         "verify-conditions-precedent"
       ],
       "status": "source"
@@ -232,8 +232,8 @@
       ],
       "relatedTaskDefinitionSlugs": [
         "request-founder-materials",
-        "run-sourcing-pipeline",
-        "sync-sourcing-candidates"
+        "run-vc-sourcing-pipeline",
+        "sync-sourcing-candidate"
       ],
       "status": "source"
     },
@@ -305,7 +305,7 @@
         "vc_deal_room"
       ],
       "relatedTaskDefinitionSlugs": [
-        "prepare-initial-call"
+        "prepare-meeting"
       ],
       "status": "source"
     },
@@ -319,7 +319,7 @@
         "vc_deal_room"
       ],
       "relatedTaskDefinitionSlugs": [
-        "summarize-initial-call"
+        "summarize-meeting-records"
       ],
       "status": "source"
     },
@@ -333,7 +333,7 @@
         "vc_deal_room"
       ],
       "relatedTaskDefinitionSlugs": [
-        "run-follow-up-evaluation"
+        "run-opportunity-evaluation"
       ],
       "status": "source"
     },
@@ -684,8 +684,8 @@
       ],
       "relatedTaskDefinitionSlugs": [
         "configure-origination-pipeline",
-        "promote-candidate-to-deal-room",
-        "run-sourcing-pipeline"
+        "promote-candidate-to-deal-pipeline",
+        "run-vc-sourcing-pipeline"
       ],
       "status": "source"
     },
@@ -702,11 +702,11 @@
       "relatedTaskDefinitionSlugs": [
         "configure-origination-pipeline",
         "prepare-lead-gen-packet",
-        "prepare-sourcing-ic-summary",
-        "promote-candidate-to-deal-room",
-        "run-sourcing-pipeline",
-        "score-sourcing-candidates",
-        "screen-active-sourcing-candidates",
+        "prepare-prospect-summary",
+        "promote-candidate-to-deal-pipeline",
+        "run-vc-sourcing-pipeline",
+        "score-sourcing-candidate",
+        "screen-active-sourcing-candidate",
         "source-thesis-targets"
       ],
       "status": "source"
@@ -722,7 +722,7 @@
       ],
       "relatedTaskDefinitionSlugs": [
         "configure-origination-pipeline",
-        "run-sourcing-pipeline"
+        "run-vc-sourcing-pipeline"
       ],
       "status": "source"
     },
@@ -736,9 +736,9 @@
         "vc_origination_pipeline"
       ],
       "relatedTaskDefinitionSlugs": [
-        "enrich-sourcing-candidates",
-        "run-sourcing-pipeline",
-        "score-sourcing-candidates"
+        "enrich-sourcing-candidate",
+        "run-vc-sourcing-pipeline",
+        "score-sourcing-candidate"
       ],
       "status": "source"
     },
@@ -752,8 +752,8 @@
         "vc_origination_pipeline"
       ],
       "relatedTaskDefinitionSlugs": [
-        "score-sourcing-candidates",
-        "screen-active-sourcing-candidates"
+        "score-sourcing-candidate",
+        "screen-active-sourcing-candidate"
       ],
       "status": "source"
     },
@@ -824,8 +824,8 @@
         "vc_origination_pipeline"
       ],
       "relatedTaskDefinitionSlugs": [
-        "prepare-sourcing-ic-summary",
-        "promote-candidate-to-deal-room"
+        "prepare-prospect-summary",
+        "promote-candidate-to-deal-pipeline"
       ],
       "status": "source"
     },
@@ -839,7 +839,7 @@
         "vc_origination_pipeline"
       ],
       "relatedTaskDefinitionSlugs": [
-        "prepare-sourcing-ic-summary"
+        "prepare-prospect-summary"
       ],
       "status": "source"
     },
@@ -853,7 +853,7 @@
         "vc_origination_pipeline"
       ],
       "relatedTaskDefinitionSlugs": [
-        "screen-active-sourcing-candidates"
+        "screen-active-sourcing-candidate"
       ],
       "status": "source"
     },

@@ -28,7 +28,7 @@ Produce evaluation-stage analysis after initial screening but before formal dili
 ## Supported Tasks
 
 Route work into:
-- `run-follow-up-evaluation`
+- `run-opportunity-evaluation`
 - `run-commercial-evaluation`
 - `run-technical-evaluation`
 - `run-financial-evaluation`
@@ -78,7 +78,7 @@ Humans own pass/continue decisions, founder relationship judgment, external send
 - Primary stage: Evaluation
 - Primary Deal Room state: `evaluation`
 - Supported task definitions:
-  - `run-follow-up-evaluation`
+  - `run-opportunity-evaluation`
   - `run-commercial-evaluation`
   - `run-technical-evaluation`
   - `run-financial-evaluation`

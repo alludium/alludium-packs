@@ -15,8 +15,8 @@ metadata:
   primaryStage: "Setup"
   primaryDealRoomState: "intake"
   requiredSkills:
-    - deal-room-setup-and-source-ingestion
-    - vc-affinity-deal-room-import
+    - deal-pipeline-setup-and-source-ingestion
+    - vc-affinity-deal-pipeline-import
     - vc-affinity-discovery
     - vc-affinity-sync-read
     - vc-affinity-sync-write
@@ -29,9 +29,9 @@ llm:
   model: "Claude Sonnet 4.6"
 
 skills:
-  - externalId: "deal-room-setup-and-source-ingestion"
+  - externalId: "deal-pipeline-setup-and-source-ingestion"
     activationMode: "ALWAYS"
-  - externalId: "vc-affinity-deal-room-import"
+  - externalId: "vc-affinity-deal-pipeline-import"
     activationMode: "ALWAYS"
   - externalId: "vc-affinity-discovery"
     activationMode: "ALWAYS"

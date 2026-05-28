@@ -309,16 +309,16 @@ ARTIFACT_FIELD_KEY_PATTERN = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+)*_artifact_id$
 VC_ARTIFACT_OUTPUTS = {
     "source-thesis-targets": ["thesis_target_list_artifact_id"],
     "prepare-lead-gen-packet": ["lead_generation_packet_artifact_id"],
-    "screen-inbound-opportunity": ["opportunity_intake_artifact_id"],
+    "capture-opportunity-intake": ["opportunity_intake_artifact_id"],
     "request-founder-materials": ["founder_materials_request_artifact_id"],
-    "prepare-initial-call": ["initial_call_brief_artifact_id"],
-    "summarize-initial-call": ["customer_insights_artifact_id"],
-    "run-follow-up-evaluation": ["follow_up_evaluation_artifact_id"],
+    "prepare-meeting": ["initial_call_brief_artifact_id"],
+    "summarize-meeting-records": ["customer_insights_artifact_id"],
+    "run-opportunity-evaluation": ["follow_up_evaluation_artifact_id"],
     "run-commercial-evaluation": ["commercial_evaluation_artifact_id"],
     "run-technical-evaluation": ["technical_evaluation_artifact_id"],
     "run-financial-evaluation": ["financial_evaluation_artifact_id"],
     "run-team-evaluation": ["team_evaluation_artifact_id"],
-    "run-investment-screen": ["investment_screen_scorecard_artifact_id"],
+    "run-investment-fit-screen": ["investment_screen_scorecard_artifact_id"],
     "generate-diligence-questions": ["diligence_question_bank_artifact_id"],
     "run-founder-evaluation": ["founder_evaluation_artifact_id"],
     "prepare-team-review-pack": ["team_review_pack_artifact_id"],
@@ -349,8 +349,8 @@ VC_ARTIFACT_OUTPUTS = {
     "affinity-deal-room-import": ["affinity_import_receipt_artifact_id"],
 }
 VC_ARTIFACT_INPUTS = {
-    "summarize-initial-call": ["meeting_record_artifact_ids"],
-    "run-follow-up-evaluation": [
+    "summarize-meeting-records": ["meeting_record_artifact_ids"],
+    "run-opportunity-evaluation": [
         "investment_screen_scorecard_artifact_id",
         "customer_insights_artifact_id",
     ],
@@ -423,7 +423,7 @@ VC_ARTIFACT_INPUTS = {
     ],
 }
 OPTIONAL_ARTIFACT_INPUTS = {
-    "prepare-initial-call": {"pitch_deck_artifact_id"},
+    "prepare-meeting": {"pitch_deck_artifact_id"},
     "run-commercial-evaluation": {"follow_up_evaluation_artifact_id"},
     "run-technical-evaluation": {"follow_up_evaluation_artifact_id"},
     "run-financial-evaluation": {"follow_up_evaluation_artifact_id"},
@@ -462,9 +462,9 @@ OPTIONAL_ARTIFACT_INPUTS = {
         "legal_diligence_artifact_id",
     },
     "prepare-portfolio-onboarding": {"completion_tracker_artifact_id"},
-    "create-deal-pipeline-project": {"pitch_deck_artifact_id"},
-    "run-investment-screen": {"opportunity_intake_artifact_id", "pitch_deck_artifact_id"},
-    "screen-inbound-opportunity": {"pitch_deck_artifact_id", "source_thread_artifact_id"},
+    "create-deal": {"pitch_deck_artifact_id"},
+    "run-investment-fit-screen": {"opportunity_intake_artifact_id", "pitch_deck_artifact_id"},
+    "capture-opportunity-intake": {"pitch_deck_artifact_id", "source_thread_artifact_id"},
 }
 
 

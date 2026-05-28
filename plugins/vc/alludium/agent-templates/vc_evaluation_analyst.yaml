@@ -12,7 +12,7 @@ metadata:
   gitBranch: main
   gitRepositoryUrl: https://github.com/alludium-templates/configurable-agent.git
   supportedTaskDefinitions:
-  - run-follow-up-evaluation
+  - run-opportunity-evaluation
   - run-commercial-evaluation
   - run-technical-evaluation
   - run-financial-evaluation
@@ -70,7 +70,7 @@ prompt:
 
     Route work into:
 
-    - `run-follow-up-evaluation`
+    - `run-opportunity-evaluation`
 
     - `run-commercial-evaluation`
 

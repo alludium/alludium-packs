@@ -4,7 +4,7 @@ title: Configure Origination Pipeline
 slug: configure-origination-pipeline
 agent: vc-sourcing-operator
 skills:
-- vc-origination-pipeline-orchestration
+- origination-pipeline-orchestration
 - citation-enforcement
 ---
 
@@ -82,5 +82,5 @@ Configuration only. No external reads beyond connection-readiness checks, no sch
 
 ## Required Skills
 
-- `vc-origination-pipeline-orchestration`
+- `origination-pipeline-orchestration`
 - `citation-enforcement`

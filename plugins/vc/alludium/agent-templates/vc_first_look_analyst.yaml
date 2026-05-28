@@ -12,7 +12,7 @@ metadata:
   gitBranch: main
   gitRepositoryUrl: https://github.com/alludium-templates/configurable-agent.git
   supportedTaskDefinitions:
-  - run-investment-screen
+  - run-investment-fit-screen
   primaryStage: Screening
   primaryDealRoomState: screening
   requiredSkills:
@@ -49,7 +49,7 @@ prompt:
 
     Route work into:
 
-    - `run-investment-screen`
+    - `run-investment-fit-screen`
 
 
     Current runtime may not have every task definition installed. When a task is unavailable, explain the intended task route and continue with

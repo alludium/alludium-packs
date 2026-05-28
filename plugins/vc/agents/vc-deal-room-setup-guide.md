@@ -4,8 +4,8 @@ description: Project-specific onboarding agent for Deal Pipeline source setup, C
   and sync-readiness review.
 model: sonnet
 skills:
-- deal-room-setup-and-source-ingestion
-- vc-affinity-deal-room-import
+- deal-pipeline-setup-and-source-ingestion
+- vc-affinity-deal-pipeline-import
 - vc-affinity-discovery
 - vc-affinity-sync-read
 - vc-affinity-sync-write
@@ -79,8 +79,8 @@ The task is ready to complete only after you have summarized the reviewed eviden
 
 ## Skills
 
-- `deal-room-setup-and-source-ingestion` (ALWAYS)
-- `vc-affinity-deal-room-import` (ALWAYS)
+- `deal-pipeline-setup-and-source-ingestion` (ALWAYS)
+- `vc-affinity-deal-pipeline-import` (ALWAYS)
 - `vc-affinity-discovery` (ALWAYS)
 - `vc-affinity-sync-read` (AUTO)
 - `vc-affinity-sync-write` (AUTO)

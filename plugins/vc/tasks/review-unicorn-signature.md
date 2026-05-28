@@ -5,7 +5,7 @@ slug: review-unicorn-signature
 agent: vc-sourcing-operator
 skills:
 - vc-sourcing-verdict-and-screening
-- vc-origination-ic-summary-preparation
+- origination-prospect-summary-preparation
 - citation-enforcement
 ---
 
@@ -74,5 +74,5 @@ Review only. Do not demote protected manual decisions, write external systems, s
 ## Required Skills
 
 - `vc-sourcing-verdict-and-screening`
-- `vc-origination-ic-summary-preparation`
+- `origination-prospect-summary-preparation`
 - `citation-enforcement`

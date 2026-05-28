@@ -29,7 +29,7 @@ definition:
       usage: operating_guidance
     requiredSkills:
     - vc-sourcing-verdict-and-screening
-    - vc-origination-ic-summary-preparation
+    - origination-prospect-summary-preparation
     - citation-enforcement
     recommendedAgentTemplate: vc_sourcing_operator
     plannedRecommendedAgentTemplate: vc_sourcing_operator

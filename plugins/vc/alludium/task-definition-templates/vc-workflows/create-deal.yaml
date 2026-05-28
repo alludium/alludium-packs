@@ -1,0 +1,143 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.create_deal_pipeline_project
+version: 1.0.0
+title: Create Deal
+category: Venture Capital
+visibility: workspace
+tags:
+- vc
+- setup
+- project-creation
+- intake
+definition:
+  name: Create Deal
+  slug: create-deal
+  description: Gather enough structured context from chat, inbox material, CRM references, source notes, domains, decks, or
+    origination handoffs to create one Deal Pipeline project.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: setup
+    taskFamily: deal_pipeline_project_creation
+    documentRefs:
+    - documentId: vc.document.deal_room_sop
+      usage: operating_guidance
+    - documentId: vc.document.evidence_citation_style_guide
+      usage: style_guide
+    - documentId: vc.document.template_use_guidance
+      usage: operating_guidance
+    requiredSkills:
+    - deal-pipeline-setup-and-source-ingestion
+    - company-research-and-enrichment
+    - citation-enforcement
+    - pitch-deck-explainer
+    plannedRecommendedAgentTemplate: vc_dealflow_concierge
+    recommendedAgentTemplate: vc_dealflow_concierge
+    supportedProjectTypes:
+    - vc_deal_room
+    supportedProjectScopes:
+    - project_instance
+    instructions:
+      executionInstructions: 'Guide the user through creating a Deal Pipeline project from whatever context is available:
+        an inbox request, intro note, CRM/source record link, company domain, pitch deck, founder material, source thread,
+        or origination promotion package. Ask only for the missing details needed to confidently identify the company and
+        preserve source context. Complete with structured output `projectCreation.fieldValues.company_name`; include domain,
+        source, founder, pitch-deck, source-reference, confidentiality, and other declared Deal Pipeline creation fields only
+        when confidently collected. Do not create the project, run intake, screen the opportunity, create child tasks, move
+        stages, mutate CRM records, send messages, or write external files; the platform finalizer owns deterministic project
+        creation after task completion. Use `definitionJson.documentRefs` as the durable document reference contract. Apply
+        each reference by usage: `style_guide` governs citations and claim language, and `operating_guidance` constrains
+        process and approval boundaries.'
+      missingInputPolicy: Ask for company_name or enough evidence to infer it, plus at least one source note, source artifact,
+        source record, pitch deck, company domain, source thread, or origination handoff before completing project creation.
+      externalActionPolicy: Guided creation only. No CRM writes, external sends, Drive changes, project creation, child task
+        creation, stage transitions, or screening work.
+      humanConfirmationPolicy: always
+      completionCriteria:
+      - '`projectCreation.fieldValues.company_name` is captured for guided project creation finalization.'
+      - Available source context is preserved as declared Deal Pipeline creation fields or summarized as creation notes.
+      - Missing enrichment or screening inputs are listed for the post-create intake task rather than blocking creation unnecessarily.
+      - The output distinguishes project-creation facts from later intake, enrichment, and screening judgments.
+    humanDecisionPoints:
+    - Confirm the target company identity when source material is ambiguous.
+    - Confirm whether incomplete context is sufficient to create the project and let intake continue after creation.
+fields:
+  input:
+  - key: company_name
+    name: Company Name
+    fieldType: string
+    required: false
+    position: 0
+    config: {}
+  - key: freeform_deal_context
+    name: Deal Context
+    fieldType: richtext
+    required: false
+    position: 1
+    config:
+      rows: 6
+  - key: company_domain
+    name: Company Domain
+    fieldType: string
+    required: false
+    position: 2
+    config: {}
+  - key: source_object_url
+    name: Source Record URL
+    fieldType: string
+    required: false
+    position: 3
+    config: {}
+  - key: source_thread_url
+    name: Source Thread URL
+    fieldType: string
+    required: false
+    position: 4
+    config: {}
+  - key: pitch_deck_artifact_id
+    name: Pitch Deck Artifact
+    fieldType: file
+    required: false
+    position: 5
+    config: {}
+  output:
+  - key: projectCreation
+    name: Project Creation Field Values
+    fieldType: json
+    required: true
+    position: 0
+    config:
+      contractRef: projectCreation.fieldValues.v1
+      requiredPaths:
+      - fieldValues.company_name
+  - key: creation_summary
+    name: Creation Summary
+    fieldType: richtext
+    required: false
+    position: 1
+    config:
+      rows: 5
+  - key: missing_creation_context
+    name: Missing Creation Context
+    fieldType: string
+    required: false
+    position: 2
+    config: {}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc-workflows
+      taskKind: create_deal_pipeline_project
+      projectType: vc_deal_room
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    requiresHumanConfirmationToComplete: true
+    preferredMode: guided_execution
+    preferredAgentType: vc_dealflow_concierge
+ui:
+  renderer: generic
+  surfaceKey: null
+  frameRef: null

@@ -94,7 +94,7 @@
         "label": "Core sourcing loop",
         "description": "Primary recurring sourcing pass, digest, and source-health review for the origination pipeline.",
         "taskDefinitionSlugs": [
-          "run-sourcing-pipeline",
+          "run-vc-sourcing-pipeline",
           "generate-sourcing-digest",
           "review-source-errors-and-spend"
         ],
@@ -109,7 +109,7 @@
           "discover-companies-house-candidates",
           "discover-x-founder-signals",
           "discover-github-builder-signals",
-          "discover-linkedin-founders",
+          "discover-linkedin-founder-candidates",
           "discover-reddit-builder-signals"
         ],
         "defaultExpanded": false,
@@ -121,11 +121,11 @@
         "description": "Optional screen, prioritization, prospect-summary, engagement-screen, and outreach-prep tasks for approved candidate batches.",
         "taskDefinitionSlugs": [
           "review-portfolio-overlap",
-          "screen-identified-candidates",
+          "screen-identified-candidate",
           "run-deal-fit-analysis",
-          "screen-active-sourcing-candidates",
+          "screen-active-sourcing-candidate",
           "review-unicorn-signature",
-          "screen-founder-connected-candidates",
+          "screen-founder-connected-candidate",
           "prepare-outreach-draft-queue"
         ],
         "defaultExpanded": false,
@@ -1091,8 +1091,8 @@
         ]
       },
       {
-        "id": "mapping-run-sourcing-pipeline",
-        "taskDefinitionSlug": "run-sourcing-pipeline",
+        "id": "mapping-run-vc-sourcing-pipeline",
+        "taskDefinitionSlug": "run-vc-sourcing-pipeline",
         "taskDefinitionTemplateId": "vc.run_sourcing_pipeline",
         "lifecycleStage": "source",
         "projectScope": "project_instance",
@@ -1188,8 +1188,8 @@
         ]
       },
       {
-        "id": "mapping-discover-linkedin-founders",
-        "taskDefinitionSlug": "discover-linkedin-founders",
+        "id": "mapping-discover-linkedin-founder-candidates",
+        "taskDefinitionSlug": "discover-linkedin-founder-candidates",
         "taskDefinitionTemplateId": "vc.discover_linkedin_founders",
         "lifecycleStage": "source",
         "projectScope": "project_instance",
@@ -1381,8 +1381,8 @@
         ]
       },
       {
-        "id": "mapping-enrich-sourcing-candidates",
-        "taskDefinitionSlug": "enrich-sourcing-candidates",
+        "id": "mapping-enrich-sourcing-candidate",
+        "taskDefinitionSlug": "enrich-sourcing-candidate",
         "taskDefinitionTemplateId": "vc.enrich_sourcing_candidates",
         "lifecycleStage": "enriched",
         "projectScope": "project_instance",
@@ -1409,8 +1409,8 @@
         ]
       },
       {
-        "id": "mapping-check-affinity-relationships",
-        "taskDefinitionSlug": "check-affinity-relationships",
+        "id": "mapping-check-affinity-relationship-context",
+        "taskDefinitionSlug": "check-affinity-relationship-context",
         "taskDefinitionTemplateId": "vc.check_affinity_relationships",
         "lifecycleStage": "enriched",
         "projectScope": "project_instance",
@@ -1437,8 +1437,8 @@
         ]
       },
       {
-        "id": "mapping-score-sourcing-candidates",
-        "taskDefinitionSlug": "score-sourcing-candidates",
+        "id": "mapping-score-sourcing-candidate",
+        "taskDefinitionSlug": "score-sourcing-candidate",
         "taskDefinitionTemplateId": "vc.score_sourcing_candidates",
         "lifecycleStage": "initial_screen",
         "projectScope": "project_instance",
@@ -1476,8 +1476,8 @@
         ]
       },
       {
-        "id": "mapping-screen-identified-candidates",
-        "taskDefinitionSlug": "screen-identified-candidates",
+        "id": "mapping-screen-identified-candidate",
+        "taskDefinitionSlug": "screen-identified-candidate",
         "taskDefinitionTemplateId": "vc.screen_identified_candidates",
         "lifecycleStage": "initial_screen",
         "projectScope": "project_instance",
@@ -1515,8 +1515,8 @@
         ]
       },
       {
-        "id": "mapping-sync-sourcing-candidates",
-        "taskDefinitionSlug": "sync-sourcing-candidates",
+        "id": "mapping-sync-sourcing-candidate",
+        "taskDefinitionSlug": "sync-sourcing-candidate",
         "taskDefinitionTemplateId": "vc.sync_sourcing_candidates",
         "lifecycleStage": "identified",
         "projectScope": "project_instance",
@@ -1604,8 +1604,8 @@
         ]
       },
       {
-        "id": "mapping-screen-active-sourcing-candidates",
-        "taskDefinitionSlug": "screen-active-sourcing-candidates",
+        "id": "mapping-screen-active-sourcing-candidate",
+        "taskDefinitionSlug": "screen-active-sourcing-candidate",
         "taskDefinitionTemplateId": "vc.screen_active_sourcing_candidates",
         "lifecycleStage": "prioritized",
         "projectScope": "project_instance",
@@ -1670,8 +1670,8 @@
         ]
       },
       {
-        "id": "mapping-prepare-sourcing-ic-summary",
-        "taskDefinitionSlug": "prepare-sourcing-ic-summary",
+        "id": "mapping-prepare-prospect-summary",
+        "taskDefinitionSlug": "prepare-prospect-summary",
         "taskDefinitionTemplateId": "vc.prepare_sourcing_ic_summary",
         "lifecycleStage": "outreach_prep",
         "projectScope": "project_instance",
@@ -1731,8 +1731,8 @@
         ]
       },
       {
-        "id": "mapping-promote-candidate-to-deal-room",
-        "taskDefinitionSlug": "promote-candidate-to-deal-room",
+        "id": "mapping-promote-candidate-to-deal-pipeline",
+        "taskDefinitionSlug": "promote-candidate-to-deal-pipeline",
         "taskDefinitionTemplateId": "vc.promote_candidate_to_deal_room",
         "lifecycleStage": "promoted_to_deal_pipeline",
         "projectScope": "project_instance",
@@ -1998,8 +1998,8 @@
         ]
       },
       {
-        "id": "mapping-screen-founder-connected-candidates",
-        "taskDefinitionSlug": "screen-founder-connected-candidates",
+        "id": "mapping-screen-founder-connected-candidate",
+        "taskDefinitionSlug": "screen-founder-connected-candidate",
         "taskDefinitionTemplateId": "vc.screen_founder_connected_candidates",
         "lifecycleStage": "engagement_screen",
         "projectScope": "project_instance",

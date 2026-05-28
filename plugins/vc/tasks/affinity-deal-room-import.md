@@ -4,9 +4,9 @@ title: Import Affinity Deal Pipeline Seed
 slug: affinity-deal-room-import
 agent: vc-deal-room-setup-guide
 skills:
-- vc-affinity-deal-room-import
+- vc-affinity-deal-pipeline-import
 - vc-affinity-sync-read
-- deal-room-setup-and-source-ingestion
+- deal-pipeline-setup-and-source-ingestion
 - citation-enforcement
 ---
 
@@ -75,7 +75,7 @@ Project-scoped import only. Reads are limited to approved Affinity records. Exte
 
 ## Required Skills
 
-- `vc-affinity-deal-room-import`
+- `vc-affinity-deal-pipeline-import`
 - `vc-affinity-sync-read`
-- `deal-room-setup-and-source-ingestion`
+- `deal-pipeline-setup-and-source-ingestion`
 - `citation-enforcement`

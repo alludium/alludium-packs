@@ -1,0 +1,207 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.run_investment_screen
+version: 1.0.16
+title: Run Investment Fit Screen
+category: Venture Capital
+visibility: workspace
+tags:
+  - vc
+  - screening
+  - investment-screening
+definition:
+  name: Run Investment Fit Screen
+  slug: run-investment-fit-screen
+  description: Run a fast investment fit screen for one venture-capital opportunity using configured criteria, available evidence, human review gates, and next-action recommendations.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: screening
+    taskFamily: screening
+    documentRefs:
+      - documentId: vc.document.investment_screening_framework
+        usage: methodology
+        outputFieldKey: investment_screen_scorecard_artifact_id
+      - documentId: vc.document.evidence_citation_style_guide
+        usage: style_guide
+      - documentId: vc.document.template_use_guidance
+        usage: operating_guidance
+    requiredSkills:
+      - investment-screening-framework
+      - red-flags-scanner
+      - citation-enforcement
+    plannedRecommendedAgentTemplate: vc_first_look_analyst
+    recommendedAgentTemplate: vc_first_look_analyst
+    supportedProjectTypes:
+      - vc_deal_room
+    sourceAnchors:
+      - source: investment-management-process-slides
+        anchor: slide-9
+        note: Initial investment screen scorecard
+      - source: investment-management-process-slides
+        anchor: slide-13
+        note: Initial call stage
+      - source: investment-management-process-slides
+        anchor: slide-14
+        note: Initial call AI map
+    instructions:
+      executionInstructions: >-
+        Score each configured investment-fit criterion with rationale, source links, unknowns, red flags, and human-review prompts before recommending continue, watch, or pass. Use a pitch deck, source material, source thread, opportunity intake artifact, meeting notes, or source links as evidence; do not require a pitch deck when another source is sufficient. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Investment Fit Screen Scorecard and attach it to the required output field `investment_screen_scorecard_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+      missingInputPolicy: Ask for at least one evidence source before producing an investment fit recommendation.
+      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
+      completionCriteria:
+        - Required input gaps are resolved or listed as assumptions/open questions.
+        - Material conclusions include source links or are labeled as human judgment calls.
+        - Next actions identify owner, dependency, and required human approval point.
+    humanDecisionPoints:
+      - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
+      - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+    orchestration:
+      parentTaskPolicy: none
+      suggestedChildTasks: []
+    workspaceConfiguredMethodologySkills:
+      - skill: investment-screening-framework
+        note: Use only when the workspace explicitly configures this screening framework.
+fields:
+  input:
+    - key: company_name
+      name: Company Name
+      fieldType: string
+      required: true
+      position: 0
+      config: {}
+    - key: pitch_deck_artifact_id
+      name: Pitch Deck Artifact
+      fieldType: file
+      required: false
+      position: 1
+      config: {}
+    - key: meeting_notes
+      name: Meeting Notes
+      fieldType: richtext
+      required: false
+      position: 2
+      config:
+        rows: 5
+    - key: source_links
+      name: Source Links
+      fieldType: string
+      required: false
+      position: 3
+      config: {}
+    - key: opportunity_intake_artifact_id
+      name: Opportunity Intake Summary
+      fieldType: file
+      required: false
+      position: 4
+      config: {}
+    - key: source_material_artifact_ids
+      name: Source Material Artifact IDs
+      fieldType: string
+      required: false
+      position: 5
+      config: {}
+
+  output:
+    - key: investment_screen_scorecard_artifact_id
+      name: Investment Fit Screen Scorecard
+      fieldType: file
+      required: true
+      position: 0
+      config:
+        documentRefId: vc.document.investment_screening_framework
+    - key: factor_scores
+      name: Criterion Scores
+      fieldType: json
+      required: false
+      position: 1
+      config: {}
+    - key: overall_recommendation
+      name: Overall Recommendation
+      fieldType: string
+      required: false
+      position: 2
+      config: {}
+    - key: source_links
+      name: Source Links
+      fieldType: string
+      required: false
+      position: 3
+      config: {}
+    - key: unknowns
+      name: Unknowns
+      fieldType: string
+      required: false
+      position: 4
+      config: {}
+    - key: human_review_prompts
+      name: Human Review Prompts
+      fieldType: string
+      required: false
+      position: 5
+      config: {}
+    - key: summary
+      name: Summary
+      fieldType: richtext
+      required: false
+      position: 6
+      config:
+        rows: 5
+    - key: recommendation
+      name: Recommendation
+      fieldType: string
+      required: false
+      position: 7
+      config: {}
+    - key: assumptions
+      name: Assumptions
+      fieldType: string
+      required: false
+      position: 8
+      config: {}
+    - key: evidence_quality
+      name: Evidence Quality
+      fieldType: json
+      required: false
+      position: 9
+      config: {}
+    - key: open_questions
+      name: Open Questions
+      fieldType: json
+      required: false
+      position: 10
+      config: {}
+    - key: risks
+      name: Risks
+      fieldType: json
+      required: false
+      position: 11
+      config: {}
+    - key: human_decision_points
+      name: Human Decision Points
+      fieldType: string
+      required: false
+      position: 12
+      config: {}
+    - key: next_actions
+      name: Next Actions
+      fieldType: json
+      required: false
+      position: 13
+      config: {}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc-workflows
+      taskKind: run_investment_screen
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    requiresHumanConfirmationToComplete: true
+    preferredMode: guided_execution
+    preferredAgentType: vc_first_look_analyst
+ui:
+  renderer: generic
+  surfaceKey: null
+  frameRef: null

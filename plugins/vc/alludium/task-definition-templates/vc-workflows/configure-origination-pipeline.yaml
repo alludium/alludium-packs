@@ -30,7 +30,7 @@ definition:
     - documentId: vc.document.template_use_guidance
       usage: operating_guidance
     requiredSkills:
-    - vc-origination-pipeline-orchestration
+    - origination-pipeline-orchestration
     - citation-enforcement
     recommendedAgentTemplate: vc_sourcing_operator
     plannedRecommendedAgentTemplate: vc_sourcing_operator

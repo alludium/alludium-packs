@@ -48,9 +48,9 @@ PLATFORM_TASK_DEFINITIONS: dict[str, dict[str, str]] = {
 
 GENERAL_TASK_SLUGS_BY_PROJECT_TYPE: dict[str, list[str]] = {
     "vc_deal_room": [
-        "prepare-initial-call",
+        "prepare-meeting",
         "request-founder-materials",
-        "summarize-initial-call",
+        "summarize-meeting-records",
         "review-opportunity-status",
     ],
 }

@@ -11,8 +11,8 @@ metadata:
   gitBranch: main
   gitRepositoryUrl: https://github.com/alludium-templates/configurable-agent.git
   supportedTaskDefinitions:
-    - prepare-initial-call
-    - summarize-initial-call
+    - prepare-meeting
+    - summarize-meeting-records
   primaryStage: "Meetings"
   primaryDealRoomState: "evaluation"
   requiredSkills:
@@ -53,8 +53,8 @@ prompt:
     ## Supported Tasks
 
     Route work into:
-    - `prepare-initial-call`
-    - `summarize-initial-call`
+    - `prepare-meeting`
+    - `summarize-meeting-records`
     - stage-specific meeting prep and summary variants
 
     Current runtime may not have every task definition installed. When a task is unavailable, explain the intended task route and continue with the matching skill output.

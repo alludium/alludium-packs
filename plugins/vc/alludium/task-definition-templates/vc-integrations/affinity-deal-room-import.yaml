@@ -21,9 +21,9 @@ definition:
     stage: intake
     taskFamily: integration_project_import
     requiredSkills:
-    - vc-affinity-deal-room-import
+    - vc-affinity-deal-pipeline-import
     - vc-affinity-sync-read
-    - deal-room-setup-and-source-ingestion
+    - deal-pipeline-setup-and-source-ingestion
     - citation-enforcement
     recommendedAgentTemplate: vc_deal_room_setup_guide
     plannedRecommendedAgentTemplate: vc_deal_room_setup_guide

@@ -105,11 +105,11 @@ The command-view stage groups should use these groups:
 | Current Task | Target Stage Availability | Required Change |
 | --- | --- | --- |
 | `affinity-deal-room-import` | `intake` | Keep as intake/import setup evidence. |
-| `screen-inbound-opportunity` | `intake`, guided creation | Narrow to opportunity-intake triage and project creation field collection. Make deck optional. |
-| `run-investment-screen` | `screening` | Rename title/description toward generic investment fit screen. Keep existing slug initially for compatibility. |
-| `run-follow-up-evaluation` | `evaluation` | Reframe as generic opportunity evaluation. Avoid source-specific framework names. |
-| `prepare-initial-call` | all active stages, initial mapping `evaluation` | Rename title/description to `Prepare Meeting`. Keep slug initially for compatibility, then migrate slug in a later release. |
-| `summarize-initial-call` | all active stages, initial mapping `evaluation` | Rename title/description to `Summarize Meeting Records`. Keep slug initially for compatibility, then migrate slug in a later release. |
+| `capture-opportunity-intake` | `intake`, guided creation | Narrow to opportunity-intake triage and project creation field collection. Make deck optional. |
+| `run-investment-fit-screen` | `screening` | Rename title/description toward generic investment fit screen. Keep existing slug initially for compatibility. |
+| `run-opportunity-evaluation` | `evaluation` | Reframe as generic opportunity evaluation. Avoid source-specific framework names. |
+| `prepare-meeting` | all active stages, initial mapping `evaluation` | Rename title/description to `Prepare Meeting`. Keep slug initially for compatibility, then migrate slug in a later release. |
+| `summarize-meeting-records` | all active stages, initial mapping `evaluation` | Rename title/description to `Summarize Meeting Records`. Keep slug initially for compatibility, then migrate slug in a later release. |
 | `request-founder-materials` | all active stages, initial mapping `evaluation` | Treat as a reusable material-request task. |
 | `generate-diligence-questions` | `evaluation`, `formal_diligence`, all active stages when invoked manually | Treat as reusable question generation, not formal diligence only. |
 | `review-opportunity-status` | all active stages | Treat as stage-agnostic operations/status review. |
@@ -167,7 +167,7 @@ Boundary:
 
 Initial implementation:
 
-- Refactor `screen-inbound-opportunity` toward this role before adding a new slug.
+- Refactor `capture-opportunity-intake` toward this role before adding a new slug.
 
 ### `run-investment-fit-screen`
 
@@ -203,7 +203,7 @@ Boundary:
 
 Initial implementation:
 
-- Retitle `run-investment-screen`; keep slug for compatibility.
+- Retitle `run-investment-fit-screen`; keep slug for compatibility.
 
 ### `run-opportunity-evaluation`
 
@@ -240,7 +240,7 @@ Boundary:
 
 Initial implementation:
 
-- Reframe `run-follow-up-evaluation`; keep slug for compatibility.
+- Reframe `run-opportunity-evaluation`; keep slug for compatibility.
 
 ### `prepare-meeting`
 
@@ -278,7 +278,7 @@ Boundary:
 
 Initial implementation:
 
-- Retitle `prepare-initial-call`; keep slug for compatibility.
+- Retitle `prepare-meeting`; keep slug for compatibility.
 
 ### `summarize-meeting-records`
 
@@ -314,7 +314,7 @@ Boundary:
 
 Initial implementation:
 
-- Retitle `summarize-initial-call`; keep slug for compatibility.
+- Retitle `summarize-meeting-records`; keep slug for compatibility.
 
 ### `prepare-decision-review-pack`
 
@@ -573,8 +573,8 @@ Status: implemented in this branch; needs validation and final review.
 
 Status: implemented in this branch.
 
-- Retitle `prepare-initial-call` as `Prepare Meeting`.
-- Retitle `summarize-initial-call` as `Summarize Meeting Records`.
+- Retitle `prepare-meeting` as `Prepare Meeting`.
+- Retitle `summarize-meeting-records` as `Summarize Meeting Records`.
 - Update descriptions, tags, instructions, field labels, output names, agent actions, document names or document refs where needed.
 - Keep current slugs and filenames for compatibility unless a release migration explicitly handles slug replacement.
 
@@ -582,10 +582,10 @@ Status: implemented in this branch.
 
 Status: implemented in this branch.
 
-- Reframe `screen-inbound-opportunity` as intake/guided project creation.
+- Reframe `capture-opportunity-intake` as intake/guided project creation.
 - Make pitch deck optional when other source artifacts exist.
-- Retitle `run-investment-screen` toward investment fit screen.
-- Reframe `run-follow-up-evaluation` toward opportunity evaluation.
+- Retitle `run-investment-fit-screen` toward investment fit screen.
+- Reframe `run-opportunity-evaluation` toward opportunity evaluation.
 - Remove source-specific methodology labels from task text.
 
 ### Slice 4: Required Skills Cleanup

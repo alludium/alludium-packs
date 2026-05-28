@@ -1,0 +1,121 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.run_follow_up_evaluation
+version: 1.0.16
+title: Run Opportunity Evaluation
+category: Venture Capital
+visibility: workspace
+tags:
+  - vc
+  - evaluation
+  - opportunity-evaluation
+definition:
+  name: Run Opportunity Evaluation
+  slug: run-opportunity-evaluation
+  description: Run a deeper opportunity evaluation after screening for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: evaluation
+    taskFamily: evaluation
+    documentRefs:
+      - documentId: vc.document.follow_up_evaluation_template
+        usage: output_template
+        outputFieldKey: follow_up_evaluation_artifact_id
+      - documentId: vc.document.opportunity_evaluation_framework
+        usage: methodology
+      - documentId: vc.document.evaluation_workstream_guide
+        usage: methodology
+      - documentId: vc.document.commercial_evaluation_guide
+        usage: methodology
+      - documentId: vc.document.technical_evaluation_guide
+        usage: methodology
+      - documentId: vc.document.financial_evaluation_guide
+        usage: methodology
+      - documentId: vc.document.evidence_citation_style_guide
+        usage: style_guide
+      - documentId: vc.document.template_use_guidance
+        usage: operating_guidance
+    requiredSkills:
+      - investment-diligence-question-framework
+      - red-flags-scanner
+      - citation-enforcement
+    plannedRecommendedAgentTemplate: vc_evaluation_analyst
+    recommendedAgentTemplate: vc_evaluation_analyst
+    supportedProjectTypes:
+      - vc_deal_room
+    sourceAnchors:
+      - source: investment-management-process-slides
+        anchor: slide-15
+        note: Follow-up stage
+      - source: investment-management-process-slides
+        anchor: slide-16
+        note: Follow-up AI map
+      - source: investment-management-process-slides
+        anchor: slide-35
+        note: structured diligence dimensions
+    instructions:
+      executionInstructions: >-
+        Build an opportunity evaluation from the investment fit screen, meeting records, founder materials, customer evidence, market sources, technical sources, financial sources, and existing questions. Produce a deeper evaluation scorecard, key claims register, critical unknowns, initial diligence recommendations, and recommended decision path. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Opportunity Evaluation and attach it to the required output field `follow_up_evaluation_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+      missingInputPolicy: Ask for the investment screen and at least one meeting, founder-material, customer, market, technical, or financial evidence source before producing the evaluation.
+      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
+      completionCriteria:
+        - Required input gaps are resolved or listed as assumptions/open questions.
+        - Material conclusions include source links or are labeled as human judgment calls.
+        - Next actions identify owner, dependency, and required human approval point.
+    humanDecisionPoints:
+      - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
+      - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+    orchestration:
+      parentTaskPolicy: none
+      suggestedChildTasks: []
+    workspaceConfiguredMethodologySkills:
+      - skill: investment-diligence-question-framework
+        note: Use only when the workspace explicitly configures this diligence framework.
+      - skill: market-map-building
+        note: Use only when the workspace explicitly configures this market mapping method.
+fields:
+  input:
+    - key: company_name
+      name: Company Name
+      fieldType: string
+      required: true
+      position: 0
+      config: {}
+    - key: investment_screen_scorecard_artifact_id
+      name: Investment Fit Screen Scorecard
+      fieldType: file
+      required: true
+      position: 1
+      config: {}
+    - key: customer_insights_artifact_id
+      name: Meeting Records Summary
+      fieldType: file
+      required: true
+      position: 2
+      config: {}
+
+  output:
+    - key: follow_up_evaluation_artifact_id
+      name: Opportunity Evaluation
+      fieldType: file
+      required: true
+      position: 0
+      config:
+        documentRefId: vc.document.follow_up_evaluation_template
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc-workflows
+      taskKind: run_follow_up_evaluation
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    requiresHumanConfirmationToComplete: true
+    preferredMode: guided_execution
+    preferredAgentType: vc_evaluation_analyst
+ui:
+  renderer: generic
+  surfaceKey: null
+  frameRef: null

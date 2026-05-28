@@ -30,7 +30,7 @@ surfaces:
     - commercial-evaluation-and-market-risk
     - company-research-and-enrichment
     - deal-terms-analysis
-    - deal-room-setup-and-source-ingestion
+    - deal-pipeline-setup-and-source-ingestion
     - financial-diligence-workstream
     - financial-evaluation-and-financing-risk
     - founder-evaluation-and-reference-checking
@@ -55,7 +55,7 @@ surfaces:
     - traction-and-saas-unit-economics
     - vc-task-and-next-step-generation
     - vc-affinity-discovery
-    - vc-affinity-deal-room-import
+    - vc-affinity-deal-pipeline-import
     - vc-affinity-sync-read
     - vc-affinity-sync-write
     - vc-slack-discovery
@@ -69,7 +69,7 @@ surfaces:
     - vc-notion-sync-write
     - vc-harmonic-discovery
     - vc-harmonic-sync-read
-    - vc-origination-pipeline-orchestration
+    - origination-pipeline-orchestration
     - vc-source-registry-and-state-management
     - vc-apify-discovery
     - vc-apify-sync-read
@@ -88,10 +88,10 @@ surfaces:
     - vc-outreach-draft-queue
     - vc-sourcing-digest-generation
     - vc-manual-tip-ingestion
-    - vc-origination-deal-room-promotion
+    - origination-deal-pipeline-promotion
     - vc-linkedin-query-spend-audit
     - vc-source-error-and-spend-audit
-    - vc-origination-ic-summary-preparation
+    - origination-prospect-summary-preparation
   alludiumAgentTemplates:
     path: alludium/agent-templates
     ids:

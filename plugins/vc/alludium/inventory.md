@@ -17,7 +17,7 @@ These skills are included because the current `vc_*` Alludium agent templates re
 - `commercial-evaluation-and-market-risk`
 - `company-research-and-enrichment`
 - `deal-terms-analysis`
-- `deal-room-setup-and-source-ingestion`
+- `deal-pipeline-setup-and-source-ingestion`
 - `financial-diligence-workstream`
 - `financial-evaluation-and-financing-risk`
 - `founder-evaluation-and-reference-checking`
@@ -42,7 +42,7 @@ These skills are included because the current `vc_*` Alludium agent templates re
 - `traction-and-saas-unit-economics`
 - `vc-task-and-next-step-generation`
 - `vc-affinity-discovery`
-- `vc-affinity-deal-room-import`
+- `vc-affinity-deal-pipeline-import`
 - `vc-affinity-sync-read`
 - `vc-affinity-sync-write`
 - `vc-slack-discovery`

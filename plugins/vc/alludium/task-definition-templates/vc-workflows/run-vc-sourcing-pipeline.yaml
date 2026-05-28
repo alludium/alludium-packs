@@ -1,0 +1,181 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.run_sourcing_pipeline
+version: 0.1.12
+title: Run VC Sourcing Pipeline
+category: Venture Capital
+visibility: workspace
+tags:
+- vc
+- origination
+- sourcing
+- recurring
+definition:
+  name: Run VC Sourcing Pipeline
+  slug: run-vc-sourcing-pipeline
+  description: Orchestrate one VC origination sourcing pass across approved sources with source-state receipts, cost gates,
+    and human approval boundaries.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: source
+    taskFamily: origination_pipeline_run
+    documentRefs:
+    - documentId: vc.document.candidate_batch_template
+      usage: output_template
+      outputFieldKey: candidate_batch_artifact_id
+    - documentId: vc.document.origination_pipeline_sop
+      usage: operating_guidance
+    - documentId: vc.document.origination_source_strategy_guide
+      usage: methodology
+    - documentId: vc.document.template_use_guidance
+      usage: operating_guidance
+    requiredSkills:
+    - origination-pipeline-orchestration
+    - vc-source-registry-and-state-management
+    - citation-enforcement
+    recommendedAgentTemplate: vc_sourcing_operator
+    plannedRecommendedAgentTemplate: vc_sourcing_operator
+    supportedProjectTypes:
+    - vc_origination_pipeline
+    supportedProjectScopes:
+    - project_instance
+    scheduleDefaults:
+      enabledByDefault: false
+      requiresHumanApprovalToEnable: true
+      dryRunFirst: true
+      cadence: daily
+      localTime: 07:00
+      timezonePolicy: project_or_workspace_timezone
+      weeklyFullRun:
+        dayOfWeek: sunday
+        includeLinkedInPeopleDiscovery: true
+      dailyRun:
+        includeLinkedInPeopleDiscovery: false
+      defaultResultLimit: 200
+      budgetGuardrail: require_budget_before_paid_sources
+    scheduling:
+      schedulable: true
+      showInProjectSetup: true
+      setupStep: schedules
+      scheduleType: cron
+      defaultScheduleRef: scheduleDefaults
+      requiresHumanApprovalToEnable: true
+      canCreateTestRun: true
+      testRunCreatesVisibleTask: true
+      dryRunFirst: true
+      safety:
+        externalWritesRequireApproval: true
+    instructions:
+      executionInstructions: 'Run only approved origination sources and preserve the reference workflow order across Companies
+        House recent and mature windows, GitHub builder signals, X/Twitter builder signals, cheap enrichment, Affinity relationship
+        check, first verdict, LinkedIn company enrichment only for Meet or Watch, second verdict for fresh LinkedIn company
+        data, sync proposal, portfolio-overlap review, screen, outreach drafts, and digest. LinkedIn people discovery is weekly
+        by default or explicit override only. Create child tasks for the enabled steps; keep each child within its own source/action
+        boundary. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage:
+        `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be
+        completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance`
+        or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the
+        referenced pack document and preserve the document ID alongside the output artifact.'
+      missingInputPolicy: Ask for enabled source registry, cadence policy, budget cap, result limits, review thresholds, and
+        credential readiness before running. If paid-source budget is missing, run only no-cost previews or produce a dry-run
+        plan.
+      externalActionPolicy: Read, score, draft, and propose only unless a child task has explicit human approval for the specific
+        write. Do not send outreach, silently update CRM/manual decisions, or create Deal Pipeline projects.
+      humanConfirmationPolicy: always_before_external_write_or_schedule_enablement
+      completionCriteria:
+      - Run receipt lists enabled sources, skipped sources, cadence mode, result limits, cost metadata or missing cost metadata,
+        and degraded-source notes.
+      - Run status is one of dry_run, completed, partial, blocked, or failed.
+      - Candidate counts are split by source, new, duplicate, rejected, enriched, Meet, Watch, Pass, screened, outreach-drafted,
+        and promotion-ready where available.
+      - Source-state update includes dedupe keys, pagination/offset notes, seen IDs, and unresolved state-store gaps.
+      - Follow-up child tasks and human approvals are listed without performing unapproved writes.
+    humanDecisionPoints:
+    - Approve enabling or changing a recurring schedule.
+    - Approve paid-source actor runs and source-specific result limits.
+    - Approve sync writes, outreach sending, or Deal Pipeline promotion in separate tasks.
+fields:
+  input:
+  - key: sourcing_run_scope
+    name: Sourcing Run Scope
+    fieldType: json
+    required: true
+    position: 0
+    config: {}
+  - key: run_mode
+    name: Run Mode
+    fieldType: string
+    required: false
+    position: 1
+    config: {}
+  output:
+  - key: sourcing_run_summary
+    name: Sourcing Run Summary
+    fieldType: richtext
+    required: false
+    position: 0
+    config:
+      rows: 10
+  - key: run_status
+    name: Run Status
+    fieldType: string
+    required: false
+    position: 1
+    config: {}
+  - key: new_candidates_count
+    name: New Candidates Count
+    fieldType: number
+    required: false
+    position: 2
+    config: {}
+  - key: promotion_ready_count
+    name: Promotion Ready Count
+    fieldType: number
+    required: false
+    position: 3
+    config: {}
+  - key: run_completed_at
+    name: Run Completed At
+    fieldType: date
+    required: false
+    position: 4
+    config: {}
+  - key: run_receipt_artifact_id
+    name: Run Receipt Artifact
+    fieldType: file
+    required: true
+    position: 5
+    config: {}
+  - key: candidate_batch_artifact_id
+    name: Candidate Batch Artifact
+    fieldType: file
+    required: true
+    position: 6
+    config:
+      documentRefId: vc.document.candidate_batch_template
+  - key: source_state_artifact_id
+    name: Source State Artifact
+    fieldType: file
+    required: true
+    position: 7
+    config: {}
+  - key: child_task_plan
+    name: Child Task Plan
+    fieldType: richtext
+    required: true
+    position: 8
+    config:
+      rows: 8
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc
+      taskKind: run_sourcing_pipeline
+      projectType: vc_origination_pipeline
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    preferredMode: guarded_orchestration
+    requiresHumanConfirmationToComplete: true

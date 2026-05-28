@@ -4,7 +4,7 @@ title: Review Outreach Outcome
 slug: review-outreach-outcome
 agent: vc-sourcing-operator
 skills:
-- vc-origination-deal-room-promotion
+- origination-deal-pipeline-promotion
 - vc-outreach-draft-queue
 - citation-enforcement
 ---
@@ -73,6 +73,6 @@ Review and recommendation only. Deal Pipeline creation, CRM stage changes, pass/
 
 ## Required Skills
 
-- `vc-origination-deal-room-promotion`
+- `origination-deal-pipeline-promotion`
 - `vc-outreach-draft-queue`
 - `citation-enforcement`
