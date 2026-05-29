@@ -1,6 +1,6 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
-id: vc.sync_sourcing_candidates
+id: vc.sync_sourcing_candidate
 version: 0.1.4
 title: Sync Sourcing Candidate
 category: Venture Capital

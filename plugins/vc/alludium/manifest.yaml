@@ -188,18 +188,18 @@ surfaces:
 
         '
     ids:
-    - vc.pack_variable_discovery
+    - vc.vc_pack_variable_discovery
     - vc.review_opportunity_status
     - vc.source_thesis_targets
     - vc.prepare_lead_gen_packet
     - vc.prepare_deal_flow_agenda
-    - vc.create_deal_pipeline_project
-    - vc.screen_inbound_opportunity
+    - vc.create_deal
+    - vc.capture_opportunity_intake
     - vc.request_founder_materials
-    - vc.prepare_initial_call
-    - vc.summarize_initial_call
-    - vc.run_investment_screen
-    - vc.run_follow_up_evaluation
+    - vc.prepare_meeting
+    - vc.summarize_meeting_records
+    - vc.run_investment_fit_screen
+    - vc.run_opportunity_evaluation
     - vc.run_commercial_evaluation
     - vc.run_technical_evaluation
     - vc.run_financial_evaluation
@@ -226,31 +226,31 @@ surfaces:
     - vc.coordinate_capital_call_and_completion
     - vc.prepare_portfolio_onboarding
     - vc.configure_origination_pipeline
-    - vc.run_sourcing_pipeline
+    - vc.run_vc_sourcing_pipeline
     - vc.discover_companies_house_candidates
-    - vc.discover_linkedin_founders
+    - vc.discover_linkedin_founder_candidates
     - vc.discover_x_founder_signals
     - vc.discover_github_builder_signals
     - vc.discover_reddit_builder_signals
     - vc.review_reddit_candidate_inbox
     - vc.ingest_manual_sourcing_tip
-    - vc.enrich_sourcing_candidates
-    - vc.check_affinity_relationships
-    - vc.score_sourcing_candidates
-    - vc.screen_identified_candidates
-    - vc.sync_sourcing_candidates
+    - vc.enrich_sourcing_candidate
+    - vc.check_affinity_relationship_context
+    - vc.score_sourcing_candidate
+    - vc.screen_identified_candidate
+    - vc.sync_sourcing_candidate
     - vc.review_portfolio_overlap
     - vc.run_deal_fit_analysis
-    - vc.screen_active_sourcing_candidates
+    - vc.screen_active_sourcing_candidate
     - vc.review_unicorn_signature
-    - vc.prepare_sourcing_ic_summary
+    - vc.prepare_prospect_summary
     - vc.prepare_outreach_draft_queue
     - vc.record_linkedin_connection_attempt
-    - vc.screen_founder_connected_candidates
+    - vc.screen_founder_connected_candidate
     - vc.prepare_initial_linkedin_reachout
     - vc.prepare_second_reachout_email
     - vc.review_outreach_outcome
-    - vc.promote_candidate_to_deal_room
+    - vc.promote_candidate_to_deal_pipeline
     - vc.generate_sourcing_digest
     - vc.audit_linkedin_query_spend
     - vc.review_source_errors_and_spend

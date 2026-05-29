@@ -14,17 +14,30 @@ skills:
 
 # Preview Harmonic Search Results
 
+## Objective
+
 Preview selected Harmonic company or saved-search results before using them as VC sourcing or screening context.
 
-## Instructions
+## What To Do
 
 Build a Harmonic read preview only after discovery has selected a saved search, daily search, company, or result scope and live tool IDs are known. The current local platform catalog has no trusted Harmonic tool rows, so treat live reads as blocked until tool discovery after authorization succeeds. When tools exist, process only selected company/search results and propose target mapping as sourcing context, task context, watchlist candidates, or Deal Pipeline setup context.
+
+## Available Context
+
+- Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
+- Especially look for: Selected Harmonic Scope.
+- If a named input is absent, follow the missing-input policy rather than inventing facts.
+
+## Deliverable
+
+- Produce a concise, reviewable task response that a human can act on.
+- Also include a short human-readable summary covering: Harmonic Results Preview, Target Context Mapping. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
 Ask for selected Harmonic source scope and discovered tool IDs before processing search results.
 
-## External Action Policy
+## Guardrails
 
 Read preview only. Do not create Deal Pipelines, import companies, mark net-new results as seen, update saved searches, export contacts, or write back to Harmonic.
 
@@ -34,36 +47,7 @@ Read preview only. Do not create Deal Pipelines, import companies, mark net-new 
 - Tool IDs used or missing are named.
 - Import, watchlist creation, or recurring monitoring approval remains separate from the preview.
 
-## Human Decision Points
+## Human Review
 
 - Approve result rows before importing or attaching context.
 - Approve dedupe decisions and target mappings.
-
-## Inputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `selected_harmonic_scope` | Selected Harmonic Scope | `json` | yes |
-
-## Outputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `harmonic_results_preview` | Harmonic Results Preview | `richtext` | no |
-| `target_context_mapping` | Target Context Mapping | `json` | no |
-
-## Routing
-
-- Source template: `alludium/task-definition-templates/vc-integrations/harmonic-sync-read.yaml`
-- Alludium task ID: `vc.harmonic_sync_read`
-- Task family: `integration_sync_read`
-- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
-- Supported project types:
-  - `vc_deal_room`
-- Supported project scopes:
-  - `project_management`
-
-## Required Skills
-
-- `vc-harmonic-sync-read`
-- `citation-enforcement`

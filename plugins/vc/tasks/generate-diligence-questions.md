@@ -14,17 +14,44 @@ skills:
 
 # Generate Diligence Questions
 
+## Objective
+
 Generate a structured investment diligence question bank for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
 
-## Instructions
+## What To Do
 
-Generate prioritized investment diligence questions with rationale, source gap, owner, and urgency. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Structured Diligence Question Bank and attach it to the required output field `diligence_question_bank_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+Generate prioritized investment diligence questions with rationale, source gap, owner, and urgency. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a polished Word-ready document named Structured Diligence Question Bank.
+
+## Available Context
+
+- Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
+- Especially look for: Company Name, Known Claims, Existing Answers, Priority Workstreams.
+- If a named input is absent, follow the missing-input policy rather than inventing facts.
+
+## Reference Materials
+
+- [Investment Diligence Question Framework](../alludium/documents/shared/investment-diligence-question-framework.md): Use as the analysis method.
+- [Opportunity Evaluation Framework](../alludium/documents/shared/opportunity-evaluation-framework.md): Use as the analysis method.
+- [Evaluation Workstream Guide](../alludium/documents/shared/evaluation-workstream-guide.md): Use as the analysis method.
+- [Commercial Evaluation Guide](../alludium/documents/deal-room/commercial-evaluation-guide.md): Use as the analysis method.
+- [Technical Evaluation Guide](../alludium/documents/deal-room/technical-evaluation-guide.md): Use as the analysis method.
+- [Financial Evaluation Guide](../alludium/documents/deal-room/financial-evaluation-guide.md): Use as the analysis method.
+- [Formal Diligence Workstream Guide](../alludium/documents/deal-room/formal-diligence-workstream-guide.md): Use as the analysis method.
+- [Formal Diligence Checklist](../alludium/documents/deal-room/formal-diligence-checklist.md): Complete as a checklist with status, evidence, owner, and open items.
+- [Legal Diligence Guide](../alludium/documents/deal-room/legal-diligence-guide.md): Use as the analysis method.
+- [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md): Follow for citations, claim language, assumptions, and evidence quality.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+
+## Deliverable
+
+- Create or update **Structured Diligence Question Bank** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Also include a short human-readable summary covering: Question Set, Rationale, Source Gap, Owner, Urgency, Summary, Recommendation, Source Links, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
 Ask for missing required inputs before producing investment-stage recommendations.
 
-## External Action Policy
+## Guardrails
 
 Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
 
@@ -34,69 +61,11 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Material conclusions include source links or are labeled as human judgment calls.
 - Next actions identify owner, dependency, and required human approval point.
 
-## Human Decision Points
+## Human Review
 
 - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
 - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
 
-## Inputs
+## Workspace Methodology
 
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `company_name` | Company Name | `string` | yes |
-| `known_claims` | Known Claims | `string` | yes |
-| `existing_answers` | Existing Answers | `string` | no |
-| `priority_workstreams` | Priority Workstreams | `string` | no |
-
-## Outputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `diligence_question_bank_artifact_id` | Structured Diligence Question Bank | `file` | yes |
-| `question_set` | Question Set | `string` | no |
-| `rationale` | Rationale | `string` | no |
-| `source_gap` | Source Gap | `string` | no |
-| `owner` | Owner | `string` | no |
-| `urgency` | Urgency | `string` | no |
-| `summary` | Summary | `richtext` | no |
-| `recommendation` | Recommendation | `string` | no |
-| `source_links` | Source Links | `string` | no |
-| `assumptions` | Assumptions | `string` | no |
-| `evidence_quality` | Evidence Quality | `json` | no |
-| `open_questions` | Open Questions | `json` | no |
-| `risks` | Risks | `json` | no |
-| `human_decision_points` | Human Decision Points | `string` | no |
-| `next_actions` | Next Actions | `json` | no |
-
-## Document References
-
-- `vc.document.investment_diligence_question_framework` (methodology) -> `diligence_question_bank_artifact_id`
-- `vc.document.opportunity_evaluation_framework` (methodology)
-- `vc.document.evaluation_workstream_guide` (methodology)
-- `vc.document.commercial_evaluation_guide` (methodology)
-- `vc.document.technical_evaluation_guide` (methodology)
-- `vc.document.financial_evaluation_guide` (methodology)
-- `vc.document.formal_diligence_workstream_guide` (methodology)
-- `vc.document.formal_diligence_checklist` (checklist)
-- `vc.document.legal_diligence_guide` (methodology)
-- `vc.document.evidence_citation_style_guide` (style_guide)
-- `vc.document.template_use_guidance` (operating_guidance)
-
-## Routing
-
-- Source template: `alludium/task-definition-templates/vc-workflows/generate-diligence-questions.yaml`
-- Alludium task ID: `vc.generate_diligence_questions`
-- Task family: `diligence`
-- Lifecycle stage: `evaluation`
-- Recommended agent: `vc-evaluation-analyst` (Alludium template `vc_evaluation_analyst`)
-- Supported project types:
-  - `vc_deal_room`
-
-## Required Skills
-
-- `investment-diligence-question-framework`
-- `citation-enforcement`
-
-## Workspace-Configured Methodology Skills
-
-- `investment-diligence-question-framework`: Use only when the workspace explicitly configures this diligence framework.
+- Use the workspace-configured Investment Diligence Question Framework methodology when applicable: Use only when the workspace explicitly configures this diligence framework.

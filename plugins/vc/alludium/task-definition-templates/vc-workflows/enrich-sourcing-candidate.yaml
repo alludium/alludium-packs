@@ -1,6 +1,6 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
-id: vc.enrich_sourcing_candidates
+id: vc.enrich_sourcing_candidate
 version: 0.1.5
 title: Enrich Sourcing Candidate
 category: Venture Capital

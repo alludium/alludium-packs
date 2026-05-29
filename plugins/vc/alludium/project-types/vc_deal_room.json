@@ -181,7 +181,7 @@
     },
     "variableDiscoveryTask": {
       "label": "VC Variable Discovery",
-      "taskDefinitionTemplateId": "vc.pack_variable_discovery",
+      "taskDefinitionTemplateId": "vc.vc_pack_variable_discovery",
       "taskDefinitionSlug": "vc-pack-variable-discovery"
     },
     "sourceSetupTasks": [
@@ -238,7 +238,7 @@
     },
     "defaultState": "intake",
     "guidedTask": {
-      "taskDefinitionTemplateId": "vc.create_deal_pipeline_project",
+      "taskDefinitionTemplateId": "vc.create_deal",
       "taskDefinitionSlug": "create-deal"
     },
     "postCreate": {
@@ -2294,7 +2294,7 @@
       },
       {
         "id": "map-capture-opportunity-intake",
-        "taskDefinitionTemplateId": "vc.screen_inbound_opportunity",
+        "taskDefinitionTemplateId": "vc.capture_opportunity_intake",
         "taskDefinitionSlug": "capture-opportunity-intake",
         "projectScope": "project_instance",
         "lifecycleStage": "intake",
@@ -2377,7 +2377,7 @@
       },
       {
         "id": "map-run-investment-fit-screen",
-        "taskDefinitionTemplateId": "vc.run_investment_screen",
+        "taskDefinitionTemplateId": "vc.run_investment_fit_screen",
         "taskDefinitionSlug": "run-investment-fit-screen",
         "projectScope": "project_instance",
         "lifecycleStage": "screening",
@@ -2459,7 +2459,7 @@
       },
       {
         "id": "map-prepare-meeting",
-        "taskDefinitionTemplateId": "vc.prepare_initial_call",
+        "taskDefinitionTemplateId": "vc.prepare_meeting",
         "taskDefinitionSlug": "prepare-meeting",
         "projectScope": "project_instance",
         "lifecycleStage": "evaluation",
@@ -2494,7 +2494,7 @@
       },
       {
         "id": "map-summarize-meeting-records",
-        "taskDefinitionTemplateId": "vc.summarize_initial_call",
+        "taskDefinitionTemplateId": "vc.summarize_meeting_records",
         "taskDefinitionSlug": "summarize-meeting-records",
         "projectScope": "project_instance",
         "lifecycleStage": "evaluation",
@@ -2535,7 +2535,7 @@
       },
       {
         "id": "map-run-opportunity-evaluation",
-        "taskDefinitionTemplateId": "vc.run_follow_up_evaluation",
+        "taskDefinitionTemplateId": "vc.run_opportunity_evaluation",
         "taskDefinitionSlug": "run-opportunity-evaluation",
         "projectScope": "project_instance",
         "lifecycleStage": "evaluation",

@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
-id: vc.pack_variable_discovery
-version: 1.0.2
+id: vc.vc_pack_variable_discovery
+version: 1.0.3
 title: VC Pack Variable Discovery
 category: Venture Capital
 visibility: workspace

@@ -1,6 +1,6 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
-id: vc.create_deal_pipeline_project
+id: vc.create_deal
 version: 1.0.0
 title: Create Deal
 category: Venture Capital

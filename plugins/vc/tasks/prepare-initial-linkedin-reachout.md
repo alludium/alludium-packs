@@ -15,17 +15,36 @@ skills:
 
 # Prepare Initial LinkedIn Reachout
 
+## Objective
+
 Draft the first LinkedIn message after a candidate has been approved for outbound engagement.
 
-## Instructions
+## What To Do
 
-Draft the first LinkedIn reachout for approved of-interest candidates or connected founders. Use concrete candidate evidence, founder context, and the approved thesis angle. Keep the message short, specific, and question-led. Do not mark the reachout as sent, update CRM stages, or contact the founder without explicit human approval. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+Draft the first LinkedIn reachout for approved of-interest candidates or connected founders. Use concrete candidate evidence, founder context, and the approved thesis angle. Keep the message short, specific, and question-led. Do not mark the reachout as sent, update CRM stages, or contact the founder without explicit human approval.
+
+## Available Context
+
+- Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
+- Especially look for: Initial Reachout Scope.
+- If a named input is absent, follow the missing-input policy rather than inventing facts.
+
+## Reference Materials
+
+- [Outreach Queue Template](../alludium/documents/origination/outreach-queue-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md): Use as the analysis method.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+
+## Deliverable
+
+- Create or update **Initial LinkedIn Reachout Artifact** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Also include a short human-readable summary covering: Initial Reachout Draft Count, Initial Reachout Summary. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
 Ask for the approved candidate, founder LinkedIn URL, connection state, thesis angle, source evidence, and outreach tone policy before drafting.
 
-## External Action Policy
+## Guardrails
 
 Draft only. Sending LinkedIn messages, updating CRM stages, and changing outbound status require explicit human approval.
 
@@ -34,45 +53,3 @@ Draft only. Sending LinkedIn messages, updating CRM stages, and changing outboun
 - Draft includes founder, company, profile URL, message text, evidence hook, owner, and skip reason where applicable.
 - Message is concise, specific, and anchored to cited candidate evidence.
 - Send and CRM mutation boundaries are explicit.
-
-## Human Decision Points
-
-- None declared
-
-## Inputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `initial_reachout_scope` | Initial Reachout Scope | `json` | yes |
-
-## Outputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `initial_linkedin_reachout_artifact_id` | Initial LinkedIn Reachout Artifact | `file` | yes |
-| `initial_reachout_draft_count` | Initial Reachout Draft Count | `number` | no |
-| `initial_reachout_summary` | Initial Reachout Summary | `richtext` | no |
-
-## Document References
-
-- `vc.document.outreach_queue_template` (output_template) -> `initial_linkedin_reachout_artifact_id`
-- `vc.document.origination_source_strategy_guide` (methodology)
-- `vc.document.template_use_guidance` (operating_guidance)
-
-## Routing
-
-- Source template: `alludium/task-definition-templates/vc-workflows/prepare-initial-linkedin-reachout.yaml`
-- Alludium task ID: `vc.prepare_initial_linkedin_reachout`
-- Task family: `origination_outreach_drafts`
-- Lifecycle stage: `initial_reachout_linkedin`
-- Recommended agent: `vc-sourcing-operator` (Alludium template `vc_sourcing_operator`)
-- Supported project types:
-  - `vc_origination_pipeline`
-- Supported project scopes:
-  - `project_instance`
-
-## Required Skills
-
-- `vc-outreach-draft-queue`
-- `founder-outreach-and-intro-paths`
-- `citation-enforcement`

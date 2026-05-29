@@ -14,17 +14,30 @@ skills:
 
 # Explore Slack Channels for VC Context
 
+## Objective
+
 Discover Slack workspace and channel scope before selected VC context reads or handoff notifications.
 
-## Instructions
+## What To Do
 
-Use the connected `slack_v2` application to confirm workspace context with `slack_v2-get-current-user` and enumerate channels with `slack_v2-list-channels`. Classify channel purpose as deal intake, deal-specific discussion, IC prep, portfolio handoff, operations, broad/general, sensitive/excluded, or unknown.
+Use the connected slack v2 application to confirm workspace context with `slack_v2-get-current-user` and enumerate channels with `slack_v2-list-channels`. Classify channel purpose as deal intake, deal-specific discussion, IC prep, portfolio handoff, operations, broad/general, sensitive/excluded, or unknown.
+
+## Available Context
+
+- Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
+- Especially look for: Discovery Goal.
+- If a named input is absent, follow the missing-input policy rather than inventing facts.
+
+## Deliverable
+
+- Produce a concise, reviewable task response that a human can act on.
+- Also include a short human-readable summary covering: Slack Discovery Report, Channel Scope Questions. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
 If Slack is not authorized, ask for authorization or a supplied channel list.
 
-## External Action Policy
+## Guardrails
 
 Discovery only. Do not read messages, post, reply, create channels, or change channel settings.
 
@@ -33,36 +46,7 @@ Discovery only. Do not read messages, post, reply, create channels, or change ch
 - Candidate channels are classified with confidence.
 - User choices needed before message/thread reads are explicit.
 
-## Human Decision Points
+## Human Review
 
 - Approve included channels or threads before sync read.
 - Approve any notification targets separately.
-
-## Inputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `discovery_goal` | Discovery Goal | `string` | yes |
-
-## Outputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `slack_discovery_report` | Slack Discovery Report | `richtext` | no |
-| `channel_scope_questions` | Channel Scope Questions | `json` | no |
-
-## Routing
-
-- Source template: `alludium/task-definition-templates/vc-integrations/slack-discovery.yaml`
-- Alludium task ID: `vc.slack_discovery`
-- Task family: `integration_discovery`
-- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
-- Supported project types:
-  - `vc_deal_room`
-- Supported project scopes:
-  - `project_management`
-
-## Required Skills
-
-- `vc-slack-discovery`
-- `citation-enforcement`

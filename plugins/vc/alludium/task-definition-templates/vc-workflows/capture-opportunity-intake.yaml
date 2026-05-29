@@ -1,6 +1,6 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
-id: vc.screen_inbound_opportunity
+id: vc.capture_opportunity_intake
 version: 1.0.18
 title: Capture Opportunity Intake
 category: Venture Capital

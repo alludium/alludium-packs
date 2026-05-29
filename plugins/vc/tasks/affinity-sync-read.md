@@ -14,17 +14,30 @@ skills:
 
 # Preview Affinity Pipeline Import
 
+## Objective
+
 Preview selected Affinity opportunity, company, person, note, and list-entry data before importing it into Deal Pipeline context.
 
-## Instructions
+## What To Do
 
-Build a Deal Pipeline Affinity read-sync preview from the approved list/source and stage scope. Use `affinity_get_list_entries`, `affinity_list_opportunities`, `affinity_get_opportunity`, `affinity_search_companies`, `affinity_get_company`, `affinity_search_persons`, `affinity_get_person`, and `affinity_list_company_notes` only inside approved scope. Show proposed project, field, task, artifact, and setup-context mappings before import. Durable project creation and initial import belong to `affinity-deal-room-import` after reviewed user approval.
+Build a Deal Pipeline Affinity read-sync preview from the approved list/source and stage scope. Use affinity get list entries, affinity list opportunities, affinity get opportunity, affinity search companies, affinity get company, affinity search persons, affinity get person, and affinity list company notes only inside approved scope. Show proposed project, field, task, artifact, and setup-context mappings before import. Durable project creation and initial import belong to `affinity-deal-room-import` after reviewed user approval.
+
+## Available Context
+
+- Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
+- Especially look for: Selected Affinity Scope.
+- If a named input is absent, follow the missing-input policy rather than inventing facts.
+
+## Deliverable
+
+- Produce a concise, reviewable task response that a human can act on.
+- Also include a short human-readable summary covering: Affinity Import Preview, Mapping Decisions. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
 Ask for the selected Affinity source scope before creating a preview.
 
-## External Action Policy
+## Guardrails
 
 Preview/import design only. Do not import records or enable recurring sync without explicit approval.
 
@@ -34,36 +47,7 @@ Preview/import design only. Do not import records or enable recurring sync witho
 - Tool IDs used are named.
 - Import approval remains separate from the preview and is executed through affinity-deal-room-import.
 
-## Human Decision Points
+## Human Review
 
 - Approve preview rows before import.
 - Approve duplicate resolution and target mappings.
-
-## Inputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `selected_affinity_scope` | Selected Affinity Scope | `json` | yes |
-
-## Outputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `affinity_import_preview` | Affinity Import Preview | `richtext` | no |
-| `mapping_decisions` | Mapping Decisions | `json` | no |
-
-## Routing
-
-- Source template: `alludium/task-definition-templates/vc-integrations/affinity-sync-read.yaml`
-- Alludium task ID: `vc.affinity_sync_read`
-- Task family: `integration_sync_read`
-- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
-- Supported project types:
-  - `vc_deal_room`
-- Supported project scopes:
-  - `project_management`
-
-## Required Skills
-
-- `vc-affinity-sync-read`
-- `citation-enforcement`

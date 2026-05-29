@@ -14,17 +14,40 @@ skills:
 
 # Run Financial DD
 
+## Objective
+
 Run Financial DD for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
 
-## Instructions
+## What To Do
 
-Run financial diligence covering historicals, burn and runway, cap table, business-model economics, forecast stress test, use of funds, and financial risks from the supplied financial source artifact list. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update durable project file artifacts named Financial DD Report and Unit Economics Analysis, and attach them to the required output fields `financial_dd_artifact_id` and `unit_economics_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+Run financial diligence covering historicals, burn and runway, cap table, business-model economics, forecast stress test, use of funds, and financial risks from the supplied financial source artifact list. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update polished Word-ready documents named Financial DD Report and Unit Economics Analysis.
+
+## Available Context
+
+- Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
+- Especially look for: Financial Source Artifact IDs, Business Model, Cap Table, Bank Statement Evidence, Use Of Funds Plan.
+- If a named input is absent, follow the missing-input policy rather than inventing facts.
+
+## Reference Materials
+
+- [Diligence Report Template](../alludium/documents/deal-room/diligence-report-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Formal Diligence Workstream Guide](../alludium/documents/deal-room/formal-diligence-workstream-guide.md): Use as the analysis method.
+- [Formal Diligence Checklist](../alludium/documents/deal-room/formal-diligence-checklist.md): Complete as a checklist with status, evidence, owner, and open items.
+- [Diligence Report Template](../alludium/documents/deal-room/diligence-report-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md): Follow for citations, claim language, assumptions, and evidence quality.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+
+## Deliverable
+
+- Create or update **Financial DD Report** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Create or update **Unit Economics Analysis** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Also include a short human-readable summary covering: Historicals Summary, Burn Runway Analysis, Cap Table Summary, Business Model Economics, Forecast Stress Test, Use Of Funds Assessment, Financial Risks, Summary, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
 Ask for missing required inputs before producing investment-stage recommendations.
 
-## External Action Policy
+## Guardrails
 
 Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
 
@@ -34,68 +57,11 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Material conclusions include source links or are labeled as human judgment calls.
 - Next actions identify owner, dependency, and required human approval point.
 
-## Human Decision Points
+## Human Review
 
 - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
 - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
 
-## Inputs
+## Workspace Methodology
 
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `financial_source_artifact_ids` | Financial Source Artifact IDs | `string` | yes |
-| `business_model` | Business Model | `string` | no |
-| `cap_table` | Cap Table | `string` | no |
-| `bank_statement_evidence` | Bank Statement Evidence | `json` | no |
-| `use_of_funds_plan` | Use Of Funds Plan | `string` | no |
-
-## Outputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `financial_dd_artifact_id` | Financial DD Report | `file` | yes |
-| `unit_economics_artifact_id` | Unit Economics Analysis | `file` | yes |
-| `historicals_summary` | Historicals Summary | `richtext` | no |
-| `burn_runway_analysis` | Burn Runway Analysis | `string` | no |
-| `cap_table_summary` | Cap Table Summary | `richtext` | no |
-| `business_model_economics` | Business Model Economics | `string` | no |
-| `forecast_stress_test` | Forecast Stress Test | `string` | no |
-| `use_of_funds_assessment` | Use Of Funds Assessment | `string` | no |
-| `financial_risks` | Financial Risks | `json` | no |
-| `summary` | Summary | `richtext` | no |
-| `recommendation` | Recommendation | `string` | no |
-| `source_links` | Source Links | `string` | no |
-| `assumptions` | Assumptions | `string` | no |
-| `evidence_quality` | Evidence Quality | `json` | no |
-| `open_questions` | Open Questions | `json` | no |
-| `risks` | Risks | `json` | no |
-| `human_decision_points` | Human Decision Points | `string` | no |
-| `next_actions` | Next Actions | `json` | no |
-
-## Document References
-
-- `vc.document.diligence_report_template` (output_template) -> `financial_dd_artifact_id`
-- `vc.document.formal_diligence_workstream_guide` (methodology)
-- `vc.document.formal_diligence_checklist` (checklist)
-- `vc.document.diligence_report_template` (output_template) -> `unit_economics_artifact_id`
-- `vc.document.evidence_citation_style_guide` (style_guide)
-- `vc.document.template_use_guidance` (operating_guidance)
-
-## Routing
-
-- Source template: `alludium/task-definition-templates/vc-workflows/run-financial-dd.yaml`
-- Alludium task ID: `vc.run_financial_dd`
-- Task family: `diligence`
-- Lifecycle stage: `formal_diligence`
-- Recommended agent: `vc-diligence-analyst` (Alludium template `vc_diligence_analyst`)
-- Supported project types:
-  - `vc_investment_management`
-
-## Required Skills
-
-- `citation-enforcement`
-- `financial-diligence-workstream`
-
-## Workspace-Configured Methodology Skills
-
-- `traction-and-saas-unit-economics`: Use only for SaaS deals or workspaces that select this metric pack.
+- Use the workspace-configured Traction And Saas Unit Economics methodology when applicable: Use only for SaaS deals or workspaces that select this metric pack.

@@ -1,6 +1,6 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
-id: vc.prepare_initial_call
+id: vc.prepare_meeting
 version: 1.0.13
 title: Prepare Meeting
 category: Venture Capital

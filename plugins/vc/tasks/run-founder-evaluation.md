@@ -16,17 +16,38 @@ skills:
 
 # Run Founder Evaluation
 
+## Objective
+
 Run Founder Evaluation for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
 
-## Instructions
+## What To Do
 
-Prepare founder dossier, reference plan, reference summaries when available, founder risk assessment, stop signals, and human-only judgment prompts. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a durable project file artifact named Founder Evaluation and attach it to the required output field `founder_evaluation_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+Prepare founder dossier, reference plan, reference summaries when available, founder risk assessment, stop signals, and human-only judgment prompts. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a polished Word-ready document named Founder Evaluation.
+
+## Available Context
+
+- Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
+- Especially look for: Founder Names, Founder Profiles, Reference Inputs.
+- If a named input is absent, follow the missing-input policy rather than inventing facts.
+
+## Reference Materials
+
+- [Diligence Report Template](../alludium/documents/deal-room/diligence-report-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Formal Diligence Workstream Guide](../alludium/documents/deal-room/formal-diligence-workstream-guide.md): Use as the analysis method.
+- [Formal Diligence Checklist](../alludium/documents/deal-room/formal-diligence-checklist.md): Complete as a checklist with status, evidence, owner, and open items.
+- [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md): Follow for citations, claim language, assumptions, and evidence quality.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+
+## Deliverable
+
+- Create or update **Founder Evaluation** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Also include a short human-readable summary covering: Founder Dossier, Reference Plan, Reference Summaries, Founder Risk Assessment, Human Only Judgment Prompts, Stop Signals, Summary, Recommendation, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
 Ask for missing required inputs before producing investment-stage recommendations.
 
-## External Action Policy
+## Guardrails
 
 Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
 
@@ -36,61 +57,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Material conclusions include source links or are labeled as human judgment calls.
 - Next actions identify owner, dependency, and required human approval point.
 
-## Human Decision Points
+## Human Review
 
 - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
 - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
-
-## Inputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `founder_names` | Founder Names | `string` | yes |
-| `founder_profiles` | Founder Profiles | `string` | yes |
-| `reference_inputs` | Reference Inputs | `string` | no |
-
-## Outputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `founder_evaluation_artifact_id` | Founder Evaluation | `file` | yes |
-| `founder_dossier` | Founder Dossier | `string` | no |
-| `reference_plan` | Reference Plan | `string` | no |
-| `reference_summaries` | Reference Summaries | `string` | no |
-| `founder_risk_assessment` | Founder Risk Assessment | `string` | no |
-| `human_only_judgment_prompts` | Human Only Judgment Prompts | `string` | no |
-| `stop_signals` | Stop Signals | `string` | no |
-| `summary` | Summary | `richtext` | no |
-| `recommendation` | Recommendation | `string` | no |
-| `source_links` | Source Links | `string` | no |
-| `assumptions` | Assumptions | `string` | no |
-| `evidence_quality` | Evidence Quality | `json` | no |
-| `open_questions` | Open Questions | `json` | no |
-| `risks` | Risks | `json` | no |
-| `human_decision_points` | Human Decision Points | `string` | no |
-| `next_actions` | Next Actions | `json` | no |
-
-## Document References
-
-- `vc.document.diligence_report_template` (output_template) -> `founder_evaluation_artifact_id`
-- `vc.document.formal_diligence_workstream_guide` (methodology)
-- `vc.document.formal_diligence_checklist` (checklist)
-- `vc.document.evidence_citation_style_guide` (style_guide)
-- `vc.document.template_use_guidance` (operating_guidance)
-
-## Routing
-
-- Source template: `alludium/task-definition-templates/vc-workflows/run-founder-evaluation.yaml`
-- Alludium task ID: `vc.run_founder_evaluation`
-- Task family: `diligence`
-- Lifecycle stage: `formal_diligence`
-- Recommended agent: `vc-diligence-analyst` (Alludium template `vc_diligence_analyst`)
-- Supported project types:
-  - `vc_investment_management`
-
-## Required Skills
-
-- `team-and-hiring-assessment`
-- `red-flags-scanner`
-- `citation-enforcement`
-- `founder-evaluation-and-reference-checking`

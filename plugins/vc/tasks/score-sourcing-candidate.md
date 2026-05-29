@@ -1,5 +1,5 @@
 ---
-id: vc.score_sourcing_candidates
+id: vc.score_sourcing_candidate
 title: Score Sourcing Candidate
 slug: score-sourcing-candidate
 agent: vc-sourcing-operator
@@ -15,17 +15,36 @@ skills:
 
 # Score Sourcing Candidate
 
+## Objective
+
 Produce Meet/Watch/Pass verdicts and urgency scores for enriched origination candidates.
 
-## Instructions
+## What To Do
 
-Mirror the reference pipeline's verdict contract. Score from already-enriched data, separate evidence from inference, and return Meet, Watch, or Pass plus urgency. Apply hard stage safety by passing companies with Series A+ funding or more than 20 employees when reliable LinkedIn company data is present. Run the second-pass verdict only for Meet/Watch rows with fresh LinkedIn company data so paid scraping and model cost stay bounded. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+Mirror the reference pipeline's verdict contract. Score from already-enriched data, separate evidence from inference, and return Meet, Watch, or Pass plus urgency. Apply hard stage safety by passing companies with Series A+ funding or more than 20 employees when reliable LinkedIn company data is present. Run the second-pass verdict only for Meet/Watch rows with fresh LinkedIn company data so paid scraping and model cost stay bounded.
+
+## Available Context
+
+- Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
+- Especially look for: Enriched Candidate Batch, Scoring Policy.
+- If a named input is absent, follow the missing-input policy rather than inventing facts.
+
+## Reference Materials
+
+- [Sourcing Scoring Rubric](../alludium/documents/origination/sourcing-scoring-rubric.md): Use as the analysis method.
+- [Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md): Use as the analysis method.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+
+## Deliverable
+
+- Create or update **Scoring Artifact** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Also include a short human-readable summary covering: Meet Candidate Count, Watch Candidate Count, Promotion Ready Count, Scoring Report. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
 Ask for enriched candidates, thesis, geography/stage policy, relationship context, LinkedIn company data availability, and scoring thresholds before scoring.
 
-## External Action Policy
+## Guardrails
 
 Scoring only. Do not sync external records, change manual decisions, send outreach, or create Deal Pipelines.
 
@@ -34,48 +53,3 @@ Scoring only. Do not sync external records, change manual decisions, send outrea
 - Each scored candidate has action, urgency, thesis fit, confidence, funding status, HQ/geography concern, frontier-pedigree evidence, reasons, and receipts.
 - Auto-pass decisions name the specific rule and evidence.
 - Second-pass rows are limited to candidates with fresh LinkedIn company data.
-
-## Human Decision Points
-
-- None declared
-
-## Inputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `enriched_candidate_batch` | Enriched Candidate Batch | `json` | yes |
-| `scoring_policy` | Scoring Policy | `json` | no |
-
-## Outputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `scoring_artifact_id` | Scoring Artifact | `file` | yes |
-| `meet_candidate_count` | Meet Candidate Count | `number` | no |
-| `watch_candidate_count` | Watch Candidate Count | `number` | no |
-| `promotion_ready_count` | Promotion Ready Count | `number` | no |
-| `scoring_report` | Scoring Report | `richtext` | no |
-
-## Document References
-
-- `vc.document.sourcing_scoring_rubric` (methodology) -> `scoring_artifact_id`
-- `vc.document.origination_source_strategy_guide` (methodology)
-- `vc.document.template_use_guidance` (operating_guidance)
-
-## Routing
-
-- Source template: `alludium/task-definition-templates/vc-workflows/score-sourcing-candidate.yaml`
-- Alludium task ID: `vc.score_sourcing_candidates`
-- Task family: `origination_scoring`
-- Lifecycle stage: `score`
-- Recommended agent: `vc-sourcing-operator` (Alludium template `vc_sourcing_operator`)
-- Supported project types:
-  - `vc_origination_pipeline`
-- Supported project scopes:
-  - `project_instance`
-
-## Required Skills
-
-- `vc-sourcing-verdict-and-screening`
-- `vc-sourcing-dedupe-and-novelty-check`
-- `citation-enforcement`

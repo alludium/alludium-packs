@@ -171,6 +171,47 @@ def title_from_key(value: str) -> str:
     return value.replace("_", " ").replace("-", " ").title()
 
 
+DOCUMENT_REF_CONTRACT_RE = re.compile(
+    r"\s*Use `definitionJson\.documentRefs` as the durable document reference contract\..*?"
+    r"(?:For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID "
+    r"alongside the output artifact\.|and `operating_guidance` constrains process and approval boundaries\.)",
+    re.DOTALL,
+)
+OUTPUT_FIELD_ATTACHMENT_RE = re.compile(r"\s+and attach it to the required output field `[^`]+`")
+OUTPUT_FIELDS_ATTACHMENT_RE = re.compile(
+    r",?\s+and attach (?:it|them) to the required output fields? `[^.]+?\.",
+)
+PROJECT_CREATION_FIELD_RE = re.compile(r"`projectCreation\.fieldValues\.([a-z0-9_]+)`")
+SNAKE_FIELD_REF_RE = re.compile(r"`([a-z][a-z0-9_]+)`")
+UNQUOTED_FIELD_REF_RE = re.compile(
+    r"\b([a-z][a-z0-9_]*(?:_artifact_ids?|_name|_notes|_url|_urls|_registry|_policy))\b"
+)
+
+
+def human_field_label(value: str) -> str:
+    label = title_from_key(value)
+    label = label.replace(" Artifact Ids", " Artifacts")
+    label = label.replace(" Artifact Id", " Artifact")
+    return label.lower()
+
+
+def clean_task_prompt_text(value: str) -> str:
+    """Remove platform contract language from generated task prompts."""
+    text = DOCUMENT_REF_CONTRACT_RE.sub("", value)
+    text = OUTPUT_FIELDS_ATTACHMENT_RE.sub(".", text)
+    text = OUTPUT_FIELD_ATTACHMENT_RE.sub("", text)
+    text = PROJECT_CREATION_FIELD_RE.sub(lambda match: title_from_key(match.group(1)).lower(), text)
+    text = SNAKE_FIELD_REF_RE.sub(lambda match: human_field_label(match.group(1)), text)
+    text = UNQUOTED_FIELD_REF_RE.sub(lambda match: human_field_label(match.group(1)), text)
+    text = text.replace("Complete with structured output", "Capture")
+    text = text.replace("Guided project creation output includes", "Guided project creation captures")
+    text = text.replace("durable project file artifact", "polished Word-ready document")
+    text = text.replace("durable management task file artifact", "polished Word-ready document")
+    text = text.replace("durable file artifact", "polished Word-ready document")
+    text = re.sub(r"\s{2,}", " ", text)
+    return text.strip()
+
+
 def field_table(fields: list[dict[str, Any]]) -> str:
     if not fields:
         return "None declared.\n"
@@ -318,6 +359,86 @@ def document_ref_list(refs: Any) -> str:
             suffix += f" -> `{output_field_key}`"
         lines.append(f"- `{document_id}`{suffix}\n")
     return "".join(lines) if lines else "- None declared\n"
+
+
+def document_guidance_list(refs: Any, documents: dict[str, dict[str, str]]) -> str:
+    if not isinstance(refs, list) or not refs:
+        return "- Use the evidence and context supplied with the task.\n"
+    lines: list[str] = []
+    for ref in refs:
+        if not isinstance(ref, dict):
+            continue
+        document_id = ref.get("documentId")
+        if not isinstance(document_id, str) or not document_id:
+            continue
+        document = documents.get(document_id, {})
+        title = document.get("title") if isinstance(document.get("title"), str) else document_id
+        path = document.get("path")
+        label = markdown_escape(title)
+        if isinstance(path, str) and path:
+            label = f"[{label}](../alludium/documents/{markdown_escape(path)})"
+        usage = ref.get("usage")
+        if usage == "output_template":
+            guidance = "Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler."
+        elif usage == "methodology":
+            guidance = "Use as the analysis method."
+        elif usage == "checklist":
+            guidance = "Complete as a checklist with status, evidence, owner, and open items."
+        elif usage == "style_guide":
+            guidance = "Follow for citations, claim language, assumptions, and evidence quality."
+        elif usage in {"operating_guidance", "policy"}:
+            guidance = "Follow for process boundaries and review standards."
+        else:
+            guidance = "Use as relevant supporting guidance."
+        lines.append(f"- {label}: {guidance}\n")
+    return "".join(lines) if lines else "- Use the evidence and context supplied with the task.\n"
+
+
+def input_context_list(fields: list[dict[str, Any]]) -> str:
+    named_fields = [
+        field.get("name")
+        for field in fields
+        if isinstance(field.get("name"), str) and field.get("name")
+    ]
+    if not named_fields:
+        return "- Use the context, files, notes, links, and prior artifacts attached to the task.\n"
+    lines = [
+        "- Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.\n",
+        "- Especially look for: " + ", ".join(named_fields) + ".\n",
+        "- If a named input is absent, follow the missing-input policy rather than inventing facts.\n",
+    ]
+    return "".join(lines)
+
+
+def deliverable_list(output_fields: list[dict[str, Any]]) -> str:
+    file_outputs = [
+        field.get("name")
+        for field in output_fields
+        if field.get("fieldType") == "file" and isinstance(field.get("name"), str) and field.get("name")
+    ]
+    non_file_outputs = [
+        field.get("name")
+        for field in output_fields
+        if field.get("fieldType") != "file" and isinstance(field.get("name"), str) and field.get("name")
+    ]
+    lines: list[str] = []
+    if file_outputs:
+        for name in file_outputs:
+            lines.append(
+                f"- Create or update **{markdown_escape(name)}** as a polished Word-ready document. "
+                "The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.\n"
+            )
+    else:
+        lines.append("- Produce a concise, reviewable task response that a human can act on.\n")
+    if non_file_outputs:
+        lines.append(
+            "- Also include a short human-readable summary covering: "
+            + ", ".join(markdown_escape(name) for name in non_file_outputs[:8])
+        )
+        if len(non_file_outputs) > 8:
+            lines[-1] += ", and other task-specific status fields"
+        lines[-1] += ". Do not output raw JSON unless the user explicitly asks for machine-readable data.\n"
+    return "".join(lines)
 
 
 def skill_ids_from_agent(template: dict[str, Any]) -> list[str]:
@@ -476,14 +597,20 @@ def render_task(path: Path) -> tuple[Path, str]:
     if not isinstance(instructions, dict):
         fail(f"{path.relative_to(PACK_ROOT)} definition.definitionJson.instructions must be an object")
 
-    execution = require_string(instructions.get("executionInstructions"), f"{path.name}.executionInstructions")
-    missing_input = optional_string(
-        instructions.get("missingInputPolicy"),
-        "No separate missing-input policy is declared. Follow the execution instructions and ask only when needed.",
+    execution = clean_task_prompt_text(
+        require_string(instructions.get("executionInstructions"), f"{path.name}.executionInstructions")
     )
-    external_action = optional_string(
-        instructions.get("externalActionPolicy"),
-        "No separate external-action policy is declared. Do not take external or persistent actions unless the task instructions explicitly allow them.",
+    missing_input = clean_task_prompt_text(
+        optional_string(
+            instructions.get("missingInputPolicy"),
+            "No separate missing-input policy is declared. Follow the execution instructions and ask only when needed.",
+        )
+    )
+    external_action = clean_task_prompt_text(
+        optional_string(
+            instructions.get("externalActionPolicy"),
+            "No separate external-action policy is declared. Do not take external or persistent actions unless the task instructions explicitly allow them.",
+        )
     )
     completion = instructions.get("completionCriteria")
     if not isinstance(completion, list):
@@ -499,13 +626,8 @@ def render_task(path: Path) -> tuple[Path, str]:
 
     recommended_agent = definition_json.get("recommendedAgentTemplate")
     recommended_agent_name = slugify(recommended_agent) if isinstance(recommended_agent, str) else None
-    planned_agent = definition_json.get("plannedRecommendedAgentTemplate")
-    planned_agent_name = slugify(planned_agent) if isinstance(planned_agent, str) else None
     required_skills = string_list(definition_json.get("requiredSkills"))
-    planned_skills = string_list(definition_json.get("plannedRequiredSkills"))
     human_decisions = string_list(definition_json.get("humanDecisionPoints"))
-    project_types = string_list(definition_json.get("supportedProjectTypes"))
-    project_scopes = string_list(definition_json.get("supportedProjectScopes"))
 
     frontmatter: dict[str, Any] = {
         "id": template_id,
@@ -520,67 +642,43 @@ def render_task(path: Path) -> tuple[Path, str]:
     body = yaml_frontmatter(frontmatter)
     body += generated_notice(path)
     body += f"# {title}\n\n"
+    body += "## Objective\n\n"
     body += f"{description}\n\n"
-    body += "## Instructions\n\n"
+    body += "## What To Do\n\n"
     body += execution.strip() + "\n\n"
-    body += "## Missing Input Policy\n\n"
-    body += missing_input.strip() + "\n\n"
-    body += "## External Action Policy\n\n"
-    body += external_action.strip() + "\n\n"
-    body += "## Completion Criteria\n\n"
-    body += plain_bullet_list([str(item) for item in completion if isinstance(item, str)])
-    body += "\n## Human Decision Points\n\n"
-    body += plain_bullet_list(human_decisions)
-    body += "\n## Inputs\n\n"
-    body += field_table(input_dicts)
-    if context_dicts:
-        body += "\n## Context Fields\n\n"
-        body += field_table(context_dicts)
-    body += "\n## Outputs\n\n"
-    body += field_table(output_dicts)
+    body += "## Available Context\n\n"
+    body += input_context_list(input_dicts + context_dicts)
     document_refs = definition_json.get("documentRefs")
     if isinstance(document_refs, list) and document_refs:
-        body += "\n## Document References\n\n"
-        body += document_ref_list(document_refs)
-    body += "\n## Routing\n\n"
-    body += f"- Source template: `alludium/task-definition-templates/{path.relative_to(TASK_TEMPLATE_ROOT)}`\n"
-    body += f"- Alludium task ID: `{template_id}`\n"
-    body += f"- Task family: `{definition_json.get('taskFamily', 'unknown')}`\n"
-    if isinstance(definition_json.get("stage"), str):
-        body += f"- Lifecycle stage: `{definition_json['stage']}`\n"
-    if recommended_agent_name is not None:
-        body += f"- Recommended agent: `{recommended_agent_name}`"
-        if isinstance(recommended_agent, str):
-            body += f" (Alludium template `{recommended_agent}`)"
-        body += "\n"
-    if planned_agent_name is not None and planned_agent_name != recommended_agent_name:
-        body += f"- Planned recommended agent: `{planned_agent_name}`"
-        if isinstance(planned_agent, str):
-            body += f" (Alludium template `{planned_agent}`)"
-        body += "\n"
-    body += "- Supported project types:\n"
-    body += "".join(f"  - `{value}`\n" for value in project_types) if project_types else "  - None declared\n"
-    if project_scopes:
-        body += "- Supported project scopes:\n"
-        body += "".join(f"  - `{value}`\n" for value in project_scopes)
-    body += "\n## Required Skills\n\n"
-    body += bullet_list(required_skills)
-    if planned_skills:
-        body += "\n## Planned Skills\n\n"
-        body += bullet_list(planned_skills)
+        documents = load_document_metadata()
+        body += "\n## Reference Materials\n\n"
+        body += document_guidance_list(document_refs, documents)
+    body += "\n## Deliverable\n\n"
+    body += deliverable_list(output_dicts)
+    body += "\n## Missing Input Policy\n\n"
+    body += missing_input.strip() + "\n\n"
+    body += "## Guardrails\n\n"
+    body += external_action.strip() + "\n\n"
+    body += "## Completion Criteria\n\n"
+    body += plain_bullet_list(
+        [clean_task_prompt_text(str(item)) for item in completion if isinstance(item, str)]
+    )
+    if human_decisions:
+        body += "\n## Human Review\n\n"
+        body += plain_bullet_list(human_decisions)
 
     methodology_skills = definition_json.get("workspaceConfiguredMethodologySkills")
     if isinstance(methodology_skills, list) and methodology_skills:
-        body += "\n## Workspace-Configured Methodology Skills\n\n"
+        body += "\n## Workspace Methodology\n\n"
         for skill in methodology_skills:
             if isinstance(skill, dict) and isinstance(skill.get("skill"), str):
                 note = skill.get("note")
-                body += f"- `{skill['skill']}`"
+                body += f"- Use the workspace-configured {markdown_escape(title_from_key(skill['skill']))} methodology"
                 if isinstance(note, str) and note:
-                    body += f": {note}"
+                    body += f" when applicable: {note}"
                 body += "\n"
             elif isinstance(skill, str):
-                body += f"- `{skill}`\n"
+                body += f"- Use the workspace-configured {markdown_escape(title_from_key(skill))} methodology when applicable.\n"
 
     return TASK_OUTPUT_ROOT / f"{slug}.md", body
 

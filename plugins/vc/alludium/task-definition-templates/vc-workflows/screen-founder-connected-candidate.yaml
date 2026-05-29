@@ -1,6 +1,6 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
-id: vc.screen_founder_connected_candidates
+id: vc.screen_founder_connected_candidate
 version: 0.1.1
 title: Screen Founder-Connected Candidate
 category: Venture Capital

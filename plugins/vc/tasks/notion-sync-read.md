@@ -14,17 +14,30 @@ skills:
 
 # Preview Notion Context
 
+## Objective
+
 Preview selected Notion page, block, property, and database content before attaching it to Deal Pipeline tasks.
 
-## Instructions
+## What To Do
 
 Build a Notion read preview from the approved page or database scope. Use `notion-retrieve-page`, `notion-retrieve-block`, `notion-retrieve-page-property-item`, `notion-retrieve-database-schema`, `notion-retrieve-database-content`, and `notion-query-database` only inside the selected scope. Summarize proposed target mapping as Deal Pipeline setup context, task context, artifact input, or human reference before any attachment or import.
+
+## Available Context
+
+- Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
+- Especially look for: Selected Notion Scope.
+- If a named input is absent, follow the missing-input policy rather than inventing facts.
+
+## Deliverable
+
+- Produce a concise, reviewable task response that a human can act on.
+- Also include a short human-readable summary covering: Notion Context Preview, Target Context Mapping. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
 Ask for approved page or database scope before reading content.
 
-## External Action Policy
+## Guardrails
 
 Read preview only. Do not attach, import, create pages, create databases, update pages, update databases, append blocks, delete blocks, duplicate pages, upload files, or create comments without a separate approval path.
 
@@ -34,36 +47,7 @@ Read preview only. Do not attach, import, create pages, create databases, update
 - Relevant content is summarized with source provenance.
 - Attachment or import approval remains separate from the preview.
 
-## Human Decision Points
+## Human Review
 
 - Approve selected page, block, database, and row context before attaching it to project or task state.
 - Approve duplicate handling and target mapping.
-
-## Inputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `selected_notion_scope` | Selected Notion Scope | `json` | yes |
-
-## Outputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `notion_context_preview` | Notion Context Preview | `richtext` | no |
-| `target_context_mapping` | Target Context Mapping | `json` | no |
-
-## Routing
-
-- Source template: `alludium/task-definition-templates/vc-integrations/notion-sync-read.yaml`
-- Alludium task ID: `vc.notion_sync_read`
-- Task family: `integration_sync_read`
-- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
-- Supported project types:
-  - `vc_deal_room`
-- Supported project scopes:
-  - `project_management`
-
-## Required Skills
-
-- `vc-notion-sync-read`
-- `citation-enforcement`

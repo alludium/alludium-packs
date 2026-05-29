@@ -15,17 +15,40 @@ skills:
 
 # Create IC Memo
 
+## Objective
+
 Create IC Memo for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
 
-## Instructions
+## What To Do
 
-Assemble the IC memo and pack checklist from review packs, evaluation-stage workstream outputs, available formal diligence outputs, source artifacts, unresolved risks, assumptions, and citation coverage. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use required evaluation input file artifacts `commercial_evaluation_artifact_id`, `technical_evaluation_artifact_id`, `financial_evaluation_artifact_id`, `team_evaluation_artifact_id`, and `diligence_question_bank_artifact_id` as the decision-review source set. Use formal diligence artifacts `commercial_dd_artifact_id`, `financial_dd_artifact_id`, `founder_evaluation_artifact_id`, and `technical_dd_artifact_id` when present, but do not block evaluation-stage review on them. Use the required input file artifacts `team_review_pack_artifact_id` and `partner_review_pack_artifact_id` as the review-pack sources for the IC memo. Create or update a durable project file artifact named Investment Memo and attach it to the required output field `investment_memo_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+Assemble the IC memo and pack checklist from review packs, evaluation-stage workstream outputs, available formal diligence outputs, source artifacts, unresolved risks, assumptions, and citation coverage. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use required evaluation input file artifacts commercial evaluation artifact, technical evaluation artifact, financial evaluation artifact, team evaluation artifact, and diligence question bank artifact as the decision-review source set. Use formal diligence artifacts commercial dd artifact, financial dd artifact, founder evaluation artifact, and technical dd artifact when present, but do not block evaluation-stage review on them. Use the required input file artifacts team review pack artifact and partner review pack artifact as the review-pack sources for the IC memo. Create or update a polished Word-ready document named Investment Memo.
+
+## Available Context
+
+- Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
+- Especially look for: Team Review Pack, Partner Review Pack, Commercial Evaluation, Technical Evaluation, Financial Evaluation, Team Evaluation, Structured Diligence Question Bank, Commercial DD Report, Financial DD Report, Founder Evaluation, Technical DD Report.
+- If a named input is absent, follow the missing-input policy rather than inventing facts.
+
+## Reference Materials
+
+- [Investment Memo Template](../alludium/documents/deal-room/investment-memo-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Opportunity Evaluation Framework](../alludium/documents/shared/opportunity-evaluation-framework.md): Use as the analysis method.
+- [Evaluation Workstream Guide](../alludium/documents/shared/evaluation-workstream-guide.md): Use as the analysis method.
+- [Formal Diligence Workstream Guide](../alludium/documents/deal-room/formal-diligence-workstream-guide.md): Use as the analysis method.
+- [Formal Diligence Checklist](../alludium/documents/deal-room/formal-diligence-checklist.md): Complete as a checklist with status, evidence, owner, and open items.
+- [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md): Follow for citations, claim language, assumptions, and evidence quality.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+
+## Deliverable
+
+- Create or update **Investment Memo** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Also include a short human-readable summary covering: Investment Memo, Ic Pack Checklist, Decision Ask, Unresolved Risks, Assumptions, Citation Coverage, Summary, Recommendation, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
 Ask for missing required inputs before producing investment-stage recommendations.
 
-## External Action Policy
+## Guardrails
 
 Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
 
@@ -35,69 +58,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Material conclusions include source links or are labeled as human judgment calls.
 - Next actions identify owner, dependency, and required human approval point.
 
-## Human Decision Points
+## Human Review
 
 - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
 - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
-
-## Inputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `team_review_pack_artifact_id` | Team Review Pack | `file` | yes |
-| `partner_review_pack_artifact_id` | Partner Review Pack | `file` | yes |
-| `commercial_evaluation_artifact_id` | Commercial Evaluation | `file` | yes |
-| `technical_evaluation_artifact_id` | Technical Evaluation | `file` | yes |
-| `financial_evaluation_artifact_id` | Financial Evaluation | `file` | yes |
-| `team_evaluation_artifact_id` | Team Evaluation | `file` | yes |
-| `diligence_question_bank_artifact_id` | Structured Diligence Question Bank | `file` | yes |
-| `commercial_dd_artifact_id` | Commercial DD Report | `file` | no |
-| `financial_dd_artifact_id` | Financial DD Report | `file` | no |
-| `founder_evaluation_artifact_id` | Founder Evaluation | `file` | no |
-| `technical_dd_artifact_id` | Technical DD Report | `file` | no |
-
-## Outputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `investment_memo_artifact_id` | Investment Memo | `file` | yes |
-| `investment_memo` | Investment Memo | `richtext` | no |
-| `ic_pack_checklist` | Ic Pack Checklist | `json` | no |
-| `decision_ask` | Decision Ask | `string` | no |
-| `unresolved_risks` | Unresolved Risks | `json` | no |
-| `assumptions` | Assumptions | `string` | no |
-| `citation_coverage` | Citation Coverage | `string` | no |
-| `summary` | Summary | `richtext` | no |
-| `recommendation` | Recommendation | `string` | no |
-| `source_links` | Source Links | `string` | no |
-| `evidence_quality` | Evidence Quality | `json` | no |
-| `open_questions` | Open Questions | `json` | no |
-| `risks` | Risks | `json` | no |
-| `human_decision_points` | Human Decision Points | `string` | no |
-| `next_actions` | Next Actions | `json` | no |
-
-## Document References
-
-- `vc.document.investment_memo_template` (output_template) -> `investment_memo_artifact_id`
-- `vc.document.opportunity_evaluation_framework` (methodology)
-- `vc.document.evaluation_workstream_guide` (methodology)
-- `vc.document.formal_diligence_workstream_guide` (methodology)
-- `vc.document.formal_diligence_checklist` (checklist)
-- `vc.document.evidence_citation_style_guide` (style_guide)
-- `vc.document.template_use_guidance` (operating_guidance)
-
-## Routing
-
-- Source template: `alludium/task-definition-templates/vc-workflows/create-ic-memo.yaml`
-- Alludium task ID: `vc.create_ic_memo`
-- Task family: `ic`
-- Lifecycle stage: `decision_review`
-- Recommended agent: `vc-ic-prep-producer` (Alludium template `vc_ic_prep_producer`)
-- Supported project types:
-  - `vc_deal_room`
-
-## Required Skills
-
-- `ic-memo-assembly`
-- `citation-enforcement`
-- `ic-risk-checklist-and-decision-log`

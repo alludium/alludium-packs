@@ -14,17 +14,30 @@ skills:
 
 # Preview Companies House Public Register Results
 
+## Objective
+
 Preview selected Companies House public search results and company profile pages before using them as VC origination source context.
 
-## Instructions
+## What To Do
 
 Build a read preview only after discovery has selected public search URLs, result limits, and page-preview scope. Use Firecrawl to scrape approved Companies House search result pages and selected `/company/<number>` public profile pages. Return company identity signals, company number, status, incorporation date, company type, registered office locality when visible, SIC or nature-of-business text when visible, direct source URLs, scrape timestamp, result rank, and suggested source-registry mapping.
+
+## Available Context
+
+- Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
+- Especially look for: Selected Companies House Scope.
+- If a named input is absent, follow the missing-input policy rather than inventing facts.
+
+## Deliverable
+
+- Produce a concise, reviewable task response that a human can act on.
+- Also include a short human-readable summary covering: Companies House Results Preview, Source Registry Mapping. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
 Ask for selected public search URLs, result limits, selected company numbers, and Firecrawl availability before processing company pages.
 
-## External Action Policy
+## Guardrails
 
 Read preview only. Do not call authenticated Companies House APIs, import companies, enable recurring monitoring, score candidates, write candidate records, update external systems, or create Deal Pipeline projects.
 
@@ -34,36 +47,7 @@ Read preview only. Do not call authenticated Companies House APIs, import compan
 - Firecrawl result metadata, source URLs, scrape timestamps, or missing metadata are named.
 - Import, recurring monitoring, scoring, and promotion approvals remain separate from the preview.
 
-## Human Decision Points
+## Human Review
 
 - Approve result rows before candidate import or scoring.
 - Approve source registry mappings and dedupe keys separately.
-
-## Inputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `selected_companies_house_scope` | Selected Companies House Scope | `json` | yes |
-
-## Outputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `companies_house_results_preview` | Companies House Results Preview | `richtext` | no |
-| `source_registry_mapping` | Source Registry Mapping | `json` | no |
-
-## Routing
-
-- Source template: `alludium/task-definition-templates/vc-integrations/companies-house-sync-read.yaml`
-- Alludium task ID: `vc.companies_house_sync_read`
-- Task family: `integration_sync_read`
-- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
-- Supported project types:
-  - `vc_origination_pipeline`
-- Supported project scopes:
-  - `project_management`
-
-## Required Skills
-
-- `vc-companies-house-sync-read`
-- `citation-enforcement`

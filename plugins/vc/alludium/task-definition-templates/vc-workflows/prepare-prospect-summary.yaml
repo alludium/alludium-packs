@@ -1,6 +1,6 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
-id: vc.prepare_sourcing_ic_summary
+id: vc.prepare_prospect_summary
 version: 0.1.8
 title: Prepare Prospect Summary
 category: Venture Capital

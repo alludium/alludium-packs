@@ -70,7 +70,7 @@
     "scheduleGroups": [],
     "variableDiscoveryTask": {
       "label": "VC Variable Discovery",
-      "taskDefinitionTemplateId": "vc.pack_variable_discovery",
+      "taskDefinitionTemplateId": "vc.vc_pack_variable_discovery",
       "taskDefinitionSlug": "vc-pack-variable-discovery"
     }
   },

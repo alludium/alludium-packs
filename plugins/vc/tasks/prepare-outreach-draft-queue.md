@@ -15,17 +15,35 @@ skills:
 
 # Prepare Outreach Draft Queue
 
+## Objective
+
 Draft founder outreach notes for active candidates while leaving send decisions to humans.
 
-## Instructions
+## What To Do
 
-Mirror the reference pipeline's outreach draft policy. Draft only for candidates with active actions such as Meet, IC-Summary, or Reach out, no manual Status/contact progress, and a founder LinkedIn URL. Produce short, specific, question-led LinkedIn connection notes tied to evidence. Skip weak hooks instead of fabricating personalization. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+Mirror the reference pipeline's outreach draft policy. Draft only for candidates with active actions such as Meet, IC-Summary, or Reach out, no manual Status/contact progress, and a founder LinkedIn URL. Produce short, specific, question-led LinkedIn connection notes tied to evidence. Skip weak hooks instead of fabricating personalization.
+
+## Available Context
+
+- Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
+- Especially look for: Outreach Scope.
+- If a named input is absent, follow the missing-input policy rather than inventing facts.
+
+## Reference Materials
+
+- [Outreach Queue Template](../alludium/documents/origination/outreach-queue-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+
+## Deliverable
+
+- Create or update **Outreach Queue Artifact** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Also include a short human-readable summary covering: Outreach Draft Count, Outreach Report. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
 Ask for active candidate batch, founder profile URL, eligible actions, manual-contact status, outreach tone policy, and destination for drafts.
 
-## External Action Policy
+## Guardrails
 
 Draft only. Do not send messages, insert browser-extension notes, mark outreach as sent, or update external systems without explicit human approval.
 
@@ -34,44 +52,3 @@ Draft only. Do not send messages, insert browser-extension notes, mark outreach 
 - Draft queue includes founder, profile URL, note, angle, strength, skip reason, and source evidence.
 - Notes are short, question-led, specific, and free of unsupported praise or editorializing.
 - Send remains a human action.
-
-## Human Decision Points
-
-- None declared
-
-## Inputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `outreach_scope` | Outreach Scope | `json` | yes |
-
-## Outputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `outreach_queue_artifact_id` | Outreach Queue Artifact | `file` | yes |
-| `outreach_draft_count` | Outreach Draft Count | `number` | no |
-| `outreach_report` | Outreach Report | `richtext` | no |
-
-## Document References
-
-- `vc.document.outreach_queue_template` (output_template) -> `outreach_queue_artifact_id`
-- `vc.document.template_use_guidance` (operating_guidance)
-
-## Routing
-
-- Source template: `alludium/task-definition-templates/vc-workflows/prepare-outreach-draft-queue.yaml`
-- Alludium task ID: `vc.prepare_outreach_draft_queue`
-- Task family: `origination_outreach_drafts`
-- Lifecycle stage: `engage`
-- Recommended agent: `vc-sourcing-operator` (Alludium template `vc_sourcing_operator`)
-- Supported project types:
-  - `vc_origination_pipeline`
-- Supported project scopes:
-  - `project_instance`
-
-## Required Skills
-
-- `vc-outreach-draft-queue`
-- `citation-enforcement`
-- `founder-outreach-and-intro-paths`

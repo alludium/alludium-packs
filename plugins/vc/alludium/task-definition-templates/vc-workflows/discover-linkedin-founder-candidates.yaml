@@ -1,6 +1,6 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
-id: vc.discover_linkedin_founders
+id: vc.discover_linkedin_founder_candidates
 version: 0.1.5
 title: Discover LinkedIn Founder Candidates
 category: Venture Capital

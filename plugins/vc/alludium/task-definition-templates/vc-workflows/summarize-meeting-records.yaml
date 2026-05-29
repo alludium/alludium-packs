@@ -1,6 +1,6 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
-id: vc.summarize_initial_call
+id: vc.summarize_meeting_records
 version: 1.0.13
 title: Summarize Meeting Records
 category: Venture Capital

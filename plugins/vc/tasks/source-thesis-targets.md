@@ -15,17 +15,37 @@ skills:
 
 # Source Thesis Targets
 
+## Objective
+
 Source Thesis Targets for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
 
-## Instructions
+## What To Do
 
-Research thesis-aligned companies for the requested thesis area, geography, stage focus, and market filters; return target companies, fit rationale, source links, warm intro paths, and confidence notes. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Thesis Target List and attach it to the required output field `thesis_target_list_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+Research thesis-aligned companies for the requested thesis area, geography, stage focus, and market filters; return target companies, fit rationale, source links, warm intro paths, and confidence notes. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a polished Word-ready document named Thesis Target List.
+
+## Available Context
+
+- Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
+- Especially look for: Thesis Area, Geography, Stage Focus, Market Filters.
+- If a named input is absent, follow the missing-input policy rather than inventing facts.
+
+## Reference Materials
+
+- [Thesis Target List Template](../alludium/documents/deal-room/thesis-target-list-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md): Use as the analysis method.
+- [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md): Follow for citations, claim language, assumptions, and evidence quality.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+
+## Deliverable
+
+- Create or update **Thesis Target List** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Also include a short human-readable summary covering: Target Company List, Fit Rationale, Source Links, Warm Intro Paths, Confidence Notes, Summary, Recommendation, Assumptions, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
 Ask for missing required inputs before producing investment-stage recommendations.
 
-## External Action Policy
+## Guardrails
 
 Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
 
@@ -35,62 +55,11 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Material conclusions include source links or are labeled as human judgment calls.
 - Next actions identify owner, dependency, and required human approval point.
 
-## Human Decision Points
+## Human Review
 
 - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
 - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
 
-## Inputs
+## Workspace Methodology
 
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `thesis_area` | Thesis Area | `string` | yes |
-| `geography` | Geography | `string` | yes |
-| `stage_focus` | Stage Focus | `string` | no |
-| `market_filters` | Market Filters | `json` | no |
-
-## Outputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `thesis_target_list_artifact_id` | Thesis Target List | `file` | yes |
-| `target_company_list` | Target Company List | `richtext` | no |
-| `fit_rationale` | Fit Rationale | `string` | no |
-| `source_links` | Source Links | `string` | no |
-| `warm_intro_paths` | Warm Intro Paths | `string` | no |
-| `confidence_notes` | Confidence Notes | `richtext` | no |
-| `summary` | Summary | `richtext` | no |
-| `recommendation` | Recommendation | `string` | no |
-| `assumptions` | Assumptions | `string` | no |
-| `evidence_quality` | Evidence Quality | `string` | no |
-| `open_questions` | Open Questions | `string` | no |
-| `risks` | Risks | `string` | no |
-| `human_decision_points` | Human Decision Points | `string` | no |
-| `next_actions` | Next Actions | `string` | no |
-
-## Document References
-
-- `vc.document.thesis_target_list_template` (output_template) -> `thesis_target_list_artifact_id`
-- `vc.document.origination_source_strategy_guide` (methodology)
-- `vc.document.evidence_citation_style_guide` (style_guide)
-- `vc.document.template_use_guidance` (operating_guidance)
-
-## Routing
-
-- Source template: `alludium/task-definition-templates/vc-workflows/source-thesis-targets.yaml`
-- Alludium task ID: `vc.source_thesis_targets`
-- Task family: `pipeline`
-- Lifecycle stage: `source`
-- Recommended agent: `vc-origination-scout` (Alludium template `vc_origination_scout`)
-- Supported project types:
-  - `vc_origination_pipeline`
-
-## Required Skills
-
-- `company-research-and-enrichment`
-- `founder-outreach-and-intro-paths`
-- `citation-enforcement`
-
-## Workspace-Configured Methodology Skills
-
-- `market-map-building`: Use only when the workspace explicitly configures this market mapping method.
+- Use the workspace-configured Market Map Building methodology when applicable: Use only when the workspace explicitly configures this market mapping method.

@@ -14,17 +14,30 @@ skills:
 
 # Draft Slack Handoff Notifications
 
+## Objective
+
 Draft approved Slack handoff notifications for VC workflows without broad posting.
 
-## Instructions
+## What To Do
 
 Draft Slack notification or handoff messages for an approved channel, user, or thread. Approved execution tools may include `slack_v2-send-message-to-channel`, `slack_v2-reply-to-a-message`, `slack_v2-send-block-kit-message`, or `slack_v2-send-message-to-user-or-group`, but this task must not send unless a later approved runtime path executes the tool.
+
+## Available Context
+
+- Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
+- Especially look for: Handoff Source.
+- If a named input is absent, follow the missing-input policy rather than inventing facts.
+
+## Deliverable
+
+- Produce a concise, reviewable task response that a human can act on.
+- Also include a short human-readable summary covering: Slack Handoff Draft. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
 Ask for the target, message purpose, source artifact, timing, and approver before drafting.
 
-## External Action Policy
+## Guardrails
 
 Draft only. Do not post, reply, create channels, archive channels, delete messages, update profiles, or administer Slack.
 
@@ -33,34 +46,6 @@ Draft only. Do not post, reply, create channels, archive channels, delete messag
 - Draft includes target, body, source context, timing, and approver.
 - Output states no Slack message was sent.
 
-## Human Decision Points
+## Human Review
 
 - Approve exact message content and target before send.
-
-## Inputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `handoff_source` | Handoff Source | `json` | yes |
-
-## Outputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `slack_handoff_draft` | Slack Handoff Draft | `richtext` | no |
-
-## Routing
-
-- Source template: `alludium/task-definition-templates/vc-integrations/slack-sync-write.yaml`
-- Alludium task ID: `vc.slack_sync_write`
-- Task family: `integration_sync_write`
-- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
-- Supported project types:
-  - `vc_deal_room`
-- Supported project scopes:
-  - `project_management`
-
-## Required Skills
-
-- `vc-slack-sync-write`
-- `citation-enforcement`
