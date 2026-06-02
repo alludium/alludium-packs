@@ -2,7 +2,7 @@
 id: ic-memo-assembly
 name: IC Memo Assembly
 description: >
-  Assemble a 12-section IC memo from existing Deal Room artifacts, enforce
+  Assemble a 12-section IC memo from existing Deal Pipeline artifacts, enforce
   citation standards, and maintain the IC Decision Log. Use this skill when
   preparing an investment committee pack from completed diligence outputs,
   drafting the IC memo for a deal that has passed evaluation, running a citation
@@ -21,13 +21,13 @@ capability:
     - kind: tool
       importance: recommended
       required: false
-      note: IC memo assembly requires access to Deal Room artifacts and supporting diligence outputs. Provider-specific tool IDs are intentionally omitted because deal artifacts may be supplied through several configured surfaces.
+      note: IC memo assembly requires access to Deal Pipeline artifacts and supporting diligence outputs. Provider-specific tool IDs are intentionally omitted because deal artifacts may be supplied through several configured surfaces.
       gracefulDegradation: Return the missing-artifact checklist and stop instead of drafting unsupported memo sections.
     - kind: setup
       importance: recommended
       required: false
       owner: user
-      ownerPath: Attach or route the required deal artifacts through the current project or Deal Room owner before assembly.
+      ownerPath: Attach or route the required deal artifacts through the current project or Deal Pipeline owner before assembly.
       confirmationRequired: true
       gracefulDegradation: Produce only chat-level summaries or gap lists when document creation or source artifacts are unavailable.
   routingHints:
@@ -38,7 +38,7 @@ capability:
 
 # IC Memo Assembly
 
-Assemble a 12-section IC investment memo by pulling from existing Deal Room
+Assemble a 12-section IC investment memo by pulling from existing Deal Pipeline
 artifacts. This is assembly work, not blank-page writing. Every section maps to a
 specific diligence output. Where gaps exist, flag them rather than fabricating content.
 
@@ -47,7 +47,7 @@ the IC Decision Log after the committee meets.
 
 ## Prerequisite Completeness Check
 
-Before drafting, confirm the Deal Room contains the minimum required inputs.
+Before drafting, confirm the Deal Pipeline contains the minimum required inputs.
 Run this check first and stop if any required item is missing.
 
 ### Required Inputs (must exist)
@@ -82,7 +82,7 @@ lead can sequence the remaining work.
 2. Create the memo document titled `IC Memo -- {Company} -- {YYYY-MM-DD}`.
 3. Populate each of the 12 sections by pulling from the mapped artifacts (see
    Artifact-to-Section Mapping below). Do not re-research unless a specific gap
-   exists and cannot be filled from Deal Room materials.
+   exists and cannot be filled from Deal Pipeline materials.
 4. Run the Citation Enforcement pass on the completed draft.
 5. Generate the IC Pre-read Pack Index listing links to all supporting artifacts.
 6. Output a 10-bullet IC summary + top risks + open questions in chat, and the
@@ -276,13 +276,13 @@ that tools can provide.
 
 | Tool            | When to Use                                                                                                          |
 | --------------- | -------------------------------------------------------------------------------------------------------------------- |
-| Exa             | Supplementary research for "Why Now" signals, recent press, and market validation when Deal Room artifacts have gaps |
+| Exa             | Supplementary research for "Why Now" signals, recent press, and market validation when Deal Pipeline artifacts have gaps |
 | Brave / SerpAPI | Public-search fallback for recent news, source triangulation, and market-source diversity                            |
 | Dealroom        | Comparable financing context, investor history, and sector activity when connected                                   |
 
 If a Company Research & Enrichment profile exists, use it as the starting point
 for sections 1, 2, and 5.
-If Dealroom is unavailable, continue from Deal Room artifacts, the company research
+If Dealroom is unavailable, continue from Deal Pipeline artifacts, the company research
 profile, and Exa rather than blocking the memo.
 
 ## Output Shape

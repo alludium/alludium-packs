@@ -1,15 +1,15 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.companies_house_setup
-version: 0.1.7
+version: 0.1.8
 title: Configure Companies House Public Register Preview
 category: Venture Capital
 visibility: workspace
 tags:
-  - vc
-  - companies-house
-  - setup
-  - origination
+- vc
+- companies-house
+- setup
+- origination
 definition:
   name: Configure Companies House Public Register Preview
   slug: companies-house-setup
@@ -19,75 +19,82 @@ definition:
     vertical: vc
     taskFamily: integration_setup
     requiredSkills:
-      - vc-companies-house-sourcing
-      - vc-companies-house-sync-read
-      - citation-enforcement
+    - vc-companies-house-sourcing
+    - vc-companies-house-sync-read
+    - citation-enforcement
     recommendedAgentTemplate: vc_integration_operator
     plannedRecommendedAgentTemplate: vc_integration_operator
     supportedProjectTypes:
-      - vc_origination_pipeline
+    - vc_origination_pipeline
     supportedProjectScopes:
-      - project_management
+    - project_management
     integrationSetup:
       applicationExternalId: firecrawl-mcp-hosted
       childTaskDefinitionTemplateIds:
         discovery: vc.companies_house_discovery
         syncRead: vc.companies_house_sync_read
       defaultFlow:
-        - kind: discovery
-          taskDefinitionTemplateId: vc.companies_house_discovery
-          label: Explore Companies House public search scope
-        - kind: sync_read
-          taskDefinitionTemplateId: vc.companies_house_sync_read
-          label: Preview selected public register pages
+      - kind: discovery
+        taskDefinitionTemplateId: vc.companies_house_discovery
+        label: Explore Companies House public search scope
+      - kind: sync_read
+        taskDefinitionTemplateId: vc.companies_house_sync_read
+        label: Preview selected public register pages
     instructions:
-      executionInstructions: Confirm that Companies House public register preview is a selected origination source, then coordinate Firecrawl readiness, search terms, allowed public URLs, result limits, and reviewed read-preview setup. Use public search URLs such as `https://find-and-update.company-information.service.gov.uk/search/companies?q=<term>` and `https://find-and-update.company-information.service.gov.uk/advanced-search/get-results?companyNameIncludes=<term>` as the approved source surface. Create child tasks from the declared integrationSetup flow only when the user chooses that step. Keep imports, recurring monitoring, candidate scoring, CRM writes, outreach, and Deal Room promotion disabled unless a later human approval explicitly creates that task.
-      missingInputPolicy: If Firecrawl is not available or no source scope is selected, keep setup incomplete and ask for Firecrawl availability, search terms, result limits, selected public register URLs, or source-scope decisions.
-      externalActionPolicy: Setup orchestration only. Do not call the Companies House API, import companies, enable recurring sync, write candidate records, update external systems, or create Deal Room projects from this setup task.
+      executionInstructions: Confirm that Companies House public register preview is a selected origination source, then coordinate
+        Firecrawl readiness, search terms, allowed public URLs, result limits, and reviewed read-preview setup. Use public
+        search URLs such as `https://find-and-update.company-information.service.gov.uk/search/companies?q=<term>` and `https://find-and-update.company-information.service.gov.uk/advanced-search/get-results?companyNameIncludes=<term>`
+        as the approved source surface. Create child tasks from the declared integrationSetup flow only when the user chooses
+        that step. Keep imports, recurring monitoring, candidate scoring, CRM writes, outreach, and Deal Pipeline promotion
+        disabled unless a later human approval explicitly creates that task.
+      missingInputPolicy: If Firecrawl is not available or no source scope is selected, keep setup incomplete and ask for
+        Firecrawl availability, search terms, result limits, selected public register URLs, or source-scope decisions.
+      externalActionPolicy: Setup orchestration only. Do not call the Companies House API, import companies, enable recurring
+        sync, write candidate records, update external systems, or create Deal Pipeline projects from this setup task.
       humanConfirmationPolicy: when_external_setup_incomplete
       completionCriteria:
-        - Firecrawl availability is connected or the missing extraction-tool gap is recorded.
-        - Search terms, public URL patterns, result limits, and source scope are recorded, or unanswered decisions are explicit.
-        - Read-preview policy is recorded without enabling imports, recurring sync, scoring, or writes.
-        - The accepted extraction scope states whether Firecrawl access is personal, project-shared, or workspace-shared.
+      - Firecrawl availability is connected or the missing extraction-tool gap is recorded.
+      - Search terms, public URL patterns, result limits, and source scope are recorded, or unanswered decisions are explicit.
+      - Read-preview policy is recorded without enabling imports, recurring sync, scoring, or writes.
+      - The accepted extraction scope states whether Firecrawl access is personal, project-shared, or workspace-shared.
     humanDecisionPoints:
-      - Choose whether Firecrawl access is personal, project-shared, or workspace-shared.
-      - Choose search terms, approved public Companies House URLs, result limits, and candidate filter scope.
-      - Approve any read-preview, import, recurring monitoring, or write task separately.
+    - Choose whether Firecrawl access is personal, project-shared, or workspace-shared.
+    - Choose search terms, approved public Companies House URLs, result limits, and candidate filter scope.
+    - Approve any read-preview, import, recurring monitoring, or write task separately.
 fields:
   input:
-    - key: setup_goal
-      name: Setup Goal
-      fieldType: string
-      required: true
-      position: 0
-      config: {}
+  - key: setup_goal
+    name: Setup Goal
+    fieldType: string
+    required: true
+    position: 0
+    config: {}
   output:
-    - key: setup_summary
-      name: Setup Summary
-      fieldType: richtext
-      required: false
-      position: 0
-      config:
-        rows: 8
-    - key: accepted_connection_scope
-      name: Accepted Connection Scope
-      fieldType: string
-      required: false
-      position: 1
-      config: {}
-    - key: child_task_plan
-      name: Child Task Plan
-      fieldType: json
-      required: false
-      position: 2
-      config: {}
-    - key: sync_policy
-      name: Sync Policy
-      fieldType: json
-      required: false
-      position: 3
-      config: {}
+  - key: setup_summary
+    name: Setup Summary
+    fieldType: richtext
+    required: false
+    position: 0
+    config:
+      rows: 8
+  - key: accepted_connection_scope
+    name: Accepted Connection Scope
+    fieldType: string
+    required: false
+    position: 1
+    config: {}
+  - key: child_task_plan
+    name: Child Task Plan
+    fieldType: json
+    required: false
+    position: 2
+    config: {}
+  - key: sync_policy
+    name: Sync Policy
+    fieldType: json
+    required: false
+    position: 3
+    config: {}
 runtime:
   defaultExecutionContext:
     sourceMetadata:
@@ -97,9 +104,9 @@ runtime:
   requiredResources:
     requiresTaskChat: true
     requiredApplications:
-      - applicationExternalId: firecrawl-mcp-hosted
-        applicationName: Firecrawl
-        connectionScope: USER_CONFIGURED
+    - applicationExternalId: firecrawl-mcp-hosted
+      applicationName: Firecrawl
+      connectionScope: USER_CONFIGURED
   executionProfile:
     agentStartsImmediately: true
     preferredMode: guided_integration_setup

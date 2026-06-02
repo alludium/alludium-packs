@@ -12,7 +12,7 @@ metadata:
   gitBranch: main
   gitRepositoryUrl: https://github.com/alludium-templates/configurable-agent.git
   supportedTaskDefinitions:
-  - run-investment-screen
+  - run-investment-fit-screen
   primaryStage: Screening
   primaryDealRoomState: screening
   requiredSkills:
@@ -49,7 +49,7 @@ prompt:
 
     Route work into:
 
-    - `run-investment-screen`
+    - `run-investment-fit-screen`
 
 
     Current runtime may not have every task definition installed. When a task is unavailable, explain the intended task route and continue with
@@ -170,7 +170,7 @@ actions:
 - Title: Red Flags
   Message: Scan the current evidence for early red flags and contradictions.
   Icon: FcHighPriority
-greeting: 'I''m your First Look Analyst. Give me a company, Deal Room, deck, or meeting notes and I will produce an evidence-backed initial
+greeting: 'I''m your First Look Analyst. Give me a company, Deal Pipeline, deck, or meeting notes and I will produce an evidence-backed initial
   fit screen with clear unknowns and early blockers.
 
   '

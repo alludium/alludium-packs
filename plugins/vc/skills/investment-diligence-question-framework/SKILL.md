@@ -28,7 +28,7 @@ capability:
       importance: recommended
       required: false
       owner: user
-      ownerPath: Attach or provide deal materials through the current chat, project, or Deal Room before running the question-generation pass.
+      ownerPath: Attach or provide deal materials through the current chat, project, or Deal Pipeline before running the question-generation pass.
       confirmationRequired: true
       gracefulDegradation: Continue only with explicitly provided context and label unanswered areas as unknown.
   routingHints:

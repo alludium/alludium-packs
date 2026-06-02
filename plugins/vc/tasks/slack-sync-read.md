@@ -14,17 +14,30 @@ skills:
 
 # Preview Slack Deal Context
 
-Preview selected Slack channel, thread, message, and file context for VC Deal Room tasks.
+## Objective
 
-## Instructions
+Preview selected Slack channel, thread, message, and file context for Deal Pipeline tasks.
+
+## What To Do
 
 Use `slack_v2-find-message`, `slack_v2-list-replies`, `slack_v2-list-files`, and `slack_v2-get-file` only inside the approved channel/thread scope. Summarize selected context and propose whether it belongs as knowledge context, artifact context, task context, or setup context.
+
+## Available Context
+
+- Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
+- Especially look for: Selected Slack Scope.
+- If a named input is absent, follow the missing-input policy rather than inventing facts.
+
+## Deliverable
+
+- Produce a concise, reviewable task response that a human can act on.
+- Also include a short human-readable summary covering: Slack Context Preview, Target Context Mapping. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
 Ask for approved channel/thread scope before reading Slack messages.
 
-## External Action Policy
+## Guardrails
 
 Read preview only. Do not ingest broad history, post, reply, delete, or update messages.
 
@@ -34,35 +47,6 @@ Read preview only. Do not ingest broad history, post, reply, delete, or update m
 - Relevant context is summarized with timestamps and sensitivity caveats.
 - Broad channel ingestion remains out of scope.
 
-## Human Decision Points
+## Human Review
 
 - Approve selected context before attaching it to project/task state.
-
-## Inputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `selected_slack_scope` | Selected Slack Scope | `json` | yes |
-
-## Outputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `slack_context_preview` | Slack Context Preview | `richtext` | no |
-| `target_context_mapping` | Target Context Mapping | `json` | no |
-
-## Routing
-
-- Source template: `alludium/task-definition-templates/vc-integrations/slack-sync-read.yaml`
-- Alludium task ID: `vc.slack_sync_read`
-- Task family: `integration_sync_read`
-- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
-- Supported project types:
-  - `vc_deal_room`
-- Supported project scopes:
-  - `project_management`
-
-## Required Skills
-
-- `vc-slack-sync-read`
-- `citation-enforcement`

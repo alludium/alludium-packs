@@ -18,7 +18,7 @@ summary: Policy for candidate dedupe, novelty, and promotion eligibility.
 | Founder names | Medium | Useful when company identity is thin |
 | CRM record URLs | Strong | Prefer durable CRM IDs where available |
 | Source object IDs | Strong within one source | Do not assume cross-source uniqueness |
-| Existing Deal Room fields | Strong | Check current and archived opportunities |
+| Existing Deal Pipeline fields | Strong | Check current and archived opportunities |
 | Prior rejected or watched candidates | Medium / strong | Requires partner review before override |
 | Relationship context | Medium | Relationship alone does not prove same company |
 
@@ -27,7 +27,7 @@ summary: Policy for candidate dedupe, novelty, and promotion eligibility.
 | Outcome | Meaning | Allowed Action |
 | --- | --- | --- |
 | New | No meaningful match found | Continue screening or promotion package |
-| Existing opportunity | Candidate maps to current Deal Room | Attach evidence to existing opportunity recommendation |
+| Existing opportunity | Candidate maps to current Deal Pipeline | Attach evidence to existing opportunity recommendation |
 | Existing pipeline candidate | Candidate already exists upstream | Update candidate batch or source registry |
 | Prior reject or watch | Candidate was previously rejected or watched | Require partner review before promotion |
 | Ambiguous | Competing matches remain plausible | Hold promotion and list matches |

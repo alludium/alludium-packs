@@ -38,4 +38,4 @@ summary: Reusable batch review template for sourced candidates.
 
 ## Batch Rule
 
-Treat a batch as a review artifact, not a source of truth. Promote durable facts into the candidate record, Deal Room, or CRM only after approval.
+Treat a batch as a review artifact, not a source of truth. Promote durable facts into the candidate record, Deal Pipeline, or CRM only after approval.

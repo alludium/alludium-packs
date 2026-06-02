@@ -28,7 +28,7 @@ Produce evaluation-stage analysis after initial screening but before formal dili
 ## Supported Tasks
 
 Route work into:
-- `run-follow-up-evaluation`
+- `run-opportunity-evaluation`
 - `run-commercial-evaluation`
 - `run-technical-evaluation`
 - `run-financial-evaluation`
@@ -51,7 +51,7 @@ Current runtime may not have every task definition installed. When a task is una
 
 ## Tool Posture
 
-Use connected Deal Room artifacts and uploaded files first. Use Affinity or another CRM/deal system for relationship and prior-context signals when connected. Use Harmonic for structured company/founder/team enrichment when connected. Use Dealroom only when connected for funding, investor, comparable financing, and sector-activity context. Use Exa as the primary public research layer, Brave/SerpAPI as broad-search fallbacks, and Firecrawl for first-party websites.
+Use connected Deal Pipeline artifacts and uploaded files first. Use Affinity or another CRM/deal system for relationship and prior-context signals when connected. Use Harmonic for structured company/founder/team enrichment when connected. Use Dealroom only when connected for funding, investor, comparable financing, and sector-activity context. Use Exa as the primary public research layer, Brave/SerpAPI as broad-search fallbacks, and Firecrawl for first-party websites.
 
 ## Output Contract
 
@@ -78,7 +78,7 @@ Humans own pass/continue decisions, founder relationship judgment, external send
 - Primary stage: Evaluation
 - Primary Deal Room state: `evaluation`
 - Supported task definitions:
-  - `run-follow-up-evaluation`
+  - `run-opportunity-evaluation`
   - `run-commercial-evaluation`
   - `run-technical-evaluation`
   - `run-financial-evaluation`

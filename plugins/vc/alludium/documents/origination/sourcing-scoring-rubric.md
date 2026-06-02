@@ -21,9 +21,9 @@ summary: Rubric for scoring sourced company fit and promotion readiness.
 | Source reliability | Trusted source or verified source run | Noisy, partial, or paid-source artifact without review | High / Medium / Low |
 | Source provenance | Specific source family, source detail, freshness, and owner are preserved | Company appears without traceable source context | Complete / Partial / Missing |
 | Relationship path | Clear warm intro or owned route | No credible route | Clear / Possible / None |
-| Promotion rationale | Clear reason to create or update a Deal Room | Next action is generic or unsupported | Clear / Partial / Missing |
+| Promotion rationale | Clear reason to create or update a Deal Pipeline | Next action is generic or unsupported | Clear / Partial / Missing |
 | Evidence completeness | Enough to justify next action | Missing critical source, identity, or fit evidence | Complete / Partial / Weak |
-| Promotion readiness | Human can decide whether to create or update Deal Room | Too little context for downstream action | Ready / Not ready |
+| Promotion readiness | Human can decide whether to create or update Deal Pipeline | Too little context for downstream action | Ready / Not ready |
 
 ## Recommendation Bands
 

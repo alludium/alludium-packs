@@ -3,7 +3,7 @@ id: vc.document.portfolio_onboarding_plan_template
 title: Portfolio Onboarding Plan Template
 documentType: template
 supportedProjectTypes:
-  - vc_deal_room
+  - vc_investment_management
 summary: Reusable post-close onboarding and first-100-days plan.
 ---
 

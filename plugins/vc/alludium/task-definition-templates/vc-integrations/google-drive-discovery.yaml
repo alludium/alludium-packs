@@ -1,62 +1,67 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.google_drive_discovery
-version: 0.1.3
+version: 0.1.4
 title: Explore Google Drive Sources
 category: Venture Capital
 visibility: workspace
 tags:
-  - vc
-  - google-drive
-  - discovery
+- vc
+- google-drive
+- discovery
 definition:
   name: Explore Google Drive Sources
   slug: google-drive-discovery
-  description: Discover Google Drive shared drive, folder, and file scope before selected VC Deal Room context reads.
+  description: Discover Google Drive shared drive, folder, and file scope before selected Deal Pipeline context reads.
   allowSubtasks: false
   definitionJson:
     vertical: vc
     taskFamily: integration_discovery
     requiredSkills:
-      - vc-google-drive-discovery
-      - citation-enforcement
+    - vc-google-drive-discovery
+    - citation-enforcement
     recommendedAgentTemplate: vc_integration_operator
     plannedRecommendedAgentTemplate: vc_integration_operator
     supportedProjectTypes:
-      - vc_deal_room
+    - vc_deal_room
     supportedProjectScopes:
-      - project_management
+    - project_management
     instructions:
-      executionInstructions: Use the connected `google_drive` application to confirm account context with `google_drive-get-current-user`, enumerate shared drives with `google_drive-search-shared-drives`, and inspect candidate folders/files with `google_drive-list-files`, `google_drive-find-folder`, `google_drive-find-file`, `google_drive-get-folder-id-for-path`, and `google_drive-get-file-by-id` inside obvious VC source areas only. Ask the user to choose the shared drive, folder, file, or source-scope boundary before any read-sync task.
+      executionInstructions: Use the connected `google_drive` application to confirm account context with `google_drive-get-current-user`,
+        enumerate shared drives with `google_drive-search-shared-drives`, and inspect candidate folders/files with `google_drive-list-files`,
+        `google_drive-find-folder`, `google_drive-find-file`, `google_drive-get-folder-id-for-path`, and `google_drive-get-file-by-id`
+        inside obvious VC source areas only. Ask the user to choose the shared drive, folder, file, or source-scope boundary
+        before any read-sync task.
       missingInputPolicy: If Google Drive is not authorized, ask for authorization or a supplied folder/file inventory.
-      externalActionPolicy: Discovery only. Do not download file contents, create files, create folders, share files, move files, delete files, trash files, update metadata, resolve access proposals, or change permissions.
+      externalActionPolicy: Discovery only. Do not download file contents, create files, create folders, share files, move
+        files, delete files, trash files, update metadata, resolve access proposals, or change permissions.
       completionCriteria:
-        - Candidate shared drives, folders, files, and source scopes are listed with stable IDs when available.
-        - Tool IDs used or missing are named.
-        - User choices needed before file or folder preview are explicit.
+      - Candidate shared drives, folders, files, and source scopes are listed with stable IDs when available.
+      - Tool IDs used or missing are named.
+      - User choices needed before file or folder preview are explicit.
     humanDecisionPoints:
-      - Choose shared drive, folder, or file scope before sync read.
-      - Approve whether comments, folder listings, or file content previews are in scope.
-      - Approve any later import or attachment separately.
+    - Choose shared drive, folder, or file scope before sync read.
+    - Approve whether comments, folder listings, or file content previews are in scope.
+    - Approve any later import or attachment separately.
 fields:
   input:
-    - key: discovery_goal
-      name: Discovery Goal
-      fieldType: string
-      required: true
-      position: 0
-      config: {}
+  - key: discovery_goal
+    name: Discovery Goal
+    fieldType: string
+    required: true
+    position: 0
+    config: {}
   output:
-    - key: google_drive_discovery_report
-      name: Google Drive Discovery Report
-      fieldType: richtext
-      required: false
-      position: 0
-      config:
-        rows: 8
-    - key: source_scope_questions
-      name: Source Scope Questions
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
+  - key: google_drive_discovery_report
+    name: Google Drive Discovery Report
+    fieldType: richtext
+    required: false
+    position: 0
+    config:
+      rows: 8
+  - key: source_scope_questions
+    name: Source Scope Questions
+    fieldType: json
+    required: false
+    position: 1
+    config: {}

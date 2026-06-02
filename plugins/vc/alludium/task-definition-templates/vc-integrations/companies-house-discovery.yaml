@@ -1,62 +1,69 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.companies_house_discovery
-version: 0.1.3
+version: 0.1.4
 title: Explore Companies House Public Register Scope
 category: Venture Capital
 visibility: workspace
 tags:
-  - vc
-  - companies-house
-  - discovery
-  - origination
+- vc
+- companies-house
+- discovery
+- origination
 definition:
   name: Explore Companies House Public Register Scope
   slug: companies-house-discovery
-  description: Discover public Companies House search URLs, result limits, and page-preview scope before selected VC origination reads.
+  description: Discover public Companies House search URLs, result limits, and page-preview scope before selected VC origination
+    reads.
   allowSubtasks: false
   definitionJson:
     vertical: vc
     taskFamily: integration_discovery
     requiredSkills:
-      - vc-companies-house-sourcing
-      - citation-enforcement
+    - vc-companies-house-sourcing
+    - citation-enforcement
     recommendedAgentTemplate: vc_integration_operator
     plannedRecommendedAgentTemplate: vc_integration_operator
     supportedProjectTypes:
-      - vc_origination_pipeline
+    - vc_origination_pipeline
     supportedProjectScopes:
-      - project_management
+    - project_management
     instructions:
-      executionInstructions: Use the connected `firecrawl-mcp-hosted` application to inspect only approved public Companies House pages. Construct public search URLs from approved terms and filters, such as `/search/companies?q=<term>` for broad company search and `/advanced-search/get-results?companyNameIncludes=<term>` for table-like advanced results. Prefer HTML or structured extraction when available so company names, company numbers, statuses, addresses, result ranks, and direct `/company/<number>` links can be captured with source receipts.
-      missingInputPolicy: Ask for Firecrawl availability, selected search terms, result limits, approved public URL patterns, or a supplied inventory when live extraction is unavailable.
-      externalActionPolicy: Discovery only. Do not call authenticated Companies House APIs, import companies, process candidate queues, persist source state, score candidates, update external systems, or create Deal Room projects.
+      executionInstructions: Use the connected `firecrawl-mcp-hosted` application to inspect only approved public Companies
+        House pages. Construct public search URLs from approved terms and filters, such as `/search/companies?q=<term>` for
+        broad company search and `/advanced-search/get-results?companyNameIncludes=<term>` for table-like advanced results.
+        Prefer HTML or structured extraction when available so company names, company numbers, statuses, addresses, result
+        ranks, and direct `/company/<number>` links can be captured with source receipts.
+      missingInputPolicy: Ask for Firecrawl availability, selected search terms, result limits, approved public URL patterns,
+        or a supplied inventory when live extraction is unavailable.
+      externalActionPolicy: Discovery only. Do not call authenticated Companies House APIs, import companies, process candidate
+        queues, persist source state, score candidates, update external systems, or create Deal Pipeline projects.
       completionCriteria:
-        - Approved public Companies House search URLs and source-scope decisions are listed.
-        - Firecrawl availability and any missing extraction-tool gap are explicit.
-        - User choices needed before sync read are explicit.
+      - Approved public Companies House search URLs and source-scope decisions are listed.
+      - Firecrawl availability and any missing extraction-tool gap are explicit.
+      - User choices needed before sync read are explicit.
     humanDecisionPoints:
-      - Choose keyword, company-name, result-limit, and optional advanced-search scope before sync read.
-      - Approve sample-result processing separately.
+    - Choose keyword, company-name, result-limit, and optional advanced-search scope before sync read.
+    - Approve sample-result processing separately.
 fields:
   input:
-    - key: discovery_goal
-      name: Discovery Goal
-      fieldType: string
-      required: true
-      position: 0
-      config: {}
+  - key: discovery_goal
+    name: Discovery Goal
+    fieldType: string
+    required: true
+    position: 0
+    config: {}
   output:
-    - key: companies_house_discovery_report
-      name: Companies House Discovery Report
-      fieldType: richtext
-      required: false
-      position: 0
-      config:
-        rows: 8
-    - key: source_scope_questions
-      name: Source Scope Questions
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
+  - key: companies_house_discovery_report
+    name: Companies House Discovery Report
+    fieldType: richtext
+    required: false
+    position: 0
+    config:
+      rows: 8
+  - key: source_scope_questions
+    name: Source Scope Questions
+    fieldType: json
+    required: false
+    position: 1
+    config: {}

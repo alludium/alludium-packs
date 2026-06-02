@@ -1,62 +1,65 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.notion_discovery
-version: 0.1.3
+version: 0.1.4
 title: Explore Notion Pages and Databases
 category: Venture Capital
 visibility: workspace
 tags:
-  - vc
-  - notion
-  - discovery
+- vc
+- notion
+- discovery
 definition:
   name: Explore Notion Pages and Databases
   slug: notion-discovery
-  description: Discover Notion page, database, and workspace scope before selected VC Deal Room context reads.
+  description: Discover Notion page, database, and workspace scope before selected Deal Pipeline context reads.
   allowSubtasks: false
   definitionJson:
     vertical: vc
     taskFamily: integration_discovery
     requiredSkills:
-      - vc-notion-discovery
-      - citation-enforcement
+    - vc-notion-discovery
+    - citation-enforcement
     recommendedAgentTemplate: vc_integration_operator
     plannedRecommendedAgentTemplate: vc_integration_operator
     supportedProjectTypes:
-      - vc_deal_room
+    - vc_deal_room
     supportedProjectScopes:
-      - project_management
+    - project_management
     instructions:
-      executionInstructions: Use the connected `notion` application to confirm account context with `notion-get-current-user`, search accessible pages and databases with `notion-search`, and inspect candidate database shape with `notion-retrieve-database-schema` when selected. Ask the user to choose the page or database scope before any read-sync task.
+      executionInstructions: Use the connected `notion` application to confirm account context with `notion-get-current-user`,
+        search accessible pages and databases with `notion-search`, and inspect candidate database shape with `notion-retrieve-database-schema`
+        when selected. Ask the user to choose the page or database scope before any read-sync task.
       missingInputPolicy: If Notion is not authorized, ask for authorization or a supplied page/database inventory.
-      externalActionPolicy: Discovery only. Do not read broad page contents, create pages, create databases, update pages, update databases, append blocks, delete blocks, duplicate pages, upload files, or create comments.
+      externalActionPolicy: Discovery only. Do not read broad page contents, create pages, create databases, update pages,
+        update databases, append blocks, delete blocks, duplicate pages, upload files, or create comments.
       completionCriteria:
-        - Candidate pages, databases, owners, and scope signals are listed with IDs when available.
-        - Tool IDs used or missing are named.
-        - User choices needed before page or database preview are explicit.
+      - Candidate pages, databases, owners, and scope signals are listed with IDs when available.
+      - Tool IDs used or missing are named.
+      - User choices needed before page or database preview are explicit.
     humanDecisionPoints:
-      - Choose page or database scope before sync read.
-      - Approve whether properties, blocks, or database rows are in scope.
-      - Approve any later import or attachment separately.
+    - Choose page or database scope before sync read.
+    - Approve whether properties, blocks, or database rows are in scope.
+    - Approve any later import or attachment separately.
 fields:
   input:
-    - key: discovery_goal
-      name: Discovery Goal
-      fieldType: string
-      required: true
-      position: 0
-      config: {}
+  - key: discovery_goal
+    name: Discovery Goal
+    fieldType: string
+    required: true
+    position: 0
+    config: {}
   output:
-    - key: notion_discovery_report
-      name: Notion Discovery Report
-      fieldType: richtext
-      required: false
-      position: 0
-      config:
-        rows: 8
-    - key: scope_questions
-      name: Scope Questions
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
+  - key: notion_discovery_report
+    name: Notion Discovery Report
+    fieldType: richtext
+    required: false
+    position: 0
+    config:
+      rows: 8
+  - key: scope_questions
+    name: Scope Questions
+    fieldType: json
+    required: false
+    position: 1
+    config: {}

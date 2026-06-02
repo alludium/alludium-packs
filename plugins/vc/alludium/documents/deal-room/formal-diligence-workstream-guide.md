@@ -4,6 +4,7 @@ title: Formal Diligence Workstream Guide
 documentType: methodology
 supportedProjectTypes:
   - vc_deal_room
+  - vc_investment_management
 summary: Workstream guide for verification-oriented venture diligence.
 ---
 

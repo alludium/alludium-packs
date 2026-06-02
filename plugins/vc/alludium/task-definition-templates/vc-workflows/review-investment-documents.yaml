@@ -1,207 +1,218 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.review_investment_documents
-version: 0.1.1
+version: 0.1.2
 title: Review Investment Documents
 category: Venture Capital
 visibility: workspace
 tags:
-  - vc
-  - contracts
-  - investment-documents
-  - legal-review
+- vc
+- contracts
+- investment-documents
+- legal-review
 definition:
   name: Review Investment Documents
   slug: review-investment-documents
-  description: Coordinate post-term-sheet investment document review, disclosure-letter issues, counsel questions, and closing readiness notes without providing legal advice.
+  description: Coordinate post-term-sheet investment document review, disclosure-letter issues, counsel questions, and closing
+    readiness notes without providing legal advice.
   allowSubtasks: true
   definitionJson:
     vertical: vc
     stage: contracts
     taskFamily: contracts
     documentRefs:
-      - documentId: vc.document.investment_document_review_template
-        usage: output_template
-        outputFieldKey: investment_document_review_artifact_id
-      - documentId: vc.document.legal_diligence_guide
-        usage: methodology
-      - documentId: vc.document.evidence_citation_style_guide
-        usage: style_guide
-      - documentId: vc.document.template_use_guidance
-        usage: operating_guidance
+    - documentId: vc.document.investment_document_review_template
+      usage: output_template
+      outputFieldKey: investment_document_review_artifact_id
+    - documentId: vc.document.legal_diligence_guide
+      usage: methodology
+    - documentId: vc.document.evidence_citation_style_guide
+      usage: style_guide
+    - documentId: vc.document.template_use_guidance
+      usage: operating_guidance
     requiredSkills:
-      - legal-diligence-coordination
-      - closing-coordination-and-cp-tracking
-      - citation-enforcement
+    - legal-diligence-coordination
+    - closing-coordination-and-cp-tracking
+    - citation-enforcement
     plannedRecommendedAgentTemplate: vc_legal_compliance_desk
     recommendedAgentTemplate: vc_legal_compliance_desk
     supportedProjectTypes:
-      - vc_deal_room
+    - vc_investment_management
     sourceAnchors:
-      - source: investment-management-process-slides
-        anchor: slide-32
-        note: Term sheet/legal execution
-      - source: investment-management-process-slides
-        anchor: slide-33
-        note: Closing AI map
-      - source: public-pattern-review
-        anchor: deal-flow-stage-refactor-spec-public-pattern-review
-        note: Document-review coordination with explicit legal boundary
+    - source: investment-management-process-slides
+      anchor: slide-32
+      note: Term sheet/legal execution
+    - source: investment-management-process-slides
+      anchor: slide-33
+      note: Closing AI map
+    - source: public-pattern-review
+      anchor: deal-flow-stage-refactor-spec-public-pattern-review
+      note: Document-review coordination with explicit legal boundary
     instructions:
-      executionInstructions: >-
-        Coordinate investment document review by mapping document provisions back to the term sheet review, disclosure letter, counsel notes, board minutes, and cap table context. Identify open document issues, counsel questions, and closing readiness notes without interpreting legal sufficiency. Cite material claims, separate assumptions from evidence, and do not provide legal advice, sign off documents, send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a durable project file artifact named Investment Document Review and attach it to the required output field `investment_document_review_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
-      missingInputPolicy: Ask for investment document artifacts and term sheet review before producing document-readiness notes.
-      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
+      executionInstructions: 'Coordinate investment document review by mapping document provisions back to the term sheet
+        review, disclosure letter, counsel notes, board minutes, and cap table context. Identify open document issues, counsel
+        questions, and closing readiness notes without interpreting legal sufficiency. Cite material claims, separate assumptions
+        from evidence, and do not provide legal advice, sign off documents, send messages, mutate CRM records, create folders/projects,
+        create child tasks, or move stages without explicit human approval. Create or update a durable project file artifact
+        named Investment Document Review and attach it to the required output field `investment_document_review_artifact_id`.
+        Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template`
+        sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status,
+        evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains
+        process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document
+        and preserve the document ID alongside the output artifact.'
+      missingInputPolicy: Ask for investment document artifacts and term sheet review before producing document-readiness
+        notes.
+      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation,
+        child task creation, or stage transition.
       completionCriteria:
-        - Required input gaps are resolved or listed as assumptions/open questions.
-        - Term-to-document mapping distinguishes business mismatches from counsel questions.
-        - Closing readiness notes identify owner, dependency, and required human approval point.
+      - Required input gaps are resolved or listed as assumptions/open questions.
+      - Term-to-document mapping distinguishes business mismatches from counsel questions.
+      - Closing readiness notes identify owner, dependency, and required human approval point.
     humanDecisionPoints:
-      - Approve legal conclusions, document sufficiency, signing readiness, counsel/founder communications, and stage movement.
-      - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+    - Approve legal conclusions, document sufficiency, signing readiness, counsel/founder communications, and stage movement.
+    - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
     orchestration:
       parentTaskPolicy: none
       suggestedChildTasks: []
 fields:
   input:
-    - key: investment_document_artifact_ids
-      name: Investment Document Artifact IDs
-      fieldType: string
-      required: true
-      position: 0
-      config: {}
-    - key: term_sheet_review_artifact_id
-      name: Term Sheet Review
-      fieldType: file
-      required: true
-      position: 1
-      config: {}
-    - key: negotiation_brief_artifact_id
-      name: Negotiation Brief
-      fieldType: file
-      required: false
-      position: 2
-      config: {}
-    - key: legal_diligence_artifact_id
-      name: Legal Diligence
-      fieldType: file
-      required: false
-      position: 3
-      config: {}
-    - key: disclosure_letter_artifact_id
-      name: Disclosure Letter
-      fieldType: file
-      required: false
-      position: 4
-      config: {}
-    - key: counsel_notes
-      name: Counsel Notes
-      fieldType: richtext
-      required: false
-      position: 5
-      config:
-        rows: 5
-    - key: cap_table_artifact_id
-      name: Cap Table
-      fieldType: file
-      required: false
-      position: 6
-      config: {}
-    - key: board_minutes_artifact_id
-      name: Board Minutes
-      fieldType: file
-      required: false
-      position: 7
-      config: {}
-
+  - key: investment_document_artifact_ids
+    name: Investment Document Artifact IDs
+    fieldType: string
+    required: true
+    position: 0
+    config: {}
+  - key: term_sheet_review_artifact_id
+    name: Term Sheet Review
+    fieldType: file
+    required: true
+    position: 1
+    config: {}
+  - key: negotiation_brief_artifact_id
+    name: Negotiation Brief
+    fieldType: file
+    required: false
+    position: 2
+    config: {}
+  - key: legal_diligence_artifact_id
+    name: Legal Diligence
+    fieldType: file
+    required: false
+    position: 3
+    config: {}
+  - key: disclosure_letter_artifact_id
+    name: Disclosure Letter
+    fieldType: file
+    required: false
+    position: 4
+    config: {}
+  - key: counsel_notes
+    name: Counsel Notes
+    fieldType: richtext
+    required: false
+    position: 5
+    config:
+      rows: 5
+  - key: cap_table_artifact_id
+    name: Cap Table
+    fieldType: file
+    required: false
+    position: 6
+    config: {}
+  - key: board_minutes_artifact_id
+    name: Board Minutes
+    fieldType: file
+    required: false
+    position: 7
+    config: {}
   output:
-    - key: investment_document_review_artifact_id
-      name: Investment Document Review
-      fieldType: file
-      required: true
-      position: 0
-      config:
-        documentRefId: vc.document.investment_document_review_template
-    - key: term_to_document_mapping
-      name: Term To Document Mapping
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
-    - key: open_document_issues
-      name: Open Document Issues
-      fieldType: json
-      required: false
-      position: 2
-      config: {}
-    - key: counsel_questions
-      name: Counsel Questions
-      fieldType: json
-      required: false
-      position: 3
-      config: {}
-    - key: closing_readiness_notes
-      name: Closing Readiness Notes
-      fieldType: richtext
-      required: false
-      position: 4
-      config:
-        rows: 5
-    - key: summary
-      name: Summary
-      fieldType: richtext
-      required: false
-      position: 5
-      config:
-        rows: 5
-    - key: recommendation
-      name: Recommendation
-      fieldType: string
-      required: false
-      position: 6
-      config: {}
-    - key: source_links
-      name: Source Links
-      fieldType: string
-      required: false
-      position: 7
-      config: {}
-    - key: assumptions
-      name: Assumptions
-      fieldType: string
-      required: false
-      position: 8
-      config: {}
-    - key: evidence_quality
-      name: Evidence Quality
-      fieldType: json
-      required: false
-      position: 9
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: false
-      position: 10
-      config: {}
-    - key: risks
-      name: Risks
-      fieldType: json
-      required: false
-      position: 11
-      config: {}
-    - key: human_decision_points
-      name: Human Decision Points
-      fieldType: string
-      required: false
-      position: 12
-      config: {}
-    - key: next_actions
-      name: Next Actions
-      fieldType: json
-      required: false
-      position: 13
-      config: {}
+  - key: investment_document_review_artifact_id
+    name: Investment Document Review
+    fieldType: file
+    required: true
+    position: 0
+    config:
+      documentRefId: vc.document.investment_document_review_template
+  - key: term_to_document_mapping
+    name: Term To Document Mapping
+    fieldType: json
+    required: false
+    position: 1
+    config: {}
+  - key: open_document_issues
+    name: Open Document Issues
+    fieldType: json
+    required: false
+    position: 2
+    config: {}
+  - key: counsel_questions
+    name: Counsel Questions
+    fieldType: json
+    required: false
+    position: 3
+    config: {}
+  - key: closing_readiness_notes
+    name: Closing Readiness Notes
+    fieldType: richtext
+    required: false
+    position: 4
+    config:
+      rows: 5
+  - key: summary
+    name: Summary
+    fieldType: richtext
+    required: false
+    position: 5
+    config:
+      rows: 5
+  - key: recommendation
+    name: Recommendation
+    fieldType: string
+    required: false
+    position: 6
+    config: {}
+  - key: source_links
+    name: Source Links
+    fieldType: string
+    required: false
+    position: 7
+    config: {}
+  - key: assumptions
+    name: Assumptions
+    fieldType: string
+    required: false
+    position: 8
+    config: {}
+  - key: evidence_quality
+    name: Evidence Quality
+    fieldType: json
+    required: false
+    position: 9
+    config: {}
+  - key: open_questions
+    name: Open Questions
+    fieldType: json
+    required: false
+    position: 10
+    config: {}
+  - key: risks
+    name: Risks
+    fieldType: json
+    required: false
+    position: 11
+    config: {}
+  - key: human_decision_points
+    name: Human Decision Points
+    fieldType: string
+    required: false
+    position: 12
+    config: {}
+  - key: next_actions
+    name: Next Actions
+    fieldType: json
+    required: false
+    position: 13
+    config: {}
 runtime:
   defaultExecutionContext:
     sourceMetadata:

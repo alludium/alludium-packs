@@ -47,5 +47,5 @@ Return normalized candidate, stable key, source receipt, dedupe decision, missin
 ## Boundaries
 
 - Do not contact founders.
-- Do not create Deal Rooms.
+- Do not create Deal Pipelines.
 - Do not write CRM records without approval.

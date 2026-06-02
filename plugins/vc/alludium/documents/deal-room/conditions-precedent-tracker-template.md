@@ -3,7 +3,7 @@ id: vc.document.conditions_precedent_tracker_template
 title: Conditions Precedent Tracker Template
 documentType: template
 supportedProjectTypes:
-  - vc_deal_room
+  - vc_investment_management
 summary: Reusable tracker for conditions precedent and evidence.
 ---
 

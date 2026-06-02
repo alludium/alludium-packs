@@ -79,4 +79,4 @@ Return candidate rows with track, query, founder URL, company name, company URL 
 - Do not bypass platform or provider policy.
 - Do not run unapproved actors.
 - Do not contact founders.
-- Do not write CRM rows or create Deal Rooms.
+- Do not write CRM rows or create Deal Pipelines.

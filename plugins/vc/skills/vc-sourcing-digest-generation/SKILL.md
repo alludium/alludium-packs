@@ -32,7 +32,7 @@ Include:
 - Budget/cost notes and missing cost metadata
 - Dedupe/quarantine counts
 - Outreach drafts prepared, not sent
-- Pending approvals for schedules, paid actor runs, sync writes, outreach, or Deal Room promotion
+- Pending approvals for schedules, paid actor runs, sync writes, outreach, or Deal Pipeline promotion
 
 ## Cadence
 

@@ -9,6 +9,10 @@
     {
       "id": "vc_origination_pipeline",
       "path": "vc_origination_pipeline.json"
+    },
+    {
+      "id": "vc_investment_management",
+      "path": "vc_investment_management.json"
     }
   ]
 }

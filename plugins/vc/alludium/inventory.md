@@ -1,9 +1,9 @@
 # Alludium VC Inventory
 
-**Version**: 0.5.22
+**Version**: 0.5.25
 **Status**: Deal overview identity fields
 
-This inventory describes the current public VC plugin/pack seed plus the draft project-type and metadata expansion. Version numbers track pack release slices that need platform alignment, so this history only lists versions that introduced durable pack-surface changes. Version `0.1.0` contains VC skills, Alludium runtime agent templates, public-safe MCP definitions, and Alludium MCP recommendations. Version `0.2.2` adds VC task-definition templates and advertises both the canonical `venture_capital` vertical key and legacy `vc` alias. Version `0.3.0` adds the VC Deal Room project type as a first-class pack surface. Version `0.3.1` adds the VC Deal Room command-view metadata used by the project command center. Version `0.3.2` adds workspace variable declarations and application recommendation metadata for the paired platform ingest work. Version `0.3.4` aligns agent Deal Room states with the collapsed lifecycle and tightens required task-input mappings. Version `0.3.5` adds compact Affinity and Slack management-action metadata plus focused integration-specific discovery and sync task templates and skills. Version `0.3.6` extends the same integration-management surface to Google Drive, Notion, and Harmonic, with Harmonic limited to discovery/read-preview until trusted tool rows exist. Version `0.3.7` grants all VC runtime agent templates access to the platform text-artifact creation tool and collapses recommendation-level integration actions to one setup task per integration; each setup task declares its own discovery/read/write child task plan. Version `0.4.0` adds the VC Origination Pipeline project type, Apify and Companies House setup/readiness tasks, scheduled sourcing task definitions, compact origination project data mappings, and supporting origination skills. Version `0.4.1` validates project manager overlays. Version `0.4.2` adds generated agent Markdown compatibility artifacts and task prompt Markdown derived from the existing Alludium YAML source of truth. Version `0.5.0` adds the VC Deal Room Setup Guide agent, routes Affinity setup toward agent-led discovery, mapping, and seed review, and declares schedulable VC tasks for project setup orchestration. Version `0.5.1` removes task-definition template turn caps so platform defaults can control agent execution budgets. Version `0.5.2` adds pack-owned project setup entrypoint metadata for VC project types. Version `0.5.3` makes project setup steps, schedule groups, and post-approval platform actions explicit in the project type definitions, adds the project-scoped Affinity Deal Room import task, keeps Origination setup distinct from Deal Room import, and adds pack-native methodology, SOP, checklist, and template documents for Deal Room and Origination project types. Version `0.5.4` tightens document-template semantics, adds missing authored-document refs, and generalizes legacy screening and diligence methodology skill IDs. Version `0.5.5` bumps the Affinity read-sync task template after content changed so platform ingest can create a new template version. Version `0.5.6` adds a separate `projectCreation` contract for launching individual VC Deal Room and VC Origination Pipeline project instances, removes legacy CRM URL fields, and moves origination setup configuration into declared workspace variables. Version `0.5.7` removes `systemUseOnly` from external task-template YAML and treats system-only task visibility as platform-owned authority. Version `0.5.8` normalizes workspace variable select options to the platform object shape and validates that shape in the pack release checks. Version `0.5.9` switches all VC runtime agent templates from Claude Opus 4.6 to Claude Sonnet 4.6 on Bedrock and bumps each agent template version so platform ingest creates a new template version. Version `0.5.10` restores project-manager identity overlays for VC project type versions and validates the overlay contract in release checks. Version `0.5.13` adds focused commercial, technical, financial, and team evaluation skills, output templates, task definitions, and Deal Room/review-pack wiring so decision review can use evaluation-stage outputs before formal diligence. Version `0.5.14` adds project data fields and task mappings for focused evaluation workstream inputs and structured summary outputs. Version `0.5.15` adds generated project blueprint Markdown for each project type. Version `0.5.16` labels platform-owned setup tasks in generated project blueprints with their canonical platform task IDs. Version `0.5.17` splits generated project blueprints into Setup, General, Management, and lifecycle-stage sections. Version `0.5.18` adds a dedicated Evaluation Analyst agent, routes evaluation-stage task templates to it, and moves founder-material requests into the generated General blueprint section. Version `0.5.19` adds focused Integration Operator and Sourcing Operator agents, routes provider integration and origination operations tasks away from generic agents, and promotes screening/evaluation methodology skills into required task contracts where they are task-critical. Version `0.5.21` reconciles the branch with mainline Sonnet 4.6 agent models and project-manager identity overlays while preserving the expanded VC lifecycle, task, agent, and blueprint contracts. Version `0.5.22` adds Deal Room company logo and founder identity fields plus Affinity import guidance for CRM-sourced founder profiles.
+This inventory describes the current public VC plugin/pack seed plus the draft project-type and metadata expansion. Version numbers track pack release slices that need platform alignment, so this history only lists versions that introduced durable pack-surface changes. Version `0.1.0` contains VC skills, Alludium runtime agent templates, public-safe MCP definitions, and Alludium MCP recommendations. Version `0.2.2` adds VC task-definition templates and advertises both the canonical `venture_capital` vertical key and legacy `vc` alias. Version `0.3.0` adds the Deal Pipeline project type as a first-class pack surface. Version `0.3.1` adds the Deal Pipeline command-view metadata used by the project command center. Version `0.3.2` adds workspace variable declarations and application recommendation metadata for the paired platform ingest work. Version `0.3.4` aligns agent Deal Pipeline states with the collapsed lifecycle and tightens required task-input mappings. Version `0.3.5` adds compact Affinity and Slack management-action metadata plus focused integration-specific discovery and sync task templates and skills. Version `0.3.6` extends the same integration-management surface to Google Drive, Notion, and Harmonic, with Harmonic limited to discovery/read-preview until trusted tool rows exist. Version `0.3.7` grants all VC runtime agent templates access to the platform text-artifact creation tool and collapses recommendation-level integration actions to one setup task per integration; each setup task declares its own discovery/read/write child task plan. Version `0.4.0` adds the Origination Pipeline project type, Apify and Companies House setup/readiness tasks, scheduled sourcing task definitions, compact origination project data mappings, and supporting origination skills. Version `0.4.1` validates project manager overlays. Version `0.4.2` adds generated agent Markdown compatibility artifacts and task prompt Markdown derived from the existing Alludium YAML source of truth. Version `0.5.0` adds the Deal Pipeline Setup Guide agent, routes Affinity setup toward agent-led discovery, mapping, and seed review, and declares schedulable VC tasks for project setup orchestration. Version `0.5.1` removes task-definition template turn caps so platform defaults can control agent execution budgets. Version `0.5.2` adds pack-owned project setup entrypoint metadata for VC project types. Version `0.5.3` makes project setup steps, schedule groups, and post-approval platform actions explicit in the project type definitions, adds the project-scoped Affinity Deal Pipeline import task, keeps Origination setup distinct from Deal Pipeline import, and adds pack-native methodology, SOP, checklist, and template documents for Deal Pipeline and Origination project types. Version `0.5.4` tightens document-template semantics, adds missing authored-document refs, and generalizes legacy screening and diligence methodology skill IDs. Version `0.5.5` bumps the Affinity read-sync task template after content changed so platform ingest can create a new template version. Version `0.5.6` adds a separate `projectCreation` contract for launching individual Deal Pipeline and Origination Pipeline project instances, removes legacy CRM URL fields, and moves origination setup configuration into declared workspace variables. Version `0.5.7` removes `systemUseOnly` from external task-template YAML and treats system-only task visibility as platform-owned authority. Version `0.5.8` normalizes workspace variable select options to the platform object shape and validates that shape in the pack release checks. Version `0.5.9` switches all VC runtime agent templates from Claude Opus 4.6 to Claude Sonnet 4.6 on Bedrock and bumps each agent template version so platform ingest creates a new template version. Version `0.5.10` restores project-manager identity overlays for VC project type versions and validates the overlay contract in release checks. Version `0.5.13` adds focused commercial, technical, financial, and team evaluation skills, output templates, task definitions, and Deal Pipeline/review-pack wiring so decision review can use evaluation-stage outputs before formal diligence. Version `0.5.14` adds project data fields and task mappings for focused evaluation workstream inputs and structured summary outputs. Version `0.5.15` adds generated project blueprint Markdown for each project type. Version `0.5.16` labels platform-owned setup tasks in generated project blueprints with their canonical platform task IDs. Version `0.5.17` splits generated project blueprints into Setup, General, Management, and lifecycle-stage sections. Version `0.5.18` adds a dedicated Evaluation Analyst agent, routes evaluation-stage task templates to it, and moves founder-material requests into the generated General blueprint section. Version `0.5.19` adds focused Integration Operator and Sourcing Operator agents, routes provider integration and origination operations tasks away from generic agents, and promotes screening/evaluation methodology skills into required task contracts where they are task-critical. Version `0.5.21` reconciles the branch with mainline Sonnet 4.6 agent models and project-manager identity overlays while preserving the expanded VC lifecycle, task, agent, and blueprint contracts. Version `0.5.22` adds Deal Pipeline company logo and founder identity fields plus Affinity import guidance for CRM-sourced founder profiles. Version `0.5.23` renames the public Deal Pipeline and Origination Pipeline surfaces, narrows Deal Pipeline to intake through deal structuring, moves thesis sourcing to Origination, adds Investment Management for formal diligence through closing, and expands generated project blueprints with documents and integrations. Version `0.5.24` adds explicit origination outbound lifecycle states and task templates for LinkedIn connection, initial LinkedIn reachout, second-touch email, and outbound outcome review. Version `0.5.25` splits guided Deal Pipeline project creation from post-create opportunity intake so inbox/chat creation can hand structured data to a separate intake hydration task.
 
 ---
 
@@ -17,7 +17,7 @@ These skills are included because the current `vc_*` Alludium agent templates re
 - `commercial-evaluation-and-market-risk`
 - `company-research-and-enrichment`
 - `deal-terms-analysis`
-- `deal-room-setup-and-source-ingestion`
+- `deal-pipeline-setup-and-source-ingestion`
 - `financial-diligence-workstream`
 - `financial-evaluation-and-financing-risk`
 - `founder-evaluation-and-reference-checking`
@@ -42,7 +42,7 @@ These skills are included because the current `vc_*` Alludium agent templates re
 - `traction-and-saas-unit-economics`
 - `vc-task-and-next-step-generation`
 - `vc-affinity-discovery`
-- `vc-affinity-deal-room-import`
+- `vc-affinity-deal-pipeline-import`
 - `vc-affinity-sync-read`
 - `vc-affinity-sync-write`
 - `vc-slack-discovery`
@@ -95,8 +95,9 @@ These templates are included because the platform VC workspace pack currently re
 - `vc.generate_diligence_questions`
 - `vc.manage_closing_checklist`
 - `vc.prepare_deal_flow_agenda`
+- `vc.create_deal`
 - `vc.prepare_ic_agenda`
-- `vc.prepare_initial_call`
+- `vc.prepare_meeting`
 - `vc.prepare_lead_gen_packet`
 - `vc.prepare_partner_review_pack`
 - `vc.prepare_portfolio_onboarding`
@@ -112,13 +113,13 @@ These templates are included because the platform VC workspace pack currently re
 - `vc.review_investment_documents`
 - `vc.run_commercial_dd`
 - `vc.run_financial_dd`
-- `vc.run_follow_up_evaluation`
+- `vc.run_opportunity_evaluation`
 - `vc.run_founder_evaluation`
 - `vc.run_technical_dd`
-- `vc.run_investment_screen`
-- `vc.screen_inbound_opportunity`
+- `vc.run_investment_fit_screen`
+- `vc.capture_opportunity_intake`
 - `vc.source_thesis_targets`
-- `vc.summarize_initial_call`
+- `vc.summarize_meeting_records`
 - `vc.verify_conditions_precedent`
 - `vc.coordinate_capital_call_and_completion`
 - `vc.affinity_setup`
@@ -150,7 +151,7 @@ Review notes:
 - The task-template catalog preserves the current platform `vc-workflows` pack metadata, template IDs, and template versions while advertising both supported vertical keys: `venture_capital` and `vc`.
 - Platform eligibility is driven by catalog `verticalKeys`, which the platform loader persists to `task_definitions.vertical_keys`; the per-template `definitionJson.vertical: vc` field remains legacy workflow metadata and is not used for workspace eligibility checks.
 - The task-template surface requires platform capability `external-task-definition-template-ingest`.
-- Task templates advertise `vc_deal_room`, `vc_origination_pipeline`, or both according to their declared workflow scope; both project types are now included in this pack's `projectTypes` surface.
+- Task templates advertise `vc_deal_room`, `vc_origination_pipeline`, `vc_investment_management`, or a combination according to their declared workflow scope; all three project types are now included in this pack's `projectTypes` surface.
 - Task templates without `supportedProjectScopes` are single-project `project_instance` tasks. Templates with `project_management` scope support pipeline, admin, or project-type management work and keep outputs on the task or future management surface unless an explicit management mapping is introduced.
 - The integration templates are application-specific `project_management` tasks. Each integration now exposes one setup task (`vc.*_setup`) in recommendation metadata. That setup task owns the discovery/read/write child task references and approval policy; the lower-level discovery, read-preview, and write-proposal templates remain available as setup-owned child tasks rather than direct application-card actions.
 
@@ -160,15 +161,17 @@ Review notes:
 
 - `vc_deal_room`
 - `vc_origination_pipeline`
+- `vc_investment_management`
 
 Review notes:
 
-- `vc_deal_room` is copied from the current platform-local project type definition and now keeps version `1.0.11`.
-- `vc_origination_pipeline` captures upstream sourcing and candidate promotion as a separate project type and now keeps version `0.1.4`.
+- `vc_deal_room` covers one investment opportunity from source capture through deal structuring and now keeps version `1.1.0`.
+- `vc_origination_pipeline` captures upstream sourcing, candidate engagement, and candidate promotion as a separate project type and now keeps version `0.2.3`.
+- `vc_investment_management` covers formal diligence, contracts, closing, completion, and portfolio handoff after Deal Pipeline deal structuring and now keeps version `0.1.0`.
 - Generated project blueprints live in `project-blueprints/` and show each project type's setup/general tasks plus lifecycle-stage task mappings, recommended agents, and task-referenced skills. Platform-owned setup tasks are labeled with their canonical platform task IDs.
 - The definitions include project fields, instruction templates, lifecycle states, lifecycle transitions, command-view metadata, project-manager identity overlays, conservative `projectTaskMappings`, pack-owned `projectSetup` metadata, project-type document references, and separate `projectCreation` metadata for one-project launchers.
-- Deal Room setup declares source, variables, schedules, and invite steps plus post-approval platform actions for applying variables, creating/importing Deal Room projects, inviting approved collaborators, and enabling approved schedules. Origination setup declares source, variables, and schedules plus post-approval platform actions for applying variables and enabling approved schedules; it does not declare initial import or invite actions.
-- Deal Room creation starts from `company_name`, with domain, deal source, stage, lead partner, pitch deck, and confidentiality as recommended creation fields. Connected CRM source records render through `projectCreation.sourceReference` and map into the lower-level source fields. Origination creation stays separate from Deal Room creation and starts from `pipeline_name`; the only optional creation input is confidentiality, owner should default to the current user or platform actor, and firm/fund identity, thesis, focus, source selection, cadence, budget, thresholds, digest destination, and workspace links belong to setup variables.
+- Deal Pipeline setup declares source, variables, schedules, and invite steps plus post-approval platform actions for applying variables, creating/importing Deal Pipeline projects, inviting approved collaborators, and enabling approved schedules. Origination setup declares source, variables, and schedules plus post-approval platform actions for applying variables and enabling approved schedules; it does not declare initial import or invite actions.
+- Deal Pipeline creation starts from `company_name`, with domain, deal source, stage, lead partner, pitch deck, and confidentiality as recommended creation fields. Connected CRM source records render through `projectCreation.sourceReference` and map into the lower-level source fields. Origination creation stays separate from Deal Pipeline creation and starts from `pipeline_name`; the only optional creation input is confidentiality, owner should default to the current user or platform actor, and firm/fund identity, thesis, focus, source selection, cadence, budget, thresholds, digest destination, and workspace links belong to setup variables.
 - The project-type surface requires platform capability `external-project-type-ingest`.
 - Expanded lifecycle-stage task mappings remain declarative, manual-review mappings for direct project-backed inputs and required artifact outputs. The new `projectCreation.postCreate.triggerInitialStateTasks` flag is an explicit platform-launcher intent, separate from project setup.
 
@@ -185,7 +188,7 @@ Included shared documents:
 - `vc.document.evidence_citation_style_guide`
 - `vc.document.file_naming_source_index_sop`
 
-Included Deal Room documents:
+Included Deal Pipeline documents:
 
 - `vc.document.deal_room_sop`
 - `vc.document.founder_materials_request_template`

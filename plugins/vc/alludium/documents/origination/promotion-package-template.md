@@ -4,7 +4,7 @@ title: Promotion Package Template
 documentType: template
 supportedProjectTypes:
   - vc_origination_pipeline
-summary: Reusable package for promoting a sourced candidate to Deal Room review.
+summary: Reusable package for promoting a sourced candidate to Deal Pipeline review.
 ---
 
 # Promotion Package Template
@@ -15,8 +15,8 @@ summary: Reusable package for promoting a sourced candidate to Deal Room review.
 | --- | --- |
 | Candidate | Company name, domain, source ID |
 | Pipeline | Origination pipeline and thesis |
-| Recommended action | Create Deal Room / update existing Deal Room / hold |
-| Proposed Deal Room owner | Name or role |
+| Recommended action | Create Deal Pipeline / update existing Deal Pipeline / hold |
+| Proposed Deal Pipeline owner | Name or role |
 | Approval status | Pending / approved / rejected |
 
 ## Promotion Case
@@ -31,7 +31,7 @@ summary: Reusable package for promoting a sourced candidate to Deal Room review.
 | Novelty / dedupe | New, existing, ambiguous, prior reject |  |
 | Relationship context | Warm intro, known contact, no path |  |
 | Risks and unknowns | Top open issues |  |
-| Suggested Deal Room posture | Intake, screening, evaluation, watch, or pass recommendation |  |
+| Suggested Deal Pipeline posture | Intake, screening, evaluation, watch, or pass recommendation |  |
 
 ## Downstream Setup
 
@@ -43,4 +43,4 @@ summary: Reusable package for promoting a sourced candidate to Deal Room review.
 
 ## Approval Rule
 
-Promotion should create or update a downstream opportunity only after a human approves the package and confirms the intended Deal Room boundary.
+Promotion should create or update a downstream opportunity only after a human approves the package and confirms the intended Deal Pipeline boundary.

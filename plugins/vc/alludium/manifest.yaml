@@ -2,12 +2,12 @@ schemaVersion: '0.1'
 pack:
   id: vc
   name: Alludium VC
-  version: 0.5.22
+  version: 0.5.25
   description: >
     Public VC workflow plugin and pack seed for Alludium, published as the
     first bundle in the broader Alludium packs catalog. This release contains
     VC skills, Alludium runtime agent templates, VC task-definition templates,
-    VC Deal Room and VC Origination Pipeline project type definitions,
+    Deal Pipeline and Origination Pipeline project type definitions,
     workspace variable declarations, application recommendation metadata,
     project-manager identity overlays, single-entry integration setup task
     recommendations, pack-native project methodology documents, and
@@ -30,7 +30,7 @@ surfaces:
     - commercial-evaluation-and-market-risk
     - company-research-and-enrichment
     - deal-terms-analysis
-    - deal-room-setup-and-source-ingestion
+    - deal-pipeline-setup-and-source-ingestion
     - financial-diligence-workstream
     - financial-evaluation-and-financing-risk
     - founder-evaluation-and-reference-checking
@@ -55,7 +55,7 @@ surfaces:
     - traction-and-saas-unit-economics
     - vc-task-and-next-step-generation
     - vc-affinity-discovery
-    - vc-affinity-deal-room-import
+    - vc-affinity-deal-pipeline-import
     - vc-affinity-sync-read
     - vc-affinity-sync-write
     - vc-slack-discovery
@@ -69,7 +69,7 @@ surfaces:
     - vc-notion-sync-write
     - vc-harmonic-discovery
     - vc-harmonic-sync-read
-    - vc-origination-pipeline-orchestration
+    - origination-pipeline-orchestration
     - vc-source-registry-and-state-management
     - vc-apify-discovery
     - vc-apify-sync-read
@@ -88,10 +88,10 @@ surfaces:
     - vc-outreach-draft-queue
     - vc-sourcing-digest-generation
     - vc-manual-tip-ingestion
-    - vc-origination-deal-room-promotion
+    - origination-deal-pipeline-promotion
     - vc-linkedin-query-spend-audit
     - vc-source-error-and-spend-audit
-    - vc-origination-ic-summary-preparation
+    - origination-prospect-summary-preparation
   alludiumAgentTemplates:
     path: alludium/agent-templates
     ids:
@@ -188,17 +188,18 @@ surfaces:
 
         '
     ids:
-    - vc.pack_variable_discovery
+    - vc.vc_pack_variable_discovery
     - vc.review_opportunity_status
     - vc.source_thesis_targets
     - vc.prepare_lead_gen_packet
     - vc.prepare_deal_flow_agenda
-    - vc.screen_inbound_opportunity
+    - vc.create_deal
+    - vc.capture_opportunity_intake
     - vc.request_founder_materials
-    - vc.prepare_initial_call
-    - vc.summarize_initial_call
-    - vc.run_investment_screen
-    - vc.run_follow_up_evaluation
+    - vc.prepare_meeting
+    - vc.summarize_meeting_records
+    - vc.run_investment_fit_screen
+    - vc.run_opportunity_evaluation
     - vc.run_commercial_evaluation
     - vc.run_technical_evaluation
     - vc.run_financial_evaluation
@@ -217,6 +218,7 @@ surfaces:
     - vc.analyze_deal_terms
     - vc.track_term_sheet_negotiation
     - vc.review_term_sheet
+    - vc.capture_investment_management_handoff
     - vc.run_legal_diligence
     - vc.review_investment_documents
     - vc.manage_closing_checklist
@@ -224,23 +226,31 @@ surfaces:
     - vc.coordinate_capital_call_and_completion
     - vc.prepare_portfolio_onboarding
     - vc.configure_origination_pipeline
-    - vc.run_sourcing_pipeline
+    - vc.run_vc_sourcing_pipeline
     - vc.discover_companies_house_candidates
-    - vc.discover_linkedin_founders
+    - vc.discover_linkedin_founder_candidates
     - vc.discover_x_founder_signals
     - vc.discover_github_builder_signals
     - vc.discover_reddit_builder_signals
     - vc.review_reddit_candidate_inbox
     - vc.ingest_manual_sourcing_tip
-    - vc.enrich_sourcing_candidates
-    - vc.check_affinity_relationships
-    - vc.score_sourcing_candidates
-    - vc.sync_sourcing_candidates
+    - vc.enrich_sourcing_candidate
+    - vc.check_affinity_relationship_context
+    - vc.score_sourcing_candidate
+    - vc.screen_identified_candidate
+    - vc.sync_sourcing_candidate
     - vc.review_portfolio_overlap
-    - vc.screen_active_sourcing_candidates
-    - vc.prepare_sourcing_ic_summary
+    - vc.run_deal_fit_analysis
+    - vc.screen_active_sourcing_candidate
+    - vc.review_unicorn_signature
+    - vc.prepare_prospect_summary
     - vc.prepare_outreach_draft_queue
-    - vc.promote_candidate_to_deal_room
+    - vc.record_linkedin_connection_attempt
+    - vc.screen_founder_connected_candidate
+    - vc.prepare_initial_linkedin_reachout
+    - vc.prepare_second_reachout_email
+    - vc.review_outreach_outcome
+    - vc.promote_candidate_to_deal_pipeline
     - vc.generate_sourcing_digest
     - vc.audit_linkedin_query_spend
     - vc.review_source_errors_and_spend
@@ -283,6 +293,7 @@ surfaces:
     ids:
     - vc_deal_room
     - vc_origination_pipeline
+    - vc_investment_management
 boundaries:
   publicSafe: true
   secretsAllowed: false

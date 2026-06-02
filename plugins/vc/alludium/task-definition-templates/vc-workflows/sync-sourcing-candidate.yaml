@@ -1,0 +1,68 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.sync_sourcing_candidate
+version: 0.1.4
+title: Sync Sourcing Candidate
+category: Venture Capital
+visibility: workspace
+tags:
+  - vc
+  - origination
+  - sync
+definition:
+  name: Sync Sourcing Candidate
+  slug: sync-sourcing-candidate
+  description: Prepare or apply reviewed candidate state sync while preserving manual workflow decisions.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    stage: review
+    taskFamily: origination_candidate_sync
+    requiredSkills:
+      - vc-source-registry-and-state-management
+      - vc-sourcing-dedupe-and-novelty-check
+      - citation-enforcement
+      - vc-notion-sync-write
+    recommendedAgentTemplate: vc_sourcing_operator
+    plannedRecommendedAgentTemplate: vc_sourcing_operator
+    supportedProjectTypes:
+      - vc_origination_pipeline
+    supportedProjectScopes:
+      - project_instance
+    instructions:
+      executionInstructions: Mirror the reference pipeline's sync safety. Upsert by stable source key and preserve manual Action/Status-style decisions unless the current value is empty or explicitly auto-set. Distinguish dry-run sync plan from approved write. If syncing to a review table, include columns equivalent to Action, Urgency, Fit, Confidence, funding/HQ concerns, relationship context, source track, reasons, receipts, and analyst notes.
+      missingInputPolicy: Ask for target system, write approval, candidate batch, dedupe key policy, protected manual fields, and dry-run/real-run mode.
+      externalActionPolicy: Default is dry-run proposal. Do not write to Notion, CRM, Slack, ClickUp, or any external system without explicit human approval in this task.
+      humanConfirmationPolicy: always_before_external_write
+      completionCriteria:
+        - Sync plan or write receipt lists created, updated, skipped, protected, rejected, and failed rows.
+        - Manual fields protected from overwrite are named.
+        - Dedupe/upsert keys and source receipts are recorded.
+fields:
+  input:
+    - key: sync_scope
+      name: Sync Scope
+      fieldType: json
+      required: true
+      position: 0
+      config: {}
+  output:
+    - key: sync_plan_artifact_id
+      name: Sync Plan Artifact
+      fieldType: file
+      required: true
+      position: 0
+      config: {}
+    - key: sync_status
+      name: Sync Status
+      fieldType: string
+      required: false
+      position: 1
+      config: {}
+    - key: sync_report
+      name: Sync Report
+      fieldType: richtext
+      required: false
+      position: 2
+      config:
+        rows: 8

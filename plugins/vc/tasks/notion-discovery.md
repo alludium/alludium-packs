@@ -14,17 +14,30 @@ skills:
 
 # Explore Notion Pages and Databases
 
-Discover Notion page, database, and workspace scope before selected VC Deal Room context reads.
+## Objective
 
-## Instructions
+Discover Notion page, database, and workspace scope before selected Deal Pipeline context reads.
 
-Use the connected `notion` application to confirm account context with `notion-get-current-user`, search accessible pages and databases with `notion-search`, and inspect candidate database shape with `notion-retrieve-database-schema` when selected. Ask the user to choose the page or database scope before any read-sync task.
+## What To Do
+
+Use the connected notion application to confirm account context with `notion-get-current-user`, search accessible pages and databases with `notion-search`, and inspect candidate database shape with `notion-retrieve-database-schema` when selected. Ask the user to choose the page or database scope before any read-sync task.
+
+## Available Context
+
+- Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
+- Especially look for: Discovery Goal.
+- If a named input is absent, follow the missing-input policy rather than inventing facts.
+
+## Deliverable
+
+- Produce a concise, reviewable task response that a human can act on.
+- Also include a short human-readable summary covering: Notion Discovery Report, Scope Questions. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
 If Notion is not authorized, ask for authorization or a supplied page/database inventory.
 
-## External Action Policy
+## Guardrails
 
 Discovery only. Do not read broad page contents, create pages, create databases, update pages, update databases, append blocks, delete blocks, duplicate pages, upload files, or create comments.
 
@@ -34,37 +47,8 @@ Discovery only. Do not read broad page contents, create pages, create databases,
 - Tool IDs used or missing are named.
 - User choices needed before page or database preview are explicit.
 
-## Human Decision Points
+## Human Review
 
 - Choose page or database scope before sync read.
 - Approve whether properties, blocks, or database rows are in scope.
 - Approve any later import or attachment separately.
-
-## Inputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `discovery_goal` | Discovery Goal | `string` | yes |
-
-## Outputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `notion_discovery_report` | Notion Discovery Report | `richtext` | no |
-| `scope_questions` | Scope Questions | `json` | no |
-
-## Routing
-
-- Source template: `alludium/task-definition-templates/vc-integrations/notion-discovery.yaml`
-- Alludium task ID: `vc.notion_discovery`
-- Task family: `integration_discovery`
-- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
-- Supported project types:
-  - `vc_deal_room`
-- Supported project scopes:
-  - `project_management`
-
-## Required Skills
-
-- `vc-notion-discovery`
-- `citation-enforcement`

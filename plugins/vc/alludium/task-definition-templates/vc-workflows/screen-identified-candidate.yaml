@@ -1,0 +1,123 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.screen_identified_candidate
+version: 0.1.1
+title: Screen Identified Candidate
+category: Venture Capital
+visibility: workspace
+tags:
+- vc
+- origination
+- screening
+definition:
+  name: Screen Identified Candidate
+  slug: screen-identified-candidate
+  description: Run a lightweight first-pass fit screen on newly identified origination candidates before marking them of interest.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    stage: review
+    taskFamily: origination_screening
+    documentRefs:
+    - documentId: vc.document.sourcing_scoring_rubric
+      usage: methodology
+      outputFieldKey: identified_screen_artifact_id
+    - documentId: vc.document.origination_source_strategy_guide
+      usage: methodology
+    - documentId: vc.document.dedupe_novelty_policy
+      usage: policy
+    - documentId: vc.document.template_use_guidance
+      usage: operating_guidance
+    requiredSkills:
+    - vc-sourcing-verdict-and-screening
+    - vc-sourcing-dedupe-and-novelty-check
+    - citation-enforcement
+    recommendedAgentTemplate: vc_sourcing_operator
+    plannedRecommendedAgentTemplate: vc_sourcing_operator
+    supportedProjectTypes:
+    - vc_origination_pipeline
+    supportedProjectScopes:
+    - project_instance
+    scheduleDefaults:
+      enabledByDefault: false
+      requiresHumanApprovalToEnable: true
+      cadence: daily
+      localTime: 08:10
+      dryRunFirst: true
+    scheduling:
+      schedulable: true
+      showInProjectSetup: true
+      setupStep: schedules
+      scheduleType: cron
+      defaultScheduleRef: scheduleDefaults
+      requiresHumanApprovalToEnable: true
+      canCreateTestRun: true
+      testRunCreatesVisibleTask: true
+      dryRunFirst: true
+      safety:
+        externalWritesRequireApproval: true
+    instructions:
+      executionInstructions: 'Screen newly identified candidates with the lightest useful evidence set: source receipt,
+        normalized identity, stage/geography fit, obvious hard exclusions, basic AI/native software signal, founder signal,
+        and duplicate/known-relationship status. This is not the full active-candidate screen; recommend only prioritize
+        for outreach, watchlist, or pass, and list what must be enriched before outreach. Use `definitionJson.documentRefs` as the durable
+        document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology`
+        supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide`
+        governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries.
+        For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID
+        alongside the output artifact.'
+      missingInputPolicy: Ask for the identified candidate batch, source receipts, thesis policy, hard exclusions, and
+        dedupe state before screening.
+      externalActionPolicy: Screening recommendation only. Do not contact founders, write CRM/list records, send outreach,
+        or create Deal Pipeline projects.
+      completionCriteria:
+      - Each candidate has a first-pass disposition: prioritize for outreach, watchlist, or pass.
+      - Every pass or watchlist recommendation names the evidence gap or exclusion rule.
+      - Outreach-ready recommendations include the next enrichment or outreach-prep evidence needed.
+fields:
+  input:
+  - key: identified_candidate_batch
+    name: Identified Candidate Batch
+    fieldType: json
+    required: true
+    position: 0
+    config: {}
+  - key: first_pass_screen_policy
+    name: First-Pass Screen Policy
+    fieldType: json
+    required: false
+    position: 1
+    config: {}
+  output:
+  - key: identified_screen_artifact_id
+    name: Identified Screen Artifact
+    fieldType: file
+    required: true
+    position: 0
+    config:
+      documentRefId: vc.document.sourcing_scoring_rubric
+  - key: outreach_ready_count
+    name: Outreach Ready Count
+    fieldType: number
+    required: false
+    position: 1
+    config: {}
+  - key: watchlist_count
+    name: Watchlist Count
+    fieldType: number
+    required: false
+    position: 2
+    config: {}
+  - key: pass_count
+    name: Pass Count
+    fieldType: number
+    required: false
+    position: 3
+    config: {}
+  - key: identified_screen_report
+    name: Identified Screen Report
+    fieldType: richtext
+    required: false
+    position: 4
+    config:
+      rows: 8

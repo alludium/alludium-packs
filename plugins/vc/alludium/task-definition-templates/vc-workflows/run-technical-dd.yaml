@@ -1,202 +1,211 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_technical_dd
-version: 1.0.13
+version: 1.0.14
 title: Run Technical DD
 category: Venture Capital
 visibility: workspace
 tags:
-  - vc
-  - diligence
-  - technical
+- vc
+- diligence
+- technical
 definition:
   name: Run Technical DD
   slug: run-technical-dd
-  description: Run Technical DD for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
+  description: Run Technical DD for one venture-capital opportunity with evidence capture, human review gates, and next-action
+    recommendations.
   allowSubtasks: true
   definitionJson:
     vertical: vc
     stage: formal_diligence
     taskFamily: diligence
     documentRefs:
-      - documentId: vc.document.diligence_report_template
-        usage: output_template
-        outputFieldKey: technical_dd_artifact_id
-      - documentId: vc.document.formal_diligence_workstream_guide
-        usage: methodology
-      - documentId: vc.document.formal_diligence_checklist
-        usage: checklist
-      - documentId: vc.document.evidence_citation_style_guide
-        usage: style_guide
-      - documentId: vc.document.template_use_guidance
-        usage: operating_guidance
+    - documentId: vc.document.diligence_report_template
+      usage: output_template
+      outputFieldKey: technical_dd_artifact_id
+    - documentId: vc.document.formal_diligence_workstream_guide
+      usage: methodology
+    - documentId: vc.document.formal_diligence_checklist
+      usage: checklist
+    - documentId: vc.document.evidence_citation_style_guide
+      usage: style_guide
+    - documentId: vc.document.template_use_guidance
+      usage: operating_guidance
     requiredSkills:
-      - team-and-hiring-assessment
-      - red-flags-scanner
-      - citation-enforcement
-      - technical-diligence-workstream
+    - team-and-hiring-assessment
+    - red-flags-scanner
+    - citation-enforcement
+    - technical-diligence-workstream
     plannedRecommendedAgentTemplate: vc_diligence_analyst
     recommendedAgentTemplate: vc_diligence_analyst
     supportedProjectTypes:
-      - vc_deal_room
+    - vc_investment_management
     sourceAnchors:
-      - source: investment-management-process-slides
-        anchor: slide-22
-        note: DD workstreams
-      - source: investment-management-process-slides
-        anchor: slide-24
-        note: Technical DD AI map
-      - source: investment-management-process-slides
-        anchor: slide-40
-        note: DD timeline
+    - source: investment-management-process-slides
+      anchor: slide-22
+      note: DD workstreams
+    - source: investment-management-process-slides
+      anchor: slide-24
+      note: Technical DD AI map
+    - source: investment-management-process-slides
+      anchor: slide-40
+      note: DD timeline
     instructions:
-      executionInstructions: >-
-        Run technical diligence covering architecture, product, engineering team, IP and licensing, AI/ML risks, scalability, security, and technical scorecard from the supplied technical source artifact list and approved access references. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a durable project file artifact named Technical DD Report and attach it to the required output field `technical_dd_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+      executionInstructions: 'Run technical diligence covering architecture, product, engineering team, IP and licensing,
+        AI/ML risks, scalability, security, and technical scorecard from the supplied technical source artifact list and approved
+        access references. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM
+        records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update
+        a durable project file artifact named Technical DD Report and attach it to the required output field `technical_dd_artifact_id`.
+        Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template`
+        sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status,
+        evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains
+        process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document
+        and preserve the document ID alongside the output artifact.'
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
-      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
+      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation,
+        child task creation, or stage transition.
       completionCriteria:
-        - Required input gaps are resolved or listed as assumptions/open questions.
-        - Material conclusions include source links or are labeled as human judgment calls.
-        - Next actions identify owner, dependency, and required human approval point.
+      - Required input gaps are resolved or listed as assumptions/open questions.
+      - Material conclusions include source links or are labeled as human judgment calls.
+      - Next actions identify owner, dependency, and required human approval point.
     humanDecisionPoints:
-      - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
-      - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+    - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
+    - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
     orchestration:
       parentTaskPolicy: none
       suggestedChildTasks: []
 fields:
   input:
-    - key: technical_source_artifact_ids
-      name: Technical Source Artifact IDs
-      fieldType: string
-      required: true
-      position: 0
-      config: {}
-    - key: repo_or_code_access
-      name: Repo Or Code Access
-      fieldType: string
-      required: true
-      position: 1
-      config: {}
-    - key: product_roadmap
-      name: Product Roadmap
-      fieldType: string
-      required: false
-      position: 2
-      config: {}
-    - key: ip_patent_materials
-      name: Ip Patent Materials
-      fieldType: string
-      required: false
-      position: 3
-      config: {}
-    - key: engineering_team_materials
-      name: Engineering Team Materials
-      fieldType: string
-      required: false
-      position: 4
-      config: {}
-
+  - key: technical_source_artifact_ids
+    name: Technical Source Artifact IDs
+    fieldType: string
+    required: true
+    position: 0
+    config: {}
+  - key: repo_or_code_access
+    name: Repo Or Code Access
+    fieldType: string
+    required: true
+    position: 1
+    config: {}
+  - key: product_roadmap
+    name: Product Roadmap
+    fieldType: string
+    required: false
+    position: 2
+    config: {}
+  - key: ip_patent_materials
+    name: Ip Patent Materials
+    fieldType: string
+    required: false
+    position: 3
+    config: {}
+  - key: engineering_team_materials
+    name: Engineering Team Materials
+    fieldType: string
+    required: false
+    position: 4
+    config: {}
   output:
-    - key: technical_dd_artifact_id
-      name: Technical DD Report
-      fieldType: file
-      required: true
-      position: 0
-      config:
-        documentRefId: vc.document.diligence_report_template
-    - key: architecture_product_summary
-      name: Architecture Product Summary
-      fieldType: richtext
-      required: false
-      position: 1
-      config:
-        rows: 5
-    - key: technical_team_assessment
-      name: Technical Team Assessment
-      fieldType: string
-      required: false
-      position: 2
-      config: {}
-    - key: oss_licensing_ip_checks
-      name: Oss Licensing Ip Checks
-      fieldType: string
-      required: false
-      position: 3
-      config: {}
-    - key: ai_ml_risk_assessment
-      name: Ai Ml Risk Assessment
-      fieldType: string
-      required: false
-      position: 4
-      config: {}
-    - key: scalability_security_concerns
-      name: Scalability Security Concerns
-      fieldType: string
-      required: false
-      position: 5
-      config: {}
-    - key: technical_scorecard
-      name: Technical Scorecard
-      fieldType: string
-      required: false
-      position: 6
-      config: {}
-    - key: summary
-      name: Summary
-      fieldType: richtext
-      required: false
-      position: 7
-      config:
-        rows: 5
-    - key: recommendation
-      name: Recommendation
-      fieldType: string
-      required: false
-      position: 8
-      config: {}
-    - key: source_links
-      name: Source Links
-      fieldType: string
-      required: false
-      position: 9
-      config: {}
-    - key: assumptions
-      name: Assumptions
-      fieldType: string
-      required: false
-      position: 10
-      config: {}
-    - key: evidence_quality
-      name: Evidence Quality
-      fieldType: json
-      required: false
-      position: 11
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: false
-      position: 12
-      config: {}
-    - key: risks
-      name: Risks
-      fieldType: json
-      required: false
-      position: 13
-      config: {}
-    - key: human_decision_points
-      name: Human Decision Points
-      fieldType: string
-      required: false
-      position: 14
-      config: {}
-    - key: next_actions
-      name: Next Actions
-      fieldType: json
-      required: false
-      position: 15
-      config: {}
+  - key: technical_dd_artifact_id
+    name: Technical DD Report
+    fieldType: file
+    required: true
+    position: 0
+    config:
+      documentRefId: vc.document.diligence_report_template
+  - key: architecture_product_summary
+    name: Architecture Product Summary
+    fieldType: richtext
+    required: false
+    position: 1
+    config:
+      rows: 5
+  - key: technical_team_assessment
+    name: Technical Team Assessment
+    fieldType: string
+    required: false
+    position: 2
+    config: {}
+  - key: oss_licensing_ip_checks
+    name: Oss Licensing Ip Checks
+    fieldType: string
+    required: false
+    position: 3
+    config: {}
+  - key: ai_ml_risk_assessment
+    name: Ai Ml Risk Assessment
+    fieldType: string
+    required: false
+    position: 4
+    config: {}
+  - key: scalability_security_concerns
+    name: Scalability Security Concerns
+    fieldType: string
+    required: false
+    position: 5
+    config: {}
+  - key: technical_scorecard
+    name: Technical Scorecard
+    fieldType: string
+    required: false
+    position: 6
+    config: {}
+  - key: summary
+    name: Summary
+    fieldType: richtext
+    required: false
+    position: 7
+    config:
+      rows: 5
+  - key: recommendation
+    name: Recommendation
+    fieldType: string
+    required: false
+    position: 8
+    config: {}
+  - key: source_links
+    name: Source Links
+    fieldType: string
+    required: false
+    position: 9
+    config: {}
+  - key: assumptions
+    name: Assumptions
+    fieldType: string
+    required: false
+    position: 10
+    config: {}
+  - key: evidence_quality
+    name: Evidence Quality
+    fieldType: json
+    required: false
+    position: 11
+    config: {}
+  - key: open_questions
+    name: Open Questions
+    fieldType: json
+    required: false
+    position: 12
+    config: {}
+  - key: risks
+    name: Risks
+    fieldType: json
+    required: false
+    position: 13
+    config: {}
+  - key: human_decision_points
+    name: Human Decision Points
+    fieldType: string
+    required: false
+    position: 14
+    config: {}
+  - key: next_actions
+    name: Next Actions
+    fieldType: json
+    required: false
+    position: 15
+    config: {}
 runtime:
   defaultExecutionContext:
     sourceMetadata:

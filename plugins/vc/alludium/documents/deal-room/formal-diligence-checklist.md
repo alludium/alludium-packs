@@ -4,6 +4,7 @@ title: Formal Diligence Checklist
 documentType: checklist
 supportedProjectTypes:
   - vc_deal_room
+  - vc_investment_management
 summary: Full formal diligence checklist covering leadership, technical, commercial, market, financial, legal, deal-terms, exit, and company-structure workstreams.
 ---
 

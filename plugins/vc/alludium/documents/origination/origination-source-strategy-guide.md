@@ -12,7 +12,7 @@ summary: Source strategy, provenance, and promotion-quality guidance for venture
 
 ## Purpose
 
-Use this guide to operate origination as a standing sourcing system rather than a one-off company search. The goal is to preserve where a candidate came from, why it matters, what evidence exists, what is missing, and whether the candidate is ready for a downstream Deal Room.
+Use this guide to operate origination as a standing sourcing system rather than a one-off company search. The goal is to preserve where a candidate came from, why it matters, what evidence exists, what is missing, and whether the candidate is ready for a downstream Deal Pipeline.
 
 ## Source Taxonomy
 
@@ -41,7 +41,7 @@ Every sourced candidate should carry:
 | Thesis rationale | Why the candidate matches the configured fund thesis. |
 | Evidence quality | High / Medium / Low based on source reliability and completeness. |
 | Dedupe state | New, existing, ambiguous, prior pass, or prior watch. |
-| Promotion rationale | Why this should or should not enter a Deal Room. |
+| Promotion rationale | Why this should or should not enter a Deal Pipeline. |
 
 ## Candidate Promotion Standard
 
@@ -52,7 +52,7 @@ Do not promote a candidate using only a name and URL. A promotion package should
 - source quality and relationship path
 - novelty/dedupe assessment
 - known risks and missing evidence
-- suggested initial Deal Room stage posture
+- suggested initial Deal Pipeline stage posture
 - recommended next task
 - required human approval
 
@@ -65,9 +65,9 @@ Do not promote a candidate using only a name and URL. A promotion package should
 | Watch | Relevant but not urgent, too early, too late, or waiting on a trigger. | Define watch trigger, owner, and review date. |
 | Reject | Poor fit, stale, duplicate, unsupported, blocked, or already passed. | Record concise rationale and source evidence. |
 
-## Handoff To Deal Room
+## Handoff To Deal Pipeline
 
-The Deal Room should inherit the origination trail. Promotion should preserve:
+The Deal Pipeline should inherit the origination trail. Promotion should preserve:
 
 - source provenance
 - thesis and category context
@@ -79,4 +79,4 @@ The Deal Room should inherit the origination trail. Promotion should preserve:
 
 ## Standard
 
-Origination outputs should make it clear why the candidate surfaced and what decision the human is being asked to make. Do not create Deal Rooms, mutate CRM records, contact founders, or enable recurring schedules without explicit human approval.
+Origination outputs should make it clear why the candidate surfaced and what decision the human is being asked to make. Do not create Deal Pipelines, mutate CRM records, contact founders, or enable recurring schedules without explicit human approval.

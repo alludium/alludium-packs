@@ -1,0 +1,102 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.run_deal_fit_analysis
+version: 0.1.0
+title: Run Deal Fit Analysis
+category: Venture Capital
+visibility: workspace
+tags:
+- vc
+- origination
+- screening
+- scoring
+definition:
+  name: Run Deal Fit Analysis
+  slug: run-deal-fit-analysis
+  description: Score active origination candidates against the firm's deal-fit pillars before deeper screening.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    stage: review
+    taskFamily: origination_deal_fit
+    documentRefs:
+    - documentId: vc.document.sourcing_scoring_rubric
+      usage: methodology
+      outputFieldKey: deal_fit_artifact_id
+    - documentId: vc.document.investment_screening_framework
+      usage: methodology
+    - documentId: vc.document.template_use_guidance
+      usage: operating_guidance
+    requiredSkills:
+    - vc-sourcing-verdict-and-screening
+    - investment-screening-framework
+    - citation-enforcement
+    recommendedAgentTemplate: vc_sourcing_operator
+    plannedRecommendedAgentTemplate: vc_sourcing_operator
+    supportedProjectTypes:
+    - vc_origination_pipeline
+    supportedProjectScopes:
+    - project_instance
+    scheduleDefaults:
+      enabledByDefault: false
+      requiresHumanApprovalToEnable: true
+      cadence: daily
+      localTime: 08:35
+      dryRunFirst: true
+    scheduling:
+      schedulable: true
+      showInProjectSetup: true
+      setupStep: schedules
+      scheduleType: cron
+      defaultScheduleRef: scheduleDefaults
+      requiresHumanApprovalToEnable: true
+      canCreateTestRun: true
+      testRunCreatesVisibleTask: true
+      dryRunFirst: true
+      safety:
+        externalWritesRequireApproval: true
+    instructions:
+      executionInstructions: 'Mirror the reference pipeline deal-fit step by scoring active candidates against the configured
+        fit pillars before the heavier screen. Use enriched evidence, relationship context, portfolio-overlap results, and
+        the current thesis policy. Return a fit score or band, reasoning, evidence gaps, and recommended next state. Use
+        `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template`
+        sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status,
+        evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains
+        process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document
+        and preserve the document ID alongside the output artifact.'
+      missingInputPolicy: Ask for enriched candidates, thesis policy, scoring pillars, portfolio overlap, relationship context,
+        and approved write mode before analysis.
+      externalActionPolicy: Analysis only unless explicit write approval is granted. Do not send outreach, update protected
+        manual decisions, or create Deal Pipeline projects.
+      completionCriteria:
+      - Each candidate has a deal-fit score or band, cited reasoning, evidence gaps, and recommended next state.
+      - Portfolio overlap and relationship context are reflected when available.
+fields:
+  input:
+  - key: deal_fit_scope
+    name: Deal Fit Scope
+    fieldType: json
+    required: true
+    position: 0
+    config: {}
+  output:
+  - key: deal_fit_artifact_id
+    name: Deal Fit Artifact
+    fieldType: file
+    required: true
+    position: 0
+    config:
+      documentRefId: vc.document.sourcing_scoring_rubric
+  - key: deal_fit_ready_count
+    name: Deal Fit Ready Count
+    fieldType: number
+    required: false
+    position: 1
+    config: {}
+  - key: deal_fit_report
+    name: Deal Fit Report
+    fieldType: richtext
+    required: false
+    position: 2
+    config:
+      rows: 8

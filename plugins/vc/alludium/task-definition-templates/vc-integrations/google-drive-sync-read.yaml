@@ -1,61 +1,66 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.google_drive_sync_read
-version: 0.1.3
+version: 0.1.4
 title: Preview Google Drive Context
 category: Venture Capital
 visibility: workspace
 tags:
-  - vc
-  - google-drive
-  - sync-read
+- vc
+- google-drive
+- sync-read
 definition:
   name: Preview Google Drive Context
   slug: google-drive-sync-read
-  description: Preview selected Google Drive file, folder, and document context before attaching or importing it into VC Deal Room tasks.
+  description: Preview selected Google Drive file, folder, and document context before attaching or importing it into Deal
+    Pipeline tasks.
   allowSubtasks: false
   definitionJson:
     vertical: vc
     taskFamily: integration_sync_read
     requiredSkills:
-      - vc-google-drive-sync-read
-      - citation-enforcement
+    - vc-google-drive-sync-read
+    - citation-enforcement
     recommendedAgentTemplate: vc_integration_operator
     plannedRecommendedAgentTemplate: vc_integration_operator
     supportedProjectTypes:
-      - vc_deal_room
+    - vc_deal_room
     supportedProjectScopes:
-      - project_management
+    - project_management
     instructions:
-      executionInstructions: Build a read preview from the approved Google Drive source scope. Use `google_drive-list-files`, `google_drive-get-file-by-id`, `google_drive-download-file`, `google_drive-list-comments`, and `google_drive-get-comment` only for selected folders or files. Summarize proposed target mapping as Deal Room setup context, task context, artifact input, or human reference before any attachment or import.
+      executionInstructions: Build a read preview from the approved Google Drive source scope. Use `google_drive-list-files`,
+        `google_drive-get-file-by-id`, `google_drive-download-file`, `google_drive-list-comments`, and `google_drive-get-comment`
+        only for selected folders or files. Summarize proposed target mapping as Deal Pipeline setup context, task context,
+        artifact input, or human reference before any attachment or import.
       missingInputPolicy: Ask for approved shared drive, folder, or file scope before reading contents or comments.
-      externalActionPolicy: Read preview only. Do not attach, import, create, upload, copy, share, move, delete, trash, update, or change permissions without a separate approval path.
+      externalActionPolicy: Read preview only. Do not attach, import, create, upload, copy, share, move, delete, trash, update,
+        or change permissions without a separate approval path.
       completionCriteria:
-        - Preview names source file/folder IDs, MIME types, owners or timestamps when available, and sensitivity caveats.
-        - Proposed target mappings and rejected files are explicit.
-        - Attachment or import approval remains separate from the preview.
+      - Preview names source file/folder IDs, MIME types, owners or timestamps when available, and sensitivity caveats.
+      - Proposed target mappings and rejected files are explicit.
+      - Attachment or import approval remains separate from the preview.
     humanDecisionPoints:
-      - Approve selected files, folders, and comments before attaching them to project or task context.
-      - Approve duplicate handling and target mapping.
+    - Approve selected files, folders, and comments before attaching them to project or task context.
+    - Approve duplicate handling and target mapping.
 fields:
   input:
-    - key: selected_google_drive_scope
-      name: Selected Google Drive Scope
-      fieldType: json
-      required: true
-      position: 0
-      config: {}
+  - key: selected_google_drive_scope
+    name: Selected Google Drive Scope
+    fieldType: json
+    required: true
+    position: 0
+    config: {}
   output:
-    - key: google_drive_context_preview
-      name: Google Drive Context Preview
-      fieldType: richtext
-      required: false
-      position: 0
-      config:
-        rows: 8
-    - key: target_context_mapping
-      name: Target Context Mapping
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
+  - key: google_drive_context_preview
+    name: Google Drive Context Preview
+    fieldType: richtext
+    required: false
+    position: 0
+    config:
+      rows: 8
+  - key: target_context_mapping
+    name: Target Context Mapping
+    fieldType: json
+    required: false
+    position: 1
+    config: {}

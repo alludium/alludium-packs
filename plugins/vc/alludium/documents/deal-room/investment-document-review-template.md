@@ -3,7 +3,7 @@ id: vc.document.investment_document_review_template
 title: Investment Document Review Template
 documentType: template
 supportedProjectTypes:
-  - vc_deal_room
+  - vc_investment_management
 summary: Reusable review-support format for mapping investment documents back to approved terms and open counsel issues.
 ---
 

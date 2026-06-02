@@ -54,5 +54,5 @@ For each candidate return:
 
 - Do not make final Meet/Watch/Pass decisions.
 - Do not pay for expensive scraping unless approved by source budget.
-- Do not write to CRM, Notion, Slack, or Deal Room projects.
+- Do not write to CRM, Notion, Slack, or Deal Pipeline projects.
 - Do not contact founders.

@@ -1,37 +1,38 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.affinity_sync_read
-version: 0.1.5
+version: 0.1.6
 title: Preview Affinity Pipeline Import
 category: Venture Capital
 visibility: workspace
 tags:
-  - vc
-  - affinity
-  - sync-read
+- vc
+- affinity
+- sync-read
 definition:
   name: Preview Affinity Pipeline Import
   slug: affinity-sync-read
-  description: Preview selected Affinity opportunity, company, person, note, and list-entry data before importing it into VC Deal Room context.
+  description: Preview selected Affinity opportunity, company, person, note, and list-entry data before importing it into
+    Deal Pipeline context.
   allowSubtasks: false
   definitionJson:
     vertical: vc
     taskFamily: integration_sync_read
     requiredSkills:
-      - vc-affinity-sync-read
-      - citation-enforcement
+    - vc-affinity-sync-read
+    - citation-enforcement
     recommendedAgentTemplate: vc_integration_operator
     plannedRecommendedAgentTemplate: vc_integration_operator
     supportedProjectTypes:
-      - vc_deal_room
+    - vc_deal_room
     supportedProjectScopes:
-      - project_management
+    - project_management
     scheduleDefaults:
       enabledByDefault: false
       requiresHumanApprovalToEnable: true
       dryRunFirst: true
       cadence: daily
-      localTime: "07:45"
+      localTime: 07:45
       timezonePolicy: project_or_workspace_timezone
       defaultResultLimit: 100
     scheduling:
@@ -47,35 +48,39 @@ definition:
       safety:
         externalWritesRequireApproval: true
     instructions:
-      executionInstructions: Build a Deal Room Affinity read-sync preview from the approved list/source and stage scope. Use `affinity_get_list_entries`, `affinity_list_opportunities`, `affinity_get_opportunity`, `affinity_search_companies`, `affinity_get_company`, `affinity_search_persons`, `affinity_get_person`, and `affinity_list_company_notes` only inside approved scope. Show proposed project, field, task, artifact, and setup-context mappings before import. Durable project creation and initial import belong to `affinity-deal-room-import` after reviewed user approval.
+      executionInstructions: Build a Deal Pipeline Affinity read-sync preview from the approved list/source and stage scope.
+        Use `affinity_get_list_entries`, `affinity_list_opportunities`, `affinity_get_opportunity`, `affinity_search_companies`,
+        `affinity_get_company`, `affinity_search_persons`, `affinity_get_person`, and `affinity_list_company_notes` only inside
+        approved scope. Show proposed project, field, task, artifact, and setup-context mappings before import. Durable project
+        creation and initial import belong to `affinity-deal-room-import` after reviewed user approval.
       missingInputPolicy: Ask for the selected Affinity source scope before creating a preview.
       externalActionPolicy: Preview/import design only. Do not import records or enable recurring sync without explicit approval.
       completionCriteria:
-        - Preview rows include source IDs, target mappings, conflicts, and rejection reasons.
-        - Tool IDs used are named.
-        - Import approval remains separate from the preview and is executed through affinity-deal-room-import.
+      - Preview rows include source IDs, target mappings, conflicts, and rejection reasons.
+      - Tool IDs used are named.
+      - Import approval remains separate from the preview and is executed through affinity-deal-room-import.
     humanDecisionPoints:
-      - Approve preview rows before import.
-      - Approve duplicate resolution and target mappings.
+    - Approve preview rows before import.
+    - Approve duplicate resolution and target mappings.
 fields:
   input:
-    - key: selected_affinity_scope
-      name: Selected Affinity Scope
-      fieldType: json
-      required: true
-      position: 0
-      config: {}
+  - key: selected_affinity_scope
+    name: Selected Affinity Scope
+    fieldType: json
+    required: true
+    position: 0
+    config: {}
   output:
-    - key: affinity_import_preview
-      name: Affinity Import Preview
-      fieldType: richtext
-      required: false
-      position: 0
-      config:
-        rows: 8
-    - key: mapping_decisions
-      name: Mapping Decisions
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
+  - key: affinity_import_preview
+    name: Affinity Import Preview
+    fieldType: richtext
+    required: false
+    position: 0
+    config:
+      rows: 8
+  - key: mapping_decisions
+    name: Mapping Decisions
+    fieldType: json
+    required: false
+    position: 1
+    config: {}

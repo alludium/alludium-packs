@@ -1,93 +1,99 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.apify_setup
-version: 0.1.7
-title: Set Up Apify for VC Origination
+version: 0.1.8
+title: Set Up Apify for Origination
 category: Venture Capital
 visibility: workspace
 tags:
-  - vc
-  - apify
-  - setup
-  - origination
+- vc
+- apify
+- setup
+- origination
 definition:
-  name: Set Up Apify for VC Origination
+  name: Set Up Apify for Origination
   slug: apify-setup
-  description: Coordinate Apify connection readiness, actor allowlist, discovery scope, and read-preview policy for a VC origination pipeline.
+  description: Coordinate Apify connection readiness, actor allowlist, discovery scope, and read-preview policy for a VC origination
+    pipeline.
   allowSubtasks: true
   definitionJson:
     vertical: vc
     taskFamily: integration_setup
     requiredSkills:
-      - vc-apify-discovery
-      - vc-apify-sync-read
-      - citation-enforcement
+    - vc-apify-discovery
+    - vc-apify-sync-read
+    - citation-enforcement
     recommendedAgentTemplate: vc_integration_operator
     plannedRecommendedAgentTemplate: vc_integration_operator
     supportedProjectTypes:
-      - vc_origination_pipeline
+    - vc_origination_pipeline
     supportedProjectScopes:
-      - project_management
+    - project_management
     integrationSetup:
       applicationExternalId: apify-actors-mcp
       childTaskDefinitionTemplateIds:
         discovery: vc.apify_discovery
         syncRead: vc.apify_sync_read
       defaultFlow:
-        - kind: discovery
-          taskDefinitionTemplateId: vc.apify_discovery
-          label: Explore Apify actor and source scope
-        - kind: sync_read
-          taskDefinitionTemplateId: vc.apify_sync_read
-          label: Preview selected actor results
+      - kind: discovery
+        taskDefinitionTemplateId: vc.apify_discovery
+        label: Explore Apify actor and source scope
+      - kind: sync_read
+        taskDefinitionTemplateId: vc.apify_sync_read
+        label: Preview selected actor results
     instructions:
-      executionInstructions: Confirm that Apify is a selected origination source, then coordinate connection readiness, actor allowlist, run budget, and reviewed discovery scope. Create child tasks from the declared integrationSetup flow only when the user chooses that step. Keep imports, scheduled actor runs, candidate scoring, CRM writes, outreach, and Deal Room promotion disabled unless a later human approval explicitly creates that task.
-      missingInputPolicy: If Apify is not authorized, no actor allowlist is approved, or no source scope is selected, keep setup incomplete and ask for authorization, approved actors, budget policy, or source-scope decisions.
-      externalActionPolicy: Setup orchestration only. Do not run scheduled sourcing, import candidates, write candidate state, contact founders, update external systems, or create Deal Room projects from this setup task.
+      executionInstructions: Confirm that Apify is a selected origination source, then coordinate connection readiness, actor
+        allowlist, run budget, and reviewed discovery scope. Create child tasks from the declared integrationSetup flow only
+        when the user chooses that step. Keep imports, scheduled actor runs, candidate scoring, CRM writes, outreach, and
+        Deal Pipeline promotion disabled unless a later human approval explicitly creates that task.
+      missingInputPolicy: If Apify is not authorized, no actor allowlist is approved, or no source scope is selected, keep
+        setup incomplete and ask for authorization, approved actors, budget policy, or source-scope decisions.
+      externalActionPolicy: Setup orchestration only. Do not run scheduled sourcing, import candidates, write candidate state,
+        contact founders, update external systems, or create Deal Pipeline projects from this setup task.
       humanConfirmationPolicy: when_external_setup_incomplete
       completionCriteria:
-        - Apify connection evidence is connected or the missing authorization/tool-discovery gap is recorded.
-        - Actor allowlist and source-scope decisions are recorded, or unanswered decisions are explicit.
-        - Read-preview, run-budget, and cost-control policies are recorded without enabling scheduled runs or writes.
-        - The accepted connection scope states whether access is personal, project-shared, or workspace-shared.
+      - Apify connection evidence is connected or the missing authorization/tool-discovery gap is recorded.
+      - Actor allowlist and source-scope decisions are recorded, or unanswered decisions are explicit.
+      - Read-preview, run-budget, and cost-control policies are recorded without enabling scheduled runs or writes.
+      - The accepted connection scope states whether access is personal, project-shared, or workspace-shared.
     humanDecisionPoints:
-      - Choose whether the Apify connection is personal, project-shared, or workspace-shared.
-      - Approve actor allowlist and source policy for LinkedIn, X, or other actors.
-      - Approve any read-preview, scheduled run, import, or write task separately.
+    - Choose whether the Apify connection is personal, project-shared, or workspace-shared.
+    - Approve actor allowlist and source policy for LinkedIn, X, or other actors.
+    - Approve any read-preview, scheduled run, import, or write task separately.
 fields:
   input:
-    - key: setup_goal
-      name: Setup Goal
-      fieldType: string
-      required: true
-      position: 0
-      config: {}
+  - key: setup_goal
+    name: Setup Goal
+    fieldType: string
+    required: true
+    position: 0
+    config: {}
   output:
-    - key: setup_summary
-      name: Setup Summary
-      fieldType: richtext
-      required: false
-      position: 0
-      config:
-        rows: 8
-    - key: accepted_connection_scope
-      name: Accepted Connection Scope
-      fieldType: string
-      required: false
-      position: 1
-      config: {}
-    - key: child_task_plan
-      name: Child Task Plan
-      fieldType: json
-      required: false
-      position: 2
-      config: {}
-    - key: sync_policy
-      name: Sync Policy
-      fieldType: json
-      required: false
-      position: 3
-      config: {}
+  - key: setup_summary
+    name: Setup Summary
+    fieldType: richtext
+    required: false
+    position: 0
+    config:
+      rows: 8
+  - key: accepted_connection_scope
+    name: Accepted Connection Scope
+    fieldType: string
+    required: false
+    position: 1
+    config: {}
+  - key: child_task_plan
+    name: Child Task Plan
+    fieldType: json
+    required: false
+    position: 2
+    config: {}
+  - key: sync_policy
+    name: Sync Policy
+    fieldType: json
+    required: false
+    position: 3
+    config: {}
 runtime:
   defaultExecutionContext:
     sourceMetadata:
@@ -97,9 +103,9 @@ runtime:
   requiredResources:
     requiresTaskChat: true
     requiredApplications:
-      - applicationExternalId: apify-actors-mcp
-        applicationName: Apify Actors
-        connectionScope: USER_CONFIGURED
+    - applicationExternalId: apify-actors-mcp
+      applicationName: Apify Actors
+      connectionScope: USER_CONFIGURED
   executionProfile:
     agentStartsImmediately: true
     preferredMode: guided_integration_setup

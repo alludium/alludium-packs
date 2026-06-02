@@ -1,17 +1,17 @@
 ---
 id: vc.document.deal_room_sop
-title: Deal Room Operating SOP
+title: Deal Pipeline Operating SOP
 documentType: sop
 supportedProjectTypes:
   - vc_deal_room
-summary: End-to-end operating method for a venture Deal Room.
+summary: End-to-end operating method for a venture Deal Pipeline.
 ---
 
-# Deal Room Operating SOP
+# Deal Pipeline Operating SOP
 
 ## Purpose
 
-Use this SOP to run one venture opportunity from intake through closing and portfolio handoff. The Deal Room is the downstream opportunity workspace; upstream sourcing remains in the Origination Pipeline until a candidate is promoted.
+Use this SOP to run one venture opportunity from intake through closing and portfolio handoff. The Deal Pipeline is the downstream opportunity workspace; upstream sourcing remains in the Origination Pipeline until a candidate is promoted.
 
 ## Workflow
 

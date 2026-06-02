@@ -64,7 +64,7 @@ If none exist, stop and ask for the minimum missing input rather than guessing.
 ## Core Method
 
 1. Confirm minimum input exists.
-2. Gather evidence from founder materials, call notes, company website, existing Deal Room
+2. Gather evidence from founder materials, call notes, company website, existing Deal Pipeline
    artifacts, and external sources via tools.
 3. Scan across all five categories (detailed below). For each flag detected:
    - **Flag** — name the specific warning signal.

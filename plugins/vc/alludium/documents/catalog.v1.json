@@ -13,10 +13,10 @@
         "vc_origination_pipeline"
       ],
       "relatedTaskDefinitionSlugs": [
-        "run-investment-screen",
-        "score-sourcing-candidates",
-        "screen-active-sourcing-candidates",
-        "screen-inbound-opportunity"
+        "run-investment-fit-screen",
+        "score-sourcing-candidate",
+        "screen-active-sourcing-candidate",
+        "capture-opportunity-intake"
       ],
       "status": "source"
     },
@@ -28,7 +28,8 @@
       "path": "shared/investment-diligence-question-framework.md",
       "supportedProjectTypes": [
         "vc_deal_room",
-        "vc_origination_pipeline"
+        "vc_origination_pipeline",
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "generate-diligence-questions",
@@ -54,7 +55,7 @@
         "prepare-team-review-pack",
         "review-opportunity-status",
         "review-ic-memo",
-        "run-follow-up-evaluation",
+        "run-opportunity-evaluation",
         "run-team-evaluation",
         "run-financial-evaluation",
         "run-technical-evaluation",
@@ -78,7 +79,7 @@
         "prepare-team-review-pack",
         "review-ic-memo",
         "review-opportunity-status",
-        "run-follow-up-evaluation",
+        "run-opportunity-evaluation",
         "run-team-evaluation",
         "run-financial-evaluation",
         "run-technical-evaluation",
@@ -97,7 +98,7 @@
       ],
       "relatedTaskDefinitionSlugs": [
         "generate-diligence-questions",
-        "run-follow-up-evaluation",
+        "run-opportunity-evaluation",
         "run-commercial-evaluation"
       ],
       "status": "source"
@@ -113,7 +114,7 @@
       ],
       "relatedTaskDefinitionSlugs": [
         "generate-diligence-questions",
-        "run-follow-up-evaluation",
+        "run-opportunity-evaluation",
         "run-technical-evaluation"
       ],
       "status": "source"
@@ -129,7 +130,7 @@
       ],
       "relatedTaskDefinitionSlugs": [
         "generate-diligence-questions",
-        "run-follow-up-evaluation",
+        "run-opportunity-evaluation",
         "run-financial-evaluation"
       ],
       "status": "source"
@@ -142,22 +143,23 @@
       "path": "shared/evidence-citation-style-guide.md",
       "supportedProjectTypes": [
         "vc_deal_room",
-        "vc_origination_pipeline"
+        "vc_origination_pipeline",
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "create-ic-memo",
         "generate-diligence-questions",
         "prepare-partner-review-pack",
-        "prepare-sourcing-ic-summary",
+        "prepare-prospect-summary",
         "prepare-team-review-pack",
         "record-ic-decision",
         "run-commercial-dd",
         "run-financial-dd",
         "run-founder-evaluation",
-        "run-investment-screen",
-        "run-sourcing-pipeline",
+        "run-investment-fit-screen",
+        "run-vc-sourcing-pipeline",
         "run-technical-dd",
-        "screen-inbound-opportunity",
+        "capture-opportunity-intake",
         "run-commercial-evaluation",
         "run-technical-evaluation",
         "run-financial-evaluation",
@@ -173,7 +175,8 @@
       "path": "shared/template-use-guidance.md",
       "supportedProjectTypes": [
         "vc_deal_room",
-        "vc_origination_pipeline"
+        "vc_origination_pipeline",
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "audit-linkedin-query-spend",
@@ -183,14 +186,14 @@
         "generate-sourcing-digest",
         "manage-closing-checklist",
         "prepare-ic-agenda",
-        "prepare-initial-call",
+        "prepare-meeting",
         "prepare-lead-gen-packet",
         "prepare-outreach-draft-queue",
         "prepare-partner-review-pack",
         "prepare-portfolio-onboarding",
-        "prepare-sourcing-ic-summary",
+        "prepare-prospect-summary",
         "prepare-team-review-pack",
-        "promote-candidate-to-deal-room",
+        "promote-candidate-to-deal-pipeline",
         "record-ic-decision",
         "request-founder-materials",
         "review-ic-memo",
@@ -198,20 +201,20 @@
         "review-term-sheet",
         "run-commercial-dd",
         "run-financial-dd",
-        "run-follow-up-evaluation",
+        "run-opportunity-evaluation",
         "run-team-evaluation",
         "run-financial-evaluation",
         "run-technical-evaluation",
         "run-commercial-evaluation",
         "run-founder-evaluation",
-        "run-investment-screen",
-        "run-sourcing-pipeline",
+        "run-investment-fit-screen",
+        "run-vc-sourcing-pipeline",
         "run-technical-dd",
-        "score-sourcing-candidates",
-        "screen-active-sourcing-candidates",
-        "screen-inbound-opportunity",
+        "score-sourcing-candidate",
+        "screen-active-sourcing-candidate",
+        "capture-opportunity-intake",
         "source-thesis-targets",
-        "summarize-initial-call",
+        "summarize-meeting-records",
         "verify-conditions-precedent"
       ],
       "status": "source"
@@ -224,19 +227,20 @@
       "path": "shared/file-naming-source-index-sop.md",
       "supportedProjectTypes": [
         "vc_deal_room",
-        "vc_origination_pipeline"
+        "vc_origination_pipeline",
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "request-founder-materials",
-        "run-sourcing-pipeline",
-        "sync-sourcing-candidates"
+        "run-vc-sourcing-pipeline",
+        "sync-sourcing-candidate"
       ],
       "status": "source"
     },
     {
       "id": "vc.document.deal_room_sop",
-      "title": "Deal Room Operating SOP",
-      "description": "End-to-end Deal Room operating method from intake through closing and portfolio handoff.",
+      "title": "Deal Pipeline Operating SOP",
+      "description": "End-to-end Deal Pipeline operating method from intake through closing and portfolio handoff.",
       "documentType": "sop",
       "path": "deal-room/deal-room-sop.md",
       "supportedProjectTypes": [
@@ -270,7 +274,7 @@
       "documentType": "template",
       "path": "deal-room/thesis-target-list-template.md",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_origination_pipeline"
       ],
       "relatedTaskDefinitionSlugs": [
         "source-thesis-targets"
@@ -284,7 +288,7 @@
       "documentType": "template",
       "path": "deal-room/lead-generation-packet-template.md",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_origination_pipeline"
       ],
       "relatedTaskDefinitionSlugs": [
         "prepare-lead-gen-packet"
@@ -301,7 +305,7 @@
         "vc_deal_room"
       ],
       "relatedTaskDefinitionSlugs": [
-        "prepare-initial-call"
+        "prepare-meeting"
       ],
       "status": "source"
     },
@@ -315,7 +319,7 @@
         "vc_deal_room"
       ],
       "relatedTaskDefinitionSlugs": [
-        "summarize-initial-call"
+        "summarize-meeting-records"
       ],
       "status": "source"
     },
@@ -329,7 +333,7 @@
         "vc_deal_room"
       ],
       "relatedTaskDefinitionSlugs": [
-        "run-follow-up-evaluation"
+        "run-opportunity-evaluation"
       ],
       "status": "source"
     },
@@ -439,7 +443,7 @@
       "documentType": "template",
       "path": "deal-room/diligence-report-template.md",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "run-commercial-dd",
@@ -456,7 +460,8 @@
       "documentType": "methodology",
       "path": "deal-room/formal-diligence-workstream-guide.md",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_deal_room",
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "create-ic-memo",
@@ -479,7 +484,8 @@
       "documentType": "checklist",
       "path": "deal-room/formal-diligence-checklist.md",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_deal_room",
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "create-ic-memo",
@@ -573,7 +579,7 @@
       "documentType": "template",
       "path": "deal-room/legal-diligence-tracker-template.md",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "run-legal-diligence"
@@ -587,7 +593,7 @@
       "documentType": "methodology",
       "path": "deal-room/legal-diligence-guide.md",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "run-legal-diligence",
@@ -604,7 +610,7 @@
       "documentType": "template",
       "path": "deal-room/investment-document-review-template.md",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "review-investment-documents"
@@ -618,7 +624,7 @@
       "documentType": "checklist",
       "path": "deal-room/closing-checklist.md",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "manage-closing-checklist"
@@ -632,7 +638,7 @@
       "documentType": "template",
       "path": "deal-room/conditions-precedent-tracker-template.md",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "verify-conditions-precedent"
@@ -646,7 +652,7 @@
       "documentType": "template",
       "path": "deal-room/completion-tracker-template.md",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "coordinate-capital-call-and-completion"
@@ -660,7 +666,7 @@
       "documentType": "template",
       "path": "deal-room/portfolio-onboarding-plan-template.md",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "prepare-portfolio-onboarding"
@@ -678,8 +684,8 @@
       ],
       "relatedTaskDefinitionSlugs": [
         "configure-origination-pipeline",
-        "promote-candidate-to-deal-room",
-        "run-sourcing-pipeline"
+        "promote-candidate-to-deal-pipeline",
+        "run-vc-sourcing-pipeline"
       ],
       "status": "source"
     },
@@ -696,11 +702,11 @@
       "relatedTaskDefinitionSlugs": [
         "configure-origination-pipeline",
         "prepare-lead-gen-packet",
-        "prepare-sourcing-ic-summary",
-        "promote-candidate-to-deal-room",
-        "run-sourcing-pipeline",
-        "score-sourcing-candidates",
-        "screen-active-sourcing-candidates",
+        "prepare-prospect-summary",
+        "promote-candidate-to-deal-pipeline",
+        "run-vc-sourcing-pipeline",
+        "score-sourcing-candidate",
+        "screen-active-sourcing-candidate",
         "source-thesis-targets"
       ],
       "status": "source"
@@ -716,7 +722,7 @@
       ],
       "relatedTaskDefinitionSlugs": [
         "configure-origination-pipeline",
-        "run-sourcing-pipeline"
+        "run-vc-sourcing-pipeline"
       ],
       "status": "source"
     },
@@ -730,9 +736,9 @@
         "vc_origination_pipeline"
       ],
       "relatedTaskDefinitionSlugs": [
-        "enrich-sourcing-candidates",
-        "run-sourcing-pipeline",
-        "score-sourcing-candidates"
+        "enrich-sourcing-candidate",
+        "run-vc-sourcing-pipeline",
+        "score-sourcing-candidate"
       ],
       "status": "source"
     },
@@ -746,8 +752,8 @@
         "vc_origination_pipeline"
       ],
       "relatedTaskDefinitionSlugs": [
-        "score-sourcing-candidates",
-        "screen-active-sourcing-candidates"
+        "score-sourcing-candidate",
+        "screen-active-sourcing-candidate"
       ],
       "status": "source"
     },
@@ -811,29 +817,29 @@
     {
       "id": "vc.document.promotion_package_template",
       "title": "Promotion Package Template",
-      "description": "Reusable promotion package for turning a sourced candidate into a Deal Room creation or update recommendation.",
+      "description": "Reusable promotion package for turning a sourced candidate into a Deal Pipeline creation or update recommendation.",
       "documentType": "template",
       "path": "origination/promotion-package-template.md",
       "supportedProjectTypes": [
         "vc_origination_pipeline"
       ],
       "relatedTaskDefinitionSlugs": [
-        "prepare-sourcing-ic-summary",
-        "promote-candidate-to-deal-room"
+        "prepare-prospect-summary",
+        "promote-candidate-to-deal-pipeline"
       ],
       "status": "source"
     },
     {
       "id": "vc.document.sourcing_ic_summary_template",
-      "title": "Sourcing IC Summary Template",
-      "description": "Reusable lightweight IC-style summary for sourced candidates before Deal Room promotion.",
+      "title": "Prospect Summary Template",
+      "description": "Reusable prospect-level sourcing summary for one prioritized candidate before outreach or Deal Pipeline promotion.",
       "documentType": "template",
       "path": "origination/sourcing-ic-summary-template.md",
       "supportedProjectTypes": [
         "vc_origination_pipeline"
       ],
       "relatedTaskDefinitionSlugs": [
-        "prepare-sourcing-ic-summary"
+        "prepare-prospect-summary"
       ],
       "status": "source"
     },
@@ -847,7 +853,7 @@
         "vc_origination_pipeline"
       ],
       "relatedTaskDefinitionSlugs": [
-        "screen-active-sourcing-candidates"
+        "screen-active-sourcing-candidate"
       ],
       "status": "source"
     },

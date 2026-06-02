@@ -15,17 +15,36 @@ skills:
 
 # Review Term Sheet
 
+## Objective
+
 Review Term Sheet for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
 
-## Instructions
+## What To Do
 
-Review the term sheet for business deviations, red flags, and counsel review questions without providing legal advice. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a durable project file artifact named Term Sheet Review and attach it to the required output field `term_sheet_review_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+Review the term sheet for business deviations, red flags, and counsel review questions without providing legal advice. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a polished Word-ready document named Term Sheet Review.
+
+## Available Context
+
+- Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
+- Especially look for: Term Sheet Artifact, Deal Terms, Standard Terms Reference, Counsel Notes, Deal Terms Analysis.
+- If a named input is absent, follow the missing-input policy rather than inventing facts.
+
+## Reference Materials
+
+- [Term Sheet Review Template](../alludium/documents/deal-room/term-sheet-review-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md): Follow for citations, claim language, assumptions, and evidence quality.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+
+## Deliverable
+
+- Create or update **Term Sheet Review** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Also include a short human-readable summary covering: Term Summary, Deviation Table, Review Focus, Deal Pipeline URL, Recommendation, Review Notes, Red Flags, Counsel Review Questions, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
 Ask for missing required inputs before producing investment-stage recommendations.
 
-## External Action Policy
+## Guardrails
 
 Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
 
@@ -35,62 +54,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 - Material conclusions include source links or are labeled as human judgment calls.
 - Next actions identify owner, dependency, and required human approval point.
 
-## Human Decision Points
+## Human Review
 
 - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
 - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
-
-## Inputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `term_sheet_artifact_id` | Term Sheet Artifact | `file` | yes |
-| `deal_terms` | Deal Terms | `json` | yes |
-| `standard_terms_reference` | Standard Terms Reference | `json` | no |
-| `counsel_notes` | Counsel Notes | `richtext` | no |
-| `deal_terms_analysis_artifact_id` | Deal Terms Analysis | `file` | no |
-
-## Outputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `term_sheet_review_artifact_id` | Term Sheet Review | `file` | yes |
-| `term_summary` | Term Summary | `richtext` | no |
-| `deviation_table` | Deviation Table | `string` | no |
-| `review_focus` | Review Focus | `multiselect` | no |
-| `deal_room_url` | Deal Room URL | `string` | no |
-| `recommendation` | Recommendation | `select` | no |
-| `review_notes` | Review Notes | `richtext` | no |
-| `red_flags` | Red Flags | `string` | no |
-| `counsel_review_questions` | Counsel Review Questions | `json` | no |
-| `approval_required` | Approval Required | `string` | no |
-| `summary` | Summary | `richtext` | no |
-| `source_links` | Source Links | `string` | no |
-| `assumptions` | Assumptions | `string` | no |
-| `evidence_quality` | Evidence Quality | `json` | no |
-| `open_questions` | Open Questions | `json` | no |
-| `risks` | Risks | `json` | no |
-| `human_decision_points` | Human Decision Points | `string` | no |
-| `next_actions` | Next Actions | `json` | no |
-
-## Document References
-
-- `vc.document.term_sheet_review_template` (output_template) -> `term_sheet_review_artifact_id`
-- `vc.document.evidence_citation_style_guide` (style_guide)
-- `vc.document.template_use_guidance` (operating_guidance)
-
-## Routing
-
-- Source template: `alludium/task-definition-templates/vc-workflows/review-term-sheet.yaml`
-- Alludium task ID: `vc.review_term_sheet`
-- Task family: `closing`
-- Lifecycle stage: `deal_structuring`
-- Recommended agent: `vc-legal-compliance-desk` (Alludium template `vc_legal_compliance_desk`)
-- Supported project types:
-  - `vc_deal_room`
-
-## Required Skills
-
-- `red-flags-scanner`
-- `citation-enforcement`
-- `closing-coordination-and-cp-tracking`

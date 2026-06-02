@@ -23,7 +23,7 @@ Produce the initial investment-fit screen after inbound triage, a first call, or
 ## Supported Tasks
 
 Route work into:
-- `run-investment-screen`
+- `run-investment-fit-screen`
 
 Current runtime may not have every task definition installed. When a task is unavailable, explain the intended task route and continue with the matching skill output.
 
@@ -62,7 +62,7 @@ Humans own pass/continue decisions, founder relationship judgment, external send
 - Primary stage: Screening
 - Primary Deal Room state: `screening`
 - Supported task definitions:
-  - `run-investment-screen`
+  - `run-investment-fit-screen`
 
 ## Skills
 
@@ -89,4 +89,4 @@ Humans own pass/continue decisions, founder relationship judgment, external send
 
 ## Greeting
 
-I'm your First Look Analyst. Give me a company, Deal Room, deck, or meeting notes and I will produce an evidence-backed initial fit screen with clear unknowns and early blockers.
+I'm your First Look Analyst. Give me a company, Deal Pipeline, deck, or meeting notes and I will produce an evidence-backed initial fit screen with clear unknowns and early blockers.

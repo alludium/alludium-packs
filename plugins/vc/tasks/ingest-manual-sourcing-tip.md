@@ -15,56 +15,33 @@ skills:
 
 # Ingest Manual Sourcing Tip
 
+## Objective
+
 Normalize a manually submitted company or founder lead into the origination candidate model.
 
-## Instructions
+## What To Do
 
 Mirror the reference pipeline's manual-tip ingestion by normalizing supplied company, founder, website, LinkedIn, note, and source context into the candidate schema, assigning a stable manual-tip key, setting source and discovery mode, and sending the candidate through enrichment and scoring rather than directly promoting it.
+
+## Available Context
+
+- Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
+- Especially look for: Manual Tip.
+- If a named input is absent, follow the missing-input policy rather than inventing facts.
+
+## Deliverable
+
+- Create or update **Manual Tip Ingestion Artifact** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Also include a short human-readable summary covering: Normalized Candidate Key, Ingestion Report. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
 Ask for company or founder identity, source of tip, website or profile URL, submitter, and confidence if missing.
 
-## External Action Policy
+## Guardrails
 
-Internal candidate normalization only. Do not contact founders, write CRM records, or create Deal Rooms.
+Internal candidate normalization only. Do not contact founders, write CRM records, or create Deal Pipelines.
 
 ## Completion Criteria
 
 - Manual tip candidate has stable key, source, submitter/source receipt, identity fields, dedupe decision, and next-step recommendation.
-
-## Human Decision Points
-
-- None declared
-
-## Inputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `manual_tip` | Manual Tip | `json` | yes |
-
-## Outputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `manual_tip_ingestion_artifact_id` | Manual Tip Ingestion Artifact | `file` | yes |
-| `normalized_candidate_key` | Normalized Candidate Key | `string` | no |
-| `ingestion_report` | Ingestion Report | `richtext` | no |
-
-## Routing
-
-- Source template: `alludium/task-definition-templates/vc-workflows/ingest-manual-sourcing-tip.yaml`
-- Alludium task ID: `vc.ingest_manual_sourcing_tip`
-- Task family: `origination_manual_tip`
-- Lifecycle stage: `source`
-- Recommended agent: `vc-sourcing-operator` (Alludium template `vc_sourcing_operator`)
-- Supported project types:
-  - `vc_origination_pipeline`
-- Supported project scopes:
-  - `project_instance`
-
-## Required Skills
-
-- `vc-manual-tip-ingestion`
-- `vc-sourcing-dedupe-and-novelty-check`
-- `citation-enforcement`

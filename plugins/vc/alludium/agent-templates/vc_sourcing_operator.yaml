@@ -1,4 +1,4 @@
-version: 1.0.2
+version: 1.0.3
 type: template
 platform_managed: false
 id: vc_sourcing_operator
@@ -13,30 +13,39 @@ metadata:
   gitRepositoryUrl: https://github.com/alludium-templates/configurable-agent.git
   supportedTaskDefinitions:
   - audit-linkedin-query-spend
-  - check-affinity-relationships
+  - check-affinity-relationship-context
   - configure-origination-pipeline
   - discover-companies-house-candidates
   - discover-github-builder-signals
-  - discover-linkedin-founders
+  - discover-linkedin-founder-candidates
   - discover-reddit-builder-signals
   - discover-x-founder-signals
-  - enrich-sourcing-candidates
+  - enrich-sourcing-candidate
   - generate-sourcing-digest
   - ingest-manual-sourcing-tip
+  - prepare-prospect-summary
   - prepare-outreach-draft-queue
-  - promote-candidate-to-deal-room
+  - prepare-initial-linkedin-reachout
+  - prepare-second-reachout-email
+  - promote-candidate-to-deal-pipeline
+  - record-linkedin-connection-attempt
+  - review-outreach-outcome
   - review-portfolio-overlap
   - review-reddit-candidate-inbox
   - review-source-errors-and-spend
-  - run-sourcing-pipeline
-  - score-sourcing-candidates
-  - screen-active-sourcing-candidates
-  - sync-sourcing-candidates
+  - review-unicorn-signature
+  - run-deal-fit-analysis
+  - run-vc-sourcing-pipeline
+  - score-sourcing-candidate
+  - screen-active-sourcing-candidate
+  - screen-founder-connected-candidate
+  - screen-identified-candidate
+  - sync-sourcing-candidate
   primaryStage: Origination Operations
   primaryDealRoomState: intake
   requiredSkills:
   - company-research-and-enrichment
-  - deal-room-setup-and-source-ingestion
+  - deal-pipeline-setup-and-source-ingestion
   - founder-outreach-and-intro-paths
   - investment-screening-framework
   - vc-apify-linkedin-founder-discovery
@@ -46,8 +55,9 @@ metadata:
   - vc-linkedin-query-spend-audit
   - vc-manual-tip-ingestion
   - vc-notion-sync-write
-  - vc-origination-deal-room-promotion
-  - vc-origination-pipeline-orchestration
+  - origination-deal-pipeline-promotion
+  - origination-pipeline-orchestration
+  - origination-prospect-summary-preparation
   - vc-outreach-draft-queue
   - vc-portfolio-overlap-review
   - vc-reddit-builder-signal-discovery
@@ -67,7 +77,7 @@ llm:
 skills:
 - externalId: company-research-and-enrichment
   activationMode: ALWAYS
-- externalId: deal-room-setup-and-source-ingestion
+- externalId: deal-pipeline-setup-and-source-ingestion
   activationMode: AUTO
 - externalId: founder-outreach-and-intro-paths
   activationMode: AUTO
@@ -87,9 +97,11 @@ skills:
   activationMode: AUTO
 - externalId: vc-notion-sync-write
   activationMode: AUTO
-- externalId: vc-origination-deal-room-promotion
+- externalId: origination-deal-pipeline-promotion
   activationMode: AUTO
-- externalId: vc-origination-pipeline-orchestration
+- externalId: origination-pipeline-orchestration
+  activationMode: AUTO
+- externalId: origination-prospect-summary-preparation
   activationMode: AUTO
 - externalId: vc-outreach-draft-queue
   activationMode: AUTO
@@ -125,15 +137,15 @@ prompt:
 
     ## Supported Tasks
 
-    Route work into source discovery, candidate ingestion, candidate enrichment, source error/spend review, sourcing digest, screening, outreach drafting, and Deal Room promotion tasks.
+    Route work into source discovery, candidate ingestion, candidate enrichment, source error/spend review, sourcing digest, screening, outreach drafting, and Deal Pipeline promotion tasks.
 
     ## Skill Routing
 
-    Use source-specific discovery skills for candidate collection, `vc-source-registry-and-state-management` for state and receipts, `vc-sourcing-dedupe-and-novelty-check` before candidate promotion, `vc-sourcing-verdict-and-screening` for scoring, and `vc-origination-deal-room-promotion` for reviewed promotion packages. Use `citation-enforcement` before presenting candidate claims or recommendations.
+    Use source-specific discovery skills for candidate collection, `vc-source-registry-and-state-management` for state and receipts, `vc-sourcing-dedupe-and-novelty-check` before candidate promotion, `vc-sourcing-verdict-and-screening` for scoring, and `origination-deal-pipeline-promotion` for reviewed promotion packages. Use `citation-enforcement` before presenting candidate claims or recommendations.
 
     ## Boundaries
 
-    Do not contact founders, create Deal Rooms, write to CRM/source systems, enable recurring schedules, or promote candidates without explicit human approval and the correct downstream task.
+    Do not contact founders, create Deal Pipelines, write to CRM/source systems, enable recurring schedules, or promote candidates without explicit human approval and the correct downstream task.
   variables: []
 actions:
 - Title: Run Sourcing
@@ -143,7 +155,7 @@ actions:
   Message: Score active sourcing candidates with evidence and open questions.
   Icon: FcSurvey
 - Title: Promotion Package
-  Message: Prepare a reviewed candidate promotion package for Deal Room creation.
+  Message: Prepare a reviewed candidate promotion package for Deal Pipeline creation.
   Icon: FcPackage
 greeting: 'I''m your Sourcing Operator. Give me a configured origination source, candidate batch, or review queue and I will prepare the next
   sourced-candidate workflow output with citations.

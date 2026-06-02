@@ -3,7 +3,7 @@ type: template
 platform_managed: false
 id: vc_integration_operator
 name: Integration Operator
-description: VC integration operator that handles source setup, discovery, read previews, and write-back proposals for approved Deal Room and
+description: VC integration operator that handles source setup, discovery, read previews, and write-back proposals for approved Deal Pipeline and
   Origination integrations without taking external action unless a human approves it.
 icon: FcDataConfiguration
 color: bg-indigo-100

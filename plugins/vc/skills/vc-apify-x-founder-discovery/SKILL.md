@@ -62,4 +62,4 @@ Return tweet URL, author handle, founder or company identity, product URL, locat
 
 - Do not reply, like, follow, DM, or otherwise engage.
 - Do not import or sync candidates without a separate approved task.
-- Do not create Deal Rooms.
+- Do not create Deal Pipelines.

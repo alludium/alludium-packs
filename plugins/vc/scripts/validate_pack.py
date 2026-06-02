@@ -309,16 +309,16 @@ ARTIFACT_FIELD_KEY_PATTERN = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+)*_artifact_id$
 VC_ARTIFACT_OUTPUTS = {
     "source-thesis-targets": ["thesis_target_list_artifact_id"],
     "prepare-lead-gen-packet": ["lead_generation_packet_artifact_id"],
-    "screen-inbound-opportunity": ["opportunity_intake_artifact_id"],
+    "capture-opportunity-intake": ["opportunity_intake_artifact_id"],
     "request-founder-materials": ["founder_materials_request_artifact_id"],
-    "prepare-initial-call": ["initial_call_brief_artifact_id"],
-    "summarize-initial-call": ["customer_insights_artifact_id"],
-    "run-follow-up-evaluation": ["follow_up_evaluation_artifact_id"],
+    "prepare-meeting": ["initial_call_brief_artifact_id"],
+    "summarize-meeting-records": ["customer_insights_artifact_id"],
+    "run-opportunity-evaluation": ["follow_up_evaluation_artifact_id"],
     "run-commercial-evaluation": ["commercial_evaluation_artifact_id"],
     "run-technical-evaluation": ["technical_evaluation_artifact_id"],
     "run-financial-evaluation": ["financial_evaluation_artifact_id"],
     "run-team-evaluation": ["team_evaluation_artifact_id"],
-    "run-investment-screen": ["investment_screen_scorecard_artifact_id"],
+    "run-investment-fit-screen": ["investment_screen_scorecard_artifact_id"],
     "generate-diligence-questions": ["diligence_question_bank_artifact_id"],
     "run-founder-evaluation": ["founder_evaluation_artifact_id"],
     "prepare-team-review-pack": ["team_review_pack_artifact_id"],
@@ -349,8 +349,8 @@ VC_ARTIFACT_OUTPUTS = {
     "affinity-deal-room-import": ["affinity_import_receipt_artifact_id"],
 }
 VC_ARTIFACT_INPUTS = {
-    "summarize-initial-call": ["meeting_record_artifact_ids"],
-    "run-follow-up-evaluation": [
+    "summarize-meeting-records": ["meeting_record_artifact_ids"],
+    "run-opportunity-evaluation": [
         "investment_screen_scorecard_artifact_id",
         "customer_insights_artifact_id",
     ],
@@ -423,7 +423,7 @@ VC_ARTIFACT_INPUTS = {
     ],
 }
 OPTIONAL_ARTIFACT_INPUTS = {
-    "prepare-initial-call": {"pitch_deck_artifact_id"},
+    "prepare-meeting": {"pitch_deck_artifact_id"},
     "run-commercial-evaluation": {"follow_up_evaluation_artifact_id"},
     "run-technical-evaluation": {"follow_up_evaluation_artifact_id"},
     "run-financial-evaluation": {"follow_up_evaluation_artifact_id"},
@@ -462,8 +462,9 @@ OPTIONAL_ARTIFACT_INPUTS = {
         "legal_diligence_artifact_id",
     },
     "prepare-portfolio-onboarding": {"completion_tracker_artifact_id"},
-    "run-investment-screen": {"opportunity_intake_artifact_id", "pitch_deck_artifact_id"},
-    "screen-inbound-opportunity": {"pitch_deck_artifact_id"},
+    "create-deal": {"pitch_deck_artifact_id"},
+    "run-investment-fit-screen": {"opportunity_intake_artifact_id", "pitch_deck_artifact_id"},
+    "capture-opportunity-intake": {"pitch_deck_artifact_id", "source_thread_artifact_id"},
 }
 
 
@@ -488,13 +489,19 @@ def read_json(path: Path) -> Any:
         fail(f"Failed to parse JSON {path.relative_to(ROOT)}: {exc}")
 
 
-def load_vc_deal_room_lifecycle_states() -> set[str]:
-    project_type = read_json(ROOT / "alludium" / "project-types" / "vc_deal_room.json")
-    initial_version = project_type.get("initialVersion") or {}
-    return set(require_string_list(
-        initial_version.get("lifecycleStates"),
-        "Project type vc_deal_room initialVersion.lifecycleStates",
-    ))
+def load_vc_project_lifecycle_states() -> set[str]:
+    states: set[str] = set()
+    for project_type_id in ["vc_deal_room", "vc_investment_management"]:
+        project_type_path = ROOT / "alludium" / "project-types" / f"{project_type_id}.json"
+        if not project_type_path.exists():
+            continue
+        project_type = read_json(project_type_path)
+        initial_version = project_type.get("initialVersion") or {}
+        states.update(require_string_list(
+            initial_version.get("lifecycleStates"),
+            f"Project type {project_type_id} initialVersion.lifecycleStates",
+        ))
+    return states
 
 
 def parse_frontmatter(path: Path) -> dict[str, Any]:
@@ -577,7 +584,7 @@ def validate_templates(manifest: dict[str, Any], skill_ids: set[str]) -> None:
     if len(template_ids) != len(set(template_ids)):
         fail("Duplicate Alludium agent-template IDs in alludium/manifest.yaml")
 
-    vc_deal_room_lifecycle_states = load_vc_deal_room_lifecycle_states()
+    vc_project_lifecycle_states = load_vc_project_lifecycle_states()
     for template_id in template_ids:
         template_path = ROOT / "alludium" / "agent-templates" / f"{template_id}.yaml"
         if not template_path.exists():
@@ -596,11 +603,11 @@ def validate_templates(manifest: dict[str, Any], skill_ids: set[str]) -> None:
         primary_deal_room_state = metadata.get("primaryDealRoomState")
         if (
             primary_deal_room_state is not None
-            and primary_deal_room_state not in vc_deal_room_lifecycle_states
+            and primary_deal_room_state not in vc_project_lifecycle_states
         ):
             fail(
                 f"Agent template {template_id} primaryDealRoomState must be one of "
-                f"{sorted(vc_deal_room_lifecycle_states)}"
+                f"{sorted(vc_project_lifecycle_states)}"
             )
 
         prompt = template.get("prompt") or {}
@@ -1399,10 +1406,13 @@ def validate_vc_deal_room_task_template_shape(
 
     if DEFAULT_PROJECT_SCOPE in supported_project_scopes:
         stage = definition_json.get("stage")
-        if stage not in VC_DEAL_ROOM_LIFECYCLE_STAGES:
+        allowed_stages = set(VC_DEAL_ROOM_LIFECYCLE_STAGES)
+        if definition_json.get("taskFamily") == "deal_pipeline_project_creation":
+            allowed_stages.add("setup")
+        if stage not in allowed_stages:
             fail(
                 f"Task template {template_id} ({slug}) definitionJson.stage must be one of "
-                f"{sorted(VC_DEAL_ROOM_LIFECYCLE_STAGES)} for vc_deal_room project_instance tasks"
+                f"{sorted(allowed_stages)} for vc_deal_room project_instance tasks"
             )
 
     for section_name in ["input", "context", "output"]:
@@ -3562,13 +3572,17 @@ def validate_project_task_mapping_contracts() -> None:
 
 ORIGINATION_STAGE_LIFECYCLE_STAGES = {
     "setup": {"draft", "configured", "needs_credentials"},
-    "source": {"active"},
-    "enrich": {"review_backlog"},
-    "score": {"review_backlog"},
-    "review": {"review_backlog"},
-    "engage": {"review_backlog"},
-    "promote": {"review_backlog"},
-    "operate": {"active", "source_degraded", "paused", "migration_in_progress"},
+    "source": {"source", "identified", "source_degraded"},
+    "enrich": {"enriched"},
+    "score": {"initial_screen", "prioritized"},
+    "review": {"identified", "initial_screen", "prioritized", "outreach_prep", "engagement_screen"},
+    "engage": {
+        "outreach_prep",
+        "contact_attempts",
+        "engagement_screen",
+    },
+    "promote": {"promoted_to_deal_pipeline"},
+    "operate": {"source", "source_degraded", "paused", "migration_in_progress"},
 }
 
 

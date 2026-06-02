@@ -1,224 +1,231 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.review_term_sheet
-version: 1.0.11
+version: 1.0.12
 title: Review Term Sheet
 category: Venture Capital
 visibility: workspace
 tags:
-  - vc
-  - closing
-  - term-sheet
+- vc
+- closing
+- term-sheet
 definition:
   name: Review Term Sheet
   slug: review-term-sheet
-  description: Review Term Sheet for one venture-capital opportunity with evidence capture, human review gates, and next-action recommendations.
+  description: Review Term Sheet for one venture-capital opportunity with evidence capture, human review gates, and next-action
+    recommendations.
   allowSubtasks: true
   definitionJson:
     vertical: vc
     stage: deal_structuring
     taskFamily: closing
     documentRefs:
-      - documentId: vc.document.term_sheet_review_template
-        usage: output_template
-        outputFieldKey: term_sheet_review_artifact_id
-      - documentId: vc.document.evidence_citation_style_guide
-        usage: style_guide
-      - documentId: vc.document.template_use_guidance
-        usage: operating_guidance
+    - documentId: vc.document.term_sheet_review_template
+      usage: output_template
+      outputFieldKey: term_sheet_review_artifact_id
+    - documentId: vc.document.evidence_citation_style_guide
+      usage: style_guide
+    - documentId: vc.document.template_use_guidance
+      usage: operating_guidance
     requiredSkills:
-      - red-flags-scanner
-      - citation-enforcement
-      - closing-coordination-and-cp-tracking
+    - red-flags-scanner
+    - citation-enforcement
+    - closing-coordination-and-cp-tracking
     plannedRecommendedAgentTemplate: vc_legal_compliance_desk
     sourceAnchors:
-      - source: investment-management-process-slides
-        anchor: slide-31
-        note: Closing process
-      - source: investment-management-process-slides
-        anchor: slide-32
-        note: Term sheet/legal execution
-      - source: investment-management-process-slides
-        anchor: slide-33
-        note: Closing AI map
-      - source: atomic-agents
-        anchor: worksheet-atomic-agents
-        note: Spreadsheet rows 61, 64, 66-67
+    - source: investment-management-process-slides
+      anchor: slide-31
+      note: Closing process
+    - source: investment-management-process-slides
+      anchor: slide-32
+      note: Term sheet/legal execution
+    - source: investment-management-process-slides
+      anchor: slide-33
+      note: Closing AI map
+    - source: atomic-agents
+      anchor: worksheet-atomic-agents
+      note: Spreadsheet rows 61, 64, 66-67
     instructions:
-      executionInstructions: >-
-        Review the term sheet for business deviations, red flags, and counsel review questions without providing legal advice. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a durable project file artifact named Term Sheet Review and attach it to the required output field `term_sheet_review_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+      executionInstructions: 'Review the term sheet for business deviations, red flags, and counsel review questions without
+        providing legal advice. Cite material claims, separate assumptions from evidence, and do not send messages, mutate
+        CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or
+        update a durable project file artifact named Term Sheet Review and attach it to the required output field `term_sheet_review_artifact_id`.
+        Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template`
+        sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status,
+        evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains
+        process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document
+        and preserve the document ID alongside the output artifact.'
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
-      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
+      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation,
+        child task creation, or stage transition.
       completionCriteria:
-        - Required input gaps are resolved or listed as assumptions/open questions.
-        - Material conclusions include source links or are labeled as human judgment calls.
-        - Next actions identify owner, dependency, and required human approval point.
+      - Required input gaps are resolved or listed as assumptions/open questions.
+      - Material conclusions include source links or are labeled as human judgment calls.
+      - Next actions identify owner, dependency, and required human approval point.
     humanDecisionPoints:
-      - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
-      - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+    - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
+    - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
     orchestration:
       parentTaskPolicy: none
       suggestedChildTasks: []
     supportedProjectTypes:
-      - vc_deal_room
+    - vc_deal_room
     recommendedAgentTemplate: vc_legal_compliance_desk
-
 fields:
   input:
-    - key: term_sheet_artifact_id
-      name: Term Sheet Artifact
-      fieldType: file
-      required: true
-      position: 0
-      config: {}
-    - key: deal_terms
-      name: Deal Terms
-      fieldType: json
-      required: true
-      position: 1
-      config: {}
-    - key: standard_terms_reference
-      name: Standard Terms Reference
-      fieldType: json
-      required: false
-      position: 2
-      config: {}
-    - key: counsel_notes
-      name: Counsel Notes
-      fieldType: richtext
-      required: false
-      position: 3
-      config:
-        rows: 5
-    - key: deal_terms_analysis_artifact_id
-      name: Deal Terms Analysis
-      fieldType: file
-      required: false
-      position: 4
-      config: {}
-
+  - key: term_sheet_artifact_id
+    name: Term Sheet Artifact
+    fieldType: file
+    required: true
+    position: 0
+    config: {}
+  - key: deal_terms
+    name: Deal Terms
+    fieldType: json
+    required: true
+    position: 1
+    config: {}
+  - key: standard_terms_reference
+    name: Standard Terms Reference
+    fieldType: json
+    required: false
+    position: 2
+    config: {}
+  - key: counsel_notes
+    name: Counsel Notes
+    fieldType: richtext
+    required: false
+    position: 3
+    config:
+      rows: 5
+  - key: deal_terms_analysis_artifact_id
+    name: Deal Terms Analysis
+    fieldType: file
+    required: false
+    position: 4
+    config: {}
   output:
-    - key: term_sheet_review_artifact_id
-      name: Term Sheet Review
-      fieldType: file
-      required: true
-      position: 0
-      config:
-        documentRefId: vc.document.term_sheet_review_template
-    - key: term_summary
-      name: Term Summary
-      fieldType: richtext
-      required: false
-      position: 1
-      config:
-        rows: 5
-    - key: deviation_table
-      name: Deviation Table
-      fieldType: string
-      required: false
-      position: 2
-      config: {}
-    - key: review_focus
-      name: Review Focus
-      fieldType: multiselect
-      required: false
-      position: 3
-      config:
-        options:
-          - economics
-          - governance
-          - control_rights
-          - information_rights
-          - liquidation_preferences
-    - key: deal_room_url
-      name: Deal Room URL
-      fieldType: string
-      required: false
-      position: 4
-      config: {}
-    - key: recommendation
-      name: Recommendation
-      fieldType: select
-      required: false
-      position: 5
-      config:
-        options:
-          - approve
-          - reject
-          - request_changes
-    - key: review_notes
-      name: Review Notes
-      fieldType: richtext
-      required: false
-      position: 6
-      config: {}
-    - key: red_flags
-      name: Red Flags
-      fieldType: string
-      required: false
-      position: 7
-      config: {}
-    - key: counsel_review_questions
-      name: Counsel Review Questions
-      fieldType: json
-      required: false
-      position: 8
-      config: {}
-    - key: approval_required
-      name: Approval Required
-      fieldType: string
-      required: false
-      position: 9
-      config: {}
-    - key: summary
-      name: Summary
-      fieldType: richtext
-      required: false
-      position: 10
-      config:
-        rows: 5
-    - key: source_links
-      name: Source Links
-      fieldType: string
-      required: false
-      position: 11
-      config: {}
-    - key: assumptions
-      name: Assumptions
-      fieldType: string
-      required: false
-      position: 12
-      config: {}
-    - key: evidence_quality
-      name: Evidence Quality
-      fieldType: json
-      required: false
-      position: 13
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: false
-      position: 14
-      config: {}
-    - key: risks
-      name: Risks
-      fieldType: json
-      required: false
-      position: 15
-      config: {}
-    - key: human_decision_points
-      name: Human Decision Points
-      fieldType: string
-      required: false
-      position: 16
-      config: {}
-    - key: next_actions
-      name: Next Actions
-      fieldType: json
-      required: false
-      position: 17
-      config: {}
+  - key: term_sheet_review_artifact_id
+    name: Term Sheet Review
+    fieldType: file
+    required: true
+    position: 0
+    config:
+      documentRefId: vc.document.term_sheet_review_template
+  - key: term_summary
+    name: Term Summary
+    fieldType: richtext
+    required: false
+    position: 1
+    config:
+      rows: 5
+  - key: deviation_table
+    name: Deviation Table
+    fieldType: string
+    required: false
+    position: 2
+    config: {}
+  - key: review_focus
+    name: Review Focus
+    fieldType: multiselect
+    required: false
+    position: 3
+    config:
+      options:
+      - economics
+      - governance
+      - control_rights
+      - information_rights
+      - liquidation_preferences
+  - key: deal_room_url
+    name: Deal Pipeline URL
+    fieldType: string
+    required: false
+    position: 4
+    config: {}
+  - key: recommendation
+    name: Recommendation
+    fieldType: select
+    required: false
+    position: 5
+    config:
+      options:
+      - approve
+      - reject
+      - request_changes
+  - key: review_notes
+    name: Review Notes
+    fieldType: richtext
+    required: false
+    position: 6
+    config: {}
+  - key: red_flags
+    name: Red Flags
+    fieldType: string
+    required: false
+    position: 7
+    config: {}
+  - key: counsel_review_questions
+    name: Counsel Review Questions
+    fieldType: json
+    required: false
+    position: 8
+    config: {}
+  - key: approval_required
+    name: Approval Required
+    fieldType: string
+    required: false
+    position: 9
+    config: {}
+  - key: summary
+    name: Summary
+    fieldType: richtext
+    required: false
+    position: 10
+    config:
+      rows: 5
+  - key: source_links
+    name: Source Links
+    fieldType: string
+    required: false
+    position: 11
+    config: {}
+  - key: assumptions
+    name: Assumptions
+    fieldType: string
+    required: false
+    position: 12
+    config: {}
+  - key: evidence_quality
+    name: Evidence Quality
+    fieldType: json
+    required: false
+    position: 13
+    config: {}
+  - key: open_questions
+    name: Open Questions
+    fieldType: json
+    required: false
+    position: 14
+    config: {}
+  - key: risks
+    name: Risks
+    fieldType: json
+    required: false
+    position: 15
+    config: {}
+  - key: human_decision_points
+    name: Human Decision Points
+    fieldType: string
+    required: false
+    position: 16
+    config: {}
+  - key: next_actions
+    name: Next Actions
+    fieldType: json
+    required: false
+    position: 17
+    config: {}
 runtime:
   defaultExecutionContext:
     sourceMetadata:

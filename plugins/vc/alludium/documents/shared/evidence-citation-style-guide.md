@@ -5,6 +5,7 @@ documentType: style_guide
 supportedProjectTypes:
   - vc_deal_room
   - vc_origination_pipeline
+  - vc_investment_management
 summary: Style guide for evidence, citations, confidence, and claim hygiene.
 ---
 

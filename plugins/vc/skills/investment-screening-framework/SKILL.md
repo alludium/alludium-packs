@@ -42,7 +42,7 @@ Apply an Investment Screening framework to produce a structured, evidence-backed
 of a company. The goal is to clearly separate what is known from what is unknown, and
 recommend a next step.
 
-This skill is for the screening method itself — not the full inbound workflow, not Deal Room
+This skill is for the screening method itself — not the full inbound workflow, not Deal Pipeline
 creation, and not deep diligence.
 
 ## Important Source Truth

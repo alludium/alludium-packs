@@ -14,17 +14,30 @@ skills:
 
 # Draft Notion Update Proposals
 
+## Objective
+
 Draft reviewable Notion page, database, or comment proposals from VC task outputs without performing broad workspace mutation.
 
-## Instructions
+## What To Do
 
 Draft Notion update proposals only. Each proposal must include the target page, database, block, or row ID, before/after summary when known, proposed content, source evidence, owner approval, and a clear statement that no Notion write has been performed. Reference available write surfaces such as `notion-create-comment`, `notion-append-block`, `notion-update-page`, or `notion-update-database` only as later approved execution candidates; this task must not execute them.
+
+## Available Context
+
+- Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
+- Especially look for: Notion Write Source.
+- If a named input is absent, follow the missing-input policy rather than inventing facts.
+
+## Deliverable
+
+- Produce a concise, reviewable task response that a human can act on.
+- Also include a short human-readable summary covering: Notion Update Proposals. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
 Ask for the source artifact, target Notion object, proposed content, and approval owner before drafting.
 
-## External Action Policy
+## Guardrails
 
 Draft only. Do not create pages, create databases, update pages, update databases, append blocks, delete blocks, duplicate pages, upload files, or create comments.
 
@@ -34,35 +47,7 @@ Draft only. Do not create pages, create databases, update pages, update database
 - The output clearly states no Notion writes were performed.
 - Broad page/database mutation remains outside this task unless a separate explicit approval workflow exists.
 
-## Human Decision Points
+## Human Review
 
 - Approve exact target object and proposed content before any future execution.
 - Approve whether a Notion write is appropriate at all for the workflow.
-
-## Inputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `notion_write_source` | Notion Write Source | `json` | yes |
-
-## Outputs
-
-| Key | Name | Type | Required |
-| --- | --- | --- | --- |
-| `notion_update_proposals` | Notion Update Proposals | `richtext` | no |
-
-## Routing
-
-- Source template: `alludium/task-definition-templates/vc-integrations/notion-sync-write.yaml`
-- Alludium task ID: `vc.notion_sync_write`
-- Task family: `integration_sync_write`
-- Recommended agent: `vc-integration-operator` (Alludium template `vc_integration_operator`)
-- Supported project types:
-  - `vc_deal_room`
-- Supported project scopes:
-  - `project_management`
-
-## Required Skills
-
-- `vc-notion-sync-write`
-- `citation-enforcement`

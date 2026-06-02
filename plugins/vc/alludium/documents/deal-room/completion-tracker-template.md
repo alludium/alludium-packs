@@ -3,7 +3,7 @@ id: vc.document.completion_tracker_template
 title: Completion Tracker Template
 documentType: template
 supportedProjectTypes:
-  - vc_deal_room
+  - vc_investment_management
 summary: Reusable tracker for capital call status, funds transfer readiness, completion evidence, and portfolio handoff triggers.
 ---
 

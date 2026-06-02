@@ -1,62 +1,70 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.companies_house_sync_read
-version: 0.1.3
+version: 0.1.4
 title: Preview Companies House Public Register Results
 category: Venture Capital
 visibility: workspace
 tags:
-  - vc
-  - companies-house
-  - sync-read
-  - origination
+- vc
+- companies-house
+- sync-read
+- origination
 definition:
   name: Preview Companies House Public Register Results
   slug: companies-house-sync-read
-  description: Preview selected Companies House public search results and company profile pages before using them as VC origination source context.
+  description: Preview selected Companies House public search results and company profile pages before using them as VC origination
+    source context.
   allowSubtasks: false
   definitionJson:
     vertical: vc
     taskFamily: integration_sync_read
     requiredSkills:
-      - vc-companies-house-sync-read
-      - citation-enforcement
+    - vc-companies-house-sync-read
+    - citation-enforcement
     recommendedAgentTemplate: vc_integration_operator
     plannedRecommendedAgentTemplate: vc_integration_operator
     supportedProjectTypes:
-      - vc_origination_pipeline
+    - vc_origination_pipeline
     supportedProjectScopes:
-      - project_management
+    - project_management
     instructions:
-      executionInstructions: Build a read preview only after discovery has selected public search URLs, result limits, and page-preview scope. Use Firecrawl to scrape approved Companies House search result pages and selected `/company/<number>` public profile pages. Return company identity signals, company number, status, incorporation date, company type, registered office locality when visible, SIC or nature-of-business text when visible, direct source URLs, scrape timestamp, result rank, and suggested source-registry mapping.
-      missingInputPolicy: Ask for selected public search URLs, result limits, selected company numbers, and Firecrawl availability before processing company pages.
-      externalActionPolicy: Read preview only. Do not call authenticated Companies House APIs, import companies, enable recurring monitoring, score candidates, write candidate records, update external systems, or create Deal Room projects.
+      executionInstructions: Build a read preview only after discovery has selected public search URLs, result limits, and
+        page-preview scope. Use Firecrawl to scrape approved Companies House search result pages and selected `/company/<number>`
+        public profile pages. Return company identity signals, company number, status, incorporation date, company type, registered
+        office locality when visible, SIC or nature-of-business text when visible, direct source URLs, scrape timestamp, result
+        rank, and suggested source-registry mapping.
+      missingInputPolicy: Ask for selected public search URLs, result limits, selected company numbers, and Firecrawl availability
+        before processing company pages.
+      externalActionPolicy: Read preview only. Do not call authenticated Companies House APIs, import companies, enable recurring
+        monitoring, score candidates, write candidate records, update external systems, or create Deal Pipeline projects.
       completionCriteria:
-        - Preview rows include company number, name, status, selected source signals, source receipts, result rank, and rejection reasons when available.
-        - Firecrawl result metadata, source URLs, scrape timestamps, or missing metadata are named.
-        - Import, recurring monitoring, scoring, and promotion approvals remain separate from the preview.
+      - Preview rows include company number, name, status, selected source signals, source receipts, result rank, and rejection
+        reasons when available.
+      - Firecrawl result metadata, source URLs, scrape timestamps, or missing metadata are named.
+      - Import, recurring monitoring, scoring, and promotion approvals remain separate from the preview.
     humanDecisionPoints:
-      - Approve result rows before candidate import or scoring.
-      - Approve source registry mappings and dedupe keys separately.
+    - Approve result rows before candidate import or scoring.
+    - Approve source registry mappings and dedupe keys separately.
 fields:
   input:
-    - key: selected_companies_house_scope
-      name: Selected Companies House Scope
-      fieldType: json
-      required: true
-      position: 0
-      config: {}
+  - key: selected_companies_house_scope
+    name: Selected Companies House Scope
+    fieldType: json
+    required: true
+    position: 0
+    config: {}
   output:
-    - key: companies_house_results_preview
-      name: Companies House Results Preview
-      fieldType: richtext
-      required: false
-      position: 0
-      config:
-        rows: 8
-    - key: source_registry_mapping
-      name: Source Registry Mapping
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
+  - key: companies_house_results_preview
+    name: Companies House Results Preview
+    fieldType: richtext
+    required: false
+    position: 0
+    config:
+      rows: 8
+  - key: source_registry_mapping
+    name: Source Registry Mapping
+    fieldType: json
+    required: false
+    position: 1
+    config: {}

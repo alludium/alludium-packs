@@ -20,6 +20,8 @@ AGENT_OUTPUT_ROOT = PACK_ROOT / "agents"
 TASK_OUTPUT_ROOT = PACK_ROOT / "tasks"
 BLUEPRINT_OUTPUT_ROOT = PACK_ROOT / "project-blueprints"
 MANIFEST_PATH = PACK_ROOT / "alludium" / "manifest.yaml"
+DOCUMENT_CATALOG_PATH = PACK_ROOT / "alludium" / "documents" / "catalog.v1.json"
+SKILL_ROOT = PACK_ROOT / "skills"
 
 PLATFORM_TASK_DEFINITIONS: dict[str, dict[str, str]] = {
     "project-source-choice": {
@@ -46,12 +48,30 @@ PLATFORM_TASK_DEFINITIONS: dict[str, dict[str, str]] = {
 
 GENERAL_TASK_SLUGS_BY_PROJECT_TYPE: dict[str, list[str]] = {
     "vc_deal_room": [
-        "prepare-initial-call",
+        "prepare-meeting",
         "request-founder-materials",
-        "summarize-initial-call",
+        "summarize-meeting-records",
         "review-opportunity-status",
     ],
 }
+
+SUPPORT_BLUEPRINT_CATEGORIES: dict[str, dict[str, str]] = {
+    "integration_support": {
+        "label": "Integration Support",
+        "description": (
+            "Connector discovery, preview, and read-only integration support tasks used to configure or inspect "
+            "source surfaces without making them part of the VC workflow."
+        ),
+    },
+    "pipeline_management": {
+        "label": "Pipeline Management",
+        "description": (
+            "VC-specific operating and management tasks that support pipeline health, source operations, or review "
+            "artifacts outside the candidate workflow."
+        ),
+    },
+}
+SUPPORT_BLUEPRINT_CATEGORY_ORDER = ["integration_support", "pipeline_management"]
 
 
 def fail(message: str) -> None:
@@ -151,6 +171,47 @@ def title_from_key(value: str) -> str:
     return value.replace("_", " ").replace("-", " ").title()
 
 
+DOCUMENT_REF_CONTRACT_RE = re.compile(
+    r"\s*Use `definitionJson\.documentRefs` as the durable document reference contract\..*?"
+    r"(?:For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID "
+    r"alongside the output artifact\.|and `operating_guidance` constrains process and approval boundaries\.)",
+    re.DOTALL,
+)
+OUTPUT_FIELD_ATTACHMENT_RE = re.compile(r"\s+and attach it to the required output field `[^`]+`")
+OUTPUT_FIELDS_ATTACHMENT_RE = re.compile(
+    r",?\s+and attach (?:it|them) to the required output fields? `[^.]+?\.",
+)
+PROJECT_CREATION_FIELD_RE = re.compile(r"`projectCreation\.fieldValues\.([a-z0-9_]+)`")
+SNAKE_FIELD_REF_RE = re.compile(r"`([a-z][a-z0-9_]+)`")
+UNQUOTED_FIELD_REF_RE = re.compile(
+    r"\b([a-z][a-z0-9_]*(?:_artifact_ids?|_name|_notes|_url|_urls|_registry|_policy))\b"
+)
+
+
+def human_field_label(value: str) -> str:
+    label = title_from_key(value)
+    label = label.replace(" Artifact Ids", " Artifacts")
+    label = label.replace(" Artifact Id", " Artifact")
+    return label.lower()
+
+
+def clean_task_prompt_text(value: str) -> str:
+    """Remove platform contract language from generated task prompts."""
+    text = DOCUMENT_REF_CONTRACT_RE.sub("", value)
+    text = OUTPUT_FIELDS_ATTACHMENT_RE.sub(".", text)
+    text = OUTPUT_FIELD_ATTACHMENT_RE.sub("", text)
+    text = PROJECT_CREATION_FIELD_RE.sub(lambda match: title_from_key(match.group(1)).lower(), text)
+    text = SNAKE_FIELD_REF_RE.sub(lambda match: human_field_label(match.group(1)), text)
+    text = UNQUOTED_FIELD_REF_RE.sub(lambda match: human_field_label(match.group(1)), text)
+    text = text.replace("Complete with structured output", "Capture")
+    text = text.replace("Guided project creation output includes", "Guided project creation captures")
+    text = text.replace("durable project file artifact", "polished Word-ready document")
+    text = text.replace("durable management task file artifact", "polished Word-ready document")
+    text = text.replace("durable file artifact", "polished Word-ready document")
+    text = re.sub(r"\s{2,}", " ", text)
+    return text.strip()
+
+
 def field_table(fields: list[dict[str, Any]]) -> str:
     if not fields:
         return "None declared.\n"
@@ -169,19 +230,100 @@ def task_link(slug: str, title: str | None = None) -> str:
     return f"[{label}](../tasks/{slug}.md)"
 
 
-def agent_link(agent_id: str | None, agent_names: dict[str, str]) -> str:
+def agent_link(agent_id: str | None, agent_templates: dict[str, dict[str, Any]]) -> str:
     if not agent_id:
         return "None declared"
-    label = markdown_escape(agent_names.get(agent_id, title_from_key(agent_id)))
+    template = agent_templates.get(agent_id, {})
+    name = template.get("name") if isinstance(template, dict) else None
+    label = markdown_escape(name if isinstance(name, str) else title_from_key(agent_id))
     return f"[{label}](../agents/{slugify(agent_id)}.md)"
 
 
-def skill_links(skills: list[str]) -> str:
+def skill_links(skills: list[str], skill_names: dict[str, str] | None = None) -> str:
     if not skills:
         return "None declared"
+    names = skill_names or {}
     return "<br>".join(
-        f"[`{markdown_escape(skill)}`](../skills/{skill}/SKILL.md)" for skill in skills
+        f"[{markdown_escape(names.get(skill, skill))}](../skills/{skill}/SKILL.md)" for skill in skills
     )
+
+
+def document_refs_inline(refs: Any, documents: dict[str, dict[str, str]]) -> str:
+    if not isinstance(refs, list) or not refs:
+        return "None declared"
+    lines: list[str] = []
+    for ref in refs:
+        if not isinstance(ref, dict):
+            continue
+        document_id = ref.get("documentId")
+        if not isinstance(document_id, str) or not document_id:
+            continue
+        document = documents.get(document_id, {})
+        document_title = document.get("title")
+        document_label = markdown_escape(document_title if isinstance(document_title, str) else document_id)
+        document_path = document.get("path")
+        if isinstance(document_path, str) and document_path:
+            document_label = f"[{document_label}](../alludium/documents/{markdown_escape(document_path)})"
+        suffix_parts: list[str] = []
+        usage = ref.get("usage")
+        if isinstance(usage, str) and usage:
+            suffix_parts.append(usage)
+        output_field_key = ref.get("outputFieldKey")
+        if isinstance(output_field_key, str) and output_field_key:
+            suffix_parts.append(f"to `{markdown_escape(output_field_key)}`")
+        suffix = f" ({', '.join(suffix_parts)})" if suffix_parts else ""
+        lines.append(f"{document_label}{suffix}")
+    return "<br>".join(lines) if lines else "None declared"
+
+
+def integration_refs_inline(
+    definition_json: dict[str, Any],
+    task: dict[str, Any],
+    agent_id: str | None,
+    agent_templates: dict[str, dict[str, Any]],
+    integration_refs_by_task_id: dict[str, list[str]],
+) -> str:
+    refs: list[str] = []
+
+    def add_ref(value: Any) -> None:
+        if isinstance(value, str) and value and value not in refs:
+            refs.append(value)
+
+    task_id = task.get("id")
+    if isinstance(task_id, str):
+        for ref in integration_refs_by_task_id.get(task_id, []):
+            add_ref(ref)
+
+    integration_setup = definition_json.get("integrationSetup")
+    if isinstance(integration_setup, dict):
+        add_ref(integration_setup.get("applicationExternalId"))
+
+    runtime = task.get("runtime")
+    if isinstance(runtime, dict):
+        default_context = runtime.get("defaultExecutionContext")
+        if isinstance(default_context, dict):
+            source_metadata = default_context.get("sourceMetadata")
+            if isinstance(source_metadata, dict):
+                add_ref(source_metadata.get("integrationKey"))
+        required_resources = runtime.get("requiredResources")
+        if isinstance(required_resources, dict):
+            for application in required_resources.get("requiredApplications", []):
+                if isinstance(application, dict):
+                    add_ref(application.get("applicationExternalId"))
+
+    mcp_servers = definition_json.get("mcpServers")
+    if isinstance(mcp_servers, dict):
+        for server_name in mcp_servers:
+            add_ref(server_name)
+
+    if isinstance(agent_id, str):
+        agent_template = agent_templates.get(agent_id, {})
+        agent_mcp_servers = agent_template.get("mcpServers") if isinstance(agent_template, dict) else None
+        if isinstance(agent_mcp_servers, dict):
+            for server_name in agent_mcp_servers:
+                add_ref(server_name)
+
+    return "<br>".join(f"`{markdown_escape(ref)}`" for ref in refs) if refs else "None declared"
 
 
 def action_list(actions: list[dict[str, Any]]) -> str:
@@ -217,6 +359,86 @@ def document_ref_list(refs: Any) -> str:
             suffix += f" -> `{output_field_key}`"
         lines.append(f"- `{document_id}`{suffix}\n")
     return "".join(lines) if lines else "- None declared\n"
+
+
+def document_guidance_list(refs: Any, documents: dict[str, dict[str, str]]) -> str:
+    if not isinstance(refs, list) or not refs:
+        return "- Use the evidence and context supplied with the task.\n"
+    lines: list[str] = []
+    for ref in refs:
+        if not isinstance(ref, dict):
+            continue
+        document_id = ref.get("documentId")
+        if not isinstance(document_id, str) or not document_id:
+            continue
+        document = documents.get(document_id, {})
+        title = document.get("title") if isinstance(document.get("title"), str) else document_id
+        path = document.get("path")
+        label = markdown_escape(title)
+        if isinstance(path, str) and path:
+            label = f"[{label}](../alludium/documents/{markdown_escape(path)})"
+        usage = ref.get("usage")
+        if usage == "output_template":
+            guidance = "Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler."
+        elif usage == "methodology":
+            guidance = "Use as the analysis method."
+        elif usage == "checklist":
+            guidance = "Complete as a checklist with status, evidence, owner, and open items."
+        elif usage == "style_guide":
+            guidance = "Follow for citations, claim language, assumptions, and evidence quality."
+        elif usage in {"operating_guidance", "policy"}:
+            guidance = "Follow for process boundaries and review standards."
+        else:
+            guidance = "Use as relevant supporting guidance."
+        lines.append(f"- {label}: {guidance}\n")
+    return "".join(lines) if lines else "- Use the evidence and context supplied with the task.\n"
+
+
+def input_context_list(fields: list[dict[str, Any]]) -> str:
+    named_fields = [
+        field.get("name")
+        for field in fields
+        if isinstance(field.get("name"), str) and field.get("name")
+    ]
+    if not named_fields:
+        return "- Use the context, files, notes, links, and prior artifacts attached to the task.\n"
+    lines = [
+        "- Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.\n",
+        "- Especially look for: " + ", ".join(named_fields) + ".\n",
+        "- If a named input is absent, follow the missing-input policy rather than inventing facts.\n",
+    ]
+    return "".join(lines)
+
+
+def deliverable_list(output_fields: list[dict[str, Any]]) -> str:
+    file_outputs = [
+        field.get("name")
+        for field in output_fields
+        if field.get("fieldType") == "file" and isinstance(field.get("name"), str) and field.get("name")
+    ]
+    non_file_outputs = [
+        field.get("name")
+        for field in output_fields
+        if field.get("fieldType") != "file" and isinstance(field.get("name"), str) and field.get("name")
+    ]
+    lines: list[str] = []
+    if file_outputs:
+        for name in file_outputs:
+            lines.append(
+                f"- Create or update **{markdown_escape(name)}** as a polished Word-ready document. "
+                "The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.\n"
+            )
+    else:
+        lines.append("- Produce a concise, reviewable task response that a human can act on.\n")
+    if non_file_outputs:
+        lines.append(
+            "- Also include a short human-readable summary covering: "
+            + ", ".join(markdown_escape(name) for name in non_file_outputs[:8])
+        )
+        if len(non_file_outputs) > 8:
+            lines[-1] += ", and other task-specific status fields"
+        lines[-1] += ". Do not output raw JSON unless the user explicitly asks for machine-readable data.\n"
+    return "".join(lines)
 
 
 def skill_ids_from_agent(template: dict[str, Any]) -> list[str]:
@@ -375,14 +597,20 @@ def render_task(path: Path) -> tuple[Path, str]:
     if not isinstance(instructions, dict):
         fail(f"{path.relative_to(PACK_ROOT)} definition.definitionJson.instructions must be an object")
 
-    execution = require_string(instructions.get("executionInstructions"), f"{path.name}.executionInstructions")
-    missing_input = optional_string(
-        instructions.get("missingInputPolicy"),
-        "No separate missing-input policy is declared. Follow the execution instructions and ask only when needed.",
+    execution = clean_task_prompt_text(
+        require_string(instructions.get("executionInstructions"), f"{path.name}.executionInstructions")
     )
-    external_action = optional_string(
-        instructions.get("externalActionPolicy"),
-        "No separate external-action policy is declared. Do not take external or persistent actions unless the task instructions explicitly allow them.",
+    missing_input = clean_task_prompt_text(
+        optional_string(
+            instructions.get("missingInputPolicy"),
+            "No separate missing-input policy is declared. Follow the execution instructions and ask only when needed.",
+        )
+    )
+    external_action = clean_task_prompt_text(
+        optional_string(
+            instructions.get("externalActionPolicy"),
+            "No separate external-action policy is declared. Do not take external or persistent actions unless the task instructions explicitly allow them.",
+        )
     )
     completion = instructions.get("completionCriteria")
     if not isinstance(completion, list):
@@ -398,13 +626,8 @@ def render_task(path: Path) -> tuple[Path, str]:
 
     recommended_agent = definition_json.get("recommendedAgentTemplate")
     recommended_agent_name = slugify(recommended_agent) if isinstance(recommended_agent, str) else None
-    planned_agent = definition_json.get("plannedRecommendedAgentTemplate")
-    planned_agent_name = slugify(planned_agent) if isinstance(planned_agent, str) else None
     required_skills = string_list(definition_json.get("requiredSkills"))
-    planned_skills = string_list(definition_json.get("plannedRequiredSkills"))
     human_decisions = string_list(definition_json.get("humanDecisionPoints"))
-    project_types = string_list(definition_json.get("supportedProjectTypes"))
-    project_scopes = string_list(definition_json.get("supportedProjectScopes"))
 
     frontmatter: dict[str, Any] = {
         "id": template_id,
@@ -419,67 +642,43 @@ def render_task(path: Path) -> tuple[Path, str]:
     body = yaml_frontmatter(frontmatter)
     body += generated_notice(path)
     body += f"# {title}\n\n"
+    body += "## Objective\n\n"
     body += f"{description}\n\n"
-    body += "## Instructions\n\n"
+    body += "## What To Do\n\n"
     body += execution.strip() + "\n\n"
-    body += "## Missing Input Policy\n\n"
-    body += missing_input.strip() + "\n\n"
-    body += "## External Action Policy\n\n"
-    body += external_action.strip() + "\n\n"
-    body += "## Completion Criteria\n\n"
-    body += plain_bullet_list([str(item) for item in completion if isinstance(item, str)])
-    body += "\n## Human Decision Points\n\n"
-    body += plain_bullet_list(human_decisions)
-    body += "\n## Inputs\n\n"
-    body += field_table(input_dicts)
-    if context_dicts:
-        body += "\n## Context Fields\n\n"
-        body += field_table(context_dicts)
-    body += "\n## Outputs\n\n"
-    body += field_table(output_dicts)
+    body += "## Available Context\n\n"
+    body += input_context_list(input_dicts + context_dicts)
     document_refs = definition_json.get("documentRefs")
     if isinstance(document_refs, list) and document_refs:
-        body += "\n## Document References\n\n"
-        body += document_ref_list(document_refs)
-    body += "\n## Routing\n\n"
-    body += f"- Source template: `alludium/task-definition-templates/{path.relative_to(TASK_TEMPLATE_ROOT)}`\n"
-    body += f"- Alludium task ID: `{template_id}`\n"
-    body += f"- Task family: `{definition_json.get('taskFamily', 'unknown')}`\n"
-    if isinstance(definition_json.get("stage"), str):
-        body += f"- Lifecycle stage: `{definition_json['stage']}`\n"
-    if recommended_agent_name is not None:
-        body += f"- Recommended agent: `{recommended_agent_name}`"
-        if isinstance(recommended_agent, str):
-            body += f" (Alludium template `{recommended_agent}`)"
-        body += "\n"
-    if planned_agent_name is not None and planned_agent_name != recommended_agent_name:
-        body += f"- Planned recommended agent: `{planned_agent_name}`"
-        if isinstance(planned_agent, str):
-            body += f" (Alludium template `{planned_agent}`)"
-        body += "\n"
-    body += "- Supported project types:\n"
-    body += "".join(f"  - `{value}`\n" for value in project_types) if project_types else "  - None declared\n"
-    if project_scopes:
-        body += "- Supported project scopes:\n"
-        body += "".join(f"  - `{value}`\n" for value in project_scopes)
-    body += "\n## Required Skills\n\n"
-    body += bullet_list(required_skills)
-    if planned_skills:
-        body += "\n## Planned Skills\n\n"
-        body += bullet_list(planned_skills)
+        documents = load_document_metadata()
+        body += "\n## Reference Materials\n\n"
+        body += document_guidance_list(document_refs, documents)
+    body += "\n## Deliverable\n\n"
+    body += deliverable_list(output_dicts)
+    body += "\n## Missing Input Policy\n\n"
+    body += missing_input.strip() + "\n\n"
+    body += "## Guardrails\n\n"
+    body += external_action.strip() + "\n\n"
+    body += "## Completion Criteria\n\n"
+    body += plain_bullet_list(
+        [clean_task_prompt_text(str(item)) for item in completion if isinstance(item, str)]
+    )
+    if human_decisions:
+        body += "\n## Human Review\n\n"
+        body += plain_bullet_list(human_decisions)
 
     methodology_skills = definition_json.get("workspaceConfiguredMethodologySkills")
     if isinstance(methodology_skills, list) and methodology_skills:
-        body += "\n## Workspace-Configured Methodology Skills\n\n"
+        body += "\n## Workspace Methodology\n\n"
         for skill in methodology_skills:
             if isinstance(skill, dict) and isinstance(skill.get("skill"), str):
                 note = skill.get("note")
-                body += f"- `{skill['skill']}`"
+                body += f"- Use the workspace-configured {markdown_escape(title_from_key(skill['skill']))} methodology"
                 if isinstance(note, str) and note:
-                    body += f": {note}"
+                    body += f" when applicable: {note}"
                 body += "\n"
             elif isinstance(skill, str):
-                body += f"- `{skill}`\n"
+                body += f"- Use the workspace-configured {markdown_escape(title_from_key(skill))} methodology when applicable.\n"
 
     return TASK_OUTPUT_ROOT / f"{slug}.md", body
 
@@ -501,6 +700,7 @@ def load_task_templates() -> tuple[dict[str, dict[str, Any]], dict[str, dict[str
                 definition.get("definitionJson"),
                 f"{path.relative_to(PACK_ROOT)}.definition.definitionJson",
             ),
+            "runtime": template.get("runtime") if isinstance(template.get("runtime"), dict) else {},
         }
         if slug in by_slug:
             fail(f"Duplicate task definition slug in YAML: {slug}")
@@ -511,19 +711,115 @@ def load_task_templates() -> tuple[dict[str, dict[str, Any]], dict[str, dict[str
     return by_slug, by_id
 
 
-def load_agent_names() -> dict[str, str]:
-    names: dict[str, str] = {}
+def collect_integration_refs_by_task_id(task_by_slug: dict[str, dict[str, Any]]) -> dict[str, list[str]]:
+    refs_by_task_id: dict[str, list[str]] = {}
+
+    def add_ref(task_id: Any, ref: Any) -> None:
+        if not isinstance(task_id, str) or not task_id:
+            return
+        if not isinstance(ref, str) or not ref:
+            return
+        refs = refs_by_task_id.setdefault(task_id, [])
+        if ref not in refs:
+            refs.append(ref)
+
+    for task in task_by_slug.values():
+        definition_json = task.get("definitionJson")
+        if not isinstance(definition_json, dict):
+            continue
+        integration_setup = definition_json.get("integrationSetup")
+        if not isinstance(integration_setup, dict):
+            continue
+        application_external_id = integration_setup.get("applicationExternalId")
+        add_ref(task.get("id"), application_external_id)
+        child_task_ids = integration_setup.get("childTaskDefinitionTemplateIds")
+        if isinstance(child_task_ids, dict):
+            for child_task_id in child_task_ids.values():
+                add_ref(child_task_id, application_external_id)
+        default_flow = integration_setup.get("defaultFlow")
+        if isinstance(default_flow, list):
+            for step in default_flow:
+                if isinstance(step, dict):
+                    add_ref(step.get("taskDefinitionTemplateId"), application_external_id)
+
+    return refs_by_task_id
+
+
+def load_agent_templates() -> dict[str, dict[str, Any]]:
+    templates: dict[str, dict[str, Any]] = {}
     for path in sorted(AGENT_TEMPLATE_ROOT.glob("*.yaml")):
         template = read_yaml(path)
         agent_id = require_string(template.get("id"), f"{path.relative_to(PACK_ROOT)}.id")
-        names[agent_id] = require_string(template.get("name"), f"{path.relative_to(PACK_ROOT)}.name")
+        require_string(template.get("name"), f"{path.relative_to(PACK_ROOT)}.name")
+        templates[agent_id] = template
+    return templates
+
+
+def load_document_paths() -> dict[str, str]:
+    catalog = read_json(DOCUMENT_CATALOG_PATH)
+    documents = catalog.get("documents")
+    if not isinstance(documents, list):
+        fail(f"{DOCUMENT_CATALOG_PATH.relative_to(PACK_ROOT)} documents must be a list")
+    paths: dict[str, str] = {}
+    for document in documents:
+        if not isinstance(document, dict):
+            continue
+        document_id = document.get("id")
+        document_path = document.get("path")
+        if isinstance(document_id, str) and isinstance(document_path, str):
+            paths[document_id] = document_path
+    return paths
+
+
+def load_document_metadata() -> dict[str, dict[str, str]]:
+    catalog = read_json(DOCUMENT_CATALOG_PATH)
+    documents = catalog.get("documents")
+    if not isinstance(documents, list):
+        fail(f"{DOCUMENT_CATALOG_PATH.relative_to(PACK_ROOT)} documents must be a list")
+    metadata: dict[str, dict[str, str]] = {}
+    for document in documents:
+        if not isinstance(document, dict):
+            continue
+        document_id = document.get("id")
+        document_path = document.get("path")
+        title = document.get("title")
+        if isinstance(document_id, str):
+            metadata[document_id] = {
+                "path": document_path if isinstance(document_path, str) else "",
+                "title": title if isinstance(title, str) else document_id,
+            }
+    return metadata
+
+
+def load_skill_names() -> dict[str, str]:
+    names: dict[str, str] = {}
+    for path in sorted(SKILL_ROOT.glob("*/SKILL.md")):
+        text = path.read_text(encoding="utf-8")
+        if not text.startswith("---"):
+            continue
+        parts = text.split("---", 2)
+        if len(parts) < 3:
+            continue
+        try:
+            frontmatter = yaml.safe_load(parts[1]) or {}
+        except Exception:
+            continue
+        if not isinstance(frontmatter, dict):
+            continue
+        skill_id = frontmatter.get("id")
+        skill_name = frontmatter.get("name")
+        if isinstance(skill_id, str) and isinstance(skill_name, str):
+            names[skill_id] = skill_name
     return names
 
 
 def blueprint_task_row(
     slug: str,
     task_by_slug: dict[str, dict[str, Any]],
-    agent_names: dict[str, str],
+    agent_templates: dict[str, dict[str, Any]],
+    documents: dict[str, dict[str, str]],
+    skill_names: dict[str, str],
+    integration_refs_by_task_id: dict[str, list[str]],
     fallback_agent_id: str | None = None,
 ) -> str:
     task = task_by_slug.get(slug)
@@ -531,12 +827,12 @@ def blueprint_task_row(
         platform_task = PLATFORM_TASK_DEFINITIONS.get(slug)
         if platform_task is not None:
             return (
-                f"| {markdown_escape(platform_task['title'])} | {agent_link(fallback_agent_id, agent_names)} | "
-                f"None declared | `{markdown_escape(platform_task['id'])}` |\n"
+                f"| {markdown_escape(platform_task['title'])} | {agent_link(fallback_agent_id, agent_templates)} | "
+                "None declared | None declared | None declared |\n"
             )
         return (
-            f"| `{markdown_escape(slug)}` | {agent_link(fallback_agent_id, agent_names)} | "
-            "None declared | Pack task not found; likely platform-owned setup task. |\n"
+            f"| `{markdown_escape(slug)}` | {agent_link(fallback_agent_id, agent_templates)} | "
+            "None declared | None declared | None declared |\n"
         )
     definition_json = task["definitionJson"]
     agent_id = definition_json.get("recommendedAgentTemplate")
@@ -546,8 +842,9 @@ def blueprint_task_row(
         agent_id = fallback_agent_id
     skills = string_list(definition_json.get("requiredSkills"))
     return (
-        f"| {task_link(slug, task['title'])} | {agent_link(agent_id, agent_names)} | "
-        f"{skill_links(skills)} | `{markdown_escape(task['id'])}` |\n"
+        f"| {task_link(slug, task['title'])} | {agent_link(agent_id, agent_templates)} | "
+        f"{skill_links(skills, skill_names)} | {document_refs_inline(definition_json.get('documentRefs'), documents)} | "
+        f"{integration_refs_inline(definition_json, task, agent_id, agent_templates, integration_refs_by_task_id)} |\n"
     )
 
 
@@ -562,12 +859,20 @@ def collect_setup_task_slugs(project_type: dict[str, Any]) -> list[tuple[str, st
     collected: list[tuple[str, str | None]] = []
 
     def add_slug(value: Any, agent_id: str | None = fallback_agent) -> None:
+        if value in PLATFORM_TASK_DEFINITIONS:
+            return
         if isinstance(value, str) and value and (value, agent_id) not in collected:
             collected.append((value, agent_id))
 
     for step in setup.get("setupSteps", []):
         if isinstance(step, dict):
             add_slug(step.get("taskDefinitionSlug"))
+
+    project_creation = project_type.get("projectCreation")
+    if isinstance(project_creation, dict):
+        guided_task = project_creation.get("guidedTask")
+        if isinstance(guided_task, dict):
+            add_slug(guided_task.get("taskDefinitionSlug"))
 
     for key in ["defaultChildTask", "variableDiscoveryTask"]:
         item = setup.get(key)
@@ -577,6 +882,14 @@ def collect_setup_task_slugs(project_type: dict[str, Any]) -> list[tuple[str, st
     for task in setup.get("sourceSetupTasks", []):
         if isinstance(task, dict):
             add_slug(task.get("taskDefinitionSlug"))
+
+    post_approval_actions = setup.get("postApprovalActions")
+    if isinstance(post_approval_actions, dict):
+        import_projects = post_approval_actions.get("importProjects")
+        if isinstance(import_projects, dict):
+            project_import_task = import_projects.get("projectImportTask")
+            if isinstance(project_import_task, dict):
+                add_slug(project_import_task.get("taskDefinitionSlug"))
 
     return collected
 
@@ -649,16 +962,53 @@ def collect_management_task_slugs(
     return collected
 
 
+def support_blueprint_category(task: dict[str, Any]) -> str:
+    definition_json = task.get("definitionJson")
+    if isinstance(definition_json, dict):
+        category = definition_json.get("blueprintCategory")
+        if isinstance(category, str) and category in SUPPORT_BLUEPRINT_CATEGORIES:
+            return category
+
+    path = task.get("path")
+    if isinstance(path, Path) and path.parent.name == "vc-integrations":
+        return "integration_support"
+
+    return "pipeline_management"
+
+
+def group_support_task_rows(
+    rows: list[tuple[str, str | None]],
+    task_by_slug: dict[str, dict[str, Any]],
+) -> dict[str, list[tuple[str, str | None]]]:
+    grouped: dict[str, list[tuple[str, str | None]]] = {}
+    for slug, fallback_agent in rows:
+        task = task_by_slug.get(slug)
+        category = support_blueprint_category(task) if isinstance(task, dict) else "pipeline_management"
+        grouped.setdefault(category, []).append((slug, fallback_agent))
+    return grouped
+
+
 def blueprint_task_table(
     rows: list[tuple[str, str | None]],
     task_by_slug: dict[str, dict[str, Any]],
-    agent_names: dict[str, str],
+    agent_templates: dict[str, dict[str, Any]],
+    documents: dict[str, dict[str, str]],
+    skill_names: dict[str, str],
+    integration_refs_by_task_id: dict[str, list[str]],
 ) -> str:
-    body = "| Task | Agent | Skills | Task ID |\n| --- | --- | --- | --- |\n"
+    body = "| Task | Agent | Skills | Documents | Integrations |\n| --- | --- | --- | --- | --- |\n"
     if not rows:
-        return body + "| None mapped | None declared | None declared |  |\n"
+        return body + "| None mapped | None declared | None declared | None declared | None declared |\n"
     body += "".join(
-        blueprint_task_row(slug, task_by_slug, agent_names, fallback_agent)
+        blueprint_task_row(
+            slug,
+            task_by_slug,
+            agent_templates,
+            documents,
+            skill_names,
+            integration_refs_by_task_id,
+            fallback_agent,
+        )
         for slug, fallback_agent in rows
     )
     return body
@@ -667,13 +1017,16 @@ def blueprint_task_table(
 def render_blueprint(
     project_type_path: Path,
     task_by_slug: dict[str, dict[str, Any]],
-    agent_names: dict[str, str],
+    agent_templates: dict[str, dict[str, Any]],
+    documents: dict[str, dict[str, str]],
+    skill_names: dict[str, str],
 ) -> tuple[Path, str]:
     project_type = read_json(project_type_path)
     project_key = require_string(project_type.get("key"), f"{project_type_path.name}.key")
     project_name = require_string(project_type.get("name"), f"{project_type_path.name}.name")
     description = require_string(project_type.get("description"), f"{project_type_path.name}.description")
     initial_version = require_mapping(project_type.get("initialVersion"), f"{project_type_path.name}.initialVersion")
+    integration_refs = collect_integration_refs_by_task_id(task_by_slug)
 
     frontmatter = {
         "projectType": project_key,
@@ -685,39 +1038,97 @@ def render_blueprint(
     body += f"# {project_name} Blueprint\n\n"
     body += f"{description}\n\n"
     body += (
-        "This blueprint lists setup, general, management, and lifecycle-stage tasks with the recommended "
-        "agents and task-referenced skills for this project type. Setup, General, and Management are "
-        "blueprint categories rather than lifecycle states.\n\n"
+        "This blueprint lists setup, support, and workflow-stage tasks with the recommended agents, "
+        "task-referenced skills, document references, and integration surfaces for this project type. "
+        "General and support sections are included only when they contain cross-cutting tasks that "
+        "are not already mapped to a workflow stage.\n\n"
     )
-
-    setup_rows = collect_setup_task_slugs(project_type)
-    general_rows = collect_general_task_slugs(project_key, task_by_slug)
-    setup_slugs = {slug for slug, _agent_id in setup_rows}
-    general_slugs = {slug for slug, _agent_id in general_rows}
-    management_rows = collect_management_task_slugs(
-        project_key,
-        project_type,
-        task_by_slug,
-        setup_slugs | general_slugs,
-    )
-    management_slugs = {slug for slug, _agent_id in management_rows}
-
-    body += "## Setup\n\n"
-    body += "Project-type setup and configuration tasks used before normal project execution.\n\n"
-    body += blueprint_task_table(setup_rows, task_by_slug, agent_names)
-
-    body += "\n## General\n\n"
-    body += "Reusable project-instance tasks that can be useful across multiple lifecycle stages.\n\n"
-    body += blueprint_task_table(general_rows, task_by_slug, agent_names)
-
-    body += "\n## Management\n\n"
-    body += "Project-management tasks that operate across a project suite, source pipeline, or recurring sync/reporting flow.\n\n"
-    body += blueprint_task_table(management_rows, task_by_slug, agent_names)
 
     mappings = initial_version.get("projectTaskMappings")
     if not isinstance(mappings, list):
         mappings = []
-    blueprint_category_slugs = setup_slugs | general_slugs | management_slugs
+    stage_definitions = [
+        definition
+        for definition in initial_version.get("stageDefinitions", [])
+        if isinstance(definition, dict) and isinstance(definition.get("key"), str)
+    ]
+    stage_definition_by_key = {definition["key"]: definition for definition in stage_definitions}
+    lifecycle_states = initial_version.get("lifecycleStates")
+    defined_stage_order = [definition["key"] for definition in stage_definitions]
+    rendered_stage_order = (
+        defined_stage_order
+        if defined_stage_order
+        else [state for state in lifecycle_states if isinstance(state, str)] if isinstance(lifecycle_states, list) else []
+    )
+    rendered_stage_keys = set(rendered_stage_order)
+    project_creation = project_type.get("projectCreation")
+    guided_task_slug = None
+    if isinstance(project_creation, dict):
+        guided_task = project_creation.get("guidedTask")
+        if isinstance(guided_task, dict) and isinstance(guided_task.get("taskDefinitionSlug"), str):
+            guided_task_slug = guided_task["taskDefinitionSlug"]
+    guided_task_has_workflow_stage = any(
+        mapping.get("taskDefinitionSlug") == guided_task_slug
+        and mapping.get("lifecycleStage") in rendered_stage_keys
+        for mapping in mappings
+        if isinstance(mapping, dict)
+    )
+
+    setup_rows = collect_setup_task_slugs(project_type)
+    if guided_task_has_workflow_stage:
+        setup_rows = [
+            (slug, fallback_agent)
+            for slug, fallback_agent in setup_rows
+            if slug != guided_task_slug
+        ]
+    general_rows = collect_general_task_slugs(project_key, task_by_slug)
+    setup_slugs = {slug for slug, _agent_id in setup_rows}
+    general_slugs = {slug for slug, _agent_id in general_rows}
+    lifecycle_stage_mapped_slugs = {
+        slug
+        for mapping in mappings
+        if isinstance(mapping, dict)
+        for slug in [mapping.get("taskDefinitionSlug")]
+        if isinstance(slug, str) and slug
+        and mapping.get("lifecycleStage") in rendered_stage_keys
+    }
+    management_rows = collect_management_task_slugs(
+        project_key,
+        project_type,
+        task_by_slug,
+        setup_slugs | general_slugs | lifecycle_stage_mapped_slugs,
+    )
+
+    body += "## Setup\n\n"
+    body += "Project-type setup and configuration tasks used before normal project execution.\n\n"
+    body += blueprint_task_table(setup_rows, task_by_slug, agent_templates, documents, skill_names, integration_refs)
+
+    if general_rows:
+        body += "\n## General\n\n"
+        body += "Reusable project-instance tasks that can be useful across multiple lifecycle stages.\n\n"
+        body += blueprint_task_table(general_rows, task_by_slug, agent_templates, documents, skill_names, integration_refs)
+
+    support_rows_by_category = group_support_task_rows(management_rows, task_by_slug)
+    for category in SUPPORT_BLUEPRINT_CATEGORY_ORDER:
+        rows = support_rows_by_category.pop(category, [])
+        if not rows:
+            continue
+        metadata = SUPPORT_BLUEPRINT_CATEGORIES[category]
+        body += f"\n## {metadata['label']}\n\n"
+        body += f"{metadata['description']}\n\n"
+        body += blueprint_task_table(rows, task_by_slug, agent_templates, documents, skill_names, integration_refs)
+    for category, rows in sorted(support_rows_by_category.items()):
+        if not rows:
+            continue
+        metadata = SUPPORT_BLUEPRINT_CATEGORIES.get(category)
+        label = metadata["label"] if isinstance(metadata, dict) else title_from_key(category)
+        description = metadata.get("description") if isinstance(metadata, dict) else None
+        body += f"\n## {label}\n\n"
+        if isinstance(description, str) and description:
+            body += f"{description}\n\n"
+        body += blueprint_task_table(rows, task_by_slug, agent_templates, documents, skill_names, integration_refs)
+
+    blueprint_category_slugs = setup_slugs | general_slugs
     mappings_by_stage: dict[str, list[str]] = {}
     for mapping in mappings:
         if not isinstance(mapping, dict):
@@ -736,22 +1147,27 @@ def render_blueprint(
             stage = "general"
         mappings_by_stage.setdefault(stage, []).append(slug)
 
-    lifecycle_states = initial_version.get("lifecycleStates")
-    stage_order = [state for state in lifecycle_states if isinstance(state, str)] if isinstance(lifecycle_states, list) else []
-    for stage in sorted(mappings_by_stage):
-        if stage not in stage_order and stage != "general":
-            stage_order.append(stage)
+    stage_order = list(rendered_stage_order)
+    if not defined_stage_order:
+        for stage in sorted(mappings_by_stage):
+            if stage not in stage_order and stage != "general":
+                stage_order.append(stage)
     if "general" in mappings_by_stage:
         stage_order.insert(0, "general")
 
     for stage in stage_order:
-        body += f"\n## {title_from_key(stage)}\n\n"
-        body += "| Task | Agent | Skills | Task ID |\n| --- | --- | --- | --- |\n"
+        stage_definition = stage_definition_by_key.get(stage, {})
+        stage_label = stage_definition.get("label") if isinstance(stage_definition, dict) else None
+        stage_description = stage_definition.get("description") if isinstance(stage_definition, dict) else None
+        body += f"\n## {markdown_escape(stage_label if isinstance(stage_label, str) else title_from_key(stage))}\n\n"
+        if isinstance(stage_description, str) and stage_description:
+            body += f"{markdown_escape(stage_description)}\n\n"
+        body += "| Task | Agent | Skills | Documents | Integrations |\n| --- | --- | --- | --- | --- |\n"
         rows = [
-            blueprint_task_row(slug, task_by_slug, agent_names)
+            blueprint_task_row(slug, task_by_slug, agent_templates, documents, skill_names, integration_refs)
             for slug in mappings_by_stage.get(stage, [])
         ]
-        body += "".join(rows) if rows else "| None mapped | None declared | None declared |  |\n"
+        body += "".join(rows) if rows else "| None mapped | None declared | None declared | None declared | None declared |\n"
 
     return BLUEPRINT_OUTPUT_ROOT / f"{slugify(project_key)}.md", body
 
@@ -852,7 +1268,9 @@ def expected_outputs() -> dict[Path, str]:
         fail(f"Task template YAML present on disk but missing from manifest: {extra_task_ids}")
 
     task_by_slug, _task_by_id = load_task_templates()
-    agent_names = load_agent_names()
+    agent_templates = load_agent_templates()
+    documents = load_document_metadata()
+    skill_names = load_skill_names()
     discovered_project_paths = {
         path.name for path in PROJECT_TYPE_ROOT.glob("*.json") if path.name != "catalog.v1.json"
     }
@@ -864,7 +1282,7 @@ def expected_outputs() -> dict[Path, str]:
         path = PROJECT_TYPE_ROOT / f"{project_type_id}.json"
         if not path.exists():
             fail(f"Manifest project type missing JSON: {project_type_id}")
-        output_path, body = render_blueprint(path, task_by_slug, agent_names)
+        output_path, body = render_blueprint(path, task_by_slug, agent_templates, documents, skill_names)
         add_expected_output(outputs, sources, output_path, body, path)
 
     extra_project_paths = sorted(discovered_project_paths - declared_project_paths)

@@ -3,7 +3,7 @@ id: vc-affinity-discovery
 name: "VC Affinity Discovery"
 description: >
   Discover Affinity CRM lists, stages, field structure, and pipeline object counts
-  before proposing any VC Deal Room import or sync.
+  before proposing any Deal Pipeline import or sync.
 tags:
   - vc
   - affinity
@@ -62,7 +62,7 @@ Return:
 - `object_counts`: counts by list, stage, and object type when available
 - `field_inventory`: important fields, owners, source/referrer fields, and date fields
 - `sample_records_reviewed`: minimal approved samples only
-- `recommended_scope`: the list/source and stages that should be considered for VC Deal Room setup
+- `recommended_scope`: the list/source and stages that should be considered for Deal Pipeline setup
 - `scope_questions`: user choices needed before read sync or import
 
 ## Boundaries

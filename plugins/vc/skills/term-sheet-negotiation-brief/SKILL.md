@@ -75,7 +75,7 @@ Return:
 
 ## Tool Guidance
 
-Use document repositories, redline files, counsel notes, deal terms analysis, and Deal Room artifacts when available. Treat e-signature, document automation, and CRM systems as read/context surfaces unless a separate approved workflow handles mutations.
+Use document repositories, redline files, counsel notes, deal terms analysis, and Deal Pipeline artifacts when available. Treat e-signature, document automation, and CRM systems as read/context surfaces unless a separate approved workflow handles mutations.
 
 ## Boundaries
 
