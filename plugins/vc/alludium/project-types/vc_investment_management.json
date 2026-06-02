@@ -106,31 +106,8 @@
       "taskDefinitionSlug": "capture-investment-management-handoff"
     }
   },
-  "setupRequirements": [
-    {
-      "key": "vc_deal_room.affinity_connection",
-      "kind": "integration_connection",
-      "requirement": "required",
-      "label": "Affinity CRM connection readiness",
-      "integrationKey": "affinity-mcp-server",
-      "connectionBindingKey": "crm",
-      "readinessEvidenceKey": "affinity_connection_ready",
-      "summary": "Prove that the workspace has a connected Affinity recommendation before the Deal Pipeline configuration becomes enabled.",
-      "taskConfiguration": {
-        "sourceTaskKeys": [
-          "vc.affinity_setup"
-        ],
-        "runMode": "manual",
-        "syncScopeKeys": [
-          "affinity_lists",
-          "affinity_pipeline_stages"
-        ],
-        "notes": "The Affinity setup task owns reviewed, manual, side-effect-free discovery readiness for this slice."
-      }
-    }
-  ],
   "initialVersion": {
-    "version": "0.1.0",
+    "version": "0.1.1",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
