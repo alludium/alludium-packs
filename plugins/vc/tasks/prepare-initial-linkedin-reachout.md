@@ -38,7 +38,7 @@ Draft the first LinkedIn reachout for approved of-interest candidates or connect
 ## Deliverable
 
 - Create or update **Initial LinkedIn Reachout Artifact** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Initial Reachout Draft Count, Initial Reachout Summary. Do not output raw JSON unless the user explicitly asks for machine-readable data.
+- Also include a short human-readable summary covering: Initial Reachout Draft Count. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

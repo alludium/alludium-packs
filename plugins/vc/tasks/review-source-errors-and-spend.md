@@ -38,7 +38,7 @@ Review run receipts and degraded-source notes from the latest origination pass. 
 ## Deliverable
 
 - Create or update **Source Health Artifact** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Source Health Status, Source Error Count, Source Health Report. Do not output raw JSON unless the user explicitly asks for machine-readable data.
+- Also include a short human-readable summary covering: Source Health Status. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

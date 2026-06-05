@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.review_source_errors_and_spend
-version: 0.1.8
+version: 0.1.9
 title: Review Source Errors and Spend
 category: Venture Capital
 visibility: workspace
@@ -86,16 +86,3 @@ fields:
       required: false
       position: 1
       config: {}
-    - key: source_error_count
-      name: Source Error Count
-      fieldType: number
-      required: false
-      position: 2
-      config: {}
-    - key: source_health_report
-      name: Source Health Report
-      fieldType: richtext
-      required: false
-      position: 3
-      config:
-        rows: 8

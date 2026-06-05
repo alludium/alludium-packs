@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.coordinate_capital_call_and_completion
-version: 0.1.1
+version: 0.1.2
 title: Coordinate Capital Call And Completion
 category: Venture Capital
 visibility: workspace
@@ -124,86 +124,6 @@ fields:
     position: 0
     config:
       documentRefId: vc.document.completion_tracker_template
-  - key: capital_call_status_summary
-    name: Capital Call Status Summary
-    fieldType: richtext
-    required: false
-    position: 1
-    config:
-      rows: 4
-  - key: funds_transfer_readiness
-    name: Funds Transfer Readiness
-    fieldType: string
-    required: false
-    position: 2
-    config: {}
-  - key: share_certificate_receipt_status
-    name: Share Certificate Receipt Status
-    fieldType: string
-    required: false
-    position: 3
-    config: {}
-  - key: portfolio_handoff_trigger
-    name: Portfolio Handoff Trigger
-    fieldType: string
-    required: false
-    position: 4
-    config: {}
-  - key: summary
-    name: Summary
-    fieldType: richtext
-    required: false
-    position: 5
-    config:
-      rows: 5
-  - key: recommendation
-    name: Recommendation
-    fieldType: string
-    required: false
-    position: 6
-    config: {}
-  - key: source_links
-    name: Source Links
-    fieldType: string
-    required: false
-    position: 7
-    config: {}
-  - key: assumptions
-    name: Assumptions
-    fieldType: string
-    required: false
-    position: 8
-    config: {}
-  - key: evidence_quality
-    name: Evidence Quality
-    fieldType: json
-    required: false
-    position: 9
-    config: {}
-  - key: open_questions
-    name: Open Questions
-    fieldType: json
-    required: false
-    position: 10
-    config: {}
-  - key: risks
-    name: Risks
-    fieldType: json
-    required: false
-    position: 11
-    config: {}
-  - key: human_decision_points
-    name: Human Decision Points
-    fieldType: string
-    required: false
-    position: 12
-    config: {}
-  - key: next_actions
-    name: Next Actions
-    fieldType: json
-    required: false
-    position: 13
-    config: {}
 runtime:
   defaultExecutionContext:
     sourceMetadata:

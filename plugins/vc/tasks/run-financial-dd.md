@@ -41,7 +41,6 @@ Run financial diligence covering historicals, burn and runway, cap table, busine
 
 - Create or update **Financial DD Report** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
 - Create or update **Unit Economics Analysis** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Historicals Summary, Burn Runway Analysis, Cap Table Summary, Business Model Economics, Forecast Stress Test, Use Of Funds Assessment, Financial Risks, Summary, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

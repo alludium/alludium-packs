@@ -37,7 +37,6 @@ Map conditions precedent to available closing evidence, identify missing items a
 ## Deliverable
 
 - Create or update **Conditions Precedent Verification** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Cp Evidence Mapping, Missing Items, Blocker Severity, Counsel Review Recommendation, Signing Readiness, Summary, Recommendation, Source Links, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

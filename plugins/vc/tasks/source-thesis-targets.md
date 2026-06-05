@@ -39,7 +39,6 @@ Research thesis-aligned companies for the requested thesis area, geography, stag
 ## Deliverable
 
 - Create or update **Thesis Target List** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Target Company List, Fit Rationale, Source Links, Warm Intro Paths, Confidence Notes, Summary, Recommendation, Assumptions, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

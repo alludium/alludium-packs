@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.generate_diligence_questions
-version: 1.0.18
+version: 1.0.20
 title: Generate Diligence Questions
 category: Venture Capital
 visibility: workspace
@@ -112,91 +112,6 @@ fields:
       position: 0
       config:
         documentRefId: vc.document.investment_diligence_question_framework
-    - key: question_set
-      name: Question Set
-      fieldType: string
-      required: false
-      position: 1
-      config: {}
-    - key: rationale
-      name: Rationale
-      fieldType: string
-      required: false
-      position: 2
-      config: {}
-    - key: source_gap
-      name: Source Gap
-      fieldType: string
-      required: false
-      position: 3
-      config: {}
-    - key: owner
-      name: Owner
-      fieldType: string
-      required: false
-      position: 4
-      config: {}
-    - key: urgency
-      name: Urgency
-      fieldType: string
-      required: false
-      position: 5
-      config: {}
-    - key: summary
-      name: Summary
-      fieldType: richtext
-      required: false
-      position: 6
-      config:
-        rows: 5
-    - key: recommendation
-      name: Recommendation
-      fieldType: string
-      required: false
-      position: 7
-      config: {}
-    - key: source_links
-      name: Source Links
-      fieldType: string
-      required: false
-      position: 8
-      config: {}
-    - key: assumptions
-      name: Assumptions
-      fieldType: string
-      required: false
-      position: 9
-      config: {}
-    - key: evidence_quality
-      name: Evidence Quality
-      fieldType: json
-      required: false
-      position: 10
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: false
-      position: 11
-      config: {}
-    - key: risks
-      name: Risks
-      fieldType: json
-      required: false
-      position: 12
-      config: {}
-    - key: human_decision_points
-      name: Human Decision Points
-      fieldType: string
-      required: false
-      position: 13
-      config: {}
-    - key: next_actions
-      name: Next Actions
-      fieldType: json
-      required: false
-      position: 14
-      config: {}
 runtime:
   defaultExecutionContext:
     sourceMetadata:

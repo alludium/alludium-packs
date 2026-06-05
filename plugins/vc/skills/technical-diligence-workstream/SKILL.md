@@ -55,25 +55,25 @@ Create a source-grounded technical diligence view.
 4. Surface security, scalability, data, AI/ML, OSS, IP, and vendor-dependency concerns.
 5. Produce a technical scorecard and expert-review questions.
 
-## Output Contract
+## Artifact Sections
 
-Return the domain sections plus the evidence fields needed for safe human review:
+When the task produces a technical diligence artifact, include these sections inside that durable document rather than as separate task output fields unless the active task template explicitly defines matching fields:
 
-- `architecture_product_summary`
-- `technical_team_assessment`
-- `oss_licensing_ip_checks`
-- `ai_ml_risk_assessment`
-- `scalability_security_concerns`
-- `technical_scorecard`
-- `expert_review_questions`
-- `source_gaps`
-- `source_links`: source document names, repository references, URLs, expert notes, or dataset records used
-- `assumptions`: assumptions behind architecture, scalability, security, AI/ML, IP, and team conclusions
-- `confidence_and_evidence_quality`: high/medium/low confidence by major conclusion, with reason
-- `technical_risks`: prioritized risks and their evidence basis
-- `open_questions`: questions that need founder, expert, security, legal, or engineering review
-- `suggested_next_actions`: validation steps, owner suggestions, and required approvals
-- `human_review_prompts`: specialist-only or investor-only judgments
+- Architecture and product summary
+- Technical team assessment
+- OSS, licensing, and IP checks
+- AI/ML risk assessment
+- Scalability and security concerns
+- Technical scorecard
+- Expert-review questions
+- Source gaps
+- Source links: source document names, repository references, URLs, expert notes, or dataset records used
+- Assumptions behind architecture, scalability, security, AI/ML, IP, and team conclusions
+- Confidence and evidence quality by major conclusion, with reason
+- Technical risks with evidence basis
+- Open questions for founder, expert, security, legal, or engineering review
+- Suggested next actions with validation steps, owner suggestions, and required approvals
+- Human-review prompts for specialist-only or investor-only judgments
 
 ## Tool Guidance
 

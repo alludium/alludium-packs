@@ -38,7 +38,7 @@ Draft a second-touch email only for candidates with a recorded LinkedIn reachout
 ## Deliverable
 
 - Create or update **Second Reachout Email Artifact** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Second Reachout Draft Count, Second Reachout Summary. Do not output raw JSON unless the user explicitly asks for machine-readable data.
+- Also include a short human-readable summary covering: Second Reachout Draft Count. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

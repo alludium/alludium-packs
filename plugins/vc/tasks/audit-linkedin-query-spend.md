@@ -37,7 +37,7 @@ Mirror the reference pipeline's read-only LinkedIn query audit. Compare query/tr
 ## Deliverable
 
 - Create or update **LinkedIn Spend Audit Artifact** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Paid Source Spend Status, Audit Report. Do not output raw JSON unless the user explicitly asks for machine-readable data.
+- Also include a short human-readable summary covering: Paid Source Spend Status. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

@@ -41,7 +41,6 @@ Prepare the Partner Review pack from the team review pack, evaluation-stage work
 ## Deliverable
 
 - Create or update **Partner Review Pack** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Investment Thesis Summary, Strategic Fit, Proposed Dd Scope, Workstream Owners, Key Risks, Decision Ask, Summary, Recommendation, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

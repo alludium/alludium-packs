@@ -41,7 +41,6 @@ Run technical diligence covering architecture, product, engineering team, IP and
 ## Deliverable
 
 - Create or update **Technical DD Report** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Architecture Product Summary, Technical Team Assessment, Oss Licensing Ip Checks, Ai Ml Risk Assessment, Scalability Security Concerns, Technical Scorecard, Summary, Recommendation, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

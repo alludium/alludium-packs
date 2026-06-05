@@ -38,7 +38,6 @@ Summarize or ingest the available meeting records for this opportunity, includin
 ## Deliverable
 
 - Create or update **Meeting Records Summary** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Transcript Summary, Claims Register, Contradictions Or Gaps, Action Items, CRM Update Draft, Stage Recommendation, Summary, Recommendation, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

@@ -39,7 +39,6 @@ Coordinate investment document review by mapping document provisions back to the
 ## Deliverable
 
 - Create or update **Investment Document Review** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Term To Document Mapping, Open Document Issues, Counsel Questions, Closing Readiness Notes, Summary, Recommendation, Source Links, Assumptions, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

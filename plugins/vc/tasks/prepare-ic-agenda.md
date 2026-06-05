@@ -37,7 +37,6 @@ Prepare the IC agenda, pack checklist, key debate topics, follow-up questions, a
 ## Deliverable
 
 - Create or update **IC Agenda** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Agenda, Pack Checklist, Key Debate Topics, Follow Up Questions, Pre Read Requirements, Summary, Recommendation, Source Links, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

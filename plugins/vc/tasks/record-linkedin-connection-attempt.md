@@ -37,7 +37,7 @@ Record only a connection attempt that a human has already approved or sent. Capt
 ## Deliverable
 
 - Create or update **Connection Record Artifact** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Outbound Status, Connection Record Summary. Do not output raw JSON unless the user explicitly asks for machine-readable data.
+- Also include a short human-readable summary covering: Outbound Status. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

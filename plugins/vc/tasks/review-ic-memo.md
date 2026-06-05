@@ -42,7 +42,6 @@ Review the IC memo and pack for findings, citation gaps, assumption gaps, unreso
 ## Deliverable
 
 - Create or update **IC Memo Review** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Review Summary, Review Findings, Citation Gaps, Assumption Gaps, Unresolved Risks, Decision Readiness, Required Changes, Summary, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

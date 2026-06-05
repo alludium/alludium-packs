@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.promote_candidate_to_deal_pipeline
-version: 0.1.9
+version: 0.1.10
 title: Promote Candidate to Deal Pipeline
 category: Venture Capital
 visibility: workspace
@@ -72,16 +72,3 @@ fields:
     position: 0
     config:
       documentRefId: vc.document.promotion_package_template
-  - key: promoted_candidate_key
-    name: Promoted Candidate Key
-    fieldType: string
-    required: false
-    position: 1
-    config: {}
-  - key: promotion_summary
-    name: Promotion Summary
-    fieldType: richtext
-    required: false
-    position: 2
-    config:
-      rows: 8
