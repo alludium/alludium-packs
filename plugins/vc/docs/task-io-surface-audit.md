@@ -191,7 +191,7 @@ These remain because they are mapped, required, or compact status/count fields r
 | `run-vc-sourcing-pipeline` | `0.1.14` | 2 | 7 | `run_status`, `new_candidates_count`, `promotion_ready_count`, `run_completed_at`, `run_receipt_artifact_id`, `candidate_batch_artifact_id`, `source_state_artifact_id` | - | - | Preserve compact run status/counts and artifacts. |
 | `score-sourcing-candidate` | `0.1.10` | 2 | 5 | `scoring_artifact_id`, `promotion_ready_count` | `meet_candidate_count`, `watch_candidate_count`, `scoring_report` | - | Current surface is tight. |
 | `screen-active-sourcing-candidate` | `0.1.12` | 1 | 3 | `screening_artifact_id`, `promotion_ready_count` | `screening_report` | - | Current surface is tight. |
-| `screen-founder-connected-candidate` | `0.1.2` | 2 | 2 | `founder_connected_screen_artifact_id`, `founder_connected_screen_recommendation` | - | - | Current surface is tight. |
+| `screen-founder-connected-candidate` | `0.1.3` | 2 | 2 | `founder_connected_screen_artifact_id`, `founder_connected_screen_recommendation` | - | - | Current surface is tight. |
 | `screen-identified-candidate` | `0.1.1` | 2 | 5 | `identified_screen_artifact_id`, `outreach_ready_count` | `watchlist_count`, `pass_count`, `identified_screen_report` | - | Current surface is tight. |
 | `slack-discovery` | `0.1.3` | 1 | 2 | - | `slack_discovery_report`, `channel_scope_questions` | - | Current surface is tight. |
 | `slack-setup` | `0.1.4` | 1 | 4 | - | `setup_summary`, `accepted_connection_scope`, `child_task_plan`, `sync_policy` | - | Current surface is tight. |
@@ -724,7 +724,7 @@ These remain because they are mapped, required, or compact status/count fields r
 
 ### `screen-founder-connected-candidate`
 
-- Template id: `vc.screen_founder_connected_candidate`; version: `0.1.2`; family: `origination_founder_connected_screening`; stage: `engage`.
+- Template id: `vc.screen_founder_connected_candidate`; version: `0.1.3`; family: `origination_founder_connected_screening`; stage: `engage`.
 - Inputs (2): `founder_connection_context`, `prior_screen_context`.
 - Outputs (2): `founder_connected_screen_artifact_id`, `founder_connected_screen_recommendation`.
 - Output-template refs: `(no outputFieldKey)`.
