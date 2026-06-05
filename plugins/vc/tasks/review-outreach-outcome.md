@@ -38,7 +38,7 @@ Review the latest outreach state, response evidence, CRM/list context, and candi
 ## Deliverable
 
 - Create or update **Outreach Outcome Artifact** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Recommended Terminal State, Outreach Outcome Summary. Do not output raw JSON unless the user explicitly asks for machine-readable data.
+- Also include a short human-readable summary covering: Recommended Terminal State. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

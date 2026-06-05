@@ -37,7 +37,7 @@ Analyze the proposed investment amount, valuation, round size, cap table, owners
 ## Deliverable
 
 - Create or update **Deal Terms Analysis** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Ownership Model Summary, Valuation Sensitivity, Open Commercial Terms, IC Questions, Summary, Recommendation, Source Links, Assumptions, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
+- Also include a short human-readable summary covering: Open Commercial Terms. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

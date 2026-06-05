@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_commercial_dd
-version: 1.0.17
+version: 1.0.18
 title: Run Commercial DD
 category: Venture Capital
 visibility: workspace
@@ -143,104 +143,6 @@ fields:
     fieldType: file
     required: true
     position: 2
-    config: {}
-  - key: tam_sam_som_assessment
-    name: Tam Sam Som Assessment
-    fieldType: string
-    required: false
-    position: 3
-    config: {}
-  - key: competitive_landscape
-    name: Competitive Landscape
-    fieldType: string
-    required: false
-    position: 4
-    config: {}
-  - key: customer_reference_plan
-    name: Customer Reference Plan
-    fieldType: string
-    required: false
-    position: 5
-    config: {}
-  - key: reference_summaries
-    name: Reference Summaries
-    fieldType: string
-    required: false
-    position: 6
-    config: {}
-  - key: retention_or_repeat_usage_notes
-    name: Retention Or Repeat Usage Notes
-    fieldType: richtext
-    required: false
-    position: 7
-    config:
-      rows: 5
-  - key: gtm_and_business_model_assessment
-    name: GTM And Business Model Assessment
-    fieldType: string
-    required: false
-    position: 8
-    config: {}
-  - key: commercial_risks
-    name: Commercial Risks
-    fieldType: json
-    required: false
-    position: 9
-    config: {}
-  - key: summary
-    name: Summary
-    fieldType: richtext
-    required: false
-    position: 10
-    config:
-      rows: 5
-  - key: recommendation
-    name: Recommendation
-    fieldType: string
-    required: false
-    position: 11
-    config: {}
-  - key: source_links
-    name: Source Links
-    fieldType: string
-    required: false
-    position: 12
-    config: {}
-  - key: assumptions
-    name: Assumptions
-    fieldType: string
-    required: false
-    position: 13
-    config: {}
-  - key: evidence_quality
-    name: Evidence Quality
-    fieldType: json
-    required: false
-    position: 14
-    config: {}
-  - key: open_questions
-    name: Open Questions
-    fieldType: json
-    required: false
-    position: 15
-    config: {}
-  - key: risks
-    name: Risks
-    fieldType: json
-    required: false
-    position: 16
-    config: {}
-  - key: human_decision_points
-    name: Human Decision Points
-    fieldType: string
-    required: false
-    position: 17
-    config: {}
-  - key: next_actions
-    name: Next Actions
-    fieldType: json
-    required: false
-    position: 18
     config: {}
 runtime:
   defaultExecutionContext:

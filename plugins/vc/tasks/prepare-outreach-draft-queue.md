@@ -37,7 +37,7 @@ Mirror the reference pipeline's outreach draft policy. Draft only for candidates
 ## Deliverable
 
 - Create or update **Outreach Queue Artifact** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Outreach Draft Count, Outreach Report. Do not output raw JSON unless the user explicitly asks for machine-readable data.
+- Also include a short human-readable summary covering: Outreach Draft Count. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

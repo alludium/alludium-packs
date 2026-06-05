@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_prospect_summary
-version: 0.1.8
+version: 0.1.9
 title: Prepare Prospect Summary
 category: Venture Capital
 visibility: workspace
@@ -70,16 +70,3 @@ fields:
     position: 0
     config:
       documentRefId: vc.document.sourcing_ic_summary_template
-  - key: prospect_summary_status
-    name: Prospect Summary Status
-    fieldType: string
-    required: false
-    position: 1
-    config: {}
-  - key: prospect_summary
-    name: Prospect Summary
-    fieldType: richtext
-    required: false
-    position: 2
-    config:
-      rows: 12

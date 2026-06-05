@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.record_linkedin_connection_attempt
-version: 0.1.0
+version: 0.1.1
 title: Record LinkedIn Connection Attempt
 category: Venture Capital
 visibility: workspace
@@ -76,10 +76,3 @@ fields:
     required: false
     position: 1
     config: {}
-  - key: connection_record_summary
-    name: Connection Record Summary
-    fieldType: richtext
-    required: false
-    position: 2
-    config:
-      rows: 6

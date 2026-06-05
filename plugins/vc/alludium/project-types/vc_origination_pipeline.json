@@ -2017,7 +2017,7 @@
             "requiredForActivation": true
           },
           {
-            "taskField": "prior_screen_artifacts",
+            "taskField": "prior_screen_context",
             "source": "project.field",
             "sourcePath": "latest_review_artifact_id",
             "requiredForActivation": false

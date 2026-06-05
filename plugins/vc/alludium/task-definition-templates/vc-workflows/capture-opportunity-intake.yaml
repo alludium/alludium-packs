@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.capture_opportunity_intake
-version: 1.0.18
+version: 1.0.19
 title: Capture Opportunity Intake
 category: Venture Capital
 visibility: workspace
@@ -158,85 +158,17 @@ fields:
     required: false
     position: 1
     config: {}
-  - key: initial_investment_screen_summary
-    name: Intake Summary
-    fieldType: richtext
-    required: false
-    position: 2
-    config:
-      rows: 5
   - key: missing_information
     name: Missing Information
     fieldType: string
     required: false
-    position: 3
+    position: 2
     config: {}
   - key: red_flags
     name: Early Red Flags
     fieldType: string
     required: false
-    position: 4
-    config: {}
-  - key: pass_feedback_draft
-    name: Pass Feedback Draft
-    fieldType: string
-    required: false
-    position: 5
-    config: {}
-  - key: next_actions
-    name: Next Actions
-    fieldType: json
-    required: false
-    position: 6
-    config: {}
-  - key: summary
-    name: Summary
-    fieldType: richtext
-    required: false
-    position: 7
-    config:
-      rows: 5
-  - key: recommendation
-    name: Recommendation
-    fieldType: string
-    required: false
-    position: 8
-    config: {}
-  - key: source_links
-    name: Source Links
-    fieldType: string
-    required: false
-    position: 9
-    config: {}
-  - key: assumptions
-    name: Assumptions
-    fieldType: string
-    required: false
-    position: 10
-    config: {}
-  - key: evidence_quality
-    name: Evidence Quality
-    fieldType: json
-    required: false
-    position: 11
-    config: {}
-  - key: open_questions
-    name: Open Questions
-    fieldType: json
-    required: false
-    position: 12
-    config: {}
-  - key: risks
-    name: Risks
-    fieldType: json
-    required: false
-    position: 13
-    config: {}
-  - key: human_decision_points
-    name: Human Decision Points
-    fieldType: string
-    required: false
-    position: 14
+    position: 3
     config: {}
 runtime:
   defaultExecutionContext:

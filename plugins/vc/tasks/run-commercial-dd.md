@@ -41,7 +41,6 @@ Run commercial diligence covering market sizing, competition, customer reference
 - Create or update **Commercial DD Report** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
 - Create or update **Market Analysis** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
 - Create or update **Customer Reference Summary** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Tam Sam Som Assessment, Competitive Landscape, Customer Reference Plan, Reference Summaries, Retention Or Repeat Usage Notes, GTM And Business Model Assessment, Commercial Risks, Summary, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

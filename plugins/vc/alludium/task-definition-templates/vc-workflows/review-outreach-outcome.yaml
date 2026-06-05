@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.review_outreach_outcome
-version: 0.1.0
+version: 0.1.1
 title: Review Outreach Outcome
 category: Venture Capital
 visibility: workspace
@@ -76,10 +76,3 @@ fields:
     required: true
     position: 1
     config: {}
-  - key: outreach_outcome_summary
-    name: Outreach Outcome Summary
-    fieldType: richtext
-    required: false
-    position: 2
-    config:
-      rows: 8

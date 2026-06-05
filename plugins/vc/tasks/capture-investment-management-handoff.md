@@ -36,7 +36,7 @@ Capture the reviewed handoff from Deal Pipeline deal structuring into Investment
 ## Deliverable
 
 - Produce a concise, reviewable task response that a human can act on.
-- Also include a short human-readable summary covering: Project Creation Payload, Handoff Summary, Missing Information, Next Actions. Do not output raw JSON unless the user explicitly asks for machine-readable data.
+- Also include a short human-readable summary covering: Project Creation Payload, Handoff Summary, Missing Information. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

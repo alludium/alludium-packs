@@ -39,7 +39,6 @@ Prepare the meeting brief, relationship context, concise company and evidence su
 ## Deliverable
 
 - Create or update **Meeting Brief** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Meeting Brief, Founder Company Summary, Competitor Funding Activity, Stage-Relevant Scorecard Notes, Questions By Topic, Summary, Recommendation, Source Links, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

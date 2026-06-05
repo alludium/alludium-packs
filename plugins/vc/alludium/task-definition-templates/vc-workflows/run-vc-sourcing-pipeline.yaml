@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_vc_sourcing_pipeline
-version: 0.1.12
+version: 0.1.14
 title: Run VC Sourcing Pipeline
 category: Venture Capital
 visibility: workspace
@@ -110,63 +110,49 @@ fields:
     position: 1
     config: {}
   output:
-  - key: sourcing_run_summary
-    name: Sourcing Run Summary
-    fieldType: richtext
-    required: false
-    position: 0
-    config:
-      rows: 10
   - key: run_status
     name: Run Status
     fieldType: string
     required: false
-    position: 1
+    position: 0
     config: {}
   - key: new_candidates_count
     name: New Candidates Count
     fieldType: number
     required: false
-    position: 2
+    position: 1
     config: {}
   - key: promotion_ready_count
     name: Promotion Ready Count
     fieldType: number
     required: false
-    position: 3
+    position: 2
     config: {}
   - key: run_completed_at
     name: Run Completed At
     fieldType: date
     required: false
-    position: 4
+    position: 3
     config: {}
   - key: run_receipt_artifact_id
     name: Run Receipt Artifact
     fieldType: file
     required: true
-    position: 5
+    position: 4
     config: {}
   - key: candidate_batch_artifact_id
     name: Candidate Batch Artifact
     fieldType: file
     required: true
-    position: 6
+    position: 5
     config:
       documentRefId: vc.document.candidate_batch_template
   - key: source_state_artifact_id
     name: Source State Artifact
     fieldType: file
     required: true
-    position: 7
+    position: 6
     config: {}
-  - key: child_task_plan
-    name: Child Task Plan
-    fieldType: richtext
-    required: true
-    position: 8
-    config:
-      rows: 8
 runtime:
   defaultExecutionContext:
     sourceMetadata:

@@ -38,7 +38,6 @@ Track the final administrative closing sequence from conditions precedent verifi
 ## Deliverable
 
 - Create or update **Completion Tracker** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Capital Call Status Summary, Funds Transfer Readiness, Share Certificate Receipt Status, Portfolio Handoff Trigger, Summary, Recommendation, Source Links, Assumptions, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

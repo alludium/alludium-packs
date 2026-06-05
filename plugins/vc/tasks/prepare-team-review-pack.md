@@ -41,7 +41,6 @@ Assemble the Team Review pack from evaluation-stage workstream outputs, the dili
 ## Deliverable
 
 - Create or update **Team Review Pack** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Company Snapshot, Evidence Summary, Initial Screening And Diligence Summary, Founder Risk Summary, Stage Gate Recommendation, Summary, Recommendation, Source Links, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

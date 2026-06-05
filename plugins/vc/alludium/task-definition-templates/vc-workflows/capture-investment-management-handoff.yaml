@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.capture_investment_management_handoff
-version: 0.1.0
+version: 0.1.1
 title: Capture Investment Management Handoff
 category: Venture Capital
 visibility: workspace
@@ -103,12 +103,6 @@ fields:
       fieldType: string
       required: false
       position: 2
-      config: {}
-    - key: next_actions
-      name: Next Actions
-      fieldType: json
-      required: false
-      position: 3
       config: {}
 runtime:
   defaultExecutionContext:

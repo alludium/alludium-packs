@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.audit_linkedin_query_spend
-version: 0.1.8
+version: 0.1.9
 title: Audit LinkedIn Query Spend
 category: Venture Capital
 visibility: workspace
@@ -85,10 +85,3 @@ fields:
       required: false
       position: 1
       config: {}
-    - key: audit_report
-      name: Audit Report
-      fieldType: richtext
-      required: false
-      position: 2
-      config:
-        rows: 8

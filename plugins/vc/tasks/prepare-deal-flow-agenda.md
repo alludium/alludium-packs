@@ -31,7 +31,7 @@ Prepare the deal-flow agenda from the pipeline snapshot; identify stale deals, n
 ## Deliverable
 
 - Produce a concise, reviewable task response that a human can act on.
-- Also include a short human-readable summary covering: Agenda, Stale Deal List, New Deal List, Stage Change Candidates, Seven Day Action Plan, Summary, Recommendation, Source Links, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
+- Also include a short human-readable summary covering: Agenda, Stale Deal List, New Deal List, Stage Change Candidates, Seven Day Action Plan. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

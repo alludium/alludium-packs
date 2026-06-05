@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.generate_sourcing_digest
-version: 0.1.8
+version: 0.1.9
 title: Generate Sourcing Digest
 category: Venture Capital
 visibility: workspace
@@ -76,16 +76,3 @@ fields:
       position: 0
       config:
         documentRefId: vc.document.sourcing_digest_template
-    - key: digest_status
-      name: Digest Status
-      fieldType: string
-      required: false
-      position: 1
-      config: {}
-    - key: sourcing_digest
-      name: Sourcing Digest
-      fieldType: richtext
-      required: false
-      position: 2
-      config:
-        rows: 10

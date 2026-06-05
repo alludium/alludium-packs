@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_initial_linkedin_reachout
-version: 0.1.0
+version: 0.1.1
 title: Prepare Initial LinkedIn Reachout
 category: Venture Capital
 visibility: workspace
@@ -76,10 +76,3 @@ fields:
     required: false
     position: 1
     config: {}
-  - key: initial_reachout_summary
-    name: Initial Reachout Summary
-    fieldType: richtext
-    required: false
-    position: 2
-    config:
-      rows: 8

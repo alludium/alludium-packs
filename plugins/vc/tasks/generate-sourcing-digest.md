@@ -36,7 +36,6 @@ Produce a reference-pipeline-style digest of new Meet/Watch and active candidate
 ## Deliverable
 
 - Create or update **Sourcing Digest Artifact** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Digest Status, Sourcing Digest. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

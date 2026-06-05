@@ -41,7 +41,7 @@ Run only approved origination sources and preserve the reference workflow order 
 - Create or update **Run Receipt Artifact** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
 - Create or update **Candidate Batch Artifact** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
 - Create or update **Source State Artifact** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Sourcing Run Summary, Run Status, New Candidates Count, Promotion Ready Count, Run Completed At, Child Task Plan. Do not output raw JSON unless the user explicitly asks for machine-readable data.
+- Also include a short human-readable summary covering: Run Status, New Candidates Count, Promotion Ready Count, Run Completed At. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

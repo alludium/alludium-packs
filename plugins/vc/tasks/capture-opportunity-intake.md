@@ -39,7 +39,7 @@ Hydrate the created Deal Pipeline from the best available source context: CRM/so
 ## Deliverable
 
 - Create or update **Opportunity Intake Summary** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Intake Recommendation, Intake Summary, Missing Information, Early Red Flags, Pass Feedback Draft, Next Actions, Summary, Recommendation, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
+- Also include a short human-readable summary covering: Intake Recommendation, Missing Information, Early Red Flags. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

@@ -36,7 +36,6 @@ Prepare the portfolio handoff with board setup notes, reporting cadence, 100-day
 ## Deliverable
 
 - Create or update **Portfolio Onboarding Plan** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Board Setup Notes, Reporting Cadence, Hundred Day Plan, Milestones, Support Request Intake, Owner Assignments, Summary, Recommendation, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

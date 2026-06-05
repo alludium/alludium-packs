@@ -38,7 +38,6 @@ Record the IC decision outcome, vote or consensus summary, dissent and objection
 ## Deliverable
 
 - Create or update **IC Decision Record** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Decision Outcome, Vote Or Consensus Summary, Dissent And Objections, Conditions, Post Ic Action Items, Stage Transition Recommendation, Summary, Recommendation, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

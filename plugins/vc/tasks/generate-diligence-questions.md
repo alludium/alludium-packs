@@ -45,7 +45,6 @@ Generate prioritized investment diligence questions with rationale, source gap, 
 ## Deliverable
 
 - Create or update **Structured Diligence Question Bank** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Question Set, Rationale, Source Gap, Owner, Urgency, Summary, Recommendation, Source Links, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

@@ -27,7 +27,7 @@ Re-screen candidates only after a founder connection, reply, or direct relations
 ## Available Context
 
 - Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
-- Especially look for: Founder Connection Context, Prior Screen Artifacts.
+- Especially look for: Founder Connection Context, Prior Screen Context.
 - If a named input is absent, follow the missing-input policy rather than inventing facts.
 
 ## Reference Materials
@@ -40,7 +40,7 @@ Re-screen candidates only after a founder connection, reply, or direct relations
 ## Deliverable
 
 - Create or update **Founder Connected Screen Artifact** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Founder Connected Screen Recommendation, Founder Connected Screen Report. Do not output raw JSON unless the user explicitly asks for machine-readable data.
+- Also include a short human-readable summary covering: Founder Connected Screen Recommendation. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

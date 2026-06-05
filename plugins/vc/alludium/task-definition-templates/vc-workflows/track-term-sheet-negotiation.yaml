@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.track_term_sheet_negotiation
-version: 0.1.0
+version: 0.1.1
 title: Track Term Sheet Negotiation
 category: Venture Capital
 visibility: workspace
@@ -116,85 +116,6 @@ fields:
       position: 0
       config:
         documentRefId: vc.document.term_sheet_negotiation_brief_template
-    - key: open_terms_table
-      name: Open Terms Table
-      fieldType: json
-      required: false
-      position: 1
-      config: {}
-    - key: give_get_options
-      name: Give/Get Options
-      fieldType: json
-      required: false
-      position: 2
-      config: {}
-    - key: legal_escalations
-      name: Legal Escalations
-      fieldType: json
-      required: false
-      position: 3
-      config: {}
-    - key: approval_required
-      name: Approval Required
-      fieldType: string
-      required: false
-      position: 4
-      config: {}
-    - key: summary
-      name: Summary
-      fieldType: richtext
-      required: false
-      position: 5
-      config:
-        rows: 5
-    - key: recommendation
-      name: Recommendation
-      fieldType: string
-      required: false
-      position: 6
-      config: {}
-    - key: source_links
-      name: Source Links
-      fieldType: string
-      required: false
-      position: 7
-      config: {}
-    - key: assumptions
-      name: Assumptions
-      fieldType: string
-      required: false
-      position: 8
-      config: {}
-    - key: evidence_quality
-      name: Evidence Quality
-      fieldType: json
-      required: false
-      position: 9
-      config: {}
-    - key: open_questions
-      name: Open Questions
-      fieldType: json
-      required: false
-      position: 10
-      config: {}
-    - key: risks
-      name: Risks
-      fieldType: json
-      required: false
-      position: 11
-      config: {}
-    - key: human_decision_points
-      name: Human Decision Points
-      fieldType: string
-      required: false
-      position: 12
-      config: {}
-    - key: next_actions
-      name: Next Actions
-      fieldType: json
-      required: false
-      position: 13
-      config: {}
 runtime:
   defaultExecutionContext:
     sourceMetadata:

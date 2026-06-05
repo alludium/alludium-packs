@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_team_review_pack
-version: 1.0.18
+version: 1.0.19
 title: Prepare Team Review Pack
 category: Venture Capital
 visibility: workspace
@@ -147,94 +147,6 @@ fields:
     position: 0
     config:
       documentRefId: vc.document.review_pack_checklist
-  - key: company_snapshot
-    name: Company Snapshot
-    fieldType: json
-    required: false
-    position: 1
-    config: {}
-  - key: evidence_summary
-    name: Evidence Summary
-    fieldType: richtext
-    required: false
-    position: 2
-    config:
-      rows: 5
-  - key: screening_and_diligence_summary
-    name: Initial Screening And Diligence Summary
-    fieldType: richtext
-    required: false
-    position: 3
-    config:
-      rows: 5
-  - key: founder_risk_summary
-    name: Founder Risk Summary
-    fieldType: richtext
-    required: false
-    position: 4
-    config:
-      rows: 5
-  - key: stage_gate_recommendation
-    name: Stage Gate Recommendation
-    fieldType: string
-    required: false
-    position: 5
-    config: {}
-  - key: summary
-    name: Summary
-    fieldType: richtext
-    required: false
-    position: 6
-    config:
-      rows: 5
-  - key: recommendation
-    name: Recommendation
-    fieldType: string
-    required: false
-    position: 7
-    config: {}
-  - key: source_links
-    name: Source Links
-    fieldType: string
-    required: false
-    position: 8
-    config: {}
-  - key: assumptions
-    name: Assumptions
-    fieldType: string
-    required: false
-    position: 9
-    config: {}
-  - key: evidence_quality
-    name: Evidence Quality
-    fieldType: json
-    required: false
-    position: 10
-    config: {}
-  - key: open_questions
-    name: Open Questions
-    fieldType: json
-    required: false
-    position: 11
-    config: {}
-  - key: risks
-    name: Risks
-    fieldType: json
-    required: false
-    position: 12
-    config: {}
-  - key: human_decision_points
-    name: Human Decision Points
-    fieldType: string
-    required: false
-    position: 13
-    config: {}
-  - key: next_actions
-    name: Next Actions
-    fieldType: json
-    required: false
-    position: 14
-    config: {}
 runtime:
   defaultExecutionContext:
     sourceMetadata:

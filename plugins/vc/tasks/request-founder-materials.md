@@ -37,7 +37,6 @@ Prepare the missing-materials checklist, founder-friendly request draft, share i
 ## Deliverable
 
 - Create or update **Founder Materials Request** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Materials Request Checklist, Draft External Message, Share Instructions, Due Date Recommendation, Approval Required, Summary, Recommendation, Source Links, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

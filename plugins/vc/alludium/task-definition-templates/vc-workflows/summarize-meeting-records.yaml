@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.summarize_meeting_records
-version: 1.0.13
+version: 1.0.14
 title: Summarize Meeting Records
 category: Venture Capital
 visibility: workspace
@@ -106,98 +106,6 @@ fields:
     position: 0
     config:
       documentRefId: vc.document.customer_insights_summary_template
-  - key: transcript_summary
-    name: Transcript Summary
-    fieldType: richtext
-    required: false
-    position: 1
-    config:
-      rows: 5
-  - key: claims_register
-    name: Claims Register
-    fieldType: string
-    required: false
-    position: 2
-    config: {}
-  - key: contradictions_or_gaps
-    name: Contradictions Or Gaps
-    fieldType: string
-    required: false
-    position: 3
-    config: {}
-  - key: action_items
-    name: Action Items
-    fieldType: string
-    required: false
-    position: 4
-    config: {}
-  - key: draft_crm_update
-    name: CRM Update Draft
-    fieldType: string
-    required: false
-    position: 5
-    config: {}
-  - key: pass_follow_up_recommendation
-    name: Stage Recommendation
-    fieldType: string
-    required: false
-    position: 6
-    config: {}
-  - key: summary
-    name: Summary
-    fieldType: richtext
-    required: false
-    position: 7
-    config:
-      rows: 5
-  - key: recommendation
-    name: Recommendation
-    fieldType: string
-    required: false
-    position: 8
-    config: {}
-  - key: source_links
-    name: Source Links
-    fieldType: string
-    required: false
-    position: 9
-    config: {}
-  - key: assumptions
-    name: Assumptions
-    fieldType: string
-    required: false
-    position: 10
-    config: {}
-  - key: evidence_quality
-    name: Evidence Quality
-    fieldType: json
-    required: false
-    position: 11
-    config: {}
-  - key: open_questions
-    name: Open Questions
-    fieldType: json
-    required: false
-    position: 12
-    config: {}
-  - key: risks
-    name: Risks
-    fieldType: json
-    required: false
-    position: 13
-    config: {}
-  - key: human_decision_points
-    name: Human Decision Points
-    fieldType: string
-    required: false
-    position: 14
-    config: {}
-  - key: next_actions
-    name: Next Actions
-    fieldType: json
-    required: false
-    position: 15
-    config: {}
 runtime:
   defaultExecutionContext:
     sourceMetadata:

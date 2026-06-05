@@ -42,7 +42,6 @@ Assemble the IC memo and pack checklist from review packs, evaluation-stage work
 ## Deliverable
 
 - Create or update **Investment Memo** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Investment Memo, Ic Pack Checklist, Decision Ask, Unresolved Risks, Assumptions, Citation Coverage, Summary, Recommendation, and other task-specific status fields. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
