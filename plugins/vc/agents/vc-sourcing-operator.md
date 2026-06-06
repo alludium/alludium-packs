@@ -2,7 +2,6 @@
 name: vc-sourcing-operator
 description: VC sourcing operator that runs the standing origination pipeline, reviews source outputs, manages candidate state,
   drafts outreach queues, and prepares promotion packages for human review.
-model: sonnet
 skills:
 - company-research-and-enrichment
 - deal-pipeline-setup-and-source-ingestion
@@ -59,7 +58,7 @@ Do not contact founders, create Deal Pipelines, write to CRM/source systems, ena
 - Source template: `alludium/agent-templates/vc_sourcing_operator.yaml`
 - Alludium template ID: `vc_sourcing_operator`
 - Display name: Sourcing Operator
-- Version: `1.0.3`
+- Version: `1.0.4`
 - Primary stage: Origination Operations
 - Primary Deal Room state: `intake`
 - Supported task definitions:

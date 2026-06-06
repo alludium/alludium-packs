@@ -1,4 +1,4 @@
-version: "1.0.5"
+version: "1.0.6"
 type: "template"
 platform_managed: true
 id: "vc_deal_room_setup_guide"
@@ -22,11 +22,6 @@ metadata:
     - vc-affinity-sync-write
     - pipeline-health-and-crm-hygiene
     - citation-enforcement
-
-llm:
-  provider: "ANTHROPIC"
-  infra: "AMZN"
-  model: "Claude Sonnet 4.6"
 
 skills:
   - externalId: "deal-pipeline-setup-and-source-ingestion"

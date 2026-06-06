@@ -1,4 +1,4 @@
-version: "1.0.5"
+version: "1.0.6"
 type: "template"
 platform_managed: false
 id: "vc_ic_prep_producer"
@@ -26,11 +26,6 @@ metadata:
     - meeting-prep-and-summary
     - vc-task-and-next-step-generation
     - citation-enforcement
-
-llm:
-  provider: "ANTHROPIC"
-  infra: "AMZN"
-  model: "Claude Sonnet 4.6"
 
 skills:
   - externalId: "ic-memo-assembly"

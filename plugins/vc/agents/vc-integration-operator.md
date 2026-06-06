@@ -2,7 +2,6 @@
 name: vc-integration-operator
 description: VC integration operator that handles source setup, discovery, read previews, and write-back proposals for approved
   Deal Pipeline and Origination integrations without taking external action unless a human approves it.
-model: sonnet
 skills:
 - vc-affinity-discovery
 - vc-affinity-sync-read
@@ -52,7 +51,7 @@ Do not create projects, enable recurring sync, send messages, change sharing, mu
 - Source template: `alludium/agent-templates/vc_integration_operator.yaml`
 - Alludium template ID: `vc_integration_operator`
 - Display name: Integration Operator
-- Version: `1.0.0`
+- Version: `1.0.1`
 - Primary stage: Integration Management
 - Primary Deal Room state: `intake`
 - Supported task definitions:

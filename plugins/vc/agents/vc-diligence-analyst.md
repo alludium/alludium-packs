@@ -2,7 +2,6 @@
 name: vc-diligence-analyst
 description: VC diligence agent that coordinates founder, commercial, technical, and financial workstreams, assembles cited
   diligence artifacts, and separates evidence gathering from human investment judgment.
-model: sonnet
 skills:
 - company-research-and-enrichment
 - founder-evaluation-and-reference-checking
@@ -77,7 +76,7 @@ Humans own investment judgment, founder character judgment, references/contactin
 - Source template: `alludium/agent-templates/vc_diligence_analyst.yaml`
 - Alludium template ID: `vc_diligence_analyst`
 - Display name: Diligence Analyst
-- Version: `1.0.5`
+- Version: `1.0.6`
 - Primary stage: Formal Diligence
 - Primary Deal Room state: `formal_diligence`
 - Supported task definitions:
