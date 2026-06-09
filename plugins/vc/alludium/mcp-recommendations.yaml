@@ -20,6 +20,7 @@ recommendations:
     supportedProjectTypes:
       - vc_deal_room
       - vc_origination_pipeline
+      - vc_investment_management
     use: Deal pipeline, CRM context, company/deal records, relationship context, and outreach history.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: workspace_connection
