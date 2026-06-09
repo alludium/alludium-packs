@@ -3,7 +3,6 @@ name: vc-dealflow-concierge
 description: Inbound VC deal triage agent that classifies opportunities, organizes source context, prepares Deal Pipeline
   setup recommendations, runs first-pass screening, drafts founder material requests, and produces cited CRM-ready recommendations
   for human review.
-model: sonnet
 skills:
 - company-research-and-enrichment
 - pitch-deck-explainer
@@ -81,7 +80,7 @@ Humans own pass/continue decisions, founder relationship handling, external send
 - Source template: `alludium/agent-templates/vc_dealflow_concierge.yaml`
 - Alludium template ID: `vc_dealflow_concierge`
 - Display name: Dealflow Concierge
-- Version: `1.0.5`
+- Version: `1.0.6`
 - Primary stage: Intake
 - Primary Deal Room state: `intake`
 - Supported task definitions:

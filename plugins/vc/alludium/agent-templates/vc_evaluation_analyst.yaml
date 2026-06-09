@@ -1,4 +1,4 @@
-version: 1.0.0
+version: 1.0.1
 type: template
 platform_managed: false
 id: vc_evaluation_analyst
@@ -30,10 +30,6 @@ metadata:
   - team-evaluation-and-founder-risk
   - red-flags-scanner
   - citation-enforcement
-llm:
-  provider: ANTHROPIC
-  infra: AMZN
-  model: Claude Sonnet 4.6
 skills:
 - externalId: company-research-and-enrichment
   activationMode: ALWAYS

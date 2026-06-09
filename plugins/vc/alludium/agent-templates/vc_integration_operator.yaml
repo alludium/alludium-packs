@@ -1,4 +1,4 @@
-version: 1.0.0
+version: 1.0.1
 type: template
 platform_managed: false
 id: vc_integration_operator
@@ -59,10 +59,6 @@ metadata:
   - vc-slack-sync-read
   - vc-slack-sync-write
   - citation-enforcement
-llm:
-  provider: ANTHROPIC
-  infra: AMZN
-  model: Claude Sonnet 4.6
 skills:
 - externalId: vc-affinity-discovery
   activationMode: AUTO

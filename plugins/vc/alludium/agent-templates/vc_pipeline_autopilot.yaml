@@ -1,4 +1,4 @@
-version: "1.0.5"
+version: "1.0.6"
 type: "template"
 platform_managed: false
 id: "vc_pipeline_autopilot"
@@ -20,11 +20,6 @@ metadata:
     - vc-task-and-next-step-generation
     - company-research-and-enrichment
     - citation-enforcement
-
-llm:
-  provider: "ANTHROPIC"
-  infra: "AMZN"
-  model: "Claude Sonnet 4.6"
 
 skills:
   - externalId: "pipeline-health-and-crm-hygiene"

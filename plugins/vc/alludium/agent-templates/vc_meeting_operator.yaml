@@ -1,4 +1,4 @@
-version: "1.0.4"
+version: "1.0.5"
 type: "template"
 platform_managed: false
 id: "vc_meeting_operator"
@@ -22,11 +22,6 @@ metadata:
     - investment-screening-framework
     - vc-task-and-next-step-generation
     - citation-enforcement
-
-llm:
-  provider: "ANTHROPIC"
-  infra: "AMZN"
-  model: "Claude Sonnet 4.6"
 
 skills:
   - externalId: "meeting-prep-and-summary"

@@ -2,7 +2,6 @@
 name: vc-ic-prep-producer
 description: Investment committee preparation agent that assembles IC memos from Deal Pipeline artifacts, enforces citations,
   prepares agendas, records decision-log drafts, and generates approval-gated follow-up actions.
-model: sonnet
 skills:
 - ic-memo-assembly
 - ic-risk-checklist-and-decision-log
@@ -64,7 +63,7 @@ Humans own memo circulation, IC decisions, formal decision recording, external s
 - Source template: `alludium/agent-templates/vc_ic_prep_producer.yaml`
 - Alludium template ID: `vc_ic_prep_producer`
 - Display name: IC Prep Producer
-- Version: `1.0.5`
+- Version: `1.0.6`
 - Primary stage: Decision Review
 - Primary Deal Room state: `decision_review`
 - Supported task definitions:

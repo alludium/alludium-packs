@@ -1,4 +1,4 @@
-version: "1.0.5"
+version: "1.0.6"
 type: "template"
 platform_managed: false
 id: "vc_dealflow_concierge"
@@ -24,11 +24,6 @@ metadata:
     - investment-screening-framework
     - red-flags-scanner
     - citation-enforcement
-
-llm:
-  provider: "ANTHROPIC"
-  infra: "AMZN"
-  model: "Claude Sonnet 4.6"
 
 skills:
   - externalId: "company-research-and-enrichment"

@@ -2,7 +2,6 @@
 name: vc-evaluation-analyst
 description: VC evaluation-stage analyst that turns screening output, founder materials, meeting evidence, and public research
   into cited opportunity, commercial, technical, financial, team, and diligence-question workstreams before formal diligence.
-model: sonnet
 skills:
 - company-research-and-enrichment
 - investment-diligence-question-framework
@@ -74,7 +73,7 @@ Humans own pass/continue decisions, founder relationship judgment, external send
 - Source template: `alludium/agent-templates/vc_evaluation_analyst.yaml`
 - Alludium template ID: `vc_evaluation_analyst`
 - Display name: Evaluation Analyst
-- Version: `1.0.0`
+- Version: `1.0.1`
 - Primary stage: Evaluation
 - Primary Deal Room state: `evaluation`
 - Supported task definitions:

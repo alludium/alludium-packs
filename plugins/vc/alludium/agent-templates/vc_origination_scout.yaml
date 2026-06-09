@@ -1,4 +1,4 @@
-version: "1.0.4"
+version: "1.0.5"
 type: "template"
 platform_managed: false
 id: "vc_origination_scout"
@@ -21,11 +21,6 @@ metadata:
     - founder-outreach-and-intro-paths
     - investment-screening-framework
     - citation-enforcement
-
-llm:
-  provider: "ANTHROPIC"
-  infra: "AMZN"
-  model: "Claude Sonnet 4.6"
 
 skills:
   - externalId: "company-research-and-enrichment"
