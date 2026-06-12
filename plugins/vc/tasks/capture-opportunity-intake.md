@@ -1,33 +1,31 @@
 ---
 id: vc.capture_opportunity_intake
-title: Capture Opportunity Intake
+title: Verify Opportunity Intake
 slug: capture-opportunity-intake
-agent: vc-dealflow-concierge
+agent: vc-intake-readiness-operator
 skills:
-- deal-pipeline-setup-and-source-ingestion
-- company-research-and-enrichment
+- deal-pipeline-intake-readiness
 - citation-enforcement
-- pitch-deck-explainer
 ---
 
 > **GENERATED FILE**
 > Source: `alludium/task-definition-templates/vc-workflows/capture-opportunity-intake.yaml`
 > Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
-# Capture Opportunity Intake
+# Verify Opportunity Intake
 
 ## Objective
 
-Hydrate and assess a created Deal Pipeline from available source context before formal screening.
+Verify that a Deal Pipeline has enough supplied or approved source context to move into screening.
 
 ## What To Do
 
-Hydrate the created Deal Pipeline from the best available source context: CRM/source record, company domain, pitch deck, intro note, source thread, founder material, origination promotion package, or other supplied evidence. Capture known project fields, source index, missing information, evidence quality, and recommended readiness for formal screening. Do not require a pitch deck when another source explains the opportunity. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a polished Word-ready document named Opportunity Intake Summary.
+Verify whether the created Deal Pipeline has enough supplied or approved source context to move into formal screening. Inspect project fields, task inputs, attached/source artifacts, source threads, founder materials, and approved CRM/source payloads such as import payload. When an approved CRM/source payload is present, read only the approved source record scope needed to hydrate missing project fields and source provenance. Capture the source index, hydrated field map, missing information, and screening-readiness status. Do not run public-web research, Exa, Brave, SerpAPI, Firecrawl, competitor discovery, market research, investment scoring, red-flag analysis, or continue/watch/pass recommendations during intake; those belong in screening or later evaluation. Do not require a pitch deck when another supplied source explains the opportunity. Ask for the smallest missing context needed to identify the company and cite at least one source anchor. Create or update a compact project file artifact named Opportunity Intake Readiness Summary.
 
 ## Available Context
 
 - Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
-- Especially look for: Company Name, Pitch Deck Artifact, Company Domain, Source System, Source Object URL, Source Thread URL, Source Thread Artifact, Source Material Artifacts, Founder Materials Artifacts, Referrer.
+- Especially look for: Company Name, Approved Source Import Payload, Pitch Deck Artifact, Company Domain, Source System, Source Object URL, Source Thread URL, Source Thread Artifact, Source Material Artifacts, Founder Materials Artifacts, Referrer.
 - If a named input is absent, follow the missing-input policy rather than inventing facts.
 
 ## Reference Materials
@@ -38,25 +36,27 @@ Hydrate the created Deal Pipeline from the best available source context: CRM/so
 
 ## Deliverable
 
-- Create or update **Opportunity Intake Summary** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Intake Recommendation, Missing Information, Early Red Flags. Do not output raw JSON unless the user explicitly asks for machine-readable data.
+- Create or update **Opportunity Intake Readiness Summary** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Also include a short human-readable summary covering: Intake Readiness Status, Missing Information, Hydrated Field Map, Source Index. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
-Ask for the minimum missing context needed to identify the company and cite at least one source. If company identity and one credible source are present, complete intake and list missing enrichment or screening inputs instead of blocking.
+If company identity and at least one credible supplied or approved source anchor are present, complete intake and list missing screening inputs instead of blocking. If identity, provenance, or approved source access is insufficient, ask for the minimum missing item such as company domain, deck, source thread, CRM/source record, founder material, or source artifact.
 
 ## Guardrails
 
-Draft only unless a human explicitly approves the send, CRM write, Drive change, child task creation, or stage transition.
+Intake readiness only. Approved CRM/source reads are allowed within the supplied scope. Public-web research, CRM writes, external sends, Drive changes, child task creation, project creation, and stage transitions are forbidden unless a human explicitly approves a separate workflow.
 
 ## Completion Criteria
 
-- Required input gaps are resolved or listed as assumptions/open questions.
-- Material conclusions include source links or are labeled as human judgment calls.
-- Next actions identify owner, dependency, and required human approval point.
-- Intake recommendation clearly states whether the project is ready for screening, needs more context, should be watched, or should be passed.
+- Company identity is confirmed or the task is blocked with a specific clarification question.
+- At least one supplied or approved source anchor is recorded, or the missing source anchor is requested.
+- Hydrated project fields list provenance and confidence without using public-web enrichment.
+- Missing information names the smallest inputs needed before or during screening.
+- Intake readiness is reported as ready_for_screening, needs_more_info, or blocked.
 
 ## Human Review
 
-- Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
-- Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+- Confirm the target company when source material is ambiguous.
+- Provide missing deck, CRM/source record, source thread, founder material, or source artifact when intake is not ready.
+- Approve final intake readiness before moving to screening.

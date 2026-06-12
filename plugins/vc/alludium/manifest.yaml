@@ -2,7 +2,7 @@ schemaVersion: '0.1'
 pack:
   id: vc
   name: Alludium VC
-  version: 0.5.28
+  version: 0.5.29
   description: >
     Public VC workflow plugin and pack seed for Alludium, published as the
     first bundle in the broader Alludium packs catalog. This release contains
@@ -30,6 +30,7 @@ surfaces:
     - commercial-evaluation-and-market-risk
     - company-research-and-enrichment
     - deal-terms-analysis
+    - deal-pipeline-intake-readiness
     - deal-pipeline-setup-and-source-ingestion
     - financial-diligence-workstream
     - financial-evaluation-and-financing-risk
@@ -103,6 +104,7 @@ surfaces:
     - vc_integration_operator
     - vc_legal_compliance_desk
     - vc_meeting_operator
+    - vc_intake_readiness_operator
     - vc_origination_scout
     - vc_pipeline_autopilot
     - vc_sourcing_operator

@@ -3554,6 +3554,11 @@ def validate_project_task_mapping_contracts() -> None:
         fail(f"Project type {project_type_id} has duplicate projectTaskMappings ids")
 
     for slug, artifact_fields in VC_ARTIFACT_OUTPUTS.items():
+        # Project-import tasks are created by the reviewed setup import flow, not
+        # lifecycle stage mappings, so their receipt artifacts are not required
+        # to appear in projectTaskMappings.
+        if slug in import_project_task_slugs:
+            continue
         if slug not in project_instance_supported_slugs:
             continue
         missing_project_fields = sorted(set(artifact_fields) - project_field_keys)

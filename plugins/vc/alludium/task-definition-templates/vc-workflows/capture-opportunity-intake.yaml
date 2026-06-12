@@ -1,18 +1,18 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.capture_opportunity_intake
-version: 1.0.19
-title: Capture Opportunity Intake
+version: 1.0.20
+title: Verify Opportunity Intake
 category: Venture Capital
 visibility: workspace
 tags:
 - vc
 - intake
-- enrichment
+- readiness
 definition:
-  name: Capture Opportunity Intake
+  name: Verify Opportunity Intake
   slug: capture-opportunity-intake
-  description: Hydrate and assess a created Deal Pipeline from available source context before formal screening.
+  description: Verify that a Deal Pipeline has enough supplied or approved source context to move into screening.
   allowSubtasks: true
   definitionJson:
     vertical: vc
@@ -26,12 +26,10 @@ definition:
     - documentId: vc.document.template_use_guidance
       usage: operating_guidance
     requiredSkills:
-    - deal-pipeline-setup-and-source-ingestion
-    - company-research-and-enrichment
+    - deal-pipeline-intake-readiness
     - citation-enforcement
-    - pitch-deck-explainer
-    plannedRecommendedAgentTemplate: vc_dealflow_concierge
-    recommendedAgentTemplate: vc_dealflow_concierge
+    plannedRecommendedAgentTemplate: vc_intake_readiness_operator
+    recommendedAgentTemplate: vc_intake_readiness_operator
     supportedProjectTypes:
     - vc_deal_room
     sourceAnchors:
@@ -54,32 +52,35 @@ definition:
       anchor: slide-10
       note: Discovery AI map
     instructions:
-      executionInstructions: 'Hydrate the created Deal Pipeline from the best available source context: CRM/source record,
-        company domain, pitch deck, intro note, source thread, founder material, origination promotion package, or other supplied
-        evidence. Capture known project fields, source index, missing information, evidence quality, and recommended readiness
-        for formal screening. Do not require a pitch deck when another source explains the opportunity. Cite material claims,
-        separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child
-        tasks, or move stages without explicit human approval. Create or update a durable project file artifact named Opportunity
-        Intake Summary and attach it to the required output field `opportunity_intake_artifact_id`. Use `definitionJson.documentRefs`
-        as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton,
-        `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner,
-        `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval
-        boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the
-        document ID alongside the output artifact.'
-      missingInputPolicy: Ask for the minimum missing context needed to identify the company and cite at least one source.
-        If company identity and one credible source are present, complete intake and list missing enrichment or screening inputs
-        instead of blocking.
-      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, child task creation,
-        or stage transition.
+      executionInstructions: 'Verify whether the created Deal Pipeline has enough supplied or approved source context to move
+        into formal screening. Inspect project fields, task inputs, attached/source artifacts, source threads, founder materials,
+        and approved CRM/source payloads such as `import_payload`. When an approved CRM/source payload is present, read only
+        the approved source record scope needed to hydrate missing project fields and source provenance. Capture the source
+        index, hydrated field map, missing information, and screening-readiness status. Do not run public-web research, Exa,
+        Brave, SerpAPI, Firecrawl, competitor discovery, market research, investment scoring, red-flag analysis, or continue/watch/pass
+        recommendations during intake; those belong in screening or later evaluation. Do not require a pitch deck when another
+        supplied source explains the opportunity. Ask for the smallest missing context needed to identify the company and cite
+        at least one source anchor. Create or update a compact project file artifact named Opportunity Intake Readiness Summary
+        and attach it to the required output field `opportunity_intake_artifact_id`. Use `definitionJson.documentRefs` as the
+        durable document reference contract. Apply each reference by usage: `style_guide` governs citations and claim language,
+        and `operating_guidance` constrains process and approval boundaries.'
+      missingInputPolicy: If company identity and at least one credible supplied or approved source anchor are present, complete
+        intake and list missing screening inputs instead of blocking. If identity, provenance, or approved source access is
+        insufficient, ask for the minimum missing item such as company domain, deck, source thread, CRM/source record, founder
+        material, or source artifact.
+      externalActionPolicy: Intake readiness only. Approved CRM/source reads are allowed within the supplied scope. Public-web
+        research, CRM writes, external sends, Drive changes, child task creation, project creation, and stage transitions are
+        forbidden unless a human explicitly approves a separate workflow.
       completionCriteria:
-      - Required input gaps are resolved or listed as assumptions/open questions.
-      - Material conclusions include source links or are labeled as human judgment calls.
-      - Next actions identify owner, dependency, and required human approval point.
-      - Intake recommendation clearly states whether the project is ready for screening, needs more context, should be watched,
-        or should be passed.
+      - Company identity is confirmed or the task is blocked with a specific clarification question.
+      - At least one supplied or approved source anchor is recorded, or the missing source anchor is requested.
+      - Hydrated project fields list provenance and confidence without using public-web enrichment.
+      - Missing information names the smallest inputs needed before or during screening.
+      - Intake readiness is reported as ready_for_screening, needs_more_info, or blocked.
     humanDecisionPoints:
-    - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
-    - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+    - Confirm the target company when source material is ambiguous.
+    - Provide missing deck, CRM/source record, source thread, founder material, or source artifact when intake is not ready.
+    - Approve final intake readiness before moving to screening.
     orchestration:
       parentTaskPolicy: none
       suggestedChildTasks: []
@@ -88,9 +89,16 @@ fields:
   - key: company_name
     name: Company Name
     fieldType: string
-    required: true
+    required: false
     position: 0
     config: {}
+  - key: import_payload
+    name: Approved Source Import Payload
+    fieldType: json
+    required: false
+    position: 1
+    config:
+      contractRef: vc.capture_opportunity_intake.import_payload.v1
   - key: pitch_deck_artifact_id
     name: Pitch Deck Artifact
     fieldType: file
@@ -147,13 +155,13 @@ fields:
     config: {}
   output:
   - key: opportunity_intake_artifact_id
-    name: Opportunity Intake Summary
+    name: Opportunity Intake Readiness Summary
     fieldType: file
     required: true
     position: 0
     config: {}
-  - key: fit_recommendation
-    name: Intake Recommendation
+  - key: intake_readiness_status
+    name: Intake Readiness Status
     fieldType: string
     required: false
     position: 1
@@ -164,24 +172,32 @@ fields:
     required: false
     position: 2
     config: {}
-  - key: red_flags
-    name: Early Red Flags
-    fieldType: string
+  - key: hydrated_field_map
+    name: Hydrated Field Map
+    fieldType: richtext
     required: false
     position: 3
-    config: {}
+    config:
+      rows: 8
+  - key: source_index
+    name: Source Index
+    fieldType: richtext
+    required: false
+    position: 4
+    config:
+      rows: 6
 runtime:
   defaultExecutionContext:
     sourceMetadata:
       templateFamily: vc-workflows
-      taskKind: screen_inbound_opportunity
+      taskKind: opportunity_intake_readiness
   requiredResources:
     requiresTaskChat: true
   executionProfile:
     agentStartsImmediately: true
     requiresHumanConfirmationToComplete: true
     preferredMode: guided_execution
-    preferredAgentType: vc_dealflow_concierge
+    preferredAgentType: vc_intake_readiness_operator
 ui:
   renderer: generic
   surfaceKey: null
