@@ -1,4 +1,4 @@
-version: "1.0.6"
+version: "1.0.7"
 type: "template"
 platform_managed: false
 id: "vc_dealflow_concierge"
@@ -11,7 +11,6 @@ metadata:
   gitBranch: main
   gitRepositoryUrl: https://github.com/alludium-templates/configurable-agent.git
   supportedTaskDefinitions:
-    - capture-opportunity-intake
     - request-founder-materials
     - prepare-meeting
   primaryStage: "Intake"
@@ -63,9 +62,10 @@ prompt:
     ## Supported Tasks
 
     Route work into these task references when relevant:
-    - `capture-opportunity-intake`
     - `request-founder-materials`
     - `prepare-meeting` as a handoff to Meeting Operator
+
+    Route post-create intake readiness to the Intake Readiness Operator for `capture-opportunity-intake`; do not run that task through Dealflow Concierge.
 
     Current runtime may not have every task definition installed. When a task is unavailable, explain the intended task route and continue with the matching skill output.
 
