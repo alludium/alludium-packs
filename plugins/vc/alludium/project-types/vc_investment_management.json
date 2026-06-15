@@ -2,14 +2,14 @@
   "kind": "project-type",
   "apiVersion": "alludium/v1alpha1",
   "key": "vc_investment_management",
-  "name": "Investment Management",
+  "name": "Deal Execution",
   "description": "Project context for formal diligence, investment contracts, closing, completion, and portfolio handoff after a deal has moved beyond deal structuring.",
   "projectSetup": {
-    "setupLabel": "Investment Management Setup",
+    "setupLabel": "Deal Execution Setup",
     "starterId": "create-investment-management",
-    "starterLabel": "Create Investment Management Setup",
-    "starterResumeLabel": "Continue Investment Management Setup",
-    "starterDescription": "Create or resume the Investment Management setup flow.",
+    "starterLabel": "Create Deal Execution Setup",
+    "starterResumeLabel": "Continue Deal Execution Setup",
+    "starterDescription": "Create or resume the Deal Execution setup flow.",
     "recommendedSetupAgent": "vc_legal_compliance_desk",
     "requiredEvidence": [
       "variables",
@@ -38,7 +38,7 @@
     "postApprovalActions": {
       "applyVariables": {
         "enabled": true,
-        "label": "Apply reviewed investment management variables",
+        "label": "Apply reviewed deal execution variables",
         "sourceEvidenceKeys": [
           "variables"
         ],
@@ -49,11 +49,11 @@
       },
       "importProjects": {
         "enabled": false,
-        "reason": "Investment Management starts from a reviewed deal handoff rather than importing source CRM records during setup."
+        "reason": "Deal Execution starts from a reviewed deal handoff rather than importing source CRM records during setup."
       },
       "inviteCollaborators": {
         "enabled": true,
-        "label": "Invite approved investment management collaborators",
+        "label": "Invite approved deal execution collaborators",
         "sourceEvidenceKeys": [
           "invite"
         ],
@@ -64,7 +64,7 @@
       },
       "enableSchedules": {
         "enabled": false,
-        "reason": "Investment Management has no recurring schedules in this pack slice."
+        "reason": "Deal Execution has no recurring schedules in this pack slice."
       }
     },
     "scheduleGroups": [],
@@ -75,9 +75,10 @@
     }
   },
   "projectCreation": {
-    "launcherLabel": "Create Investment Management",
+    "launcherLabel": "Create Deal Execution",
     "starterId": "create-investment-management-project",
     "aliases": [
+      "deal execution",
       "investment management",
       "formal diligence",
       "closing process",
@@ -107,7 +108,7 @@
     }
   },
   "initialVersion": {
-    "version": "0.1.1",
+    "version": "0.1.2",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -1426,7 +1427,7 @@
         "description": "Portfolio onboarding plan artifact produced by prepare-portfolio-onboarding."
       }
     ],
-    "instructionTemplate": "This project is an Investment Management workspace for formal diligence, investment contracts, closing, completion, and portfolio handoff after deal structuring. Treat prior Deal Pipeline artifacts, diligence materials, counsel notes, signed documents, and task outputs as evidence. External sends, CRM writes, Drive changes, legal conclusions, investment decisions, capital calls, and portfolio handoff actions require explicit human approval.",
+    "instructionTemplate": "This project is a Deal Execution workspace for formal diligence, investment contracts, closing, completion, and portfolio handoff after deal structuring. Treat prior Deal Pipeline artifacts, diligence materials, counsel notes, signed documents, and task outputs as evidence. External sends, CRM writes, Drive changes, legal conclusions, investment decisions, capital calls, and portfolio handoff actions require explicit human approval.",
     "projectManager": {
       "displayName": "Deal Manager",
       "labels": {

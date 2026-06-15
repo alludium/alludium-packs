@@ -269,7 +269,7 @@
     }
   ],
   "initialVersion": {
-    "version": "1.1.0",
+    "version": "1.1.1",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -1604,7 +1604,7 @@
         "description": "Portfolio onboarding plan artifact produced by prepare-portfolio-onboarding."
       }
     ],
-    "instructionTemplate": "This project is a Deal Pipeline for one investment opportunity through deal structuring. Treat source links, decks, transcripts, CRM references, and task outputs as evidence that should stay attached to the pipeline when supported. Ask for manual links or files when integrations are missing. External sends, CRM writes, Drive changes, investment decisions, legal decisions, and handoff into Investment Management require explicit human approval.",
+    "instructionTemplate": "This project is a Deal Pipeline for one investment opportunity through deal structuring. Treat source links, decks, transcripts, CRM references, and task outputs as evidence that should stay attached to the pipeline when supported. Ask for manual links or files when integrations are missing. External sends, CRM writes, Drive changes, investment decisions, legal decisions, and handoff into Deal Execution require explicit human approval.",
     "projectManager": {
       "displayName": "Deal Manager",
       "labels": {
@@ -2266,32 +2266,6 @@
       ]
     },
     "projectTaskMappings": [
-      {
-        "id": "map-affinity-deal-room-import",
-        "taskDefinitionTemplateId": "vc.affinity_deal_room_import",
-        "taskDefinitionSlug": "affinity-deal-room-import",
-        "projectScope": "project_instance",
-        "lifecycleStage": "intake",
-        "outputMappings": [
-          {
-            "taskField": "affinity_import_receipt_artifact_id",
-            "target": "project.field",
-            "targetPath": "affinity_import_receipt_artifact_id",
-            "requiredForCompletion": true
-          },
-          {
-            "taskField": "import_status",
-            "target": "project.field",
-            "targetPath": "affinity_import_status"
-          }
-        ],
-        "activationPolicy": {
-          "mode": "manual_review",
-          "autoStartWhenRequiredInputsAvailable": false,
-          "requiresHumanApproval": true,
-          "createTaskWhenLifecycleStageEntered": false
-        }
-      },
       {
         "id": "map-capture-opportunity-intake",
         "taskDefinitionTemplateId": "vc.capture_opportunity_intake",

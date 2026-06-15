@@ -1,6 +1,6 @@
 ---
 projectType: vc_investment_management
-title: Investment Management Blueprint
+title: Deal Execution Blueprint
 source: alludium/project-types/vc_investment_management.json
 ---
 
@@ -8,7 +8,7 @@ source: alludium/project-types/vc_investment_management.json
 > Source: `alludium/project-types/vc_investment_management.json`
 > Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
-# Investment Management Blueprint
+# Deal Execution Blueprint
 
 Project context for formal diligence, investment contracts, closing, completion, and portfolio handoff after a deal has moved beyond deal structuring.
 
@@ -20,7 +20,7 @@ Project-type setup and configuration tasks used before normal project execution.
 
 | Task | Agent | Skills | Documents | Integrations |
 | --- | --- | --- | --- | --- |
-| [Capture Investment Management Handoff](../tasks/capture-investment-management-handoff.md) | [Legal & Compliance Desk](../agents/vc-legal-compliance-desk.md) | [Citation Enforcement](../skills/citation-enforcement/SKILL.md)<br>[VC Task & Next-Step Generation](../skills/vc-task-and-next-step-generation/SKILL.md) | [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md) (style_guide)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | `alludium-platform`<br>`affinity-mcp-server`<br>`exa-mcp-hosted`<br>`brave-search-mcp`<br>`dealroom-mcp`<br>`google_drive` |
+| [Capture Deal Execution Handoff](../tasks/capture-investment-management-handoff.md) | [Legal & Compliance Desk](../agents/vc-legal-compliance-desk.md) | [Citation Enforcement](../skills/citation-enforcement/SKILL.md)<br>[VC Task & Next-Step Generation](../skills/vc-task-and-next-step-generation/SKILL.md) | [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md) (style_guide)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | `alludium-platform`<br>`affinity-mcp-server`<br>`exa-mcp-hosted`<br>`brave-search-mcp`<br>`dealroom-mcp`<br>`google_drive` |
 | [VC Pack Variable Discovery](../tasks/vc-pack-variable-discovery.md) | [Legal & Compliance Desk](../agents/vc-legal-compliance-desk.md) | None declared | None declared | `alludium-platform`<br>`affinity-mcp-server`<br>`exa-mcp-hosted`<br>`brave-search-mcp`<br>`dealroom-mcp`<br>`google_drive` |
 
 ## Formal Diligence

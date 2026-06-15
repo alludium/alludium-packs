@@ -1,6 +1,6 @@
 ---
 id: vc.capture_investment_management_handoff
-title: Capture Investment Management Handoff
+title: Capture Deal Execution Handoff
 slug: capture-investment-management-handoff
 agent: vc-legal-compliance-desk
 skills:
@@ -12,15 +12,15 @@ skills:
 > Source: `alludium/task-definition-templates/vc-workflows/capture-investment-management-handoff.yaml`
 > Do not edit directly. Change the YAML source and run `python plugins/vc/scripts/generate_markdown.py`.
 
-# Capture Investment Management Handoff
+# Capture Deal Execution Handoff
 
 ## Objective
 
-Capture the reviewed deal-structuring handoff needed to create an Investment Management project for formal diligence, contracts, and closing.
+Capture the reviewed deal-structuring handoff needed to create a Deal Execution project for formal diligence, contracts, and closing.
 
 ## What To Do
 
-Capture the reviewed handoff from Deal Pipeline deal structuring into Investment Management. Confirm company identity, lead owner, IC or partner-review decision context, current term-sheet status, diligence source materials, legal/finance workstream readiness, and missing evidence. Cite material claims, separate assumptions from evidence, and do not create projects, send messages, mutate CRM records, move stages, or start legal/finance work without explicit human approval. When this task is used as a guided project creation task, complete with structured output company name and include any confidently collected declared creation fields. Do not create the project; the platform finalizer owns deterministic project creation after task completion.
+Capture the reviewed handoff from Deal Pipeline deal structuring into Deal Execution. Confirm company identity, lead owner, IC or partner-review decision context, current term-sheet status, diligence source materials, legal/finance workstream readiness, and missing evidence. Cite material claims, separate assumptions from evidence, and do not create projects, send messages, mutate CRM records, move stages, or start legal/finance work without explicit human approval. When this task is used as a guided project creation task, complete with structured output company name and include any confidently collected declared creation fields. Do not create the project; the platform finalizer owns deterministic project creation after task completion.
 
 ## Available Context
 
@@ -55,5 +55,5 @@ Draft only unless a human explicitly approves project creation, external communi
 
 ## Human Review
 
-- Approve creation of the Investment Management project.
+- Approve creation of the Deal Execution project.
 - Approve legal, finance, counsel, CRM, Drive, task creation, stage movement, and external communication actions separately.

@@ -7,7 +7,7 @@ Scope: all task definition templates in `plugins/vc/alludium/task-definition-tem
 ## Executive Summary
 
 - Baseline main had 92 task templates, 645 output declarations, 66 file outputs, and 579 non-file outputs.
-- This branch now has 229 output declarations: 66 file outputs and 163 non-file outputs. The cleanup removed 416 output declarations while preserving mapped artifacts, document-ref output contracts, project setup/import evidence, command-view artifact slots, required fields, and downstream project mappings.
+- This branch now has 230 output declarations: 66 file outputs and 164 non-file outputs. The cleanup removed 415 output declarations while preserving mapped artifacts, document-ref output contracts, project setup/import evidence, command-view artifact slots, required fields, and downstream project mappings.
 - The repeated generic bundle (`summary`, `next_actions`, `recommendation`, `source_links`, `assumptions`, `evidence_quality`, `open_questions`, `risks`, `human_decision_points`) has dropped from 263 baseline declarations to 1 retained declaration. The retained field is `vc-pack-variable-discovery.summary`, which is projected into parent Pack Setup context.
 - For tasks with `output_template` documents, this branch now removes non-contract standalone fields when the durable artifact should carry that content. Remaining non-file outputs on template-backed tasks are mapped, required, or compact status/count fields.
 - The remaining cleanup is now product-shaped rather than generic-noise cleanup: decide how lean no-artifact task surfaces and integration setup receipts should be.
@@ -17,14 +17,14 @@ Scope: all task definition templates in `plugins/vc/alludium/task-definition-tem
 | Metric | Value |
 | --- | ---: |
 | Task templates | 92 |
-| Input field declarations | 260 |
+| Input field declarations | 261 |
 | Unique input keys | 177 |
-| Output field declarations | 229 |
+| Output field declarations | 230 |
 | Unique output keys | 179 |
 | File outputs | 66 |
-| Non-file outputs | 163 |
+| Non-file outputs | 164 |
 | Required outputs | 71 (66 file, 5 non-file) |
-| Optional outputs | 158 |
+| Optional outputs | 159 |
 | Tasks with any `documentRefs` | 53 |
 | Tasks with `output_template` refs | 41 |
 | `output_template` refs | 42 |
@@ -35,11 +35,11 @@ Scope: all task definition templates in `plugins/vc/alludium/task-definition-tem
 | Command-view artifact output refs | 20 |
 | Likely removable/hideable outputs remaining | Product-review candidates only |
 
-Output field types: `date` 1, `file` 66, `json` 39, `number` 23, `richtext` 66, `select` 1, `string` 33.
+Output field types: `date` 1, `file` 66, `json` 39, `number` 23, `richtext` 68, `select` 1, `string` 32.
 
 ## Cleanup Completed
 
-- `capture-opportunity-intake` was reduced from 15 outputs to 4: artifact, recommendation, missing information, and red flags.
+- `capture-opportunity-intake` was reduced from 15 outputs to 5: artifact, intake readiness status, missing information, hydrated field map, and source index.
 - The 24 highest-noise artifact-backed tasks were reduced so they keep artifact IDs and concise status fields only.
 - A second document-template pass removed 51 more standalone fields from `output_template` tasks where the durable artifact should carry the content.
 - A third pass removed the remaining unused generic output bundle from `generate-diligence-questions`, `run-investment-fit-screen`, `prepare-deal-flow-agenda`, `review-opportunity-status`, and `capture-investment-management-handoff`.
@@ -84,7 +84,7 @@ These remain because they are mapped, required, or compact status/count fields r
 | --- | ---: | ---: | --- |
 | `summary` | 1 | 0 | Retain only for `vc-pack-variable-discovery`, where parent setup orchestration consumes it. Otherwise use task completion summary or artifact executive summary. |
 | `next_actions` | 0 | 0 | Move into artifact/body; do not add as standalone UI field. |
-| `recommendation` | 0 | 0 | Use task-specific decision fields instead, e.g. `overall_recommendation` or `fit_recommendation`. |
+| `recommendation` | 0 | 0 | Use task-specific decision fields instead, e.g. `overall_recommendation` or `intake_readiness_status`. |
 | `source_links` | 0 | 0 | Move into artifact/body; do not add as standalone UI field. |
 | `assumptions` | 0 | 0 | Move into artifact/body; do not add as standalone UI field. |
 | `evidence_quality` | 0 | 0 | Move into artifact/body; do not add as standalone UI field. |
@@ -121,8 +121,8 @@ These remain because they are mapped, required, or compact status/count fields r
 | `apify-setup` | `0.1.8` | 1 | 4 | - | `setup_summary`, `accepted_connection_scope`, `child_task_plan`, `sync_policy` | - | Current surface is tight. |
 | `apify-sync-read` | `0.1.4` | 1 | 2 | - | `apify_results_preview`, `source_registry_mapping` | - | Current surface is tight. |
 | `audit-linkedin-query-spend` | `0.1.9` | 1 | 2 | `linkedin_spend_audit_artifact_id`, `paid_source_spend_status` | - | - | Current surface is tight. |
-| `capture-investment-management-handoff` | `0.1.1` | 5 | 3 | `projectCreation` | `handoff_summary`, `missing_information` | - | Current no-artifact surface is compact; revisit only with UX evidence. |
-| `capture-opportunity-intake` | `1.0.19` | 10 | 4 | `opportunity_intake_artifact_id` | `fit_recommendation`, `missing_information`, `red_flags` | - | Current surface is tight. |
+| `capture-investment-management-handoff` | `0.1.2` | 5 | 3 | `projectCreation` | `handoff_summary`, `missing_information` | - | Current no-artifact surface is compact; revisit only with UX evidence. |
+| `capture-opportunity-intake` | `1.0.20` | 11 | 5 | `opportunity_intake_artifact_id` | `intake_readiness_status`, `missing_information`, `hydrated_field_map`, `source_index` | - | Current readiness surface is tight. |
 | `check-affinity-relationship-context` | `0.1.3` | 1 | 3 | `relationship_context_artifact_id` | `known_candidate_count`, `relationship_report` | - | Current surface is tight. |
 | `companies-house-discovery` | `0.1.4` | 1 | 2 | - | `companies_house_discovery_report`, `source_scope_questions` | - | Current surface is tight. |
 | `companies-house-setup` | `0.1.8` | 1 | 4 | - | `setup_summary`, `accepted_connection_scope`, `child_task_plan`, `sync_policy` | - | Current surface is tight. |
@@ -270,15 +270,15 @@ These remain because they are mapped, required, or compact status/count fields r
 
 ### `capture-investment-management-handoff`
 
-- Template id: `vc.capture_investment_management_handoff`; version: `0.1.1`; family: `investment_management_setup`; stage: `formal_diligence`.
+- Template id: `vc.capture_investment_management_handoff`; version: `0.1.2`; family: `investment_management_setup`; stage: `formal_diligence`.
 - Inputs (5): `company_name`, `lead_partner`, `handoff_source_artifact_ids`, `ic_decision_record_artifact_id`, `term_sheet_review_artifact_id`.
 - Outputs (3): `projectCreation`, `handoff_summary`, `missing_information`.
 
 ### `capture-opportunity-intake`
 
-- Template id: `vc.capture_opportunity_intake`; version: `1.0.19`; family: `intake`; stage: `intake`.
-- Inputs (10): `company_name`, `pitch_deck_artifact_id`, `company_domain`, `source_system`, `source_object_url`, `source_thread_url`, `source_thread_artifact_id`, `source_material_artifact_ids`, `founder_materials_artifact_ids`, `referrer`.
-- Outputs (4): `opportunity_intake_artifact_id`, `fit_recommendation`, `missing_information`, `red_flags`.
+- Template id: `vc.capture_opportunity_intake`; version: `1.0.20`; family: `intake`; stage: `intake`.
+- Inputs (11): `company_name`, `pitch_deck_artifact_id`, `company_domain`, `source_system`, `source_object_url`, `source_thread_url`, `source_thread_artifact_id`, `source_material_artifact_ids`, `founder_materials_artifact_ids`, `referrer`, `import_payload`.
+- Outputs (5): `opportunity_intake_artifact_id`, `intake_readiness_status`, `missing_information`, `hydrated_field_map`, `source_index`.
 
 ### `check-affinity-relationship-context`
 

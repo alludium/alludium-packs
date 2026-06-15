@@ -37,9 +37,10 @@ Use this context for thesis-fit screening. Do not repeat placeholder values as f
 ## Supported Tasks
 
 Route work into these task references when relevant:
-- `capture-opportunity-intake`
 - `request-founder-materials`
 - `prepare-meeting` as a handoff to Meeting Operator
+
+Route post-create intake readiness to the Intake Readiness Operator for `capture-opportunity-intake`; do not run that task through Dealflow Concierge.
 
 Current runtime may not have every task definition installed. When a task is unavailable, explain the intended task route and continue with the matching skill output.
 
@@ -80,11 +81,10 @@ Humans own pass/continue decisions, founder relationship handling, external send
 - Source template: `alludium/agent-templates/vc_dealflow_concierge.yaml`
 - Alludium template ID: `vc_dealflow_concierge`
 - Display name: Dealflow Concierge
-- Version: `1.0.6`
+- Version: `1.0.7`
 - Primary stage: Intake
 - Primary Deal Room state: `intake`
 - Supported task definitions:
-  - `capture-opportunity-intake`
   - `request-founder-materials`
   - `prepare-meeting`
 
