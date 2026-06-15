@@ -1604,7 +1604,7 @@
         "description": "Portfolio onboarding plan artifact produced by prepare-portfolio-onboarding."
       }
     ],
-    "instructionTemplate": "This project is a Deal Pipeline for one investment opportunity through deal structuring. Treat source links, decks, transcripts, CRM references, and task outputs as evidence that should stay attached to the pipeline when supported. Ask for manual links or files when integrations are missing. External sends, CRM writes, Drive changes, investment decisions, legal decisions, and handoff into Investment Management require explicit human approval.",
+    "instructionTemplate": "This project is a Deal Pipeline for one investment opportunity through deal structuring. Treat source links, decks, transcripts, CRM references, and task outputs as evidence that should stay attached to the pipeline when supported. Ask for manual links or files when integrations are missing. External sends, CRM writes, Drive changes, investment decisions, legal decisions, and handoff into Deal Execution require explicit human approval.",
     "projectManager": {
       "displayName": "Deal Manager",
       "labels": {

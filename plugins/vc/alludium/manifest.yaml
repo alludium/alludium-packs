@@ -7,7 +7,7 @@ pack:
     Public VC workflow plugin and pack seed for Alludium, published as the
     first bundle in the broader Alludium packs catalog. This release contains
     VC skills, Alludium runtime agent templates, VC task-definition templates,
-    Deal Pipeline and Origination Pipeline project type definitions,
+    Deal Pipeline, Origination Pipeline, and Deal Execution project type definitions,
     workspace variable declarations, application recommendation metadata,
     project-manager identity overlays, single-entry integration setup task
     recommendations, pack-native project methodology documents, and
