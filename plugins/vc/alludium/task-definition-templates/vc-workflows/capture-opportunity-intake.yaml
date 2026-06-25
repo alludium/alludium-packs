@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.capture_opportunity_intake
-version: 1.0.20
+version: 1.0.22
 title: Verify Opportunity Intake
 category: Venture Capital
 visibility: workspace
@@ -60,10 +60,22 @@ definition:
         Brave, SerpAPI, Firecrawl, competitor discovery, market research, investment scoring, red-flag analysis, or continue/watch/pass
         recommendations during intake; those belong in screening or later evaluation. Do not require a pitch deck when another
         supplied source explains the opportunity. Ask for the smallest missing context needed to identify the company and cite
-        at least one source anchor. Create or update a compact project file artifact named Opportunity Intake Readiness Summary
-        and attach it to the required output field `opportunity_intake_artifact_id`. Use `definitionJson.documentRefs` as the
-        durable document reference contract. Apply each reference by usage: `style_guide` governs citations and claim language,
-        and `operating_guidance` constrains process and approval boundaries.'
+        at least one source anchor. Create or update the required output field `opportunity_intake_artifact_id` by calling
+        `artifact_createTextArtifact` directly. The artifact must be an HTML text artifact, not a Markdown/project file: use
+        a `.html` filename, `mimeType: "text/html"`, and set `content` to complete standalone HTML source beginning with
+        `<!doctype html>`. Do not create `.md` files, do not use `text/markdown`, and do not pass Markdown or prose for the
+        platform to convert. Author the summary directly as safe static HTML with semantic sections and optional inline CSS
+        in a `<style>` block. Do not include scripts, event handlers, external assets, forms, iframes, or interactive JavaScript.
+        Include readiness status, source index, hydrated field map, missing information, and screening handoff notes in the
+        HTML document. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by
+        usage: `style_guide` governs citations and claim language, and `operating_guidance` constrains process and approval
+        boundaries.'
+      outputFormatting: 'Keep the HTML artifact separate from structured task output fields. `opportunity_intake_artifact_id`
+        must contain only the returned artifact UUID. `intake_readiness_status` must contain only one status string:
+        ready_for_screening, needs_more_info, or blocked. `hydrated_field_map`, `source_index`, and `missing_information`
+        must be plain text with no HTML tags, no `<table>`, no `<tr>`, no `<td>`, and no escaped HTML. Use compact lines
+        or numbered plain-text entries for those fields. HTML tables and semantic markup belong only inside the `.html`
+        artifact content passed to `artifact_createTextArtifact`, never inside saved task output fields.'
       missingInputPolicy: If company identity and at least one credible supplied or approved source anchor are present, complete
         intake and list missing screening inputs instead of blocking. If identity, provenance, or approved source access is
         insufficient, ask for the minimum missing item such as company domain, deck, source thread, CRM/source record, founder

@@ -10,6 +10,18 @@ summary: Reusable first-look scorecard methodology for venture screening.
 
 # Investment Screening Framework
 
+## Rendered Artifact Contract
+
+When this document is used to create a task output artifact:
+
+- Create the final artifact with `artifact_createTextArtifact`.
+- Use a `.html` filename and `mimeType: "text/html"`.
+- Set `content` to a complete standalone safe static HTML document beginning with `<!doctype html>`.
+- Convert this Markdown scaffold into semantic HTML sections, tables, and lists with small inline CSS in a `<style>` block.
+- Do not create `.md` or `text/markdown` artifacts for rendered outputs.
+- Do not copy HTML into structured task output fields; those fields remain plain text or artifact UUIDs.
+
+
 ## Purpose
 
 Use this framework to create a first-look investment screen for one company or a sourced candidate batch. The output should help an investor decide whether to pass, watch, continue, promote, or ask for specific missing evidence. It is a screening tool, not a full diligence memo.
