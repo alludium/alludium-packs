@@ -88,8 +88,8 @@ rather than doing it inside intake.
 Return one of these statuses:
 
 - `ready_for_screening`: identity and at least one credible source anchor are present
-- `needs_more_info`: the user should provide a small set of missing fields or artifacts
-- `blocked`: identity, source provenance, or approved source access is insufficient
+- `needs_more_info`: a small set of missing fields or artifacts is needed before a durable intake artifact should be created
+- `blocked`: identity, source provenance, or approved source access is insufficient, and the user must answer a specific question before intake can continue
 
 Readiness is about whether screening can start. It is not a recommendation to
 continue, watch, or pass.
@@ -102,7 +102,9 @@ Return:
 - `source_index`: supplied or approved source anchors used for intake
 - `hydrated_field_map`: project fields observed or filled, with provenance
 - `missing_information`: the smallest missing inputs needed for screening
-- `opportunity_intake_artifact_id`: compact readiness summary artifact, when the task contract requires an artifact
+- `opportunity_intake_artifact_id`: compact readiness summary artifact only when at least one supplied or approved source anchor has been inspected, or when the user explicitly approves creating a partial artifact with gaps
+
+For `needs_more_info` or `blocked` caused by missing source anchoring, ask the user for the minimum missing domain, deck, source thread, CRM/source record, founder material, or source artifact through task chat/questions. Do not create a placeholder Opportunity Intake Readiness Summary solely to satisfy an output field.
 
 ## Boundaries
 

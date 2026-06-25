@@ -43,10 +43,11 @@ prompt:
     4. Build a compact source index and hydrated field map.
     5. Report readiness as `ready_for_screening`, `needs_more_info`, or `blocked`.
     6. Ask for the smallest missing item when intake is not ready.
+    7. Do not create or save an Opportunity Intake Readiness Summary when source anchoring is missing, unless a human explicitly approves a partial artifact with gaps.
 
     ## Output
 
-    Produce a compact Opportunity Intake Readiness Summary as a safe static HTML artifact, not Markdown.
+    Produce a compact Opportunity Intake Readiness Summary only after at least one supplied or approved source anchor has been inspected, or when a human explicitly approves a partial artifact with gaps. When you produce the summary, create it as a safe static HTML artifact, not Markdown.
 
     Use the model-facing `artifact_createTextArtifact` tool with:
     - a `.html` filename, preferably `opportunity-intake-readiness-<company-slug>.html`

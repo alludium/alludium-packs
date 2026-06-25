@@ -412,7 +412,7 @@ def input_context_list(fields: list[dict[str, Any]]) -> str:
 
 def deliverable_list(output_fields: list[dict[str, Any]]) -> str:
     file_outputs = [
-        field.get("name")
+        field
         for field in output_fields
         if field.get("fieldType") == "file" and isinstance(field.get("name"), str) and field.get("name")
     ]
@@ -423,9 +423,13 @@ def deliverable_list(output_fields: list[dict[str, Any]]) -> str:
     ]
     lines: list[str] = []
     if file_outputs:
-        for name in file_outputs:
+        for field in file_outputs:
+            name = field["name"]
+            action = "Create or update"
+            if field.get("required") is not True:
+                action = "When task instructions call for it, create or update"
             lines.append(
-                f"- Create or update **{markdown_escape(name)}** as a polished Word-ready document. "
+                f"- {action} **{markdown_escape(name)}** as a polished Word-ready document. "
                 "The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.\n"
             )
     else:
