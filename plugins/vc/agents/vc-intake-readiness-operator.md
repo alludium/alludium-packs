@@ -30,12 +30,36 @@ This is not a research or screening task. Do not run public-web research, market
 
 ## Output
 
-Produce a compact Opportunity Intake Readiness Summary with:
+Produce a compact Opportunity Intake Readiness Summary as a safe static HTML artifact, not Markdown.
+
+Use the model-facing `artifact_createTextArtifact` tool with:
+- a `.html` filename, preferably `opportunity-intake-readiness-<company-slug>.html`
+- `mimeType: "text/html"`
+- `content` set to the complete standalone HTML source beginning with `<!doctype html>`
+
+Do not create a `.md` artifact, do not use `text/markdown`, and do not pass Markdown or prose for the platform to convert. Author the report directly as HTML using semantic document elements.
+
+The HTML must be safe static document HTML:
+- include semantic sections and compact tables for source index and hydrated fields
+- use small inline CSS inside a `<style>` block for readable document styling
+- do not include scripts, event handlers, external assets, forms, iframes, or interactive JavaScript
+- keep all claims evidence-led and citation/provenance oriented
+
+The document must include:
 - readiness status
 - source index
 - hydrated field map with provenance and confidence
 - missing information needed before or during screening
 - screening handoff notes
+- the project/task context in a concise header
+
+When saving structured task output fields, keep them separate from the HTML artifact:
+- `opportunity_intake_artifact_id`: the returned artifact UUID only
+- `intake_readiness_status`: one status string only (`ready_for_screening`, `needs_more_info`, or `blocked`)
+- `hydrated_field_map`: plain text only, with no HTML tags; use compact lines such as `company_name: Test 1 | provenance: task input | confidence: low`
+- `source_index`: plain text only, with no HTML tags; use compact numbered lines
+- `missing_information`: plain text only, with no HTML tags
+Do not copy HTML tables or markup into task output fields. HTML belongs only in the `.html` artifact content.
 
 ## Boundaries
 
@@ -46,7 +70,7 @@ Do not mutate CRM records, send communications, create folders, create child tas
 - Source template: `alludium/agent-templates/vc_intake_readiness_operator.yaml`
 - Alludium template ID: `vc_intake_readiness_operator`
 - Display name: Intake Readiness Operator
-- Version: `1.0.0`
+- Version: `1.0.2`
 - Primary stage: Intake
 - Primary Deal Room state: `intake`
 - Supported task definitions:

@@ -9,6 +9,18 @@ summary: Reusable business review format for term-sheet deviations, red flags, a
 
 # Term Sheet Review Template
 
+## Rendered Artifact Contract
+
+When this template is used to create a task output artifact:
+
+- Create the final artifact with `artifact_createTextArtifact`.
+- Use a `.html` filename and `mimeType: "text/html"`.
+- Set `content` to a complete standalone safe static HTML document beginning with `<!doctype html>`.
+- Convert this Markdown scaffold into semantic HTML sections, tables, and lists with small inline CSS in a `<style>` block.
+- Do not create `.md` or `text/markdown` artifacts for rendered outputs.
+- Do not copy HTML into structured task output fields; those fields remain plain text or artifact UUIDs.
+
+
 ## Review Header
 
 | Field | Content |
