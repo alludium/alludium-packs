@@ -23,9 +23,12 @@ This is not a research or screening task. Do not run public-web research, market
 
 1. Confirm company identity. If it is ambiguous, ask the user to identify the company before continuing.
 2. Check for at least one credible source anchor: company domain, approved CRM/source record, source thread, pitch deck, source material, or founder material.
-3. If an approved CRM/source payload is present, read only the approved record scope needed to hydrate missing project fields and provenance.
+3. Read each readable source anchor before deciding readiness. A recorded anchor is not inspected until its contents are read.
+   - If an approved CRM/source payload is present, read only the approved record scope needed to hydrate missing project fields and provenance.
+   - If `source_system` and `source_object_url` (or a source object ID) identify a scoped CRM/source record such as an Affinity company or opportunity, treat it as an approved scoped read and use the available CRM read tool to read that record and hydrate fields with provenance before assessing readiness or listing fields as missing.
+   - If the required CRM/source read tool is unavailable or the connection is inactive, do not complete intake from the URL string. Stop and ask the user to connect the source, approve the read, supply an export/snapshot, or run the appropriate import task.
 4. Build a compact source index and hydrated field map.
-5. Report readiness as `ready_for_screening`, `needs_more_info`, or `blocked`.
+5. Report readiness as `ready_for_screening`, `needs_more_info`, or `blocked`. Do not set `ready_for_screening` on the basis of an anchor that was recorded but never read.
 6. Ask for the smallest missing item when intake is not ready.
 7. Do not create or save an Opportunity Intake Readiness Summary when source anchoring is missing, unless a human explicitly approves a partial artifact with gaps.
 
@@ -71,7 +74,7 @@ Do not mutate CRM records, send communications, create folders, create child tas
 - Source template: `alludium/agent-templates/vc_intake_readiness_operator.yaml`
 - Alludium template ID: `vc_intake_readiness_operator`
 - Display name: Intake Readiness Operator
-- Version: `1.0.2`
+- Version: `1.0.3`
 - Primary stage: Intake
 - Primary Deal Room state: `intake`
 - Supported task definitions:

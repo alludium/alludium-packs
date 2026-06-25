@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.capture_opportunity_intake
-version: 1.0.22
+version: 1.0.23
 title: Verify Opportunity Intake
 category: Venture Capital
 visibility: workspace
@@ -55,7 +55,14 @@ definition:
       executionInstructions: 'Verify whether the created Deal Pipeline has enough supplied or approved source context to move
         into formal screening. Inspect project fields, task inputs, attached/source artifacts, source threads, founder materials,
         and approved CRM/source payloads such as `import_payload`. When an approved CRM/source payload is present, read only
-        the approved source record scope needed to hydrate missing project fields and source provenance. Capture the source
+        the approved source record scope needed to hydrate missing project fields and source provenance. When `source_system`
+        and `source_object_url` (or a source object ID) identify a scoped CRM/source record such as an Affinity company or
+        opportunity, treat that as an approved scoped read for that specific record: use the available CRM read tool to read
+        the record and hydrate available fields with provenance before assessing readiness. A source anchor that is recorded
+        but not read does not count as inspected: do not mark fields missing, set readiness, or create an artifact on the
+        basis of a CRM/source URL whose record has not actually been read. If the required CRM/source read tool is unavailable
+        or the connection is inactive, do not complete intake from the URL string; stop and ask the user to connect the source,
+        approve the read, supply an export/snapshot, or run the appropriate import task. Capture the source
         index, hydrated field map, missing information, and screening-readiness status. Do not run public-web research, Exa,
         Brave, SerpAPI, Firecrawl, competitor discovery, market research, investment scoring, red-flag analysis, or continue/watch/pass
         recommendations during intake; those belong in screening or later evaluation. Do not require a pitch deck when another
@@ -80,10 +87,12 @@ definition:
         must be plain text with no HTML tags, no `<table>`, no `<tr>`, no `<td>`, and no escaped HTML. Use compact lines
         or numbered plain-text entries for those fields. HTML tables and semantic markup belong only inside the `.html`
         artifact content passed to `artifact_createTextArtifact`, never inside saved task output fields.'
-      missingInputPolicy: If company identity and at least one credible supplied or approved source anchor are present, complete
-        intake and list missing screening inputs instead of blocking. If identity, provenance, or approved source access is
-        insufficient, ask for the minimum missing item such as company domain, deck, source thread, CRM/source record, founder
-        material, or source artifact.
+      missingInputPolicy: If company identity and at least one credible supplied or approved source anchor that has actually
+        been inspected are present, complete intake and list missing screening inputs instead of blocking. A recorded but
+        un-read source anchor, such as a supplied CRM/source URL whose record was never read, does not satisfy this bar. If
+        identity, provenance, or approved source access is insufficient, or a supplied CRM/source record cannot be read with
+        the available tools, ask for the minimum missing item such as connecting/approving the CRM/source, a company domain,
+        deck, source thread, CRM/source record, founder material, or source artifact.
       externalActionPolicy: Intake readiness only. Approved CRM/source reads are allowed within the supplied scope. Public-web
         research, CRM writes, external sends, Drive changes, child task creation, project creation, and stage transitions are
         forbidden unless a human explicitly approves a separate workflow.
@@ -91,6 +100,8 @@ definition:
       - Company identity is confirmed or the task is blocked with a specific clarification question.
       - At least one supplied or approved source anchor is recorded before an intake artifact is created, or the missing source
         anchor is requested without creating an artifact.
+      - Any supplied CRM/source record anchor is read with an available tool before readiness or missing fields are decided, or
+        the user is asked to connect/approve the source or supply an export when the record cannot be read.
       - Hydrated project fields list provenance and confidence without using public-web enrichment.
       - Missing information names the smallest inputs needed before or during screening.
       - Intake readiness is reported as ready_for_screening, needs_more_info, or blocked.

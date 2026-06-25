@@ -75,6 +75,27 @@ When a CRM/source payload is present, read only the approved record scope needed
 to hydrate project fields and source provenance. Record which source supplied
 each hydrated value.
 
+## A Source Anchor Must Be Read, Not Just Recorded
+
+A supplied source anchor counts as evidence only after its contents have been
+inspected. The presence of a pointer is not the same as reading what it points to.
+
+- When `source_system` and `source_object_url` (or a source object ID) identify a
+  scoped CRM/source record such as an Affinity company or opportunity, treat that as
+  an approved scoped read for that specific record. Use the available CRM read tool
+  to read the record and hydrate available fields with provenance before deciding
+  readiness or listing fields as missing.
+- Do not mark a field missing, set a readiness status, or create an intake artifact
+  on the basis of a CRM/source URL whose record has not actually been read.
+- If the required CRM/source read tool is unavailable or the connection is inactive,
+  do not complete intake from the URL string. Stop and ask the user to connect the
+  source, approve the read, supply an export/snapshot, or run the appropriate import
+  task before producing output.
+
+This applies to any source anchor whose content the agent can read: an attached deck
+should be inspected, not just noted as present, and a CRM/source record should be
+read, not just recorded as a URL.
+
 ## Do Not Use Public Research
 
 Do not use Exa, Brave, SerpAPI, Firecrawl, broad web search, market research
@@ -87,7 +108,7 @@ rather than doing it inside intake.
 
 Return one of these statuses:
 
-- `ready_for_screening`: identity and at least one credible source anchor are present
+- `ready_for_screening`: identity is confirmed and at least one credible source anchor has been inspected (its contents read, not just its presence noted)
 - `needs_more_info`: a small set of missing fields or artifacts is needed before a durable intake artifact should be created
 - `blocked`: identity, source provenance, or approved source access is insufficient, and the user must answer a specific question before intake can continue
 
