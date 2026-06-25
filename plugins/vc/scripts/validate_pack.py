@@ -306,6 +306,9 @@ VC_DEAL_ROOM_FORBIDDEN_CONTEXT_FIELDS = {
     "prior_task_outputs",
 }
 ARTIFACT_FIELD_KEY_PATTERN = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+)*_artifact_id$")
+OPTIONAL_ARTIFACT_OUTPUTS = {
+    "capture-opportunity-intake": {"opportunity_intake_artifact_id"},
+}
 VC_ARTIFACT_OUTPUTS = {
     "source-thesis-targets": ["thesis_target_list_artifact_id"],
     "prepare-lead-gen-packet": ["lead_generation_packet_artifact_id"],
@@ -1368,11 +1371,15 @@ def validate_required_artifact_fields(
     ]:
         for field in mapped_fields.values():
             optional_inputs = OPTIONAL_ARTIFACT_INPUTS.get(slug, set())
+            optional_outputs = OPTIONAL_ARTIFACT_OUTPUTS.get(slug, set())
             validate_artifact_field_shape(
                 template_id,
                 section_name,
                 field,
-                require_required=not (section_name == "input" and field["key"] in optional_inputs),
+                require_required=not (
+                    (section_name == "input" and field["key"] in optional_inputs)
+                    or (section_name == "output" and field["key"] in optional_outputs)
+                ),
             )
 
     for key in VC_ARTIFACT_INPUTS.get(slug, []):
@@ -1390,7 +1397,12 @@ def validate_required_artifact_fields(
         field = output_fields.get(key)
         if field is None:
             fail(f"Task template {template_id} ({slug}) is missing required artifact output {key}")
-        validate_artifact_field_shape(template_id, "output", field)
+        validate_artifact_field_shape(
+            template_id,
+            "output",
+            field,
+            require_required=key not in OPTIONAL_ARTIFACT_OUTPUTS.get(slug, set()),
+        )
 
 
 def validate_vc_deal_room_task_template_shape(

@@ -2339,7 +2339,7 @@
             "taskField": "opportunity_intake_artifact_id",
             "target": "project.field",
             "targetPath": "opportunity_intake_artifact_id",
-            "requiredForCompletion": true
+            "requiredForCompletion": false
           }
         ],
         "activationPolicy": {
