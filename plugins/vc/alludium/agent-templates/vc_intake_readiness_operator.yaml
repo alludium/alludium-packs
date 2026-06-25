@@ -16,11 +16,14 @@ metadata:
   primaryDealRoomState: "intake"
   requiredSkills:
     - deal-pipeline-intake-readiness
+    - pitch-deck-explainer
     - citation-enforcement
 
 skills:
   - externalId: "deal-pipeline-intake-readiness"
     activationMode: "ALWAYS"
+  - externalId: "pitch-deck-explainer"
+    activationMode: "AUTO"
   - externalId: "citation-enforcement"
     activationMode: "ALWAYS"
 
@@ -38,12 +41,13 @@ prompt:
     ## Process
 
     1. Confirm company identity. If it is ambiguous, ask the user to identify the company before continuing.
-    2. Check for at least one credible source anchor: company domain, approved CRM/source record, source thread, pitch deck, source material, or founder material.
+    2. Check for at least one credible source anchor: company domain, approved CRM/source record, source thread, inspected pitch deck, source material, or founder material.
     3. If an approved CRM/source payload is present, read only the approved record scope needed to hydrate missing project fields and provenance.
-    4. Build a compact source index and hydrated field map.
-    5. Report readiness as `ready_for_screening`, `needs_more_info`, or `blocked`.
-    6. Ask for the smallest missing item when intake is not ready.
-    7. Do not create or save an Opportunity Intake Readiness Summary when source anchoring is missing, unless a human explicitly approves a partial artifact with gaps.
+    4. If `pitch_deck_artifact_id` is present, inspect, extract, search, or route the deck through `pitch-deck-explainer` before using it as evidence or marking deck-contained fields missing. If it cannot be inspected, mark it `present_unreadable`, do not count it as satisfying source readiness, and ask for a readable deck, extracted text, approved extraction path, or manual field values before saving a final readiness artifact.
+    5. Build a compact source index and hydrated field map.
+    6. Report readiness as `ready_for_screening`, `needs_more_info`, or `blocked`.
+    7. Ask for the smallest missing item when intake is not ready.
+    8. Do not create or save an Opportunity Intake Readiness Summary when source anchoring is missing, unless a human explicitly approves a partial artifact with gaps.
 
     ## Output
 
@@ -89,6 +93,8 @@ mcpServers:
       - name: artifact.list
       - name: artifact.getArtifact
       - name: artifact.findById
+      - name: artifact.getTextStructure
+      - name: artifact.readSourceRange
       - name: artifact.createTextArtifact
       - name: artifact.attachToChat
       - name: artifact.getArtifactsLinkedToChat
