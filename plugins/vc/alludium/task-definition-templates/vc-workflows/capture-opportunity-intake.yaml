@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.capture_opportunity_intake
-version: 1.0.22
+version: 1.0.21
 title: Verify Opportunity Intake
 category: Venture Capital
 visibility: workspace

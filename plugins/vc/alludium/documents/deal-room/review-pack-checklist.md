@@ -11,7 +11,7 @@ summary: Checklist for team and partner review packs.
 
 ## Rendered Artifact Contract
 
-When this document is used to create a task output artifact:
+When this template is used to create a task output artifact:
 
 - Create the final artifact with `artifact_createTextArtifact`.
 - Use a `.html` filename and `mimeType: "text/html"`.
