@@ -86,13 +86,13 @@ each hydrated value.
 A supplied source anchor counts as evidence only after its contents have been
 inspected. The presence of a pointer is not the same as reading what it points to.
 
-- When `source_system` and `source_object_url` (or a source object ID) identify a
-  scoped CRM/source record such as an Affinity company or opportunity, treat that as
-  an approved scoped read for that specific record. If the URL path resembles
-  `.../companies/<id>`, treat it as a company and read it with `affinity_get_company`
-  using that ID; otherwise treat it as an opportunity or list entry and read it with
-  `affinity_get_opportunity` or `affinity_get_list_entries`. If the URL cannot be
-  parsed or the direct read is empty, confirm the record with
+- When `source_system` and `source_object_url` identify a scoped CRM/source record
+  such as an Affinity company or opportunity, treat that as an approved scoped read
+  for that specific record. If the URL path resembles `.../companies/<id>`, treat it
+  as a company and read it with `affinity_get_company` using that ID; if it resembles
+  `.../lists/<id>` or a list-entry path, read it with `affinity_get_list_entries`;
+  otherwise treat it as an opportunity and read it with `affinity_get_opportunity`. If
+  the URL cannot be parsed or the direct read is empty, confirm the record with
   `affinity_search_companies` using the confirmed company identity before reading.
   Hydrate available fields with provenance before deciding readiness or listing fields
   as missing.

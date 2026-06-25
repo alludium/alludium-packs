@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.capture_opportunity_intake
-version: 1.0.23
+version: 1.0.24
 title: Verify Opportunity Intake
 category: Venture Capital
 visibility: workspace
@@ -56,11 +56,12 @@ definition:
         into formal screening. Inspect project fields, task inputs, attached/source artifacts, source threads, founder materials,
         and approved CRM/source payloads such as `import_payload`. When an approved CRM/source payload is present, read only
         the approved source record scope needed to hydrate missing project fields and source provenance. When `source_system`
-        and `source_object_url` (or a source object ID) identify a scoped CRM/source record such as an Affinity company or
-        opportunity, treat that as an approved scoped read for that specific record. Resolve it to a tool call: if the URL
-        path resembles `.../companies/<id>`, treat it as a company and read it with `affinity_get_company` using that ID;
-        otherwise treat it as an opportunity or list entry and read it with `affinity_get_opportunity` or
-        `affinity_get_list_entries`. If the URL cannot be parsed or the direct read returns nothing, confirm the record with
+        and `source_object_url` identify a scoped CRM/source record such as an Affinity company or
+        opportunity, treat that as an approved scoped read for that specific record. Resolve `source_object_url` to a tool
+        call: if the URL path resembles `.../companies/<id>`, treat it as a company and read it with `affinity_get_company`
+        using that ID; if it resembles `.../lists/<id>` or a list-entry path, read it with `affinity_get_list_entries`;
+        otherwise treat it as an opportunity and read it with `affinity_get_opportunity`. If the URL cannot be parsed or the
+        direct read returns nothing, confirm the record with
         `affinity_search_companies` using the confirmed company identity before reading, rather than completing from the URL
         string. Read the record and hydrate available fields with provenance before assessing readiness. A
         source anchor that is recorded
