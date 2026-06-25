@@ -57,6 +57,12 @@ To mark intake ready for screening, require:
   - founder material artifact
 - provenance for every field hydrated during intake
 
+A source anchor whose content the agent can read — a CRM/source record, deck, source
+thread, source material, or founder material — counts only once it has actually been
+inspected (see "A Source Anchor Must Be Read, Not Just Recorded" below). A company
+domain serves as an identity/disambiguation anchor rather than a readable record, and
+does not require a read during intake because public-web research is out of scope here.
+
 If company identity is ambiguous, stop and ask the user to confirm the target
 company before continuing.
 
@@ -82,9 +88,14 @@ inspected. The presence of a pointer is not the same as reading what it points t
 
 - When `source_system` and `source_object_url` (or a source object ID) identify a
   scoped CRM/source record such as an Affinity company or opportunity, treat that as
-  an approved scoped read for that specific record. Use the available CRM read tool
-  to read the record and hydrate available fields with provenance before deciding
-  readiness or listing fields as missing.
+  an approved scoped read for that specific record. If the URL path resembles
+  `.../companies/<id>`, treat it as a company and read it with `affinity_get_company`
+  using that ID; otherwise treat it as an opportunity or list entry and read it with
+  `affinity_get_opportunity` or `affinity_get_list_entries`. If the URL cannot be
+  parsed or the direct read is empty, confirm the record with
+  `affinity_search_companies` using the confirmed company identity before reading.
+  Hydrate available fields with provenance before deciding readiness or listing fields
+  as missing.
 - Do not mark a field missing, set a readiness status, or create an intake artifact
   on the basis of a CRM/source URL whose record has not actually been read.
 - If the required CRM/source read tool is unavailable or the connection is inactive,
@@ -92,9 +103,11 @@ inspected. The presence of a pointer is not the same as reading what it points t
   source, approve the read, supply an export/snapshot, or run the appropriate import
   task before producing output.
 
-This applies to any source anchor whose content the agent can read: an attached deck
-should be inspected, not just noted as present, and a CRM/source record should be
-read, not just recorded as a URL.
+This applies to any source anchor whose content the agent can read: a CRM/source
+record should be read, not just recorded as a URL. The same principle holds for other
+readable anchors such as an attached deck or source thread, each handled through its
+own extraction path; deck extraction specifically is owned by the deck-handling
+workflow, not gated here.
 
 ## Do Not Use Public Research
 

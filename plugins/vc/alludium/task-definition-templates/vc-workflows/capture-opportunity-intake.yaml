@@ -57,8 +57,13 @@ definition:
         and approved CRM/source payloads such as `import_payload`. When an approved CRM/source payload is present, read only
         the approved source record scope needed to hydrate missing project fields and source provenance. When `source_system`
         and `source_object_url` (or a source object ID) identify a scoped CRM/source record such as an Affinity company or
-        opportunity, treat that as an approved scoped read for that specific record: use the available CRM read tool to read
-        the record and hydrate available fields with provenance before assessing readiness. A source anchor that is recorded
+        opportunity, treat that as an approved scoped read for that specific record. Resolve it to a tool call: if the URL
+        path resembles `.../companies/<id>`, treat it as a company and read it with `affinity_get_company` using that ID;
+        otherwise treat it as an opportunity or list entry and read it with `affinity_get_opportunity` or
+        `affinity_get_list_entries`. If the URL cannot be parsed or the direct read returns nothing, confirm the record with
+        `affinity_search_companies` using the confirmed company identity before reading, rather than completing from the URL
+        string. Read the record and hydrate available fields with provenance before assessing readiness. A
+        source anchor that is recorded
         but not read does not count as inspected: do not mark fields missing, set readiness, or create an artifact on the
         basis of a CRM/source URL whose record has not actually been read. If the required CRM/source read tool is unavailable
         or the connection is inactive, do not complete intake from the URL string; stop and ask the user to connect the source,
