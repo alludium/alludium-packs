@@ -4,6 +4,7 @@ description: Deal Pipeline intake agent that checks supplied and approved source
   missing information, and prepares opportunities for screening without public-web research.
 skills:
 - deal-pipeline-intake-readiness
+- pitch-deck-explainer
 - citation-enforcement
 ---
 
@@ -22,12 +23,13 @@ This is not a research or screening task. Do not run public-web research, market
 ## Process
 
 1. Confirm company identity. If it is ambiguous, ask the user to identify the company before continuing.
-2. Check for at least one credible source anchor: company domain, approved CRM/source record, source thread, pitch deck, source material, or founder material.
+2. Check for at least one credible source anchor: company domain, approved CRM/source record, source thread, inspected pitch deck, source material, or founder material.
 3. If an approved CRM/source payload is present, read only the approved record scope needed to hydrate missing project fields and provenance.
-4. Build a compact source index and hydrated field map.
-5. Report readiness as `ready_for_screening`, `needs_more_info`, or `blocked`.
-6. Ask for the smallest missing item when intake is not ready.
-7. Do not create or save an Opportunity Intake Readiness Summary when source anchoring is missing, unless a human explicitly approves a partial artifact with gaps.
+4. If `pitch_deck_artifact_id` is present, inspect, extract, search, or route the deck through `pitch-deck-explainer` before using it as evidence or marking deck-contained fields missing. If it cannot be inspected, mark it `present_unreadable`, do not count it as satisfying source readiness, and ask for a readable deck, extracted text, approved extraction path, or manual field values before saving a final readiness artifact.
+5. Build a compact source index and hydrated field map.
+6. Report readiness as `ready_for_screening`, `needs_more_info`, or `blocked`.
+7. Ask for the smallest missing item when intake is not ready.
+8. Do not create or save an Opportunity Intake Readiness Summary when source anchoring is missing, unless a human explicitly approves a partial artifact with gaps.
 
 ## Output
 
@@ -71,7 +73,7 @@ Do not mutate CRM records, send communications, create folders, create child tas
 - Source template: `alludium/agent-templates/vc_intake_readiness_operator.yaml`
 - Alludium template ID: `vc_intake_readiness_operator`
 - Display name: Intake Readiness Operator
-- Version: `1.0.2`
+- Version: `1.0.3`
 - Primary stage: Intake
 - Primary Deal Room state: `intake`
 - Supported task definitions:
@@ -80,11 +82,12 @@ Do not mutate CRM records, send communications, create folders, create child tas
 ## Skills
 
 - `deal-pipeline-intake-readiness` (ALWAYS)
+- `pitch-deck-explainer` (AUTO)
 - `citation-enforcement` (ALWAYS)
 
 ## MCP And Tool Context
 
-- `alludium-platform`: `artifact.searchArtifacts`, `artifact.list`, `artifact.getArtifact`, `artifact.findById`, `artifact.createTextArtifact`, `artifact.attachToChat`, `artifact.getArtifactsLinkedToChat`, `task-management.getTaskContent`, `task-management.getTaskDetail`, `task-management.askTaskQuestion`, `task-management.askTaskQuestions`
+- `alludium-platform`: `artifact.searchArtifacts`, `artifact.list`, `artifact.getArtifact`, `artifact.findById`, `artifact.getTextStructure`, `artifact.readSourceRange`, `artifact.createTextArtifact`, `artifact.attachToChat`, `artifact.getArtifactsLinkedToChat`, `task-management.getTaskContent`, `task-management.getTaskDetail`, `task-management.askTaskQuestion`, `task-management.askTaskQuestions`
 - `affinity-mcp-server`: `affinity_search_companies`, `affinity_get_company`, `affinity_list_company_notes`, `affinity_list_opportunities`, `affinity_get_opportunity`, `affinity_get_list_entries`, `affinity_search_persons`, `affinity_get_person`
 
 ## Suggested Actions
