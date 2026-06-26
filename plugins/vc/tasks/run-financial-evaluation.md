@@ -20,7 +20,7 @@ Run an evaluation-stage financial and financing workstream for one venture-capit
 
 ## What To Do
 
-Run a financial evaluation covering business model, forecast plausibility, revenue quality, burn, runway, use of funds, valuation, ownership, financing path, and financial gating risk. Use this as evaluation-stage work, not formal financial diligence, accounting advice, tax advice, or legal advice. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a polished Word-ready document named Financial Evaluation.
+Run a financial evaluation covering business model, forecast plausibility, revenue quality, burn, runway, use of funds, valuation, ownership, financing path, and financial gating risk. Use this as evaluation-stage work, not formal financial diligence, accounting advice, tax advice, or legal advice. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a polished Word-ready document named Financial Evaluation as a standalone safe static HTML artifact using `artifact_createTextArtifact`, a `.html` filename, and `mimeType: "text/html"`; then attach it to the required output field financial evaluation artifact.
 
 ## Available Context
 
@@ -39,7 +39,7 @@ Run a financial evaluation covering business model, forecast plausibility, reven
 
 ## Deliverable
 
-- Create or update **Financial Evaluation** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Create or update **Financial Evaluation** as a standalone safe HTML artifact. Use `.html`, `mimeType: "text/html"`, and complete static HTML suitable for the platform safe previewer.
 - Also include a short human-readable summary covering: Main Financial Hypothesis, Financial Gating Risk, Next Financial Proof Needed. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy

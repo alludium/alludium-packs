@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_ic_agenda
-version: 1.0.12
+version: 1.0.13
 title: Prepare IC Agenda
 category: Venture Capital
 visibility: workspace
@@ -47,7 +47,7 @@ definition:
         note: Spreadsheet row 48
     instructions:
       executionInstructions: >-
-        Prepare the IC agenda, pack checklist, key debate topics, follow-up questions, and pre-read requirements. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifact `investment_memo_artifact_id` as the source memo when preparing the IC agenda. Create or update a durable project file artifact named IC Agenda and attach it to the required output field `ic_agenda_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+        Prepare the IC agenda, pack checklist, key debate topics, follow-up questions, and pre-read requirements. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifact `investment_memo_artifact_id` as the source memo when preparing the IC agenda. Create or update a durable project file artifact named IC Agenda as a standalone safe static HTML artifact using `artifact_createTextArtifact`, a `.html` filename, and `mimeType: "text/html"`; then attach it to the required output field `ic_agenda_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:

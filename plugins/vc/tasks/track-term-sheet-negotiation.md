@@ -21,7 +21,7 @@ Organize open term-sheet issues, give/get options, counsel questions, and approv
 
 ## What To Do
 
-Prepare an internal negotiation brief from the current term sheet, open terms, IC constraints, founder comments or redlines, counsel notes, cap table context, and deal terms analysis. Separate business tradeoffs from counsel review, identify give/get options, and list approval points. Cite material claims, separate assumptions from evidence, and do not provide legal advice, negotiate terms, send terms, approve legal language, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a polished Word-ready document named Term Sheet Negotiation Brief.
+Prepare an internal negotiation brief from the current term sheet, open terms, IC constraints, founder comments or redlines, counsel notes, cap table context, and deal terms analysis. Separate business tradeoffs from counsel review, identify give/get options, and list approval points. Cite material claims, separate assumptions from evidence, and do not provide legal advice, negotiate terms, send terms, approve legal language, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a polished Word-ready document named Term Sheet Negotiation Brief as a standalone safe static HTML artifact using `artifact_createTextArtifact`, a `.html` filename, and `mimeType: "text/html"`; then attach it to the required output field negotiation brief artifact.
 
 ## Available Context
 
@@ -37,7 +37,7 @@ Prepare an internal negotiation brief from the current term sheet, open terms, I
 
 ## Deliverable
 
-- Create or update **Negotiation Brief** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Create or update **Negotiation Brief** as a standalone safe HTML artifact. Use `.html`, `mimeType: "text/html"`, and complete static HTML suitable for the platform safe previewer.
 
 ## Missing Input Policy
 

@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_technical_evaluation
-version: 0.1.1
+version: 0.1.2
 title: Run Technical Evaluation
 category: Venture Capital
 visibility: workspace
@@ -49,7 +49,7 @@ definition:
         note: structured diligence dimensions
     instructions:
       executionInstructions: >-
-        Run a technical evaluation covering product depth, architecture plausibility, technical edge, IP or data defensibility, roadmap realism, technical team coverage, and technical gating risk. Use this as evaluation-stage work, not formal technical diligence, code review, security review, expert validation, or IP clearance. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a durable project file artifact named Technical Evaluation and attach it to the required output field `technical_evaluation_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
+        Run a technical evaluation covering product depth, architecture plausibility, technical edge, IP or data defensibility, roadmap realism, technical team coverage, and technical gating risk. Use this as evaluation-stage work, not formal technical diligence, code review, security review, expert validation, or IP clearance. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a durable project file artifact named Technical Evaluation as a standalone safe static HTML artifact using `artifact_createTextArtifact`, a `.html` filename, and `mimeType: "text/html"`; then attach it to the required output field `technical_evaluation_artifact_id`. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.
       missingInputPolicy: Ask for the company name and at least one relevant source such as a deck, product demo notes, product materials, architecture claims, roadmap, IP/data narrative, or technical team context before producing the evaluation.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
       completionCriteria:

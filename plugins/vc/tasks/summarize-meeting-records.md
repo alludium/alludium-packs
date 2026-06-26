@@ -21,7 +21,7 @@ Summarize or ingest meeting records for one venture-capital opportunity with evi
 
 ## What To Do
 
-Summarize or ingest the available meeting records for this opportunity, including founder, management, advisor, customer, expert, partner, IC, legal, or closing meetings represented by transcript artifacts, meeting-summary artifacts, recording exports, notes, or meeting-source links. Extract claims and gaps, capture action items, draft a CRM-neutral update, identify open questions, and recommend next actions or stage considerations without moving the deal. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a polished Word-ready document named Meeting Records Summary.
+Summarize or ingest the available meeting records for this opportunity, including founder, management, advisor, customer, expert, partner, IC, legal, or closing meetings represented by transcript artifacts, meeting-summary artifacts, recording exports, notes, or meeting-source links. Extract claims and gaps, capture action items, draft a CRM-neutral update, identify open questions, and recommend next actions or stage considerations without moving the deal. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a polished Word-ready document named Meeting Records Summary as a standalone safe static HTML artifact using `artifact_createTextArtifact`, a `.html` filename, and `mimeType: "text/html"`; then attach it to the required output field customer insights artifact.
 
 ## Available Context
 
@@ -37,7 +37,7 @@ Summarize or ingest the available meeting records for this opportunity, includin
 
 ## Deliverable
 
-- Create or update **Meeting Records Summary** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Create or update **Meeting Records Summary** as a standalone safe HTML artifact. Use `.html`, `mimeType: "text/html"`, and complete static HTML suitable for the platform safe previewer.
 
 ## Missing Input Policy
 

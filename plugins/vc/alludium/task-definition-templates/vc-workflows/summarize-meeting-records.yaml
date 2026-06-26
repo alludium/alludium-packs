@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.summarize_meeting_records
-version: 1.0.14
+version: 1.0.15
 title: Summarize Meeting Records
 category: Venture Capital
 visibility: workspace
@@ -48,7 +48,7 @@ definition:
         folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring
         frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default
         unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Meeting
-        Records Summary and attach it to the required output field `customer_insights_artifact_id`. Use `definitionJson.documentRefs`
+        Records Summary as a standalone safe static HTML artifact using `artifact_createTextArtifact`, a `.html` filename, and `mimeType: "text/html"`; then attach it to the required output field `customer_insights_artifact_id`. Use `definitionJson.documentRefs`
         as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton,
         `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner,
         `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval

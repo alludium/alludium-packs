@@ -21,7 +21,7 @@ Run an evaluation-stage technical and product workstream for one venture-capital
 
 ## What To Do
 
-Run a technical evaluation covering product depth, architecture plausibility, technical edge, IP or data defensibility, roadmap realism, technical team coverage, and technical gating risk. Use this as evaluation-stage work, not formal technical diligence, code review, security review, expert validation, or IP clearance. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a polished Word-ready document named Technical Evaluation.
+Run a technical evaluation covering product depth, architecture plausibility, technical edge, IP or data defensibility, roadmap realism, technical team coverage, and technical gating risk. Use this as evaluation-stage work, not formal technical diligence, code review, security review, expert validation, or IP clearance. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a polished Word-ready document named Technical Evaluation as a standalone safe static HTML artifact using `artifact_createTextArtifact`, a `.html` filename, and `mimeType: "text/html"`; then attach it to the required output field technical evaluation artifact.
 
 ## Available Context
 
@@ -40,7 +40,7 @@ Run a technical evaluation covering product depth, architecture plausibility, te
 
 ## Deliverable
 
-- Create or update **Technical Evaluation** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Create or update **Technical Evaluation** as a standalone safe HTML artifact. Use `.html`, `mimeType: "text/html"`, and complete static HTML suitable for the platform safe previewer.
 - Also include a short human-readable summary covering: Main Technical Hypothesis, Technical Gating Risk, Next Technical Proof Needed. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy

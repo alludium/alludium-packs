@@ -22,7 +22,7 @@ Prepare a founder, management, advisor, customer, expert, partner, IC, legal, or
 
 ## What To Do
 
-Prepare the meeting brief, relationship context, concise company and evidence summary, stage-relevant agenda, risk prompts, and questions by topic for the requested meeting type. Use the pitch deck, prior task artifacts, meeting goal, calendar context, CRM context, or other supplied source material when available, but do not require a pitch deck when another evidence source is sufficient. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a polished Word-ready document named Meeting Brief.
+Prepare the meeting brief, relationship context, concise company and evidence summary, stage-relevant agenda, risk prompts, and questions by topic for the requested meeting type. Use the pitch deck, prior task artifacts, meeting goal, calendar context, CRM context, or other supplied source material when available, but do not require a pitch deck when another evidence source is sufficient. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a polished Word-ready document named Meeting Brief as a standalone safe static HTML artifact using `artifact_createTextArtifact`, a `.html` filename, and `mimeType: "text/html"`; then attach it to the required output field initial call brief artifact.
 
 ## Available Context
 
@@ -38,7 +38,7 @@ Prepare the meeting brief, relationship context, concise company and evidence su
 
 ## Deliverable
 
-- Create or update **Meeting Brief** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Create or update **Meeting Brief** as a standalone safe HTML artifact. Use `.html`, `mimeType: "text/html"`, and complete static HTML suitable for the platform safe previewer.
 
 ## Missing Input Policy
 

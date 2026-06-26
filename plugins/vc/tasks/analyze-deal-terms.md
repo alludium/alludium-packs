@@ -20,7 +20,7 @@ Analyze proposed venture deal economics, ownership, dilution, ESOP, and commerci
 
 ## What To Do
 
-Analyze the proposed investment amount, valuation, round size, cap table, ownership target, ESOP, co-investors, and reserve policy as commercial deal economics. Model ownership, dilution, valuation sensitivity, and open commercial terms only from supplied evidence. Cite material claims, separate assumptions from evidence, and do not provide legal advice, negotiate terms, approve terms, send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a polished Word-ready document named Deal Terms Analysis.
+Analyze the proposed investment amount, valuation, round size, cap table, ownership target, ESOP, co-investors, and reserve policy as commercial deal economics. Model ownership, dilution, valuation sensitivity, and open commercial terms only from supplied evidence. Cite material claims, separate assumptions from evidence, and do not provide legal advice, negotiate terms, approve terms, send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a polished Word-ready document named Deal Terms Analysis as a standalone safe static HTML artifact using `artifact_createTextArtifact`, a `.html` filename, and `mimeType: "text/html"`; then attach it to the required output field deal terms analysis artifact.
 
 ## Available Context
 
@@ -36,7 +36,7 @@ Analyze the proposed investment amount, valuation, round size, cap table, owners
 
 ## Deliverable
 
-- Create or update **Deal Terms Analysis** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Create or update **Deal Terms Analysis** as a standalone safe HTML artifact. Use `.html`, `mimeType: "text/html"`, and complete static HTML suitable for the platform safe previewer.
 - Also include a short human-readable summary covering: Open Commercial Terms. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy

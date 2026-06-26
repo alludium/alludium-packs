@@ -21,7 +21,7 @@ Record IC Decision for one venture-capital opportunity with evidence capture, hu
 
 ## What To Do
 
-Record the IC decision outcome, vote or consensus summary, dissent and objections, conditions, post-IC action items, and stage transition recommendation. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifacts investment memo artifact and ic agenda artifact as the IC decision record subjects, alongside the transcript or notes. Create or update a polished Word-ready document named IC Decision Record.
+Record the IC decision outcome, vote or consensus summary, dissent and objections, conditions, post-IC action items, and stage transition recommendation. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifacts investment memo artifact and ic agenda artifact as the IC decision record subjects, alongside the transcript or notes. Create or update a polished Word-ready document named IC Decision Record as a standalone safe static HTML artifact using `artifact_createTextArtifact`, a `.html` filename, and `mimeType: "text/html"`; then attach it to the required output field ic decision record artifact.
 
 ## Available Context
 
@@ -37,7 +37,7 @@ Record the IC decision outcome, vote or consensus summary, dissent and objection
 
 ## Deliverable
 
-- Create or update **IC Decision Record** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Create or update **IC Decision Record** as a standalone safe HTML artifact. Use `.html`, `mimeType: "text/html"`, and complete static HTML suitable for the platform safe previewer.
 
 ## Missing Input Policy
 

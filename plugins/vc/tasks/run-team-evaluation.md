@@ -21,7 +21,7 @@ Run an evaluation-stage team and founder workstream for one venture-capital oppo
 
 ## What To Do
 
-Run a team evaluation covering founder-market fit, role coverage, relevant experience, execution evidence, integrity or consistency signals, hiring gaps, adviser or board quality, reference needs, and team gating risk. Use this as evaluation-stage work, not formal founder diligence, completed reference checking, or background checking. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a polished Word-ready document named Team Evaluation.
+Run a team evaluation covering founder-market fit, role coverage, relevant experience, execution evidence, integrity or consistency signals, hiring gaps, adviser or board quality, reference needs, and team gating risk. Use this as evaluation-stage work, not formal founder diligence, completed reference checking, or background checking. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a polished Word-ready document named Team Evaluation as a standalone safe static HTML artifact using `artifact_createTextArtifact`, a `.html` filename, and `mimeType: "text/html"`; then attach it to the required output field team evaluation artifact.
 
 ## Available Context
 
@@ -39,7 +39,7 @@ Run a team evaluation covering founder-market fit, role coverage, relevant exper
 
 ## Deliverable
 
-- Create or update **Team Evaluation** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Create or update **Team Evaluation** as a standalone safe HTML artifact. Use `.html`, `mimeType: "text/html"`, and complete static HTML suitable for the platform safe previewer.
 - Also include a short human-readable summary covering: Main Team Hypothesis, Team Gating Risk, Next Team Proof Needed. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy

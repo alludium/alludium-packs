@@ -20,7 +20,7 @@ Prepare Team Review Pack for one venture-capital opportunity with evidence captu
 
 ## What To Do
 
-Assemble the Team Review pack from evaluation-stage workstream outputs, the diligence question bank, available formal diligence outputs, evidence summary, founder risks, and stage-gate recommendation. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use required evaluation input file artifacts commercial evaluation artifact, technical evaluation artifact, financial evaluation artifact, team evaluation artifact, and diligence question bank artifact as the decision-review source set. Use formal diligence artifacts commercial dd artifact, financial dd artifact, founder evaluation artifact, and technical dd artifact when present, but do not block evaluation-stage review on them. Create or update a polished Word-ready document named Team Review Pack.
+Assemble the Team Review pack from evaluation-stage workstream outputs, the diligence question bank, available formal diligence outputs, evidence summary, founder risks, and stage-gate recommendation. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use required evaluation input file artifacts commercial evaluation artifact, technical evaluation artifact, financial evaluation artifact, team evaluation artifact, and diligence question bank artifact as the decision-review source set. Use formal diligence artifacts commercial dd artifact, financial dd artifact, founder evaluation artifact, and technical dd artifact when present, but do not block evaluation-stage review on them. Create or update a polished Word-ready document named Team Review Pack as a standalone safe static HTML artifact using `artifact_createTextArtifact`, a `.html` filename, and `mimeType: "text/html"`; then attach it to the required output field team review pack artifact.
 
 ## Available Context
 
@@ -40,7 +40,7 @@ Assemble the Team Review pack from evaluation-stage workstream outputs, the dili
 
 ## Deliverable
 
-- Create or update **Team Review Pack** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Create or update **Team Review Pack** as a standalone safe HTML artifact. Use `.html`, `mimeType: "text/html"`, and complete static HTML suitable for the platform safe previewer.
 
 ## Missing Input Policy
 

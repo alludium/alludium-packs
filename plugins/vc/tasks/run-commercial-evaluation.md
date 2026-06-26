@@ -20,7 +20,7 @@ Run an evaluation-stage commercial workstream for one venture-capital opportunit
 
 ## What To Do
 
-Run a commercial evaluation covering customer segment, pain urgency, budget, pricing, GTM path, competition, lightweight market sizing, and commercial gating risk. Use this as evaluation-stage work, not formal commercial diligence. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a polished Word-ready document named Commercial Evaluation.
+Run a commercial evaluation covering customer segment, pain urgency, budget, pricing, GTM path, competition, lightweight market sizing, and commercial gating risk. Use this as evaluation-stage work, not formal commercial diligence. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a polished Word-ready document named Commercial Evaluation as a standalone safe static HTML artifact using `artifact_createTextArtifact`, a `.html` filename, and `mimeType: "text/html"`; then attach it to the required output field commercial evaluation artifact.
 
 ## Available Context
 
@@ -39,7 +39,7 @@ Run a commercial evaluation covering customer segment, pain urgency, budget, pri
 
 ## Deliverable
 
-- Create or update **Commercial Evaluation** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Create or update **Commercial Evaluation** as a standalone safe HTML artifact. Use `.html`, `mimeType: "text/html"`, and complete static HTML suitable for the platform safe previewer.
 - Also include a short human-readable summary covering: Main Commercial Hypothesis, Commercial Gating Risk, Next Commercial Proof Needed. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
