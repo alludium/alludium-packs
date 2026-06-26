@@ -20,6 +20,17 @@ When this template is used to create a task output artifact:
 - Do not create `.md` or `text/markdown` artifacts for rendered outputs.
 - Do not copy HTML into structured task output fields; those fields remain plain text or artifact UUIDs.
 
+## At A Glance
+
+Render this section first as a compact HTML decision card before the full record.
+
+| Field | Content |
+| --- | --- |
+| Decision | Approved / approved with conditions / continue diligence / passed |
+| Investment amount | Proposed amount, ownership, and any conditions |
+| Core rationale | One-line reason the committee decided this way |
+| Dissent or concern | The most material unresolved concern or objection |
+| Follow-up owner | The person accountable for next actions and deadlines |
 
 ## Decision Summary
 

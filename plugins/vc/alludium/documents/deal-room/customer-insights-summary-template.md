@@ -20,6 +20,17 @@ When this template is used to create a task output artifact:
 - Do not create `.md` or `text/markdown` artifacts for rendered outputs.
 - Do not copy HTML into structured task output fields; those fields remain plain text or artifact UUIDs.
 
+## At A Glance
+
+Render this section first as a compact HTML insight card before the detailed evidence tables.
+
+| Field | Content |
+| --- | --- |
+| Source coverage | Complete / partial / excerpt, with reliability |
+| Strongest customer insight | The most decision-relevant customer, buyer, or workflow signal |
+| Main contradiction or gap | The claim, question, or missing source that limits confidence |
+| Investment implication | Continue / watch / pass / request follow-up, with one-line rationale |
+| Next action | Specific follow-up item, owner, and approval need |
 
 ## Source Coverage
 

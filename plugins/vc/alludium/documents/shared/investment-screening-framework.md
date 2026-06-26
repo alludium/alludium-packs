@@ -21,6 +21,17 @@ When this document is used to create a task output artifact:
 - Do not create `.md` or `text/markdown` artifacts for rendered outputs.
 - Do not copy HTML into structured task output fields; those fields remain plain text or artifact UUIDs.
 
+## At A Glance Output
+
+Every rendered screen should begin with a compact HTML overview before the scorecard.
+
+| Field | Content |
+| --- | --- |
+| Verdict | Continue / Watch / Pass / Promote / Needs partner judgment |
+| Top reason to continue | The strongest thesis, problem, product, market, team, or return signal |
+| Top reason to hesitate | The most material risk, contradiction, or unknown |
+| Evidence confidence | High / Medium / Low, with one-line rationale |
+| Next action | The exact follow-up, owner, or routing decision |
 
 ## Purpose
 

@@ -20,6 +20,17 @@ When this template is used to create a task output artifact:
 - Do not create `.md` or `text/markdown` artifacts for rendered outputs.
 - Do not copy HTML into structured task output fields; those fields remain plain text or artifact UUIDs.
 
+## At A Glance
+
+Render this section first as a compact HTML decision overview before the full evaluation.
+
+| Field | Content |
+| --- | --- |
+| Current posture | Pass / Watch / Targeted diligence / Decision-review preparation / Term-sheet consideration |
+| Best case | The strongest underwritable reason to continue |
+| Base case | The current evidence-led view |
+| Main gating risk | The risk that most directly decides progression |
+| Single most important question | The next question or data-room request that changes the decision |
 
 ## Evaluation Objective
 

@@ -20,6 +20,17 @@ When this template is used to create a task output artifact:
 - Do not create `.md` or `text/markdown` artifacts for rendered outputs.
 - Do not copy HTML into structured task output fields; those fields remain plain text or artifact UUIDs.
 
+## At A Glance
+
+Render this section first as a compact HTML readiness card before the checklist. Use it for both team review and partner review packs.
+
+| Field | Content |
+| --- | --- |
+| Pack type | Team review / partner review / gap review |
+| Decision requested | Continue, pass, launch diligence, prepare IC, approve condition |
+| Readiness | Ready / gap / blocked, with one-line rationale |
+| Top missing item | The critical evidence, citation, risk, or owner gap |
+| Reviewer action | The exact decision or review action requested |
 
 ## Pack Header
 

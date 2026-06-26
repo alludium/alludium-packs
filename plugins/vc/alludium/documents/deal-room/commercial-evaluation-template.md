@@ -20,6 +20,17 @@ When this template is used to create a task output artifact:
 - Do not create `.md` or `text/markdown` artifacts for rendered outputs.
 - Do not copy HTML into structured task output fields; those fields remain plain text or artifact UUIDs.
 
+## At A Glance
+
+Render this section first as a compact HTML overview before the workstream detail.
+
+| Field | Content |
+| --- | --- |
+| Commercial posture | Continue / watch / pass / targeted diligence / decision review |
+| Strongest commercial proof | Best evidence for urgent customer pain, budget, or GTM pull |
+| Main commercial doubt | The customer, budget, market, or GTM assumption still unproven |
+| Evidence confidence | High / Medium / Low, with one-line rationale |
+| Next proof needed | The single customer, market, pricing, or pipeline proof that changes the decision |
 
 ## Workstream Header
 

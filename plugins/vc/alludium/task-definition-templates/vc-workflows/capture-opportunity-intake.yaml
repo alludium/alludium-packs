@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.capture_opportunity_intake
-version: 1.0.24
+version: 1.0.25
 title: Verify Opportunity Intake
 category: Venture Capital
 visibility: workspace
@@ -87,8 +87,11 @@ definition:
         with `<!doctype html>`. Do not create `.md` files, do not use `text/markdown`, and do not pass Markdown or prose for
         the platform to convert. Author the summary directly as safe static HTML with semantic sections and optional inline
         CSS in a `<style>` block. Do not include scripts, event handlers, external assets, forms, iframes, or interactive
-        JavaScript. Include readiness status, source index, hydrated field map, missing information, and screening handoff
-        notes in the HTML document. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each
+        JavaScript. Start the HTML body with a compact "At a glance" overview that surfaces company identity, readiness
+        status, source confidence, top missing inputs, and the screening handoff recommendation before any detailed tables.
+        Style the overview as a concise static card or summary table so the first screen is decision-useful. Include readiness
+        status, source index, hydrated field map, missing information, and screening handoff notes in the HTML document. Use
+        `definitionJson.documentRefs` as the durable document reference contract. Apply each
         reference by usage: `style_guide` governs citations and claim language, and `operating_guidance` constrains process
         and approval boundaries.'
       outputFormatting: 'Keep the HTML artifact separate from structured task output fields. `opportunity_intake_artifact_id`

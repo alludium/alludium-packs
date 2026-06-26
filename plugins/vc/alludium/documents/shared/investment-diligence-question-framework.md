@@ -22,6 +22,17 @@ When this document is used to create a task output artifact:
 - Do not create `.md` or `text/markdown` artifacts for rendered outputs.
 - Do not copy HTML into structured task output fields; those fields remain plain text or artifact UUIDs.
 
+## At A Glance Output
+
+Every rendered question bank should begin with a compact HTML overview before the full question table.
+
+| Field | Content |
+| --- | --- |
+| Diligence objective | The decision this question bank supports |
+| Top must-answer questions | Three to five questions most likely to change proceed/pass, valuation, terms, or approval conditions |
+| Highest-risk workstream | The area with the biggest decision impact or weakest evidence |
+| Evidence gaps | The key artefacts, interviews, models, or counsel inputs still needed |
+| Owner / next step | The immediate assignment needed to unblock the question bank |
 
 ## Purpose
 
