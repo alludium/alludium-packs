@@ -17,6 +17,7 @@ When this template is used to create a task output artifact:
 - Use a `.html` filename and `mimeType: "text/html"`.
 - Set `content` to a complete standalone safe static HTML document beginning with `<!doctype html>`.
 - Convert this Markdown scaffold into semantic HTML sections, tables, and lists with small inline CSS in a `<style>` block.
+- Follow the shared VC HTML Artifact Contract in Template Use Guidance for section order, first-screen summary, spacing, responsive tables, and compact structured outputs.
 - Do not create `.md` or `text/markdown` artifacts for rendered outputs.
 - Do not copy HTML into structured task output fields; those fields remain plain text or artifact UUIDs.
 
