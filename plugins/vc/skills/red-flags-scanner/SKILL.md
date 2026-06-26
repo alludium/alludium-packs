@@ -98,7 +98,11 @@ Scan founder materials for internal contradictions and credibility signals.
 - Cross-reference every quantitative claim in the deck against other slides, call notes,
   and external sources. Build a claims table if three or more numbers are involved.
 - When the deck says X and reality suggests Y, do not resolve the contradiction — flag it,
-  present both data points with sources, and recommend a founder question.
+  present both data points with sources, and recommend a founder question. A
+  company-claimed value (revenue, customer count, traction) that merely disagrees with a
+  public/web source is a conflict to surface, not proof the founder is wrong: keep the
+  company-provided value as the baseline claim and treat the external disagreement as the
+  flag, not as a correction that overwrites it.
 - Pay special attention to revenue, growth rate, customer count, and team size — these are
   the most commonly overstated metrics.
 

@@ -105,13 +105,25 @@ and downstream diligence even before deeper work starts.
 Sources frequently disagree on funding amounts, headcount, founding dates, and
 company descriptions. When they do:
 
-1. **Prefer the most authoritative source for that field type.**
+0. **Company-claimed facts default to company-provided material.** For facts a
+   company asserts about itself — ARR and other traction metrics, fundraising ask,
+   round and stage, customer counts and named customers, roadmap, go-to-market,
+   founder names and roles, and team narrative — uploaded/founder/company materials
+   and supplied CRM notes are the primary source. Structured and public sources
+   corroborate, challenge, timestamp, or fill gaps for these facts; they do not
+   silently replace the company-provided value. When they conflict, keep the
+   company-provided value as the primary claim, record the conflicting value and its
+   source, and flag material conflicts for human review. The field-type ordering
+   below applies to independent validation facts and to company-claimed facts only
+   when no company-provided value exists.
+
+1. **Otherwise, prefer the most authoritative source for that field type.**
 
    - Funding amounts and investor history: Affinity enriched > Dealroom > Harmonic
    - Headcount and growth trends: Harmonic > Affinity enriched > official website
    - Market positioning and ecosystem: Exa > official website > Harmonic
-   - Team backgrounds: Harmonic > official bios / cited public profiles > founder materials
-   - Product detail and pricing: official website via Firecrawl > founder materials > Exa
+   - Team backgrounds: founder materials for company-claimed roles/titles, then Harmonic > official bios / cited public profiles for independent background validation
+   - Product detail and pricing: founder materials and official website via Firecrawl for company-claimed product/pricing, then Exa for independent validation
 
 2. **Never silently pick one value.** Record all conflicting values, which source
    each came from, and which you selected as primary.
@@ -269,6 +281,9 @@ If the requesting workflow does not specify depth, default to Standard.
 - **Do not block on Dealroom.** If Dealroom is not connected, continue with the other
   sources and mark the missing structured fields as `Unknown`.
 - **Cite every value.** A field without a source is not decision-grade.
+- **Do not overwrite company-claimed facts with web values.** For facts the company
+  asserts about itself, keep the company-provided value primary and flag conflicts;
+  enrichment corroborates or challenges but does not silently replace it.
 - **Do not write to Affinity from this skill.** This skill is read-only.
 - **Do not contact founders or external parties.** Outreach is handled elsewhere.
 - **Respect depth boundaries.** Do not run deep research if quick enrichment is enough.

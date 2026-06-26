@@ -26,6 +26,21 @@ When this document is used to create a task output artifact:
 
 Use this framework to create a first-look investment screen for one company or a sourced candidate batch. The output should help an investor decide whether to pass, watch, continue, promote, or ask for specific missing evidence. It is a screening tool, not a full diligence memo.
 
+## Source Precedence For Company-Claimed Facts
+
+For facts the company asserts about itself — ARR and other traction metrics,
+fundraising ask, round and stage, customer counts and named customers, roadmap,
+go-to-market, founder names and roles, and team narrative — uploaded/founder/
+company-provided materials and supplied CRM notes are the primary source. Use public,
+structured, and web sources to corroborate, challenge, timestamp, or fill gaps; do not
+let them silently replace a company-provided value. When they conflict on a
+company-claimed fact, keep the company-provided value as the primary claim, show the
+conflicting value and its source, explain which value the scorecard uses and why, and
+flag material conflicts for partner judgment. Independent validation facts such as
+press, market context, registry data, and third-party headcount signals may be led by
+high-quality external sources. The "Evidence To Look For" column below lists candidate
+sources, not a precedence order.
+
 ## Scorecard
 
 | Dimension | What To Assess | Evidence To Look For | Rating |

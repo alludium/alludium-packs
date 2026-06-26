@@ -142,6 +142,14 @@ When evaluating citation quality or suggesting sources, prefer higher-quality so
 Label the source tier when it materially affects confidence. A TAM number from a 10-K
 is not the same as a TAM number from a blog post.
 
+This hierarchy ranks *verification strength*. It is not a license to overwrite
+company-claimed facts. For facts a company asserts about itself — ARR and other
+traction metrics, fundraising ask, round and stage, customer counts, roadmap,
+go-to-market, founder names and roles — the company-provided value stays the primary
+claim even when a higher-tier source disagrees. Flag the conflict (a claim that
+contradicts other evidence is P1) and show both values with their sources; do not
+silently replace the company-provided value with the higher-tier one.
+
 ## Confidence Labelling
 
 For each unsupported claim, assign a priority based on risk:

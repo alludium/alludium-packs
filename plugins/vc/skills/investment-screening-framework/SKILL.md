@@ -68,6 +68,26 @@ Before running the method, confirm there is enough material to do meaningful wor
 
 If none exist, stop and ask for the minimum missing input rather than guessing.
 
+## Source Precedence For Company-Claimed Facts
+
+For facts the company asserts about itself — revenue, ARR, traction, customer
+count, pipeline, pricing, round size, funding need, runway, product roadmap,
+go-to-market, founder names and roles, and team narrative — treat uploaded,
+founder, company, and CRM materials as the primary source of the company's claim.
+
+Public web, structured enrichment, and third-party sources may corroborate,
+challenge, or contextualise company-claimed facts, but they must not silently
+replace them. When an external source conflicts with a company-provided value,
+keep the company-provided value as the primary claim in the scorecard, show the
+conflicting value and its source, explain which value the assessment uses and
+why, and turn material conflicts into validation questions or partner-judgment
+items.
+
+This precedence applies to company-claimed facts only. Independent validation
+facts such as litigation, regulatory status, adverse media, market size,
+competitor positioning, or third-party customer evidence may still be led by
+external sources.
+
 ## Thesis Fit Pre-Check
 
 If the firm's investment thesis is available, do a fast fit check before full evaluation:

@@ -57,6 +57,12 @@ To mark intake ready for screening, require:
   - founder material artifact
 - provenance for every field hydrated during intake
 
+A source anchor whose content the agent can read — a CRM/source record, deck, source
+thread, source material, or founder material — counts only once it has actually been
+inspected (see "A Source Anchor Must Be Read, Not Just Recorded" below). A company
+domain serves as an identity/disambiguation anchor rather than a readable record, and
+does not require a read during intake because public-web research is out of scope here.
+
 If company identity is ambiguous, stop and ask the user to confirm the target
 company before continuing.
 
@@ -78,6 +84,34 @@ Use only supplied or approved source context:
 When a CRM/source payload is present, read only the approved record scope needed
 to hydrate project fields and source provenance. Record which source supplied
 each hydrated value.
+
+## A Source Anchor Must Be Read, Not Just Recorded
+
+A supplied source anchor counts as evidence only after its contents have been
+inspected. The presence of a pointer is not the same as reading what it points to.
+
+- When `source_system` and `source_object_url` identify a scoped CRM/source record
+  such as an Affinity company or opportunity, treat that as an approved scoped read
+  for that specific record. If the URL path resembles `.../companies/<id>`, treat it
+  as a company and read it with `affinity_get_company` using that ID; if it resembles
+  `.../lists/<id>` or a list-entry path, read it with `affinity_get_list_entries`;
+  otherwise treat it as an opportunity and read it with `affinity_get_opportunity`. If
+  the URL cannot be parsed or the direct read is empty, confirm the record with
+  `affinity_search_companies` using the confirmed company identity before reading.
+  Hydrate available fields with provenance before deciding readiness or listing fields
+  as missing.
+- Do not mark a field missing, set a readiness status, or create an intake artifact
+  on the basis of a CRM/source URL whose record has not actually been read.
+- If the required CRM/source read tool is unavailable or the connection is inactive,
+  do not complete intake from the URL string. Stop and ask the user to connect the
+  source, approve the read, supply an export/snapshot, or run the appropriate import
+  task before producing output.
+
+This applies to any source anchor whose content the agent can read: a CRM/source
+record should be read, not just recorded as a URL. The same principle holds for other
+readable anchors such as an attached deck or source thread, each handled through its
+own extraction path; deck extraction specifically is owned by the deck-handling
+workflow, not gated here.
 
 When a pitch deck is attached, inspect, extract, search, or route it through the
 `pitch-deck-explainer` skill before using it as evidence or declaring likely
@@ -103,7 +137,7 @@ rather than doing it inside intake.
 
 Return one of these statuses:
 
-- `ready_for_screening`: identity and at least one credible source anchor are present
+- `ready_for_screening`: identity is confirmed and at least one credible source anchor has been inspected (its contents read, not just its presence noted)
 - `needs_more_info`: a small set of missing fields or artifacts is needed before a durable intake artifact should be created
 - `blocked`: identity, source provenance, or approved source access is insufficient, and the user must answer a specific question before intake can continue
 

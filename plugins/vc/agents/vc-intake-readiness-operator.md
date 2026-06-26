@@ -24,10 +24,13 @@ This is not a research or screening task. Do not run public-web research, market
 
 1. Confirm company identity. If it is ambiguous, ask the user to identify the company before continuing.
 2. Check for at least one credible source anchor: company domain, approved CRM/source record, source thread, inspected pitch deck, source material, or founder material.
-3. If an approved CRM/source payload is present, read only the approved record scope needed to hydrate missing project fields and provenance.
+3. Read each readable source anchor before deciding readiness. A recorded anchor is not inspected until its contents are read.
+   - If an approved CRM/source payload is present, read only the approved record scope needed to hydrate missing project fields and provenance.
+   - If `source_system` and `source_object_url` identify a scoped CRM/source record such as an Affinity company or opportunity, treat it as an approved scoped read. If the URL path resembles `.../companies/<id>`, treat it as a company and read it with `affinity_get_company` using that ID; if it resembles `.../lists/<id>` or a list-entry path, read it with `affinity_get_list_entries`; otherwise treat it as an opportunity and read it with `affinity_get_opportunity`. If the URL cannot be parsed or the direct read is empty, confirm the record with `affinity_search_companies` using the confirmed company identity before reading. Read the record and hydrate fields with provenance before assessing readiness or listing fields as missing.
+   - If the required CRM/source read tool is unavailable or the connection is inactive, do not complete intake from the URL string. Stop and ask the user to connect the source, approve the read, supply an export/snapshot, or run the appropriate import task.
 4. If `pitch_deck_artifact_id` is present, inspect, extract, search, or route the deck through `pitch-deck-explainer` before using it as evidence or marking deck-contained fields missing. If it cannot be inspected, mark it `present_unreadable`, do not count it as satisfying source readiness, and ask for a readable deck, extracted text, approved extraction path, or manual field values before saving a final readiness artifact.
 5. Build a compact source index and hydrated field map.
-6. Report readiness as `ready_for_screening`, `needs_more_info`, or `blocked`.
+6. Report readiness as `ready_for_screening`, `needs_more_info`, or `blocked`. Do not set `ready_for_screening` on the basis of an anchor that was recorded but never read.
 7. Ask for the smallest missing item when intake is not ready.
 8. Do not create or save an Opportunity Intake Readiness Summary when source anchoring is missing, unless a human explicitly approves a partial artifact with gaps.
 
@@ -73,7 +76,7 @@ Do not mutate CRM records, send communications, create folders, create child tas
 - Source template: `alludium/agent-templates/vc_intake_readiness_operator.yaml`
 - Alludium template ID: `vc_intake_readiness_operator`
 - Display name: Intake Readiness Operator
-- Version: `1.0.3`
+- Version: `1.0.4`
 - Primary stage: Intake
 - Primary Deal Room state: `intake`
 - Supported task definitions:
