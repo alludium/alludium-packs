@@ -410,7 +410,7 @@ def input_context_list(fields: list[dict[str, Any]]) -> str:
     return "".join(lines)
 
 
-def deliverable_list(output_fields: list[dict[str, Any]]) -> str:
+def deliverable_list(output_fields: list[dict[str, Any]], execution_text: str = "") -> str:
     file_outputs = [
         field
         for field in output_fields
@@ -423,15 +423,26 @@ def deliverable_list(output_fields: list[dict[str, Any]]) -> str:
     ]
     lines: list[str] = []
     if file_outputs:
+        expects_html_artifact = (
+            'mimeType: "text/html"' in execution_text
+            or "mimeType: `text/html`" in execution_text
+            or "must be an HTML text artifact" in execution_text
+        )
         for field in file_outputs:
             name = field["name"]
             action = "Create or update"
             if field.get("required") is not True:
                 action = "When task instructions call for it, create or update"
-            lines.append(
-                f"- {action} **{markdown_escape(name)}** as a polished Word-ready document. "
-                "The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.\n"
-            )
+            if expects_html_artifact:
+                lines.append(
+                    f"- {action} **{markdown_escape(name)}** as a standalone safe HTML artifact. "
+                    "Use `.html`, `mimeType: \"text/html\"`, and complete static HTML suitable for the platform safe previewer.\n"
+                )
+            else:
+                lines.append(
+                    f"- {action} **{markdown_escape(name)}** as a polished Word-ready document. "
+                    "The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.\n"
+                )
     else:
         lines.append("- Produce a concise, reviewable task response that a human can act on.\n")
     if non_file_outputs:
@@ -658,7 +669,7 @@ def render_task(path: Path) -> tuple[Path, str]:
         body += "\n## Reference Materials\n\n"
         body += document_guidance_list(document_refs, documents)
     body += "\n## Deliverable\n\n"
-    body += deliverable_list(output_dicts)
+    body += deliverable_list(output_dicts, execution)
     body += "\n## Missing Input Policy\n\n"
     body += missing_input.strip() + "\n\n"
     body += "## Guardrails\n\n"

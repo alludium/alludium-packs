@@ -1,4 +1,4 @@
-version: "1.0.4"
+version: "1.0.5"
 type: "template"
 platform_managed: false
 id: "vc_intake_readiness_operator"
@@ -68,8 +68,22 @@ prompt:
     - use small inline CSS inside a `<style>` block for readable document styling
     - do not include scripts, event handlers, external assets, forms, iframes, or interactive JavaScript
     - keep all claims evidence-led and citation/provenance oriented
+    - use a scalable report layout with comfortable spacing, a readable base font, max-width around 960-1120px, responsive summary cards, and horizontally scrollable tables where needed so the safe preview does not feel cramped
 
-    The document must include:
+    The document must start with:
+    - a concise header containing project/task context
+    - a first visible section whose heading text is exactly `Executive Summary`
+
+    The `Executive Summary` section is mandatory. It must appear before Source Index, Hydrated Field Map, Missing Information, or any detailed table. It should fit in the first screen and include:
+    - readiness status and recommendation / next action
+    - company identity and source confidence
+    - the strongest 3-5 grounded facts
+    - the top 1-3 blockers or missing items
+    - a short screening handoff note
+
+    Do not substitute `Company Identity`, `Readiness`, `At a glance`, or another heading for `Executive Summary`. If your draft HTML does not contain a visible `<h2>Executive Summary</h2>` near the top, revise it before calling `artifact_createTextArtifact`.
+
+    The rest of the document must include:
     - readiness status
     - source index
     - hydrated field map with provenance and confidence
@@ -80,10 +94,10 @@ prompt:
     When saving structured task output fields, keep them separate from the HTML artifact:
     - `opportunity_intake_artifact_id`: the returned artifact UUID only
     - `intake_readiness_status`: one status string only (`ready_for_screening`, `needs_more_info`, or `blocked`)
-    - `hydrated_field_map`: plain text only, with no HTML tags; use compact lines such as `company_name: Test 1 | provenance: task input | confidence: low`
-    - `source_index`: plain text only, with no HTML tags; use compact numbered lines
-    - `missing_information`: plain text only, with no HTML tags
-    Do not copy HTML tables or markup into task output fields. HTML belongs only in the `.html` artifact content.
+    - `hydrated_field_map`: leave unset when the HTML artifact contains the full table; if a value is required, use plain text only with no HTML tags and one concise pointer, for example `See HTML artifact for full hydrated field map (12 fields; 8 high confidence)`
+    - `source_index`: leave unset when the HTML artifact contains the full table; if a value is required, use plain text only with no HTML tags and one concise pointer, for example `See HTML artifact for full source index (2 inspected sources; CRM unavailable)`
+    - `missing_information`: leave unset when the HTML artifact contains the full list; if a value is required, use plain text only with no HTML tags and at most the top 3 missing items
+    Do not copy HTML tables, full field maps, full source indexes, long prose, or markup into task output fields. HTML and detailed evidence tables belong only in the `.html` artifact content.
 
     ## Boundaries
 

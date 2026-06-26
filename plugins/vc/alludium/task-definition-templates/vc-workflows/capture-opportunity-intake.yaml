@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.capture_opportunity_intake
-version: 1.0.25
+version: 1.0.26
 title: Verify Opportunity Intake
 category: Venture Capital
 visibility: workspace
@@ -87,20 +87,31 @@ definition:
         with `<!doctype html>`. Do not create `.md` files, do not use `text/markdown`, and do not pass Markdown or prose for
         the platform to convert. Author the summary directly as safe static HTML with semantic sections and optional inline
         CSS in a `<style>` block. Do not include scripts, event handlers, external assets, forms, iframes, or interactive
-        JavaScript. Start the HTML body with a compact "At a glance" overview that surfaces company identity, readiness
-        status, source confidence, top missing inputs, and the screening handoff recommendation before any detailed tables.
-        Style the overview as a concise static card or summary table so the first screen is decision-useful. Include readiness
-        status, source index, hydrated field map, missing information, and screening handoff notes in the HTML document. Use
-        `definitionJson.documentRefs` as the durable document reference contract. Apply each
+        JavaScript. The first visible section after the document header/status must be exactly titled `Executive Summary`;
+        do not call it only `Company Identity`, `Readiness`, `At a glance`, or another synonym. The Executive Summary must
+        appear before Source Index, Hydrated Field Map, Missing Information, or any detailed table. It must be compact and
+        decision-useful on the first screen: include readiness status, recommendation/next action, company identity, evidence
+        quality, the strongest 3-5 grounded facts, and the top 1-3 blockers or missing items. If the generated HTML does not
+        contain a visible `<h2>Executive Summary</h2>` section near the top, revise the HTML before creating or saving the
+        artifact. Style the artifact as a scalable static report: use a readable base font, generous spacing, max-width around
+        960-1120px, responsive card/summary grids, and horizontally scrollable tables when needed so the document does not
+        feel cramped in the safe previewer. Include readiness status, source index, hydrated field map, missing information,
+        and screening handoff notes in the HTML document after the Executive Summary. Use `definitionJson.documentRefs` as
+        the durable document reference contract. Apply each
         reference by usage: `style_guide` governs citations and claim language, and `operating_guidance` constrains process
         and approval boundaries.'
       outputFormatting: 'Keep the HTML artifact separate from structured task output fields. `opportunity_intake_artifact_id`
         must be omitted when no artifact is created and must contain only the returned artifact UUID when present.
         `intake_readiness_status` must contain only one status string:
         ready_for_screening, needs_more_info, or blocked. `hydrated_field_map`, `source_index`, and `missing_information`
-        must be plain text with no HTML tags, no `<table>`, no `<tr>`, no `<td>`, and no escaped HTML. Use compact lines
-        or numbered plain-text entries for those fields. HTML tables and semantic markup belong only inside the `.html`
-        artifact content passed to `artifact_createTextArtifact`, never inside saved task output fields.'
+        must be plain text with no HTML tags, no `<table>`, no `<tr>`, no `<td>`, and no escaped HTML. Keep these structured
+        task output fields intentionally small because the HTML artifact is the full reader-facing document. When an HTML
+        artifact is created, leave `hydrated_field_map`, `source_index`, and `missing_information` unset unless the platform
+        requires a value. If a value is required, use one-line pointers such as `See HTML artifact for full source index (3
+        inspected sources)` or, where useful, at most 3 short semicolon-separated bullets. Do not paste full source indexes,
+        full field maps, long missing-material lists, or full prose summaries into task output fields. HTML tables, detailed
+        field maps, source tables, and longer explanations belong only inside the `.html` artifact content passed to
+        `artifact_createTextArtifact`, never inside saved task output fields.'
       missingInputPolicy: If company identity and at least one credible supplied or approved source anchor that has actually
         been inspected are present, complete intake and list missing screening inputs instead of blocking. A recorded but
         unread source anchor, such as a supplied CRM/source URL whose record was never read or an attached deck whose contents
@@ -213,25 +224,23 @@ fields:
     position: 1
     config: {}
   - key: missing_information
-    name: Missing Information
+    name: Missing Information Summary
     fieldType: string
     required: false
     position: 2
     config: {}
   - key: hydrated_field_map
-    name: Hydrated Field Map
-    fieldType: richtext
+    name: Hydrated Field Map Summary
+    fieldType: string
     required: false
     position: 3
-    config:
-      rows: 8
+    config: {}
   - key: source_index
-    name: Source Index
-    fieldType: richtext
+    name: Source Index Summary
+    fieldType: string
     required: false
     position: 4
-    config:
-      rows: 6
+    config: {}
 runtime:
   defaultExecutionContext:
     sourceMetadata:
