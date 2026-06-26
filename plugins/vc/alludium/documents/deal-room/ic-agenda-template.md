@@ -20,6 +20,17 @@ When this template is used to create a task output artifact:
 - Do not create `.md` or `text/markdown` artifacts for rendered outputs.
 - Do not copy HTML into structured task output fields; those fields remain plain text or artifact UUIDs.
 
+## At A Glance
+
+Render this section first as a compact HTML meeting card before the full agenda.
+
+| Field | Content |
+| --- | --- |
+| Decision requested | Approve / reject / continue / approve with conditions |
+| Time-critical topic | The discussion item most likely to decide the meeting outcome |
+| Required pre-reads | The memo, model, diligence, or term-sheet items reviewers must read first |
+| Open condition | The named condition or blocker that needs committee attention |
+| Meeting output | The decision record or follow-up owner expected at the end |
 
 ## Meeting Header
 

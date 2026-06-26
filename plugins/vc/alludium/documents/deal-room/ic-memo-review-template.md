@@ -20,6 +20,17 @@ When this template is used to create a task output artifact:
 - Do not create `.md` or `text/markdown` artifacts for rendered outputs.
 - Do not copy HTML into structured task output fields; those fields remain plain text or artifact UUIDs.
 
+## At A Glance
+
+Render this section first as a compact HTML readiness card before the detailed review.
+
+| Field | Content |
+| --- | --- |
+| Readiness view | Ready / ready with edits / not ready |
+| Main blocker | The issue most likely to prevent IC use |
+| Must-fix changes | The top required changes before the memo proceeds |
+| Risk visibility | Whether risks, dissent, and source confidence are visible enough |
+| Recommended handling | Proceed / proceed with caveats / hold / reframe as gap review |
 
 ## Review Header
 

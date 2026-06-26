@@ -20,6 +20,18 @@ When this template is used to create a task output artifact:
 - Do not create `.md` or `text/markdown` artifacts for rendered outputs.
 - Do not copy HTML into structured task output fields; those fields remain plain text or artifact UUIDs.
 
+## At A Glance
+
+Render this section as the first visible HTML block, using a compact summary card or table before the detailed memo.
+
+| Field | Content |
+| --- | --- |
+| Decision ask | Invest / proceed to IC / continue diligence / pass, with the specific approval requested |
+| Recommendation | One sentence stating the recommended action and the main condition |
+| Why now | The timing argument in one line |
+| Top upside | The single strongest reason this can return capital to the fund |
+| Top risk | The risk most likely to change the recommendation |
+| Must decide before IC | The one question or condition that cannot be deferred |
 
 ## Cover Summary
 

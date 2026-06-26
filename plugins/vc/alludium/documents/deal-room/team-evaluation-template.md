@@ -20,6 +20,17 @@ When this template is used to create a task output artifact:
 - Do not create `.md` or `text/markdown` artifacts for rendered outputs.
 - Do not copy HTML into structured task output fields; those fields remain plain text or artifact UUIDs.
 
+## At A Glance
+
+Render this section first as a compact HTML overview before the workstream detail.
+
+| Field | Content |
+| --- | --- |
+| Team posture | Continue / watch / pass / targeted diligence / decision review |
+| Strongest team proof | Best evidence for founder-market fit, execution history, role coverage, or reference signal |
+| Main team doubt | The founder, hiring, governance, integrity, or role-coverage assumption still unproven |
+| Evidence confidence | High / Medium / Low, with one-line rationale |
+| Next proof needed | The single reference, hiring plan, founder fact, or governance evidence item that changes the decision |
 
 ## Workstream Header
 

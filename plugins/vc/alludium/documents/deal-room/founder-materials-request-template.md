@@ -20,6 +20,17 @@ When this template is used to create a task output artifact:
 - Do not create `.md` or `text/markdown` artifacts for rendered outputs.
 - Do not copy HTML into structured task output fields; those fields remain plain text or artifact UUIDs.
 
+## At A Glance
+
+Render this section first as a compact HTML overview so the founder and deal owner can see the request shape quickly.
+
+| Field | Content |
+| --- | --- |
+| Request purpose | What decision or diligence step the materials support |
+| Highest-priority items | The top three required materials |
+| Deadline | Requested response date or dependency |
+| Sensitive items | Any legal, customer, security, financial, or counsel-routed materials |
+| Founder action | Clear next step and preferred delivery channel |
 
 ## Request Summary
 

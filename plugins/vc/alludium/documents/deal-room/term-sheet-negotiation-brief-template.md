@@ -20,6 +20,17 @@ When this template is used to create a task output artifact:
 - Do not create `.md` or `text/markdown` artifacts for rendered outputs.
 - Do not copy HTML into structured task output fields; those fields remain plain text or artifact UUIDs.
 
+## At A Glance
+
+Render this section first as a compact HTML negotiation card before the detailed term tables.
+
+| Field | Content |
+| --- | --- |
+| Negotiation posture | Hold / trade / accept / escalate |
+| Highest-priority open term | The term most likely to affect economics, control, or closing risk |
+| Preferred give / get | The recommended concession and return ask, if any |
+| Approval needed | Partner, IC, counsel, or deal-lead approval point |
+| Counsel question | The legal or drafting question that must stay with counsel |
 
 ## Source Inputs
 

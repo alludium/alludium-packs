@@ -20,6 +20,17 @@ When this template is used to create a task output artifact:
 - Do not create `.md` or `text/markdown` artifacts for rendered outputs.
 - Do not copy HTML into structured task output fields; those fields remain plain text or artifact UUIDs.
 
+## At A Glance
+
+Render this section first as a compact HTML terms card before the detailed model and analysis.
+
+| Field | Content |
+| --- | --- |
+| Terms posture | Attractive / workable / stretched / not ready |
+| Proposed ownership | Base-case ownership and sensitivity if available |
+| Main economic tradeoff | The valuation, dilution, ESOP, reserve, or round-construction issue that matters most |
+| IC question | The term or return question committee must answer |
+| Next proof needed | The model, cap table, reserve, or syndicate input needed before approval |
 
 ## Source Inputs
 

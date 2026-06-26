@@ -20,6 +20,17 @@ When this template is used to create a task output artifact:
 - Do not create `.md` or `text/markdown` artifacts for rendered outputs.
 - Do not copy HTML into structured task output fields; those fields remain plain text or artifact UUIDs.
 
+## At A Glance
+
+Render this section first as a compact HTML pre-call card before the full brief.
+
+| Field | Content |
+| --- | --- |
+| Meeting objective | Discover / qualify / follow-up / partner intro, with the decision this call supports |
+| Current view | Pass / watch / continue / unknown, with one-line rationale |
+| Strongest signal | Most decision-relevant positive signal before the call |
+| Main unknown | The question the call must answer |
+| Recommended next action | Expected follow-up if the call goes well |
 
 ## Meeting Header
 

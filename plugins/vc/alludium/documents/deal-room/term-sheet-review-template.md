@@ -20,6 +20,17 @@ When this template is used to create a task output artifact:
 - Do not create `.md` or `text/markdown` artifacts for rendered outputs.
 - Do not copy HTML into structured task output fields; those fields remain plain text or artifact UUIDs.
 
+## At A Glance
+
+Render this section first as a compact HTML business-review card before the full term-sheet review.
+
+| Field | Content |
+| --- | --- |
+| Business recommendation | Acceptable / acceptable with counsel changes / not ready |
+| Main deviation | The most material deviation from expected economics, rights, or process |
+| Highest red flag | The issue most likely to block or reprice the deal |
+| Counsel status | Not reviewed / in review / reviewed, with the key counsel question |
+| Next approval | The business or legal approval needed before proceeding |
 
 ## Review Header
 

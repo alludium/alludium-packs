@@ -20,6 +20,17 @@ When this template is used to create a task output artifact:
 - Do not create `.md` or `text/markdown` artifacts for rendered outputs.
 - Do not copy HTML into structured task output fields; those fields remain plain text or artifact UUIDs.
 
+## At A Glance
+
+Render this section first as a compact HTML overview before the workstream detail.
+
+| Field | Content |
+| --- | --- |
+| Financial posture | Continue / watch / pass / targeted diligence / decision review |
+| Strongest financial proof | Best evidence for revenue quality, burn discipline, ownership path, or return potential |
+| Main financial doubt | The forecast, runway, valuation, ownership, or financing assumption still unproven |
+| Evidence confidence | High / Medium / Low, with one-line rationale |
+| Next proof needed | The single model, cap-table, metric, or financing evidence item that changes the decision |
 
 ## Workstream Header
 
