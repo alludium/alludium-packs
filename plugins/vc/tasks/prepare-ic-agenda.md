@@ -21,7 +21,7 @@ Prepare IC Agenda for one venture-capital opportunity with evidence capture, hum
 
 ## What To Do
 
-Prepare the IC agenda, pack checklist, key debate topics, follow-up questions, and pre-read requirements. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifact investment memo artifact as the source memo when preparing the IC agenda. Create or update a polished Word-ready document named IC Agenda as a standalone safe static HTML artifact using `artifact_createTextArtifact`, a `.html` filename, and `mimeType: "text/html"`; then attach it to the required output field ic agenda artifact.
+Prepare the IC agenda, pack checklist, key debate topics, follow-up questions, and pre-read requirements. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifact investment memo artifact as the source memo when preparing the IC agenda. Create or update a polished Word-ready document named IC Agenda as a standalone safe static HTML artifact using the Artifact Create Text Artifact tool (`artifact.createTextArtifact`), a `.html` filename, and `mimeType: "text/html"`; do not use `project.instantiateTemplate` or create a `.md`/`text/markdown` artifact for this rendered output; then attach it to the required output field ic agenda artifact.
 
 ## Available Context
 

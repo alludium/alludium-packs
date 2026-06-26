@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.create_ic_memo
-version: 1.0.17
+version: 1.0.18
 title: Create IC Memo
 category: Venture Capital
 visibility: workspace
@@ -79,7 +79,7 @@ definition:
         set. Use formal diligence artifacts `commercial_dd_artifact_id`, `financial_dd_artifact_id`, `founder_evaluation_artifact_id`, and `technical_dd_artifact_id`
         when present, but do not block evaluation-stage review on them. Use the required input file artifacts `team_review_pack_artifact_id` and
         `partner_review_pack_artifact_id` as the review-pack sources for the IC memo. Create or update a durable project file artifact named Investment
-        Memo as a standalone safe static HTML artifact using `artifact_createTextArtifact`, a `.html` filename, and `mimeType: "text/html"`; then attach it to the required output field `investment_memo_artifact_id`. Use `definitionJson.documentRefs` as the durable document
+        Memo as a standalone safe static HTML artifact using the Artifact Create Text Artifact tool (`artifact.createTextArtifact`), a `.html` filename, and `mimeType: "text/html"`; do not use `project.instantiateTemplate` or create a `.md`/`text/markdown` artifact for this rendered output; then attach it to the required output field `investment_memo_artifact_id`. Use `definitionJson.documentRefs` as the durable document
         reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis
         logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance`
         or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document

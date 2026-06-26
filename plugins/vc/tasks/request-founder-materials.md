@@ -20,7 +20,7 @@ Request Founder Materials for one venture-capital opportunity with evidence capt
 
 ## What To Do
 
-Prepare the missing-materials checklist, founder-friendly request draft, share instructions, and due-date recommendation for human approval before sending. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a polished Word-ready document named Founder Materials Request as a standalone safe static HTML artifact using `artifact_createTextArtifact`, a `.html` filename, and `mimeType: "text/html"`; then attach it to the required output field founder materials request artifact.
+Prepare the missing-materials checklist, founder-friendly request draft, share instructions, and due-date recommendation for human approval before sending. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a polished Word-ready document named Founder Materials Request as a standalone safe static HTML artifact using the Artifact Create Text Artifact tool (`artifact.createTextArtifact`), a `.html` filename, and `mimeType: "text/html"`; do not use `project.instantiateTemplate` or create a `.md`/`text/markdown` artifact for this rendered output; then attach it to the required output field founder materials request artifact.
 
 ## Available Context
 
