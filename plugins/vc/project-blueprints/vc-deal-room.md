@@ -73,7 +73,7 @@ VC-specific operating and management tasks that support pipeline health, source 
 
 | Task | Agent | Skills | Documents | Integrations |
 | --- | --- | --- | --- | --- |
-| [Verify Opportunity Intake](../tasks/capture-opportunity-intake.md) | [Intake Readiness Operator](../agents/vc-intake-readiness-operator.md) | [Deal Pipeline Intake Readiness](../skills/deal-pipeline-intake-readiness/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | [Deal Pipeline Operating SOP](../alludium/documents/deal-room/deal-room-sop.md) (operating_guidance)<br>[Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md) (style_guide)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | `alludium-platform`<br>`affinity-mcp-server` |
+| [Verify Opportunity Intake](../tasks/capture-opportunity-intake.md) | [Intake Readiness Operator](../agents/vc-intake-readiness-operator.md) | [Deal Pipeline Intake Readiness](../skills/deal-pipeline-intake-readiness/SKILL.md)<br>[Pitch Deck Explainer](../skills/pitch-deck-explainer/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | [Deal Pipeline Operating SOP](../alludium/documents/deal-room/deal-room-sop.md) (operating_guidance)<br>[Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md) (style_guide)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.md) (operating_guidance) | `alludium-platform`<br>`affinity-mcp-server` |
 
 ## Screening
 

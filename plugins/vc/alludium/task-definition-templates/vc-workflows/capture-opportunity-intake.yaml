@@ -27,6 +27,7 @@ definition:
       usage: operating_guidance
     requiredSkills:
     - deal-pipeline-intake-readiness
+    - pitch-deck-explainer
     - citation-enforcement
     plannedRecommendedAgentTemplate: vc_intake_readiness_operator
     recommendedAgentTemplate: vc_intake_readiness_operator
@@ -72,8 +73,12 @@ definition:
         index, hydrated field map, missing information, and screening-readiness status. Do not run public-web research, Exa,
         Brave, SerpAPI, Firecrawl, competitor discovery, market research, investment scoring, red-flag analysis, or continue/watch/pass
         recommendations during intake; those belong in screening or later evaluation. Do not require a pitch deck when another
-        supplied source explains the opportunity. Ask for the smallest missing context needed to identify the company and cite
-        at least one source anchor. If identity or source anchoring is insufficient, do not create or save an
+        supplied source explains the opportunity. When `pitch_deck_artifact_id` is present, inspect, extract, search, or route
+        the deck through `pitch-deck-explainer` before using it as evidence or declaring deck-contained fields missing. Deck
+        presence alone is not evidence. If the deck cannot be inspected with available tools, mark it as unreadable, do not
+        count it as satisfying source readiness, and ask for a readable deck, extracted text, an approved extraction path, or
+        manual field values before saving a final readiness artifact. Ask for the smallest missing context needed to identify
+        the company and cite at least one source anchor. If identity or source anchoring is insufficient, do not create or save an
         `opportunity_intake_artifact_id`; use task chat/questions to request the missing item and keep the intake state
         interactive. Create or update `opportunity_intake_artifact_id` only after at least one supplied or approved source
         anchor has been inspected, or when a human explicitly approves a partial artifact with gaps. When an artifact is
@@ -95,10 +100,13 @@ definition:
         artifact content passed to `artifact_createTextArtifact`, never inside saved task output fields.'
       missingInputPolicy: If company identity and at least one credible supplied or approved source anchor that has actually
         been inspected are present, complete intake and list missing screening inputs instead of blocking. A recorded but
-        un-read source anchor, such as a supplied CRM/source URL whose record was never read, does not satisfy this bar. If
-        identity, provenance, or approved source access is insufficient, or a supplied CRM/source record cannot be read with
-        the available tools, ask for the minimum missing item such as connecting/approving the CRM/source, a company domain,
-        deck, source thread, CRM/source record, founder material, or source artifact.
+        unread source anchor, such as a supplied CRM/source URL whose record was never read or an attached deck whose contents
+        were never inspected, does not satisfy this bar. If identity, provenance, or approved source access is insufficient,
+        or a supplied CRM/source record or deck cannot be read with the available tools, ask for the minimum missing item such
+        as connecting/approving the CRM/source, a company domain, readable deck or extracted deck text, source thread,
+        CRM/source record, founder material, or source artifact. If a pitch deck is attached but unreadable, do not treat the
+        deck artifact ID as a credible source anchor until its contents have been inspected or a human explicitly approves a
+        partial artifact with gaps.
       externalActionPolicy: Intake readiness only. Approved CRM/source reads are allowed within the supplied scope. Public-web
         research, CRM writes, external sends, Drive changes, child task creation, project creation, and stage transitions are
         forbidden unless a human explicitly approves a separate workflow.
@@ -108,6 +116,7 @@ definition:
         anchor is requested without creating an artifact.
       - Any supplied CRM/source record anchor is read with an available tool before readiness or missing fields are decided, or
         the user is asked to connect/approve the source or supply an export when the record cannot be read.
+      - Any attached pitch deck is inspected and cited, or recorded as unreadable and excluded from readiness evidence.
       - Hydrated project fields list provenance and confidence without using public-web enrichment.
       - Missing information names the smallest inputs needed before or during screening.
       - Intake readiness is reported as ready_for_screening, needs_more_info, or blocked.

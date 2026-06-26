@@ -52,7 +52,7 @@ To mark intake ready for screening, require:
   - company domain
   - approved CRM/source record
   - source thread URL or source-thread artifact
-  - pitch deck artifact
+  - inspected pitch deck artifact
   - source material artifact
   - founder material artifact
 - provenance for every field hydrated during intake
@@ -65,6 +65,10 @@ does not require a read during intake because public-web research is out of scop
 
 If company identity is ambiguous, stop and ask the user to confirm the target
 company before continuing.
+
+If `pitch_deck_artifact_id` is present, the artifact ID only proves that a deck
+was attached. It is not evidence for company, team, stage, traction, geography,
+business model, or source readiness until the deck contents have been inspected.
 
 ## Approved Source Hydration
 
@@ -109,6 +113,18 @@ readable anchors such as an attached deck or source thread, each handled through
 own extraction path; deck extraction specifically is owned by the deck-handling
 workflow, not gated here.
 
+When a pitch deck is attached, inspect, extract, search, or route it through the
+`pitch-deck-explainer` skill before using it as evidence or declaring likely
+deck-contained fields missing. At minimum, check for company domain, founder
+names and titles, sector or category, geography, investment stage or round,
+business model, traction or key metrics, and source snippets for any hydrated
+fields.
+
+If the available tools cannot inspect the deck, record the deck as
+`present_unreadable` in the source index, do not count it as satisfying source
+readiness, and ask for a readable deck, extracted text, an approved extraction
+path, or manual field values before saving a final-looking readiness artifact.
+
 ## Do Not Use Public Research
 
 Do not use Exa, Brave, SerpAPI, Firecrawl, broad web search, market research
@@ -133,7 +149,7 @@ continue, watch, or pass.
 Return:
 
 - `intake_readiness_status`: one readiness status
-- `source_index`: supplied or approved source anchors used for intake
+- `source_index`: supplied or approved source anchors used for intake, distinguishing inspected deck evidence from decks that are attached but unreadable or not inspected
 - `hydrated_field_map`: project fields observed or filled, with provenance
 - `missing_information`: the smallest missing inputs needed for screening
 - `opportunity_intake_artifact_id`: compact readiness summary artifact only when at least one supplied or approved source anchor has been inspected, or when the user explicitly approves creating a partial artifact with gaps
