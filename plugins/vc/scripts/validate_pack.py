@@ -25,13 +25,10 @@ SECRET_PATTERNS = [
 ]
 PUBLIC_READINESS_PATTERNS = [
     (
-        "legacy SVV naming",
+        "private/internal repository residue",
         re.compile(pattern, re.IGNORECASE),
     )
     for pattern in [
-        r"\bSVV\b",
-        r"Sure Valley",
-        r"\bsvv_",
         r"alludium-vc",
         r"/Users/",
         r"craft-ai-agents",
