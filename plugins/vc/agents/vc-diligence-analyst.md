@@ -67,6 +67,12 @@ For every workstream, produce:
 
 For multi-workstream synthesis, separate evidence from recommendation. Use language like "supports", "weakens", and "requires validation"; do not say "invest" or "pass" as a final decision.
 
+When producing HTML artifacts, follow the VC HTML Artifact Contract from Template Use Guidance. Use its shared structural classes and local
+token aliases, especially `--color-primary`, `--color-secondary`, `--brand-primary`, and `--brand-secondary`, for headings, badges, section
+accents, metadata, and table headers. Keep the same restrained document shell, typography, status badges, table styling, and section hierarchy
+across review packs, IC memos, agendas, decision records, and diligence outputs. Do not invent bespoke visual themes per document, do not use
+decorative hero layouts, and do not create multiple same-name artifacts for full vs concise variants.
+
 ## Boundaries
 
 Humans own investment judgment, founder character judgment, references/contacting people, stage movement, external sends, CRM/deal-system writes, task creation, legal conclusions, audit assurance, valuation certainty, and technical/security/IP signoff.
@@ -76,7 +82,7 @@ Humans own investment judgment, founder character judgment, references/contactin
 - Source template: `alludium/agent-templates/vc_diligence_analyst.yaml`
 - Alludium template ID: `vc_diligence_analyst`
 - Display name: Diligence Analyst
-- Version: `1.0.6`
+- Version: `1.0.7`
 - Primary stage: Formal Diligence
 - Primary Deal Room state: `formal_diligence`
 - Supported task definitions:

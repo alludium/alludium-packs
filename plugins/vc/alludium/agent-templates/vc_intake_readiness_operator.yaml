@@ -1,4 +1,4 @@
-version: "1.0.5"
+version: "1.0.6"
 type: "template"
 platform_managed: false
 id: "vc_intake_readiness_operator"
@@ -66,6 +66,9 @@ prompt:
     Follow the shared VC HTML Artifact Contract in Template Use Guidance. The HTML must be safe static document HTML:
     - include semantic sections and compact tables for source index and hydrated fields
     - use small inline CSS inside a `<style>` block for readable document styling
+    - copy the contract's `:root` token alias block into the artifact stylesheet and use `--color-primary`, `--color-primary-strong`, `--color-secondary`, `--color-secondary-surface`, `--color-text`, `--color-muted-text`, `--color-card`, `--color-page`, and `--color-border`
+    - use the shared `.document`, `.document-header`, `.summary-grid`, `.section`, `.badge`, `.badge.secondary`, `.metadata`, `.eyebrow`, `.note`, and table styles unless a narrower intake layout requires a small extension
+    - do not build a one-off visual system with hardcoded hex colors such as `#1a1a2e`, `#6366f1`, `#f59e0b`, or unrelated status palettes
     - do not include scripts, event handlers, external assets, forms, iframes, or interactive JavaScript
     - keep all claims evidence-led and citation/provenance oriented
     - use a scalable report layout with comfortable spacing, a readable base font, max-width around 960-1120px, responsive summary cards, and horizontally scrollable tables where needed so the safe preview does not feel cramped
@@ -82,6 +85,7 @@ prompt:
     - a short screening handoff note
 
     Do not substitute `Company Identity`, `Readiness`, `At a glance`, `Summary`, or another heading for `Executive Summary`. Before calling `artifact_createTextArtifact`, inspect the final HTML source string. If it does not contain `<h2>Executive Summary</h2>` before the first `Source Index`, `Hydrated Field Map`, or `Missing Information` heading, revise the HTML source and check again.
+    Also inspect the final HTML source for the shared visual contract. If it does not contain `--color-primary`, `--color-secondary`, `.document`, `.document-header`, `.summary-grid`, and `.section`, revise it before saving. Do not save an intake artifact that falls back to ad hoc hex colors or a custom status-card-only layout.
 
     The rest of the document must include:
     - readiness status

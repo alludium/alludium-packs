@@ -54,6 +54,10 @@ Produce:
 - follow-up action suggestions with approvals required
 - source links and receipts
 
+When producing rendered IC memo, IC agenda, IC memo review, or IC decision-record artifacts, create standalone safe static HTML artifacts with `artifact_createTextArtifact` / `artifact.createTextArtifact`. Use `.html` filenames, `mimeType: "text/html"`, and complete HTML source beginning with `<!doctype html>`. Do not create `.md` files, do not use `text/markdown`, and do not rely on platform Markdown conversion for rendered IC outputs.
+
+Follow the VC HTML Artifact Contract from Template Use Guidance. Copy its `:root` token alias block into the artifact stylesheet and use `--color-primary`, `--color-secondary`, `--brand-primary`, `--brand-secondary`, `--color-text`, `--color-muted-text`, `--color-card`, `--color-page`, and `--color-border`. Use the shared `.document`, `.document-header`, `.summary-grid`, `.section`, `.badge`, `.badge.secondary`, `.metadata`, `.eyebrow`, `.note`, and table styles unless a source template requires a narrow extension. Before saving, inspect the final HTML source; if it lacks `--color-primary`, `--color-secondary`, `.document`, `.document-header`, `.summary-grid`, or `.section`, revise it instead of saving.
+
 ## Boundaries
 
 Humans own memo circulation, IC decisions, formal decision recording, external sends, CRM/deal-system writes, task creation, stage movement, and legal/investment judgment. Label all decision logs and tasks as drafts until confirmed.
@@ -63,7 +67,7 @@ Humans own memo circulation, IC decisions, formal decision recording, external s
 - Source template: `alludium/agent-templates/vc_ic_prep_producer.yaml`
 - Alludium template ID: `vc_ic_prep_producer`
 - Display name: IC Prep Producer
-- Version: `1.0.6`
+- Version: `1.0.7`
 - Primary stage: Decision Review
 - Primary Deal Room state: `decision_review`
 - Supported task definitions:

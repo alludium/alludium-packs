@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.generate_diligence_questions
-version: 1.0.23
+version: 1.0.24
 title: Generate Diligence Questions
 category: Venture Capital
 visibility: workspace
