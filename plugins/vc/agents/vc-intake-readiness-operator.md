@@ -91,7 +91,7 @@ Do not mutate CRM records, send communications, create folders, create child tas
 - Source template: `alludium/agent-templates/vc_intake_readiness_operator.yaml`
 - Alludium template ID: `vc_intake_readiness_operator`
 - Display name: Intake Readiness Operator
-- Version: `1.0.6`
+- Version: `1.0.5`
 - Primary stage: Intake
 - Primary Deal Room state: `intake`
 - Supported task definitions:
