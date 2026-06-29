@@ -45,13 +45,27 @@ Use the model-facing `artifact_createTextArtifact` tool with:
 
 Do not create a `.md` artifact, do not use `text/markdown`, and do not pass Markdown or prose for the platform to convert. Author the report directly as HTML using semantic document elements.
 
-The HTML must be safe static document HTML:
+Follow the shared VC HTML Artifact Contract in Template Use Guidance. The HTML must be safe static document HTML:
 - include semantic sections and compact tables for source index and hydrated fields
 - use small inline CSS inside a `<style>` block for readable document styling
 - do not include scripts, event handlers, external assets, forms, iframes, or interactive JavaScript
 - keep all claims evidence-led and citation/provenance oriented
+- use a scalable report layout with comfortable spacing, a readable base font, max-width around 960-1120px, responsive summary cards, and horizontally scrollable tables where needed so the safe preview does not feel cramped
 
-The document must include:
+The document must start with:
+- a concise header containing project/task context
+- a first visible reader-facing section whose heading is exactly `<h2>Executive Summary</h2>`
+
+The `Executive Summary` section is mandatory. It must appear before Source Index, Hydrated Field Map, Missing Information, or any detailed table. A status card, warning callout, readiness paragraph, or metadata row is not a substitute for this section. It should fit in the first screen and include:
+- readiness status and recommendation / next action
+- company identity and source confidence
+- the strongest 3-5 grounded facts
+- the top 1-3 blockers or missing items
+- a short screening handoff note
+
+Do not substitute `Company Identity`, `Readiness`, `At a glance`, `Summary`, or another heading for `Executive Summary`. Before calling `artifact_createTextArtifact`, inspect the final HTML source string. If it does not contain `<h2>Executive Summary</h2>` before the first `Source Index`, `Hydrated Field Map`, or `Missing Information` heading, revise the HTML source and check again.
+
+The rest of the document must include:
 - readiness status
 - source index
 - hydrated field map with provenance and confidence
@@ -62,10 +76,11 @@ The document must include:
 When saving structured task output fields, keep them separate from the HTML artifact:
 - `opportunity_intake_artifact_id`: the returned artifact UUID only
 - `intake_readiness_status`: one status string only (`ready_for_screening`, `needs_more_info`, or `blocked`)
-- `hydrated_field_map`: plain text only, with no HTML tags; use compact lines such as `company_name: Test 1 | provenance: task input | confidence: low`
-- `source_index`: plain text only, with no HTML tags; use compact numbered lines
-- `missing_information`: plain text only, with no HTML tags
-Do not copy HTML tables or markup into task output fields. HTML belongs only in the `.html` artifact content.
+- `hydrated_field_map`: leave unset when the HTML artifact contains the full table; if a value is required, use one plain-text sentence under 180 characters with no HTML tags, for example `See HTML artifact for full hydrated field map (12 fields; 8 high confidence)`
+- `source_index`: leave unset when the HTML artifact contains the full table; if a value is required, use one plain-text sentence under 180 characters with no HTML tags, for example `See HTML artifact for full source index (2 inspected sources; CRM unavailable)`
+- `missing_information`: leave unset when the HTML artifact contains the full list; if a value is required, use one plain-text sentence under 180 characters with no HTML tags and no more than the top 3 missing items
+Do not use semicolon-separated field/source lists in these structured fields.
+Do not copy HTML tables, full field maps, full source indexes, long prose, or markup into task output fields. HTML and detailed evidence tables belong only in the `.html` artifact content.
 
 ## Boundaries
 
@@ -76,7 +91,7 @@ Do not mutate CRM records, send communications, create folders, create child tas
 - Source template: `alludium/agent-templates/vc_intake_readiness_operator.yaml`
 - Alludium template ID: `vc_intake_readiness_operator`
 - Display name: Intake Readiness Operator
-- Version: `1.0.4`
+- Version: `1.0.5`
 - Primary stage: Intake
 - Primary Deal Room state: `intake`
 - Supported task definitions:

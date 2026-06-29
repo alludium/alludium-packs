@@ -21,7 +21,7 @@ Record IC Decision for one venture-capital opportunity with evidence capture, hu
 
 ## What To Do
 
-Record the IC decision outcome, vote or consensus summary, dissent and objections, conditions, post-IC action items, and stage transition recommendation. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifacts investment memo artifact and ic agenda artifact as the IC decision record subjects, alongside the transcript or notes. Create or update a polished Word-ready document named IC Decision Record.
+Record the IC decision outcome, vote or consensus summary, dissent and objections, conditions, post-IC action items, and stage transition recommendation. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use the required input file artifacts investment memo artifact and ic agenda artifact as the IC decision record subjects, alongside the transcript or notes. Create or update a polished Word-ready document named IC Decision Record as a standalone safe static HTML artifact using the Artifact Create Text Artifact tool (`artifact.createTextArtifact`), a `.html` filename, and `mimeType: "text/html"`; do not use the Project Instantiate Template tool, `project.instantiateTemplate`, or `project_instantiateTemplate`, and do not create a `.md`/`text/markdown` artifact for this rendered output; then attach it to the required output field ic decision record artifact. Use `definitionJson.documentRefs` only as source guidance for rendered outputs. Read referenced templates, methodologies, checklists, style guides, operating guidance, and policies, but convert the referenced Markdown/template sections into semantic standalone HTML for `artifact.createTextArtifact`: keep the required first summary section from the task or template, preserve decision-critical section order, omit unsupported boilerplate, and resolve conflicts in favor of the shared HTML contract plus task-specific heading requirements. For refs with `outputFieldKey`, save the `artifact.createTextArtifact` result to that output field and preserve the document ID alongside the output artifact.
 
 ## Available Context
 
@@ -37,7 +37,7 @@ Record the IC decision outcome, vote or consensus summary, dissent and objection
 
 ## Deliverable
 
-- Create or update **IC Decision Record** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Create or update **IC Decision Record** as a standalone safe HTML artifact. Use `.html`, `mimeType: "text/html"`, and complete static HTML suitable for the platform safe previewer.
 
 ## Missing Input Policy
 

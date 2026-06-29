@@ -21,7 +21,7 @@ Create IC Memo for one venture-capital opportunity with evidence capture, human 
 
 ## What To Do
 
-Assemble the IC memo and pack checklist from review packs, evaluation-stage workstream outputs, available formal diligence outputs, source artifacts, unresolved risks, assumptions, and citation coverage. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use required evaluation input file artifacts commercial evaluation artifact, technical evaluation artifact, financial evaluation artifact, team evaluation artifact, and diligence question bank artifact as the decision-review source set. Use formal diligence artifacts commercial dd artifact, financial dd artifact, founder evaluation artifact, and technical dd artifact when present, but do not block evaluation-stage review on them. Use the required input file artifacts team review pack artifact and partner review pack artifact as the review-pack sources for the IC memo. Create or update a polished Word-ready document named Investment Memo.
+Assemble the IC memo and pack checklist from review packs, evaluation-stage workstream outputs, available formal diligence outputs, source artifacts, unresolved risks, assumptions, and citation coverage. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use required evaluation input file artifacts commercial evaluation artifact, technical evaluation artifact, financial evaluation artifact, team evaluation artifact, and diligence question bank artifact as the decision-review source set. Use formal diligence artifacts commercial dd artifact, financial dd artifact, founder evaluation artifact, and technical dd artifact when present, but do not block evaluation-stage review on them. Use the required input file artifacts team review pack artifact and partner review pack artifact as the review-pack sources for the IC memo. Create or update a polished Word-ready document named Investment Memo as a standalone safe static HTML artifact using the Artifact Create Text Artifact tool (`artifact.createTextArtifact`), a `.html` filename, and `mimeType: "text/html"`; do not use the Project Instantiate Template tool, `project.instantiateTemplate`, or `project_instantiateTemplate`, and do not create a `.md`/`text/markdown` artifact for this rendered output; then attach it to the required output field investment memo artifact.
 
 ## Available Context
 
@@ -41,7 +41,7 @@ Assemble the IC memo and pack checklist from review packs, evaluation-stage work
 
 ## Deliverable
 
-- Create or update **Investment Memo** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Create or update **Investment Memo** as a standalone safe HTML artifact. Use `.html`, `mimeType: "text/html"`, and complete static HTML suitable for the platform safe previewer.
 
 ## Missing Input Policy
 

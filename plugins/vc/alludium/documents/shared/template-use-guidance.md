@@ -52,6 +52,29 @@ Every material claim should have a source link, source artifact reference, or a 
 
 Do not reproduce internal drafting notes, task instructions, or template-use guidance in the generated artifact unless the referenced template intentionally includes a reader-facing standard, source index, decision criteria, or usage section. Final artifacts should read like partner-ready VC work product, not like a workflow trace.
 
+## HTML Artifact Contract
+
+When a VC template is rendered as a task output artifact, create the final artifact with `artifact_createTextArtifact` as a safe static HTML text artifact. Use a `.html` filename, `mimeType: "text/html"`, and complete standalone HTML source beginning with `<!doctype html>`. Do not create Markdown artifacts for rendered outputs, and do not rely on the platform to convert Markdown into HTML.
+
+Use a consistent document structure:
+
+1. Header with company, project/task context, date, and artifact purpose.
+2. Status strip or compact metadata row, when the workflow has a readiness, recommendation, or decision status.
+3. First visible reader-facing summary block using the exact heading required by the task/template. Common headings include `Executive Summary` and `At A Glance`; they are not interchangeable when a task names one explicitly. If a task requires `Executive Summary`, that exact heading is mandatory and a status card is not a substitute.
+4. Decision snapshot, key facts, or requested action.
+5. Evidence, source index, and provenance.
+6. Detailed findings, field map, evaluation sections, or checklist rows.
+7. Missing information, risks, next actions, owners, and follow-up timing.
+8. Appendix only when useful.
+
+Keep the first screen decision-useful. Put the recommendation, status, source confidence, strongest supported facts, and highest-priority gaps before long tables or detailed evidence logs.
+
+Use scalable safe-preview styling: readable 15-16px base text, line-height around 1.5-1.65, max-width around 960-1120px, generous section spacing, responsive summary cards, and tables wrapped in an overflow container. Avoid cramped first-screen table walls, fixed-width layouts, external assets, scripts, event handlers, forms, iframes, and interactive JavaScript.
+
+Keep structured task output fields separate from the artifact. Detailed HTML tables, source indexes, field maps, and long narrative belong inside the HTML artifact only. Optional structured fields should be unset where possible; when the platform requires a value, use plain text, no markup, and one short pointer or summary rather than copying the document body.
+
+Compatibility note: before `v0.5.37`, some intake task output fields accepted richer text for detailed source indexes and field maps. Existing task runs may still contain that historical content. Treat those values as legacy task-output history, review or clean them manually only when a workspace depends on the compact summaries, and write new runs using the compact plain-text summary fields plus the full HTML artifact.
+
 ## Completion Check
 
 Before finishing, verify that the artifact states the decision ask or workflow purpose, separates evidence from unknowns, identifies next actions and owners where relevant, and gives the human reviewer enough context to decide what to do next.

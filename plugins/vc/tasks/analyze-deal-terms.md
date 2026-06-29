@@ -20,7 +20,7 @@ Analyze proposed venture deal economics, ownership, dilution, ESOP, and commerci
 
 ## What To Do
 
-Analyze the proposed investment amount, valuation, round size, cap table, ownership target, ESOP, co-investors, and reserve policy as commercial deal economics. Model ownership, dilution, valuation sensitivity, and open commercial terms only from supplied evidence. Cite material claims, separate assumptions from evidence, and do not provide legal advice, negotiate terms, approve terms, send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a polished Word-ready document named Deal Terms Analysis.
+Analyze the proposed investment amount, valuation, round size, cap table, ownership target, ESOP, co-investors, and reserve policy as commercial deal economics. Model ownership, dilution, valuation sensitivity, and open commercial terms only from supplied evidence. Cite material claims, separate assumptions from evidence, and do not provide legal advice, negotiate terms, approve terms, send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a polished Word-ready document named Deal Terms Analysis as a standalone safe static HTML artifact using the Artifact Create Text Artifact tool (`artifact.createTextArtifact`), a `.html` filename, and `mimeType: "text/html"`; do not use the Project Instantiate Template tool, `project.instantiateTemplate`, or `project_instantiateTemplate`, and do not create a `.md`/`text/markdown` artifact for this rendered output; then attach it to the required output field deal terms analysis artifact. Use `definitionJson.documentRefs` only as source guidance for rendered outputs. Read referenced templates, methodologies, checklists, style guides, operating guidance, and policies, but convert the referenced Markdown/template sections into semantic standalone HTML for `artifact.createTextArtifact`: keep the required first summary section from the task or template, preserve decision-critical section order, omit unsupported boilerplate, and resolve conflicts in favor of the shared HTML contract plus task-specific heading requirements. For refs with `outputFieldKey`, save the `artifact.createTextArtifact` result to that output field and preserve the document ID alongside the output artifact.
 
 ## Available Context
 
@@ -36,7 +36,7 @@ Analyze the proposed investment amount, valuation, round size, cap table, owners
 
 ## Deliverable
 
-- Create or update **Deal Terms Analysis** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Create or update **Deal Terms Analysis** as a standalone safe HTML artifact. Use `.html`, `mimeType: "text/html"`, and complete static HTML suitable for the platform safe previewer.
 - Also include a short human-readable summary covering: Open Commercial Terms. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy

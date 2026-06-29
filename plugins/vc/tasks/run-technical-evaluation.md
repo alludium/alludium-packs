@@ -21,7 +21,7 @@ Run an evaluation-stage technical and product workstream for one venture-capital
 
 ## What To Do
 
-Run a technical evaluation covering product depth, architecture plausibility, technical edge, IP or data defensibility, roadmap realism, technical team coverage, and technical gating risk. Use this as evaluation-stage work, not formal technical diligence, code review, security review, expert validation, or IP clearance. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a polished Word-ready document named Technical Evaluation.
+Run a technical evaluation covering product depth, architecture plausibility, technical edge, IP or data defensibility, roadmap realism, technical team coverage, and technical gating risk. Use this as evaluation-stage work, not formal technical diligence, code review, security review, expert validation, or IP clearance. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Create or update a polished Word-ready document named Technical Evaluation as a standalone safe static HTML artifact using the Artifact Create Text Artifact tool (`artifact.createTextArtifact`), a `.html` filename, and `mimeType: "text/html"`; do not use the Project Instantiate Template tool, `project.instantiateTemplate`, or `project_instantiateTemplate`, and do not create a `.md`/`text/markdown` artifact for this rendered output; then attach it to the required output field technical evaluation artifact. Use `definitionJson.documentRefs` only as source guidance for rendered outputs. Read referenced templates, methodologies, checklists, style guides, operating guidance, and policies, but convert the referenced Markdown/template sections into semantic standalone HTML for `artifact.createTextArtifact`: keep the required first summary section from the task or template, preserve decision-critical section order, omit unsupported boilerplate, and resolve conflicts in favor of the shared HTML contract plus task-specific heading requirements. For refs with `outputFieldKey`, save the `artifact.createTextArtifact` result to that output field and preserve the document ID alongside the output artifact.
 
 ## Available Context
 
@@ -40,7 +40,7 @@ Run a technical evaluation covering product depth, architecture plausibility, te
 
 ## Deliverable
 
-- Create or update **Technical Evaluation** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Create or update **Technical Evaluation** as a standalone safe HTML artifact. Use `.html`, `mimeType: "text/html"`, and complete static HTML suitable for the platform safe previewer.
 - Also include a short human-readable summary covering: Main Technical Hypothesis, Technical Gating Risk, Next Technical Proof Needed. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
