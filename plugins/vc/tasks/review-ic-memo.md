@@ -31,7 +31,7 @@ Review the IC memo and pack for findings, citation gaps, assumption gaps, unreso
 
 ## Reference Materials
 
-- [IC Memo Review Template](../alludium/documents/deal-room/ic-memo-review-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [IC Memo Review Template](../alludium/documents/deal-room/ic-memo-review-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
 - [Opportunity Evaluation Framework](../alludium/documents/shared/opportunity-evaluation-framework.md): Use as the analysis method.
 - [Evaluation Workstream Guide](../alludium/documents/shared/evaluation-workstream-guide.md): Use as the analysis method.
 - [Formal Diligence Workstream Guide](../alludium/documents/deal-room/formal-diligence-workstream-guide.md): Use as the analysis method.

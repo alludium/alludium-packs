@@ -7,7 +7,7 @@
       "title": "Investment Screening Framework",
       "description": "Reusable first-look scorecard methodology for deciding whether a venture opportunity deserves deeper work.",
       "documentType": "methodology",
-      "path": "shared/investment-screening-framework.md",
+      "path": "shared/investment-screening-framework.html",
       "supportedProjectTypes": [
         "vc_deal_room",
         "vc_origination_pipeline"
@@ -25,7 +25,7 @@
       "title": "Investment Diligence Question Framework",
       "description": "Structured diligence question-bank methodology for converting knowns, unknowns, and risks into workstream questions.",
       "documentType": "methodology",
-      "path": "shared/investment-diligence-question-framework.md",
+      "path": "shared/investment-diligence-question-framework.html",
       "supportedProjectTypes": [
         "vc_deal_room",
         "vc_origination_pipeline",
@@ -258,7 +258,7 @@
       "title": "Founder Materials Request Template",
       "description": "Reusable founder request template for source materials, financials, customer evidence, technical context, and legal basics.",
       "documentType": "template",
-      "path": "deal-room/founder-materials-request-template.md",
+      "path": "deal-room/founder-materials-request-template.html",
       "supportedProjectTypes": [
         "vc_deal_room"
       ],
@@ -300,7 +300,7 @@
       "title": "Initial Call Brief Template",
       "description": "Reusable pre-call brief for first founder or management meetings.",
       "documentType": "template",
-      "path": "deal-room/initial-call-brief-template.md",
+      "path": "deal-room/initial-call-brief-template.html",
       "supportedProjectTypes": [
         "vc_deal_room"
       ],
@@ -314,7 +314,7 @@
       "title": "Customer Insights Summary Template",
       "description": "Reusable meeting-record summary for customer, founder, and diligence call evidence.",
       "documentType": "template",
-      "path": "deal-room/customer-insights-summary-template.md",
+      "path": "deal-room/customer-insights-summary-template.html",
       "supportedProjectTypes": [
         "vc_deal_room"
       ],
@@ -328,7 +328,7 @@
       "title": "Opportunity Evaluation Template",
       "description": "Reusable deeper opportunity evaluation after investment screening and early evidence collection.",
       "documentType": "template",
-      "path": "deal-room/follow-up-evaluation-template.md",
+      "path": "deal-room/follow-up-evaluation-template.html",
       "supportedProjectTypes": [
         "vc_deal_room"
       ],
@@ -342,7 +342,7 @@
       "title": "Team Evaluation Template",
       "description": "Output template for lightweight team and founder evaluation before formal diligence.",
       "documentType": "template",
-      "path": "deal-room/team-evaluation-template.md",
+      "path": "deal-room/team-evaluation-template.html",
       "supportedProjectTypes": [
         "vc_deal_room"
       ],
@@ -356,7 +356,7 @@
       "title": "Financial Evaluation Template",
       "description": "Output template for lightweight financial and financing evaluation before formal diligence.",
       "documentType": "template",
-      "path": "deal-room/financial-evaluation-template.md",
+      "path": "deal-room/financial-evaluation-template.html",
       "supportedProjectTypes": [
         "vc_deal_room"
       ],
@@ -370,7 +370,7 @@
       "title": "Technical Evaluation Template",
       "description": "Output template for lightweight technical and product evaluation before formal diligence.",
       "documentType": "template",
-      "path": "deal-room/technical-evaluation-template.md",
+      "path": "deal-room/technical-evaluation-template.html",
       "supportedProjectTypes": [
         "vc_deal_room"
       ],
@@ -384,7 +384,7 @@
       "title": "Commercial Evaluation Template",
       "description": "Output template for lightweight commercial evaluation before formal diligence.",
       "documentType": "template",
-      "path": "deal-room/commercial-evaluation-template.md",
+      "path": "deal-room/commercial-evaluation-template.html",
       "supportedProjectTypes": [
         "vc_deal_room"
       ],
@@ -398,7 +398,7 @@
       "title": "Investment Memo Template",
       "description": "Reusable IC investment memo structure with thesis, evidence, risks, valuation, diligence, and decision ask.",
       "documentType": "template",
-      "path": "deal-room/investment-memo-template.md",
+      "path": "deal-room/investment-memo-template.html",
       "supportedProjectTypes": [
         "vc_deal_room"
       ],
@@ -413,7 +413,7 @@
       "title": "IC Agenda Template",
       "description": "Reusable investment committee agenda for sequencing discussion, open questions, decision items, and pre-reads.",
       "documentType": "template",
-      "path": "deal-room/ic-agenda-template.md",
+      "path": "deal-room/ic-agenda-template.html",
       "supportedProjectTypes": [
         "vc_deal_room"
       ],
@@ -427,7 +427,7 @@
       "title": "IC Decision Record Template",
       "description": "Reusable decision record for approvals, conditions, dissent, follow-ups, and evidence references.",
       "documentType": "template",
-      "path": "deal-room/ic-decision-record-template.md",
+      "path": "deal-room/ic-decision-record-template.html",
       "supportedProjectTypes": [
         "vc_deal_room"
       ],
@@ -506,7 +506,7 @@
       "title": "Review Pack Checklist",
       "description": "Checklist for team review and partner review packs before escalation to IC materials.",
       "documentType": "checklist",
-      "path": "deal-room/review-pack-checklist.md",
+      "path": "deal-room/review-pack-checklist.html",
       "supportedProjectTypes": [
         "vc_deal_room"
       ],
@@ -521,7 +521,7 @@
       "title": "IC Memo Review Template",
       "description": "Reusable review format for checking IC memo readiness, gaps, and required changes.",
       "documentType": "template",
-      "path": "deal-room/ic-memo-review-template.md",
+      "path": "deal-room/ic-memo-review-template.html",
       "supportedProjectTypes": [
         "vc_deal_room"
       ],
@@ -535,7 +535,7 @@
       "title": "Deal Terms Analysis Template",
       "description": "Reusable commercial review format for valuation, ownership, dilution, ESOP, and round construction analysis.",
       "documentType": "template",
-      "path": "deal-room/deal-terms-analysis-template.md",
+      "path": "deal-room/deal-terms-analysis-template.html",
       "supportedProjectTypes": [
         "vc_deal_room"
       ],
@@ -549,7 +549,7 @@
       "title": "Term Sheet Negotiation Brief Template",
       "description": "Reusable internal brief for open terms, give/get options, counsel questions, and approval points.",
       "documentType": "template",
-      "path": "deal-room/term-sheet-negotiation-brief-template.md",
+      "path": "deal-room/term-sheet-negotiation-brief-template.html",
       "supportedProjectTypes": [
         "vc_deal_room"
       ],
@@ -563,7 +563,7 @@
       "title": "Term Sheet Review Template",
       "description": "Reusable business review format for term-sheet deviations, red flags, and counsel questions.",
       "documentType": "template",
-      "path": "deal-room/term-sheet-review-template.md",
+      "path": "deal-room/term-sheet-review-template.html",
       "supportedProjectTypes": [
         "vc_deal_room"
       ],

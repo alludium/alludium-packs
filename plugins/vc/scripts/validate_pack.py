@@ -177,6 +177,7 @@ DOCUMENT_SURFACE_STATUS = "pack-native-document-sources"
 DOCUMENT_CATALOG_PATH = "alludium/documents/catalog.v1.json"
 DOCUMENT_TYPES = {"checklist", "methodology", "policy", "sop", "style_guide", "template"}
 DOCUMENT_STATUSES = {"source"}
+DOCUMENT_SOURCE_EXTENSIONS = {".html", ".md"}
 DOCUMENT_AUTHORING_LEAK_PATTERNS = [
     "delete this section",
     "remove this section",
@@ -2670,6 +2671,30 @@ def validate_document_markdown(
     validate_document_quality_sections(relative_path, markdown_text, catalog_entry)
 
 
+def validate_document_html(
+    document_root: Path,
+    html_path: Path,
+    catalog_entry: dict[str, Any],
+) -> None:
+    relative_path = html_path.relative_to(document_root)
+    html_text = html_path.read_text(encoding="utf-8")
+    lowered = html_text.lower()
+    if not lowered.startswith("<!doctype html>"):
+        fail(f"Document {relative_path} must start with <!doctype html>")
+    required_fragments = [
+        f'data-document-id="{catalog_entry["id"]}"',
+        f'data-document-type="{catalog_entry["documentType"]}"',
+        '<meta charset="utf-8">',
+        "mimeType:",
+        "text/html",
+    ]
+    for fragment in required_fragments:
+        if fragment not in html_text:
+            fail(f"Document {relative_path} must include {fragment!r}")
+    validate_document_output_hygiene(relative_path, html_text)
+    validate_document_quality_sections(relative_path, html_text, catalog_entry)
+
+
 def validate_markdown_tables(relative_path: Path, markdown_text: str) -> None:
     table_block: list[tuple[int, str]] = []
     for line_number, line in enumerate(markdown_text.splitlines(), start=1):
@@ -2702,22 +2727,23 @@ def validate_document_output_hygiene(relative_path: Path, markdown_text: str) ->
 
 def validate_document_quality_sections(
     relative_path: Path,
-    markdown_text: str,
+    document_text: str,
     catalog_entry: dict[str, Any],
 ) -> None:
     document_type = catalog_entry.get("documentType")
     reader_facing_quality_sections = [
-        "## Approval Rule",
-        "## Batch Rule",
-        "## Boundary",
-        "## Cadence",
-        "## Decision",
-        "## Escalation Rule",
-        "## Standard",
-        "## Usage",
+        "Approval Rule",
+        "Batch Rule",
+        "Boundary",
+        "Cadence",
+        "Decision",
+        "Escalation Rule",
+        "Standard",
+        "Usage",
     ]
     if document_type in {"template", "checklist"} and not any(
-        heading in markdown_text for heading in reader_facing_quality_sections
+        re.search(rf"(?:##\s+|<h[1-6][^>]*>)\s*{re.escape(heading)}\b", document_text)
+        for heading in reader_facing_quality_sections
     ):
         fail(f"Document {relative_path} must include a reader-facing quality or boundary section")
     if catalog_entry.get("id") in {
@@ -2727,7 +2753,7 @@ def validate_document_quality_sections(
         "vc.document.initial_call_brief_template",
         "vc.document.sourcing_digest_template",
         "vc.document.closing_checklist",
-    } and "## Source Inputs" not in markdown_text:
+    } and not re.search(r"(?:##\s+|<h[1-6][^>]*>)\s*Source Inputs\b", document_text):
         fail(f"Document {relative_path} must include a Source Inputs section")
 
 
@@ -2802,8 +2828,9 @@ def validate_documents(
             fail(f"Document catalog entry {document_id} has invalid status")
         if not isinstance(relative_document_path, str) or not relative_document_path:
             fail(f"Document catalog entry {document_id} must declare path")
-        if not relative_document_path.endswith(".md"):
-            fail(f"Document catalog entry {document_id} path must reference Markdown")
+        source_extension = Path(relative_document_path).suffix
+        if source_extension not in DOCUMENT_SOURCE_EXTENSIONS:
+            fail(f"Document catalog entry {document_id} path must reference Markdown or HTML")
 
         supported_project_types = require_string_list(
             entry.get("supportedProjectTypes"),
@@ -2842,7 +2869,10 @@ def validate_documents(
             fail(f"Document catalog references missing file {relative_document_path}")
         discovered_paths.add(resolved_document_path)
         discovered_ids.append(document_id)
-        validate_document_markdown(document_root, resolved_document_path, entry)
+        if source_extension == ".md":
+            validate_document_markdown(document_root, resolved_document_path, entry)
+        elif source_extension == ".html":
+            validate_document_html(document_root, resolved_document_path, entry)
         for project_type_id in supported_project_types:
             document_ids_by_project_type[project_type_id].add(document_id)
 
@@ -2855,12 +2885,16 @@ def validate_documents(
             f"catalog_only={sorted(set(discovered_ids) - set(manifest_document_ids))}"
         )
 
-    actual_markdown_paths = {path.resolve() for path in document_root.glob("**/*.md")}
-    extra_markdown_paths = actual_markdown_paths - discovered_paths
-    if extra_markdown_paths:
+    actual_document_paths = {
+        path.resolve()
+        for extension in DOCUMENT_SOURCE_EXTENSIONS
+        for path in document_root.glob(f"**/*{extension}")
+    }
+    extra_document_paths = actual_document_paths - discovered_paths
+    if extra_document_paths:
         fail(
-            "Document Markdown files present on disk but missing from catalog: "
-            f"{sorted(str(path.relative_to(document_root)) for path in extra_markdown_paths)}"
+            "Document source files present on disk but missing from catalog: "
+            f"{sorted(str(path.relative_to(document_root)) for path in extra_document_paths)}"
         )
 
     return document_ids_by_project_type, document_types_by_id

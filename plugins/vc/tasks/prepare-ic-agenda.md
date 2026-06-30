@@ -31,7 +31,7 @@ Prepare the IC agenda, pack checklist, key debate topics, follow-up questions, a
 
 ## Reference Materials
 
-- [IC Agenda Template](../alludium/documents/deal-room/ic-agenda-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [IC Agenda Template](../alludium/documents/deal-room/ic-agenda-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
 - [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
 
 ## Deliverable

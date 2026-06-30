@@ -30,7 +30,7 @@ Generate prioritized investment diligence questions with rationale, source gap, 
 
 ## Reference Materials
 
-- [Investment Diligence Question Framework](../alludium/documents/shared/investment-diligence-question-framework.md): Use as the analysis method.
+- [Investment Diligence Question Framework](../alludium/documents/shared/investment-diligence-question-framework.html): Use as the analysis method.
 - [Opportunity Evaluation Framework](../alludium/documents/shared/opportunity-evaluation-framework.md): Use as the analysis method.
 - [Evaluation Workstream Guide](../alludium/documents/shared/evaluation-workstream-guide.md): Use as the analysis method.
 - [Commercial Evaluation Guide](../alludium/documents/deal-room/commercial-evaluation-guide.md): Use as the analysis method.

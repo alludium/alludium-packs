@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Investment Diligence Question Framework</title>
+  <style>
+    :root { color-scheme: light; --color-text: #172033; --color-muted-text: #5b6475; --color-border: #d8dee8; --color-page: #f6f8fb; --color-card: #ffffff; --color-primary: #263f89; --color-secondary: #566275; --color-secondary-surface: #eef2f7; }
+    body { margin: 0; background: var(--color-page); color: var(--color-text); font: 15px/1.58 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .document { max-width: 1080px; margin: 0 auto; padding: 32px 28px 48px; background: var(--color-card); }
+    .document-header { border-bottom: 2px solid var(--color-primary); margin-bottom: 24px; padding-bottom: 16px; }
+    .eyebrow, .metadata { color: var(--color-muted-text); font-size: 13px; text-transform: uppercase; letter-spacing: .04em; }
+    h1, h2, h3 { color: var(--color-primary); line-height: 1.2; }
+    h1 { font-size: 30px; margin: 8px 0; }
+    h2 { font-size: 21px; border-top: 1px solid var(--color-border); margin-top: 28px; padding-top: 20px; }
+    h3 { font-size: 17px; margin-top: 22px; }
+    p { margin: 10px 0; }
+    code { background: var(--color-secondary-surface); border-radius: 4px; padding: 1px 4px; }
+    ul, ol { padding-left: 22px; }
+    li { margin: 6px 0; }
+    .note { border-left: 4px solid var(--color-primary); background: var(--color-secondary-surface); padding: 12px 14px; margin: 16px 0; }
+    .table-wrap { overflow-x: auto; margin: 14px 0 22px; border: 1px solid var(--color-border); border-radius: 6px; }
+    table { width: 100%; border-collapse: collapse; min-width: 680px; }
+    th, td { border-bottom: 1px solid var(--color-border); padding: 10px 12px; text-align: left; vertical-align: top; }
+    th { background: var(--color-secondary-surface); color: var(--color-secondary); font-weight: 700; }
+  </style>
+</head>
+<body>
+  <article class="document document-source-template" data-document-id="vc.document.investment_diligence_question_framework" data-document-type="methodology">
+    <header class="document-header">
+      <div class="eyebrow">VC methodology source</div>
+      <h1>Investment Diligence Question Framework</h1>
+      <p class="metadata">Structured diligence question-bank methodology for investment workstreams.</p>
+    </header>
+    <section class="note">When this source is used as a rendered task output, create the final deliverable as a standalone safe static HTML artifact with a <code>.html</code> filename and <code>mimeType: "text/html"</code>. Do not create Markdown output artifacts from this source.</section>
+<h1 id="investment-diligence-question-framework">Investment Diligence Question Framework</h1>
+<h2 id="rendered-artifact-contract">Rendered Artifact Contract</h2>
+<p>When this document is used to create a task output artifact:</p>
+<ul>
+<li>Create the final artifact with <code>artifact_createTextArtifact</code>.</li>
+<li>Use a <code>.html</code> filename and <code>mimeType: &quot;text/html&quot;</code>.</li>
+<li>Set <code>content</code> to a complete standalone safe static HTML document beginning with <code>&lt;!doctype html&gt;</code>.</li>
+<li>Convert this Markdown scaffold into semantic HTML sections, tables, and lists with small inline CSS in a <code>&lt;style&gt;</code> block.</li>
+<li>Follow the shared VC HTML Artifact Contract in Template Use Guidance for section order, first-screen summary, spacing, responsive tables, and compact structured outputs.</li>
+<li>Do not create <code>.md</code> or <code>text/markdown</code> artifacts for rendered outputs.</li>
+<li>Do not copy HTML into structured task output fields; those fields remain plain text or artifact UUIDs.</li>
+</ul>
+<h2 id="at-a-glance-output">At A Glance Output</h2>
+<p>Every rendered question bank should begin with a compact HTML overview before the full question table.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Field</th><th>Content</th></tr></thead>
+<tbody>
+<tr><td>Diligence objective</td><td>The decision this question bank supports</td></tr>
+<tr><td>Top must-answer questions</td><td>Three to five questions most likely to change proceed/pass, valuation, terms, or approval conditions</td></tr>
+<tr><td>Highest-risk workstream</td><td>The area with the biggest decision impact or weakest evidence</td></tr>
+<tr><td>Evidence gaps</td><td>The key artefacts, interviews, models, or counsel inputs still needed</td></tr>
+<tr><td>Owner / next step</td><td>The immediate assignment needed to unblock the question bank</td></tr>
+</tbody></table></div>
+<h2 id="purpose">Purpose</h2>
+<p>Use this framework to turn known facts, risk hypotheses, and evidence gaps into an assignable diligence question bank. Good questions are specific, answerable, owned, and tied to a decision. Avoid generic diligence prompts that do not change the investment view.</p>
+<h2 id="question-bank-format">Question Bank Format</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Priority</th><th>Workstream</th><th>Question</th><th>Why It Matters</th><th>Expected Evidence</th><th>Owner</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td>Must answer</td><td>Market / customer / product / team / financial / legal / fund fit</td><td>Specific question</td><td>Decision affected by the answer</td><td>Source, artifact, interview, model, or counsel input</td><td>Named owner</td><td>Open / In review / Answered / Blocked</td></tr>
+</tbody></table></div>
+<h2 id="workstreams">Workstreams</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Workstream</th><th>Example Focus Areas</th></tr></thead>
+<tbody>
+<tr><td>Market and customer</td><td>Market urgency, buyer pain, budget owner, category growth, customer proof, customer concentration</td></tr>
+<tr><td>Product and technology</td><td>Product depth, architecture, defensibility, roadmap, security, AI or data dependencies, scalability</td></tr>
+<tr><td>Team and governance</td><td>Founder quality, hiring plan, board needs, references, key-person risk, role coverage</td></tr>
+<tr><td>Financial and unit economics</td><td>Revenue quality, gross margin, burn, runway, payback, forecast realism, use of funds</td></tr>
+<tr><td>Commercial motion</td><td>Pipeline, sales cycle, pricing power, retention, expansion, channel risk, partner dependencies</td></tr>
+<tr><td>Legal and regulatory</td><td>IP, contracts, privacy, employment, regulatory exposure, licenses, counsel items</td></tr>
+<tr><td>Company structure and deal terms</td><td>Cap table, option pool, shareholder rights, round dynamics, valuation, reserves, ownership path</td></tr>
+<tr><td>Exit and return fit</td><td>Acquirer logic, comparable exits, exit timing, fund-return sensitivity</td></tr>
+</tbody></table></div>
+<h2 id="prioritization">Prioritization</h2>
+<p>Use <code>must answer</code> for questions that can change proceed/pass, valuation, terms, or approval conditions. Use <code>should answer</code> for questions that affect conviction or workstream planning. Use <code>optional</code> only for useful context that should not block the investment decision. End with the top five unanswered questions and the decision each one informs.</p>
+<h2 id="evidence-request-standard">Evidence Request Standard</h2>
+<p>For each must-answer question, state the requested artifact or interaction. Good outputs do not only ask &quot;what is the traction?&quot; They ask for the specific pipeline export, customer reference, model bridge, contract, architecture diagram, cap table, IP assignment, counsel note, or expert call needed to resolve the decision.</p>
+  </article>
+</body>
+</html>

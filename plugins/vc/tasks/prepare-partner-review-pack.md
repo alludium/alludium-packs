@@ -20,7 +20,7 @@ Prepare Partner Review Pack for one venture-capital opportunity with evidence ca
 
 ## What To Do
 
-Prepare the Partner Review pack from the team review pack, evaluation-stage workstream outputs, the diligence question bank, available formal diligence outputs, key risks, proposed diligence scope, and decision ask. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use required evaluation input file artifacts commercial evaluation artifact, technical evaluation artifact, financial evaluation artifact, team evaluation artifact, and diligence question bank artifact as the decision-review source set. Use formal diligence artifacts commercial dd artifact, financial dd artifact, founder evaluation artifact, and technical dd artifact when present, but do not block evaluation-stage review on them. Use the required input file artifact team review pack artifact as the team review pack being escalated to partner review. Create or update a polished Word-ready document named Partner Review Pack.
+Prepare the Partner Review pack from the team review pack, evaluation-stage workstream outputs, the diligence question bank, available formal diligence outputs, key risks, proposed diligence scope, and decision ask. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use required evaluation input file artifacts commercial evaluation artifact, technical evaluation artifact, financial evaluation artifact, team evaluation artifact, and diligence question bank artifact as the decision-review source set. Use formal diligence artifacts commercial dd artifact, financial dd artifact, founder evaluation artifact, and technical dd artifact when present, but do not block evaluation-stage review on them. Use the required input file artifact team review pack artifact as the team review pack being escalated to partner review. Create or update a polished Word-ready document named Partner Review Pack as a standalone safe static HTML artifact using the Artifact Create Text Artifact tool (`artifact.createTextArtifact`), a `.html` filename, and `mimeType: "text/html"`; do not use the Project Instantiate Template tool, `project.instantiateTemplate`, or `project_instantiateTemplate`, and do not create a `.md`/`text/markdown` artifact for this rendered output; then attach it to the required output field partner review pack artifact.
 
 ## Available Context
 
@@ -30,7 +30,7 @@ Prepare the Partner Review pack from the team review pack, evaluation-stage work
 
 ## Reference Materials
 
-- [Review Pack Checklist](../alludium/documents/deal-room/review-pack-checklist.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Review Pack Checklist](../alludium/documents/deal-room/review-pack-checklist.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
 - [Opportunity Evaluation Framework](../alludium/documents/shared/opportunity-evaluation-framework.md): Use as the analysis method.
 - [Evaluation Workstream Guide](../alludium/documents/shared/evaluation-workstream-guide.md): Use as the analysis method.
 - [Formal Diligence Workstream Guide](../alludium/documents/deal-room/formal-diligence-workstream-guide.md): Use as the analysis method.
@@ -40,7 +40,7 @@ Prepare the Partner Review pack from the team review pack, evaluation-stage work
 
 ## Deliverable
 
-- Create or update **Partner Review Pack** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Create or update **Partner Review Pack** as a standalone safe HTML artifact. Use `.html`, `mimeType: "text/html"`, and complete static HTML suitable for the platform safe previewer.
 
 ## Missing Input Policy
 

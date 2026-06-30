@@ -31,7 +31,7 @@ Run a technical evaluation covering product depth, architecture plausibility, te
 
 ## Reference Materials
 
-- [Technical Evaluation Template](../alludium/documents/deal-room/technical-evaluation-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Technical Evaluation Template](../alludium/documents/deal-room/technical-evaluation-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
 - [Evaluation Workstream Guide](../alludium/documents/shared/evaluation-workstream-guide.md): Use as the analysis method.
 - [Technical Evaluation Guide](../alludium/documents/deal-room/technical-evaluation-guide.md): Use as the analysis method.
 - [Opportunity Evaluation Framework](../alludium/documents/shared/opportunity-evaluation-framework.md): Use as the analysis method.

@@ -30,7 +30,7 @@ Run a commercial evaluation covering customer segment, pain urgency, budget, pri
 
 ## Reference Materials
 
-- [Commercial Evaluation Template](../alludium/documents/deal-room/commercial-evaluation-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Commercial Evaluation Template](../alludium/documents/deal-room/commercial-evaluation-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
 - [Evaluation Workstream Guide](../alludium/documents/shared/evaluation-workstream-guide.md): Use as the analysis method.
 - [Commercial Evaluation Guide](../alludium/documents/deal-room/commercial-evaluation-guide.md): Use as the analysis method.
 - [Opportunity Evaluation Framework](../alludium/documents/shared/opportunity-evaluation-framework.md): Use as the analysis method.

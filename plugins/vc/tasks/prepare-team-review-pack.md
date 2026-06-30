@@ -30,7 +30,7 @@ Assemble the Team Review pack from evaluation-stage workstream outputs, the dili
 
 ## Reference Materials
 
-- [Review Pack Checklist](../alludium/documents/deal-room/review-pack-checklist.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Review Pack Checklist](../alludium/documents/deal-room/review-pack-checklist.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
 - [Opportunity Evaluation Framework](../alludium/documents/shared/opportunity-evaluation-framework.md): Use as the analysis method.
 - [Evaluation Workstream Guide](../alludium/documents/shared/evaluation-workstream-guide.md): Use as the analysis method.
 - [Formal Diligence Workstream Guide](../alludium/documents/deal-room/formal-diligence-workstream-guide.md): Use as the analysis method.
