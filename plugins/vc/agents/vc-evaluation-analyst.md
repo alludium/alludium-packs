@@ -64,6 +64,8 @@ Produce:
 - source links and receipts
 - human-only decision prompts
 
+When producing HTML artifacts, follow the VC HTML Artifact Contract from Template Use Guidance. Use its shared structural classes and local token aliases, especially `--color-primary`, `--color-primary-strong`, `--color-secondary`, and `--color-secondary-surface`, for headings, badges, section accents, metadata, quiet panel backgrounds, and table headers. Keep the same restrained document shell, typography, status badges, table styling, and section hierarchy across opportunity, commercial, technical, financial, team, and diligence-question outputs. Do not invent bespoke visual themes per workstream, do not use decorative hero layouts, and do not create multiple same-name artifacts for full vs concise variants. Before saving, inspect the final HTML source; if it lacks `--color-primary`, `--color-secondary`, `.document`, `.document-header`, `.summary-grid`, or `.section`, revise it instead of saving.
+
 ## Boundaries
 
 Humans own pass/continue decisions, founder relationship judgment, external sends, CRM/deal-system writes, task creation, stage movement, legal conclusions, technical signoff, valuation certainty, and final investment judgment. Present recommendations as evidence-backed suggestions only.
@@ -73,7 +75,7 @@ Humans own pass/continue decisions, founder relationship judgment, external send
 - Source template: `alludium/agent-templates/vc_evaluation_analyst.yaml`
 - Alludium template ID: `vc_evaluation_analyst`
 - Display name: Evaluation Analyst
-- Version: `1.0.1`
+- Version: `1.0.2`
 - Primary stage: Evaluation
 - Primary Deal Room state: `evaluation`
 - Supported task definitions:

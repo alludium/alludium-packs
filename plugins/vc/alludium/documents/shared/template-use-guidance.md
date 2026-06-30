@@ -56,6 +56,49 @@ Do not reproduce internal drafting notes, task instructions, or template-use gui
 
 When a VC template is rendered as a task output artifact, create the final artifact with `artifact_createTextArtifact` as a safe static HTML text artifact. Use a `.html` filename, `mimeType: "text/html"`, and complete standalone HTML source beginning with `<!doctype html>`. Do not create Markdown artifacts for rendered outputs, and do not rely on the platform to convert Markdown into HTML.
 
+Use one shared visual system across all VC HTML artifacts. The goal is to make commercial, technical, financial, team, diligence-question, review-pack, memo, agenda, and decision-record outputs feel like one document family rather than unrelated one-off pages.
+
+Required shell:
+
+- Create one complete standalone HTML document with `<!doctype html>`, `<html lang="en">`, `<head>`, and `<body>`.
+- Use one centered page container: `max-width: 1080px; margin: 0 auto; padding: 32px 28px 48px;`.
+- Use the same font stack everywhere: `Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`.
+- Use a white document surface with a quiet neutral page background. Do not use full-page gradients, decorative illustrations, oversized hero sections, or saturated theme backgrounds.
+
+Define local token aliases inside the artifact stylesheet so preview and download render consistently without depending on host app CSS variables:
+
+```css
+:root {
+  --brand: 229 56% 34%;
+  --brand-primary: var(--brand);
+  --brand-primary-strong: 229 58% 24%;
+  --brand-secondary: 215 18% 38%;
+  --brand-secondary-surface: 220 18% 94%;
+  --foreground: 222 27% 14%;
+  --muted-foreground: 218 12% 42%;
+  --card: 0 0% 100%;
+  --muted: 220 18% 96%;
+  --border: 220 16% 86%;
+  --color-primary: hsl(var(--brand-primary));
+  --color-primary-strong: hsl(var(--brand-primary-strong));
+  --color-secondary: hsl(var(--brand-secondary));
+  --color-secondary-surface: hsl(var(--brand-secondary-surface));
+  --color-text: hsl(var(--foreground));
+  --color-muted-text: hsl(var(--muted-foreground));
+  --color-card: hsl(var(--card));
+  --color-page: hsl(var(--muted));
+  --color-border: hsl(var(--border));
+}
+```
+
+Use those aliases for the document system:
+
+- `--color-primary` and `--color-primary-strong`: document header rule, major section headings, primary badges, and note accents.
+- `--color-secondary` and `--color-secondary-surface`: metadata, secondary badges, table headers, and quiet panel backgrounds.
+- `--color-text`, `--color-muted-text`, `--color-card`, `--color-page`, and `--color-border`: body copy, metadata, document surfaces, page background, borders, and table rules.
+
+Use consistent structural classes unless a source template provides a stricter structure: `.document`, `.document-header`, `.summary-grid`, `.section`, `.badge`, `.badge.secondary`, `.metadata`, `.eyebrow`, `.note`, and table styles. Status badges should use a stable label set such as `Recommended`, `Watch`, `Targeted Diligence`, `Gap`, `Blocked`, and `Ready for Review`. Do not invent a new visual badge system when one of those labels fits.
+
 Use a consistent document structure:
 
 1. Header with company, project/task context, date, and artifact purpose.
@@ -74,6 +117,16 @@ Use scalable safe-preview styling: readable 15-16px base text, line-height aroun
 Keep structured task output fields separate from the artifact. Detailed HTML tables, source indexes, field maps, and long narrative belong inside the HTML artifact only. Optional structured fields should be unset where possible; when the platform requires a value, use plain text, no markup, and one short pointer or summary rather than copying the document body.
 
 Compatibility note: before `v0.5.37`, some intake task output fields accepted richer text for detailed source indexes and field maps. Existing task runs may still contain that historical content. Treat those values as legacy task-output history, review or clean them manually only when a workspace depends on the compact summaries, and write new runs using the compact plain-text summary fields plus the full HTML artifact.
+
+Pre-save HTML QA checklist:
+
+- Exactly one `h1`.
+- Major sections use `h2`; subsections use `h3`.
+- The document includes `--color-primary` and `--color-secondary` aliases and uses them for badges, section accents, and table headers.
+- The document uses the shared `.document`, `.document-header`, `.summary-grid`, `.section`, `.badge`, and table styles unless the source template explicitly overrides them.
+- No raw Markdown fences, raw `<html>` text in the rendered body, unresolved placeholders such as `TODO`, `{{variable}}`, `undefined`, or `null`, external scripts, forms, iframes, or event handlers.
+- No duplicate same-name artifact is created during retry or recovery.
+- No decorative full-page gradients, oversized hero sections, nested cards, or one-off status-color systems.
 
 ## Completion Check
 

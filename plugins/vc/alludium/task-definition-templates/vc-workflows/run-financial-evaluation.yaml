@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_financial_evaluation
-version: 0.1.4
+version: 0.1.5
 title: Run Financial Evaluation
 category: Venture Capital
 visibility: workspace

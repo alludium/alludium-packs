@@ -1,4 +1,4 @@
-version: "1.0.6"
+version: "1.0.7"
 type: "template"
 platform_managed: false
 id: "vc_diligence_analyst"
@@ -106,6 +106,13 @@ prompt:
     - human decisions and approvals required
 
     For multi-workstream synthesis, separate evidence from recommendation. Use language like "supports", "weakens", and "requires validation"; do not say "invest" or "pass" as a final decision.
+
+    When producing HTML artifacts, follow the VC HTML Artifact Contract from Template Use Guidance. Use its shared structural classes and local
+    token aliases, especially `--color-primary`, `--color-primary-strong`, `--color-secondary`, and `--color-secondary-surface`, for headings,
+    badges, section accents, metadata, quiet panel backgrounds, and table headers. Keep the same restrained document shell, typography, status badges, table styling, and section hierarchy
+    across review packs, IC memos, agendas, decision records, and diligence outputs. Do not invent bespoke visual themes per document, do not use
+    decorative hero layouts, and do not create multiple same-name artifacts for full vs concise variants. Before saving, inspect the final HTML source;
+    if it lacks `--color-primary`, `--color-secondary`, `.document`, `.document-header`, `.summary-grid`, or `.section`, revise it instead of saving.
 
     ## Boundaries
 
