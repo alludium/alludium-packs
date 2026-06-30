@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Template Use Guidance</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --brand: 229 56% 34%;
+      --brand-primary: var(--brand);
+      --brand-primary-strong: 229 58% 24%;
+      --brand-secondary: 215 18% 38%;
+      --brand-secondary-surface: 220 18% 94%;
+      --foreground: 222 27% 14%;
+      --muted-foreground: 218 12% 42%;
+      --card: 0 0% 100%;
+      --muted: 220 18% 96%;
+      --border: 220 16% 86%;
+      --color-primary: hsl(var(--brand-primary));
+      --color-primary-strong: hsl(var(--brand-primary-strong));
+      --color-secondary: hsl(var(--brand-secondary));
+      --color-secondary-surface: hsl(var(--brand-secondary-surface));
+      --color-text: hsl(var(--foreground));
+      --color-muted-text: hsl(var(--muted-foreground));
+      --color-card: hsl(var(--card));
+      --color-page: hsl(var(--muted));
+      --color-border: hsl(var(--border));
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--color-page);
+      color: var(--color-text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.58;
+    }
+    .document {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 32px 28px 48px;
+      background: var(--color-card);
+    }
+    .document-header {
+      border-bottom: 2px solid var(--color-primary);
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+    }
+    .eyebrow, .metadata {
+      color: var(--color-muted-text);
+      font-size: 13px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3 {
+      color: var(--color-primary);
+      line-height: 1.22;
+      letter-spacing: 0;
+    }
+    h1 { font-size: 30px; margin: 8px 0; }
+    h2 {
+      border-top: 1px solid var(--color-border);
+      font-size: 21px;
+      margin-top: 28px;
+      padding-top: 20px;
+    }
+    h3 { font-size: 17px; margin-top: 22px; }
+    p { margin: 10px 0; }
+    a { color: var(--color-primary-strong); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+    code { background: var(--color-secondary-surface); border-radius: 4px; padding: 1px 4px; }
+    pre { background: var(--color-secondary-surface); border: 1px solid var(--color-border); border-radius: 6px; overflow-x: auto; padding: 12px 14px; }
+    pre code { background: transparent; padding: 0; }
+    ul, ol { padding-left: 22px; }
+    li { margin: 6px 0; }
+    blockquote { border-left: 4px solid var(--color-primary); color: var(--color-secondary); margin: 16px 0; padding: 4px 0 4px 14px; }
+    .summary-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin: 16px 0 24px; }
+    .summary-card { border: 1px solid var(--color-border); border-radius: 6px; background: var(--color-secondary-surface); padding: 12px 14px; }
+    .section { margin: 24px 0; }
+    .badge { display: inline-block; border-radius: 999px; background: var(--color-primary); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: .02em; padding: 3px 9px; text-transform: uppercase; }
+    .badge.secondary { background: var(--color-secondary-surface); color: var(--color-secondary); }
+    .note { border-left: 4px solid var(--color-primary); background: var(--color-secondary-surface); padding: 12px 14px; margin: 16px 0; }
+    .table-wrap { overflow-x: auto; margin: 14px 0 22px; border: 1px solid var(--color-border); border-radius: 6px; }
+    table { width: 100%; border-collapse: collapse; min-width: 680px; }
+    th, td { border-bottom: 1px solid var(--color-border); padding: 10px 12px; text-align: left; vertical-align: top; }
+    th { background: var(--color-secondary-surface); color: var(--color-secondary); font-weight: 700; }
+    tr:last-child td { border-bottom: 0; }
+    @media (max-width: 720px) {
+      body { font-size: 15px; }
+      .document { padding: 24px 18px 36px; }
+      h1 { font-size: 26px; }
+      h2 { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+  <article class="document document-source-template" data-document-id="vc.document.template_use_guidance" data-document-type="sop">
+    <header class="document-header">
+      <div class="eyebrow">VC sop source</div>
+      <h1>Template Use Guidance</h1>
+      <p class="metadata">Operating guidance for applying VC document templates without producing generic filler.</p>
+    </header>
+    <section class="note">When this source is used as a rendered task output, create the final deliverable as a standalone safe static HTML artifact with a <code>.html</code> filename and <code>mimeType: &quot;text/html&quot;</code>. Use the shared VC document styling rules from Template Use Guidance and make any generated links open in a new tab or window with <code>target=&quot;_blank&quot;</code> and <code>rel=&quot;noopener noreferrer&quot;</code>. Do not create Markdown output artifacts from this source.</section>
+<h2 id="purpose">Purpose</h2>
+<p>Use this guidance whenever a task references a pack document as an output template, methodology, checklist, style guide, policy, or operating guide. The goal is to produce investor-grade artifacts that are consistent enough to review, but flexible enough to reflect the actual source evidence.</p>
+<h2 id="template-application-contract">Template Application Contract</h2>
+<p>Treat referenced document templates as adaptable artifact scaffolds. Preserve the core sections needed for the decision, but omit, compress, or mark sections as not available when they are irrelevant or unsupported by source inputs. Never fill a section with generic prose solely because the template contains it.</p>
+<h2 id="document-type-semantics">Document Type Semantics</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Document Type</th><th>Use It For</th><th>Quality Bar</th></tr></thead>
+<tbody>
+<tr><td>Template</td><td>A reusable output structure for a generated artifact</td><td>Produces a polished reader-facing artifact without exposing authoring guidance</td></tr>
+<tr><td>Methodology</td><td>Reusable analysis logic, scoring, or diligence structure</td><td>Explains how to reason, not merely what headings to use</td></tr>
+<tr><td>Checklist</td><td>Status tracking, readiness review, setup review, or control completion</td><td>Captures owner, status, evidence, and blocker state</td></tr>
+<tr><td>Style guide</td><td>Citation, source-confidence, claim-language, or formatting discipline</td><td>Governs how claims are written across artifacts</td></tr>
+<tr><td>Policy</td><td>Boundaries, approval rules, or disallowed behavior</td><td>States what may and may not happen</td></tr>
+<tr><td>SOP</td><td>Operating sequence, handoff convention, or repeatable process</td><td>Gives ordered, action-oriented process guidance</td></tr>
+</tbody></table></div>
+<h2 id="source-input-mapping">Source Input Mapping</h2>
+<p>When a template includes a source-input map, use it to route evidence into the right section. Do not treat the map as an exhaustive requirement. If a mapped source is missing, mark the affected section as unknown or not assessed rather than inventing content.</p>
+<h2 id="section-handling">Section Handling</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Situation</th><th>Expected Handling</th></tr></thead>
+<tbody>
+<tr><td>Source evidence supports the section</td><td>Complete it with specific claims, citations, and decision relevance</td></tr>
+<tr><td>Evidence is partial</td><td>Complete the known parts and mark gaps explicitly</td></tr>
+<tr><td>Evidence is absent</td><td>Mark as unavailable, unknown, or not assessed; name the source input that would resolve it</td></tr>
+<tr><td>Section is irrelevant to the deal or workflow</td><td>Omit it or compress it into a short not-applicable note</td></tr>
+<tr><td>Template rows would create repetitive filler</td><td>Combine rows or summarize with a compact table</td></tr>
+</tbody></table></div>
+<h2 id="evidence-discipline">Evidence Discipline</h2>
+<p>Every material claim should have a source link, source artifact reference, or a clear label such as assumption, inference, founder claim, investor judgment, or unverified. Preserve source links when available. Do not imply precision when the source inputs do not support it.</p>
+<h2 id="output-hygiene">Output Hygiene</h2>
+<p>Do not reproduce internal drafting notes, task instructions, or template-use guidance in the generated artifact unless the referenced template intentionally includes a reader-facing standard, source index, decision criteria, or usage section. Final artifacts should read like partner-ready VC work product, not like a workflow trace.</p>
+<h2 id="html-artifact-contract">HTML Artifact Contract</h2>
+<p>When a VC template is rendered as a task output artifact, create the final artifact with <code>artifact_createTextArtifact</code> as a safe static HTML text artifact. Use a <code>.html</code> filename, <code>mimeType: "text/html"</code>, and complete standalone HTML source beginning with <code>&lt;!doctype html&gt;</code>. Do not create Markdown artifacts for rendered outputs, and do not rely on the platform to convert Markdown into HTML.</p>
+<p>Use one shared visual system across all VC HTML artifacts. The goal is to make commercial, technical, financial, team, diligence-question, review-pack, memo, agenda, and decision-record outputs feel like one document family rather than unrelated one-off pages.</p>
+<p>Required shell:</p>
+<ul>
+<li>Create one complete standalone HTML document with <code>&lt;!doctype html&gt;</code>, <code>&lt;html lang="en"&gt;</code>, <code>&lt;head&gt;</code>, and <code>&lt;body&gt;</code>.</li>
+<li>Use one centered page container: <code>max-width: 1080px; margin: 0 auto; padding: 32px 28px 48px;</code>.</li>
+<li>Use the same font stack everywhere: <code>Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif</code>.</li>
+<li>Use a white document surface with a quiet neutral page background. Do not use full-page gradients, decorative illustrations, oversized hero sections, or saturated theme backgrounds.</li>
+</ul>
+<p>Define local token aliases inside the artifact stylesheet so preview and download render consistently without depending on host app CSS variables:</p>
+<pre><code>
+:root {
+  --brand: 229 56% 34%;
+  --brand-primary: var(--brand);
+  --brand-primary-strong: 229 58% 24%;
+  --brand-secondary: 215 18% 38%;
+  --brand-secondary-surface: 220 18% 94%;
+  --foreground: 222 27% 14%;
+  --muted-foreground: 218 12% 42%;
+  --card: 0 0% 100%;
+  --muted: 220 18% 96%;
+  --border: 220 16% 86%;
+  --color-primary: hsl(var(--brand-primary));
+  --color-primary-strong: hsl(var(--brand-primary-strong));
+  --color-secondary: hsl(var(--brand-secondary));
+  --color-secondary-surface: hsl(var(--brand-secondary-surface));
+  --color-text: hsl(var(--foreground));
+  --color-muted-text: hsl(var(--muted-foreground));
+  --color-card: hsl(var(--card));
+  --color-page: hsl(var(--muted));
+  --color-border: hsl(var(--border));
+}
+</code></pre>
+<p>Use those aliases for the document system:</p>
+<ul>
+<li><code>--color-primary</code> and <code>--color-primary-strong</code>: document header rule, major section headings, primary badges, and note accents.</li>
+<li><code>--color-secondary</code> and <code>--color-secondary-surface</code>: metadata, secondary badges, table headers, and quiet panel backgrounds.</li>
+<li><code>--color-text</code>, <code>--color-muted-text</code>, <code>--color-card</code>, <code>--color-page</code>, and <code>--color-border</code>: body copy, metadata, document surfaces, page background, borders, and table rules.</li>
+</ul>
+<p>Use consistent structural classes unless a source template provides a stricter structure: <code>.document</code>, <code>.document-header</code>, <code>.summary-grid</code>, <code>.section</code>, <code>.badge</code>, <code>.badge.secondary</code>, <code>.metadata</code>, <code>.eyebrow</code>, <code>.note</code>, and table styles. Status badges should use a stable label set such as <code>Recommended</code>, <code>Watch</code>, <code>Targeted Diligence</code>, <code>Gap</code>, <code>Blocked</code>, and <code>Ready for Review</code>. Do not invent a new visual badge system when one of those labels fits.</p>
+<p>Use a consistent document structure:</p>
+<ol>
+<li>Header with company, project/task context, date, and artifact purpose.</li>
+<li>Status strip or compact metadata row, when the workflow has a readiness, recommendation, or decision status.</li>
+<li>First visible reader-facing summary block using the exact heading required by the task/template. Common headings include <code>Executive Summary</code> and <code>At A Glance</code>; they are not interchangeable when a task names one explicitly. If a task requires <code>Executive Summary</code>, that exact heading is mandatory and a status card is not a substitute.</li>
+<li>Decision snapshot, key facts, or requested action.</li>
+<li>Evidence, source index, and provenance.</li>
+<li>Detailed findings, field map, evaluation sections, or checklist rows.</li>
+<li>Missing information, risks, next actions, owners, and follow-up timing.</li>
+<li>Appendix only when useful.</li>
+</ol>
+<p>Keep the first screen decision-useful. Put the recommendation, status, source confidence, strongest supported facts, and highest-priority gaps before long tables or detailed evidence logs.</p>
+<p>Use scalable safe-preview styling: readable 15-16px base text, line-height around 1.5-1.65, max-width around 960-1120px, generous section spacing, responsive summary cards, and tables wrapped in an overflow container. Avoid cramped first-screen table walls, fixed-width layouts, external assets, scripts, event handlers, forms, iframes, and interactive JavaScript.</p>
+<p>Keep structured task output fields separate from the artifact. Detailed HTML tables, source indexes, field maps, and long narrative belong inside the HTML artifact only. Optional structured fields should be unset where possible; when the platform requires a value, use plain text, no markup, and one short pointer or summary rather than copying the document body.</p>
+<p>Compatibility note: before <code>v0.5.37</code>, some intake task output fields accepted richer text for detailed source indexes and field maps. Existing task runs may still contain that historical content. Treat those values as legacy task-output history, review or clean them manually only when a workspace depends on the compact summaries, and write new runs using the compact plain-text summary fields plus the full HTML artifact.</p>
+<p>Pre-save HTML QA checklist:</p>
+<ul>
+<li>Exactly one <code>h1</code>.</li>
+<li>Major sections use <code>h2</code>; subsections use <code>h3</code>.</li>
+<li>The document includes <code>--color-primary</code> and <code>--color-secondary</code> aliases and uses them for badges, section accents, and table headers.</li>
+<li>The document uses the shared <code>.document</code>, <code>.document-header</code>, <code>.summary-grid</code>, <code>.section</code>, <code>.badge</code>, and table styles unless the source template explicitly overrides them.</li>
+<li>No raw Markdown fences, raw <code>&lt;html&gt;</code> text in the rendered body, unresolved placeholders such as <code>TODO</code>, <code>{{variable}}</code>, <code>undefined</code>, or <code>null</code>, external scripts, forms, iframes, or event handlers.</li>
+<li>No duplicate same-name artifact is created during retry or recovery.</li>
+<li>No decorative full-page gradients, oversized hero sections, nested cards, or one-off status-color systems.</li>
+</ul>
+<h2 id="completion-check">Completion Check</h2>
+<p>Before finishing, verify that the artifact states the decision ask or workflow purpose, separates evidence from unknowns, identifies next actions and owners where relevant, and gives the human reviewer enough context to decide what to do next.</p>
+  </article>
+</body>
+</html>

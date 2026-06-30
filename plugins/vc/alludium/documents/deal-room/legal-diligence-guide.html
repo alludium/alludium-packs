@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Legal Diligence Guide</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --brand: 229 56% 34%;
+      --brand-primary: var(--brand);
+      --brand-primary-strong: 229 58% 24%;
+      --brand-secondary: 215 18% 38%;
+      --brand-secondary-surface: 220 18% 94%;
+      --foreground: 222 27% 14%;
+      --muted-foreground: 218 12% 42%;
+      --card: 0 0% 100%;
+      --muted: 220 18% 96%;
+      --border: 220 16% 86%;
+      --color-primary: hsl(var(--brand-primary));
+      --color-primary-strong: hsl(var(--brand-primary-strong));
+      --color-secondary: hsl(var(--brand-secondary));
+      --color-secondary-surface: hsl(var(--brand-secondary-surface));
+      --color-text: hsl(var(--foreground));
+      --color-muted-text: hsl(var(--muted-foreground));
+      --color-card: hsl(var(--card));
+      --color-page: hsl(var(--muted));
+      --color-border: hsl(var(--border));
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--color-page);
+      color: var(--color-text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.58;
+    }
+    .document {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 32px 28px 48px;
+      background: var(--color-card);
+    }
+    .document-header {
+      border-bottom: 2px solid var(--color-primary);
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+    }
+    .eyebrow, .metadata {
+      color: var(--color-muted-text);
+      font-size: 13px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3 {
+      color: var(--color-primary);
+      line-height: 1.22;
+      letter-spacing: 0;
+    }
+    h1 { font-size: 30px; margin: 8px 0; }
+    h2 {
+      border-top: 1px solid var(--color-border);
+      font-size: 21px;
+      margin-top: 28px;
+      padding-top: 20px;
+    }
+    h3 { font-size: 17px; margin-top: 22px; }
+    p { margin: 10px 0; }
+    a { color: var(--color-primary-strong); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+    code { background: var(--color-secondary-surface); border-radius: 4px; padding: 1px 4px; }
+    pre { background: var(--color-secondary-surface); border: 1px solid var(--color-border); border-radius: 6px; overflow-x: auto; padding: 12px 14px; }
+    pre code { background: transparent; padding: 0; }
+    ul, ol { padding-left: 22px; }
+    li { margin: 6px 0; }
+    blockquote { border-left: 4px solid var(--color-primary); color: var(--color-secondary); margin: 16px 0; padding: 4px 0 4px 14px; }
+    .summary-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin: 16px 0 24px; }
+    .summary-card { border: 1px solid var(--color-border); border-radius: 6px; background: var(--color-secondary-surface); padding: 12px 14px; }
+    .section { margin: 24px 0; }
+    .badge { display: inline-block; border-radius: 999px; background: var(--color-primary); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: .02em; padding: 3px 9px; text-transform: uppercase; }
+    .badge.secondary { background: var(--color-secondary-surface); color: var(--color-secondary); }
+    .note { border-left: 4px solid var(--color-primary); background: var(--color-secondary-surface); padding: 12px 14px; margin: 16px 0; }
+    .table-wrap { overflow-x: auto; margin: 14px 0 22px; border: 1px solid var(--color-border); border-radius: 6px; }
+    table { width: 100%; border-collapse: collapse; min-width: 680px; }
+    th, td { border-bottom: 1px solid var(--color-border); padding: 10px 12px; text-align: left; vertical-align: top; }
+    th { background: var(--color-secondary-surface); color: var(--color-secondary); font-weight: 700; }
+    tr:last-child td { border-bottom: 0; }
+    @media (max-width: 720px) {
+      body { font-size: 15px; }
+      .document { padding: 24px 18px 36px; }
+      h1 { font-size: 26px; }
+      h2 { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+  <article class="document document-source-template" data-document-id="vc.document.legal_diligence_guide" data-document-type="methodology">
+    <header class="document-header">
+      <div class="eyebrow">VC methodology source</div>
+      <h1>Legal Diligence Guide</h1>
+      <p class="metadata">Legal diligence guidance for document indexing, issue tracking, counsel questions, and legal-risk escalation without legal advice.</p>
+    </header>
+    <section class="note">When this source is used as a rendered task output, create the final deliverable as a standalone safe static HTML artifact with a <code>.html</code> filename and <code>mimeType: &quot;text/html&quot;</code>. Use the shared VC document styling rules from Template Use Guidance and make any generated links open in a new tab or window with <code>target=&quot;_blank&quot;</code> and <code>rel=&quot;noopener noreferrer&quot;</code>. Do not create Markdown output artifacts from this source.</section>
+<h2 id="purpose">Purpose</h2>
+<p>Use this guide during formal diligence to organize legal source documents, identify factual gaps, draft counsel questions, and track legal-risk issues for human and counsel review. The agent must not provide legal advice or approve legal sufficiency.</p>
+<h2 id="core-workstreams">Core Workstreams</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Workstream</th><th>Evidence Requested</th><th>Key Questions</th></tr></thead>
+<tbody>
+<tr><td>Corporate existence and filings</td><td>Incorporation documents, constitutional documents, registers, filings.</td><td>Is the company validly formed, current, and in good standing?</td></tr>
+<tr><td>Capitalization and ownership</td><td>Cap table, option pool, shareholder register, prior financing documents.</td><td>Are there ownership, option, debt, or undocumented issuance issues?</td></tr>
+<tr><td>Corporate approvals</td><td>Board minutes, shareholder consents, investor rights, approval rights.</td><td>Who must approve the transaction, and are there blockers?</td></tr>
+<tr><td>IP ownership and licensing</td><td>Patents, copyrights, trade secrets, assignments, licenses, contributor agreements.</td><td>Does the company own or control the IP and data it depends on?</td></tr>
+<tr><td>Employment and consultants</td><td>Employment contracts, consultant contracts, invention assignment, restrictive covenants.</td><td>Are contributor rights and obligations documented?</td></tr>
+<tr><td>Material contracts</td><td>Customer, supplier, partner, distribution, data, and license agreements.</td><td>Do contracts create rights, restrictions, concentration, termination, or change-of-control risks?</td></tr>
+<tr><td>Litigation and disputes</td><td>Litigation searches, threatened claims, settlement agreements, correspondence.</td><td>Are there disputes that could materially affect the investment?</td></tr>
+<tr><td>Regulatory and compliance</td><td>Licenses, regulatory strategy, privacy/security materials, correspondence.</td><td>Are regulatory obligations understood and feasible?</td></tr>
+<tr><td>Transaction terms</td><td>Proposed security, investor rights, control rights, liquidation/exit rights, covenants.</td><td>Which provisions require counsel, partner, or IC attention?</td></tr>
+</tbody></table></div>
+<h2 id="issue-register">Issue Register</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Issue</th><th>Source</th><th>Category</th><th>Severity</th><th>Counsel Question</th><th>Owner</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td></td><td></td><td>Corporate / IP / Employment / Contract / Litigation / Regulatory / Transaction</td><td>High / Medium / Low</td><td></td><td></td><td>Open / In review / Resolved / Waived</td></tr>
+</tbody></table></div>
+<h2 id="counsel-question-standard">Counsel Question Standard</h2>
+<p>Good counsel questions are specific and tied to a source document or missing artifact. For each question, state:</p>
+<ul>
+<li>source document or missing evidence</li>
+<li>factual observation</li>
+<li>why it matters to the transaction</li>
+<li>requested counsel review or confirmation</li>
+<li>deadline or dependency</li>
+</ul>
+<h2 id="escalation-triggers">Escalation Triggers</h2>
+<p>Escalate immediately when there are indications of:</p>
+<ul>
+<li>unclear ownership of material IP, data, or product assets</li>
+<li>undocumented share issuances, options, SAFEs, loans, or side letters</li>
+<li>unresolved litigation, threatened claims, or regulatory exposure</li>
+<li>missing founder, employee, consultant, or contractor IP assignments</li>
+<li>blocking investor approval rights, consent rights, or unusual control terms</li>
+<li>material contract restrictions, termination rights, or change-of-control issues</li>
+<li>transaction terms inconsistent with approved commercial terms</li>
+</ul>
+<h2 id="boundary">Boundary</h2>
+<p>The agent may organize, summarize, cross-reference, and draft questions. The agent must not interpret legal sufficiency, advise on enforceability, clear a risk, negotiate legal terms, contact counsel, or contact the company without explicit human approval and platform-supported action.</p>
+  </article>
+</body>
+</html>

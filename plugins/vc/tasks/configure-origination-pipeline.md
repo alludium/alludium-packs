@@ -30,10 +30,10 @@ Guide the user through initial origination pipeline configuration. Capture the r
 
 ## Reference Materials
 
-- [Origination Pipeline Operating SOP](../alludium/documents/origination/origination-pipeline-sop.md): Follow for process boundaries and review standards.
-- [Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md): Use as the analysis method.
-- [Source Registry Template](../alludium/documents/origination/source-registry-template.md): Follow for process boundaries and review standards.
-- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+- [Origination Pipeline Operating SOP](../alludium/documents/origination/origination-pipeline-sop.html): Follow for process boundaries and review standards.
+- [Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.html): Use as the analysis method.
+- [Source Registry Template](../alludium/documents/origination/source-registry-template.html): Follow for process boundaries and review standards.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.html): Follow for process boundaries and review standards.
 
 ## Deliverable
 

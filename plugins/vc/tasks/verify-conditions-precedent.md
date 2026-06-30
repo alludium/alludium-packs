@@ -30,9 +30,9 @@ Map conditions precedent to available closing evidence, identify missing items a
 
 ## Reference Materials
 
-- [Conditions Precedent Tracker Template](../alludium/documents/deal-room/conditions-precedent-tracker-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
-- [Legal Diligence Guide](../alludium/documents/deal-room/legal-diligence-guide.md): Use as the analysis method.
-- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+- [Conditions Precedent Tracker Template](../alludium/documents/deal-room/conditions-precedent-tracker-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Legal Diligence Guide](../alludium/documents/deal-room/legal-diligence-guide.html): Use as the analysis method.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.html): Follow for process boundaries and review standards.
 
 ## Deliverable
 

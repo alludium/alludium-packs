@@ -31,11 +31,11 @@ Run a commercial evaluation covering customer segment, pain urgency, budget, pri
 ## Reference Materials
 
 - [Commercial Evaluation Template](../alludium/documents/deal-room/commercial-evaluation-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
-- [Evaluation Workstream Guide](../alludium/documents/shared/evaluation-workstream-guide.md): Use as the analysis method.
-- [Commercial Evaluation Guide](../alludium/documents/deal-room/commercial-evaluation-guide.md): Use as the analysis method.
-- [Opportunity Evaluation Framework](../alludium/documents/shared/opportunity-evaluation-framework.md): Use as the analysis method.
-- [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md): Follow for citations, claim language, assumptions, and evidence quality.
-- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+- [Evaluation Workstream Guide](../alludium/documents/shared/evaluation-workstream-guide.html): Use as the analysis method.
+- [Commercial Evaluation Guide](../alludium/documents/deal-room/commercial-evaluation-guide.html): Use as the analysis method.
+- [Opportunity Evaluation Framework](../alludium/documents/shared/opportunity-evaluation-framework.html): Use as the analysis method.
+- [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.html): Follow for citations, claim language, assumptions, and evidence quality.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.html): Follow for process boundaries and review standards.
 
 ## Deliverable
 

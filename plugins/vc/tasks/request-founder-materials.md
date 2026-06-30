@@ -31,8 +31,8 @@ Prepare the missing-materials checklist, founder-friendly request draft, share i
 ## Reference Materials
 
 - [Founder Materials Request Template](../alludium/documents/deal-room/founder-materials-request-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
-- [File Naming And Source Index SOP](../alludium/documents/shared/file-naming-source-index-sop.md): Follow for process boundaries and review standards.
-- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+- [File Naming And Source Index SOP](../alludium/documents/shared/file-naming-source-index-sop.html): Follow for process boundaries and review standards.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.html): Follow for process boundaries and review standards.
 
 ## Deliverable
 

@@ -32,10 +32,10 @@ Re-screen candidates only after a founder connection, reply, or direct relations
 
 ## Reference Materials
 
-- [Sourcing Scoring Rubric](../alludium/documents/origination/sourcing-scoring-rubric.md): Use as the analysis method.
-- [Outreach Queue Template](../alludium/documents/origination/outreach-queue-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
-- [Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md): Use as the analysis method.
-- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+- [Sourcing Scoring Rubric](../alludium/documents/origination/sourcing-scoring-rubric.html): Use as the analysis method.
+- [Outreach Queue Template](../alludium/documents/origination/outreach-queue-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.html): Use as the analysis method.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.html): Follow for process boundaries and review standards.
 
 ## Deliverable
 
