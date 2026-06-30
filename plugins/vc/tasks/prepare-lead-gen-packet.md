@@ -30,10 +30,10 @@ Prepare the lead-generation meeting packet from candidate companies and thesis c
 
 ## Reference Materials
 
-- [Lead Generation Packet Template](../alludium/documents/deal-room/lead-generation-packet-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
-- [Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md): Use as the analysis method.
-- [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md): Follow for citations, claim language, assumptions, and evidence quality.
-- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+- [Lead Generation Packet Template](../alludium/documents/deal-room/lead-generation-packet-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.html): Use as the analysis method.
+- [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.html): Follow for citations, claim language, assumptions, and evidence quality.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.html): Follow for process boundaries and review standards.
 
 ## Deliverable
 

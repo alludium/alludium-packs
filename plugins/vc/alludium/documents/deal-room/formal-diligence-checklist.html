@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Formal Diligence Checklist</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --brand: 229 56% 34%;
+      --brand-primary: var(--brand);
+      --brand-primary-strong: 229 58% 24%;
+      --brand-secondary: 215 18% 38%;
+      --brand-secondary-surface: 220 18% 94%;
+      --foreground: 222 27% 14%;
+      --muted-foreground: 218 12% 42%;
+      --card: 0 0% 100%;
+      --muted: 220 18% 96%;
+      --border: 220 16% 86%;
+      --color-primary: hsl(var(--brand-primary));
+      --color-primary-strong: hsl(var(--brand-primary-strong));
+      --color-secondary: hsl(var(--brand-secondary));
+      --color-secondary-surface: hsl(var(--brand-secondary-surface));
+      --color-text: hsl(var(--foreground));
+      --color-muted-text: hsl(var(--muted-foreground));
+      --color-card: hsl(var(--card));
+      --color-page: hsl(var(--muted));
+      --color-border: hsl(var(--border));
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--color-page);
+      color: var(--color-text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.58;
+    }
+    .document {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 32px 28px 48px;
+      background: var(--color-card);
+    }
+    .document-header {
+      border-bottom: 2px solid var(--color-primary);
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+    }
+    .eyebrow, .metadata {
+      color: var(--color-muted-text);
+      font-size: 13px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3 {
+      color: var(--color-primary);
+      line-height: 1.22;
+      letter-spacing: 0;
+    }
+    h1 { font-size: 30px; margin: 8px 0; }
+    h2 {
+      border-top: 1px solid var(--color-border);
+      font-size: 21px;
+      margin-top: 28px;
+      padding-top: 20px;
+    }
+    h3 { font-size: 17px; margin-top: 22px; }
+    p { margin: 10px 0; }
+    a { color: var(--color-primary-strong); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+    code { background: var(--color-secondary-surface); border-radius: 4px; padding: 1px 4px; }
+    pre { background: var(--color-secondary-surface); border: 1px solid var(--color-border); border-radius: 6px; overflow-x: auto; padding: 12px 14px; }
+    pre code { background: transparent; padding: 0; }
+    ul, ol { padding-left: 22px; }
+    li { margin: 6px 0; }
+    blockquote { border-left: 4px solid var(--color-primary); color: var(--color-secondary); margin: 16px 0; padding: 4px 0 4px 14px; }
+    .summary-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin: 16px 0 24px; }
+    .summary-card { border: 1px solid var(--color-border); border-radius: 6px; background: var(--color-secondary-surface); padding: 12px 14px; }
+    .section { margin: 24px 0; }
+    .badge { display: inline-block; border-radius: 999px; background: var(--color-primary); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: .02em; padding: 3px 9px; text-transform: uppercase; }
+    .badge.secondary { background: var(--color-secondary-surface); color: var(--color-secondary); }
+    .note { border-left: 4px solid var(--color-primary); background: var(--color-secondary-surface); padding: 12px 14px; margin: 16px 0; }
+    .table-wrap { overflow-x: auto; margin: 14px 0 22px; border: 1px solid var(--color-border); border-radius: 6px; }
+    table { width: 100%; border-collapse: collapse; min-width: 680px; }
+    th, td { border-bottom: 1px solid var(--color-border); padding: 10px 12px; text-align: left; vertical-align: top; }
+    th { background: var(--color-secondary-surface); color: var(--color-secondary); font-weight: 700; }
+    tr:last-child td { border-bottom: 0; }
+    @media (max-width: 720px) {
+      body { font-size: 15px; }
+      .document { padding: 24px 18px 36px; }
+      h1 { font-size: 26px; }
+      h2 { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+  <article class="document document-source-template" data-document-id="vc.document.formal_diligence_checklist" data-document-type="checklist">
+    <header class="document-header">
+      <div class="eyebrow">VC checklist source</div>
+      <h1>Formal Diligence Checklist</h1>
+      <p class="metadata">Full formal diligence checklist covering leadership, technical, commercial, market, financial, legal, deal-terms, exit, and company-structure workstreams.</p>
+    </header>
+    <section class="note">When this source is used as a rendered task output, create the final deliverable as a standalone safe static HTML artifact with a <code>.html</code> filename and <code>mimeType: &quot;text/html&quot;</code>. Use the shared VC document styling rules from Template Use Guidance and make any generated links open in a new tab or window with <code>target=&quot;_blank&quot;</code> and <code>rel=&quot;noopener noreferrer&quot;</code>. Do not create Markdown output artifacts from this source.</section>
+<h2 id="purpose">Purpose</h2>
+<p>Use this checklist during formal diligence. It combines the major diligence workstreams into an assignable verification plan. Each item should have a status, source evidence, owner, confidence, and decision impact.</p>
+<h2 id="checklist-format">Checklist Format</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Workstream</th><th>Item</th><th>Evidence Requested</th><th>Task</th><th>Key Question</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td></td><td></td><td></td><td></td><td></td><td>Open / In review / Verified / Blocked / Not applicable</td></tr>
+</tbody></table></div>
+<h2 id="leadership-and-team">Leadership And Team</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Item</th><th>Evidence Requested</th><th>Key Question</th></tr></thead>
+<tbody>
+<tr><td>CEO and leadership capability</td><td>Resumes, role descriptions, founder history, references.</td><td>Does the CEO have the experience, judgement, and leadership ability to succeed?</td></tr>
+<tr><td>Team completeness</td><td>Org chart, hiring plan, role coverage.</td><td>Does the team cover the critical functions required for the next stage?</td></tr>
+<tr><td>References</td><td>Professional references, customer/partner references where relevant.</td><td>Do references confirm capability, integrity, and execution quality?</td></tr>
+<tr><td>Board and advisers</td><td>Board/adviser list, bios, time commitment, role.</td><td>Are board members and advisers suitable, committed, and useful?</td></tr>
+<tr><td>Key hires</td><td>Hiring roadmap and current gaps.</td><td>What hires are needed to address execution risks?</td></tr>
+</tbody></table></div>
+<h2 id="technical-product-and-ip">Technical, Product, And IP</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Item</th><th>Evidence Requested</th><th>Key Question</th></tr></thead>
+<tbody>
+<tr><td>Technology and product description</td><td>Product overview, demo, architecture notes.</td><td>What has been built, and does it work?</td></tr>
+<tr><td>Architecture and scalability</td><td>Architecture diagram, infrastructure notes, integration plan.</td><td>Can the solution scale without unacceptable technical or services burden?</td></tr>
+<tr><td>Technical team</td><td>Technical team bios, responsibilities, hiring plan.</td><td>Is the technical team qualified and experienced?</td></tr>
+<tr><td>IP position</td><td>Patent filings, invention assignments, IP ownership records, licensing agreements.</td><td>How strong and clean are the IP positions?</td></tr>
+<tr><td>Roadmap</td><td>Product roadmap, milestones, dependencies.</td><td>Is the roadmap achievable with the team and funding plan?</td></tr>
+<tr><td>Competing technologies</td><td>Competitor and substitute technology review.</td><td>Are superior technologies likely to emerge or already available?</td></tr>
+</tbody></table></div>
+<h2 id="customer-gtm-and-commercial">Customer, GTM, And Commercial</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Item</th><th>Evidence Requested</th><th>Key Question</th></tr></thead>
+<tbody>
+<tr><td>Customer need</td><td>Customer calls, references, pilots, contracts, usage.</td><td>Do customers confirm need, urgency, and likely adoption?</td></tr>
+<tr><td>GTM plan</td><td>Sales approach, buyer roles, partner strategy, milestones.</td><td>Is the go-to-market plan credible and repeatable?</td></tr>
+<tr><td>Pipeline</td><td>Sales pipeline by stage, probability, owner, and next action.</td><td>Is the pipeline adequate and realistically weighted?</td></tr>
+<tr><td>Pricing and revenue</td><td>Pricing materials, contracts, LOIs, revenue model.</td><td>Are pricing and revenue assumptions credible?</td></tr>
+<tr><td>Customer experience</td><td>Customer feedback, support notes, churn/retention evidence.</td><td>What concerns or improvements do customers highlight?</td></tr>
+<tr><td>Commercial risk</td><td>Adoption, awareness, sales-cycle, concentration, or channel risks.</td><td>What could block commercial scale?</td></tr>
+</tbody></table></div>
+<h2 id="market-and-competition">Market And Competition</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Item</th><th>Evidence Requested</th><th>Key Question</th></tr></thead>
+<tbody>
+<tr><td>Market estimates</td><td>Segmented market estimates, published sources, bottom-up logic.</td><td>Are top-down and bottom-up estimates consistent and attractive?</td></tr>
+<tr><td>Market share assumptions</td><td>Forecast share assumptions, comparable adoption paths.</td><td>Are market-share projections realistic?</td></tr>
+<tr><td>Competitive map</td><td>Competitors, substitutes, relative strengths and weaknesses.</td><td>Is the company well positioned against current and future competitors?</td></tr>
+<tr><td>Barriers and defensibility</td><td>IP, data, network effects, switching costs, distribution.</td><td>What makes the position defensible?</td></tr>
+<tr><td>Expert input</td><td>Expert interviews or industry references where needed.</td><td>What do independent sources confirm or dispute?</td></tr>
+</tbody></table></div>
+<h2 id="financial">Financial</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Item</th><th>Evidence Requested</th><th>Key Question</th></tr></thead>
+<tbody>
+<tr><td>Historical financials</td><td>P&amp;L, balance sheet, cash flow, bank statements where available.</td><td>Do historicals and cash evidence make sense?</td></tr>
+<tr><td>Forecast model</td><td>Three-year forecast, assumptions, sensitivities.</td><td>Are projections reasonable and conservative?</td></tr>
+<tr><td>Burn and runway</td><td>Current cash, burn, runway, hiring plan.</td><td>Can the company survive to the next funding milestone?</td></tr>
+<tr><td>Use of funds</td><td>Past and projected use of funds.</td><td>Are proceeds sufficient and appropriately allocated?</td></tr>
+<tr><td>Future financing</td><td>Future capital needs and assumptions.</td><td>Is future financing risk manageable?</td></tr>
+<tr><td>Ownership and valuation</td><td>Cap table, option pool, valuation, round structure.</td><td>Are ownership and valuation compatible with fund-return goals?</td></tr>
+</tbody></table></div>
+<h2 id="legal-regulatory-and-company-structure">Legal, Regulatory, And Company Structure</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Item</th><th>Evidence Requested</th><th>Key Question</th></tr></thead>
+<tbody>
+<tr><td>Entity and filings</td><td>Incorporation documents, statutory filings, registers.</td><td>Is the company validly formed and current?</td></tr>
+<tr><td>Corporate approvals</td><td>Board/shareholder approvals, consent rights.</td><td>Are there approval rights or blockers?</td></tr>
+<tr><td>Litigation</td><td>Litigation searches, disputes, claims.</td><td>Is there any material litigation or unresolved dispute?</td></tr>
+<tr><td>IP legal status</td><td>Assignments, licenses, patents, copyrights, trade secrets.</td><td>Does the company own or control the IP it depends on?</td></tr>
+<tr><td>Employment and consultants</td><td>Employment agreements, consultant agreements, invention assignment.</td><td>Are contributor rights and obligations documented?</td></tr>
+<tr><td>Regulatory</td><td>Regulatory strategy, licenses, correspondence.</td><td>Is the regulatory path feasible and funded?</td></tr>
+<tr><td>Deal terms</td><td>Proposed terms, investor rights, control rights, economics.</td><td>What terms should be changed, negotiated, or escalated?</td></tr>
+</tbody></table></div>
+<h2 id="exit-and-return-fit">Exit And Return Fit</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Item</th><th>Evidence Requested</th><th>Key Question</th></tr></thead>
+<tbody>
+<tr><td>Exit strategy</td><td>Exit thesis, likely acquirers, comparable outcomes.</td><td>Is the exit strategy reasonable and aligned with the team?</td></tr>
+<tr><td>Exit multiples</td><td>Comparable valuations and scenario model.</td><td>What exit multiples can be predicted under representative scenarios?</td></tr>
+<tr><td>Buyer relationships</td><td>Founder network, strategic relationship map.</td><td>Can the company create the relationships needed for exit interest?</td></tr>
+</tbody></table></div>
+<h2 id="completion-standard">Completion Standard</h2>
+<p>Each must-answer item should be verified, blocked with owner/action, waived by explicit human decision, or converted into an approval condition. Do not mark formal diligence complete when source artifacts are missing or unresolved risks remain unowned.</p>
+<h2 id="boundary">Boundary</h2>
+<p>This checklist supports investor diligence coordination. It does not provide legal, tax, accounting, regulatory, technical-security, or investment advice. Specialist conclusions should be attributed to the relevant human reviewer, counsel, accountant, expert, or approved source artifact.</p>
+  </article>
+</body>
+</html>

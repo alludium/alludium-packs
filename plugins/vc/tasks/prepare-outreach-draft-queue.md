@@ -31,8 +31,8 @@ Mirror the reference pipeline's outreach draft policy. Draft only for candidates
 
 ## Reference Materials
 
-- [Outreach Queue Template](../alludium/documents/origination/outreach-queue-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
-- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+- [Outreach Queue Template](../alludium/documents/origination/outreach-queue-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.html): Follow for process boundaries and review standards.
 
 ## Deliverable
 

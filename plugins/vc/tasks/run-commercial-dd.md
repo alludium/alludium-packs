@@ -30,11 +30,11 @@ Run commercial diligence covering market sizing, competition, customer reference
 
 ## Reference Materials
 
-- [Diligence Report Template](../alludium/documents/deal-room/diligence-report-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
-- [Formal Diligence Workstream Guide](../alludium/documents/deal-room/formal-diligence-workstream-guide.md): Use as the analysis method.
-- [Formal Diligence Checklist](../alludium/documents/deal-room/formal-diligence-checklist.md): Complete as a checklist with status, evidence, owner, and open items.
-- [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md): Follow for citations, claim language, assumptions, and evidence quality.
-- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+- [Diligence Report Template](../alludium/documents/deal-room/diligence-report-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Formal Diligence Workstream Guide](../alludium/documents/deal-room/formal-diligence-workstream-guide.html): Use as the analysis method.
+- [Formal Diligence Checklist](../alludium/documents/deal-room/formal-diligence-checklist.html): Complete as a checklist with status, evidence, owner, and open items.
+- [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.html): Follow for citations, claim language, assumptions, and evidence quality.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.html): Follow for process boundaries and review standards.
 
 ## Deliverable
 

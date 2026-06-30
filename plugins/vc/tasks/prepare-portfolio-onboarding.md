@@ -30,8 +30,8 @@ Prepare the portfolio handoff with board setup notes, reporting cadence, 100-day
 
 ## Reference Materials
 
-- [Portfolio Onboarding Plan Template](../alludium/documents/deal-room/portfolio-onboarding-plan-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
-- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+- [Portfolio Onboarding Plan Template](../alludium/documents/deal-room/portfolio-onboarding-plan-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.html): Follow for process boundaries and review standards.
 
 ## Deliverable
 

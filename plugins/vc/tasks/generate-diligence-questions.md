@@ -31,16 +31,16 @@ Generate prioritized investment diligence questions with rationale, source gap, 
 ## Reference Materials
 
 - [Investment Diligence Question Framework](../alludium/documents/shared/investment-diligence-question-framework.html): Use as the analysis method.
-- [Opportunity Evaluation Framework](../alludium/documents/shared/opportunity-evaluation-framework.md): Use as the analysis method.
-- [Evaluation Workstream Guide](../alludium/documents/shared/evaluation-workstream-guide.md): Use as the analysis method.
-- [Commercial Evaluation Guide](../alludium/documents/deal-room/commercial-evaluation-guide.md): Use as the analysis method.
-- [Technical Evaluation Guide](../alludium/documents/deal-room/technical-evaluation-guide.md): Use as the analysis method.
-- [Financial Evaluation Guide](../alludium/documents/deal-room/financial-evaluation-guide.md): Use as the analysis method.
-- [Formal Diligence Workstream Guide](../alludium/documents/deal-room/formal-diligence-workstream-guide.md): Use as the analysis method.
-- [Formal Diligence Checklist](../alludium/documents/deal-room/formal-diligence-checklist.md): Complete as a checklist with status, evidence, owner, and open items.
-- [Legal Diligence Guide](../alludium/documents/deal-room/legal-diligence-guide.md): Use as the analysis method.
-- [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md): Follow for citations, claim language, assumptions, and evidence quality.
-- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+- [Opportunity Evaluation Framework](../alludium/documents/shared/opportunity-evaluation-framework.html): Use as the analysis method.
+- [Evaluation Workstream Guide](../alludium/documents/shared/evaluation-workstream-guide.html): Use as the analysis method.
+- [Commercial Evaluation Guide](../alludium/documents/deal-room/commercial-evaluation-guide.html): Use as the analysis method.
+- [Technical Evaluation Guide](../alludium/documents/deal-room/technical-evaluation-guide.html): Use as the analysis method.
+- [Financial Evaluation Guide](../alludium/documents/deal-room/financial-evaluation-guide.html): Use as the analysis method.
+- [Formal Diligence Workstream Guide](../alludium/documents/deal-room/formal-diligence-workstream-guide.html): Use as the analysis method.
+- [Formal Diligence Checklist](../alludium/documents/deal-room/formal-diligence-checklist.html): Complete as a checklist with status, evidence, owner, and open items.
+- [Legal Diligence Guide](../alludium/documents/deal-room/legal-diligence-guide.html): Use as the analysis method.
+- [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.html): Follow for citations, claim language, assumptions, and evidence quality.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.html): Follow for process boundaries and review standards.
 
 ## Deliverable
 

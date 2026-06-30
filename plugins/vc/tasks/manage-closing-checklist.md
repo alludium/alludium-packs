@@ -31,9 +31,9 @@ Track closing workplan owners, due dates, blockers, daily status, and onboarding
 
 ## Reference Materials
 
-- [Closing Checklist](../alludium/documents/deal-room/closing-checklist.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
-- [Legal Diligence Guide](../alludium/documents/deal-room/legal-diligence-guide.md): Use as the analysis method.
-- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+- [Closing Checklist](../alludium/documents/deal-room/closing-checklist.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Legal Diligence Guide](../alludium/documents/deal-room/legal-diligence-guide.html): Use as the analysis method.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.html): Follow for process boundaries and review standards.
 
 ## Deliverable
 

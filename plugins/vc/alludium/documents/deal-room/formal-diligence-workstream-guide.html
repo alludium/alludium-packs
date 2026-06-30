@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Formal Diligence Workstream Guide</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --brand: 229 56% 34%;
+      --brand-primary: var(--brand);
+      --brand-primary-strong: 229 58% 24%;
+      --brand-secondary: 215 18% 38%;
+      --brand-secondary-surface: 220 18% 94%;
+      --foreground: 222 27% 14%;
+      --muted-foreground: 218 12% 42%;
+      --card: 0 0% 100%;
+      --muted: 220 18% 96%;
+      --border: 220 16% 86%;
+      --color-primary: hsl(var(--brand-primary));
+      --color-primary-strong: hsl(var(--brand-primary-strong));
+      --color-secondary: hsl(var(--brand-secondary));
+      --color-secondary-surface: hsl(var(--brand-secondary-surface));
+      --color-text: hsl(var(--foreground));
+      --color-muted-text: hsl(var(--muted-foreground));
+      --color-card: hsl(var(--card));
+      --color-page: hsl(var(--muted));
+      --color-border: hsl(var(--border));
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--color-page);
+      color: var(--color-text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.58;
+    }
+    .document {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 32px 28px 48px;
+      background: var(--color-card);
+    }
+    .document-header {
+      border-bottom: 2px solid var(--color-primary);
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+    }
+    .eyebrow, .metadata {
+      color: var(--color-muted-text);
+      font-size: 13px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3 {
+      color: var(--color-primary);
+      line-height: 1.22;
+      letter-spacing: 0;
+    }
+    h1 { font-size: 30px; margin: 8px 0; }
+    h2 {
+      border-top: 1px solid var(--color-border);
+      font-size: 21px;
+      margin-top: 28px;
+      padding-top: 20px;
+    }
+    h3 { font-size: 17px; margin-top: 22px; }
+    p { margin: 10px 0; }
+    a { color: var(--color-primary-strong); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+    code { background: var(--color-secondary-surface); border-radius: 4px; padding: 1px 4px; }
+    pre { background: var(--color-secondary-surface); border: 1px solid var(--color-border); border-radius: 6px; overflow-x: auto; padding: 12px 14px; }
+    pre code { background: transparent; padding: 0; }
+    ul, ol { padding-left: 22px; }
+    li { margin: 6px 0; }
+    blockquote { border-left: 4px solid var(--color-primary); color: var(--color-secondary); margin: 16px 0; padding: 4px 0 4px 14px; }
+    .summary-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin: 16px 0 24px; }
+    .summary-card { border: 1px solid var(--color-border); border-radius: 6px; background: var(--color-secondary-surface); padding: 12px 14px; }
+    .section { margin: 24px 0; }
+    .badge { display: inline-block; border-radius: 999px; background: var(--color-primary); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: .02em; padding: 3px 9px; text-transform: uppercase; }
+    .badge.secondary { background: var(--color-secondary-surface); color: var(--color-secondary); }
+    .note { border-left: 4px solid var(--color-primary); background: var(--color-secondary-surface); padding: 12px 14px; margin: 16px 0; }
+    .table-wrap { overflow-x: auto; margin: 14px 0 22px; border: 1px solid var(--color-border); border-radius: 6px; }
+    table { width: 100%; border-collapse: collapse; min-width: 680px; }
+    th, td { border-bottom: 1px solid var(--color-border); padding: 10px 12px; text-align: left; vertical-align: top; }
+    th { background: var(--color-secondary-surface); color: var(--color-secondary); font-weight: 700; }
+    tr:last-child td { border-bottom: 0; }
+    @media (max-width: 720px) {
+      body { font-size: 15px; }
+      .document { padding: 24px 18px 36px; }
+      h1 { font-size: 26px; }
+      h2 { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+  <article class="document document-source-template" data-document-id="vc.document.formal_diligence_workstream_guide" data-document-type="methodology">
+    <header class="document-header">
+      <div class="eyebrow">VC methodology source</div>
+      <h1>Formal Diligence Workstream Guide</h1>
+      <p class="metadata">Workstream guide for verification-oriented venture diligence.</p>
+    </header>
+    <section class="note">When this source is used as a rendered task output, create the final deliverable as a standalone safe static HTML artifact with a <code>.html</code> filename and <code>mimeType: &quot;text/html&quot;</code>. Use the shared VC document styling rules from Template Use Guidance and make any generated links open in a new tab or window with <code>target=&quot;_blank&quot;</code> and <code>rel=&quot;noopener noreferrer&quot;</code>. Do not create Markdown output artifacts from this source.</section>
+<h2 id="purpose">Purpose</h2>
+<p>Use this guide when an opportunity has moved beyond initial evaluation and the investor needs structured verification. Formal diligence should test the assumptions that decide the investment, not summarize the company narrative.</p>
+<p>Each workstream should produce findings, confidence, evidence, open questions, decision impact, and escalation notes.</p>
+<h2 id="workstream-map">Workstream Map</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Workstream</th><th>Information Requests</th><th>Key Outputs</th></tr></thead>
+<tbody>
+<tr><td>Leadership and team</td><td>Founder CVs, role map, references, board/adviser details, hiring plan.</td><td>Founder/team assessment, reference findings, key-hire gaps, governance needs.</td></tr>
+<tr><td>Product, technical, and IP</td><td>Product description, architecture, roadmap, patents, data dependencies, open-source use, security context.</td><td>Technical risk, IP defensibility, scalability, roadmap realism, expert questions.</td></tr>
+<tr><td>Customer and GTM</td><td>Customer/prospect list, pipeline, pricing, sales cycle, pilots, churn/retention, partner references.</td><td>Customer validation, buyer urgency, pipeline quality, pricing power, need-to-have assessment.</td></tr>
+<tr><td>Market and competition</td><td>Segmented market estimates, competitor list, alternatives, market-share assumptions, category reports.</td><td>TAM/SAM/SOM assessment, competitive map, incumbent/substitution risk, market-development risk.</td></tr>
+<tr><td>Financial</td><td>P&amp;L, balance sheet, cash flow, forecast, bank statements, burn, runway, use of funds, financing plan.</td><td>Forecast realism, unit economics, runway, sensitivity, financing risk, milestone sufficiency.</td></tr>
+<tr><td>Legal, regulatory, and employment</td><td>Corporate docs, shareholder docs, contracts, employment, IP assignments, litigation, licenses, regulatory strategy.</td><td>Legal document index, issue register, counsel questions, showstopper-risk review support.</td></tr>
+<tr><td>Company structure and deal terms</td><td>Incorporation records, cap table, option pool, shareholder rights, proposed terms, co-investor context.</td><td>Structural issues, ownership path, terms questions, closing-readiness blockers.</td></tr>
+<tr><td>Exit and return fit</td><td>Comparable exits, likely acquirers, IPO logic, strategic buyer rationale, return model assumptions.</td><td>Exit logic, valuation basis, fund-return fit, downside and upside sensitivity.</td></tr>
+</tbody></table></div>
+<h2 id="workstream-output-standard">Workstream Output Standard</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Section</th><th>Required Content</th></tr></thead>
+<tbody>
+<tr><td>Scope</td><td>What the workstream covers and excludes.</td></tr>
+<tr><td>Source inputs</td><td>Source artifacts, interviews, models, third-party evidence, counsel notes, and source quality.</td></tr>
+<tr><td>Verified facts</td><td>Claims that are supported by reliable evidence.</td></tr>
+<tr><td>Unverified claims</td><td>Company or third-party assertions that still need proof.</td></tr>
+<tr><td>Findings</td><td>Decision-relevant positives, negatives, and neutral context.</td></tr>
+<tr><td>Confidence</td><td>High / Medium / Low by finding, not only by report.</td></tr>
+<tr><td>Risks</td><td>Severity, likelihood, mitigant, owner, and decision impact.</td></tr>
+<tr><td>Must-answer questions</td><td>Questions that can change pass/proceed, valuation, terms, or approval conditions.</td></tr>
+<tr><td>Escalation triggers</td><td>Issues that require partner, IC, counsel, expert, or founder follow-up.</td></tr>
+</tbody></table></div>
+<h2 id="diligence-question-generation">Diligence Question Generation</h2>
+<p>Questions should be generated from known evidence gaps. For each question, include:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Field</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td>Workstream</td><td>Commercial, financial, technical, founder/team, legal, market, terms, or exit.</td></tr>
+<tr><td>Question</td><td>Specific, answerable question.</td></tr>
+<tr><td>Evidence requested</td><td>Artifact, interview, model, contract, source link, export, or expert input.</td></tr>
+<tr><td>Why it matters</td><td>The decision, risk, score, or term it affects.</td></tr>
+<tr><td>Owner</td><td>Human or workstream owner.</td></tr>
+<tr><td>Priority</td><td>Must answer / Should answer / Optional.</td></tr>
+<tr><td>Success threshold</td><td>What would clear the question or materially improve confidence.</td></tr>
+</tbody></table></div>
+<h2 id="escalation-rules">Escalation Rules</h2>
+<p>Escalate when:</p>
+<ul>
+<li>a must-answer question remains unanswered before decision review or term-sheet work</li>
+<li>a legal, regulatory, IP, or ownership issue could block investment</li>
+<li>the company narrative contradicts customer, financial, technical, or public evidence</li>
+<li>forecast assumptions do not support the proposed financing plan</li>
+<li>the valuation or ownership path is inconsistent with fund-return requirements</li>
+<li>a workstream uncovers a severe risk with no credible mitigant</li>
+</ul>
+<h2 id="completion-standard">Completion Standard</h2>
+<p>Formal diligence is complete only when must-answer questions have an answer, owner, or explicit approval condition. Do not imply counsel approval, legal sufficiency, external communication, stage movement, or administrative execution unless a human has separately approved and the platform action exists.</p>
+  </article>
+</body>
+</html>

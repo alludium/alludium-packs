@@ -31,9 +31,9 @@ Review run receipts and degraded-source notes from the latest origination pass. 
 
 ## Reference Materials
 
-- [Source Health Review Checklist](../alludium/documents/origination/source-health-review-checklist.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
-- [Paid Source Spend Audit Checklist](../alludium/documents/origination/paid-source-spend-audit-checklist.md): Complete as a checklist with status, evidence, owner, and open items.
-- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+- [Source Health Review Checklist](../alludium/documents/origination/source-health-review-checklist.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Paid Source Spend Audit Checklist](../alludium/documents/origination/paid-source-spend-audit-checklist.html): Complete as a checklist with status, evidence, owner, and open items.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.html): Follow for process boundaries and review standards.
 
 ## Deliverable
 

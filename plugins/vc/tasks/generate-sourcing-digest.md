@@ -30,8 +30,8 @@ Produce a reference-pipeline-style digest of new Meet/Watch and active candidate
 
 ## Reference Materials
 
-- [Sourcing Digest Template](../alludium/documents/origination/sourcing-digest-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
-- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+- [Sourcing Digest Template](../alludium/documents/origination/sourcing-digest-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.html): Follow for process boundaries and review standards.
 
 ## Deliverable
 

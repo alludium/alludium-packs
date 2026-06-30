@@ -30,11 +30,11 @@ Review the supplied stage snapshot and current Deal Pipeline state, identify mis
 
 ## Reference Materials
 
-- [Deal Pipeline Operating SOP](../alludium/documents/deal-room/deal-room-sop.md): Follow for process boundaries and review standards.
-- [Opportunity Evaluation Framework](../alludium/documents/shared/opportunity-evaluation-framework.md): Use as the analysis method.
-- [Evaluation Workstream Guide](../alludium/documents/shared/evaluation-workstream-guide.md): Use as the analysis method.
-- [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md): Follow for citations, claim language, assumptions, and evidence quality.
-- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+- [Deal Pipeline Operating SOP](../alludium/documents/deal-room/deal-room-sop.html): Follow for process boundaries and review standards.
+- [Opportunity Evaluation Framework](../alludium/documents/shared/opportunity-evaluation-framework.html): Use as the analysis method.
+- [Evaluation Workstream Guide](../alludium/documents/shared/evaluation-workstream-guide.html): Use as the analysis method.
+- [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.html): Follow for citations, claim language, assumptions, and evidence quality.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.html): Follow for process boundaries and review standards.
 
 ## Deliverable
 

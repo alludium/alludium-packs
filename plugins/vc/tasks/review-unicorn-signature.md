@@ -31,9 +31,9 @@ Stress-test candidates that survived deal-fit and active screening for genuine v
 
 ## Reference Materials
 
-- [Sourcing Scoring Rubric](../alludium/documents/origination/sourcing-scoring-rubric.md): Use as the analysis method.
-- [Prospect Summary Template](../alludium/documents/origination/sourcing-ic-summary-template.md): Follow for process boundaries and review standards.
-- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+- [Sourcing Scoring Rubric](../alludium/documents/origination/sourcing-scoring-rubric.html): Use as the analysis method.
+- [Prospect Summary Template](../alludium/documents/origination/sourcing-ic-summary-template.html): Follow for process boundaries and review standards.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.html): Follow for process boundaries and review standards.
 
 ## Deliverable
 
