@@ -30,7 +30,7 @@ Analyze the proposed investment amount, valuation, round size, cap table, owners
 
 ## Reference Materials
 
-- [Deal Terms Analysis Template](../alludium/documents/deal-room/deal-terms-analysis-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Deal Terms Analysis Template](../alludium/documents/deal-room/deal-terms-analysis-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
 - [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md): Follow for citations, claim language, assumptions, and evidence quality.
 - [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
 

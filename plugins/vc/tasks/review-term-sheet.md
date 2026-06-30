@@ -31,7 +31,7 @@ Review the term sheet for business deviations, red flags, and counsel review que
 
 ## Reference Materials
 
-- [Term Sheet Review Template](../alludium/documents/deal-room/term-sheet-review-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Term Sheet Review Template](../alludium/documents/deal-room/term-sheet-review-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
 - [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md): Follow for citations, claim language, assumptions, and evidence quality.
 - [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
 

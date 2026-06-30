@@ -31,7 +31,7 @@ Assemble the IC memo and pack checklist from review packs, evaluation-stage work
 
 ## Reference Materials
 
-- [Investment Memo Template](../alludium/documents/deal-room/investment-memo-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Investment Memo Template](../alludium/documents/deal-room/investment-memo-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
 - [Opportunity Evaluation Framework](../alludium/documents/shared/opportunity-evaluation-framework.md): Use as the analysis method.
 - [Evaluation Workstream Guide](../alludium/documents/shared/evaluation-workstream-guide.md): Use as the analysis method.
 - [Formal Diligence Workstream Guide](../alludium/documents/deal-room/formal-diligence-workstream-guide.md): Use as the analysis method.

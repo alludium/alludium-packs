@@ -32,7 +32,7 @@ Prepare the meeting brief, relationship context, concise company and evidence su
 
 ## Reference Materials
 
-- [Initial Call Brief Template](../alludium/documents/deal-room/initial-call-brief-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Initial Call Brief Template](../alludium/documents/deal-room/initial-call-brief-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
 - [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md): Follow for citations, claim language, assumptions, and evidence quality.
 - [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
 

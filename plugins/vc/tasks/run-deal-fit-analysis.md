@@ -32,7 +32,7 @@ Mirror the reference pipeline deal-fit step by scoring active candidates against
 ## Reference Materials
 
 - [Sourcing Scoring Rubric](../alludium/documents/origination/sourcing-scoring-rubric.md): Use as the analysis method.
-- [Investment Screening Framework](../alludium/documents/shared/investment-screening-framework.md): Use as the analysis method.
+- [Investment Screening Framework](../alludium/documents/shared/investment-screening-framework.html): Use as the analysis method.
 - [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
 
 ## Deliverable

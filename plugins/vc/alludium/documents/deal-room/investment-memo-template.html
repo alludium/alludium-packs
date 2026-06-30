@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Investment Memo Template</title>
+  <style>
+    :root { color-scheme: light; --color-text: #172033; --color-muted-text: #5b6475; --color-border: #d8dee8; --color-page: #f6f8fb; --color-card: #ffffff; --color-primary: #263f89; --color-secondary: #566275; --color-secondary-surface: #eef2f7; }
+    body { margin: 0; background: var(--color-page); color: var(--color-text); font: 15px/1.58 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .document { max-width: 1080px; margin: 0 auto; padding: 32px 28px 48px; background: var(--color-card); }
+    .document-header { border-bottom: 2px solid var(--color-primary); margin-bottom: 24px; padding-bottom: 16px; }
+    .eyebrow, .metadata { color: var(--color-muted-text); font-size: 13px; text-transform: uppercase; letter-spacing: .04em; }
+    h1, h2, h3 { color: var(--color-primary); line-height: 1.2; }
+    h1 { font-size: 30px; margin: 8px 0; }
+    h2 { font-size: 21px; border-top: 1px solid var(--color-border); margin-top: 28px; padding-top: 20px; }
+    h3 { font-size: 17px; margin-top: 22px; }
+    p { margin: 10px 0; }
+    code { background: var(--color-secondary-surface); border-radius: 4px; padding: 1px 4px; }
+    ul, ol { padding-left: 22px; }
+    li { margin: 6px 0; }
+    .note { border-left: 4px solid var(--color-primary); background: var(--color-secondary-surface); padding: 12px 14px; margin: 16px 0; }
+    .table-wrap { overflow-x: auto; margin: 14px 0 22px; border: 1px solid var(--color-border); border-radius: 6px; }
+    table { width: 100%; border-collapse: collapse; min-width: 680px; }
+    th, td { border-bottom: 1px solid var(--color-border); padding: 10px 12px; text-align: left; vertical-align: top; }
+    th { background: var(--color-secondary-surface); color: var(--color-secondary); font-weight: 700; }
+  </style>
+</head>
+<body>
+  <article class="document document-source-template" data-document-id="vc.document.investment_memo_template" data-document-type="template">
+    <header class="document-header">
+      <div class="eyebrow">VC template source</div>
+      <h1>Investment Memo Template</h1>
+      <p class="metadata">Reusable investment memo structure for IC preparation.</p>
+    </header>
+    <section class="note">When this source is used as a rendered task output, create the final deliverable as a standalone safe static HTML artifact with a <code>.html</code> filename and <code>mimeType: "text/html"</code>. Do not create Markdown output artifacts from this source.</section>
+<h1 id="investment-memo-template">Investment Memo Template</h1>
+<h2 id="rendered-artifact-contract">Rendered Artifact Contract</h2>
+<p>When this template is used to create a task output artifact:</p>
+<ul>
+<li>Create the final artifact with <code>artifact_createTextArtifact</code>.</li>
+<li>Use a <code>.html</code> filename and <code>mimeType: &quot;text/html&quot;</code>.</li>
+<li>Set <code>content</code> to a complete standalone safe static HTML document beginning with <code>&lt;!doctype html&gt;</code>.</li>
+<li>Convert this Markdown scaffold into semantic HTML sections, tables, and lists with small inline CSS in a <code>&lt;style&gt;</code> block.</li>
+<li>Follow the shared VC HTML Artifact Contract in Template Use Guidance for section order, first-screen summary, spacing, responsive tables, and compact structured outputs.</li>
+<li>Do not create <code>.md</code> or <code>text/markdown</code> artifacts for rendered outputs.</li>
+<li>Do not copy HTML into structured task output fields; those fields remain plain text or artifact UUIDs.</li>
+</ul>
+<h2 id="at-a-glance">At A Glance</h2>
+<p>Render this section as the first visible HTML block, using a compact summary card or table before the detailed memo.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Field</th><th>Content</th></tr></thead>
+<tbody>
+<tr><td>Decision ask</td><td>Invest / proceed to IC / continue diligence / pass, with the specific approval requested</td></tr>
+<tr><td>Recommendation</td><td>One sentence stating the recommended action and the main condition</td></tr>
+<tr><td>Why now</td><td>The timing argument in one line</td></tr>
+<tr><td>Top upside</td><td>The single strongest reason this can return capital to the fund</td></tr>
+<tr><td>Top risk</td><td>The risk most likely to change the recommendation</td></tr>
+<tr><td>Must decide before IC</td><td>The one question or condition that cannot be deferred</td></tr>
+</tbody></table></div>
+<h2 id="cover-summary">Cover Summary</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Field</th><th>Content</th></tr></thead>
+<tbody>
+<tr><td>Company</td><td>Name, sector, geography, stage</td></tr>
+<tr><td>Decision ask</td><td>Invest / proceed to IC / continue diligence / pass</td></tr>
+<tr><td>Round</td><td>Round size, valuation, lead, expected close date</td></tr>
+<tr><td>Proposed check</td><td>Amount, target ownership, reserve implication</td></tr>
+<tr><td>Owner</td><td>Deal lead and memo preparer</td></tr>
+<tr><td>Recommendation</td><td>One-line recommendation with conditions</td></tr>
+</tbody></table></div>
+<h2 id="source-inputs">Source Inputs</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Source Input</th><th>Use For</th></tr></thead>
+<tbody>
+<tr><td>Founder deck or data room materials</td><td>Company narrative, product, market, traction, financial claims, fundraise terms</td></tr>
+<tr><td>CRM notes or intro context</td><td>Source path, relationship context, prior partner views, open action history</td></tr>
+<tr><td>Initial call brief and transcript</td><td>Founder claims, customer pain, GTM motion, current unknowns</td></tr>
+<tr><td>Diligence reports and question bank</td><td>Workstream findings, open risks, disconfirming evidence, required follow-up</td></tr>
+<tr><td>Financial model or cap table</td><td>Burn, runway, ownership, valuation, reserves, return sensitivity</td></tr>
+<tr><td>Term sheet or counsel notes</td><td>Terms, closing conditions, legal/commercial issues</td></tr>
+</tbody></table></div>
+<h2 id="executive-summary">Executive Summary</h2>
+<p>Write one tight page covering the business, why now, why this fund, proposed action, headline returns or ownership logic, and the top three risks. Include both the bull case and the bear case; do not bury the bear case in the risk section.</p>
+<h2 id="investment-thesis">Investment Thesis</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Thesis Pillar</th><th>Evidence</th><th>Why It Matters</th><th>Confidence</th></tr></thead>
+<tbody>
+<tr><td>Pillar 1</td><td>Cited evidence</td><td>Link to return, ownership, or strategic fit</td><td>High / Medium / Low</td></tr>
+<tr><td>Pillar 2</td><td>Cited evidence</td><td>Link to return, ownership, or strategic fit</td><td>High / Medium / Low</td></tr>
+<tr><td>Pillar 3</td><td>Cited evidence</td><td>Link to return, ownership, or strategic fit</td><td>High / Medium / Low</td></tr>
+</tbody></table></div>
+<h2 id="business-overview">Business Overview</h2>
+<ul>
+<li>Company snapshot and product description</li>
+<li>Customer, buyer, and workflow summary</li>
+<li>Business model and pricing</li>
+<li>Current traction and operating cadence</li>
+<li>What must be true for this to become a fund-returning outcome</li>
+</ul>
+<h2 id="market-and-competition">Market And Competition</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Topic</th><th>Required Content</th></tr></thead>
+<tbody>
+<tr><td>Market</td><td>Size, growth, urgency, and customer budget owner</td></tr>
+<tr><td>Category dynamics</td><td>Tailwinds, adoption barriers, timing risk</td></tr>
+<tr><td>Competitive set</td><td>Direct alternatives, incumbents, substitutes</td></tr>
+<tr><td>Differentiation</td><td>What is defensible versus what is merely claimed</td></tr>
+</tbody></table></div>
+<h2 id="diligence-findings">Diligence Findings</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Workstream</th><th>Finding</th><th>Evidence</th><th>Risk / Gap</th><th>Owner</th></tr></thead>
+<tbody>
+<tr><td>Commercial</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Financial</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Technical</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Founder / team</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Legal / regulatory</td><td></td><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<h2 id="terms-ownership-and-returns">Terms, Ownership, And Returns</h2>
+<p>Include round terms, implied valuation, target ownership, dilution assumptions, reserves, exit path, and sensitivity cases when available. If a returns model is not available, state that plainly and avoid implying precision.</p>
+<h2 id="risks-mitigants-and-unknowns">Risks, Mitigants, And Unknowns</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Risk</th><th>Severity</th><th>Evidence</th><th>Mitigant</th><th>Decision Impact</th></tr></thead>
+<tbody>
+<tr><td></td><td>High / Medium / Low</td><td></td><td></td><td>Proceed / condition / pass</td></tr>
+</tbody></table></div>
+<h2 id="conditions-and-next-actions">Conditions And Next Actions</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Condition / Action</th><th>Owner</th><th>Due Date</th><th>Blocks Decision?</th></tr></thead>
+<tbody>
+<tr><td></td><td></td><td></td><td>Yes / No</td></tr>
+</tbody></table></div>
+<h2 id="standard">Standard</h2>
+<p>Every material claim should cite a source. The memo should distinguish completed diligence from remaining work, state what would change the recommendation, and end with a source index.</p>
+  </article>
+</body>
+</html>

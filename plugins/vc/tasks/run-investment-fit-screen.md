@@ -31,7 +31,7 @@ Score each configured investment-fit criterion with rationale, source links, unk
 
 ## Reference Materials
 
-- [Investment Screening Framework](../alludium/documents/shared/investment-screening-framework.md): Use as the analysis method.
+- [Investment Screening Framework](../alludium/documents/shared/investment-screening-framework.html): Use as the analysis method.
 - [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md): Follow for citations, claim language, assumptions, and evidence quality.
 - [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
 

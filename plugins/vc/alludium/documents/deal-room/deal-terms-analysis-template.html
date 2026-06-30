@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Deal Terms Analysis Template</title>
+  <style>
+    :root { color-scheme: light; --color-text: #172033; --color-muted-text: #5b6475; --color-border: #d8dee8; --color-page: #f6f8fb; --color-card: #ffffff; --color-primary: #263f89; --color-secondary: #566275; --color-secondary-surface: #eef2f7; }
+    body { margin: 0; background: var(--color-page); color: var(--color-text); font: 15px/1.58 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .document { max-width: 1080px; margin: 0 auto; padding: 32px 28px 48px; background: var(--color-card); }
+    .document-header { border-bottom: 2px solid var(--color-primary); margin-bottom: 24px; padding-bottom: 16px; }
+    .eyebrow, .metadata { color: var(--color-muted-text); font-size: 13px; text-transform: uppercase; letter-spacing: .04em; }
+    h1, h2, h3 { color: var(--color-primary); line-height: 1.2; }
+    h1 { font-size: 30px; margin: 8px 0; }
+    h2 { font-size: 21px; border-top: 1px solid var(--color-border); margin-top: 28px; padding-top: 20px; }
+    h3 { font-size: 17px; margin-top: 22px; }
+    p { margin: 10px 0; }
+    code { background: var(--color-secondary-surface); border-radius: 4px; padding: 1px 4px; }
+    ul, ol { padding-left: 22px; }
+    li { margin: 6px 0; }
+    .note { border-left: 4px solid var(--color-primary); background: var(--color-secondary-surface); padding: 12px 14px; margin: 16px 0; }
+    .table-wrap { overflow-x: auto; margin: 14px 0 22px; border: 1px solid var(--color-border); border-radius: 6px; }
+    table { width: 100%; border-collapse: collapse; min-width: 680px; }
+    th, td { border-bottom: 1px solid var(--color-border); padding: 10px 12px; text-align: left; vertical-align: top; }
+    th { background: var(--color-secondary-surface); color: var(--color-secondary); font-weight: 700; }
+  </style>
+</head>
+<body>
+  <article class="document document-source-template" data-document-id="vc.document.deal_terms_analysis_template" data-document-type="template">
+    <header class="document-header">
+      <div class="eyebrow">VC template source</div>
+      <h1>Deal Terms Analysis Template</h1>
+      <p class="metadata">Reusable commercial review format for valuation, ownership, dilution, ESOP, and round construction analysis.</p>
+    </header>
+    <section class="note">When this source is used as a rendered task output, create the final deliverable as a standalone safe static HTML artifact with a <code>.html</code> filename and <code>mimeType: "text/html"</code>. Do not create Markdown output artifacts from this source.</section>
+<h1 id="deal-terms-analysis-template">Deal Terms Analysis Template</h1>
+<h2 id="rendered-artifact-contract">Rendered Artifact Contract</h2>
+<p>When this template is used to create a task output artifact:</p>
+<ul>
+<li>Create the final artifact with <code>artifact_createTextArtifact</code>.</li>
+<li>Use a <code>.html</code> filename and <code>mimeType: &quot;text/html&quot;</code>.</li>
+<li>Set <code>content</code> to a complete standalone safe static HTML document beginning with <code>&lt;!doctype html&gt;</code>.</li>
+<li>Convert this Markdown scaffold into semantic HTML sections, tables, and lists with small inline CSS in a <code>&lt;style&gt;</code> block.</li>
+<li>Follow the shared VC HTML Artifact Contract in Template Use Guidance for section order, first-screen summary, spacing, responsive tables, and compact structured outputs.</li>
+<li>Do not create <code>.md</code> or <code>text/markdown</code> artifacts for rendered outputs.</li>
+<li>Do not copy HTML into structured task output fields; those fields remain plain text or artifact UUIDs.</li>
+</ul>
+<h2 id="at-a-glance">At A Glance</h2>
+<p>Render this section first as a compact HTML terms card before the detailed model and analysis.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Field</th><th>Content</th></tr></thead>
+<tbody>
+<tr><td>Terms posture</td><td>Attractive / workable / stretched / not ready</td></tr>
+<tr><td>Proposed ownership</td><td>Base-case ownership and sensitivity if available</td></tr>
+<tr><td>Main economic tradeoff</td><td>The valuation, dilution, ESOP, reserve, or round-construction issue that matters most</td></tr>
+<tr><td>IC question</td><td>The term or return question committee must answer</td></tr>
+<tr><td>Next proof needed</td><td>The model, cap table, reserve, or syndicate input needed before approval</td></tr>
+</tbody></table></div>
+<h2 id="source-inputs">Source Inputs</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Source</th><th>Artifact / Link</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Proposed investment amount</td><td></td><td></td></tr>
+<tr><td>Valuation</td><td></td><td></td></tr>
+<tr><td>Round size</td><td></td><td></td></tr>
+<tr><td>Cap table</td><td></td><td></td></tr>
+<tr><td>Forecast / reserve policy</td><td></td><td></td></tr>
+</tbody></table></div>
+<h2 id="ownership-model">Ownership Model</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Scenario</th><th>Investment</th><th>Valuation</th><th>Ownership</th><th>Dilution / ESOP Notes</th></tr></thead>
+<tbody>
+<tr><td>Base case</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Sensitivity case</td><td></td><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<h2 id="commercial-terms">Commercial Terms</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Term</th><th>Proposed</th><th>Investor View</th><th>Open Question</th></tr></thead>
+<tbody>
+<tr><td>Ownership</td><td></td><td></td><td></td></tr>
+<tr><td>ESOP</td><td></td><td></td><td></td></tr>
+<tr><td>Co-investors</td><td></td><td></td><td></td></tr>
+<tr><td>Follow-on reserves</td><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<h2 id="ic-questions">IC Questions</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Question</th><th>Owner</th><th>Evidence Needed</th><th>Decision Impact</th></tr></thead>
+<tbody>
+<tr><td></td><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<h2 id="standard">Standard</h2>
+<p>Frame the output as commercial analysis only. Do not provide legal advice, negotiate terms, or approve the deal.</p>
+  </article>
+</body>
+</html>

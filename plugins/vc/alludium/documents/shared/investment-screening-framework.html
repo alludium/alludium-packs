@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Investment Screening Framework</title>
+  <style>
+    :root { color-scheme: light; --color-text: #172033; --color-muted-text: #5b6475; --color-border: #d8dee8; --color-page: #f6f8fb; --color-card: #ffffff; --color-primary: #263f89; --color-secondary: #566275; --color-secondary-surface: #eef2f7; }
+    body { margin: 0; background: var(--color-page); color: var(--color-text); font: 15px/1.58 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .document { max-width: 1080px; margin: 0 auto; padding: 32px 28px 48px; background: var(--color-card); }
+    .document-header { border-bottom: 2px solid var(--color-primary); margin-bottom: 24px; padding-bottom: 16px; }
+    .eyebrow, .metadata { color: var(--color-muted-text); font-size: 13px; text-transform: uppercase; letter-spacing: .04em; }
+    h1, h2, h3 { color: var(--color-primary); line-height: 1.2; }
+    h1 { font-size: 30px; margin: 8px 0; }
+    h2 { font-size: 21px; border-top: 1px solid var(--color-border); margin-top: 28px; padding-top: 20px; }
+    h3 { font-size: 17px; margin-top: 22px; }
+    p { margin: 10px 0; }
+    code { background: var(--color-secondary-surface); border-radius: 4px; padding: 1px 4px; }
+    ul, ol { padding-left: 22px; }
+    li { margin: 6px 0; }
+    .note { border-left: 4px solid var(--color-primary); background: var(--color-secondary-surface); padding: 12px 14px; margin: 16px 0; }
+    .table-wrap { overflow-x: auto; margin: 14px 0 22px; border: 1px solid var(--color-border); border-radius: 6px; }
+    table { width: 100%; border-collapse: collapse; min-width: 680px; }
+    th, td { border-bottom: 1px solid var(--color-border); padding: 10px 12px; text-align: left; vertical-align: top; }
+    th { background: var(--color-secondary-surface); color: var(--color-secondary); font-weight: 700; }
+  </style>
+</head>
+<body>
+  <article class="document document-source-template" data-document-id="vc.document.investment_screening_framework" data-document-type="methodology">
+    <header class="document-header">
+      <div class="eyebrow">VC methodology source</div>
+      <h1>Investment Screening Framework</h1>
+      <p class="metadata">Reusable first-look scorecard methodology for venture screening.</p>
+    </header>
+    <section class="note">When this source is used as a rendered task output, create the final deliverable as a standalone safe static HTML artifact with a <code>.html</code> filename and <code>mimeType: "text/html"</code>. Do not create Markdown output artifacts from this source.</section>
+<h1 id="investment-screening-framework">Investment Screening Framework</h1>
+<h2 id="rendered-artifact-contract">Rendered Artifact Contract</h2>
+<p>When this document is used to create a task output artifact:</p>
+<ul>
+<li>Create the final artifact with <code>artifact_createTextArtifact</code>.</li>
+<li>Use a <code>.html</code> filename and <code>mimeType: &quot;text/html&quot;</code>.</li>
+<li>Set <code>content</code> to a complete standalone safe static HTML document beginning with <code>&lt;!doctype html&gt;</code>.</li>
+<li>Convert this Markdown scaffold into semantic HTML sections, tables, and lists with small inline CSS in a <code>&lt;style&gt;</code> block.</li>
+<li>Follow the shared VC HTML Artifact Contract in Template Use Guidance for section order, first-screen summary, spacing, responsive tables, and compact structured outputs.</li>
+<li>Do not create <code>.md</code> or <code>text/markdown</code> artifacts for rendered outputs.</li>
+<li>Do not copy HTML into structured task output fields; those fields remain plain text or artifact UUIDs.</li>
+</ul>
+<h2 id="at-a-glance-output">At A Glance Output</h2>
+<p>Every rendered screen should begin with a compact HTML overview before the scorecard.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Field</th><th>Content</th></tr></thead>
+<tbody>
+<tr><td>Verdict</td><td>Continue / Watch / Pass / Promote / Needs partner judgment</td></tr>
+<tr><td>Top reason to continue</td><td>The strongest thesis, problem, product, market, team, or return signal</td></tr>
+<tr><td>Top reason to hesitate</td><td>The most material risk, contradiction, or unknown</td></tr>
+<tr><td>Evidence confidence</td><td>High / Medium / Low, with one-line rationale</td></tr>
+<tr><td>Next action</td><td>The exact follow-up, owner, or routing decision</td></tr>
+</tbody></table></div>
+<h2 id="purpose">Purpose</h2>
+<p>Use this framework to create a first-look investment screen for one company or a sourced candidate batch. The output should help an investor decide whether to pass, watch, continue, promote, or ask for specific missing evidence. It is a screening tool, not a full diligence memo.</p>
+<h2 id="source-precedence-for-company-claimed-facts">Source Precedence For Company-Claimed Facts</h2>
+<p>For facts the company asserts about itself — ARR and other traction metrics, fundraising ask, round and stage, customer counts and named customers, roadmap, go-to-market, founder names and roles, and team narrative — uploaded/founder/ company-provided materials and supplied CRM notes are the primary source. Use public, structured, and web sources to corroborate, challenge, timestamp, or fill gaps; do not let them silently replace a company-provided value. When they conflict on a company-claimed fact, keep the company-provided value as the primary claim, show the conflicting value and its source, explain which value the scorecard uses and why, and flag material conflicts for partner judgment. Independent validation facts such as press, market context, registry data, and third-party headcount signals may be led by high-quality external sources. The &quot;Evidence To Look For&quot; column below lists candidate sources, not a precedence order.</p>
+<h2 id="scorecard">Scorecard</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Dimension</th><th>What To Assess</th><th>Evidence To Look For</th><th>Rating</th></tr></thead>
+<tbody>
+<tr><td>Thesis fit</td><td>Fit to fund mandate, stage, geography, sector, and timing</td><td>Fund thesis, source context, company description</td><td>Strong / Mixed / Weak / Unknown</td></tr>
+<tr><td>Problem</td><td>Pain severity, urgency, buyer owner, and whether the problem is worth solving now</td><td>Customer evidence, founder materials, market notes, intro context</td><td>Strong / Mixed / Weak / Unknown</td></tr>
+<tr><td>Product</td><td>Clear product, workflow, customer value, differentiation, and adoption path</td><td>Demo, pitch deck, product notes, usage evidence</td><td>Strong / Mixed / Weak / Unknown</td></tr>
+<tr><td>Market</td><td>Category size, growth, budget pool, timing, and route to first segment</td><td>Market reports, customer notes, source thesis, public research</td><td>Strong / Mixed / Weak / Unknown</td></tr>
+<tr><td>Business model</td><td>Pricing, gross margin potential, sales motion, and revenue-quality path</td><td>Pricing notes, contracts, pipeline, model, customer claims</td><td>Strong / Mixed / Weak / Unknown</td></tr>
+<tr><td>Funding requirement</td><td>Stage, cheque size, valuation, ownership path, reserves, and syndicate fit</td><td>Fundraise materials, cap table, round plan, terms</td><td>Strong / Mixed / Weak / Unknown</td></tr>
+<tr><td>Value creation</td><td>Edge or asset that can compound into durable enterprise value</td><td>Product evidence, IP, data, distribution, workflow lock-in, customer proof</td><td>Strong / Mixed / Weak / Unknown</td></tr>
+<tr><td>Competition</td><td>Differentiation, defensibility, category crowding, incumbent risk, switching costs</td><td>Competitor map, customer alternatives, public sources</td><td>Strong / Mixed / Weak / Unknown</td></tr>
+<tr><td>Exit</td><td>Plausible acquirers, IPO logic, strategic value, and fund-return relevance</td><td>Comparable exits, buyer map, category consolidation, return model</td><td>Strong / Mixed / Weak / Unknown</td></tr>
+<tr><td>Risks and unknowns</td><td>Disqualifying issues, missing evidence, contradictions, and what would change the answer</td><td>Red flags, source gaps, disconfirming evidence, open questions</td><td>Clear / Manageable / Severe / Unknown</td></tr>
+<tr><td>Team</td><td>Founder-market fit, integrity, ambition, hiring gaps, commercial ability, and coachability</td><td>Founder bios, references, prior outcomes, role coverage</td><td>Strong / Mixed / Weak / Unknown</td></tr>
+</tbody></table></div>
+<h2 id="recommendation-bands">Recommendation Bands</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Recommendation</th><th>Use When</th><th>Required Next Step</th></tr></thead>
+<tbody>
+<tr><td>Continue</td><td>Most core dimensions are strong or answerable and no obvious hard stop exists</td><td>Run follow-up evaluation or diligence questions</td></tr>
+<tr><td>Watch</td><td>Fit is plausible, but timing, traction, or evidence is not yet strong enough</td><td>Define watch trigger and owner</td></tr>
+<tr><td>Pass</td><td>Fund fit, evidence quality, risk, or timing is materially weak</td><td>Record concise pass rationale</td></tr>
+<tr><td>Promote</td><td>Sourcing candidate has enough evidence for Deal Pipeline review</td><td>Prepare promotion package and require human approval</td></tr>
+<tr><td>Needs partner judgment</td><td>Evidence is incomplete but strategic relevance may override the screen</td><td>Escalate exact tradeoff, not a generic &quot;maybe&quot;</td></tr>
+</tbody></table></div>
+<h2 id="routing-notes">Routing Notes</h2>
+<p>Use the screen to route work, not to imply diligence is complete.</p>
+<ul>
+<li><code>too early</code>: strong thesis fit but evidence, product, team, or financing path is not ready.</li>
+<li><code>too late</code>: mature stage, valuation, ownership path, or round dynamics do not fit the fund.</li>
+<li><code>out of thesis</code>: company may be credible but does not fit mandate, geography, sector, stage, or return model.</li>
+<li><code>watchlist</code>: attractive but waiting on a trigger such as customer proof, fundraise timing, hiring, regulatory event, or category inflection.</li>
+<li><code>promote</code>: enough evidence exists for a human to approve downstream Deal Pipeline review.</li>
+</ul>
+<h2 id="output-standard">Output Standard</h2>
+<p>Every screen should include a one-paragraph verdict, the scorecard table, cited evidence, unknowns, disconfirming evidence, and an explicit next action. Do not average ratings mechanically. If a dimension is unknown, state the specific source input that would make it assessable.</p>
+  </article>
+</body>
+</html>

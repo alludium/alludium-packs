@@ -31,7 +31,7 @@ Build an opportunity evaluation from the investment fit screen, meeting records,
 
 ## Reference Materials
 
-- [Opportunity Evaluation Template](../alludium/documents/deal-room/follow-up-evaluation-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Opportunity Evaluation Template](../alludium/documents/deal-room/follow-up-evaluation-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
 - [Opportunity Evaluation Framework](../alludium/documents/shared/opportunity-evaluation-framework.md): Use as the analysis method.
 - [Evaluation Workstream Guide](../alludium/documents/shared/evaluation-workstream-guide.md): Use as the analysis method.
 - [Commercial Evaluation Guide](../alludium/documents/deal-room/commercial-evaluation-guide.md): Use as the analysis method.
