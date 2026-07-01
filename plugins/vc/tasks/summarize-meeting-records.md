@@ -32,8 +32,8 @@ Summarize or ingest the available meeting records for this opportunity, includin
 ## Reference Materials
 
 - [Customer Insights Summary Template](../alludium/documents/deal-room/customer-insights-summary-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
-- [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md): Follow for citations, claim language, assumptions, and evidence quality.
-- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+- [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.html): Follow for citations, claim language, assumptions, and evidence quality.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.html): Follow for process boundaries and review standards.
 
 ## Deliverable
 

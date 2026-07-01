@@ -32,8 +32,8 @@ Prepare an internal negotiation brief from the current term sheet, open terms, I
 ## Reference Materials
 
 - [Term Sheet Negotiation Brief Template](../alludium/documents/deal-room/term-sheet-negotiation-brief-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
-- [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md): Follow for citations, claim language, assumptions, and evidence quality.
-- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+- [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.html): Follow for citations, claim language, assumptions, and evidence quality.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.html): Follow for process boundaries and review standards.
 
 ## Deliverable
 

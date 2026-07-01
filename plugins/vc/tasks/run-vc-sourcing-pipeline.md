@@ -31,10 +31,10 @@ Run only approved origination sources and preserve the reference workflow order 
 
 ## Reference Materials
 
-- [Candidate Batch Template](../alludium/documents/origination/candidate-batch-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
-- [Origination Pipeline Operating SOP](../alludium/documents/origination/origination-pipeline-sop.md): Follow for process boundaries and review standards.
-- [Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md): Use as the analysis method.
-- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+- [Candidate Batch Template](../alludium/documents/origination/candidate-batch-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Origination Pipeline Operating SOP](../alludium/documents/origination/origination-pipeline-sop.html): Follow for process boundaries and review standards.
+- [Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.html): Use as the analysis method.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.html): Follow for process boundaries and review standards.
 
 ## Deliverable
 

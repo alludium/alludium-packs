@@ -44,7 +44,7 @@
       "title": "Opportunity Evaluation Framework",
       "description": "Evidence-led post-screening opportunity evaluation methodology with scoring, thesis tension, gating risk, and meeting/data-room planning standards.",
       "documentType": "methodology",
-      "path": "shared/opportunity-evaluation-framework.md",
+      "path": "shared/opportunity-evaluation-framework.html",
       "supportedProjectTypes": [
         "vc_deal_room"
       ],
@@ -68,7 +68,7 @@
       "title": "Evaluation Workstream Guide",
       "description": "Lightweight commercial, technical, financial, and team evaluation guidance for post-screening work before formal diligence.",
       "documentType": "methodology",
-      "path": "shared/evaluation-workstream-guide.md",
+      "path": "shared/evaluation-workstream-guide.html",
       "supportedProjectTypes": [
         "vc_deal_room"
       ],
@@ -92,7 +92,7 @@
       "title": "Commercial Evaluation Guide",
       "description": "Lightweight commercial evaluation guidance for market, customer, GTM, pricing, and competition hypotheses.",
       "documentType": "methodology",
-      "path": "deal-room/commercial-evaluation-guide.md",
+      "path": "deal-room/commercial-evaluation-guide.html",
       "supportedProjectTypes": [
         "vc_deal_room"
       ],
@@ -108,7 +108,7 @@
       "title": "Technical Evaluation Guide",
       "description": "Lightweight technical evaluation guidance for product, architecture, technical edge, IP, data, and roadmap hypotheses.",
       "documentType": "methodology",
-      "path": "deal-room/technical-evaluation-guide.md",
+      "path": "deal-room/technical-evaluation-guide.html",
       "supportedProjectTypes": [
         "vc_deal_room"
       ],
@@ -124,7 +124,7 @@
       "title": "Financial Evaluation Guide",
       "description": "Lightweight financial evaluation guidance for forecast plausibility, burn, runway, use of funds, valuation, ownership, and financing risk.",
       "documentType": "methodology",
-      "path": "deal-room/financial-evaluation-guide.md",
+      "path": "deal-room/financial-evaluation-guide.html",
       "supportedProjectTypes": [
         "vc_deal_room"
       ],
@@ -140,7 +140,7 @@
       "title": "Evidence And Citation Style Guide",
       "description": "Pack-level style guide for citations, assumptions, source confidence, and claim hygiene across VC documents.",
       "documentType": "style_guide",
-      "path": "shared/evidence-citation-style-guide.md",
+      "path": "shared/evidence-citation-style-guide.html",
       "supportedProjectTypes": [
         "vc_deal_room",
         "vc_origination_pipeline",
@@ -172,7 +172,7 @@
       "title": "Template Use Guidance",
       "description": "Operating guidance for applying VC document templates as adaptable scaffolds without producing generic filler.",
       "documentType": "sop",
-      "path": "shared/template-use-guidance.md",
+      "path": "shared/template-use-guidance.html",
       "supportedProjectTypes": [
         "vc_deal_room",
         "vc_origination_pipeline",
@@ -224,7 +224,7 @@
       "title": "File Naming And Source Index SOP",
       "description": "Operating convention for naming files, tracking source provenance, and maintaining a compact source index.",
       "documentType": "sop",
-      "path": "shared/file-naming-source-index-sop.md",
+      "path": "shared/file-naming-source-index-sop.html",
       "supportedProjectTypes": [
         "vc_deal_room",
         "vc_origination_pipeline",
@@ -242,7 +242,7 @@
       "title": "Deal Pipeline Operating SOP",
       "description": "End-to-end Deal Pipeline operating method from intake through closing and portfolio handoff.",
       "documentType": "sop",
-      "path": "deal-room/deal-room-sop.md",
+      "path": "deal-room/deal-room-sop.html",
       "supportedProjectTypes": [
         "vc_deal_room"
       ],
@@ -272,7 +272,7 @@
       "title": "Thesis Target List Template",
       "description": "Reusable target-list format for thesis-led sourcing and warm-intro planning.",
       "documentType": "template",
-      "path": "deal-room/thesis-target-list-template.md",
+      "path": "deal-room/thesis-target-list-template.html",
       "supportedProjectTypes": [
         "vc_origination_pipeline"
       ],
@@ -286,7 +286,7 @@
       "title": "Lead Generation Packet Template",
       "description": "Reusable management-level packet for thesis-led lead generation reviews.",
       "documentType": "template",
-      "path": "deal-room/lead-generation-packet-template.md",
+      "path": "deal-room/lead-generation-packet-template.html",
       "supportedProjectTypes": [
         "vc_origination_pipeline"
       ],
@@ -441,7 +441,7 @@
       "title": "Diligence Report Template",
       "description": "Reusable diligence report structure for commercial, technical, financial, founder, and legal workstreams.",
       "documentType": "template",
-      "path": "deal-room/diligence-report-template.md",
+      "path": "deal-room/diligence-report-template.html",
       "supportedProjectTypes": [
         "vc_investment_management"
       ],
@@ -458,7 +458,7 @@
       "title": "Formal Diligence Workstream Guide",
       "description": "Verification-oriented diligence workstream methodology for commercial, financial, technical, founder/team, legal, market, terms, and exit review.",
       "documentType": "methodology",
-      "path": "deal-room/formal-diligence-workstream-guide.md",
+      "path": "deal-room/formal-diligence-workstream-guide.html",
       "supportedProjectTypes": [
         "vc_deal_room",
         "vc_investment_management"
@@ -482,7 +482,7 @@
       "title": "Formal Diligence Checklist",
       "description": "Full formal diligence checklist covering leadership, technical, commercial, market, financial, legal, deal-terms, exit, and company-structure workstreams.",
       "documentType": "checklist",
-      "path": "deal-room/formal-diligence-checklist.md",
+      "path": "deal-room/formal-diligence-checklist.html",
       "supportedProjectTypes": [
         "vc_deal_room",
         "vc_investment_management"
@@ -577,7 +577,7 @@
       "title": "Legal Diligence Tracker Template",
       "description": "Reusable tracker for legal document indexing, issue registers, counsel questions, and showstopper-risk review support.",
       "documentType": "template",
-      "path": "deal-room/legal-diligence-tracker-template.md",
+      "path": "deal-room/legal-diligence-tracker-template.html",
       "supportedProjectTypes": [
         "vc_investment_management"
       ],
@@ -591,7 +591,7 @@
       "title": "Legal Diligence Guide",
       "description": "Legal diligence guidance for document indexing, issue tracking, counsel questions, and legal-risk escalation without legal advice.",
       "documentType": "methodology",
-      "path": "deal-room/legal-diligence-guide.md",
+      "path": "deal-room/legal-diligence-guide.html",
       "supportedProjectTypes": [
         "vc_investment_management"
       ],
@@ -608,7 +608,7 @@
       "title": "Investment Document Review Template",
       "description": "Reusable review-support format for mapping investment documents back to approved terms and open counsel issues.",
       "documentType": "template",
-      "path": "deal-room/investment-document-review-template.md",
+      "path": "deal-room/investment-document-review-template.html",
       "supportedProjectTypes": [
         "vc_investment_management"
       ],
@@ -622,7 +622,7 @@
       "title": "Closing Checklist",
       "description": "Checklist for legal, finance, operational, and onboarding readiness before signing and completion.",
       "documentType": "checklist",
-      "path": "deal-room/closing-checklist.md",
+      "path": "deal-room/closing-checklist.html",
       "supportedProjectTypes": [
         "vc_investment_management"
       ],
@@ -636,7 +636,7 @@
       "title": "Conditions Precedent Tracker Template",
       "description": "Reusable tracker for condition, owner, evidence, blocker, counsel review, and completion status.",
       "documentType": "template",
-      "path": "deal-room/conditions-precedent-tracker-template.md",
+      "path": "deal-room/conditions-precedent-tracker-template.html",
       "supportedProjectTypes": [
         "vc_investment_management"
       ],
@@ -650,7 +650,7 @@
       "title": "Completion Tracker Template",
       "description": "Reusable tracker for capital call status, funds transfer readiness, completion evidence, and portfolio handoff triggers.",
       "documentType": "template",
-      "path": "deal-room/completion-tracker-template.md",
+      "path": "deal-room/completion-tracker-template.html",
       "supportedProjectTypes": [
         "vc_investment_management"
       ],
@@ -664,7 +664,7 @@
       "title": "Portfolio Onboarding Plan Template",
       "description": "Reusable post-close onboarding plan covering owners, first 100 days, reporting, board setup, and operating cadence.",
       "documentType": "template",
-      "path": "deal-room/portfolio-onboarding-plan-template.md",
+      "path": "deal-room/portfolio-onboarding-plan-template.html",
       "supportedProjectTypes": [
         "vc_investment_management"
       ],
@@ -678,7 +678,7 @@
       "title": "Origination Pipeline Operating SOP",
       "description": "Operating method for standing venture sourcing pipelines from source configuration through promotion packages.",
       "documentType": "sop",
-      "path": "origination/origination-pipeline-sop.md",
+      "path": "origination/origination-pipeline-sop.html",
       "supportedProjectTypes": [
         "vc_origination_pipeline"
       ],
@@ -694,7 +694,7 @@
       "title": "Origination Source Strategy Guide",
       "description": "Source strategy, source provenance, source quality, and promotion-readiness methodology for venture origination pipelines.",
       "documentType": "methodology",
-      "path": "origination/origination-source-strategy-guide.md",
+      "path": "origination/origination-source-strategy-guide.html",
       "supportedProjectTypes": [
         "vc_deal_room",
         "vc_origination_pipeline"
@@ -716,7 +716,7 @@
       "title": "Source Registry Template",
       "description": "Reusable registry for source keys, scopes, owners, credential state, budgets, cadence, and review policy.",
       "documentType": "template",
-      "path": "origination/source-registry-template.md",
+      "path": "origination/source-registry-template.html",
       "supportedProjectTypes": [
         "vc_origination_pipeline"
       ],
@@ -731,7 +731,7 @@
       "title": "Candidate Batch Template",
       "description": "Reusable batch review template for sourced companies, evidence, dedupe state, fit scores, and next actions.",
       "documentType": "template",
-      "path": "origination/candidate-batch-template.md",
+      "path": "origination/candidate-batch-template.html",
       "supportedProjectTypes": [
         "vc_origination_pipeline"
       ],
@@ -747,7 +747,7 @@
       "title": "Sourcing Scoring Rubric",
       "description": "Reusable scoring rubric for sourced candidate fit, evidence quality, novelty, timing, and promotion readiness.",
       "documentType": "methodology",
-      "path": "origination/sourcing-scoring-rubric.md",
+      "path": "origination/sourcing-scoring-rubric.html",
       "supportedProjectTypes": [
         "vc_origination_pipeline"
       ],
@@ -762,7 +762,7 @@
       "title": "Source Health Review Checklist",
       "description": "Checklist for reviewing source freshness, error rates, coverage drift, duplication, and review queue quality.",
       "documentType": "checklist",
-      "path": "origination/source-health-review-checklist.md",
+      "path": "origination/source-health-review-checklist.html",
       "supportedProjectTypes": [
         "vc_origination_pipeline"
       ],
@@ -776,7 +776,7 @@
       "title": "Paid Source Spend Audit Checklist",
       "description": "Checklist for paid-source budgets, query cost, usage spikes, result quality, and disabled-source policy.",
       "documentType": "checklist",
-      "path": "origination/paid-source-spend-audit-checklist.md",
+      "path": "origination/paid-source-spend-audit-checklist.html",
       "supportedProjectTypes": [
         "vc_origination_pipeline"
       ],
@@ -791,7 +791,7 @@
       "title": "Sourcing Digest Template",
       "description": "Reusable sourcing digest format for new candidates, changes, source performance, decisions, and follow-ups.",
       "documentType": "template",
-      "path": "origination/sourcing-digest-template.md",
+      "path": "origination/sourcing-digest-template.html",
       "supportedProjectTypes": [
         "vc_origination_pipeline"
       ],
@@ -805,7 +805,7 @@
       "title": "Outreach Queue Template",
       "description": "Reusable outreach queue template for candidate priority, reason to reach out, channel, owner, and draft status.",
       "documentType": "template",
-      "path": "origination/outreach-queue-template.md",
+      "path": "origination/outreach-queue-template.html",
       "supportedProjectTypes": [
         "vc_origination_pipeline"
       ],
@@ -819,7 +819,7 @@
       "title": "Promotion Package Template",
       "description": "Reusable promotion package for turning a sourced candidate into a Deal Pipeline creation or update recommendation.",
       "documentType": "template",
-      "path": "origination/promotion-package-template.md",
+      "path": "origination/promotion-package-template.html",
       "supportedProjectTypes": [
         "vc_origination_pipeline"
       ],
@@ -834,7 +834,7 @@
       "title": "Prospect Summary Template",
       "description": "Reusable prospect-level sourcing summary for one prioritized candidate before outreach or Deal Pipeline promotion.",
       "documentType": "template",
-      "path": "origination/sourcing-ic-summary-template.md",
+      "path": "origination/sourcing-ic-summary-template.html",
       "supportedProjectTypes": [
         "vc_origination_pipeline"
       ],
@@ -848,7 +848,7 @@
       "title": "Dedupe And Novelty Policy",
       "description": "Policy for matching sourced candidates to existing opportunities, relationships, and prior rejects before promotion.",
       "documentType": "policy",
-      "path": "origination/dedupe-novelty-policy.md",
+      "path": "origination/dedupe-novelty-policy.html",
       "supportedProjectTypes": [
         "vc_origination_pipeline"
       ],
@@ -862,7 +862,7 @@
       "title": "Apify Source Setup Checklist",
       "description": "Source-specific setup checklist for Apify actor allowlists, inputs, spend controls, and preview policy.",
       "documentType": "checklist",
-      "path": "origination/apify-source-setup-checklist.md",
+      "path": "origination/apify-source-setup-checklist.html",
       "supportedProjectTypes": [
         "vc_origination_pipeline"
       ],
@@ -878,7 +878,7 @@
       "title": "Companies House Source Setup Checklist",
       "description": "Source-specific setup checklist for public-register discovery scope, region policy, and reviewed read-preview.",
       "documentType": "checklist",
-      "path": "origination/companies-house-source-setup-checklist.md",
+      "path": "origination/companies-house-source-setup-checklist.html",
       "supportedProjectTypes": [
         "vc_origination_pipeline"
       ],

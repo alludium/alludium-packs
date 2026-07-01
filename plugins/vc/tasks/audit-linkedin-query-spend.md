@@ -31,8 +31,8 @@ Mirror the reference pipeline's read-only LinkedIn query audit. Compare query/tr
 
 ## Reference Materials
 
-- [Paid Source Spend Audit Checklist](../alludium/documents/origination/paid-source-spend-audit-checklist.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
-- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+- [Paid Source Spend Audit Checklist](../alludium/documents/origination/paid-source-spend-audit-checklist.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.html): Follow for process boundaries and review standards.
 
 ## Deliverable
 

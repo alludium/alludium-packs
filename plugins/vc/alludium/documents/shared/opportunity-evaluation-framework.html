@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Opportunity Evaluation Framework</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --brand: 229 56% 34%;
+      --brand-primary: var(--brand);
+      --brand-primary-strong: 229 58% 24%;
+      --brand-secondary: 215 18% 38%;
+      --brand-secondary-surface: 220 18% 94%;
+      --foreground: 222 27% 14%;
+      --muted-foreground: 218 12% 42%;
+      --card: 0 0% 100%;
+      --muted: 220 18% 96%;
+      --border: 220 16% 86%;
+      --color-primary: hsl(var(--brand-primary));
+      --color-primary-strong: hsl(var(--brand-primary-strong));
+      --color-secondary: hsl(var(--brand-secondary));
+      --color-secondary-surface: hsl(var(--brand-secondary-surface));
+      --color-text: hsl(var(--foreground));
+      --color-muted-text: hsl(var(--muted-foreground));
+      --color-card: hsl(var(--card));
+      --color-page: hsl(var(--muted));
+      --color-border: hsl(var(--border));
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--color-page);
+      color: var(--color-text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.58;
+    }
+    .document {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 32px 28px 48px;
+      background: var(--color-card);
+    }
+    .document-header {
+      border-bottom: 2px solid var(--color-primary);
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+    }
+    .eyebrow, .metadata {
+      color: var(--color-muted-text);
+      font-size: 13px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3 {
+      color: var(--color-primary);
+      line-height: 1.22;
+      letter-spacing: 0;
+    }
+    h1 { font-size: 30px; margin: 8px 0; }
+    h2 {
+      border-top: 1px solid var(--color-border);
+      font-size: 21px;
+      margin-top: 28px;
+      padding-top: 20px;
+    }
+    h3 { font-size: 17px; margin-top: 22px; }
+    p { margin: 10px 0; }
+    a { color: var(--color-primary-strong); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+    code { background: var(--color-secondary-surface); border-radius: 4px; padding: 1px 4px; }
+    pre { background: var(--color-secondary-surface); border: 1px solid var(--color-border); border-radius: 6px; overflow-x: auto; padding: 12px 14px; }
+    pre code { background: transparent; padding: 0; }
+    ul, ol { padding-left: 22px; }
+    li { margin: 6px 0; }
+    blockquote { border-left: 4px solid var(--color-primary); color: var(--color-secondary); margin: 16px 0; padding: 4px 0 4px 14px; }
+    .summary-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin: 16px 0 24px; }
+    .summary-card { border: 1px solid var(--color-border); border-radius: 6px; background: var(--color-secondary-surface); padding: 12px 14px; }
+    .section { margin: 24px 0; }
+    .badge { display: inline-block; border-radius: 999px; background: var(--color-primary); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: .02em; padding: 3px 9px; text-transform: uppercase; }
+    .badge.secondary { background: var(--color-secondary-surface); color: var(--color-secondary); }
+    .note { border-left: 4px solid var(--color-primary); background: var(--color-secondary-surface); padding: 12px 14px; margin: 16px 0; }
+    .table-wrap { overflow-x: auto; margin: 14px 0 22px; border: 1px solid var(--color-border); border-radius: 6px; }
+    table { width: 100%; border-collapse: collapse; min-width: 680px; }
+    th, td { border-bottom: 1px solid var(--color-border); padding: 10px 12px; text-align: left; vertical-align: top; }
+    th { background: var(--color-secondary-surface); color: var(--color-secondary); font-weight: 700; }
+    tr:last-child td { border-bottom: 0; }
+    @media (max-width: 720px) {
+      body { font-size: 15px; }
+      .document { padding: 24px 18px 36px; }
+      h1 { font-size: 26px; }
+      h2 { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+  <article class="document document-source-template" data-document-id="vc.document.opportunity_evaluation_framework" data-document-type="methodology">
+    <header class="document-header">
+      <div class="eyebrow">VC methodology source</div>
+      <h1>Opportunity Evaluation Framework</h1>
+      <p class="metadata">Evidence-led venture opportunity evaluation framework for post-screening analysis.</p>
+    </header>
+    <section class="note">When this source is used as a rendered task output, create the final deliverable as a standalone safe static HTML artifact with a <code>.html</code> filename and <code>mimeType: &quot;text/html&quot;</code>. Use the shared VC document styling rules from Template Use Guidance and make any generated links open in a new tab or window with <code>target=&quot;_blank&quot;</code> and <code>rel=&quot;noopener noreferrer&quot;</code>. Do not create Markdown output artifacts from this source.</section>
+<h2 id="purpose">Purpose</h2>
+<p>Use this framework after a first-look screen when the investor needs a deeper view of whether an opportunity should move to targeted diligence, decision review, term-sheet consideration, watchlist, or pass. It is not a completed diligence report. It is an evidence-led investment judgement artifact.</p>
+<p>The output should explain the current posture, the central thesis tension, the strongest positive evidence, the must-prove assumptions, and the next evidence-gathering plan.</p>
+<h2 id="evaluation-lenses">Evaluation Lenses</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Lens</th><th>Investor Question</th><th>Evidence Standard</th></tr></thead>
+<tbody>
+<tr><td>Team</td><td>Can this team execute the critical success factors and hire around gaps?</td><td>Founder history, references, role coverage, motivation, integrity, hiring plan, board and adviser quality.</td></tr>
+<tr><td>Micro market</td><td>Which first customer segment has urgent pain, budget, and willingness to pay now?</td><td>Customer interviews, pilots, pipeline, pricing evidence, use-case specificity, need-to-have proof.</td></tr>
+<tr><td>Macro market</td><td>Is the broader category large and growing enough for venture outcomes?</td><td>Segment growth, spend pools, adoption drivers, market reports, macro tailwinds.</td></tr>
+<tr><td>Macro industry</td><td>Are industry forces attractive, or will buyers, suppliers, incumbents, substitutes, or regulators capture value?</td><td>Industry structure, buyer power, data or rights control, rivalry, substitution, regulatory exposure.</td></tr>
+<tr><td>Micro industry</td><td>What is the company's durable edge and why is it hard to copy?</td><td>IP, proprietary data, process advantage, distribution, switching costs, technical depth, strategic positioning.</td></tr>
+<tr><td>Timing</td><td>Is now the right moment for adoption, infrastructure, regulation, and buyer behavior?</td><td>Technology readiness, budget cycles, regulation, platform shifts, customer behavior, inflection events.</td></tr>
+<tr><td>Scalability</td><td>Can the business scale through product leverage rather than bespoke services?</td><td>Architecture, repeatability, gross margin, integration burden, operating model, product roadmap.</td></tr>
+<tr><td>Next-round readiness</td><td>Can the company reach the proof level needed for the next financing within the expected runway?</td><td>ARR or equivalent milestone path, pipeline coverage, retention, usage, burn, runway, hiring plan.</td></tr>
+<tr><td>Financial and ownership fit</td><td>Can the fund own enough at a reasonable valuation with manageable reserve and financing risk?</td><td>Cap table, round size, valuation, use of funds, follow-on needs, exit math.</td></tr>
+<tr><td>Legal, regulatory, and IP</td><td>Are there legal, data, employment, IP, regulatory, or transaction issues that block investment?</td><td>Counsel inputs, corporate docs, IP assignments, litigation searches, licenses, compliance map.</td></tr>
+</tbody></table></div>
+<h2 id="evaluation-tracker">Evaluation Tracker</h2>
+<p>The checklist layer exists to preserve coverage and discipline. It should not force a mechanical average.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Field</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td>Area</td><td>Team, market, product, financial, legal, deal terms, exit, fund fit, or other relevant family.</td></tr>
+<tr><td>Criterion</td><td>The specific question or criterion being assessed.</td></tr>
+<tr><td>Score</td><td>Conservative evidence-led score. Do not reward unverified claims as proof.</td></tr>
+<tr><td>Confidence</td><td>High / Medium / Low based on source quality and recency.</td></tr>
+<tr><td>Evidence</td><td>Source artifact, interview, public source, model, data-room item, or counsel input.</td></tr>
+<tr><td>Gap</td><td>Missing or unverified proof.</td></tr>
+<tr><td>Decision impact</td><td>Pass, watch, meeting, targeted diligence, decision review, term-sheet readiness, or condition.</td></tr>
+</tbody></table></div>
+<h2 id="posture-bands">Posture Bands</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Score Band</th><th>Posture</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td><code>&lt;50</code></td><td>Watchlist / do not progress</td><td>Too many unresolved proof gaps unless new evidence changes the case.</td></tr>
+<tr><td><code>50-59</code></td><td>Thesis-clarification meeting</td><td>The team or category may justify a meeting, but the core investment thesis is unresolved.</td></tr>
+<tr><td><code>60-69</code></td><td>Targeted diligence</td><td>Worth structured evidence collection, but not decision-review ready.</td></tr>
+<tr><td><code>70-79</code></td><td>Decision-review preparation</td><td>Potential review candidate if the improvement is evidence-driven.</td></tr>
+<tr><td><code>80-84</code></td><td>Term-sheet consideration</td><td>Possible draft term sheet if valuation, ownership, gating risks, and partner consensus fit.</td></tr>
+<tr><td><code>85+</code></td><td>High-conviction candidate</td><td>Strong case subject to negotiation, formal diligence, and approval conditions.</td></tr>
+</tbody></table></div>
+<p>A high blended score must not override a gating submodel. Technical proof, legal/IP, customer proof, financial assumptions, team completeness, or fund ownership can each block progression.</p>
+<h2 id="report-standard">Report Standard</h2>
+<p>Opportunity evaluations should include:</p>
+<ol>
+<li>Current recommendation and stage posture.</li>
+<li>Best case, base case, and main gating risk.</li>
+<li>Single most important thesis question.</li>
+<li>What is attractive.</li>
+<li>What must be proved.</li>
+<li>Narrative lens assessment.</li>
+<li>Score table with confidence and rationale.</li>
+<li>Central thesis tension.</li>
+<li>Workstream-specific analysis.</li>
+<li>Meeting agenda and data-room request list.</li>
+<li>Recommended next steps.</li>
+<li>Evaluation tracker.</li>
+<li>Source register and claim-hygiene notes.</li>
+</ol>
+<h2 id="evidence-rules">Evidence Rules</h2>
+<p>Separate company claims, verified evidence, investor inference, and missing proof. Use conservative scores when the evidence is founder-provided only, stale, uncited, or not independently checked. State what evidence would improve, reduce, or block the recommendation.</p>
+<h2 id="meeting-and-data-room-plan">Meeting And Data-Room Plan</h2>
+<p>For each gating risk, produce:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Output</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td>Question</td><td>Specific question for founder, customer, expert, counsel, or internal team.</td></tr>
+<tr><td>Evidence requested</td><td>Artifact, data-room item, model, transcript, contract, source link, or interview.</td></tr>
+<tr><td>Why it matters</td><td>Which investment decision or risk it affects.</td></tr>
+<tr><td>Owner</td><td>Human or workstream owner.</td></tr>
+<tr><td>Timing</td><td>Before meeting, after meeting, before decision review, before term sheet, or before closing.</td></tr>
+<tr><td>Success threshold</td><td>What proof would clear or reduce the risk.</td></tr>
+</tbody></table></div>
+<h2 id="standard">Standard</h2>
+<p>End with a concrete recommendation. Do not hide behind a score. The evaluation should make clear whether the next best action is pass, watch, targeted diligence, partner review, decision-review preparation, or term-sheet consideration.</p>
+  </article>
+</body>
+</html>
