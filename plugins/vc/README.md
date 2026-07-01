@@ -31,13 +31,13 @@ External pack task-definition templates must not declare `systemUseOnly`. System
 
 | Surface                   | Path                                  | Notes                                                                                    |
 | ------------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------- |
-| Skills                    | `skills/`                             | 68 public workflow, integration-management, and origination skills used by the VC pack   |
+| Skills                    | `skills/`                             | 69 public workflow, integration-management, and origination skills used by the VC pack   |
 | Generated agents          | `agents/`                             | 13 agent Markdown compatibility artifacts generated from Alludium runtime YAML          |
-| Generated tasks           | `tasks/`                              | 82 task prompt Markdown files generated from task-definition YAML                        |
-| Project blueprints        | `project-blueprints/`                 | 2 generated project-stage/task/agent/skill blueprints                                   |
-| Agent templates           | `alludium/agent-templates/`           | 9 Alludium runtime templates using the `vc_*` baseline                                   |
-| Task definition templates | `alludium/task-definition-templates/` | 82 VC workflow, integration-management, and origination task templates plus catalog metadata |
-| Project types             | `alludium/project-types/`             | Deal Pipeline and Origination Pipeline project type catalog and definitions            |
+| Generated tasks           | `tasks/`                              | 92 task prompt Markdown files generated from task-definition YAML                        |
+| Project blueprints        | `project-blueprints/`                 | 3 generated project-stage/task/agent/skill blueprints                                   |
+| Agent templates           | `alludium/agent-templates/`           | 13 Alludium runtime templates using the `vc_*` baseline                                  |
+| Task definition templates | `alludium/task-definition-templates/` | 92 VC workflow, integration-management, and origination task templates plus catalog metadata |
+| Project types             | `alludium/project-types/`             | Deal Pipeline, Origination Pipeline, and Deal Execution project type catalog and definitions |
 | Documents                 | `alludium/documents/`                 | Pack-native methodology, SOP, checklist, template, and style-guide sources               |
 | Pack manifest             | `alludium/manifest.yaml`              | Alludium-specific inventory, boundaries, and future pack surfaces                        |
 | Plugin MCP manifest       | `.mcp.json`                           | Public-safe MCP definitions for VC research, CRM, meeting, and market-intelligence tools |
@@ -109,6 +109,7 @@ See [alludium/inventory.md](alludium/inventory.md) for the current skill, templa
 ## Project Blueprints
 
 - [Deal Pipeline Blueprint](project-blueprints/vc-deal-room.md)
+- [Deal Execution Blueprint](project-blueprints/vc-investment-management.md)
 - [Origination Pipeline Blueprint](project-blueprints/vc-origination-pipeline.md)
 
 ## Validation
