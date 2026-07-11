@@ -42,7 +42,7 @@ definition:
         role: source_collection
         purpose: Collect and persist one bounded source batch.
         outputContract: &boundedEnvelope
-          required: [status, artifactIds, counts, warnings, summary]
+          required: [status, resultIds, counts, warnings, summary]
           summaryMaxTokens: 1500
         toolAllowlist: [configured_source_read, artifact.createTextArtifact]
         dryRun: true
@@ -50,7 +50,7 @@ definition:
         role: normalize_score
         purpose: Deduplicate and score artifacts with deterministic count rollups.
         outputContract:
-          required: [status, artifactIds, counts, warnings, summary]
+          required: [status, resultIds, counts, warnings, summary]
           summaryMaxTokens: 1500
           requiredCountDimensions: [source, disposition, tier]
         toolAllowlist: [artifact.read_canonical_source, artifact.createTextArtifact]

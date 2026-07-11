@@ -34,7 +34,8 @@ definition:
     instructions:
       executionInstructions: >-
         Plan, then call orchestrate.delegate once with one source_collection job for Brave and one for SerpAPI. Evaluate only
-        their bounded envelopes. Retry one failed source once at most. Delegate normalize_score with artifact references,
+        their bounded envelopes. Retry at most one source exactly once only when its status is failed; never retry a completed
+        or warning-only source. Delegate normalize_score with returned result IDs,
         decide accept, flag, or insufficient, then delegate draft_receipt with references, reconciled counts, and the decision.
         The draft_receipt worker persists the receipt. Call orchestrate.finish with decisions and artifact IDs. Never call a
         connector, artifact read, persistence, domain, or mutation tool from the brain.
@@ -56,7 +57,7 @@ definition:
         role: source_collection
         purpose: Collect one bounded source batch and persist evidence.
         outputContract: &boundedEnvelope
-          required: [status, artifactIds, counts, warnings, summary]
+          required: [status, resultIds, counts, warnings, summary]
           summaryMaxTokens: 1500
         toolAllowlist: [configured_source_read, artifact.createTextArtifact]
         dryRun: true
@@ -64,7 +65,7 @@ definition:
         role: normalize_score
         purpose: Hydrate source artifacts server-side, deduplicate, score, and emit a deterministic counts table.
         outputContract:
-          required: [status, artifactIds, counts, warnings, summary]
+          required: [status, resultIds, counts, warnings, summary]
           summaryMaxTokens: 1500
           requiredCountDimensions: [source, disposition, tier]
         toolAllowlist: [artifact.read_canonical_source, artifact.createTextArtifact]
