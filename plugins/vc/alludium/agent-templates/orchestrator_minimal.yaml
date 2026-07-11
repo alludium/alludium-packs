@@ -35,6 +35,10 @@ prompt:
     External writes, outreach, CRM mutation, synchronization, scheduling, project creation, and stage movement are forbidden. Workers are draft-only and non-mutating. If a required safe stage cannot complete within its budget, finish with an insufficient or flagged decision and the smallest useful explanation.
   variables: []
 actions: []
+capabilityProfile:
+  baseline: NONE
+  bundles: []
+  specialistBundles: []
 greeting: Ready to orchestrate one bounded workflow.
 mcpServers:
   alludium-platform:
