@@ -391,6 +391,14 @@
         "description": "Artifact ID for the latest sourcing run receipt."
       },
       {
+        "id": "field-latest-run-receipt-result-id",
+        "key": "latest_run_receipt_result_id",
+        "label": "Latest Run Receipt Result ID",
+        "kind": "text",
+        "required": false,
+        "description": "Durable result-task ID for the latest lean sourcing run receipt."
+      },
+      {
         "id": "field-latest-candidate-batch-artifact-id",
         "key": "latest_candidate_batch_artifact_id",
         "label": "Latest Candidate Batch Artifact ID",
@@ -1236,7 +1244,7 @@
         ],
         "outputMappings": [
           {"taskField": "run_status", "target": "project.field", "targetPath": "last_run_status"},
-          {"taskField": "run_receipt_artifact_id", "target": "project.field", "targetPath": "latest_run_receipt_artifact_id"}
+          {"taskField": "run_receipt_result_id", "target": "project.field", "targetPath": "latest_run_receipt_result_id"}
         ]
       },
       {
@@ -1257,7 +1265,7 @@
         ],
         "outputMappings": [
           {"taskField": "run_status", "target": "project.field", "targetPath": "last_run_status"},
-          {"taskField": "run_receipt_artifact_id", "target": "project.field", "targetPath": "latest_run_receipt_artifact_id"}
+          {"taskField": "run_receipt_result_id", "target": "project.field", "targetPath": "latest_run_receipt_result_id"}
         ]
       },
       {

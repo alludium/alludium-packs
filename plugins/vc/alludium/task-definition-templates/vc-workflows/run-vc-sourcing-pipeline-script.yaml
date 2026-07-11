@@ -44,7 +44,7 @@ definition:
         outputContract: &boundedEnvelope
           required: [status, resultIds, counts, warnings, summary]
           summaryMaxTokens: 1500
-        toolAllowlist: [configured_source_read, artifact.createTextArtifact]
+        toolAllowlist: [configured_source_read]
         dryRun: true
       - id: normalize_score
         role: normalize_score
@@ -53,13 +53,13 @@ definition:
           required: [status, resultIds, counts, warnings, summary]
           summaryMaxTokens: 1500
           requiredCountDimensions: [source, disposition, tier]
-        toolAllowlist: [artifact.read_canonical_source, artifact.createTextArtifact]
+        toolAllowlist: []
         dryRun: true
       - id: draft_receipt
         role: draft_receipt
         purpose: Consume count rollups verbatim and persist the receipt.
         outputContract: *boundedEnvelope
-        toolAllowlist: [artifact.read_canonical_source, artifact.createTextArtifact, task-output.persist]
+        toolAllowlist: []
         dryRun: true
 fields:
   input:
@@ -67,7 +67,7 @@ fields:
   - {key: run_mode, name: Run Mode, fieldType: string, required: true, position: 1, config: {}}
   output:
   - {key: run_status, name: Run Status, fieldType: string, required: true, position: 0, config: {}}
-  - {key: run_receipt_artifact_id, name: Run Receipt Artifact, fieldType: file, required: true, position: 1, config: {}}
+  - {key: run_receipt_result_id, name: Run Receipt Result, fieldType: string, required: true, position: 1, config: {}}
 runtime:
   defaultExecutionContext:
     sourceMetadata: {templateFamily: vc, taskKind: run_sourcing_pipeline_script, deterministicPipelinePoc: true, promptProfile: minimal}

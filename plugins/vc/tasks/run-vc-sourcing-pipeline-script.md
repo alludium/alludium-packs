@@ -26,8 +26,8 @@ Execute fixed logic with no orchestrator LLM: dispatch Brave and SerpAPI source_
 
 ## Deliverable
 
-- Create or update **Run Receipt Artifact** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Run Status. Do not output raw JSON unless the user explicitly asks for machine-readable data.
+- Produce a concise, reviewable task response that a human can act on.
+- Also include a short human-readable summary covering: Run Status, Run Receipt Result. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
