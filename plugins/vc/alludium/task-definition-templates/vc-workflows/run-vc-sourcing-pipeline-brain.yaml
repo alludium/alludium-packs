@@ -36,7 +36,9 @@ definition:
         Plan, then call orchestrate.delegate once with one source_collection job for Brave and one for SerpAPI. Evaluate only
         their bounded envelopes. Retry at most one source exactly once only when its status is failed; never retry a completed
         or warning-only source. Delegate normalize_score with returned result IDs,
-        decide accept, flag, or insufficient, then delegate draft_receipt with references, reconciled counts, and the decision.
+        add the source envelope result counts and compare that sum exactly with the normalize_score total. If they differ,
+        flag and include COUNT_MISMATCH. Then decide accept, flag, or insufficient and delegate draft_receipt with references,
+        reconciled counts, and the decision.
         The draft_receipt worker persists the receipt. Call orchestrate.finish with decisions and artifact IDs. Never call a
         connector, artifact read, persistence, domain, or mutation tool from the brain.
       missingInputPolicy: Require the frozen KeyWise fixture, Brave and SerpAPI, dry-run mode, result limit, and rubric reference.
