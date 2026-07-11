@@ -1,0 +1,80 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.run_vc_sourcing_pipeline_script
+version: 1.0.0
+title: Run VC Sourcing Pipeline (Deterministic PoC)
+category: Venture Capital
+visibility: workspace
+tags: [vc, sourcing, deterministic-poc]
+definition:
+  name: Run VC Sourcing Pipeline (Deterministic PoC)
+  slug: run-vc-sourcing-pipeline-script
+  description: Run the same bounded sourcing stages without an orchestrator model.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: source
+    taskFamily: origination_pipeline_run
+    deterministicPipelinePoc: true
+    promptProfile: minimal
+    frozenSources: [brave, serpapi]
+    requiredSkills: []
+    supportedProjectTypes: [vc_origination_pipeline]
+    instructions:
+      executionInstructions: >-
+        Execute fixed logic with no orchestrator LLM: dispatch Brave and SerpAPI source_collection jobs concurrently; retry
+        one failed source once; run normalize_score; run draft_receipt and persist its output; finish. Use the identical worker
+        roles, inputs, budgets, artifacts, count contract, and anomaly envelope as the bare-brain arm. Never silently adapt the
+        fixed policy. Surface degraded coverage and warnings in the receipt.
+      missingInputPolicy: Require the frozen KeyWise fixture, both frozen sources, dry-run mode, result limit, and rubric reference.
+      externalActionPolicy: Read-only and draft-only. External writes and project or stage mutations are forbidden.
+      completionCriteria:
+      - No orchestrator model request occurred.
+      - Both sources were dispatched and one failed source was retried at most once.
+      - Counts reconcile by source, outcome, and Meet, Watch, or Pass tier.
+      - The persisted receipt states dry-run status, degraded coverage, warnings, and artifact references.
+    humanDecisionPoints:
+    - Review degraded coverage, contradictions, insufficiency, and any proposal to enable external writes.
+    orchestration:
+      parentTaskPolicy: deterministic_envelope
+      suggestedChildTasks:
+      - id: source_collection
+        role: source_collection
+        purpose: Collect and persist one bounded source batch.
+        outputContract: &boundedEnvelope
+          required: [status, artifactIds, counts, warnings, summary]
+          summaryMaxTokens: 1500
+        toolAllowlist: [configured_source_read, artifact.createTextArtifact]
+        dryRun: true
+      - id: normalize_score
+        role: normalize_score
+        purpose: Deduplicate and score artifacts with deterministic count rollups.
+        outputContract:
+          required: [status, artifactIds, counts, warnings, summary]
+          summaryMaxTokens: 1500
+          requiredCountDimensions: [source, disposition, tier]
+        toolAllowlist: [artifact.read_canonical_source, artifact.createTextArtifact]
+        dryRun: true
+      - id: draft_receipt
+        role: draft_receipt
+        purpose: Consume count rollups verbatim and persist the receipt.
+        outputContract: *boundedEnvelope
+        toolAllowlist: [artifact.read_canonical_source, artifact.createTextArtifact, task-output.persist]
+        dryRun: true
+fields:
+  input:
+  - {key: sourcing_run_scope, name: Sourcing Run Scope, fieldType: json, required: true, position: 0, config: {}}
+  - {key: run_mode, name: Run Mode, fieldType: string, required: true, position: 1, config: {}}
+  output:
+  - {key: run_status, name: Run Status, fieldType: string, required: true, position: 0, config: {}}
+  - {key: run_receipt_artifact_id, name: Run Receipt Artifact, fieldType: file, required: true, position: 1, config: {}}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata: {templateFamily: vc, taskKind: run_sourcing_pipeline_script, deterministicPipelinePoc: true, promptProfile: minimal}
+  requiredResources: {requiresTaskChat: false}
+  executionProfile:
+    agentStartsImmediately: false
+    preferredMode: deterministic_envelope
+    requiresHumanConfirmationToComplete: false
+    promptProfile: minimal
+    maxWorkerProviderRequests: 6

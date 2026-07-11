@@ -2,7 +2,7 @@ schemaVersion: '0.1'
 pack:
   id: vc
   name: Alludium VC
-  version: 0.5.42
+  version: 0.5.43
   description: >
     Public VC workflow plugin and pack seed for Alludium, published as the
     first bundle in the broader Alludium packs catalog. This release contains
@@ -96,6 +96,7 @@ surfaces:
   alludiumAgentTemplates:
     path: alludium/agent-templates
     ids:
+    - orchestrator_minimal
     - vc_dealflow_concierge
     - vc_diligence_analyst
     - vc_evaluation_analyst
@@ -109,6 +110,7 @@ surfaces:
     - vc_pipeline_autopilot
     - vc_sourcing_operator
     - vc_worker_minimal
+    - vc_lean_worker_minimal
     - vc_deal_room_setup_guide
   mcpServers:
     path: .mcp.json
@@ -231,6 +233,10 @@ surfaces:
     - vc.configure_origination_pipeline
     - vc.run_vc_sourcing_pipeline
     - vc.run_vc_sourcing_pipeline_delegated
+    - vc.run_vc_sourcing_pipeline_brain
+    - vc.run_vc_sourcing_pipeline_script
+    - vc.summarize_meeting_records_brain
+    - vc.summarize_meeting_records_script
     - vc.discover_companies_house_candidates
     - vc.discover_linkedin_founder_candidates
     - vc.discover_x_founder_signals

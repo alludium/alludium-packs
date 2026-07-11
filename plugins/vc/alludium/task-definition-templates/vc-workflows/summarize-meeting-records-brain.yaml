@@ -1,0 +1,88 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.summarize_meeting_records_brain
+version: 1.0.0
+title: Summarize Meeting Records (Bare Brain PoC)
+category: Venture Capital
+visibility: workspace
+tags: [vc, meeting-records, bare-brain-poc]
+definition:
+  name: Summarize Meeting Records (Bare Brain PoC)
+  slug: summarize-meeting-records-brain
+  description: Orchestrate evidence extraction and summary persistence without exposing meeting bodies to the brain.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: evaluation
+    taskFamily: meeting
+    bareBrainPoc: true
+    promptProfile: minimal
+    allowedBrainTools: [orchestrate.delegate, orchestrate.finish]
+    documentRefs:
+    - documentId: vc.document.customer_insights_summary_template
+      usage: output_template
+      outputFieldKey: customer_insights_artifact_id
+    - documentId: vc.document.template_use_guidance
+      usage: operating_guidance
+    requiredSkills: []
+    recommendedAgentTemplate: orchestrator_minimal
+    plannedRecommendedAgentTemplate: orchestrator_minimal
+    supportedProjectTypes: [vc_deal_room]
+    instructions:
+      executionInstructions: >-
+        Delegate evidence_extraction with meeting artifact IDs only. Evaluate its bounded claim counts, contradiction counts,
+        warnings, and summary; never read a meeting record or extraction artifact. Decide sufficient, contradictory, or
+        insufficient. Delegate meeting_synthesis with extraction artifact IDs and that decision. The synthesis worker must
+        persist the Meeting Records Summary and return its artifact ID. Finish with the decision, counts, warnings, and ID. Use
+        definitionJson.documentRefs as the durable document contract: apply the output_template as the output skeleton and the
+        operating_guidance as process constraints, then preserve the output template's document ID with the artifact.
+      missingInputPolicy: Require meeting_record_artifact_ids and company_name. Do not place meeting bodies in brain context.
+      externalActionPolicy: Draft only. Messages, CRM writes, project creation, child-task mutation, and stage movement are forbidden.
+      completionCriteria:
+      - The brain called only orchestrate.delegate and orchestrate.finish.
+      - Every brain-bound payload was at most 1,500 tokens.
+      - Claims retain meeting and evidence references, with assumptions separated from evidence.
+      - Contradictory claims are presented side by side and surfaced for human review.
+      - The synthesis worker persisted the final artifact and returned its ID.
+    humanDecisionPoints:
+    - Review contradictions, evidence gaps, external follow-up drafts, and any stage recommendation.
+    orchestration:
+      parentTaskPolicy: none
+      suggestedChildTasks:
+      - id: evidence_extraction
+        role: evidence_extraction
+        purpose: Read meeting artifacts server-side and persist a claim, decision, action, and contradiction register.
+        outputContract:
+          required: [status, artifactIds, counts, warnings, summary]
+          summaryMaxTokens: 1500
+          requiredCountDimensions: [records, claims, contradictions, actions]
+        toolAllowlist: [artifact.read_canonical_source, artifact.createTextArtifact]
+        dryRun: true
+      - id: meeting_synthesis
+        role: meeting_synthesis
+        purpose: Synthesize referenced extraction artifacts and persist the final meeting summary.
+        outputContract:
+          required: [status, artifactIds, counts, warnings, summary]
+          summaryMaxTokens: 1500
+        toolAllowlist: [artifact.read_canonical_source, artifact.createTextArtifact, task-output.persist]
+        dryRun: true
+fields:
+  input:
+  - {key: meeting_record_artifact_ids, name: Meeting Record Artifact IDs, fieldType: string, required: true, position: 0, config: {}}
+  - {key: meeting_notes, name: Meeting Notes, fieldType: richtext, required: false, position: 1, config: {rows: 5}}
+  - {key: company_name, name: Company Name, fieldType: string, required: true, position: 2, config: {}}
+  output:
+  - {key: customer_insights_artifact_id, name: Meeting Records Summary, fieldType: file, required: true, position: 0, config: {documentRefId: vc.document.customer_insights_summary_template}}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata: {templateFamily: vc, taskKind: summarize_meeting_records_brain, bareBrainPoc: true, promptProfile: minimal}
+  requiredResources: {requiresTaskChat: true}
+  executionProfile:
+    agentStartsImmediately: true
+    preferredMode: guarded_orchestration
+    requiresHumanConfirmationToComplete: false
+    promptProfile: minimal
+    maxSteps: 10
+    maxBrainProviderRequests: 7
+    maxWorkerProviderRequests: 6
+    maxBrainPayloadTokens: 1500

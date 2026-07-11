@@ -1,0 +1,80 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.summarize_meeting_records_script
+version: 1.0.0
+title: Summarize Meeting Records (Deterministic PoC)
+category: Venture Capital
+visibility: workspace
+tags: [vc, meeting-records, deterministic-poc]
+definition:
+  name: Summarize Meeting Records (Deterministic PoC)
+  slug: summarize-meeting-records-script
+  description: Execute the same meeting extraction and synthesis stages without an orchestrator model.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: evaluation
+    taskFamily: meeting
+    deterministicPipelinePoc: true
+    promptProfile: minimal
+    documentRefs:
+    - documentId: vc.document.customer_insights_summary_template
+      usage: output_template
+      outputFieldKey: customer_insights_artifact_id
+    - documentId: vc.document.template_use_guidance
+      usage: operating_guidance
+    requiredSkills: []
+    supportedProjectTypes: [vc_deal_room]
+    instructions:
+      executionInstructions: >-
+        Execute fixed logic with no orchestrator LLM: run evidence_extraction over the supplied meeting artifact IDs, then run
+        meeting_synthesis with its artifact references and persist the result. Use the identical worker roles, budgets, inputs,
+        and output contracts as the bare-brain arm. Propagate extraction warnings and contradiction counts without adding an
+        adaptive decision. Use definitionJson.documentRefs as the durable document contract: apply the output_template as the
+        output skeleton and the operating_guidance as process constraints, then preserve the output template's document ID with
+        the artifact.
+      missingInputPolicy: Require meeting_record_artifact_ids and company_name.
+      externalActionPolicy: Draft only. Messages, CRM writes, project creation, child-task mutation, and stage movement are forbidden.
+      completionCriteria:
+      - No orchestrator model request occurred.
+      - Claims retain meeting and evidence references, with assumptions separated from evidence.
+      - Extraction warnings and contradictory claims are preserved in the persisted summary.
+    humanDecisionPoints:
+    - Review contradictions, evidence gaps, external follow-up drafts, and any stage recommendation.
+    orchestration:
+      parentTaskPolicy: deterministic_envelope
+      suggestedChildTasks:
+      - id: evidence_extraction
+        role: evidence_extraction
+        purpose: Persist a referenced claim and contradiction register.
+        outputContract:
+          required: [status, artifactIds, counts, warnings, summary]
+          summaryMaxTokens: 1500
+          requiredCountDimensions: [records, claims, contradictions, actions]
+        toolAllowlist: [artifact.read_canonical_source, artifact.createTextArtifact]
+        dryRun: true
+      - id: meeting_synthesis
+        role: meeting_synthesis
+        purpose: Synthesize extraction artifacts and persist the final summary.
+        outputContract:
+          required: [status, artifactIds, counts, warnings, summary]
+          summaryMaxTokens: 1500
+        toolAllowlist: [artifact.read_canonical_source, artifact.createTextArtifact, task-output.persist]
+        dryRun: true
+fields:
+  input:
+  - {key: meeting_record_artifact_ids, name: Meeting Record Artifact IDs, fieldType: string, required: true, position: 0, config: {}}
+  - {key: meeting_notes, name: Meeting Notes, fieldType: richtext, required: false, position: 1, config: {rows: 5}}
+  - {key: company_name, name: Company Name, fieldType: string, required: true, position: 2, config: {}}
+  output:
+  - {key: customer_insights_artifact_id, name: Meeting Records Summary, fieldType: file, required: true, position: 0, config: {documentRefId: vc.document.customer_insights_summary_template}}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata: {templateFamily: vc, taskKind: summarize_meeting_records_script, deterministicPipelinePoc: true, promptProfile: minimal}
+  requiredResources: {requiresTaskChat: false}
+  executionProfile:
+    agentStartsImmediately: false
+    preferredMode: deterministic_envelope
+    requiresHumanConfirmationToComplete: false
+    promptProfile: minimal
+    maxWorkerProviderRequests: 6

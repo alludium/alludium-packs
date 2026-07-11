@@ -1,0 +1,102 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.run_vc_sourcing_pipeline_brain
+version: 1.0.0
+title: Run VC Sourcing Pipeline (Bare Brain PoC)
+category: Venture Capital
+visibility: workspace
+tags:
+- vc
+- sourcing
+- bare-brain-poc
+definition:
+  name: Run VC Sourcing Pipeline (Bare Brain PoC)
+  slug: run-vc-sourcing-pipeline-brain
+  description: Orchestrate the frozen read-only sourcing pipeline with a pure decision brain and bounded workers.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: source
+    taskFamily: origination_pipeline_run
+    bareBrainPoc: true
+    promptProfile: minimal
+    allowedBrainTools:
+    - orchestrate.delegate
+    - orchestrate.finish
+    frozenSources:
+    - brave
+    - serpapi
+    requiredSkills: []
+    recommendedAgentTemplate: orchestrator_minimal
+    plannedRecommendedAgentTemplate: orchestrator_minimal
+    supportedProjectTypes:
+    - vc_origination_pipeline
+    instructions:
+      executionInstructions: >-
+        Plan, then call orchestrate.delegate once with one source_collection job for Brave and one for SerpAPI. Evaluate only
+        their bounded envelopes. Retry one failed source once at most. Delegate normalize_score with artifact references,
+        decide accept, flag, or insufficient, then delegate draft_receipt with references, reconciled counts, and the decision.
+        The draft_receipt worker persists the receipt. Call orchestrate.finish with decisions and artifact IDs. Never call a
+        connector, artifact read, persistence, domain, or mutation tool from the brain.
+      missingInputPolicy: Require the frozen KeyWise fixture, Brave and SerpAPI, dry-run mode, result limit, and rubric reference.
+      externalActionPolicy: Read-only and draft-only. External writes and project or stage mutations are forbidden.
+      completionCriteria:
+      - The brain called only orchestrate.delegate and orchestrate.finish.
+      - Every brain-bound payload was at most 1,500 tokens.
+      - Exactly one Brave and one SerpAPI source job ran, with at most one retry for one failed source.
+      - Counts reconcile by source, outcome, and Meet, Watch, or Pass tier.
+      - The receipt worker persisted an evidence-backed dry-run receipt and returned its artifact ID.
+      - Outages, zero-yield sources, contradictions, and warnings are surfaced for human review.
+    humanDecisionPoints:
+    - Review degraded coverage, contradictions, insufficiency, and any proposal to enable external writes.
+    orchestration:
+      parentTaskPolicy: none
+      suggestedChildTasks:
+      - id: source_collection
+        role: source_collection
+        purpose: Collect one bounded source batch and persist evidence.
+        outputContract: &boundedEnvelope
+          required: [status, artifactIds, counts, warnings, summary]
+          summaryMaxTokens: 1500
+        toolAllowlist: [configured_source_read, artifact.createTextArtifact]
+        dryRun: true
+      - id: normalize_score
+        role: normalize_score
+        purpose: Hydrate source artifacts server-side, deduplicate, score, and emit a deterministic counts table.
+        outputContract:
+          required: [status, artifactIds, counts, warnings, summary]
+          summaryMaxTokens: 1500
+          requiredCountDimensions: [source, disposition, tier]
+        toolAllowlist: [artifact.read_canonical_source, artifact.createTextArtifact]
+        dryRun: true
+      - id: draft_receipt
+        role: draft_receipt
+        purpose: Consume the deterministic counts table verbatim and persist the final receipt.
+        outputContract: *boundedEnvelope
+        toolAllowlist: [artifact.read_canonical_source, artifact.createTextArtifact, task-output.persist]
+        dryRun: true
+fields:
+  input:
+  - {key: sourcing_run_scope, name: Sourcing Run Scope, fieldType: json, required: true, position: 0, config: {}}
+  - {key: run_mode, name: Run Mode, fieldType: string, required: true, position: 1, config: {}}
+  output:
+  - {key: run_status, name: Run Status, fieldType: string, required: true, position: 0, config: {}}
+  - {key: run_receipt_artifact_id, name: Run Receipt Artifact, fieldType: file, required: true, position: 1, config: {}}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc
+      taskKind: run_sourcing_pipeline_brain
+      bareBrainPoc: true
+      promptProfile: minimal
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    preferredMode: guarded_orchestration
+    requiresHumanConfirmationToComplete: false
+    promptProfile: minimal
+    maxSteps: 10
+    maxBrainProviderRequests: 7
+    maxWorkerProviderRequests: 6
+    maxBrainPayloadTokens: 1500

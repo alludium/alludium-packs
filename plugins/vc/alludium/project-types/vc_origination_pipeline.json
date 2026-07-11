@@ -196,7 +196,7 @@
     }
   },
   "initialVersion": {
-    "version": "0.2.4",
+    "version": "0.2.5",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -1216,6 +1216,48 @@
             "target": "project.field",
             "targetPath": "latest_source_state_artifact_id"
           }
+        ]
+      },
+      {
+        "id": "mapping-run-vc-sourcing-pipeline-brain",
+        "taskDefinitionSlug": "run-vc-sourcing-pipeline-brain",
+        "taskDefinitionTemplateId": "vc.run_vc_sourcing_pipeline_brain",
+        "lifecycleStage": "source",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {"taskField": "sourcing_run_scope", "source": "project.field", "sourcePath": "source_registry", "requiredForActivation": true},
+          {"taskField": "run_mode", "source": "constant", "constantValue": "bare_brain_poc_dry_run", "requiredForActivation": true}
+        ],
+        "outputMappings": [
+          {"taskField": "run_status", "target": "project.field", "targetPath": "last_run_status"},
+          {"taskField": "run_receipt_artifact_id", "target": "project.field", "targetPath": "latest_run_receipt_artifact_id"}
+        ]
+      },
+      {
+        "id": "mapping-run-vc-sourcing-pipeline-script",
+        "taskDefinitionSlug": "run-vc-sourcing-pipeline-script",
+        "taskDefinitionTemplateId": "vc.run_vc_sourcing_pipeline_script",
+        "lifecycleStage": "source",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {"taskField": "sourcing_run_scope", "source": "project.field", "sourcePath": "source_registry", "requiredForActivation": true},
+          {"taskField": "run_mode", "source": "constant", "constantValue": "deterministic_poc_dry_run", "requiredForActivation": true}
+        ],
+        "outputMappings": [
+          {"taskField": "run_status", "target": "project.field", "targetPath": "last_run_status"},
+          {"taskField": "run_receipt_artifact_id", "target": "project.field", "targetPath": "latest_run_receipt_artifact_id"}
         ]
       },
       {
