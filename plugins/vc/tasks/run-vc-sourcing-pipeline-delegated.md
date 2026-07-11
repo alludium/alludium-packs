@@ -21,7 +21,7 @@ Run the read-only VC sourcing PoC across the frozen Brave and SerpAPI source set
 
 ## What To Do
 
-This is the worker-delegation PoC and is always a dry run. First create a compact source run plan for the frozen Brave and SerpAPI source set. Delegate one source_collection child per source with task-management.delegateWorkerJob; do not pass the parent transcript or raw payloads. When both source summaries are available, call tasks.normalizeWorkerCandidates with the bounded observations, then tasks.draftWorkerRunReceipt. Persist the returned Markdown through the normal artifact creation tool and attach it as the run receipt. Parent/child handoffs contain only artifact IDs, counts, warnings, status, and a summary capped at 1,500 tokens. Never call outreach, messaging, CRM write, sync-write, project creation, or any other mutation tool. Use definitionJson.documentRefs as the durable document contract and preserve evidence references through normalization and receipt drafting.
+This is the worker-delegation PoC and is always a dry run. First create a compact source run plan for the frozen Brave and SerpAPI source set. In one call to task-management.delegateWorkerJobs, submit exactly one research job per source to the vc_worker_minimal deployment; do not pass the parent transcript or raw payloads. Do not poll tasks and do not read worker artifacts. When the batched result is available, call tasks.normalizeWorkerCandidates once with artifact references only, then tasks.draftWorkerRunReceipt once. Persist the returned Markdown through the normal artifact creation tool and attach it as the run receipt. Parent/child handoffs contain only artifact IDs, counts, warnings, status, and a summary capped at 1,500 tokens. Never call outreach, messaging, CRM write, sync-write, project creation, or any other mutation tool. Use definitionJson.documentRefs as the durable document contract and preserve evidence references through normalization and receipt drafting.
 
 ## Available Context
 
@@ -53,11 +53,12 @@ Read, score, draft, and create local task artifacts only. No external writes or 
 
 ## Completion Criteria
 
-- Exactly one source_collection child exists for Brave and one for SerpAPI.
+- Exactly one research child exists for Brave and one for SerpAPI.
 - Child summaries are at most 1,500 tokens and no child transcript is copied to the parent.
 - Candidate counts reconcile with source observations and retain evidence references.
 - Run receipt lists enabled sources, skipped sources, degraded-source notes, counts, warnings, and dry-run status.
 - No mutation, outreach, messaging, CRM write, sync-write, or project-creation tool was called.
+- The parent used one batched delegation call and did not call artifact read tools for worker output.
 
 ## Human Review
 

@@ -1,0 +1,25 @@
+version: 1.0.0
+type: template
+platform_managed: false
+id: vc_worker_minimal
+name: VC Minimal Worker
+description: Minimal, stateless capability container for one bounded read-only VC source job.
+icon: FcSearch
+color: bg-slate-100
+category: Alludium
+metadata:
+  gitBranch: main
+  gitRepositoryUrl: https://github.com/alludium-templates/configurable-agent.git
+  workerContainer: true
+  requiredSkills: []
+skills: []
+prompt:
+  template: |
+    Execute one bounded read-only research job.
+
+    Return a compact Markdown artifact and save task output containing only artifact IDs, counts, status, warnings, and a short summary.
+
+    Use only the source tool named in the job brief plus artifact creation and task-output tools. Preserve evidence URLs. Never use another source, include raw payloads or transcripts, contact anyone, or perform CRM, sync, scheduling, project, or other external writes.
+  variables: []
+actions: []
+greeting: Ready for one bounded read-only research job.
