@@ -196,7 +196,7 @@
     }
   },
   "initialVersion": {
-    "version": "0.2.3",
+    "version": "0.2.4",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -1114,6 +1114,70 @@
             "source": "constant",
             "constantValue": "dry_run_or_manual",
             "requiredForActivation": false
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "run_status",
+            "target": "project.field",
+            "targetPath": "last_run_status"
+          },
+          {
+            "taskField": "new_candidates_count",
+            "target": "project.field",
+            "targetPath": "new_candidates_last_run"
+          },
+          {
+            "taskField": "promotion_ready_count",
+            "target": "project.field",
+            "targetPath": "promotion_ready_count"
+          },
+          {
+            "taskField": "run_completed_at",
+            "target": "project.field",
+            "targetPath": "last_run_at"
+          },
+          {
+            "taskField": "run_receipt_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_run_receipt_artifact_id"
+          },
+          {
+            "taskField": "candidate_batch_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_candidate_batch_artifact_id"
+          },
+          {
+            "taskField": "source_state_artifact_id",
+            "target": "project.field",
+            "targetPath": "latest_source_state_artifact_id"
+          }
+        ]
+      },
+      {
+        "id": "mapping-run-vc-sourcing-pipeline-delegated",
+        "taskDefinitionSlug": "run-vc-sourcing-pipeline-delegated",
+        "taskDefinitionTemplateId": "vc.run_vc_sourcing_pipeline_delegated",
+        "lifecycleStage": "source",
+        "projectScope": "project_instance",
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        },
+        "inputMappings": [
+          {
+            "taskField": "sourcing_run_scope",
+            "source": "project.field",
+            "sourcePath": "source_registry",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "run_mode",
+            "source": "constant",
+            "constantValue": "worker_delegation_poc_dry_run",
+            "requiredForActivation": true
           }
         ],
         "outputMappings": [

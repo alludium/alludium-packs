@@ -47,6 +47,7 @@
         "vc-workflows/prepare-portfolio-onboarding.yaml",
         "vc-workflows/configure-origination-pipeline.yaml",
         "vc-workflows/run-vc-sourcing-pipeline.yaml",
+        "vc-workflows/run-vc-sourcing-pipeline-delegated.yaml",
         "vc-workflows/discover-companies-house-candidates.yaml",
         "vc-workflows/discover-linkedin-founder-candidates.yaml",
         "vc-workflows/discover-x-founder-signals.yaml",

@@ -1,0 +1,228 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.run_vc_sourcing_pipeline_delegated
+version: 0.1.0
+title: Run VC Sourcing Pipeline (Delegated PoC)
+category: Venture Capital
+visibility: workspace
+tags:
+- vc
+- origination
+- sourcing
+- worker-delegation-poc
+definition:
+  name: Run VC Sourcing Pipeline (Delegated PoC)
+  slug: run-vc-sourcing-pipeline-delegated
+  description: Run the read-only VC sourcing PoC across the frozen Brave and SerpAPI source set using bounded Gemini worker jobs.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: source
+    taskFamily: origination_pipeline_run
+    workerDelegationPoc: true
+    frozenSources:
+    - brave
+    - serpapi
+    documentRefs:
+    - documentId: vc.document.candidate_batch_template
+      usage: output_template
+      outputFieldKey: candidate_batch_artifact_id
+    - documentId: vc.document.origination_pipeline_sop
+      usage: operating_guidance
+    - documentId: vc.document.origination_source_strategy_guide
+      usage: methodology
+    - documentId: vc.document.template_use_guidance
+      usage: operating_guidance
+    requiredSkills:
+    - origination-pipeline-orchestration
+    - vc-source-registry-and-state-management
+    - citation-enforcement
+    recommendedAgentTemplate: vc_sourcing_operator
+    plannedRecommendedAgentTemplate: vc_sourcing_operator
+    supportedProjectTypes:
+    - vc_origination_pipeline
+    supportedProjectScopes:
+    - project_instance
+    instructions:
+      executionInstructions: >-
+        This is the worker-delegation PoC and is always a dry run. First create a compact source run plan for the frozen
+        Brave and SerpAPI source set. Delegate one source_collection child per source with task-management.delegateWorkerJob; do not
+        pass the parent transcript or raw payloads. When both source summaries are available, call
+        tasks.normalizeWorkerCandidates with the bounded observations, then tasks.draftWorkerRunReceipt. Persist the returned
+        Markdown through the normal artifact creation tool and attach it as the run receipt. Parent/child handoffs contain only
+        artifact IDs, counts, warnings, status, and a summary capped at 1,500 tokens. Never call outreach, messaging, CRM write,
+        sync-write, project creation, or any other mutation tool. Use definitionJson.documentRefs as the durable document
+        contract and preserve evidence references through normalization and receipt drafting.
+      missingInputPolicy: >-
+        Require the KeyWise-shaped fixture, the frozen Brave and SerpAPI source set, dry-run mode, result limit, and scoring
+        rubric reference. Stop rather than substituting a different connector.
+      externalActionPolicy: Read, score, draft, and create local task artifacts only. No external writes or outreach.
+      humanConfirmationPolicy: always_before_external_write_or_schedule_enablement
+      completionCriteria:
+      - Exactly one source_collection child exists for Brave and one for SerpAPI.
+      - Child summaries are at most 1,500 tokens and no child transcript is copied to the parent.
+      - Candidate counts reconcile with source observations and retain evidence references.
+      - Run receipt lists enabled sources, skipped sources, degraded-source notes, counts, warnings, and dry-run status.
+      - No mutation, outreach, messaging, CRM write, sync-write, or project-creation tool was called.
+    humanDecisionPoints:
+    - Approve any later productionization or external write behavior outside this PoC.
+    orchestration:
+      parentTaskPolicy: none
+      suggestedChildTasks:
+      - id: source_run_plan
+        role: brain
+        purpose: Plan the frozen source run in the parent without creating a child.
+        inputContract:
+          required:
+          - company
+          - sources
+          - resultLimit
+        outputContract:
+          required:
+          - queries
+          - dedupeKey
+          - rubricRef
+        toolAllowlist: []
+        dryRun: true
+      - id: source_collection_brave
+        role: research
+        purpose: Collect bounded Brave observations.
+        inputContract:
+          required:
+          - company
+          - query
+          - resultLimit
+        outputContract:
+          required:
+          - artifactIds
+          - summary
+          - counts
+          - status
+          - warnings
+          summaryMaxTokens: 1500
+        toolAllowlist:
+        - brave-search-mcp.brave_web_search
+        - artifact.createTextArtifact
+        dryRun: true
+      - id: source_collection_serpapi
+        role: research
+        purpose: Collect bounded SerpAPI observations.
+        inputContract:
+          required:
+          - company
+          - query
+          - resultLimit
+        outputContract:
+          required:
+          - artifactIds
+          - summary
+          - counts
+          - status
+          - warnings
+          summaryMaxTokens: 1500
+        toolAllowlist:
+        - serpapi-mcp.search
+        - artifact.createTextArtifact
+        dryRun: true
+      - id: candidate_normalization_scoring
+        role: extraction
+        purpose: Normalize, deduplicate, and score the bounded source observations with Gemini 2.5 Flash.
+        inputContract:
+          required:
+          - observations
+          - rubricRef
+        outputContract:
+          required:
+          - candidates
+          - unknowns
+        toolAllowlist:
+        - tasks.normalizeWorkerCandidates
+        dryRun: true
+      - id: run_receipt_digest
+        role: drafting
+        purpose: Draft the bounded Markdown run receipt with Gemini 2.5 Flash.
+        inputContract:
+          required:
+          - runPlan
+          - batches
+          - scores
+          - childStatuses
+        outputContract:
+          required:
+          - markdown
+          - byteSize
+        toolAllowlist:
+        - tasks.draftWorkerRunReceipt
+        - artifact.createTextArtifact
+        dryRun: true
+fields:
+  input:
+  - key: sourcing_run_scope
+    name: Sourcing Run Scope
+    fieldType: json
+    required: true
+    position: 0
+    config: {}
+  - key: run_mode
+    name: Run Mode
+    fieldType: string
+    required: true
+    position: 1
+    config: {}
+  output:
+  - key: run_status
+    name: Run Status
+    fieldType: string
+    required: false
+    position: 0
+    config: {}
+  - key: new_candidates_count
+    name: New Candidates Count
+    fieldType: number
+    required: false
+    position: 1
+    config: {}
+  - key: promotion_ready_count
+    name: Promotion Ready Count
+    fieldType: number
+    required: false
+    position: 2
+    config: {}
+  - key: run_completed_at
+    name: Run Completed At
+    fieldType: date
+    required: false
+    position: 3
+    config: {}
+  - key: run_receipt_artifact_id
+    name: Run Receipt Artifact
+    fieldType: file
+    required: true
+    position: 4
+    config: {}
+  - key: candidate_batch_artifact_id
+    name: Candidate Batch Artifact
+    fieldType: file
+    required: true
+    position: 5
+    config:
+      documentRefId: vc.document.candidate_batch_template
+  - key: source_state_artifact_id
+    name: Source State Artifact
+    fieldType: file
+    required: true
+    position: 6
+    config: {}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc
+      taskKind: run_sourcing_pipeline_delegated
+      projectType: vc_origination_pipeline
+      workerDelegationPoc: true
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    preferredMode: guarded_orchestration
+    requiresHumanConfirmationToComplete: true
