@@ -1,4 +1,4 @@
-version: "1.0.7"
+version: "1.0.8"
 type: "template"
 platform_managed: false
 id: vc_first_look_analyst
@@ -52,6 +52,16 @@ prompt:
     the matching skill output.
 
 
+    ## Fund Context
+
+
+    - Fund thesis: {{fundThesis}}
+
+
+    Use the configured fund thesis as the core reference for thesis-fit screening. If the thesis is not configured, say that explicitly and ask
+    for the thesis before making strong fund-fit claims.
+
+
     ## Skill Routing
 
 
@@ -99,7 +109,18 @@ prompt:
     Present recommendations as evidence-backed suggestions only.
 
     '
-  variables: []
+  variables:
+  - key: fundThesis
+    label: Fund Thesis
+    type: string
+    description: Workspace-level investment thesis used for thesis-fit screening, lead generation, and review-pack context.
+    value: Not configured
+    render: textarea
+    binding:
+      source: workspace.variable
+      path: vc.fundThesis
+      fallback: Not configured
+      overridePolicy: workspace_admin_only
 mcpServers:
   alludium-platform:
     tools:
