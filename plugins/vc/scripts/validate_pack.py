@@ -25,13 +25,10 @@ SECRET_PATTERNS = [
 ]
 PUBLIC_READINESS_PATTERNS = [
     (
-        "legacy SVV naming",
+        "legacy customer-specific naming",
         re.compile(pattern, re.IGNORECASE),
     )
     for pattern in [
-        r"\bSVV\b",
-        r"Sure Valley",
-        r"\bsvv_",
         r"alludium-vc",
         r"/Users/",
         r"craft-ai-agents",
@@ -41,6 +38,7 @@ EXPECTED_WORKSPACE_VARIABLE_BINDINGS = {
     "fundStage": "vc.fundStage",
     "fundSectors": "vc.fundSectors",
     "fundGeography": "vc.fundGeography",
+    "fundThesis": "vc.fundThesis",
 }
 WORKSPACE_VARIABLE_VALUE_TYPES = {"string", "number", "boolean", "object", "array"}
 WORKSPACE_VARIABLE_RENDER_TYPES = {"text", "textarea", "select", "checkbox", "number"}
