@@ -25,10 +25,13 @@ SECRET_PATTERNS = [
 ]
 PUBLIC_READINESS_PATTERNS = [
     (
-        "legacy customer-specific naming",
+        "legacy SVV naming",
         re.compile(pattern, re.IGNORECASE),
     )
     for pattern in [
+        r"\bSVV\b",
+        r"Sure Valley",
+        r"\bsvv_",
         r"alludium-vc",
         r"/Users/",
         r"craft-ai-agents",
@@ -39,6 +42,11 @@ EXPECTED_WORKSPACE_VARIABLE_BINDINGS = {
     "fundSectors": "vc.fundSectors",
     "fundGeography": "vc.fundGeography",
     "fundThesis": "vc.fundThesis",
+}
+REQUIRED_AGENT_PROMPT_VARIABLES = {
+    "vc_first_look_analyst": {
+        "fundThesis": "vc.fundThesis",
+    },
 }
 WORKSPACE_VARIABLE_VALUE_TYPES = {"string", "number", "boolean", "object", "array"}
 WORKSPACE_VARIABLE_RENDER_TYPES = {"text", "textarea", "select", "checkbox", "number"}
@@ -613,13 +621,19 @@ def validate_templates(manifest: dict[str, Any], skill_ids: set[str]) -> None:
             )
 
         prompt = template.get("prompt") or {}
+        prompt_template = prompt.get("template")
+        if prompt_template is not None and not isinstance(prompt_template, str):
+            fail(f"Agent template {template_id} prompt.template must be a string when declared")
         variables = prompt.get("variables") or []
         if variables and not isinstance(variables, list):
             fail(f"Agent template {template_id} prompt.variables must be a list")
+        variables_by_key: dict[str, dict[str, Any]] = {}
         for variable in variables:
             if not isinstance(variable, dict):
                 fail(f"Agent template {template_id} prompt variable entries must be objects")
             key = variable.get("key")
+            if isinstance(key, str):
+                variables_by_key[key] = variable
             binding = variable.get("binding")
             expected_path = EXPECTED_WORKSPACE_VARIABLE_BINDINGS.get(key)
             if expected_path is None:
@@ -639,6 +653,32 @@ def validate_templates(manifest: dict[str, Any], skill_ids: set[str]) -> None:
             if binding.get("overridePolicy") != "workspace_admin_only":
                 fail(
                     f"Template {template_id} variable {key} binding overridePolicy must be workspace_admin_only"
+                )
+
+        for required_key, required_path in REQUIRED_AGENT_PROMPT_VARIABLES.get(
+            template_id,
+            {},
+        ).items():
+            required_variable = variables_by_key.get(required_key)
+            if required_variable is None:
+                fail(f"Agent template {template_id} must declare prompt variable {required_key}")
+            required_binding = required_variable.get("binding")
+            if not isinstance(required_binding, dict):
+                fail(
+                    f"Agent template {template_id} prompt variable {required_key} must bind to {required_path}"
+                )
+            if required_binding.get("source") != "workspace.variable":
+                fail(
+                    f"Agent template {template_id} prompt variable {required_key} binding source must be workspace.variable"
+                )
+            if required_binding.get("path") != required_path:
+                fail(
+                    f"Agent template {template_id} prompt variable {required_key} binding path must be {required_path}"
+                )
+            interpolation = "{{" + required_key + "}}"
+            if not isinstance(prompt_template, str) or interpolation not in prompt_template:
+                fail(
+                    f"Agent template {template_id} prompt.template must interpolate {interpolation}"
                 )
 
         for skill in template.get("skills", []):
