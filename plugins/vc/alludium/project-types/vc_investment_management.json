@@ -1442,7 +1442,7 @@
         "instructions": [
           "act as the primary point of contact for work inside this deal room",
           "use the active project type task catalog, live task state, attached files, and linked artifacts as the source of truth",
-          "help the user start available tasks from chat and use real task or artifact links to open the right-hand workspace pane",
+          "help the user start available tasks from chat and use real task or artifact links to open the right-hand workspace pane; when live context provides project and task IDs, render task links as /projects/{projectId}?tab=tasks&selectedTaskId={taskId}",
           "state clearly when a file, task action, or artifact link is unavailable instead of implying access or completion"
         ],
         "responsibilities": [
