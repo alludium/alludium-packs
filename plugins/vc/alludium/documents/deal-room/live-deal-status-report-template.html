@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live Deal Status Report Template</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --brand: 172 63% 24%;
+      --brand-primary: var(--brand);
+      --brand-primary-strong: 172 68% 17%;
+      --brand-secondary: 215 12% 38%;
+      --brand-secondary-surface: 210 14% 96%;
+      --foreground: 210 15% 16%;
+      --muted-foreground: 215 9% 46%;
+      --card: 0 0% 100%;
+      --muted: 210 17% 98%;
+      --border: 210 13% 88%;
+      --color-primary: hsl(var(--brand-primary));
+      --color-primary-strong: hsl(var(--brand-primary-strong));
+      --color-secondary: hsl(var(--brand-secondary));
+      --color-secondary-surface: hsl(var(--brand-secondary-surface));
+      --color-text: hsl(var(--foreground));
+      --color-muted-text: hsl(var(--muted-foreground));
+      --color-card: hsl(var(--card));
+      --color-page: hsl(var(--muted));
+      --color-border: hsl(var(--border));
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--color-page);
+      color: var(--color-text);
+      font: 15px/1.6 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .document {
+      max-width: 1080px;
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 32px 28px 48px;
+      background: var(--color-card);
+    }
+    .document-header {
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: 18px;
+      padding-bottom: 18px;
+    }
+    .eyebrow, .metadata {
+      color: var(--color-muted-text);
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3 { line-height: 1.25; }
+    h1 { margin: 6px 0 8px; font-family: Georgia, "Times New Roman", serif; font-size: 30px; }
+    h2 { margin: 0 0 18px; font-family: Georgia, "Times New Roman", serif; font-size: 25px; }
+    h3 { margin: 24px 0 8px; font-size: 16px; }
+    p { margin: 8px 0; }
+    ul { padding-left: 20px; }
+    li { margin: 6px 0; }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1px;
+      margin: 18px 0;
+      border: 1px solid var(--color-border);
+      background: var(--color-border);
+    }
+    .summary-grid > div { min-height: 88px; padding: 14px; background: var(--color-card); }
+    .label { color: var(--color-muted-text); font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+    .value { margin-top: 6px; font-size: 16px; }
+    .badge {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 3px 8px;
+      background: var(--color-primary);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .badge.secondary { background: var(--color-secondary-surface); color: var(--color-secondary); }
+    .note { margin: 16px 0; border-left: 3px solid var(--color-primary); padding: 10px 12px; background: var(--color-secondary-surface); }
+    .report-tabs {
+      display: flex;
+      gap: 2px;
+      overflow-x: auto;
+      border-bottom: 1px solid var(--color-border);
+      margin: 0 0 28px;
+      scrollbar-width: thin;
+    }
+    .report-tabs a {
+      flex: 0 0 auto;
+      border-bottom: 2px solid transparent;
+      padding: 11px 12px 10px;
+      color: var(--color-secondary);
+      font-size: 13px;
+      font-weight: 650;
+      text-decoration: none;
+    }
+    .report-tabs a:hover, .report-tabs a:focus-visible { color: var(--color-primary); }
+    .report-tabs a:first-child { border-bottom-color: var(--color-primary); color: var(--color-text); }
+    body:has(.report-section:target) .report-tabs a:first-child { border-bottom-color: transparent; color: var(--color-secondary); }
+    body:has(#snapshot:target) .report-tabs a[href="#snapshot"],
+    body:has(#product:target) .report-tabs a[href="#product"],
+    body:has(#technology:target) .report-tabs a[href="#technology"],
+    body:has(#market:target) .report-tabs a[href="#market"],
+    body:has(#business-model:target) .report-tabs a[href="#business-model"],
+    body:has(#go-to-market:target) .report-tabs a[href="#go-to-market"],
+    body:has(#competition:target) .report-tabs a[href="#competition"],
+    body:has(#team:target) .report-tabs a[href="#team"],
+    body:has(#financials:target) .report-tabs a[href="#financials"],
+    body:has(#deal:target) .report-tabs a[href="#deal"],
+    body:has(#open-questions:target) .report-tabs a[href="#open-questions"] {
+      border-bottom-color: var(--color-primary);
+      color: var(--color-text);
+    }
+    .report-section { display: none; scroll-margin-top: 24px; }
+    .report-section:first-child { display: block; }
+    .report-content:has(.report-section:target) .report-section:first-child:not(:target) { display: none; }
+    .report-section:target { display: block; }
+    .section { border-top: 1px solid var(--color-border); padding: 20px 0; }
+    .section:first-of-type { border-top: 0; padding-top: 0; }
+    .finding {
+      display: grid;
+      grid-template-columns: minmax(130px, 170px) 1fr;
+      gap: 18px;
+      border-top: 1px solid var(--color-border);
+      padding: 16px 0;
+    }
+    .finding:first-of-type { border-top: 0; }
+    .citation { white-space: nowrap; border: 1px solid var(--color-border); border-radius: 3px; padding: 1px 5px; color: var(--color-muted-text); font-size: 11px; }
+    .table-wrap { overflow-x: auto; margin: 14px 0 22px; border: 1px solid var(--color-border); }
+    table { width: 100%; min-width: 720px; border-collapse: collapse; }
+    th, td { border-bottom: 1px solid var(--color-border); padding: 10px 12px; text-align: left; vertical-align: top; }
+    th { background: var(--color-secondary-surface); color: var(--color-secondary); font-size: 12px; }
+    @media (max-width: 700px) {
+      .document { padding: 22px 18px 40px; }
+      .finding { grid-template-columns: 1fr; gap: 4px; }
+    }
+  </style>
+</head>
+<body>
+  <article class="document document-source-template" data-document-id="vc.document.live_deal_status_report_template" data-document-type="template">
+    <header class="document-header">
+      <div class="eyebrow">Live · manually refreshed</div>
+      <h1>Live Deal Status Report</h1>
+      <p class="metadata">Company · fund · investment stage · report revision · generated time · source count</p>
+    </header>
+
+    <div class="note">
+      This source defines the report-only artifact. Render a complete standalone HTML document with the same CSS-only tab pattern.
+      Create a first report with <code>artifact_createTextArtifact</code>, a <code>.html</code> filename, and
+      <code>mimeType: "text/html"</code>. Regenerate an existing report by updating the supplied artifact ID.
+      Do not include JavaScript, forms, an evidence ledger, human posture, votes, or a decision record.
+    </div>
+
+    <nav class="report-tabs" aria-label="Live deal report chapters">
+      <a href="#snapshot">Snapshot</a>
+      <a href="#product">Product</a>
+      <a href="#technology">Technology</a>
+      <a href="#market">Market</a>
+      <a href="#business-model">Business model</a>
+      <a href="#go-to-market">Go-to-market</a>
+      <a href="#competition">Competition</a>
+      <a href="#team">Team</a>
+      <a href="#financials">Financials</a>
+      <a href="#deal">Deal</a>
+      <a href="#open-questions">Open questions</a>
+    </nav>
+
+    <main class="report-content">
+      <section id="snapshot" class="report-section">
+        <h2>Snapshot</h2>
+        <div class="finding"><div class="label">Fund fit</div><p>State fit against the selected fund mandate, including the fund-specific thesis, stage, geography, cheque and return requirements.</p></div>
+        <div class="finding"><div class="label">What the company is</div><p>Explain the problem, solution, buyer, business model and current traction in plain language.</p></div>
+        <div class="finding"><div class="label">What the evidence supports</div><p>Summarise the strongest supported facts and distinguish company claims from independently corroborated evidence.</p></div>
+        <div class="finding"><div class="label">Material risk</div><p>Name the risk most likely to change the current view.</p></div>
+        <div class="finding"><div class="label">What is not yet seen</div><p>State the most important missing proof without filling gaps with generic prose.</p></div>
+      </section>
+
+      <section id="product" class="report-section"><h2>Product</h2><div class="section"><h3>Problem and customer</h3><p>Describe the user, buyer, pain, urgency and current alternative.</p><h3>Solution and value</h3><p>Explain the workflow, product experience, measured value and product maturity.</p></div></section>
+      <section id="technology" class="report-section"><h2>Technology</h2><div class="section"><h3>Architecture and technical edge</h3><p>Explain how the product works, what is proprietary, dependencies, defensibility, security and the principal technical proof gap.</p></div></section>
+      <section id="market" class="report-section"><h2>Market</h2><div class="section"><h3>Market structure</h3><p>Cover market size, growth, timing, customer budget and adoption constraints.</p><h3>Porter's Five Forces</h3><p>Assess buyer power, supplier power, competitive rivalry, threat of substitutes and threat of new entrants using cited evidence.</p></div></section>
+      <section id="business-model" class="report-section"><h2>Business model</h2><div class="section"><p>Cover pricing, revenue model, gross margin, retention, expansion, services exposure, scalability and unit-economics evidence.</p></div></section>
+      <section id="go-to-market" class="report-section"><h2>Go-to-market</h2><div class="section"><p>Cover ideal customer, sales motion, sales cycle, pipeline, channels, acquisition economics and repeatability.</p></div></section>
+      <section id="competition" class="report-section"><h2>Competition</h2><div class="section"><p>Compare direct competitors, incumbents, internal alternatives and substitutes. Explain the wedge, differentiation and durability of advantage.</p></div></section>
+      <section id="team" class="report-section"><h2>Team</h2><div class="section"><p>Cover founder-market fit, role coverage, relevant execution evidence, reference signals, hiring gaps, governance and key-person risk.</p></div></section>
+      <section id="financials" class="report-section"><h2>Financials</h2><div class="section"><p>Cover revenue quality, growth, burn, runway, forecast credibility, cash requirements and the metrics still needing verification.</p></div></section>
+      <section id="deal" class="report-section"><h2>Deal</h2><div class="section"><p>Cover round size, pre-money and post-money valuation, proposed investment, target ownership, dilution, option pool, lead, other investors, allocation, closing timing, reserves and return sensitivity. Mark unavailable terms plainly.</p></div></section>
+
+      <section id="open-questions" class="report-section">
+        <h2>Open questions</h2>
+        <p>Show only specific unresolved questions that can change conviction, valuation, terms, ownership, approval conditions or next actions. Group by area; use topic and sector as secondary labels.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Priority</th><th>Area</th><th>Topic / sector</th><th>Question</th><th>Why it matters</th><th>Evidence needed</th><th>Owner</th><th>Status</th></tr></thead>
+            <tbody><tr><td>Must answer</td><td>Product / technology / market / commercial / competition / team / financial / legal / deal / fund fit</td><td>Relevant labels</td><td>One answerable question</td><td>Decision affected</td><td>Specific artifact, analysis, interview or reference</td><td>Named owner or Unassigned</td><td>Open / In review / Blocked</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <section class="section">
+      <h2 id="standard">Standard</h2>
+      <p>Every material claim must cite a source or be labelled as a company claim, inference, assumption, or investor judgment. Unknowns remain unknown. The generated artifact contains the report only and keeps evidence and decision records on their separate product surfaces. This source-only standards section is authoring guidance and must be omitted from the generated report.</p>
+    </section>
+  </article>
+</body>
+</html>

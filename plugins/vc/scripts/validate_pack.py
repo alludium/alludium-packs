@@ -324,6 +324,7 @@ VC_ARTIFACT_OUTPUTS = {
     "prepare-meeting": ["initial_call_brief_artifact_id"],
     "summarize-meeting-records": ["customer_insights_artifact_id"],
     "run-opportunity-evaluation": ["follow_up_evaluation_artifact_id"],
+    "refresh-live-deal-status-report": ["live_deal_status_report_artifact_id"],
     "run-commercial-evaluation": ["commercial_evaluation_artifact_id"],
     "run-technical-evaluation": ["technical_evaluation_artifact_id"],
     "run-financial-evaluation": ["financial_evaluation_artifact_id"],
@@ -475,6 +476,7 @@ OPTIONAL_ARTIFACT_INPUTS = {
     "create-deal": {"pitch_deck_artifact_id"},
     "run-investment-fit-screen": {"opportunity_intake_artifact_id", "pitch_deck_artifact_id"},
     "capture-opportunity-intake": {"pitch_deck_artifact_id", "source_thread_artifact_id"},
+    "refresh-live-deal-status-report": {"existing_live_deal_status_report_artifact_id"},
 }
 
 

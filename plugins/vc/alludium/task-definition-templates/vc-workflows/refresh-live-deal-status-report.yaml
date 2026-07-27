@@ -1,0 +1,107 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.refresh_live_deal_status_report
+version: 1.0.0
+title: Refresh Live Deal Status Report
+category: Venture Capital
+visibility: workspace
+tags:
+  - vc
+  - deal-status
+  - report
+definition:
+  name: Refresh Live Deal Status Report
+  slug: refresh-live-deal-status-report
+  description: Create or manually refresh the current evidence-backed live deal status report for one venture-capital opportunity.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    stage: evaluation
+    taskFamily: evaluation
+    documentRefs:
+      - documentId: vc.document.live_deal_status_report_template
+        usage: output_template
+        outputFieldKey: live_deal_status_report_artifact_id
+      - documentId: vc.document.investment_diligence_question_framework
+        usage: methodology
+      - documentId: vc.document.evidence_citation_style_guide
+        usage: style_guide
+      - documentId: vc.document.template_use_guidance
+        usage: operating_guidance
+    requiredSkills:
+      - citation-enforcement
+      - investment-diligence-question-framework
+    plannedRecommendedAgentTemplate: vc_evaluation_analyst
+    recommendedAgentTemplate: vc_evaluation_analyst
+    supportedProjectTypes:
+      - vc_deal_room
+    instructions:
+      executionInstructions: >-
+        Create or refresh the current Live Deal Status Report from the supplied source artifacts and every relevant READY Deal Pipeline file available in the task chat. This is the report only: include Snapshot, Product, Technology, Market, Business model, Go-to-market, Competition, Team, Financials, Deal, and Open questions. Do not include the separate evidence ledger, human posture, votes, or decision record. Cite material claims inline, distinguish company claims from corroborated evidence, label inference and investor judgment, preserve material conflicts, and state missing information plainly.
+
+        Use `definitionJson.documentRefs` as the durable source guidance for this output. Render one complete standalone safe static HTML artifact using the CSS-only tab pattern in `vc.document.live_deal_status_report_template`. The tabs must be ordinary fragment links backed by CSS `:target` selectors. Do not use JavaScript, forms, iframes, event handlers, external scripts, or external stylesheets. Follow Template Use Guidance for the shared token aliases, structural classes, source discipline, and pre-save HTML QA. The first visible tab must be Snapshot. Open questions must be grouped by area and include topic or sector labels where useful, priority, decision relevance, evidence needed, owner, and status. Do not invent generic questions merely to fill the table.
+
+        The Deal Pipeline mapping supplies the project's current report artifact as `existing_live_deal_status_report_artifact_id` when one exists. If that ID is supplied, this is a regeneration. Read that artifact's source metadata, then call `artifact.updateTextArtifact` with the same artifact ID, the complete replacement HTML, and the observed source revision number and content hash. Do not create a replacement artifact, change the artifact identity, or create a duplicate with the same filename. If the supplied artifact cannot be read or updated, stop and explain the problem instead of creating a duplicate.
+
+        If `existing_live_deal_status_report_artifact_id` is not supplied, this is the first generation. Create exactly one project-shared HTML artifact with `artifact.createTextArtifact`, a clear `.html` filename, `mimeType: "text/html"`, and complete HTML beginning with `<!doctype html>`.
+
+        In both cases, save the created or updated artifact ID to the required output field `live_deal_status_report_artifact_id`. The output ID is the ID that must be supplied as `existing_live_deal_status_report_artifact_id` on the next manual refresh. Keep detailed report content inside the HTML artifact rather than duplicating it in task output fields.
+      missingInputPolicy: Use the evidence currently available and mark unsupported sections or claims as unknown. Ask only when no company identity or readable source material is available.
+      externalActionPolicy: Do not send messages, mutate CRM records, create folders or projects, create child tasks, move stages, or record an investment decision.
+      completionCriteria:
+        - The report is a standalone HTML artifact with eleven CSS-only report tabs and no JavaScript.
+        - Material claims are cited or clearly labelled as company claim, inference, assumption, or investor judgment.
+        - Missing information and open questions are explicit and decision-relevant.
+        - A first run creates one artifact; a regeneration updates the supplied artifact without changing its ID.
+        - The resulting artifact ID is saved to `live_deal_status_report_artifact_id`.
+    humanDecisionPoints:
+      - Confirm the report is an analytical synthesis and does not record a human investment decision.
+      - Approve any separate external communication, CRM write, stage movement, or investment decision outside this task.
+    orchestration:
+      mode: manual_suggestion
+      parentTaskPolicy: none
+      suggestedChildTasks: []
+fields:
+  input:
+    - key: company_name
+      name: Company Name
+      fieldType: string
+      required: true
+      position: 0
+      config: {}
+    - key: existing_live_deal_status_report_artifact_id
+      name: Existing Live Deal Status Report
+      fieldType: file
+      required: false
+      position: 1
+      config: {}
+    - key: source_artifact_ids
+      name: Additional Source Artifact IDs
+      fieldType: string
+      required: false
+      position: 2
+      config: {}
+  output:
+    - key: live_deal_status_report_artifact_id
+      name: Live Deal Status Report
+      fieldType: file
+      required: true
+      position: 0
+      config:
+        documentRefId: vc.document.live_deal_status_report_template
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc-workflows
+      taskKind: refresh_live_deal_status_report
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    requiresHumanConfirmationToComplete: true
+    preferredMode: guided_execution
+    preferredAgentType: vc_evaluation_analyst
+ui:
+  renderer: generic
+  surfaceKey: null
+  frameRef: null

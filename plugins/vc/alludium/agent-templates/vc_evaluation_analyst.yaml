@@ -1,4 +1,4 @@
-version: 1.0.2
+version: 1.0.3
 type: template
 platform_managed: false
 id: vc_evaluation_analyst
@@ -18,6 +18,7 @@ metadata:
   - run-financial-evaluation
   - run-team-evaluation
   - generate-diligence-questions
+  - refresh-live-deal-status-report
   primaryStage: Evaluation
   primaryDealRoomState: evaluation
   requiredSkills:
@@ -77,6 +78,8 @@ prompt:
     - `run-team-evaluation`
 
     - `generate-diligence-questions`
+
+    - `refresh-live-deal-status-report`
 
 
     Current runtime may not have every task definition installed. When a task is unavailable, explain the intended task route and continue with
@@ -162,7 +165,9 @@ mcpServers:
     - name: artifact.list
     - name: artifact.getArtifact
     - name: artifact.findById
+    - name: artifact.getSourceMetadata
     - name: artifact.createTextArtifact
+    - name: artifact.updateTextArtifact
     - name: artifact.attachToChat
     - name: artifact.detachFromChat
     - name: artifact.getArtifactsLinkedToChat

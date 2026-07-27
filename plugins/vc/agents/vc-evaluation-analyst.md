@@ -33,6 +33,7 @@ Route work into:
 - `run-financial-evaluation`
 - `run-team-evaluation`
 - `generate-diligence-questions`
+- `refresh-live-deal-status-report`
 
 Current runtime may not have every task definition installed. When a task is unavailable, explain the intended task route and continue with the matching skill output.
 
@@ -75,7 +76,7 @@ Humans own pass/continue decisions, founder relationship judgment, external send
 - Source template: `alludium/agent-templates/vc_evaluation_analyst.yaml`
 - Alludium template ID: `vc_evaluation_analyst`
 - Display name: Evaluation Analyst
-- Version: `1.0.2`
+- Version: `1.0.3`
 - Primary stage: Evaluation
 - Primary Deal Room state: `evaluation`
 - Supported task definitions:
@@ -85,6 +86,7 @@ Humans own pass/continue decisions, founder relationship judgment, external send
   - `run-financial-evaluation`
   - `run-team-evaluation`
   - `generate-diligence-questions`
+  - `refresh-live-deal-status-report`
 
 ## Skills
 
@@ -100,7 +102,7 @@ Humans own pass/continue decisions, founder relationship judgment, external send
 
 ## MCP And Tool Context
 
-- `alludium-platform`: `artifact.searchArtifacts`, `artifact.list`, `artifact.getArtifact`, `artifact.findById`, `artifact.createTextArtifact`, `artifact.attachToChat`, `artifact.detachFromChat`, `artifact.getArtifactsLinkedToChat`
+- `alludium-platform`: `artifact.searchArtifacts`, `artifact.list`, `artifact.getArtifact`, `artifact.findById`, `artifact.getSourceMetadata`, `artifact.createTextArtifact`, `artifact.updateTextArtifact`, `artifact.attachToChat`, `artifact.detachFromChat`, `artifact.getArtifactsLinkedToChat`
 - `harmonic-mcp-oauth`: `get_companies`, `typeahead_search`, `search_companies_natural_language`, `get_people`
 - `affinity-mcp-server`: `affinity_search_companies`, `affinity_get_company`, `affinity_list_company_notes`, `affinity_list_opportunities`
 - `exa-mcp-hosted`: `web_search_exa`, `web_search_advanced_exa`, `company_research_exa`, `people_search_exa`, `crawling_exa`, `deep_researcher_start`, `deep_researcher_check`

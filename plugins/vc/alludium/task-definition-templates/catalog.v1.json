@@ -10,6 +10,7 @@
       "templates": [
         "vc-workflows/pack-variable-discovery.yaml",
         "vc-workflows/review-opportunity-status.yaml",
+        "vc-workflows/refresh-live-deal-status-report.yaml",
         "vc-workflows/source-thesis-targets.yaml",
         "vc-workflows/prepare-lead-gen-packet.yaml",
         "vc-workflows/prepare-deal-flow-agenda.yaml",

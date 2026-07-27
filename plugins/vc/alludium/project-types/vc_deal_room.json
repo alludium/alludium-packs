@@ -269,7 +269,7 @@
     }
   ],
   "initialVersion": {
-    "version": "1.1.3",
+    "version": "1.1.4",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -293,6 +293,7 @@
         "vc.document.technical_evaluation_template",
         "vc.document.commercial_evaluation_template",
         "vc.document.investment_memo_template",
+        "vc.document.live_deal_status_report_template",
         "vc.document.ic_agenda_template",
         "vc.document.ic_decision_record_template",
         "vc.document.formal_diligence_workstream_guide",
@@ -1290,6 +1291,14 @@
         "kind": "text",
         "required": false,
         "description": "Opportunity evaluation artifact produced by run-opportunity-evaluation."
+      },
+      {
+        "id": "field-live-deal-status-report-artifact-id",
+        "key": "live_deal_status_report_artifact_id",
+        "label": "Live Deal Status Report",
+        "kind": "text",
+        "required": false,
+        "description": "Current live deal status HTML artifact created or updated by refresh-live-deal-status-report."
       },
       {
         "id": "field-commercial-evaluation-artifact-id",
@@ -2546,6 +2555,41 @@
             "taskField": "follow_up_evaluation_artifact_id",
             "target": "project.field",
             "targetPath": "follow_up_evaluation_artifact_id",
+            "requiredForCompletion": true
+          }
+        ],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-refresh-live-deal-status-report",
+        "taskDefinitionTemplateId": "vc.refresh_live_deal_status_report",
+        "taskDefinitionSlug": "refresh-live-deal-status-report",
+        "projectScope": "project_instance",
+        "lifecycleStage": "evaluation",
+        "inputMappings": [
+          {
+            "taskField": "company_name",
+            "source": "project.field",
+            "sourcePath": "company_name",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "existing_live_deal_status_report_artifact_id",
+            "source": "project.field",
+            "sourcePath": "live_deal_status_report_artifact_id",
+            "requiredForActivation": false
+          }
+        ],
+        "outputMappings": [
+          {
+            "taskField": "live_deal_status_report_artifact_id",
+            "target": "project.field",
+            "targetPath": "live_deal_status_report_artifact_id",
             "requiredForCompletion": true
           }
         ],
