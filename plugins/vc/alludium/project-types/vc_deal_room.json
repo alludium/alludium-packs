@@ -2570,7 +2570,6 @@
         "taskDefinitionTemplateId": "vc.refresh_live_deal_status_report",
         "taskDefinitionSlug": "refresh-live-deal-status-report",
         "projectScope": "project_instance",
-        "lifecycleStage": "evaluation",
         "inputMappings": [
           {
             "taskField": "company_name",
