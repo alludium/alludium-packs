@@ -2,11 +2,16 @@
 
 ## Scope
 
-Pack `0.6.0` separates the legacy all-in-one `vc_origination_pipeline` into:
+Pack `0.6.1` separates the legacy all-in-one `vc_origination_pipeline` into:
 
 - `vc_origination_pipeline`: fund-level source registry, shared policy, budgets, cross-line Inbox, digest, and health.
 - `vc_sourcing_line`: one repeatable experiment with a dedicated chat, source mix, screen, cadence, schedules, receipts, and metrics.
 - `vc_origination_candidate`: one deduplicated pre-deal company with multi-line provenance, screening, relationship, outreach, and promotion state.
+
+It also binds the canonical chats for these project types to the dedicated
+`vc_origination_manager` agent template. Existing projects must move to the current project-type
+version and refresh their persisted project-manager configuration so a stale generic Project
+Manager overlay does not continue to take precedence.
 
 Existing project instances are not automatically rewritten. Historical tasks and artifacts remain evidence, but legacy schedules must stay disabled until a human reviews the proposed migration.
 

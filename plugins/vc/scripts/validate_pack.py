@@ -162,7 +162,13 @@ PROJECT_MANAGER_OVERLAY_LONG_TEXT_MAX = 1000
 PROJECT_MANAGER_OVERLAY_SUFFIX_TEXT_MAX = 80
 PROJECT_MANAGER_OVERLAY_LIST_LIMIT = 12
 PROJECT_MANAGER_OVERLAY_STARTER_LIMIT = 8
-PROJECT_MANAGER_OVERLAY_ROOT_KEYS = {"displayName", "labels", "identity", "greeting"}
+PROJECT_MANAGER_OVERLAY_ROOT_KEYS = {
+    "agentTemplateKey",
+    "displayName",
+    "labels",
+    "identity",
+    "greeting",
+}
 PROJECT_MANAGER_OVERLAY_LABEL_KEYS = {
     "shortName",
     "chatTitleSuffix",
@@ -1848,7 +1854,11 @@ def validate_project_manager_overlay_object(
     return value
 
 
-def validate_project_manager_overlay(project_type_id: str, initial_version: dict[str, Any]) -> None:
+def validate_project_manager_overlay(
+    project_type_id: str,
+    initial_version: dict[str, Any],
+    agent_template_ids: set[str],
+) -> None:
     if "projectManager" not in initial_version:
         return
 
@@ -1860,6 +1870,17 @@ def validate_project_manager_overlay(project_type_id: str, initial_version: dict
     )
     if "displayName" not in project_manager:
         fail(f"{context}.displayName must be declared")
+    if "agentTemplateKey" in project_manager:
+        agent_template_key = validate_project_manager_overlay_text(
+            project_manager["agentTemplateKey"],
+            f"{context}.agentTemplateKey",
+            max_length=PROJECT_MANAGER_OVERLAY_SHORT_TEXT_MAX,
+        )
+        if agent_template_key not in agent_template_ids:
+            fail(
+                f"{context}.agentTemplateKey references unknown agent template "
+                f"{agent_template_key}"
+            )
     validate_project_manager_overlay_text(
         project_manager["displayName"],
         f"{context}.displayName",
@@ -1884,6 +1905,8 @@ def validate_project_manager_overlay(project_type_id: str, initial_version: dict
                 f"{context}.labels.{field_name}",
                 max_length=max_length,
             )
+            if field_name == "chatTitleSuffix" and not field_value[0].isspace():
+                fail(f"{context}.labels.chatTitleSuffix must begin with whitespace")
 
     identity = project_manager.get("identity")
     if identity is not None:
@@ -2678,7 +2701,11 @@ def validate_project_creation_contract(
         )
 
 
-def validate_project_type_file(path: Path, expected_id: str) -> str:
+def validate_project_type_file(
+    path: Path,
+    expected_id: str,
+    agent_template_ids: set[str],
+) -> str:
     project_type = read_json(path)
     relative_path = path.relative_to(ROOT)
     if not isinstance(project_type, dict):
@@ -2756,7 +2783,7 @@ def validate_project_type_file(path: Path, expected_id: str) -> str:
     if len(transition_pairs) != len(set(transition_pairs)):
         fail(f"Project type {expected_id} has duplicate lifecycle transitions")
 
-    validate_project_manager_overlay(expected_id, initial_version)
+    validate_project_manager_overlay(expected_id, initial_version, agent_template_ids)
     validate_project_type_extensions(expected_id, initial_version)
 
     if expected_id == "vc_deal_room":
@@ -2766,6 +2793,7 @@ def validate_project_type_file(path: Path, expected_id: str) -> str:
 
 
 def validate_project_types(manifest: dict[str, Any]) -> set[str]:
+    agent_template_ids = set(manifest["surfaces"]["alludiumAgentTemplates"]["ids"])
     surface = manifest["surfaces"].get("projectTypes")
     if not isinstance(surface, dict):
         fail("Manifest must declare surfaces.projectTypes")
@@ -2824,7 +2852,13 @@ def validate_project_types(manifest: dict[str, Any]) -> set[str]:
         if not project_type_path.exists():
             fail(f"Project type catalog references missing file {relative_project_type_path}")
         discovered_paths.add(resolved_project_type_path)
-        discovered_ids.append(validate_project_type_file(resolved_project_type_path, project_type_id))
+        discovered_ids.append(
+            validate_project_type_file(
+                resolved_project_type_path,
+                project_type_id,
+                agent_template_ids,
+            )
+        )
 
     if len(discovered_ids) != len(set(discovered_ids)):
         fail("Duplicate project type IDs in catalog files")

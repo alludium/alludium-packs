@@ -10,7 +10,7 @@
     "starterLabel": "Create Origination Setup",
     "starterResumeLabel": "Continue Origination Setup",
     "starterDescription": "Create or resume the fund-level Origination Pipeline setup flow.",
-    "recommendedSetupAgent": "vc_origination_scout",
+    "recommendedSetupAgent": "vc_sourcing_operator",
     "requiredEvidence": [
       "source_choice",
       "source_setup",
@@ -157,7 +157,7 @@
     }
   },
   "initialVersion": {
-    "version": "0.3.0",
+    "version": "0.3.1",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -302,10 +302,11 @@
       ]
     },
     "projectManager": {
+      "agentTemplateKey": "vc_origination_manager",
       "displayName": "Origination Manager",
       "labels": {
         "shortName": "Origination",
-        "chatTitleSuffix": "Origination",
+        "chatTitleSuffix": " Origination Manager",
         "roleNoun": "origination manager",
         "projectNoun": "origination pipeline",
         "collectionNoun": "origination",
@@ -326,7 +327,7 @@
         ]
       },
       "greeting": {
-        "message": "I manage origination across your sourcing lines and candidates, with the current configuration, runs, costs, and approvals in context.",
+        "message": "I'm your **Origination Manager**. I manage origination across your sourcing lines and candidates, with the current configuration, runs, costs, and approvals in context.",
         "instructions": "Lead with what needs attention. Use dedicated line and candidate projects for detailed work.",
         "starterPrompts": [
           "What needs my attention today?",

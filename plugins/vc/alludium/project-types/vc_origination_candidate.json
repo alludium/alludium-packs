@@ -92,7 +92,7 @@
     }
   },
   "initialVersion": {
-    "version": "0.1.0",
+    "version": "0.1.1",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -234,10 +234,11 @@
       ]
     },
     "projectManager": {
+      "agentTemplateKey": "vc_origination_manager",
       "displayName": "Origination Candidate Agent",
       "labels": {
         "shortName": "Candidate Agent",
-        "chatTitleSuffix": "Origination Candidate",
+        "chatTitleSuffix": " Origination Candidate Agent",
         "roleNoun": "candidate agent",
         "projectNoun": "origination candidate",
         "collectionNoun": "origination candidates",

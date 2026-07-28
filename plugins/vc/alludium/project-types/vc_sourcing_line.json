@@ -135,7 +135,7 @@
     }
   },
   "initialVersion": {
-    "version": "0.1.0",
+    "version": "0.1.1",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -478,10 +478,11 @@
       ]
     },
     "projectManager": {
+      "agentTemplateKey": "vc_origination_manager",
       "displayName": "Sourcing Line Agent",
       "labels": {
         "shortName": "Line Agent",
-        "chatTitleSuffix": "Sourcing Line",
+        "chatTitleSuffix": " Sourcing Line Agent",
         "roleNoun": "sourcing line agent",
         "projectNoun": "sourcing line",
         "collectionNoun": "sourcing lines",
