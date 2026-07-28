@@ -17,16 +17,16 @@ skills:
 
 ## Objective
 
-Run a lightweight first-pass fit screen on newly identified origination candidates before marking them of interest.
+Run a lightweight first-pass fit screen on one newly identified Origination Candidate.
 
 ## What To Do
 
-Screen newly identified candidates with the lightest useful evidence set: source receipt, normalized identity, stage/geography fit, obvious hard exclusions, basic AI/native software signal, founder signal, and duplicate/known-relationship status. This is not the full active-candidate screen; recommend only prioritize for outreach, watchlist, or pass, and list what must be enriched before outreach.
+Screen the current newly identified candidate with the lightest useful evidence set: source receipt, normalized identity, stage/geography fit, obvious hard exclusions, basic AI/native software signal, founder signal, and duplicate/known-relationship status. This is not the full active-candidate screen; recommend only prioritize for outreach, watchlist, or pass, and list what must be enriched before outreach.
 
 ## Available Context
 
 - Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
-- Especially look for: Identified Candidate Batch, First-Pass Screen Policy.
+- Especially look for: Identified Candidate, First-Pass Screen Policy.
 - If a named input is absent, follow the missing-input policy rather than inventing facts.
 
 ## Reference Materials
@@ -39,11 +39,11 @@ Screen newly identified candidates with the lightest useful evidence set: source
 ## Deliverable
 
 - Create or update **Identified Screen Artifact** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Outreach Ready Count, Watchlist Count, Pass Count, Identified Screen Report. Do not output raw JSON unless the user explicitly asks for machine-readable data.
+- Also include a short human-readable summary covering: Review Verdict, Candidate Score, Thesis Fit Summary, Identified Screen Report. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
-Ask for the identified candidate batch, source receipts, thesis policy, hard exclusions, and dedupe state before screening.
+Ask for the identified candidate, source receipts, thesis policy, hard exclusions, and dedupe state before screening.
 
 ## Guardrails
 

@@ -3,7 +3,7 @@ id: vc.document.sourcing_scoring_rubric
 title: Sourcing Scoring Rubric
 documentType: methodology
 supportedProjectTypes:
-  - vc_origination_pipeline
+  - vc_origination_candidate
 summary: Rubric for scoring sourced company fit and promotion readiness.
 ---
 

@@ -1229,6 +1229,17 @@ def validate_task_scheduling_contract(
     if not isinstance(scheduling, dict):
         fail(f"Task template {template_id} definitionJson.scheduling must be declared")
 
+    if definition_json.get("projectInvocation") == "child_only":
+        if scheduling.get("schedulable") is not False:
+            fail(
+                f"Task template {template_id} child-only scheduling.schedulable must be false"
+            )
+        if scheduling.get("showInProjectSetup") is not False:
+            fail(
+                f"Task template {template_id} child-only scheduling.showInProjectSetup must be false"
+            )
+        return
+
     if scheduling.get("schedulable") is not True:
         fail(f"Task template {template_id} definitionJson.scheduling.schedulable must be true")
     if scheduling.get("showInProjectSetup") is not True:
@@ -1635,6 +1646,153 @@ def validate_project_type_field(project_type_id: str, field: Any) -> tuple[str, 
         if len(option_values) != len(set(option_values)):
             fail(f"Project type {project_type_id} enum field {field_key} has duplicate option values")
     return field_id, field_key
+
+
+def validate_project_type_extensions(project_type_id: str, initial_version: dict[str, Any]) -> None:
+    extensions = initial_version.get("extensions")
+    if extensions is None:
+        return
+    if not isinstance(extensions, dict):
+        fail(f"Project type {project_type_id} initialVersion.extensions must be an object")
+
+    relationships = extensions.get("projectRelationships", [])
+    if not isinstance(relationships, list):
+        fail(
+            f"Project type {project_type_id} "
+            "initialVersion.extensions.projectRelationships must be a list"
+        )
+    relationship_keys: list[str] = []
+    allowed_relationship_keys = {
+        "typeKey",
+        "label",
+        "inverseLabel",
+        "description",
+        "targetProjectTypeKeys",
+    }
+    for index, relationship in enumerate(relationships):
+        context = (
+            f"Project type {project_type_id} "
+            f"initialVersion.extensions.projectRelationships[{index}]"
+        )
+        if not isinstance(relationship, dict):
+            fail(f"{context} must be an object")
+        unknown_keys = sorted(set(relationship) - allowed_relationship_keys)
+        if unknown_keys:
+            fail(f"{context} contains unknown keys: {unknown_keys}")
+        for field_name in ["typeKey", "label", "inverseLabel"]:
+            if not isinstance(relationship.get(field_name), str) or not relationship[field_name]:
+                fail(f"{context}.{field_name} must be declared")
+        type_key = relationship["typeKey"]
+        if "." not in type_key:
+            fail(f"{context}.typeKey must be namespaced")
+        relationship_keys.append(type_key)
+        if "description" in relationship and (
+            not isinstance(relationship["description"], str)
+            or not relationship["description"]
+        ):
+            fail(f"{context}.description must be a non-empty string when declared")
+        targets = require_string_list(
+            relationship.get("targetProjectTypeKeys"),
+            f"{context}.targetProjectTypeKeys",
+        )
+        if not targets:
+            fail(f"{context}.targetProjectTypeKeys must not be empty")
+        if len(targets) != len(set(targets)):
+            fail(f"{context}.targetProjectTypeKeys has duplicates")
+    if len(relationship_keys) != len(set(relationship_keys)):
+        fail(
+            f"Project type {project_type_id} "
+            "initialVersion.extensions.projectRelationships has duplicate typeKey values"
+        )
+
+    sourcing_line_templates = extensions.get("sourcingLineTemplates")
+    if sourcing_line_templates is None:
+        return
+    if project_type_id != "vc_sourcing_line":
+        fail(
+            f"Project type {project_type_id} must not declare "
+            "initialVersion.extensions.sourcingLineTemplates"
+        )
+    if not isinstance(sourcing_line_templates, list) or not sourcing_line_templates:
+        fail(
+            "Project type vc_sourcing_line "
+            "initialVersion.extensions.sourcingLineTemplates must be a non-empty list"
+        )
+    allowed_template_keys = {
+        "key",
+        "label",
+        "summary",
+        "starterPrompt",
+        "defaultHypothesis",
+        "sourceCategories",
+        "defaultCadence",
+        "defaultOutreachMode",
+    }
+    template_keys: list[str] = []
+    for index, template in enumerate(sourcing_line_templates):
+        context = (
+            "Project type vc_sourcing_line "
+            f"initialVersion.extensions.sourcingLineTemplates[{index}]"
+        )
+        if not isinstance(template, dict):
+            fail(f"{context} must be an object")
+        unknown_keys = sorted(set(template) - allowed_template_keys)
+        if unknown_keys:
+            fail(f"{context} contains unknown keys: {unknown_keys}")
+        for field_name in ["key", "label", "summary", "starterPrompt"]:
+            if not isinstance(template.get(field_name), str) or not template[field_name]:
+                fail(f"{context}.{field_name} must be declared")
+        template_keys.append(template["key"])
+        for field_name in [
+            "defaultHypothesis",
+            "defaultCadence",
+            "defaultOutreachMode",
+        ]:
+            if field_name in template and (
+                not isinstance(template[field_name], str) or not template[field_name]
+            ):
+                fail(f"{context}.{field_name} must be a non-empty string when declared")
+        if "sourceCategories" in template:
+            source_categories = require_string_list(
+                template["sourceCategories"],
+                f"{context}.sourceCategories",
+            )
+            if not source_categories:
+                fail(f"{context}.sourceCategories must not be empty when declared")
+            if len(source_categories) != len(set(source_categories)):
+                fail(f"{context}.sourceCategories has duplicates")
+    if len(template_keys) != len(set(template_keys)):
+        fail(
+            "Project type vc_sourcing_line "
+            "initialVersion.extensions.sourcingLineTemplates has duplicate keys"
+        )
+    starter_template_field = next(
+        (
+            field
+            for field in initial_version.get("fieldsSchema", [])
+            if isinstance(field, dict) and field.get("key") == "starter_template_key"
+        ),
+        None,
+    )
+    if not isinstance(starter_template_field, dict):
+        fail("Project type vc_sourcing_line must declare starter_template_key")
+    starter_template_options = field_option_values(starter_template_field) - {"custom"}
+    if set(template_keys) != starter_template_options:
+        fail(
+            "Project type vc_sourcing_line sourcingLineTemplates keys must match "
+            "starter_template_key options excluding custom"
+        )
+    template_catalog_text = (
+        ROOT / "alludium" / "documents" / "origination" / "sourcing-line-template-catalog.md"
+    ).read_text(encoding="utf-8")
+    missing_documented_keys = sorted(
+        key for key in template_keys if f"`{key}`" not in template_catalog_text
+    )
+    if missing_documented_keys:
+        fail(
+            "Sourcing Line Template Catalog is missing starter template keys: "
+            f"{missing_documented_keys}"
+        )
 
 
 def validate_project_manager_overlay_text(
@@ -2466,16 +2624,44 @@ def validate_project_creation_contract(
             f"output {PROJECT_CREATION_COMPLETION_OUTPUT_KEY}.config.requiredPaths"
         ),
     )
+    creation_field_prefix = (
+        "createRequest.fieldValues."
+        if project_type_id in {"vc_sourcing_line", "vc_origination_candidate"}
+        else "fieldValues."
+    )
     missing_required_paths = sorted(
-        f"fieldValues.{field_key}"
+        f"{creation_field_prefix}{field_key}"
         for field_key in project_creation["requiredFieldKeys"]
-        if f"fieldValues.{field_key}" not in required_paths
+        if f"{creation_field_prefix}{field_key}" not in required_paths
     )
     if missing_required_paths:
         fail(
             f"Project type {project_type_id} projectCreation guided task {task_slug} "
             f"completion output is missing requiredPaths: {missing_required_paths}"
         )
+    if (
+        project_type_id in {"vc_sourcing_line", "vc_origination_candidate"}
+        and "createRequest.relationships" not in required_paths
+    ):
+        fail(
+            f"Project type {project_type_id} projectCreation guided task {task_slug} "
+            "completion output must require createRequest.relationships"
+        )
+    if project_type_id in {"vc_sourcing_line", "vc_origination_candidate"}:
+        relationship_required_paths = {
+            "createRequest.relationships[].direction",
+            "createRequest.relationships[].relatedProjectId",
+            "createRequest.relationships[].relationshipTypeKey",
+            "createRequest.relationships[].metadata",
+        }
+        missing_relationship_paths = sorted(
+            relationship_required_paths - set(required_paths)
+        )
+        if missing_relationship_paths:
+            fail(
+                f"Project type {project_type_id} projectCreation guided task {task_slug} "
+                f"relationship contract is missing requiredPaths: {missing_relationship_paths}"
+            )
 
     post_create = project_creation.get("postCreate")
     if not isinstance(post_create, dict):
@@ -2571,6 +2757,7 @@ def validate_project_type_file(path: Path, expected_id: str) -> str:
         fail(f"Project type {expected_id} has duplicate lifecycle transitions")
 
     validate_project_manager_overlay(expected_id, initial_version)
+    validate_project_type_extensions(expected_id, initial_version)
 
     if expected_id == "vc_deal_room":
         validate_vc_deal_room_command_view(expected_id, initial_version)
@@ -2647,6 +2834,21 @@ def validate_project_types(manifest: dict[str, Any]) -> set[str]:
             f"manifest_only={sorted(set(manifest_project_type_ids) - set(discovered_ids))}, "
             f"catalog_only={sorted(set(discovered_ids) - set(manifest_project_type_ids))}"
         )
+    discovered_id_set = set(discovered_ids)
+    for entry in catalog_entries:
+        project_type_id = entry["id"]
+        project_type = read_json(project_type_root / entry["path"])
+        extensions = (project_type.get("initialVersion") or {}).get("extensions") or {}
+        for relationship in extensions.get("projectRelationships", []):
+            unknown_targets = sorted(
+                set(relationship.get("targetProjectTypeKeys", [])) - discovered_id_set
+            )
+            if unknown_targets:
+                fail(
+                    f"Project type {project_type_id} relationship "
+                    f"{relationship.get('typeKey')} references unknown target project types: "
+                    f"{unknown_targets}"
+                )
 
     actual_json_paths = {
         path.resolve() for path in project_type_root.glob("**/*.json") if path.name != "catalog.v1.json"
@@ -3299,6 +3501,7 @@ def load_task_template_contracts() -> dict[str, dict[str, Any]]:
             ),
             "stage": definition_json.get("stage"),
             "scheduling": definition_json.get("scheduling"),
+            "projectInvocation": definition_json.get("projectInvocation", "direct"),
             "fields": {
                 "input": field_map(template_id, "input", fields.get("input")),
                 "context": field_map(template_id, "context", fields.get("context")),
@@ -3660,35 +3863,59 @@ def validate_project_task_mapping_contracts() -> None:
 
 
 ORIGINATION_STAGE_LIFECYCLE_STAGES = {
-    "setup": {"draft", "configured", "needs_credentials"},
-    "source": {"source", "identified", "source_degraded"},
+    "setup": {"draft", "configured", "needs_credentials", "paused", "ready"},
+    "source": {"source", "identified", "source_degraded", "active", "degraded"},
     "enrich": {"enriched"},
-    "score": {"initial_screen", "prioritized"},
-    "review": {"identified", "initial_screen", "prioritized", "outreach_prep", "engagement_screen"},
+    "score": {"initial_screen", "prioritized", "qualified"},
+    "review": {
+        "identified",
+        "initial_screen",
+        "prioritized",
+        "outreach_prep",
+        "engagement_screen",
+        "enriched",
+        "qualified",
+        "engaged",
+        "watchlist",
+        "active",
+        "degraded",
+    },
     "engage": {
         "outreach_prep",
         "contact_attempts",
         "engagement_screen",
+        "outreach_ready",
+        "contacted",
+        "engaged",
     },
-    "promote": {"promoted_to_deal_pipeline"},
-    "operate": {"source", "source_degraded", "paused", "migration_in_progress"},
+    "promote": {"promoted_to_deal_pipeline", "promotion_ready", "promoted"},
+    "operate": {
+        "source",
+        "source_degraded",
+        "paused",
+        "migration_in_progress",
+        "active",
+        "degraded",
+    },
 }
 
 
-def validate_origination_pipeline_task_mapping_contracts() -> None:
-    project_type_id = "vc_origination_pipeline"
+def validate_origination_project_task_mapping_contracts(project_type_id: str) -> None:
     project_type = read_json(ROOT / "alludium" / "project-types" / f"{project_type_id}.json")
     initial_version = project_type.get("initialVersion") or {}
-    project_field_keys = {
-        field["key"]
+    project_fields_by_key = {
+        field["key"]: field
         for field in initial_version.get("fieldsSchema", [])
         if isinstance(field, dict) and isinstance(field.get("key"), str)
     }
+    project_field_keys = set(project_fields_by_key)
     lifecycle_states = set(require_string_list(
         initial_version.get("lifecycleStates"),
         f"Project type {project_type_id} initialVersion.lifecycleStates",
     ))
     task_contracts = load_task_template_contracts()
+    guided_task = project_type.get("projectCreation", {}).get("guidedTask", {})
+    guided_task_slug = guided_task.get("taskDefinitionSlug")
     mappings = require_mapping_list(
         initial_version.get("projectTaskMappings"),
         f"Project type {project_type_id} initialVersion.projectTaskMappings",
@@ -3701,6 +3928,8 @@ def validate_origination_pipeline_task_mapping_contracts() -> None:
         for slug, contract in task_contracts.items()
         if project_type_id in contract.get("supportedProjectTypes", [])
         and DEFAULT_PROJECT_SCOPE in contract.get("supportedProjectScopes", [])
+        and contract.get("projectInvocation") != "child_only"
+        and slug != guided_task_slug
     }
     mapped_project_instance_slugs: set[str] = set()
     mapping_ids: list[str] = []
@@ -3725,6 +3954,16 @@ def validate_origination_pipeline_task_mapping_contracts() -> None:
         task_contract = task_contracts.get(slug)
         if task_contract is None:
             fail(f"Project type {project_type_id} mapping {mapping_id} references unknown task {slug}")
+        if slug == guided_task_slug:
+            fail(
+                f"Project type {project_type_id} mapping {mapping_id} must not remap guided "
+                f"creation task {slug} after project creation"
+            )
+        if task_contract.get("projectInvocation") == "child_only":
+            fail(
+                f"Project type {project_type_id} mapping {mapping_id} must not map child-only "
+                f"task {slug} as a direct project task"
+            )
         if task_contract["id"] != template_id:
             fail(
                 f"Project type {project_type_id} mapping {mapping_id} references template id "
@@ -3837,6 +4076,14 @@ def validate_origination_pipeline_task_mapping_contracts() -> None:
                     f"targetPath references unknown project field {target_path}"
                 )
             output_field = task_contract["fields"]["output"][task_field]
+            if target == "project.field":
+                validate_project_enum_output_mapping(
+                    project_type_id,
+                    mapping_id,
+                    task_field,
+                    output_field,
+                    project_fields_by_key[target_path],
+                )
             if output_field.get("fieldType") == "json":
                 fail(
                     f"Project type {project_type_id} mapping {mapping_id}.outputMappings.{task_field} "
@@ -3878,11 +4125,88 @@ def validate_origination_pipeline_task_mapping_contracts() -> None:
             f"{missing_project_instance_mappings}"
         )
 
+    initial_state = project_type.get("projectCreation", {}).get("defaultState")
+    initial_state_slugs = {
+        mapping.get("taskDefinitionSlug")
+        for mapping in mappings
+        if mapping.get("lifecycleStage") == initial_state
+    }
+    expected_initial_state_slugs = {
+        "vc_origination_pipeline": set(),
+        "vc_sourcing_line": {"configure-sourcing-line"},
+        "vc_origination_candidate": {"screen-identified-candidate"},
+    }[project_type_id]
+    if initial_state_slugs != expected_initial_state_slugs:
+        fail(
+            f"Project type {project_type_id} initial-state task mappings must be exactly "
+            f"{sorted(expected_initial_state_slugs)}, found {sorted(initial_state_slugs)}"
+        )
+
+    structured_proposal_contracts = {
+        "vc_sourcing_line": (
+            "run-vc-sourcing-pipeline",
+            "candidateCreationProposals",
+            "requiredItemPaths",
+            {
+                "fieldValues.company_name",
+                "fieldValues.candidate_key",
+                "fieldValues.sourcing_line_project_id",
+                "sourceRefs",
+                "relationships[].direction",
+                "relationships[].relatedProjectId",
+                "relationships[].relationshipTypeKey",
+                "relationships[].metadata",
+                "attention.reason",
+                "attention.rank",
+            },
+        ),
+        "vc_origination_candidate": (
+            "promote-candidate-to-deal-pipeline",
+            "dealCreationProposal",
+            "requiredPaths",
+            {
+                "createRequest.fieldValues",
+                "createRequest.relationships",
+                "createRequest.relationships[].direction",
+                "createRequest.relationships[].relatedProjectId",
+                "createRequest.relationships[].relationshipTypeKey",
+                "createRequest.relationships[].metadata",
+            },
+        ),
+    }
+    proposal_contract = structured_proposal_contracts.get(project_type_id)
+    if proposal_contract is not None:
+        proposal_task_slug, output_key, paths_key, expected_paths = proposal_contract
+        proposal_output = task_contracts[proposal_task_slug]["fields"]["output"].get(output_key)
+        if not isinstance(proposal_output, dict) or proposal_output.get("fieldType") != "json":
+            fail(
+                f"Task {proposal_task_slug} must declare structured JSON output {output_key}"
+            )
+        if proposal_output.get("required") is not True:
+            fail(f"Task {proposal_task_slug} output {output_key} must be required")
+        proposal_config = proposal_output.get("config")
+        if not isinstance(proposal_config, dict):
+            fail(f"Task {proposal_task_slug} output {output_key} must declare config")
+        actual_paths = set(require_string_list(
+            proposal_config.get(paths_key),
+            f"Task {proposal_task_slug} output {output_key}.config.{paths_key}",
+        ))
+        missing_paths = sorted(expected_paths - actual_paths)
+        if missing_paths:
+            fail(
+                f"Task {proposal_task_slug} output {output_key} is missing structured "
+                f"proposal paths: {missing_paths}"
+            )
+
     for slug in expected_project_instance_slugs:
         for field_key, field in task_contracts[slug]["fields"]["output"].items():
             if (
                 field.get("fieldType") == "json"
-                and field_key != PROJECT_CREATION_COMPLETION_OUTPUT_KEY
+                and field_key not in {
+                    PROJECT_CREATION_COMPLETION_OUTPUT_KEY,
+                    "candidateCreationProposals",
+                    "dealCreationProposal",
+                }
             ):
                 fail(
                     f"Project type {project_type_id} task {slug} output {field_key} "
@@ -4028,7 +4352,12 @@ def main() -> None:
         document_types_by_id,
     )
     validate_project_task_mapping_contracts()
-    validate_origination_pipeline_task_mapping_contracts()
+    for origination_project_type_id in [
+        "vc_origination_pipeline",
+        "vc_sourcing_line",
+        "vc_origination_candidate",
+    ]:
+        validate_origination_project_task_mapping_contracts(origination_project_type_id)
     recommendations_path = manifest["surfaces"]["alludiumMcpRecommendations"]["path"]
     if not (ROOT / recommendations_path).exists():
         fail(f"Missing Alludium MCP recommendations file: {recommendations_path}")

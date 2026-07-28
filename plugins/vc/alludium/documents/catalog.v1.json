@@ -10,7 +10,8 @@
       "path": "shared/investment-screening-framework.html",
       "supportedProjectTypes": [
         "vc_deal_room",
-        "vc_origination_pipeline"
+        "vc_origination_pipeline",
+        "vc_origination_candidate"
       ],
       "relatedTaskDefinitionSlugs": [
         "run-investment-fit-screen",
@@ -144,6 +145,8 @@
       "supportedProjectTypes": [
         "vc_deal_room",
         "vc_origination_pipeline",
+        "vc_sourcing_line",
+        "vc_origination_candidate",
         "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
@@ -176,6 +179,8 @@
       "supportedProjectTypes": [
         "vc_deal_room",
         "vc_origination_pipeline",
+        "vc_sourcing_line",
+        "vc_origination_candidate",
         "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
@@ -274,7 +279,7 @@
       "documentType": "template",
       "path": "deal-room/thesis-target-list-template.md",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_sourcing_line"
       ],
       "relatedTaskDefinitionSlugs": [
         "source-thesis-targets"
@@ -680,7 +685,9 @@
       "documentType": "sop",
       "path": "origination/origination-pipeline-sop.md",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_origination_pipeline",
+        "vc_sourcing_line",
+        "vc_origination_candidate"
       ],
       "relatedTaskDefinitionSlugs": [
         "configure-origination-pipeline",
@@ -697,7 +704,9 @@
       "path": "origination/origination-source-strategy-guide.md",
       "supportedProjectTypes": [
         "vc_deal_room",
-        "vc_origination_pipeline"
+        "vc_origination_pipeline",
+        "vc_sourcing_line",
+        "vc_origination_candidate"
       ],
       "relatedTaskDefinitionSlugs": [
         "configure-origination-pipeline",
@@ -718,11 +727,27 @@
       "documentType": "template",
       "path": "origination/source-registry-template.md",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_origination_pipeline",
+        "vc_sourcing_line"
       ],
       "relatedTaskDefinitionSlugs": [
         "configure-origination-pipeline",
         "run-vc-sourcing-pipeline"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.sourcing_line_template_catalog",
+      "title": "Sourcing Line Template Catalog",
+      "description": "Starter configurations for repeatable sourcing experiments defined by source mix, screen, cadence, review policy, outreach boundary, and learning question.",
+      "documentType": "methodology",
+      "path": "origination/sourcing-line-template-catalog.md",
+      "supportedProjectTypes": [
+        "vc_origination_pipeline",
+        "vc_sourcing_line"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "configure-sourcing-line"
       ],
       "status": "source"
     },
@@ -733,7 +758,8 @@
       "documentType": "template",
       "path": "origination/candidate-batch-template.md",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_sourcing_line",
+        "vc_origination_candidate"
       ],
       "relatedTaskDefinitionSlugs": [
         "enrich-sourcing-candidate",
@@ -749,7 +775,7 @@
       "documentType": "methodology",
       "path": "origination/sourcing-scoring-rubric.md",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_origination_candidate"
       ],
       "relatedTaskDefinitionSlugs": [
         "score-sourcing-candidate",
@@ -764,7 +790,8 @@
       "documentType": "checklist",
       "path": "origination/source-health-review-checklist.md",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_origination_pipeline",
+        "vc_sourcing_line"
       ],
       "relatedTaskDefinitionSlugs": [
         "review-source-errors-and-spend"
@@ -778,7 +805,8 @@
       "documentType": "checklist",
       "path": "origination/paid-source-spend-audit-checklist.md",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_origination_pipeline",
+        "vc_sourcing_line"
       ],
       "relatedTaskDefinitionSlugs": [
         "audit-linkedin-query-spend",
@@ -807,7 +835,7 @@
       "documentType": "template",
       "path": "origination/outreach-queue-template.md",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_origination_candidate"
       ],
       "relatedTaskDefinitionSlugs": [
         "prepare-outreach-draft-queue"
@@ -821,7 +849,7 @@
       "documentType": "template",
       "path": "origination/promotion-package-template.md",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_origination_candidate"
       ],
       "relatedTaskDefinitionSlugs": [
         "prepare-prospect-summary",
@@ -836,7 +864,7 @@
       "documentType": "template",
       "path": "origination/sourcing-ic-summary-template.md",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_origination_candidate"
       ],
       "relatedTaskDefinitionSlugs": [
         "prepare-prospect-summary"
@@ -850,7 +878,7 @@
       "documentType": "policy",
       "path": "origination/dedupe-novelty-policy.md",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_origination_candidate"
       ],
       "relatedTaskDefinitionSlugs": [
         "screen-active-sourcing-candidate"

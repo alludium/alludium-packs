@@ -4,6 +4,7 @@ title: Source Health Review Checklist
 documentType: checklist
 supportedProjectTypes:
   - vc_origination_pipeline
+  - vc_sourcing_line
 summary: Checklist for reviewing source quality and operational health.
 ---
 

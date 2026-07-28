@@ -3,7 +3,8 @@ id: vc.document.candidate_batch_template
 title: Candidate Batch Template
 documentType: template
 supportedProjectTypes:
-  - vc_origination_pipeline
+  - vc_sourcing_line
+  - vc_origination_candidate
 summary: Reusable batch review template for sourced candidates.
 ---
 
@@ -13,9 +14,10 @@ summary: Reusable batch review template for sourced candidates.
 
 | Field | Content |
 | --- | --- |
-| Pipeline | Name and thesis |
+| Origination Pipeline | Parent project ID and name |
+| Sourcing Line | Project ID, name, hypothesis, and screen version |
 | Batch period | Date range |
-| Sources | Source keys used |
+| Sources | Registered source keys and run receipt IDs |
 | Prepared by | Owner and date |
 | Review objective | Score, enrich, promote, reject, or watch |
 

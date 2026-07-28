@@ -5,6 +5,8 @@ documentType: methodology
 supportedProjectTypes:
   - vc_deal_room
   - vc_origination_pipeline
+  - vc_sourcing_line
+  - vc_origination_candidate
 summary: Source strategy, provenance, and promotion-quality guidance for venture origination pipelines.
 ---
 
@@ -13,6 +15,8 @@ summary: Source strategy, provenance, and promotion-quality guidance for venture
 ## Purpose
 
 Use this guide to operate origination as a standing sourcing system rather than a one-off company search. The goal is to preserve where a candidate came from, why it matters, what evidence exists, what is missing, and whether the candidate is ready for a downstream Deal Pipeline.
+
+A provider is not a sourcing line. Register reusable provider connections once on the Origination Pipeline. Define each repeatable learning loop as a Sourcing Line: source mix, query or screen, cadence, review policy, outreach boundary, and success metric. The same provider may support multiple lines, and one line may combine multiple providers.
 
 ## Source Taxonomy
 
@@ -33,6 +37,7 @@ Every sourced candidate should carry:
 
 | Field | Meaning |
 | --- | --- |
+| Sourcing Line | Project ID, hypothesis, screen version, and run receipt that produced the signal. |
 | Source family | The source taxonomy category. |
 | Source detail | Specific query, event, list, person, source run, or thread. |
 | Owner | Person or task responsible for follow-up. |
@@ -70,6 +75,7 @@ Do not promote a candidate using only a name and URL. A promotion package should
 The Deal Pipeline should inherit the origination trail. Promotion should preserve:
 
 - source provenance
+- every native Sourcing Line relationship and relevant run receipt
 - thesis and category context
 - first-look score or verdict
 - source artifacts
@@ -79,4 +85,4 @@ The Deal Pipeline should inherit the origination trail. Promotion should preserv
 
 ## Standard
 
-Origination outputs should make it clear why the candidate surfaced and what decision the human is being asked to make. Do not create Deal Pipelines, mutate CRM records, contact founders, or enable recurring schedules without explicit human approval.
+Origination outputs should make it clear why the candidate surfaced, which line and experiment produced it, and what decision the human is being asked to make. Do not create candidates or Deal Pipelines, mutate CRM records, contact founders, spend on paid sources, or enable recurring schedules without explicit human approval.

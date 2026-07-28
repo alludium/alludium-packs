@@ -3,7 +3,7 @@ id: vc.document.dedupe_novelty_policy
 title: Dedupe And Novelty Policy
 documentType: policy
 supportedProjectTypes:
-  - vc_origination_pipeline
+  - vc_origination_candidate
 summary: Policy for candidate dedupe, novelty, and promotion eligibility.
 ---
 

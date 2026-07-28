@@ -21,12 +21,12 @@ Prepare a reviewed promotion package for creating or updating a Deal Pipeline fr
 
 ## What To Do
 
-Promote only human-approved candidates. Prepare a Deal Pipeline creation/update package with company identity, founder evidence, source receipts, enrichment/verdict/screen summaries, relationship context, outreach state, and open questions. Do not create or update the Deal Pipeline unless the platform action is explicitly approved.
+Promote only human-approved candidates. Prepare a Deal Pipeline creation/update package with company identity, founder evidence, source receipts, enrichment/verdict/screen summaries, relationship context, outreach state, and open questions. Do not create or update the Deal Pipeline unless the platform action is explicitly approved. When creation is approved, the platform finalizer should use atomic project creation with `relationships: [{ direction: "incoming", relatedProjectId: origination_candidate_project_id, relationshipTypeKey: "vc.origination_candidate_promoted_to_deal", metadata: { promotionPackageArtifactId } }]`. Use `project-relationship.create` only when both the candidate and Deal Pipeline already exist. Compatibility project-ID fields may be written during rollout but do not replace the native relationship. Emit `dealCreationProposal.createRequest` with Deal Pipeline field values and `relationships: [{ direction: "incoming", relatedProjectId: origination_candidate_project_id, relationshipTypeKey: "vc.origination_candidate_promoted_to_deal", metadata: { promotionPackageArtifactId } }]`. This task does not claim to finalize creation or return a Deal Pipeline project ID; those mappings can be added only when the platform finalizer exposes a confirmed result contract.
 
 ## Available Context
 
 - Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
-- Especially look for: Promotion Candidate.
+- Especially look for: Origination Candidate Project ID, Promotion Candidate.
 - If a named input is absent, follow the missing-input policy rather than inventing facts.
 
 ## Reference Materials
@@ -38,6 +38,7 @@ Promote only human-approved candidates. Prepare a Deal Pipeline creation/update 
 ## Deliverable
 
 - Create or update **Promotion Package Artifact** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Also include a short human-readable summary covering: Deal Creation Proposal. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
@@ -51,3 +52,4 @@ Promotion package by default. Deal Pipeline creation/update, CRM changes, docume
 
 - Promotion package includes source receipts, candidate evidence, recommended initial Deal Pipeline state, required tasks, owner, and unresolved risks.
 - Human approval boundary for project creation/update is explicit.
+- Deal creation proposal contains the incoming candidate relationship and is not represented as a completed project creation.

@@ -1,0 +1,483 @@
+{
+  "kind": "project-type",
+  "apiVersion": "alludium/v1alpha1",
+  "key": "vc_origination_candidate",
+  "name": "Origination Candidate",
+  "description": "A first-class pre-deal company record that consolidates multi-line provenance, evidence, screening, relationship context, outreach state, and reviewed Deal Pipeline promotion.",
+  "projectSetup": {
+    "setupLabel": "Origination Candidate Registration",
+    "starterId": "register-origination-candidate",
+    "starterLabel": "Register Candidate",
+    "starterResumeLabel": "Continue Candidate Registration",
+    "starterDescription": "Normalize one reviewed sourcing result into a durable candidate.",
+    "recommendedSetupAgent": "vc_sourcing_operator",
+    "requiredEvidence": [
+      "candidate_registration"
+    ],
+    "setupSteps": [
+      {
+        "key": "candidate_registration",
+        "label": "Review candidate identity and provenance",
+        "purpose": "Confirm company identity, dedupe key, originating line, source evidence, prior decisions, and do-not-contact status.",
+        "stepType": "variables",
+        "evidenceKey": "candidate_registration",
+        "required": true,
+        "taskDefinitionTemplateId": "vc.register_origination_candidate",
+        "taskDefinitionSlug": "register-origination-candidate"
+      }
+    ],
+    "postApprovalActions": {
+      "applyVariables": {
+        "enabled": false,
+        "reason": "Candidate registration writes reviewed project fields through deterministic project creation, not workspace variables."
+      },
+      "importProjects": {
+        "enabled": false,
+        "reason": "Candidate batch fan-out requires the platform project-relationship API and reviewed import contract."
+      },
+      "inviteCollaborators": {
+        "enabled": false,
+        "reason": "Candidate registration does not send invitations."
+      },
+      "enableSchedules": {
+        "enabled": false,
+        "reason": "Candidate work is event-driven and individually reviewed; recurring source schedules belong to sourcing lines."
+      }
+    },
+    "scheduleGroups": [],
+    "defaultChildTask": {
+      "label": "Register candidate",
+      "taskDefinitionSlug": "register-origination-candidate",
+      "setupGoal": "Confirm one candidate identity, provenance, dedupe result, and relationship context before creating the project."
+    },
+    "variableDiscoveryTask": {
+      "label": "VC Variable Discovery",
+      "taskDefinitionTemplateId": "vc.vc_pack_variable_discovery",
+      "taskDefinitionSlug": "vc-pack-variable-discovery"
+    },
+    "sourceSetupTasks": []
+  },
+  "projectCreation": {
+    "launcherLabel": "Register Origination Candidate",
+    "starterId": "create-origination-candidate-project",
+    "aliases": [
+      "origination candidate",
+      "sourced company",
+      "prospect"
+    ],
+    "requiredFieldKeys": [
+      "company_name",
+      "candidate_key",
+      "sourcing_line_project_id",
+      "relationship_to_line_key",
+      "source_evidence_summary"
+    ],
+    "recommendedFieldKeys": [
+      "company_domain",
+      "origination_pipeline_project_id",
+      "discovered_at"
+    ],
+    "advancedFieldKeys": [
+      "additional_sourcing_line_project_ids",
+      "source_record_keys",
+      "do_not_contact_status"
+    ],
+    "defaultState": "identified",
+    "guidedTask": {
+      "taskDefinitionTemplateId": "vc.register_origination_candidate",
+      "taskDefinitionSlug": "register-origination-candidate"
+    },
+    "postCreate": {
+      "triggerInitialStateTasks": true
+    }
+  },
+  "initialVersion": {
+    "version": "0.1.0",
+    "documentLibrary": {
+      "catalogPath": "alludium/documents/catalog.v1.json",
+      "documentIds": [
+        "vc.document.investment_screening_framework",
+        "vc.document.evidence_citation_style_guide",
+        "vc.document.origination_pipeline_sop",
+        "vc.document.origination_source_strategy_guide",
+        "vc.document.candidate_batch_template",
+        "vc.document.sourcing_scoring_rubric",
+        "vc.document.dedupe_novelty_policy",
+        "vc.document.outreach_queue_template",
+        "vc.document.promotion_package_template",
+        "vc.document.sourcing_ic_summary_template",
+        "vc.document.template_use_guidance"
+      ]
+    },
+    "fieldsSchema": [
+      {"id": "field-company-name", "key": "company_name", "label": "Company Name", "kind": "text", "required": true},
+      {"id": "field-company-domain", "key": "company_domain", "label": "Company Domain", "kind": "text", "required": false},
+      {"id": "field-candidate-key", "key": "candidate_key", "label": "Candidate Dedupe Key", "kind": "text", "required": true},
+      {"id": "field-line-project-id", "key": "sourcing_line_project_id", "label": "Originating Sourcing Line Project ID", "kind": "text", "required": true},
+      {"id": "field-additional-line-ids", "key": "additional_sourcing_line_project_ids", "label": "Additional Sourcing Line Project IDs", "kind": "text", "required": false},
+      {"id": "field-pipeline-project-id", "key": "origination_pipeline_project_id", "label": "Origination Pipeline Project ID", "kind": "text", "required": false},
+      {"id": "field-line-relationship-key", "key": "relationship_to_line_key", "label": "Sourcing Line Relationship Key", "kind": "text", "required": true, "placeholder": "vc.sourcing_line_originated_candidate"},
+      {"id": "field-source-evidence", "key": "source_evidence_summary", "label": "Source Evidence Summary", "kind": "text", "required": true},
+      {"id": "field-source-record-keys", "key": "source_record_keys", "label": "Source Record Keys", "kind": "text", "required": false},
+      {"id": "field-discovered-at", "key": "discovered_at", "label": "Discovered At", "kind": "date", "required": false},
+      {"id": "field-thesis-fit", "key": "thesis_fit_summary", "label": "Thesis Fit Summary", "kind": "text", "required": false},
+      {"id": "field-candidate-score", "key": "candidate_score", "label": "Candidate Score", "kind": "number", "required": false},
+      {
+        "id": "field-review-verdict",
+        "key": "review_verdict",
+        "label": "Review Verdict",
+        "kind": "enum",
+        "required": false,
+        "options": [
+          {"value": "meet", "label": "Meet"},
+          {"value": "watch", "label": "Watch"},
+          {"value": "pass", "label": "Pass"},
+          {"value": "needs_review", "label": "Needs Review"}
+        ]
+      },
+      {
+        "id": "field-do-not-contact",
+        "key": "do_not_contact_status",
+        "label": "Do Not Contact Status",
+        "kind": "enum",
+        "required": false,
+        "options": [
+          {"value": "clear", "label": "Clear"},
+          {"value": "blocked", "label": "Blocked"},
+          {"value": "needs_review", "label": "Needs Review"},
+          {"value": "unknown", "label": "Unknown"}
+        ]
+      },
+      {
+        "id": "field-outbound-status",
+        "key": "outbound_status",
+        "label": "Outbound Status",
+        "kind": "enum",
+        "required": false,
+        "options": [
+          {"value": "not_started", "label": "Not Started"},
+          {"value": "drafted", "label": "Drafted"},
+          {"value": "approved", "label": "Approved"},
+          {"value": "contacted", "label": "Contacted"},
+          {"value": "engaged", "label": "Engaged"},
+          {"value": "no_response", "label": "No Response"},
+          {"value": "opted_out", "label": "Opted Out"}
+        ]
+      },
+      {"id": "field-latest-enrichment", "key": "latest_enrichment_artifact_id", "label": "Latest Enrichment", "kind": "text", "required": false},
+      {"id": "field-latest-scoring", "key": "latest_scoring_artifact_id", "label": "Latest Scoring", "kind": "text", "required": false},
+      {"id": "field-relationship-context", "key": "relationship_context_artifact_id", "label": "Relationship Context", "kind": "text", "required": false},
+      {"id": "field-identified-screen", "key": "identified_screen_artifact_id", "label": "Identified Candidate Screen", "kind": "text", "required": false},
+      {"id": "field-sync-plan", "key": "sync_plan_artifact_id", "label": "Sync Plan", "kind": "text", "required": false},
+      {"id": "field-portfolio-overlap", "key": "portfolio_overlap_artifact_id", "label": "Portfolio Overlap Review", "kind": "text", "required": false},
+      {"id": "field-deal-fit", "key": "deal_fit_artifact_id", "label": "Deal Fit Analysis", "kind": "text", "required": false},
+      {"id": "field-active-screen", "key": "active_screen_artifact_id", "label": "Active Candidate Screen", "kind": "text", "required": false},
+      {"id": "field-unicorn-signature", "key": "unicorn_signature_artifact_id", "label": "Unicorn Signature Review", "kind": "text", "required": false},
+      {"id": "field-latest-prospect-summary", "key": "latest_prospect_summary_artifact_id", "label": "Latest Prospect Summary", "kind": "text", "required": false},
+      {"id": "field-outreach-queue", "key": "outreach_queue_artifact_id", "label": "Outreach Draft Queue", "kind": "text", "required": false},
+      {"id": "field-connection-record", "key": "connection_record_artifact_id", "label": "Connection Attempt Record", "kind": "text", "required": false},
+      {"id": "field-initial-reachout", "key": "initial_reachout_artifact_id", "label": "Initial Reachout Draft", "kind": "text", "required": false},
+      {"id": "field-founder-connected-screen", "key": "founder_connected_screen_artifact_id", "label": "Founder Connected Screen", "kind": "text", "required": false},
+      {"id": "field-second-reachout", "key": "second_reachout_artifact_id", "label": "Second Reachout Draft", "kind": "text", "required": false},
+      {"id": "field-outreach-outcome", "key": "outreach_outcome_artifact_id", "label": "Outreach Outcome Review", "kind": "text", "required": false},
+      {"id": "field-latest-promotion", "key": "latest_promotion_package_artifact_id", "label": "Latest Promotion Package", "kind": "text", "required": false},
+      {"id": "field-promoted-deal-id", "key": "promoted_deal_project_id", "label": "Promoted Deal Pipeline Project ID", "kind": "text", "required": false},
+      {"id": "field-deal-relationship-key", "key": "relationship_to_deal_key", "label": "Deal Relationship Key", "kind": "text", "required": false, "placeholder": "vc.origination_candidate_promoted_to_deal"},
+      {"id": "field-owner", "key": "owner", "label": "Owner", "kind": "member", "required": false},
+      {"id": "field-confidentiality", "key": "confidentiality_level", "label": "Confidentiality", "kind": "enum", "required": false, "options": [{"value": "standard", "label": "Standard"}, {"value": "restricted", "label": "Restricted"}]}
+    ],
+    "instructionTemplate": "Maintain one pre-deal candidate as the durable source of truth for identity, provenance, evidence, review decisions, relationship context, outreach state, and promotion. Preserve every originating line and source receipt. Never send outreach, overwrite human decisions, or create a Deal Pipeline without explicit reviewed approval.",
+    "lifecycleStates": [
+      "identified",
+      "enriched",
+      "qualified",
+      "outreach_ready",
+      "contacted",
+      "engaged",
+      "watchlist",
+      "passed",
+      "promotion_ready",
+      "promoted",
+      "archived"
+    ],
+    "lifecycleTransitions": [
+      {"from": "identified", "to": "enriched"},
+      {"from": "identified", "to": "watchlist"},
+      {"from": "identified", "to": "passed"},
+      {"from": "enriched", "to": "qualified"},
+      {"from": "enriched", "to": "watchlist"},
+      {"from": "enriched", "to": "passed"},
+      {"from": "qualified", "to": "outreach_ready"},
+      {"from": "qualified", "to": "promotion_ready"},
+      {"from": "qualified", "to": "watchlist"},
+      {"from": "outreach_ready", "to": "contacted"},
+      {"from": "contacted", "to": "engaged"},
+      {"from": "contacted", "to": "watchlist"},
+      {"from": "engaged", "to": "promotion_ready"},
+      {"from": "engaged", "to": "passed"},
+      {"from": "promotion_ready", "to": "promoted"},
+      {"from": "watchlist", "to": "enriched"},
+      {"from": "passed", "to": "archived"},
+      {"from": "promoted", "to": "archived"}
+    ],
+    "extensions": {
+      "projectRelationships": [
+        {
+          "typeKey": "vc.origination_candidate_promoted_to_deal",
+          "label": "Promoted to Deal Pipeline",
+          "inverseLabel": "Promoted from Origination Candidate",
+          "description": "Links the pre-deal candidate and its provenance to the reviewed Deal Pipeline project created from it.",
+          "targetProjectTypeKeys": [
+            "vc_deal_room"
+          ]
+        }
+      ]
+    },
+    "projectManager": {
+      "displayName": "Origination Candidate Agent",
+      "labels": {
+        "shortName": "Candidate Agent",
+        "chatTitleSuffix": "Origination Candidate",
+        "roleNoun": "candidate agent",
+        "projectNoun": "origination candidate",
+        "collectionNoun": "origination candidates",
+        "taskShortcutLabel": "New candidate task"
+      },
+      "identity": {
+        "roleDescription": "Maintains complete pre-deal context for one sourced company and coordinates its reviewed progression.",
+        "tone": "Evidence-led, concise, skeptical of weak identity matches, and careful with relationship context.",
+        "responsibilities": [
+          "Consolidate multi-line provenance without duplicating the company.",
+          "Maintain enrichment, screening, relationship, outreach, and promotion context.",
+          "Surface the next human decision with evidence and unresolved risks."
+        ],
+        "boundaries": [
+          "Do not send outreach or write external systems without approval.",
+          "Do not erase prior decisions, do-not-contact status, or source provenance.",
+          "Do not create a Deal Pipeline without an approved promotion action."
+        ]
+      },
+      "greeting": {
+        "message": "I retain this candidate's source history, evidence, decisions, relationship context, and next review step.",
+        "instructions": "Answer from candidate-specific evidence and name the sourcing line behind each signal.",
+        "starterPrompts": [
+          "Why did this candidate surface?",
+          "What evidence is missing before a meeting decision?",
+          "Show all sourcing lines and source receipts.",
+          "Prepare the next reviewed action."
+        ]
+      }
+    },
+    "projectTaskMappings": [
+      {
+        "id": "mapping-enrich-candidate",
+        "taskDefinitionSlug": "enrich-sourcing-candidate",
+        "taskDefinitionTemplateId": "vc.enrich_sourcing_candidate",
+        "lifecycleStage": "enriched",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
+        "inputMappings": [
+          {"taskField": "candidate_batch", "source": "project.id", "requiredForActivation": true}
+        ],
+        "outputMappings": [
+          {"taskField": "enrichment_artifact_id", "target": "project.field", "targetPath": "latest_enrichment_artifact_id"}
+        ]
+      },
+      {
+        "id": "mapping-score-candidate",
+        "taskDefinitionSlug": "score-sourcing-candidate",
+        "taskDefinitionTemplateId": "vc.score_sourcing_candidate",
+        "lifecycleStage": "qualified",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
+        "inputMappings": [
+          {"taskField": "enriched_candidate_batch", "source": "project.field", "sourcePath": "latest_enrichment_artifact_id", "requiredForActivation": true}
+        ],
+        "outputMappings": [
+          {"taskField": "scoring_artifact_id", "target": "project.field", "targetPath": "latest_scoring_artifact_id"},
+          {"taskField": "candidate_score", "target": "project.field", "targetPath": "candidate_score"},
+          {"taskField": "review_verdict", "target": "project.field", "targetPath": "review_verdict"},
+          {"taskField": "thesis_fit_summary", "target": "project.field", "targetPath": "thesis_fit_summary"}
+        ]
+      },
+      {
+        "id": "mapping-prepare-outreach",
+        "taskDefinitionSlug": "prepare-outreach-draft-queue",
+        "taskDefinitionTemplateId": "vc.prepare_outreach_draft_queue",
+        "lifecycleStage": "outreach_ready",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
+        "inputMappings": [
+          {"taskField": "outreach_scope", "source": "project.id", "requiredForActivation": true}
+        ],
+        "outputMappings": [
+          {"taskField": "outreach_queue_artifact_id", "target": "project.field", "targetPath": "outreach_queue_artifact_id"}
+        ]
+      },
+      {
+        "id": "mapping-promote-candidate",
+        "taskDefinitionSlug": "promote-candidate-to-deal-pipeline",
+        "taskDefinitionTemplateId": "vc.promote_candidate_to_deal_pipeline",
+        "lifecycleStage": "promotion_ready",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
+        "inputMappings": [
+          {"taskField": "origination_candidate_project_id", "source": "project.id", "requiredForActivation": true},
+          {"taskField": "promotion_candidate", "source": "project.id", "requiredForActivation": true}
+        ],
+        "outputMappings": [
+          {"taskField": "promotion_package_artifact_id", "target": "project.field", "targetPath": "latest_promotion_package_artifact_id"}
+        ]
+      },
+      {
+        "id": "mapping-check-relationship-context",
+        "taskDefinitionSlug": "check-affinity-relationship-context",
+        "taskDefinitionTemplateId": "vc.check_affinity_relationship_context",
+        "lifecycleStage": "enriched",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
+        "inputMappings": [{"taskField": "relationship_check_scope", "source": "project.id", "requiredForActivation": true}],
+        "outputMappings": [{"taskField": "relationship_context_artifact_id", "target": "project.field", "targetPath": "relationship_context_artifact_id"}]
+      },
+      {
+        "id": "mapping-screen-identified",
+        "taskDefinitionSlug": "screen-identified-candidate",
+        "taskDefinitionTemplateId": "vc.screen_identified_candidate",
+        "lifecycleStage": "identified",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
+        "inputMappings": [
+          {"taskField": "identified_candidate_batch", "source": "project.id", "requiredForActivation": true},
+          {"taskField": "first_pass_screen_policy", "source": "project.field", "sourcePath": "thesis_fit_summary", "requiredForActivation": false}
+        ],
+        "outputMappings": [
+          {"taskField": "identified_screen_artifact_id", "target": "project.field", "targetPath": "identified_screen_artifact_id"},
+          {"taskField": "candidate_score", "target": "project.field", "targetPath": "candidate_score"},
+          {"taskField": "review_verdict", "target": "project.field", "targetPath": "review_verdict"},
+          {"taskField": "thesis_fit_summary", "target": "project.field", "targetPath": "thesis_fit_summary"}
+        ]
+      },
+      {
+        "id": "mapping-sync-candidate",
+        "taskDefinitionSlug": "sync-sourcing-candidate",
+        "taskDefinitionTemplateId": "vc.sync_sourcing_candidate",
+        "lifecycleStage": "qualified",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
+        "inputMappings": [{"taskField": "sync_scope", "source": "project.id", "requiredForActivation": true}],
+        "outputMappings": [{"taskField": "sync_plan_artifact_id", "target": "project.field", "targetPath": "sync_plan_artifact_id"}]
+      },
+      {
+        "id": "mapping-review-portfolio-overlap",
+        "taskDefinitionSlug": "review-portfolio-overlap",
+        "taskDefinitionTemplateId": "vc.review_portfolio_overlap",
+        "lifecycleStage": "qualified",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
+        "inputMappings": [{"taskField": "portfolio_overlap_scope", "source": "project.id", "requiredForActivation": true}],
+        "outputMappings": [{"taskField": "portfolio_overlap_artifact_id", "target": "project.field", "targetPath": "portfolio_overlap_artifact_id"}]
+      },
+      {
+        "id": "mapping-run-deal-fit",
+        "taskDefinitionSlug": "run-deal-fit-analysis",
+        "taskDefinitionTemplateId": "vc.run_deal_fit_analysis",
+        "lifecycleStage": "qualified",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
+        "inputMappings": [{"taskField": "deal_fit_scope", "source": "project.id", "requiredForActivation": true}],
+        "outputMappings": [{"taskField": "deal_fit_artifact_id", "target": "project.field", "targetPath": "deal_fit_artifact_id"}]
+      },
+      {
+        "id": "mapping-screen-active-candidate",
+        "taskDefinitionSlug": "screen-active-sourcing-candidate",
+        "taskDefinitionTemplateId": "vc.screen_active_sourcing_candidate",
+        "lifecycleStage": "qualified",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
+        "inputMappings": [{"taskField": "screening_scope", "source": "project.id", "requiredForActivation": true}],
+        "outputMappings": [
+          {"taskField": "screening_artifact_id", "target": "project.field", "targetPath": "active_screen_artifact_id"},
+          {"taskField": "candidate_score", "target": "project.field", "targetPath": "candidate_score"},
+          {"taskField": "review_verdict", "target": "project.field", "targetPath": "review_verdict"},
+          {"taskField": "thesis_fit_summary", "target": "project.field", "targetPath": "thesis_fit_summary"}
+        ]
+      },
+      {
+        "id": "mapping-review-unicorn-signature",
+        "taskDefinitionSlug": "review-unicorn-signature",
+        "taskDefinitionTemplateId": "vc.review_unicorn_signature",
+        "lifecycleStage": "qualified",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
+        "inputMappings": [{"taskField": "unicorn_signature_scope", "source": "project.id", "requiredForActivation": true}],
+        "outputMappings": [{"taskField": "unicorn_signature_artifact_id", "target": "project.field", "targetPath": "unicorn_signature_artifact_id"}]
+      },
+      {
+        "id": "mapping-prepare-prospect-summary",
+        "taskDefinitionSlug": "prepare-prospect-summary",
+        "taskDefinitionTemplateId": "vc.prepare_prospect_summary",
+        "lifecycleStage": "qualified",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
+        "inputMappings": [{"taskField": "prospect_summary_candidate", "source": "project.id", "requiredForActivation": true}],
+        "outputMappings": [{"taskField": "prospect_summary_artifact_id", "target": "project.field", "targetPath": "latest_prospect_summary_artifact_id"}]
+      },
+      {
+        "id": "mapping-record-connection-attempt",
+        "taskDefinitionSlug": "record-linkedin-connection-attempt",
+        "taskDefinitionTemplateId": "vc.record_linkedin_connection_attempt",
+        "lifecycleStage": "contacted",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
+        "inputMappings": [{"taskField": "connection_attempt", "source": "project.id", "requiredForActivation": true}],
+        "outputMappings": [
+          {"taskField": "connection_record_artifact_id", "target": "project.field", "targetPath": "connection_record_artifact_id"},
+          {"taskField": "outbound_status", "target": "project.field", "targetPath": "outbound_status"}
+        ]
+      },
+      {
+        "id": "mapping-prepare-initial-linkedin-reachout",
+        "taskDefinitionSlug": "prepare-initial-linkedin-reachout",
+        "taskDefinitionTemplateId": "vc.prepare_initial_linkedin_reachout",
+        "lifecycleStage": "outreach_ready",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
+        "inputMappings": [{"taskField": "initial_reachout_scope", "source": "project.id", "requiredForActivation": true}],
+        "outputMappings": [{"taskField": "initial_linkedin_reachout_artifact_id", "target": "project.field", "targetPath": "initial_reachout_artifact_id"}]
+      },
+      {
+        "id": "mapping-screen-founder-connected",
+        "taskDefinitionSlug": "screen-founder-connected-candidate",
+        "taskDefinitionTemplateId": "vc.screen_founder_connected_candidate",
+        "lifecycleStage": "engaged",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
+        "inputMappings": [
+          {"taskField": "founder_connection_context", "source": "project.field", "sourcePath": "connection_record_artifact_id", "requiredForActivation": true},
+          {"taskField": "prior_screen_context", "source": "project.field", "sourcePath": "identified_screen_artifact_id", "requiredForActivation": false}
+        ],
+        "outputMappings": [{"taskField": "founder_connected_screen_artifact_id", "target": "project.field", "targetPath": "founder_connected_screen_artifact_id"}]
+      },
+      {
+        "id": "mapping-prepare-second-reachout",
+        "taskDefinitionSlug": "prepare-second-reachout-email",
+        "taskDefinitionTemplateId": "vc.prepare_second_reachout_email",
+        "lifecycleStage": "contacted",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
+        "inputMappings": [{"taskField": "second_reachout_scope", "source": "project.id", "requiredForActivation": true}],
+        "outputMappings": [{"taskField": "second_reachout_email_artifact_id", "target": "project.field", "targetPath": "second_reachout_artifact_id"}]
+      },
+      {
+        "id": "mapping-review-outreach-outcome",
+        "taskDefinitionSlug": "review-outreach-outcome",
+        "taskDefinitionTemplateId": "vc.review_outreach_outcome",
+        "lifecycleStage": "engaged",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
+        "inputMappings": [{"taskField": "outreach_state", "source": "project.id", "requiredForActivation": true}],
+        "outputMappings": [{"taskField": "outreach_outcome_artifact_id", "target": "project.field", "targetPath": "outreach_outcome_artifact_id"}]
+      }
+    ]
+  }
+}

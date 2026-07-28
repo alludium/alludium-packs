@@ -5,6 +5,8 @@ documentType: sop
 supportedProjectTypes:
   - vc_deal_room
   - vc_origination_pipeline
+  - vc_sourcing_line
+  - vc_origination_candidate
   - vc_investment_management
 summary: Operating guidance for applying VC document templates without producing generic filler.
 ---

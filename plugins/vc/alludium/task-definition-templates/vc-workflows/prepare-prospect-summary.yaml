@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_prospect_summary
-version: 0.1.9
+version: 0.1.10
 title: Prepare Prospect Summary
 category: Venture Capital
 visibility: workspace
@@ -34,7 +34,7 @@ definition:
     recommendedAgentTemplate: vc_sourcing_operator
     plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
-    - vc_origination_pipeline
+    - vc_origination_candidate
     supportedProjectScopes:
     - project_instance
     instructions:

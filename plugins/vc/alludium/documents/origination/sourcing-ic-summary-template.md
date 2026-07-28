@@ -3,7 +3,7 @@ id: vc.document.sourcing_ic_summary_template
 title: Prospect Summary Template
 documentType: template
 supportedProjectTypes:
-  - vc_origination_pipeline
+  - vc_origination_candidate
 summary: Reusable prospect-level sourcing summary for one prioritized candidate before outreach or Deal Pipeline promotion.
 ---
 

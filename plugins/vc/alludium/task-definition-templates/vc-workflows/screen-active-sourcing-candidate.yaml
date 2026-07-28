@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.screen_active_sourcing_candidate
-version: 0.1.12
+version: 0.1.13
 title: Screen Active Sourcing Candidate
 category: Venture Capital
 visibility: workspace
@@ -12,7 +12,7 @@ tags:
 definition:
   name: Screen Active Sourcing Candidate
   slug: screen-active-sourcing-candidate
-  description: Run an origination-specific thesis screen on active Meet, IC-Summary, or Reach out candidates.
+  description: Run an origination-specific thesis screen on one active Origination Candidate.
   allowSubtasks: false
   definitionJson:
     vertical: vc
@@ -35,43 +35,25 @@ definition:
     recommendedAgentTemplate: vc_sourcing_operator
     plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
-    - vc_origination_pipeline
+    - vc_origination_candidate
     supportedProjectScopes:
     - project_instance
-    scheduleDefaults:
-      enabledByDefault: false
-      requiresHumanApprovalToEnable: true
-      cadence: daily
-      localTime: 08:20
-      dryRunFirst: true
-    scheduling:
-      schedulable: true
-      showInProjectSetup: true
-      setupStep: schedules
-      scheduleType: cron
-      defaultScheduleRef: scheduleDefaults
-      requiresHumanApprovalToEnable: true
-      canCreateTestRun: true
-      testRunCreatesVisibleTask: true
-      dryRunFirst: true
-      safety:
-        externalWritesRequireApproval: true
     instructions:
-      executionInstructions: 'Screen active origination candidates using the reference pipeline''s fast thesis filter rather
+      executionInstructions: 'Screen the current active Origination Candidate using the reference pipeline''s fast thesis filter rather
         than the downstream Deal Pipeline first-look task. Assess stage, geography, enterprise software, AI-native depth,
-        named buyer, moat, and founder balance. Return PROCEED_TO_IC, DIG_FURTHER, or PASS and map those to review actions
+        named buyer, moat, and founder balance. Return Meet, Watch, Pass, or Needs Review and map that verdict to a review action
         without downgrading protected manual decisions. Use `definitionJson.documentRefs` as the durable document reference
         contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring
         or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations
         and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with
         `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the
         output artifact.'
-      missingInputPolicy: Ask for active candidate batch, current manual actions, thesis policy, protected-action list, and
+      missingInputPolicy: Ask for the active candidate, current manual actions, thesis policy, protected-action list, and
         approved write mode before screening.
       externalActionPolicy: Screening recommendation only unless explicit write approval is granted. Never downgrade protected
         manual decisions such as IC-Summary or Pass.
       completionCriteria:
-      - Each screened candidate has thesis pillar statuses, key signals, verdict, verdict reason, protected-action handling,
+      - The screened candidate has thesis pillar statuses, key signals, one verdict, verdict reason, protected-action handling,
         and receipts.
       - Manual decision preservation is explicit.
 fields:
@@ -90,16 +72,38 @@ fields:
     position: 0
     config:
       documentRefId: vc.document.sourcing_scoring_rubric
-  - key: promotion_ready_count
-    name: Promotion Ready Count
-    fieldType: number
+  - key: review_verdict
+    name: Review Verdict
+    fieldType: select
     required: false
     position: 1
+    options:
+    - value: meet
+      label: Meet
+    - value: watch
+      label: Watch
+    - value: pass
+      label: Pass
+    - value: needs_review
+      label: Needs Review
     config: {}
+  - key: candidate_score
+    name: Candidate Score
+    fieldType: number
+    required: false
+    position: 2
+    config: {}
+  - key: thesis_fit_summary
+    name: Thesis Fit Summary
+    fieldType: richtext
+    required: false
+    position: 3
+    config:
+      rows: 6
   - key: screening_report
     name: Screening Report
     fieldType: richtext
     required: false
-    position: 2
+    position: 4
     config:
       rows: 8

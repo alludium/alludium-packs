@@ -1,0 +1,235 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.configure_sourcing_line
+version: 0.1.0
+title: Configure Sourcing Line
+category: Venture Capital
+visibility: workspace
+tags:
+- vc
+- origination
+- sourcing-line
+- setup
+definition:
+  name: Configure Sourcing Line
+  slug: configure-sourcing-line
+  description: Turn a sourcing hypothesis into a paused, measurable sourcing-line project with approved sources, screen, cadence, review policy, and outreach boundaries.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: setup
+    taskFamily: sourcing_line_setup
+    documentRefs:
+    - documentId: vc.document.sourcing_line_template_catalog
+      usage: methodology
+    - documentId: vc.document.source_registry_template
+      usage: operating_guidance
+    - documentId: vc.document.origination_pipeline_sop
+      usage: operating_guidance
+    requiredSkills:
+    - origination-pipeline-orchestration
+    - vc-source-registry-and-state-management
+    recommendedAgentTemplate: vc_sourcing_operator
+    plannedRecommendedAgentTemplate: vc_sourcing_operator
+    supportedProjectTypes:
+    - vc_sourcing_line
+    supportedProjectScopes:
+    - project_instance
+    instructions:
+      executionInstructions: 'Use the dedicated Sourcing Line chat to shape one sourcing experiment. A sourcing line is registered source(s) x query or screen x cadence x review policy x outreach policy, not a provider connection. Start from an optional starter configuration, then capture the hypothesis, source keys, connection assumptions, exclusions, evidence requirements, cadence, timezone, cursor/window, result limit, budget, Inbox threshold, review owner, outreach mode, success metrics, review date, and retirement condition. Verify the native `vc.origination_pipeline_contains_sourcing_line` relationship or propose `project-relationship.create` when the hub and line already exist but are not linked. Update the draft line configuration only after human approval and leave schedules disabled. Use `definitionJson.documentRefs` as the durable document reference contract.'
+      missingInputPolicy: Keep setup incomplete until the line hypothesis, parent pipeline project ID, source mix, screen, cadence, budget posture, review policy, and outreach boundary are explicit.
+      externalActionPolicy: Configuration only. Do not read paid sources, enable schedules, create candidates, write external systems, or send outreach.
+      humanConfirmationPolicy: always
+      completionCriteria:
+      - The line has one coherent, testable learning question.
+      - Source keys refer to the parent pipeline source registry and do not embed credentials.
+      - Cadence, result limits, budget, review threshold, and retirement condition are explicit.
+      - Outreach is disabled or approval-gated and never represented as an automatic send.
+      - Approved configuration fields are ready to persist before the draft line moves to paused.
+    humanDecisionPoints:
+    - Approve the source mix and query or screen.
+    - Approve paid-source budget and result limits.
+    - Approve any later schedule enablement or outreach experiment separately.
+fields:
+  input:
+  - key: line_name
+    name: Line Name
+    fieldType: string
+    required: true
+    position: 0
+    config: {}
+  - key: origination_pipeline_project_id
+    name: Origination Pipeline Project ID
+    fieldType: string
+    required: true
+    position: 1
+    config: {}
+  - key: starter_template_key
+    name: Starter Template Key
+    fieldType: string
+    required: false
+    position: 2
+    config: {}
+  - key: configuration_goal
+    name: Configuration Goal
+    fieldType: string
+    required: false
+    position: 3
+    config: {}
+  output:
+  - key: line_definition
+    name: Line Definition
+    fieldType: richtext
+    required: true
+    position: 0
+    config:
+      rows: 10
+  - key: relationship_to_pipeline_key
+    name: Pipeline Relationship Key
+    fieldType: string
+    required: true
+    position: 1
+    config: {}
+  - key: line_hypothesis
+    name: Line Hypothesis
+    fieldType: string
+    required: true
+    position: 2
+    config: {}
+  - key: source_keys
+    name: Registered Source Keys
+    fieldType: string
+    required: true
+    position: 3
+    config: {}
+  - key: screen_definition
+    name: Query And Screen
+    fieldType: richtext
+    required: true
+    position: 4
+    config:
+      rows: 6
+  - key: cadence_policy
+    name: Cadence Policy
+    fieldType: richtext
+    required: true
+    position: 5
+    config:
+      rows: 4
+  - key: review_policy
+    name: Review And Inbox Policy
+    fieldType: richtext
+    required: true
+    position: 6
+    config:
+      rows: 4
+  - key: outreach_policy
+    name: Outreach Policy
+    fieldType: richtext
+    required: true
+    position: 7
+    config:
+      rows: 4
+  - key: child_task_plan
+    name: Child Task Plan
+    fieldType: richtext
+    required: true
+    position: 8
+    config:
+      rows: 6
+  - key: starter_template_key
+    name: Starter Template Key
+    fieldType: select
+    required: true
+    position: 9
+    options:
+    - value: thesis_radar
+      label: Thesis Radar
+    - value: trigger_event_watch
+      label: Trigger And Event Watch
+    - value: builder_signal_convergence
+      label: Builder-Signal Convergence
+    - value: ecosystem_community_scout
+      label: Ecosystem And Community Scout
+    - value: relationship_reactivation
+      label: Relationship-Led Reactivation
+    - value: targeted_outbound_experiment
+      label: Targeted Outbound Message Experiment
+    - value: custom
+      label: Custom
+    config: {}
+  - key: geography
+    name: Geography
+    fieldType: string
+    required: true
+    position: 10
+    config: {}
+  - key: stage_focus
+    name: Stage Focus
+    fieldType: string
+    required: true
+    position: 11
+    config: {}
+  - key: cursor_window_policy
+    name: Cursor And Window Policy
+    fieldType: richtext
+    required: true
+    position: 12
+    config:
+      rows: 4
+  - key: result_limit
+    name: Result Limit
+    fieldType: number
+    required: true
+    position: 13
+    config: {}
+  - key: budget_limit
+    name: Budget Limit
+    fieldType: number
+    required: true
+    position: 14
+    config: {}
+  - key: timezone
+    name: Timezone
+    fieldType: string
+    required: true
+    position: 15
+    config: {}
+  - key: success_metrics
+    name: Success Metrics
+    fieldType: richtext
+    required: true
+    position: 16
+    config:
+      rows: 4
+  - key: review_date
+    name: Review Date
+    fieldType: date
+    required: true
+    position: 17
+    config: {}
+  - key: retirement_condition
+    name: Retirement Condition
+    fieldType: richtext
+    required: true
+    position: 18
+    config:
+      rows: 4
+  - key: inbox_threshold
+    name: Inbox Threshold
+    fieldType: number
+    required: true
+    position: 19
+    config: {}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc
+      taskKind: configure_sourcing_line
+      projectType: vc_sourcing_line
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    preferredMode: guided_configuration
+    requiresHumanConfirmationToComplete: true

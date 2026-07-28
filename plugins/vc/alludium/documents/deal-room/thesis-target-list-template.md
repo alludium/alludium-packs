@@ -3,7 +3,7 @@ id: vc.document.thesis_target_list_template
 title: Thesis Target List Template
 documentType: template
 supportedProjectTypes:
-  - vc_origination_pipeline
+  - vc_sourcing_line
 summary: Reusable target-list format for thesis-led sourcing and warm-intro planning.
 ---
 

@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.record_linkedin_connection_attempt
-version: 0.1.1
+version: 0.1.2
 title: Record LinkedIn Connection Attempt
 category: Venture Capital
 visibility: workspace
@@ -33,7 +33,7 @@ definition:
     recommendedAgentTemplate: vc_sourcing_operator
     plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
-    - vc_origination_pipeline
+    - vc_origination_candidate
     supportedProjectScopes:
     - project_instance
     instructions:
@@ -72,7 +72,22 @@ fields:
       documentRefId: vc.document.outreach_queue_template
   - key: outbound_status
     name: Outbound Status
-    fieldType: string
+    fieldType: select
     required: false
     position: 1
+    options:
+    - value: not_started
+      label: Not Started
+    - value: drafted
+      label: Drafted
+    - value: approved
+      label: Approved
+    - value: contacted
+      label: Contacted
+    - value: engaged
+      label: Engaged
+    - value: no_response
+      label: No Response
+    - value: opted_out
+      label: Opted Out
     config: {}

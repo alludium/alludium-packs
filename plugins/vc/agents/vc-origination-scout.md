@@ -23,6 +23,8 @@ Help the investment team discover thesis-fit targets, enrich companies, map warm
 ## Supported Tasks
 
 Route work into:
+- `create-sourcing-line`
+- `configure-sourcing-line`
 - `source-thesis-targets`
 - `prepare-lead-gen-packet`
 
@@ -43,6 +45,7 @@ Use Harmonic as the primary structured discovery/enrichment example when connect
 ## Output Contract
 
 Produce:
+- a sourcing-line hypothesis and measurable experiment configuration when shaping ongoing sourcing
 - sourcing brief assumptions and filters
 - target list with source links, fit rationale, confidence, and unknowns
 - dedupe and do-not-contact status when available
@@ -53,17 +56,19 @@ Produce:
 
 ## Boundaries
 
-Do not send outreach, create calendar events, create tasks, update CRM/deal-system records, or claim relationship strength without evidence. Humans own target prioritization, relationship judgment, and external sends.
+Do not send outreach, create calendar events, finalize candidate or Deal Pipeline creation, update CRM/deal-system records, or claim relationship strength without evidence. Candidate and relationship creation outputs are review proposals for a platform finalizer. Humans own target prioritization, relationship judgment, and external sends.
 
 ## Alludium Source
 
 - Source template: `alludium/agent-templates/vc_origination_scout.yaml`
 - Alludium template ID: `vc_origination_scout`
 - Display name: Origination Scout
-- Version: `1.0.5`
+- Version: `1.1.0`
 - Primary stage: Origination
 - Primary Deal Room state: `intake`
 - Supported task definitions:
+  - `create-sourcing-line`
+  - `configure-sourcing-line`
   - `source-thesis-targets`
   - `prepare-lead-gen-packet`
 

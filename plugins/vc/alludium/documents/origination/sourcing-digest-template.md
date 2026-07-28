@@ -14,16 +14,16 @@ summary: Reusable digest format for sourced candidate updates.
 | Field | Content |
 | --- | --- |
 | Period | Date range |
-| Pipeline | Name and thesis |
-| Sources covered | Source keys and run IDs |
+| Origination Pipeline | Project ID, name, and thesis |
+| Sourcing Lines covered | Line project IDs, hypotheses, source keys, and run receipt IDs |
 | Prepared by | Owner and date |
 
 ## Source Inputs
 
 | Source Input | Use For |
 | --- | --- |
-| Candidate batch artifact | New Meet/Watch/Pass candidates, action queue, duplicate state |
-| Source run receipts | Source coverage, failures, degraded runs, spend or quota notes |
+| Sourcing Line projects and run receipts | Line status, source coverage, failures, experiment metrics, spend, and quota notes |
+| Origination Candidate projects | New Meet/Watch/Pass candidates, attention state, multi-line provenance, and duplicate state |
 | Scoring and screening outputs | Recommendation, urgency, confidence, reason codes |
 | Relationship and portfolio-overlap checks | Warm paths, conflict risk, protected manual decisions |
 | Outreach queue or promotion package | Follow-up actions, owner assignments, candidates ready for human approval |
@@ -32,10 +32,10 @@ summary: Reusable digest format for sourced candidate updates.
 
 | Category | Summary | Link / Artifact |
 | --- | --- | --- |
-| Best new candidates |  |  |
+| Best new candidates |  | Candidate project links |
 | Candidates needing review |  |  |
 | Promoted or rejected |  |  |
-| Source health notes |  |  |
+| Line and source health notes |  | Line project and receipt links |
 | Spend or quota notes |  |  |
 
 ## Candidate Actions

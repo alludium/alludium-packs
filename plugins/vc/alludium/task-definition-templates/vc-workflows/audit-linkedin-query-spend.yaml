@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.audit_linkedin_query_spend
-version: 0.1.9
+version: 0.1.10
 title: Audit LinkedIn Query Spend
 category: Venture Capital
 visibility: workspace
@@ -19,6 +19,7 @@ definition:
     vertical: vc
     stage: operate
     taskFamily: origination_spend_audit
+    projectInvocation: child_only
     documentRefs:
       - documentId: vc.document.paid_source_spend_audit_checklist
         usage: output_template
@@ -32,7 +33,7 @@ definition:
     recommendedAgentTemplate: vc_sourcing_operator
     plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
-      - vc_origination_pipeline
+    - vc_sourcing_line
     supportedProjectScopes:
       - project_instance
     scheduleDefaults:
@@ -43,8 +44,8 @@ definition:
       localTime: "09:00"
       dryRunFirst: true
     scheduling:
-      schedulable: true
-      showInProjectSetup: true
+      schedulable: false
+      showInProjectSetup: false
       setupStep: schedules
       scheduleType: cron
       defaultScheduleRef: scheduleDefaults

@@ -20,7 +20,7 @@ Generate a daily or weekly origination digest with candidates, run receipts, deg
 
 ## What To Do
 
-Produce a reference-pipeline-style digest of new Meet/Watch and active candidates, source counts, run failures, budget/cost notes, and review actions. The default destination is a reviewable digest object; posting to Slack, ClickUp, email, or another external channel requires a separately approved write-capable task.
+Treat digest scope as the Origination Pipeline project ID. Traverse native `vc.origination_pipeline_contains_sourcing_line` relationships, then each line's `vc.sourcing_line_originated_candidate` relationships, and derive active-line, candidate-attention, source-count, run-failure, and budget/cost summaries from current related projects and their receipts. Do not depend on a hub-level latest-line-activity pointer or trust cached count fields as source evidence. Produce a reference-pipeline-style digest of new Meet/Watch and active candidates and review actions. The default destination is a reviewable digest object; posting to Slack, ClickUp, email, or another external channel requires a separately approved write-capable task.
 
 ## Available Context
 
@@ -36,10 +36,11 @@ Produce a reference-pipeline-style digest of new Meet/Watch and active candidate
 ## Deliverable
 
 - Create or update **Sourcing Digest Artifact** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
+- Also include a short human-readable summary covering: Active Sourcing Line Count, Candidate Attention Count. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
-Ask for run receipt, candidate batch, digest channel, audience, and whether this is daily, weekly, or monthly.
+Ask for the Origination Pipeline project ID, digest channel, audience, and whether this is daily, weekly, or monthly. Report relationship or receipt gaps instead of substituting stale hub pointers.
 
 ## Guardrails
 
@@ -49,3 +50,4 @@ Draft digest only unless explicit channel-post approval is granted.
 
 - Digest groups candidates by action, urgency, source, and owner/review need.
 - Run receipt, cost/budget notes, degraded-source warnings, and pending approvals are included.
+- Counts are derived from current native relationships and related-project state.

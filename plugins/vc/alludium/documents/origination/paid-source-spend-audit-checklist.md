@@ -4,6 +4,7 @@ title: Paid Source Spend Audit Checklist
 documentType: checklist
 supportedProjectTypes:
   - vc_origination_pipeline
+  - vc_sourcing_line
 summary: Checklist for paid-source budgets, usage, and quality.
 ---
 

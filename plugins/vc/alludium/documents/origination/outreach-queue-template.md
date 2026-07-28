@@ -3,7 +3,7 @@ id: vc.document.outreach_queue_template
 title: Outreach Queue Template
 documentType: template
 supportedProjectTypes:
-  - vc_origination_pipeline
+  - vc_origination_candidate
 summary: Reusable queue for founder outreach drafts and owner review.
 ---
 

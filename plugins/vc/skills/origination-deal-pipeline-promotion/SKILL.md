@@ -3,7 +3,7 @@ id: origination-deal-pipeline-promotion
 name: "Origination Deal Pipeline Promotion"
 description: >
   Prepare a human-reviewed promotion package that can create or update a VC Deal
-  Room from an approved origination candidate.
+  Pipeline from an approved first-class Origination Candidate.
 tags:
   - vc
   - origination
@@ -48,6 +48,8 @@ Include:
 ## Approval Boundary
 
 The default output is a promotion package. Creating or updating a Deal Pipeline project is a separate explicit platform action.
+
+When a new Deal Pipeline is approved, create it atomically with an incoming `vc.origination_candidate_promoted_to_deal` relationship from the Origination Candidate. Use `project-relationship.create` only when both projects already exist. Preserve the candidate project ID in compatibility fields during rollout, but treat the native relationship as authoritative.
 
 ## Boundaries
 

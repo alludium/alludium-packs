@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.screen_founder_connected_candidate
-version: 0.1.3
+version: 0.1.4
 title: Screen Founder-Connected Candidate
 category: Venture Capital
 visibility: workspace
@@ -37,27 +37,9 @@ definition:
     recommendedAgentTemplate: vc_sourcing_operator
     plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
-    - vc_origination_pipeline
+    - vc_origination_candidate
     supportedProjectScopes:
     - project_instance
-    scheduleDefaults:
-      enabledByDefault: false
-      requiresHumanApprovalToEnable: true
-      cadence: daily
-      localTime: 09:10
-      dryRunFirst: true
-    scheduling:
-      schedulable: true
-      showInProjectSetup: true
-      setupStep: schedules
-      scheduleType: cron
-      defaultScheduleRef: scheduleDefaults
-      requiresHumanApprovalToEnable: true
-      canCreateTestRun: true
-      testRunCreatesVisibleTask: true
-      dryRunFirst: true
-      safety:
-        externalWritesRequireApproval: true
     instructions:
       executionInstructions: 'Re-screen candidates only after a founder connection, reply, or direct relationship signal adds
         new context beyond the first-pass screen. Compare founder-provided context, current enrichment, relationship warmth,

@@ -17,11 +17,11 @@ skills:
 
 ## Objective
 
-Run an origination-specific thesis screen on active Meet, IC-Summary, or Reach out candidates.
+Run an origination-specific thesis screen on one active Origination Candidate.
 
 ## What To Do
 
-Screen active origination candidates using the reference pipeline's fast thesis filter rather than the downstream Deal Pipeline first-look task. Assess stage, geography, enterprise software, AI-native depth, named buyer, moat, and founder balance. Return PROCEED_TO_IC, DIG_FURTHER, or PASS and map those to review actions without downgrading protected manual decisions.
+Screen the current active Origination Candidate using the reference pipeline's fast thesis filter rather than the downstream Deal Pipeline first-look task. Assess stage, geography, enterprise software, AI-native depth, named buyer, moat, and founder balance. Return Meet, Watch, Pass, or Needs Review and map that verdict to a review action without downgrading protected manual decisions.
 
 ## Available Context
 
@@ -39,11 +39,11 @@ Screen active origination candidates using the reference pipeline's fast thesis 
 ## Deliverable
 
 - Create or update **Screening Artifact** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Promotion Ready Count, Screening Report. Do not output raw JSON unless the user explicitly asks for machine-readable data.
+- Also include a short human-readable summary covering: Review Verdict, Candidate Score, Thesis Fit Summary, Screening Report. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
-Ask for active candidate batch, current manual actions, thesis policy, protected-action list, and approved write mode before screening.
+Ask for the active candidate, current manual actions, thesis policy, protected-action list, and approved write mode before screening.
 
 ## Guardrails
 
@@ -51,5 +51,5 @@ Screening recommendation only unless explicit write approval is granted. Never d
 
 ## Completion Criteria
 
-- Each screened candidate has thesis pillar statuses, key signals, verdict, verdict reason, protected-action handling, and receipts.
+- The screened candidate has thesis pillar statuses, key signals, one verdict, verdict reason, protected-action handling, and receipts.
 - Manual decision preservation is explicit.

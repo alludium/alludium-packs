@@ -17,16 +17,16 @@ skills:
 
 ## Objective
 
-Produce Meet/Watch/Pass verdicts and urgency scores for enriched origination candidates.
+Produce one Meet/Watch/Pass verdict and urgency score for an enriched Origination Candidate.
 
 ## What To Do
 
-Mirror the reference pipeline's verdict contract. Score from already-enriched data, separate evidence from inference, and return Meet, Watch, or Pass plus urgency. Apply hard stage safety by passing companies with Series A+ funding or more than 20 employees when reliable LinkedIn company data is present. Run the second-pass verdict only for Meet/Watch rows with fresh LinkedIn company data so paid scraping and model cost stay bounded.
+Mirror the reference pipeline's verdict contract. Score from already-enriched data, separate evidence from inference, and return Meet, Watch, or Pass plus urgency. Apply hard stage safety by passing companies with Series A+ funding or more than 20 employees when reliable LinkedIn company data is present. Run the second-pass verdict only for a Meet/Watch candidate with fresh LinkedIn company data so paid scraping and model cost stay bounded.
 
 ## Available Context
 
 - Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
-- Especially look for: Enriched Candidate Batch, Scoring Policy.
+- Especially look for: Enriched Candidate, Scoring Policy.
 - If a named input is absent, follow the missing-input policy rather than inventing facts.
 
 ## Reference Materials
@@ -38,11 +38,11 @@ Mirror the reference pipeline's verdict contract. Score from already-enriched da
 ## Deliverable
 
 - Create or update **Scoring Artifact** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Meet Candidate Count, Watch Candidate Count, Promotion Ready Count, Scoring Report. Do not output raw JSON unless the user explicitly asks for machine-readable data.
+- Also include a short human-readable summary covering: Candidate Score, Review Verdict, Thesis Fit Summary, Scoring Report. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
-Ask for enriched candidates, thesis, geography/stage policy, relationship context, LinkedIn company data availability, and scoring thresholds before scoring.
+Ask for the enriched candidate, thesis, geography/stage policy, relationship context, LinkedIn company data availability, and scoring thresholds before scoring.
 
 ## Guardrails
 
@@ -50,6 +50,6 @@ Scoring only. Do not sync external records, change manual decisions, send outrea
 
 ## Completion Criteria
 
-- Each scored candidate has action, urgency, thesis fit, confidence, funding status, HQ/geography concern, frontier-pedigree evidence, reasons, and receipts.
+- The scored candidate has action, urgency, thesis fit, confidence, funding status, HQ/geography concern, frontier-pedigree evidence, reasons, and receipts.
 - Auto-pass decisions name the specific rule and evidence.
-- Second-pass rows are limited to candidates with fresh LinkedIn company data.
+- A second pass is limited to a candidate with fresh LinkedIn company data.

@@ -21,7 +21,7 @@ Review degraded source runs, cost warnings, retry safety, and required human act
 
 ## What To Do
 
-Review run receipts and degraded-source notes from the latest origination pass. Classify missing credentials, auth expiry, provider failure, rate limits, budget caps, exhausted queries, schema drift, no-yield sources, and blocked writes. Recommend retry, setup, query pruning, schedule pause, or human review.
+Treat source health scope as a project ID. For an Origination Pipeline, traverse native `vc.origination_pipeline_contains_sourcing_line` relationships and derive shared source health from related line receipts; for a Sourcing Line, inspect that line's receipts directly. Do not depend on a hub-level latest-line-activity pointer. Classify missing credentials, auth expiry, provider failure, rate limits, budget caps, exhausted queries, schema drift, no-yield sources, and blocked writes. Recommend retry, setup, query pruning, schedule pause, or human review.
 
 ## Available Context
 

@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.source_thesis_targets
-version: 1.0.14
+version: 1.0.15
 title: Source Thesis Targets
 category: Venture Capital
 visibility: workspace
@@ -19,6 +19,7 @@ definition:
     vertical: vc
     stage: source
     taskFamily: pipeline
+    projectInvocation: child_only
     documentRefs:
     - documentId: vc.document.thesis_target_list_template
       usage: output_template
@@ -36,7 +37,9 @@ definition:
     plannedRecommendedAgentTemplate: vc_origination_scout
     recommendedAgentTemplate: vc_origination_scout
     supportedProjectTypes:
-    - vc_origination_pipeline
+    - vc_sourcing_line
+    supportedProjectScopes:
+    - project_instance
     sourceAnchors:
     - source: investment-management-process-slides
       anchor: slide-8

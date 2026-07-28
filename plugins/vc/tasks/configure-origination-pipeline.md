@@ -16,11 +16,11 @@ skills:
 
 ## Objective
 
-Capture thesis, source selection, cadence intent, budget policy, review thresholds, and integration-readiness requirements for a VC origination pipeline.
+Configure the fund-level origination control plane, shared source registry, policy, budgets, and cross-line reporting without defining or running individual sourcing experiments.
 
 ## What To Do
 
-Guide the user through initial origination pipeline configuration. Capture the required pipeline name, thesis, source choices, cadence intent, digest destination, budget, review policy, promotion threshold, manual-review threshold, credential gaps, and child setup tasks needed for selected sources. Create setup child tasks only for selected integrations whose setup templates exist. Capture pipeline name, include source registry and review policy when captured, and include confidentiality level only when confidently captured. Do not run sourcing, score candidates, create candidate records, enable schedules, write to external systems, send outreach, create Deal Pipelines, or create the Origination Pipeline project; the platform finalizer owns deterministic project creation after task completion.
+Guide the user through initial fund-level Origination Pipeline configuration. Capture the required pipeline name, thesis, reusable source connections and approved scopes, digest destination, aggregate budget, review policy, promotion threshold, manual-review threshold, credential gaps, and child setup tasks needed for selected sources. Create setup child tasks only for selected integrations whose setup templates exist. Capture pipeline name, include source registry and review policy when captured, and include confidentiality level only when confidently captured. Do not run sourcing, put query, cadence, outreach experiment, or candidate funnel state on this hub; those belong to Sourcing Line and Origination Candidate projects. Do not score candidates, create candidate records, enable schedules, write to external systems, send outreach, create Deal Pipelines, or create the Origination Pipeline project; the platform finalizer owns deterministic project creation after task completion.
 
 ## Available Context
 
@@ -42,7 +42,7 @@ Guide the user through initial origination pipeline configuration. Capture the r
 
 ## Missing Input Policy
 
-Keep setup incomplete when thesis, enabled sources, review policy, budget policy, or required credential decisions are missing. Ask targeted task questions rather than inventing configuration.
+Keep setup incomplete when thesis, shared source connections, review policy, aggregate budget policy, or required credential decisions are missing. Ask targeted task questions rather than inventing configuration.
 
 ## Guardrails
 
@@ -51,7 +51,7 @@ Configuration only. No external reads beyond connection-readiness checks, no sch
 ## Completion Criteria
 
 - pipeline name is captured for guided project creation finalization.
-- Thesis, source selection, run cadence intent, budget policy, review policy, and thresholds are captured or explicitly marked unresolved.
+- Thesis, shared source selection, aggregate budget policy, review policy, and thresholds are captured or explicitly marked unresolved.
 - Required setup child tasks for selected Apify and Companies House sources are proposed without executing source reads.
 - Credential gaps and approved connection scopes are listed.
 - The output distinguishes configuration intent from active automation.
@@ -60,5 +60,5 @@ Configuration only. No external reads beyond connection-readiness checks, no sch
 ## Human Review
 
 - Choose enabled source systems and approved source scope.
-- Confirm budget and cadence intent before any later scheduled-run work.
+- Confirm shared budget policy before any later line schedules or paid runs.
 - Approve child setup tasks separately for each integration.

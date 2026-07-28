@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.promote_candidate_to_deal_pipeline
-version: 0.1.10
+version: 0.1.11
 title: Promote Candidate to Deal Pipeline
 category: Venture Capital
 visibility: workspace
@@ -35,13 +35,21 @@ definition:
     recommendedAgentTemplate: vc_sourcing_operator
     plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
-    - vc_origination_pipeline
+    - vc_origination_candidate
     supportedProjectScopes:
     - project_instance
     instructions:
       executionInstructions: 'Promote only human-approved candidates. Prepare a Deal Pipeline creation/update package with
         company identity, founder evidence, source receipts, enrichment/verdict/screen summaries, relationship context, outreach
         state, and open questions. Do not create or update the Deal Pipeline unless the platform action is explicitly approved.
+        When creation is approved, the platform finalizer should use atomic project creation with `relationships: [{ direction:
+        "incoming", relatedProjectId: origination_candidate_project_id, relationshipTypeKey: "vc.origination_candidate_promoted_to_deal",
+        metadata: { promotionPackageArtifactId } }]`. Use `project-relationship.create` only when both the candidate and Deal
+        Pipeline already exist. Compatibility project-ID fields may be written during rollout but do not replace the native relationship.
+        Emit `dealCreationProposal.createRequest` with Deal Pipeline field values and `relationships: [{ direction: "incoming",
+        relatedProjectId: origination_candidate_project_id, relationshipTypeKey: "vc.origination_candidate_promoted_to_deal",
+        metadata: { promotionPackageArtifactId } }]`. This task does not claim to finalize creation or return a Deal Pipeline
+        project ID; those mappings can be added only when the platform finalizer exposes a confirmed result contract.
         Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template`
         sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status,
         evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains
@@ -56,13 +64,20 @@ definition:
       - Promotion package includes source receipts, candidate evidence, recommended initial Deal Pipeline state, required
         tasks, owner, and unresolved risks.
       - Human approval boundary for project creation/update is explicit.
+      - Deal creation proposal contains the incoming candidate relationship and is not represented as a completed project creation.
 fields:
   input:
+  - key: origination_candidate_project_id
+    name: Origination Candidate Project ID
+    fieldType: string
+    required: true
+    position: 0
+    config: {}
   - key: promotion_candidate
     name: Promotion Candidate
     fieldType: json
     required: true
-    position: 0
+    position: 1
     config: {}
   output:
   - key: promotion_package_artifact_id
@@ -72,3 +87,17 @@ fields:
     position: 0
     config:
       documentRefId: vc.document.promotion_package_template
+  - key: dealCreationProposal
+    name: Deal Creation Proposal
+    fieldType: json
+    required: true
+    position: 1
+    config:
+      contractRef: dealCreationProposal.createRequest.v1
+      requiredPaths:
+      - createRequest.fieldValues
+      - createRequest.relationships
+      - createRequest.relationships[].direction
+      - createRequest.relationships[].relatedProjectId
+      - createRequest.relationships[].relationshipTypeKey
+      - createRequest.relationships[].metadata

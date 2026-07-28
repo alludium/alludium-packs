@@ -4,6 +4,8 @@ title: Origination Pipeline Operating SOP
 documentType: sop
 supportedProjectTypes:
   - vc_origination_pipeline
+  - vc_sourcing_line
+  - vc_origination_candidate
 summary: Operating method for standing venture sourcing pipelines.
 ---
 
@@ -11,22 +13,31 @@ summary: Operating method for standing venture sourcing pipelines.
 
 ## Purpose
 
-Use this SOP to operate a standing sourcing machine. Origination finds, enriches, dedupes, scores, and promotes candidates. Deal Pipeline work starts only after a candidate is promoted or a partner explicitly creates an opportunity workspace.
+Use this SOP to operate a standing sourcing machine without collapsing provider configuration, repeatable experiments, and company progression into one project.
+
+- The **Origination Pipeline** is the fund-level control plane for shared source connections, policy, budgets, cross-line Inbox, and reporting.
+- A **Sourcing Line** is one measurable experiment: source mix, query or screen, cadence, review policy, and outreach boundary. It owns schedules and run receipts.
+- An **Origination Candidate** is one deduplicated pre-deal company. It owns multi-line provenance, evidence, review decisions, relationship context, outreach state, and promotion.
+
+Deal Pipeline work starts only after a candidate is promoted or a partner explicitly creates an opportunity workspace.
 
 ## Workflow
 
 | Step | Output | Approval Gate |
 | --- | --- | --- |
-| Configure thesis, geography, stage, source scope, review policy, budgets, and source taxonomy | Source registry | Human confirms scope |
-| Run discovery and read-preview tasks | Setup and preview artifacts with source provenance | Human approves source readiness |
-| Batch candidates for enrichment, dedupe, scoring, and relationship checks | Candidate batch with source family, freshness, and evidence quality | Human reviews batch quality |
-| Produce digests and outreach queues | Sourcing digest and outreach queue | Human approves outreach or follow-up |
-| Promote qualified candidates | Promotion package with thesis rationale, source path, screening result, risks, and recommended Deal Pipeline posture | Human approves Deal Pipeline creation or update |
+| Configure shared sources, thesis, aggregate budgets, review policy, and promotion policy on the hub | Source registry and control-plane policy | Human confirms connection scope and shared controls |
+| Start a minimal draft Sourcing Line and continue in its canonical chat | Native hub-to-line relationship and line proposal | Human approves the line configuration before it moves to paused |
+| Enable reviewed line schedules and run source methods | Line-scoped run receipt, source state, cost, and candidate proposals | Human approves schedule enablement, paid reads, and limits |
+| Deduplicate and register reviewed companies | Origination Candidate with native line provenance | Human resolves ambiguous identity and existing-record matches |
+| Enrich, score, screen, and review relationship context | Candidate-specific artifacts and next decision | Human owns Watch, Pass, outreach-ready, and promotion-ready decisions |
+| Draft and review outreach experiments | Candidate outreach artifact plus line/message-variant metrics | Human approves each send or an explicitly bounded batch; the pack never auto-sends |
+| Aggregate attention across lines and candidates | Hub digest and Inbox | Human chooses follow-up; the digest does not mutate line or candidate state |
+| Promote a qualified candidate | Promotion package and candidate-to-deal relationship proposal | Human approves atomic Deal Pipeline creation or linking |
 
 ## Source Provenance
 
-Every candidate should preserve source family, source detail, owner, freshness, relationship path, thesis rationale, evidence quality, dedupe state, and promotion rationale. Promotion should carry that trail into the downstream Deal Pipeline.
+Every line run and candidate should preserve the originating project IDs, source family/detail, query or screen version, message variant when relevant, owner, freshness, relationship path, thesis rationale, evidence quality, dedupe state, and promotion rationale. A company found by multiple lines remains one candidate with multiple native line relationships. Promotion carries that trail into the downstream Deal Pipeline.
 
 ## Controls
 
-Do not create Deal Pipelines, mutate CRM records, contact founders, or enable recurring schedules without explicit human approval.
+Do not create candidates or Deal Pipelines, mutate CRM records, contact founders, spend on paid sources, or enable recurring schedules without explicit human approval. Compatibility ID fields support rollout but do not replace native project relationships.

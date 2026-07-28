@@ -2,8 +2,8 @@
 id: vc-source-registry-and-state-management
 name: "VC Source Registry & State Management"
 description: >
-  Maintain origination source scope, dedupe keys, pagination state, run receipts,
-  candidate action preservation, and degraded-source notes across VC sourcing tasks.
+  Maintain shared source registrations plus line-scoped query state, dedupe keys,
+  pagination, run receipts, and degraded-source notes across VC sourcing tasks.
 tags:
   - vc
   - origination
@@ -33,7 +33,9 @@ Use this skill whenever an origination task reads, updates, or proposes changes 
 
 ## State Model
 
-Track source state by source key:
+The Origination Pipeline source registry owns provider connections and approved scopes. Each Sourcing Line references those keys and separately owns its query/screen, cadence, cursor/window, budget, and run history.
+
+Track execution state by sourcing-line project ID and source key:
 
 - `companies_house`: company numbers, search windows, query URLs, last extraction time
 - `linkedin_people`: actor id, track, query, offset, seen profile ids, seen company slugs, exhaustion lock, quarantine rows
@@ -53,6 +55,7 @@ Track source state by source key:
 
 Every source task should return:
 
+- Sourcing Line project ID, parent Origination Pipeline project ID, hypothesis/screen version, and message variant where applicable
 - Source name and approved scope used
 - Query, actor, URL, or API surface used
 - Result limit, run time, and lookback window

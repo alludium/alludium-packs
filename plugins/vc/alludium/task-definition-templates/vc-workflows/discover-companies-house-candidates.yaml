@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.discover_companies_house_candidates
-version: 0.1.5
+version: 0.1.6
 title: Discover Companies House Candidates
 category: Venture Capital
 visibility: workspace
@@ -20,6 +20,7 @@ definition:
     vertical: vc
     stage: source
     taskFamily: origination_source_discovery
+    projectInvocation: child_only
     requiredSkills:
     - vc-companies-house-sourcing
     - vc-source-registry-and-state-management
@@ -27,7 +28,7 @@ definition:
     recommendedAgentTemplate: vc_sourcing_operator
     plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
-    - vc_origination_pipeline
+    - vc_sourcing_line
     supportedProjectScopes:
     - project_instance
     scheduleDefaults:
@@ -41,8 +42,8 @@ definition:
         mature: 14-548d
       defaultResultLimit: 100
     scheduling:
-      schedulable: true
-      showInProjectSetup: true
+      schedulable: false
+      showInProjectSetup: false
       setupStep: schedules
       scheduleType: cron
       defaultScheduleRef: scheduleDefaults

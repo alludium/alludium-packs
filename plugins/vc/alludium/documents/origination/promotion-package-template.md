@@ -3,7 +3,7 @@ id: vc.document.promotion_package_template
 title: Promotion Package Template
 documentType: template
 supportedProjectTypes:
-  - vc_origination_pipeline
+  - vc_origination_candidate
 summary: Reusable package for promoting a sourced candidate to Deal Pipeline review.
 ---
 

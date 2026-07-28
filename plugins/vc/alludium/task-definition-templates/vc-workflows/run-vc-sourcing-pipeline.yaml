@@ -1,8 +1,8 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_vc_sourcing_pipeline
-version: 0.1.14
-title: Run VC Sourcing Pipeline
+version: 0.1.15
+title: Run Sourcing Line
 category: Venture Capital
 visibility: workspace
 tags:
@@ -11,15 +11,15 @@ tags:
 - sourcing
 - recurring
 definition:
-  name: Run VC Sourcing Pipeline
+  name: Run Sourcing Line
   slug: run-vc-sourcing-pipeline
-  description: Orchestrate one VC origination sourcing pass across approved sources with source-state receipts, cost gates,
-    and human approval boundaries.
+  description: Execute one configured Sourcing Line experiment across its approved sources with line-scoped receipts, cost gates,
+    candidate proposals, and human approval boundaries.
   allowSubtasks: true
   definitionJson:
     vertical: vc
     stage: source
-    taskFamily: origination_pipeline_run
+    taskFamily: sourcing_line_run
     documentRefs:
     - documentId: vc.document.candidate_batch_template
       usage: output_template
@@ -37,7 +37,7 @@ definition:
     recommendedAgentTemplate: vc_sourcing_operator
     plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
-    - vc_origination_pipeline
+    - vc_sourcing_line
     supportedProjectScopes:
     - project_instance
     scheduleDefaults:
@@ -67,7 +67,8 @@ definition:
       safety:
         externalWritesRequireApproval: true
     instructions:
-      executionInstructions: 'Run only approved origination sources and preserve the reference workflow order across Companies
+      executionInstructions: 'Run only sources referenced by this Sourcing Line and apply its query or screen, cadence policy,
+        cursor/window, result limit, budget, Inbox threshold, and review policy. Preserve the reference workflow order across Companies
         House recent and mature windows, GitHub builder signals, X/Twitter builder signals, cheap enrichment, Affinity relationship
         check, first verdict, LinkedIn company enrichment only for Meet or Watch, second verdict for fresh LinkedIn company
         data, sync proposal, portfolio-overlap review, screen, outreach drafts, and digest. LinkedIn people discovery is weekly
@@ -75,9 +76,14 @@ definition:
         boundary. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage:
         `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be
         completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance`
-        or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the
-        referenced pack document and preserve the document ID alongside the output artifact.'
-      missingInputPolicy: Ask for enabled source registry, cadence policy, budget cap, result limits, review thresholds, and
+        or `policy` constrains process and approval boundaries. Include the sourcing-line project ID and parent Origination
+        Pipeline project ID in every run receipt and candidate proposal. For refs with `outputFieldKey`, produce that output
+        from the referenced pack document and preserve the document ID alongside the output artifact. Emit each
+        `candidateCreationProposals` item as `{ fieldValues, sourceRefs, relationships, attention }`; `relationships` must
+        contain `{ direction: "incoming", relatedProjectId: sourcing_line_project_id, relationshipTypeKey:
+        "vc.sourcing_line_originated_candidate", metadata }`, and `attention` must contain an evidence-backed reason and
+        deterministic rank. These are review proposals, not completed project creations.'
+      missingInputPolicy: Ask for the line definition, registered source keys, cadence policy, budget cap, result limits, review thresholds, and
         credential readiness before running. If paid-source budget is missing, run only no-cost previews or produce a dry-run
         plan.
       externalActionPolicy: Read, score, draft, and propose only unless a child task has explicit human approval for the specific
@@ -87,9 +93,12 @@ definition:
       - Run receipt lists enabled sources, skipped sources, cadence mode, result limits, cost metadata or missing cost metadata,
         and degraded-source notes.
       - Run status is one of dry_run, completed, partial, blocked, or failed.
+      - Receipt identifies the Sourcing Line project, parent pipeline, template or custom hypothesis, screen version, and message variant when applicable.
       - Candidate counts are split by source, new, duplicate, rejected, enriched, Meet, Watch, Pass, screened, outreach-drafted,
         and promotion-ready where available.
       - Source-state update includes dedupe keys, pagination/offset notes, seen IDs, and unresolved state-store gaps.
+      - Every proposed candidate includes project field values, source references, the incoming sourcing-line relationship, and an attention reason and rank.
+      - Candidate creation remains an explicit, approval-gated platform finalization step.
       - Follow-up child tasks and human approvals are listed without performing unapproved writes.
     humanDecisionPoints:
     - Approve enabling or changing a recurring schedule.
@@ -112,9 +121,20 @@ fields:
   output:
   - key: run_status
     name: Run Status
-    fieldType: string
+    fieldType: select
     required: false
     position: 0
+    options:
+    - value: dry_run
+      label: Dry Run
+    - value: completed
+      label: Completed
+    - value: partial
+      label: Partial
+    - value: blocked
+      label: Blocked
+    - value: failed
+      label: Failed
     config: {}
   - key: new_candidates_count
     name: New Candidates Count
@@ -153,12 +173,30 @@ fields:
     required: true
     position: 6
     config: {}
+  - key: candidateCreationProposals
+    name: Candidate Creation Proposals
+    fieldType: json
+    required: true
+    position: 7
+    config:
+      contractRef: candidateCreationProposals.v1
+      requiredItemPaths:
+      - fieldValues.company_name
+      - fieldValues.candidate_key
+      - fieldValues.sourcing_line_project_id
+      - sourceRefs
+      - relationships[].direction
+      - relationships[].relatedProjectId
+      - relationships[].relationshipTypeKey
+      - relationships[].metadata
+      - attention.reason
+      - attention.rank
 runtime:
   defaultExecutionContext:
     sourceMetadata:
       templateFamily: vc
       taskKind: run_sourcing_pipeline
-      projectType: vc_origination_pipeline
+      projectType: vc_sourcing_line
   requiredResources:
     requiresTaskChat: true
   executionProfile:
