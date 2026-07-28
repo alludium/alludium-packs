@@ -20,6 +20,7 @@ recommendations:
     supportedProjectTypes:
       - vc_deal_room
       - vc_origination_pipeline
+      - vc_sourcing_line
       - vc_investment_management
     use: Deal pipeline, CRM context, company/deal records, relationship context, and outreach history.
     pluginCredentialBoundary: user_or_workspace_api_key
@@ -51,6 +52,7 @@ recommendations:
     supportedProjectTypes:
       - vc_deal_room
       - vc_origination_pipeline
+      - vc_sourcing_line
     use: Company enrichment, founder profiles, market intelligence, and sourcing context.
     pluginCredentialBoundary: user_or_workspace_oauth
     alludiumPlatformMapping: workspace_connection
@@ -79,6 +81,7 @@ recommendations:
     category: Source Automation
     supportedProjectTypes:
       - vc_origination_pipeline
+      - vc_sourcing_line
     use: Approved actor-based source discovery for VC origination pipelines, including founder, company, launch, and hiring signals when a workspace authorizes those sources.
     recommendationStatus: recommended
     pluginCredentialBoundary: user_or_workspace_api_key
@@ -103,6 +106,7 @@ recommendations:
       - kind: setup
         supportedProjectTypes:
           - vc_origination_pipeline
+          - vc_sourcing_line
         label: Set up Apify for Origination
         taskDefinitionTemplateId: vc.apify_setup
   - externalId: companies-house-mcp
@@ -110,6 +114,7 @@ recommendations:
     category: Company Registry
     supportedProjectTypes:
       - vc_origination_pipeline
+      - vc_sourcing_line
     status: future
     use: Future typed UK company registry connector candidate for VC origination pipelines if public-page extraction proves insufficient.
     recommendationStatus: optional
@@ -132,6 +137,7 @@ recommendations:
     supportedProjectTypes:
       - vc_deal_room
       - vc_origination_pipeline
+      - vc_sourcing_line
     use: Financing, investor, funding-round, and private-market context.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: workspace_connection
@@ -152,6 +158,7 @@ recommendations:
     supportedProjectTypes:
       - vc_deal_room
       - vc_origination_pipeline
+      - vc_sourcing_line
     use: Public web, company, people, code, and deeper research workflows.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: platform_or_workspace_connection
@@ -162,6 +169,7 @@ recommendations:
     supportedProjectTypes:
       - vc_deal_room
       - vc_origination_pipeline
+      - vc_sourcing_line
     use: First-party website extraction, website mapping, page evidence, source-material gathering, and public Companies House page previews for VC origination.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: platform_or_workspace_connection
@@ -181,6 +189,7 @@ recommendations:
     supportedProjectTypes:
       - vc_deal_room
       - vc_origination_pipeline
+      - vc_sourcing_line
     use: Broad public web and news search fallback.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: platform_or_workspace_connection
@@ -191,6 +200,7 @@ recommendations:
     supportedProjectTypes:
       - vc_deal_room
       - vc_origination_pipeline
+      - vc_sourcing_line
     use: Broad search fallback across Google, Bing, YouTube, and other search surfaces.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: platform_or_workspace_connection
@@ -201,6 +211,7 @@ recommendations:
     supportedProjectTypes:
       - vc_deal_room
       - vc_origination_pipeline
+      - vc_sourcing_line
     use: Web search and extraction when a workspace prefers Tavily-backed research.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: workspace_connection
@@ -211,6 +222,7 @@ recommendations:
     supportedProjectTypes:
       - vc_deal_room
       - vc_origination_pipeline
+      - vc_sourcing_line
     use: Search, reasoning, and deep research workflows where Perplexity is connected.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: workspace_connection
@@ -221,6 +233,7 @@ recommendations:
     supportedProjectTypes:
       - vc_deal_room
       - vc_origination_pipeline
+      - vc_sourcing_line
     use: Real-time web access, search, and scraping where a workspace has Bright Data access.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: workspace_connection
@@ -231,6 +244,7 @@ recommendations:
     supportedProjectTypes:
       - vc_deal_room
       - vc_origination_pipeline
+      - vc_sourcing_line
     use: News, media monitoring, and market-signal intelligence where a workspace has Meltwater access.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: workspace_connection

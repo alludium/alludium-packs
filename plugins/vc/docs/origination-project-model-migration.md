@@ -2,7 +2,7 @@
 
 ## Scope
 
-Pack `0.6.1` separates the legacy all-in-one `vc_origination_pipeline` into:
+Pack `0.6.2` separates the legacy all-in-one `vc_origination_pipeline` into:
 
 - `vc_origination_pipeline`: fund-level source registry, shared policy, budgets, cross-line Inbox, digest, and health.
 - `vc_sourcing_line`: one repeatable experiment with a dedicated chat, source mix, screen, cadence, schedules, receipts, and metrics.

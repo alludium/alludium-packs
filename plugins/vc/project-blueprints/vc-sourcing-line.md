@@ -24,6 +24,16 @@ Project-type setup and configuration tasks used before normal project execution.
 | [Create Sourcing Line](../tasks/create-sourcing-line.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | [Origination Pipeline Orchestration](../skills/origination-pipeline-orchestration/SKILL.md) | None declared | None declared |
 | [VC Pack Variable Discovery](../tasks/vc-pack-variable-discovery.md) | [Sourcing Operator](../agents/vc-sourcing-operator.md) | None declared | None declared | None declared |
 
+## Integration Support
+
+Connector discovery, preview, and read-only integration support tasks used to configure or inspect source surfaces without making them part of the VC workflow.
+
+| Task | Agent | Skills | Documents | Integrations |
+| --- | --- | --- | --- | --- |
+| [Explore Apify Origination Sources](../tasks/apify-discovery.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Apify Discovery](../skills/vc-apify-discovery/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | `apify-actors-mcp` |
+| [Preview Apify Origination Results](../tasks/apify-sync-read.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Apify Sync Read](../skills/vc-apify-sync-read/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | `apify-actors-mcp` |
+| [Set Up Apify for Origination](../tasks/apify-setup.md) | [Integration Operator](../agents/vc-integration-operator.md) | [VC Apify Discovery](../skills/vc-apify-discovery/SKILL.md)<br>[VC Apify Sync Read](../skills/vc-apify-sync-read/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | None declared | `apify-actors-mcp` |
+
 ## Draft
 
 | Task | Agent | Skills | Documents | Integrations |

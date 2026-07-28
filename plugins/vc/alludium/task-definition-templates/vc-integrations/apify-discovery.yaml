@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.apify_discovery
-version: 0.1.4
+version: 0.1.5
 title: Explore Apify Origination Sources
 category: Venture Capital
 visibility: workspace
@@ -26,6 +26,7 @@ definition:
     plannedRecommendedAgentTemplate: vc_integration_operator
     supportedProjectTypes:
     - vc_origination_pipeline
+    - vc_sourcing_line
     supportedProjectScopes:
     - project_management
     instructions:
@@ -66,3 +67,19 @@ fields:
     required: false
     position: 1
     config: {}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc
+      taskKind: apify_discovery
+      integrationKey: apify-actors-mcp
+  requiredResources:
+    requiresTaskChat: true
+    requiredApplications:
+    - applicationExternalId: apify-actors-mcp
+      applicationName: Apify Actors
+      connectionScope: USER_CONFIGURED
+  executionProfile:
+    agentStartsImmediately: true
+    preferredMode: guided_integration_discovery
+    requiresHumanConfirmationToComplete: true
