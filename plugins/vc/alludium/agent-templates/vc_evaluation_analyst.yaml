@@ -171,6 +171,7 @@ mcpServers:
     - name: artifact.attachToChat
     - name: artifact.detachFromChat
     - name: artifact.getArtifactsLinkedToChat
+    - name: artifact.getArtifactsForChatContext
   harmonic-mcp-oauth:
     tools:
     - name: get_companies

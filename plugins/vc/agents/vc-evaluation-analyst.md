@@ -102,7 +102,7 @@ Humans own pass/continue decisions, founder relationship judgment, external send
 
 ## MCP And Tool Context
 
-- `alludium-platform`: `artifact.searchArtifacts`, `artifact.list`, `artifact.getArtifact`, `artifact.findById`, `artifact.getSourceMetadata`, `artifact.createTextArtifact`, `artifact.updateTextArtifact`, `artifact.attachToChat`, `artifact.detachFromChat`, `artifact.getArtifactsLinkedToChat`
+- `alludium-platform`: `artifact.searchArtifacts`, `artifact.list`, `artifact.getArtifact`, `artifact.findById`, `artifact.getSourceMetadata`, `artifact.createTextArtifact`, `artifact.updateTextArtifact`, `artifact.attachToChat`, `artifact.detachFromChat`, `artifact.getArtifactsLinkedToChat`, `artifact.getArtifactsForChatContext`
 - `harmonic-mcp-oauth`: `get_companies`, `typeahead_search`, `search_companies_natural_language`, `get_people`
 - `affinity-mcp-server`: `affinity_search_companies`, `affinity_get_company`, `affinity_list_company_notes`, `affinity_list_opportunities`
 - `exa-mcp-hosted`: `web_search_exa`, `web_search_advanced_exa`, `company_research_exa`, `people_search_exa`, `crawling_exa`, `deep_researcher_start`, `deep_researcher_check`
