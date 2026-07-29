@@ -135,7 +135,7 @@
     }
   },
   "initialVersion": {
-    "version": "0.1.1",
+    "version": "0.1.2",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -392,6 +392,7 @@
       "archived"
     ],
     "lifecycleTransitions": [
+      {"from": "draft", "to": "ready"},
       {"from": "draft", "to": "paused"},
       {"from": "paused", "to": "ready"},
       {"from": "ready", "to": "active"},
