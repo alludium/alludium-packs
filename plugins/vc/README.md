@@ -4,13 +4,13 @@ Public VC workflow plugin and pack seed for [Alludium](https://www.alludium.ai).
 
 Alludium VC packages reusable venture capital workflows for sourcing, screening, diligence, investment committee preparation, closing, and portfolio onboarding. It is the first bundle inside the broader `alludium-packs` catalog, not a standalone VC-only repository.
 
-Version `0.6.3` makes the Origination Manager the primary interactive operator for connected origination integrations, adds truthful sourcing-line readiness transitions, and strengthens receipt-reading, delegation, and user-facing identifier rules. It builds on the `0.6.2` split between the fund-level Origination Pipeline, first-class Sourcing Line experiments, and Origination Candidate records.
+Version `0.6.4` gives the Origination Manager dynamic access to the user's live connected applications, so newly connected origination integrations can be discovered and activated without rebuilding the manager deployment. It builds on the `0.6.3` manager-first interaction model and the `0.6.2` split between the fund-level Origination Pipeline, first-class Sourcing Line experiments, and Origination Candidate records.
 
 Version `0.5.42` makes Deal Manager the truthful primary contact for deal work, grounds it in the
 active task, file, and artifact surface, and requires real workspace links for task and artifact
 handoffs.
 
-The current draft `v0.6.3` pack surface includes skills, generated agent/task/project-blueprint Markdown for external agentic tooling, Alludium runtime agent templates, MCP definitions, VC task-definition templates, the canonical `venture_capital` vertical key and legacy `vc` alias, and the Deal Pipeline, Origination Pipeline, Sourcing Line, Origination Candidate, and Deal Execution project type definitions. Earlier release notes remain in git history and tags.
+The current draft `v0.6.4` pack surface includes skills, generated agent/task/project-blueprint Markdown for external agentic tooling, Alludium runtime agent templates, MCP definitions, VC task-definition templates, the canonical `venture_capital` vertical key and legacy `vc` alias, and the Deal Pipeline, Origination Pipeline, Sourcing Line, Origination Candidate, and Deal Execution project type definitions. Earlier release notes remain in git history and tags.
 
 The current draft pack surface contains:
 
@@ -27,7 +27,7 @@ The current draft pack surface contains:
 - Alludium workspace variable declarations in `alludium/workspace-variables.yaml`
 - a pack-aware Alludium manifest in `alludium/manifest.yaml`
 
-The VC task-definition templates advertise the project types they support, including `vc_deal_room`, `vc_origination_pipeline`, `vc_sourcing_line`, `vc_origination_candidate`, and `vc_investment_management`. The draft `v0.6.3` surface includes those definitions, but it still requires paired platform ingest and relationship-finalizer support before it can be used as the runtime source of truth.
+The VC task-definition templates advertise the project types they support, including `vc_deal_room`, `vc_origination_pipeline`, `vc_sourcing_line`, `vc_origination_candidate`, and `vc_investment_management`. The draft `v0.6.4` surface includes those definitions, but it still requires paired platform ingest and relationship-finalizer support before it can be used as the runtime source of truth.
 
 Task-template workspace eligibility is controlled by catalog-level `verticalKeys`. Individual template `definitionJson.vertical` values remain legacy workflow metadata, so the `v0.2.2` compatibility fix is intentionally made in `alludium/task-definition-templates/catalog.v1.json`.
 

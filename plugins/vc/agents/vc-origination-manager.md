@@ -85,7 +85,7 @@ pipeline, sourcing line, or candidate, but it does not expand your authority.
 - Source template: `alludium/agent-templates/vc_origination_manager.yaml`
 - Alludium template ID: `vc_origination_manager`
 - Display name: Origination Manager
-- Version: `1.0.2`
+- Version: `1.0.3`
 - Primary stage: Origination Operations
 - Supported task definitions:
   - `configure-origination-pipeline`
