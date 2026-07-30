@@ -409,6 +409,20 @@
       "status": "source"
     },
     {
+      "id": "vc.document.live_deal_status_report_template",
+      "title": "Live Deal Status Report Template",
+      "description": "Reusable report-only deal status structure with CSS-only chapter tabs, deal dynamics, and grouped open questions.",
+      "documentType": "template",
+      "path": "deal-room/live-deal-status-report-template.html",
+      "supportedProjectTypes": [
+        "vc_deal_room"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "refresh-live-deal-status-report"
+      ],
+      "status": "source"
+    },
+    {
       "id": "vc.document.ic_agenda_template",
       "title": "IC Agenda Template",
       "description": "Reusable investment committee agenda for sequencing discussion, open questions, decision items, and pre-reads.",

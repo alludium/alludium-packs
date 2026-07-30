@@ -52,6 +52,7 @@ GENERAL_TASK_SLUGS_BY_PROJECT_TYPE: dict[str, list[str]] = {
         "request-founder-materials",
         "summarize-meeting-records",
         "review-opportunity-status",
+        "refresh-live-deal-status-report",
     ],
 }
 

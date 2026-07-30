@@ -324,6 +324,7 @@ VC_ARTIFACT_OUTPUTS = {
     "prepare-meeting": ["initial_call_brief_artifact_id"],
     "summarize-meeting-records": ["customer_insights_artifact_id"],
     "run-opportunity-evaluation": ["follow_up_evaluation_artifact_id"],
+    "refresh-live-deal-status-report": ["live_deal_status_report_artifact_id"],
     "run-commercial-evaluation": ["commercial_evaluation_artifact_id"],
     "run-technical-evaluation": ["technical_evaluation_artifact_id"],
     "run-financial-evaluation": ["financial_evaluation_artifact_id"],
@@ -475,6 +476,7 @@ OPTIONAL_ARTIFACT_INPUTS = {
     "create-deal": {"pitch_deck_artifact_id"},
     "run-investment-fit-screen": {"opportunity_intake_artifact_id", "pitch_deck_artifact_id"},
     "capture-opportunity-intake": {"pitch_deck_artifact_id", "source_thread_artifact_id"},
+    "refresh-live-deal-status-report": {"existing_live_deal_status_report_artifact_id"},
 }
 
 
@@ -1457,13 +1459,20 @@ def validate_vc_deal_room_task_template_shape(
 
     if DEFAULT_PROJECT_SCOPE in supported_project_scopes:
         stage = definition_json.get("stage")
+        stage_independent = definition_json.get("stageIndependent") is True
         allowed_stages = set(VC_DEAL_ROOM_LIFECYCLE_STAGES)
         if definition_json.get("taskFamily") == "deal_pipeline_project_creation":
             allowed_stages.add("setup")
-        if stage not in allowed_stages:
+        if stage_independent and stage is not None:
+            fail(
+                f"Task template {template_id} ({slug}) must omit definitionJson.stage when "
+                "definitionJson.stageIndependent is true"
+            )
+        if not stage_independent and stage not in allowed_stages:
             fail(
                 f"Task template {template_id} ({slug}) definitionJson.stage must be one of "
-                f"{sorted(allowed_stages)} for vc_deal_room project_instance tasks"
+                f"{sorted(allowed_stages)} for vc_deal_room project_instance tasks, or the task "
+                "must explicitly set definitionJson.stageIndependent: true"
             )
 
     for section_name in ["input", "context", "output"]:
@@ -3298,6 +3307,7 @@ def load_task_template_contracts() -> dict[str, dict[str, Any]]:
                 supported_project_types,
             ),
             "stage": definition_json.get("stage"),
+            "stageIndependent": definition_json.get("stageIndependent") is True,
             "scheduling": definition_json.get("scheduling"),
             "fields": {
                 "input": field_map(template_id, "input", fields.get("input")),
@@ -3508,7 +3518,13 @@ def validate_project_task_mapping_contracts() -> None:
             )
 
         lifecycle_stage = mapping.get("lifecycleStage")
-        if lifecycle_stage not in lifecycle_states:
+        stage_independent = task_contract.get("stageIndependent") is True
+        if stage_independent and lifecycle_stage is not None:
+            fail(
+                f"Project type {project_type_id} mapping {mapping_id} must omit lifecycleStage "
+                f"because task {slug} is stage-independent"
+            )
+        if not stage_independent and lifecycle_stage not in lifecycle_states:
             fail(
                 f"Project type {project_type_id} mapping {mapping_id} references unknown "
                 f"lifecycleStage {lifecycle_stage}"
