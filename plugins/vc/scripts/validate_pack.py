@@ -48,6 +48,11 @@ REQUIRED_AGENT_PROMPT_VARIABLES = {
         "fundThesis": "vc.fundThesis",
     },
 }
+REQUIRED_AGENT_TOOLS = {
+    "vc_first_look_analyst": {
+        "alludium-platform": {"artifact.readSourceRange"},
+    },
+}
 WORKSPACE_VARIABLE_VALUE_TYPES = {"string", "number", "boolean", "object", "array"}
 WORKSPACE_VARIABLE_RENDER_TYPES = {"text", "textarea", "select", "checkbox", "number"}
 WORKSPACE_VARIABLE_REQUIREMENT_LEVELS = {"optional", "recommended", "required"}
@@ -681,6 +686,21 @@ def validate_templates(manifest: dict[str, Any], skill_ids: set[str]) -> None:
             if not isinstance(prompt_template, str) or interpolation not in prompt_template:
                 fail(
                     f"Agent template {template_id} prompt.template must interpolate {interpolation}"
+                )
+
+        mcp_servers = template.get("mcpServers") or {}
+        for server_id, required_tools in REQUIRED_AGENT_TOOLS.get(template_id, {}).items():
+            server = mcp_servers.get(server_id) if isinstance(mcp_servers, dict) else None
+            tools = server.get("tools") if isinstance(server, dict) else None
+            declared_tools = {
+                tool.get("name")
+                for tool in tools or []
+                if isinstance(tool, dict) and isinstance(tool.get("name"), str)
+            }
+            missing_tools = sorted(required_tools - declared_tools)
+            if missing_tools:
+                fail(
+                    f"Agent template {template_id} must expose {server_id} tools {missing_tools}"
                 )
 
         for skill in template.get("skills", []):

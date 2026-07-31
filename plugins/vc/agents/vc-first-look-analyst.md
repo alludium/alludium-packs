@@ -41,7 +41,7 @@ Use the configured fund thesis as the core reference for thesis-fit screening. I
 
 ## Tool Posture
 
-Affinity or another CRM/deal system may provide existing relationship and source context. Harmonic is the primary structured company/founder enrichment example when connected. Dealroom is optional when connected for funding and investor context. Use Exa for public research, Brave/SerpAPI for broad fallback, and Firecrawl for first-party website evidence.
+Affinity or another CRM/deal system may provide existing relationship and source context. Harmonic is the primary structured company/founder enrichment example when connected. Dealroom is optional when connected for funding and investor context. Use Exa for public research, Brave/SerpAPI for broad fallback, and Firecrawl for first-party website evidence. When artifact search reports a source-backed artifact without a provider index, read its canonical text with `artifact.readSourceRange`; never send platform storage URLs to Firecrawl or another external scraper.
 
 ## Output Contract
 
@@ -63,7 +63,7 @@ Humans own pass/continue decisions, founder relationship judgment, external send
 - Source template: `alludium/agent-templates/vc_first_look_analyst.yaml`
 - Alludium template ID: `vc_first_look_analyst`
 - Display name: First Look Analyst
-- Version: `1.0.8`
+- Version: `1.0.9`
 - Primary stage: Screening
 - Primary Deal Room state: `screening`
 - Supported task definitions:
@@ -78,7 +78,7 @@ Humans own pass/continue decisions, founder relationship judgment, external send
 
 ## MCP And Tool Context
 
-- `alludium-platform`: `artifact.searchArtifacts`, `artifact.list`, `artifact.getArtifact`, `artifact.findById`, `artifact.createTextArtifact`, `artifact.attachToChat`, `artifact.detachFromChat`, `artifact.getArtifactsLinkedToChat`
+- `alludium-platform`: `artifact.searchArtifacts`, `artifact.list`, `artifact.getArtifact`, `artifact.findById`, `artifact.readSourceRange`, `artifact.createTextArtifact`, `artifact.attachToChat`, `artifact.detachFromChat`, `artifact.getArtifactsLinkedToChat`
 - `harmonic-mcp-oauth`: `get_companies`, `typeahead_search`, `search_companies_natural_language`, `get_people`
 - `affinity-mcp-server`: `affinity_search_companies`, `affinity_get_company`, `affinity_list_company_notes`
 - `exa-mcp-hosted`: `web_search_exa`, `web_search_advanced_exa`, `company_research_exa`, `people_search_exa`, `crawling_exa`, `deep_researcher_start`, `deep_researcher_check`

@@ -1,4 +1,4 @@
-version: "1.0.8"
+version: "1.0.9"
 type: "template"
 platform_managed: false
 id: vc_first_look_analyst
@@ -79,7 +79,8 @@ prompt:
 
     Affinity or another CRM/deal system may provide existing relationship and source context. Harmonic is the primary structured company/founder
     enrichment example when connected. Dealroom is optional when connected for funding and investor context. Use Exa for public research, Brave/SerpAPI
-    for broad fallback, and Firecrawl for first-party website evidence.
+    for broad fallback, and Firecrawl for first-party website evidence. When artifact search reports a source-backed artifact without a provider
+    index, read its canonical text with `artifact.readSourceRange`; never send platform storage URLs to Firecrawl or another external scraper.
 
 
     ## Output Contract
@@ -128,6 +129,7 @@ mcpServers:
     - name: artifact.list
     - name: artifact.getArtifact
     - name: artifact.findById
+    - name: artifact.readSourceRange
     - name: artifact.createTextArtifact
     - name: artifact.attachToChat
     - name: artifact.detachFromChat
