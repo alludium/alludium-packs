@@ -157,7 +157,7 @@
     }
   },
   "initialVersion": {
-    "version": "0.3.1",
+    "version": "0.3.2",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -321,7 +321,7 @@
           "Surface the most important candidates and degraded lines in the cross-line Inbox."
         ],
         "boundaries": [
-          "Do not run source queries directly on the hub.",
+          "Use the manager chat for bounded source discovery, previews, schema and cost checks, approved on-demand runs, and enrichment; retain experiment-specific state and history in the dedicated sourcing-line project.",
           "Do not store candidate funnel state on the hub.",
           "Do not enable schedules, spend money, send outreach, or create downstream projects without approval."
         ]
