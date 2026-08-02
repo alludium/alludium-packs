@@ -1,0 +1,782 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/alludium/alludium-packs/blob/main/plugins/vc/skills/embedded-deal-continuity/references/method-run.schema.json",
+  "title": "Embedded Deal Continuity method run",
+  "description": "Version 1.0.0 input and provisional output contract for cited First Look, What Changed, and Next Decision generation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "input",
+    "output"
+  ],
+  "properties": {
+    "input": {
+      "$ref": "#/$defs/input"
+    },
+    "output": {
+      "$ref": "#/$defs/output"
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "methodIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "version"
+      ],
+      "properties": {
+        "id": {
+          "const": "vc.embedded-deal-continuity"
+        },
+        "version": {
+          "const": "1.0.0"
+        }
+      }
+    },
+    "uncertainty": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "level",
+        "explanation"
+      ],
+      "properties": {
+        "level": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "explanation": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "authorityRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authorityId",
+        "role",
+        "scope",
+        "status",
+        "reviewedAt"
+      ],
+      "properties": {
+        "authorityId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "role": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "scope": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "status": {
+          "enum": [
+            "current",
+            "stale",
+            "revoked"
+          ]
+        },
+        "reviewedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "sourceRevision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "revisionId",
+        "status",
+        "authorityId",
+        "observedAt"
+      ],
+      "properties": {
+        "sourceId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "revisionId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "status": {
+          "enum": [
+            "current",
+            "stale",
+            "superseded"
+          ]
+        },
+        "authorityId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "observedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "citation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "citationId",
+        "sourceId",
+        "revisionId",
+        "locator"
+      ],
+      "properties": {
+        "citationId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "sourceId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "revisionId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "locator": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "evidenceClaim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claimId",
+        "claim",
+        "evidenceState",
+        "citationIds",
+        "authorityId",
+        "uncertainty"
+      ],
+      "properties": {
+        "claimId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "claim": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "evidenceState": {
+          "enum": [
+            "current",
+            "stale",
+            "superseded",
+            "conflicting",
+            "unresolved"
+          ]
+        },
+        "citationIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "authorityId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "uncertainty": {
+          "$ref": "#/$defs/uncertainty"
+        }
+      }
+    },
+    "changeConsequence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "changeId",
+        "changeLevel",
+        "category",
+        "consequence",
+        "claimIds",
+        "citationIds",
+        "authorityIds",
+        "uncertainty"
+      ],
+      "properties": {
+        "changeId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "changeLevel": {
+          "enum": [
+            "S0",
+            "S1"
+          ]
+        },
+        "category": {
+          "enum": [
+            "added",
+            "preserved",
+            "stale",
+            "superseded",
+            "conflicting",
+            "unresolved"
+          ]
+        },
+        "consequence": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "claimIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "citationIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "authorityIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "uncertainty": {
+          "$ref": "#/$defs/uncertainty"
+        }
+      }
+    },
+    "fundMethodContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "revisionId",
+        "citationIds",
+        "uncertainty"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "revisionId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "citationIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "uncertainty": {
+          "$ref": "#/$defs/uncertainty"
+        }
+      }
+    },
+    "authorityContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "methodOwnerAuthorityId",
+        "investmentAuthorityId",
+        "humanApprovalRequired"
+      ],
+      "properties": {
+        "methodOwnerAuthorityId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "investmentAuthorityId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "humanApprovalRequired": {
+          "const": true
+        }
+      }
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method",
+        "dealReference",
+        "fundMethodContext",
+        "authorityContext",
+        "authorityRecords",
+        "sourceRevisions",
+        "citations",
+        "evidenceClaims",
+        "changeConsequences"
+      ],
+      "properties": {
+        "method": {
+          "$ref": "#/$defs/methodIdentity"
+        },
+        "dealReference": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "opaqueId",
+            "label"
+          ],
+          "properties": {
+            "opaqueId": {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            "label": {
+              "$ref": "#/$defs/nonEmptyString"
+            }
+          }
+        },
+        "fundMethodContext": {
+          "$ref": "#/$defs/fundMethodContext"
+        },
+        "authorityContext": {
+          "$ref": "#/$defs/authorityContext"
+        },
+        "authorityRecords": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/authorityRecord"
+          }
+        },
+        "sourceRevisions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/sourceRevision"
+          }
+        },
+        "citations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/citation"
+          }
+        },
+        "evidenceClaims": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/evidenceClaim"
+          }
+        },
+        "changeConsequences": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/changeConsequence"
+          }
+        }
+      }
+    },
+    "outputClaim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claimId",
+        "statement",
+        "evidenceState",
+        "citationIds",
+        "authorityId",
+        "authorityStatus",
+        "uncertainty"
+      ],
+      "properties": {
+        "claimId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "statement": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "evidenceState": {
+          "enum": [
+            "current",
+            "stale",
+            "superseded",
+            "conflicting",
+            "unresolved"
+          ]
+        },
+        "citationIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "authorityId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "authorityStatus": {
+          "enum": [
+            "current",
+            "stale",
+            "revoked"
+          ]
+        },
+        "uncertainty": {
+          "$ref": "#/$defs/uncertainty"
+        }
+      }
+    },
+    "firstLook": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "status",
+        "summary",
+        "supportingClaimIds",
+        "claims",
+        "limitations"
+      ],
+      "properties": {
+        "title": {
+          "const": "First Look"
+        },
+        "status": {
+          "const": "provisional"
+        },
+        "summary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "supportingClaimIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "claims": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/outputClaim"
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        }
+      }
+    },
+    "changeOutputItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "changeId",
+        "changeLevel",
+        "consequence",
+        "claimIds",
+        "citationIds",
+        "authorityStatuses",
+        "uncertainty"
+      ],
+      "properties": {
+        "changeId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "changeLevel": {
+          "enum": [
+            "S0",
+            "S1"
+          ]
+        },
+        "consequence": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "claimIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "citationIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "authorityStatuses": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "current",
+              "stale",
+              "revoked"
+            ]
+          }
+        },
+        "uncertainty": {
+          "$ref": "#/$defs/uncertainty"
+        }
+      }
+    },
+    "whatChanged": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "summary",
+        "added",
+        "preserved",
+        "stale",
+        "superseded",
+        "conflicting",
+        "unresolved",
+        "unresolvedVisible"
+      ],
+      "properties": {
+        "title": {
+          "const": "What Changed"
+        },
+        "summary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "added": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/changeOutputItem"
+          }
+        },
+        "preserved": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/changeOutputItem"
+          }
+        },
+        "stale": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/changeOutputItem"
+          }
+        },
+        "superseded": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/changeOutputItem"
+          }
+        },
+        "conflicting": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/changeOutputItem"
+          }
+        },
+        "unresolved": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/changeOutputItem"
+          }
+        },
+        "unresolvedVisible": {
+          "const": true
+        }
+      }
+    },
+    "nextDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "kind",
+        "question",
+        "whyConsequential",
+        "evidenceNeeded",
+        "ownerAuthorityId",
+        "supportingClaimIds",
+        "citationIds",
+        "uncertainty",
+        "humanJudgmentRequired"
+      ],
+      "properties": {
+        "title": {
+          "const": "Next Decision"
+        },
+        "kind": {
+          "enum": [
+            "unresolved_question",
+            "missing_evidence",
+            "human_judgment"
+          ]
+        },
+        "question": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "whyConsequential": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "evidenceNeeded": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "ownerAuthorityId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "supportingClaimIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "citationIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "uncertainty": {
+          "$ref": "#/$defs/uncertainty"
+        },
+        "humanJudgmentRequired": {
+          "const": true
+        }
+      }
+    },
+    "revisionReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fundMethodRevisionId",
+        "sourceRevisionsUsed",
+        "changeIdsUsed"
+      ],
+      "properties": {
+        "fundMethodRevisionId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "sourceRevisionsUsed": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "sourceId",
+              "revisionId",
+              "status"
+            ],
+            "properties": {
+              "sourceId": {
+                "$ref": "#/$defs/nonEmptyString"
+              },
+              "revisionId": {
+                "$ref": "#/$defs/nonEmptyString"
+              },
+              "status": {
+                "enum": [
+                  "current",
+                  "stale",
+                  "superseded"
+                ]
+              }
+            }
+          }
+        },
+        "changeIdsUsed": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        }
+      }
+    },
+    "approvalBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "postureAuthoritative",
+        "icExportAuthoritative",
+        "reviewOwnerAuthorityId",
+        "allowedActions"
+      ],
+      "properties": {
+        "status": {
+          "const": "pending_human_review"
+        },
+        "postureAuthoritative": {
+          "const": false
+        },
+        "icExportAuthoritative": {
+          "const": false
+        },
+        "reviewOwnerAuthorityId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "allowedActions": {
+          "const": [
+            "approve",
+            "edit",
+            "reject"
+          ]
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method",
+        "firstLook",
+        "whatChanged",
+        "nextDecision",
+        "revisionReceipt",
+        "approvalBoundary"
+      ],
+      "properties": {
+        "method": {
+          "$ref": "#/$defs/methodIdentity"
+        },
+        "firstLook": {
+          "$ref": "#/$defs/firstLook"
+        },
+        "whatChanged": {
+          "$ref": "#/$defs/whatChanged"
+        },
+        "nextDecision": {
+          "$ref": "#/$defs/nextDecision"
+        },
+        "revisionReceipt": {
+          "$ref": "#/$defs/revisionReceipt"
+        },
+        "approvalBoundary": {
+          "$ref": "#/$defs/approvalBoundary"
+        }
+      }
+    }
+  }
+}

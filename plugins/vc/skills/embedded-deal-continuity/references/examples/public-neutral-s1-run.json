@@ -1,0 +1,634 @@
+{
+  "input": {
+    "method": {
+      "id": "vc.embedded-deal-continuity",
+      "version": "1.0.0"
+    },
+    "dealReference": {
+      "opaqueId": "public-neutral-deal-001",
+      "label": "Northstar Systems"
+    },
+    "fundMethodContext": {
+      "name": "Public-neutral seed mandate",
+      "revisionId": "fund-method-v2",
+      "citationIds": [
+        "cite-fund-method-v2"
+      ],
+      "uncertainty": {
+        "level": "low",
+        "explanation": "The supplied mandate revision is explicit, but applying it remains a human judgment."
+      }
+    },
+    "authorityContext": {
+      "methodOwnerAuthorityId": "authority-fund-method-owner",
+      "investmentAuthorityId": "authority-investment-committee",
+      "humanApprovalRequired": true
+    },
+    "authorityRecords": [
+      {
+        "authorityId": "authority-company-materials",
+        "role": "Company evidence owner",
+        "scope": "Company-provided product, pricing, and traction claims",
+        "status": "current",
+        "reviewedAt": "2026-07-31T09:00:00Z"
+      },
+      {
+        "authorityId": "authority-independent-research",
+        "role": "Independent research owner",
+        "scope": "Public-neutral market research note",
+        "status": "current",
+        "reviewedAt": "2026-07-31T09:05:00Z"
+      },
+      {
+        "authorityId": "authority-reference-program",
+        "role": "Reference programme owner",
+        "scope": "Historic reference interview notes",
+        "status": "stale",
+        "reviewedAt": "2026-06-01T10:00:00Z"
+      },
+      {
+        "authorityId": "authority-fund-method-owner",
+        "role": "Fund method owner",
+        "scope": "Public-neutral seed mandate method revision",
+        "status": "current",
+        "reviewedAt": "2026-07-31T08:30:00Z"
+      },
+      {
+        "authorityId": "authority-investment-committee",
+        "role": "Human investment authority",
+        "scope": "Fund-relative posture and IC export",
+        "status": "current",
+        "reviewedAt": "2026-07-31T08:35:00Z"
+      }
+    ],
+    "sourceRevisions": [
+      {
+        "sourceId": "source-company-deck",
+        "revisionId": "deck-v1",
+        "status": "superseded",
+        "authorityId": "authority-company-materials",
+        "observedAt": "2026-07-01T10:00:00Z"
+      },
+      {
+        "sourceId": "source-company-deck",
+        "revisionId": "deck-v2",
+        "status": "current",
+        "authorityId": "authority-company-materials",
+        "observedAt": "2026-07-31T09:15:00Z"
+      },
+      {
+        "sourceId": "source-market-note",
+        "revisionId": "market-note-v1",
+        "status": "current",
+        "authorityId": "authority-independent-research",
+        "observedAt": "2026-07-30T14:00:00Z"
+      },
+      {
+        "sourceId": "source-reference-note",
+        "revisionId": "reference-note-v1",
+        "status": "stale",
+        "authorityId": "authority-reference-program",
+        "observedAt": "2026-06-01T10:00:00Z"
+      },
+      {
+        "sourceId": "source-fund-method",
+        "revisionId": "fund-method-v2",
+        "status": "current",
+        "authorityId": "authority-fund-method-owner",
+        "observedAt": "2026-07-31T08:30:00Z"
+      }
+    ],
+    "citations": [
+      {
+        "citationId": "cite-deck-v1-pricing",
+        "sourceId": "source-company-deck",
+        "revisionId": "deck-v1",
+        "locator": "slide 8, pricing table"
+      },
+      {
+        "citationId": "cite-deck-v2-product",
+        "sourceId": "source-company-deck",
+        "revisionId": "deck-v2",
+        "locator": "slide 3, product summary"
+      },
+      {
+        "citationId": "cite-deck-v2-pilots",
+        "sourceId": "source-company-deck",
+        "revisionId": "deck-v2",
+        "locator": "slide 6, pilot status"
+      },
+      {
+        "citationId": "cite-deck-v2-market",
+        "sourceId": "source-company-deck",
+        "revisionId": "deck-v2",
+        "locator": "slide 10, market estimate"
+      },
+      {
+        "citationId": "cite-deck-v2-retention",
+        "sourceId": "source-company-deck",
+        "revisionId": "deck-v2",
+        "locator": "slide 7, usage metrics"
+      },
+      {
+        "citationId": "cite-market-note-v1-size",
+        "sourceId": "source-market-note",
+        "revisionId": "market-note-v1",
+        "locator": "section 2, addressable segment"
+      },
+      {
+        "citationId": "cite-reference-note-v1-renewal",
+        "sourceId": "source-reference-note",
+        "revisionId": "reference-note-v1",
+        "locator": "paragraph 4, renewal intent"
+      },
+      {
+        "citationId": "cite-fund-method-v2",
+        "sourceId": "source-fund-method",
+        "revisionId": "fund-method-v2",
+        "locator": "section 1, seed mandate"
+      }
+    ],
+    "evidenceClaims": [
+      {
+        "claimId": "claim-product-workflow",
+        "claim": "The product automates a defined compliance evidence workflow for mid-market operators.",
+        "evidenceState": "current",
+        "citationIds": [
+          "cite-deck-v2-product"
+        ],
+        "authorityId": "authority-company-materials",
+        "uncertainty": {
+          "level": "medium",
+          "explanation": "The workflow is described by the company and has not been independently observed."
+        }
+      },
+      {
+        "claimId": "claim-two-pilots",
+        "claim": "Two design-partner pilots are now described as active.",
+        "evidenceState": "current",
+        "citationIds": [
+          "cite-deck-v2-pilots"
+        ],
+        "authorityId": "authority-company-materials",
+        "uncertainty": {
+          "level": "medium",
+          "explanation": "The current deck names pilot status but supplies no signed contract or usage export."
+        }
+      },
+      {
+        "claimId": "claim-old-pricing",
+        "claim": "The prior deck described a per-seat pricing model.",
+        "evidenceState": "superseded",
+        "citationIds": [
+          "cite-deck-v1-pricing"
+        ],
+        "authorityId": "authority-company-materials",
+        "uncertainty": {
+          "level": "low",
+          "explanation": "The historic statement is clear, but the revision is no longer current."
+        }
+      },
+      {
+        "claimId": "claim-reference-renewal",
+        "claim": "A historic reference note recorded intent to renew after the pilot.",
+        "evidenceState": "stale",
+        "citationIds": [
+          "cite-reference-note-v1-renewal"
+        ],
+        "authorityId": "authority-reference-program",
+        "uncertainty": {
+          "level": "high",
+          "explanation": "The note predates the current product revision and its authority review is stale."
+        }
+      },
+      {
+        "claimId": "claim-market-size-conflict",
+        "claim": "The company market estimate materially exceeds the independent segment estimate.",
+        "evidenceState": "conflicting",
+        "citationIds": [
+          "cite-deck-v2-market",
+          "cite-market-note-v1-size"
+        ],
+        "authorityId": "authority-independent-research",
+        "uncertainty": {
+          "level": "high",
+          "explanation": "The sources use different segment definitions and cannot be reconciled from the supplied packet."
+        }
+      },
+      {
+        "claimId": "claim-retention-unresolved",
+        "claim": "The current packet does not establish cohort retention beyond aggregate weekly usage.",
+        "evidenceState": "unresolved",
+        "citationIds": [
+          "cite-deck-v2-retention"
+        ],
+        "authorityId": "authority-company-materials",
+        "uncertainty": {
+          "level": "high",
+          "explanation": "No cohort-level export or customer-verified retention evidence is supplied."
+        }
+      }
+    ],
+    "changeConsequences": [
+      {
+        "changeId": "change-added-pilots",
+        "changeLevel": "S1",
+        "category": "added",
+        "consequence": "The new pilot claim adds traction evidence but remains company-reported.",
+        "claimIds": [
+          "claim-two-pilots"
+        ],
+        "citationIds": [
+          "cite-deck-v2-pilots"
+        ],
+        "authorityIds": [
+          "authority-company-materials"
+        ],
+        "uncertainty": {
+          "level": "medium",
+          "explanation": "Pilot activity is current but not independently verified."
+        }
+      },
+      {
+        "changeId": "change-preserved-workflow",
+        "changeLevel": "S0",
+        "category": "preserved",
+        "consequence": "The core product workflow remains consistent in the current revision.",
+        "claimIds": [
+          "claim-product-workflow"
+        ],
+        "citationIds": [
+          "cite-deck-v2-product"
+        ],
+        "authorityIds": [
+          "authority-company-materials"
+        ],
+        "uncertainty": {
+          "level": "medium",
+          "explanation": "The description is preserved, but independent product observation is absent."
+        }
+      },
+      {
+        "changeId": "change-stale-reference",
+        "changeLevel": "S1",
+        "category": "stale",
+        "consequence": "The historic renewal statement cannot support a current retention claim.",
+        "claimIds": [
+          "claim-reference-renewal"
+        ],
+        "citationIds": [
+          "cite-reference-note-v1-renewal"
+        ],
+        "authorityIds": [
+          "authority-reference-program"
+        ],
+        "uncertainty": {
+          "level": "high",
+          "explanation": "Both evidence age and stale authority limit present use."
+        }
+      },
+      {
+        "changeId": "change-superseded-pricing",
+        "changeLevel": "S1",
+        "category": "superseded",
+        "consequence": "The prior per-seat pricing statement must not be used as the current model.",
+        "claimIds": [
+          "claim-old-pricing"
+        ],
+        "citationIds": [
+          "cite-deck-v1-pricing"
+        ],
+        "authorityIds": [
+          "authority-company-materials"
+        ],
+        "uncertainty": {
+          "level": "low",
+          "explanation": "Revision status is explicit; the replacement pricing model remains outside this packet."
+        }
+      },
+      {
+        "changeId": "change-conflicting-market",
+        "changeLevel": "S1",
+        "category": "conflicting",
+        "consequence": "Market scale cannot be treated as settled until segment definitions are reconciled.",
+        "claimIds": [
+          "claim-market-size-conflict"
+        ],
+        "citationIds": [
+          "cite-deck-v2-market",
+          "cite-market-note-v1-size"
+        ],
+        "authorityIds": [
+          "authority-company-materials",
+          "authority-independent-research"
+        ],
+        "uncertainty": {
+          "level": "high",
+          "explanation": "The two current sources disagree because their market boundaries differ."
+        }
+      },
+      {
+        "changeId": "change-unresolved-retention",
+        "changeLevel": "S1",
+        "category": "unresolved",
+        "consequence": "Retention remains decision-relevant and unsupported by cohort evidence.",
+        "claimIds": [
+          "claim-retention-unresolved"
+        ],
+        "citationIds": [
+          "cite-deck-v2-retention"
+        ],
+        "authorityIds": [
+          "authority-company-materials"
+        ],
+        "uncertainty": {
+          "level": "high",
+          "explanation": "Aggregate usage does not answer cohort retention."
+        }
+      }
+    ]
+  },
+  "output": {
+    "method": {
+      "id": "vc.embedded-deal-continuity",
+      "version": "1.0.0"
+    },
+    "firstLook": {
+      "title": "First Look",
+      "status": "provisional",
+      "summary": "Northstar Systems presents a defined compliance workflow and two company-reported pilots, while market scale and retention remain unresolved.",
+      "supportingClaimIds": [
+        "claim-product-workflow",
+        "claim-two-pilots",
+        "claim-market-size-conflict",
+        "claim-retention-unresolved"
+      ],
+      "claims": [
+        {
+          "claimId": "claim-product-workflow",
+          "statement": "The product automates a defined compliance evidence workflow for mid-market operators.",
+          "evidenceState": "current",
+          "citationIds": [
+            "cite-deck-v2-product"
+          ],
+          "authorityId": "authority-company-materials",
+          "authorityStatus": "current",
+          "uncertainty": {
+            "level": "medium",
+            "explanation": "The workflow is described by the company and has not been independently observed."
+          }
+        },
+        {
+          "claimId": "claim-two-pilots",
+          "statement": "Two design-partner pilots are now described as active.",
+          "evidenceState": "current",
+          "citationIds": [
+            "cite-deck-v2-pilots"
+          ],
+          "authorityId": "authority-company-materials",
+          "authorityStatus": "current",
+          "uncertainty": {
+            "level": "medium",
+            "explanation": "The current deck names pilot status but supplies no signed contract or usage export."
+          }
+        },
+        {
+          "claimId": "claim-market-size-conflict",
+          "statement": "The company market estimate materially exceeds the independent segment estimate.",
+          "evidenceState": "conflicting",
+          "citationIds": [
+            "cite-deck-v2-market",
+            "cite-market-note-v1-size"
+          ],
+          "authorityId": "authority-independent-research",
+          "authorityStatus": "current",
+          "uncertainty": {
+            "level": "high",
+            "explanation": "The sources use different segment definitions and cannot be reconciled from the supplied packet."
+          }
+        },
+        {
+          "claimId": "claim-retention-unresolved",
+          "statement": "The current packet does not establish cohort retention beyond aggregate weekly usage.",
+          "evidenceState": "unresolved",
+          "citationIds": [
+            "cite-deck-v2-retention"
+          ],
+          "authorityId": "authority-company-materials",
+          "authorityStatus": "current",
+          "uncertainty": {
+            "level": "high",
+            "explanation": "No cohort-level export or customer-verified retention evidence is supplied."
+          }
+        }
+      ],
+      "limitations": [
+        "Pilot activity is company-reported and lacks signed or usage evidence.",
+        "The market estimates use unreconciled segment definitions.",
+        "No cohort retention evidence is supplied.",
+        "This First Look is provisional and records no investment disposition."
+      ]
+    },
+    "whatChanged": {
+      "title": "What Changed",
+      "summary": "The current revision adds pilot activity, preserves the product workflow, and makes prior pricing, reference, market, and retention limits explicit.",
+      "added": [
+        {
+          "changeId": "change-added-pilots",
+          "changeLevel": "S1",
+          "consequence": "The new pilot claim adds traction evidence but remains company-reported.",
+          "claimIds": [
+            "claim-two-pilots"
+          ],
+          "citationIds": [
+            "cite-deck-v2-pilots"
+          ],
+          "authorityStatuses": [
+            "current"
+          ],
+          "uncertainty": {
+            "level": "medium",
+            "explanation": "Pilot activity is current but not independently verified."
+          }
+        }
+      ],
+      "preserved": [
+        {
+          "changeId": "change-preserved-workflow",
+          "changeLevel": "S0",
+          "consequence": "The core product workflow remains consistent in the current revision.",
+          "claimIds": [
+            "claim-product-workflow"
+          ],
+          "citationIds": [
+            "cite-deck-v2-product"
+          ],
+          "authorityStatuses": [
+            "current"
+          ],
+          "uncertainty": {
+            "level": "medium",
+            "explanation": "The description is preserved, but independent product observation is absent."
+          }
+        }
+      ],
+      "stale": [
+        {
+          "changeId": "change-stale-reference",
+          "changeLevel": "S1",
+          "consequence": "The historic renewal statement cannot support a current retention claim.",
+          "claimIds": [
+            "claim-reference-renewal"
+          ],
+          "citationIds": [
+            "cite-reference-note-v1-renewal"
+          ],
+          "authorityStatuses": [
+            "stale"
+          ],
+          "uncertainty": {
+            "level": "high",
+            "explanation": "Both evidence age and stale authority limit present use."
+          }
+        }
+      ],
+      "superseded": [
+        {
+          "changeId": "change-superseded-pricing",
+          "changeLevel": "S1",
+          "consequence": "The prior per-seat pricing statement must not be used as the current model.",
+          "claimIds": [
+            "claim-old-pricing"
+          ],
+          "citationIds": [
+            "cite-deck-v1-pricing"
+          ],
+          "authorityStatuses": [
+            "current"
+          ],
+          "uncertainty": {
+            "level": "low",
+            "explanation": "Revision status is explicit; the replacement pricing model remains outside this packet."
+          }
+        }
+      ],
+      "conflicting": [
+        {
+          "changeId": "change-conflicting-market",
+          "changeLevel": "S1",
+          "consequence": "Market scale cannot be treated as settled until segment definitions are reconciled.",
+          "claimIds": [
+            "claim-market-size-conflict"
+          ],
+          "citationIds": [
+            "cite-deck-v2-market",
+            "cite-market-note-v1-size"
+          ],
+          "authorityStatuses": [
+            "current"
+          ],
+          "uncertainty": {
+            "level": "high",
+            "explanation": "The two current sources disagree because their market boundaries differ."
+          }
+        }
+      ],
+      "unresolved": [
+        {
+          "changeId": "change-unresolved-retention",
+          "changeLevel": "S1",
+          "consequence": "Retention remains decision-relevant and unsupported by cohort evidence.",
+          "claimIds": [
+            "claim-retention-unresolved"
+          ],
+          "citationIds": [
+            "cite-deck-v2-retention"
+          ],
+          "authorityStatuses": [
+            "current"
+          ],
+          "uncertainty": {
+            "level": "high",
+            "explanation": "Aggregate usage does not answer cohort retention."
+          }
+        }
+      ],
+      "unresolvedVisible": true
+    },
+    "nextDecision": {
+      "title": "Next Decision",
+      "kind": "missing_evidence",
+      "question": "What current cohort evidence establishes whether pilot usage is retained beyond initial activation?",
+      "whyConsequential": "Retention is the most consequential unresolved operating claim and cannot be inferred from aggregate weekly usage or the stale reference note.",
+      "evidenceNeeded": [
+        "A current cohort retention export with cohort definitions and observation dates",
+        "A current customer-confirmed renewal or continued-use record"
+      ],
+      "ownerAuthorityId": "authority-investment-committee",
+      "supportingClaimIds": [
+        "claim-two-pilots",
+        "claim-reference-renewal",
+        "claim-retention-unresolved"
+      ],
+      "citationIds": [
+        "cite-deck-v2-pilots",
+        "cite-reference-note-v1-renewal",
+        "cite-deck-v2-retention"
+      ],
+      "uncertainty": {
+        "level": "high",
+        "explanation": "The supplied evidence does not establish current cohort retention."
+      },
+      "humanJudgmentRequired": true
+    },
+    "revisionReceipt": {
+      "fundMethodRevisionId": "fund-method-v2",
+      "sourceRevisionsUsed": [
+        {
+          "sourceId": "source-company-deck",
+          "revisionId": "deck-v1",
+          "status": "superseded"
+        },
+        {
+          "sourceId": "source-company-deck",
+          "revisionId": "deck-v2",
+          "status": "current"
+        },
+        {
+          "sourceId": "source-market-note",
+          "revisionId": "market-note-v1",
+          "status": "current"
+        },
+        {
+          "sourceId": "source-reference-note",
+          "revisionId": "reference-note-v1",
+          "status": "stale"
+        },
+        {
+          "sourceId": "source-fund-method",
+          "revisionId": "fund-method-v2",
+          "status": "current"
+        }
+      ],
+      "changeIdsUsed": [
+        "change-added-pilots",
+        "change-preserved-workflow",
+        "change-stale-reference",
+        "change-superseded-pricing",
+        "change-conflicting-market",
+        "change-unresolved-retention"
+      ]
+    },
+    "approvalBoundary": {
+      "status": "pending_human_review",
+      "postureAuthoritative": false,
+      "icExportAuthoritative": false,
+      "reviewOwnerAuthorityId": "authority-investment-committee",
+      "allowedActions": [
+        "approve",
+        "edit",
+        "reject"
+      ]
+    }
+  }
+}

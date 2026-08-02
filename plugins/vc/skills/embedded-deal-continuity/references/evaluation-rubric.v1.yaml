@@ -1,0 +1,37 @@
+method:
+  id: vc.embedded-deal-continuity
+  version: 1.0.0
+rubricVersion: 1.0.0
+scope: provisional_method_output
+criteria:
+  - id: citation_correctness
+    severity: critical
+    passCondition: Every material output item resolves to an input claim and its exact citation locator.
+  - id: wrong_revision_use
+    severity: critical
+    passCondition: Every citation resolves to the declared source revision and no non-current revision is presented as current.
+  - id: stale_authority_use
+    severity: critical
+    passCondition: Authority status matches the input registry and stale or revoked authority is never presented as current.
+  - id: unsupported_claims
+    severity: critical
+    passCondition: First Look, What Changed, and Next Decision contain no claim outside the cited input claim set.
+  - id: change_comprehension
+    severity: material
+    passCondition: Every supplied S0/S1 consequence appears exactly once in its matching change bucket with consequence preserved.
+  - id: unresolved_state_visibility
+    severity: material
+    passCondition: Stale, superseded, conflicting, and unresolved states remain explicit and unresolved visibility is true.
+  - id: no_automated_investment_judgment
+    severity: critical
+    passCondition: Next Decision is a question, evidence request, or human judgment and contains no automatic disposition or score.
+  - id: human_authority_boundary
+    severity: critical
+    passCondition: Output remains pending human review with posture and IC export non-authoritative and approve, edit, reject available.
+comparison:
+  baseline: strong_same_source_cited_prose
+  requireSameAuthorizedSources: true
+  criticalFailureResult: method_fails
+  tieResult: prefer_cited_prose
+  unnecessaryComplexityResult: prefer_cited_prose
+  interpretation: Prefer the method only when its durable structure produces decision-relevant benefit after error, review, and complexity costs.

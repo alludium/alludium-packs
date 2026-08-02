@@ -1,0 +1,88 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.run_embedded_deal_continuity
+version: 1.0.0
+title: Run Embedded Deal Continuity
+category: Venture Capital
+visibility: workspace
+tags:
+  - vc
+  - evidence-continuity
+  - change-review
+definition:
+  name: Run Embedded Deal Continuity
+  slug: run-embedded-deal-continuity
+  description: Produce one provisional cited First Look, What Changed, and Next Decision bundle from adapter-supplied evidence and S0/S1 change state.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    stageIndependent: true
+    taskFamily: evaluation
+    methodContract:
+      id: vc.embedded-deal-continuity
+      version: 1.0.0
+      schemaPath: skills/embedded-deal-continuity/references/method-run.schema.json
+      inputDefinition: '#/$defs/input'
+      outputDefinition: '#/$defs/output'
+    requiredSkills:
+      - embedded-deal-continuity
+      - citation-enforcement
+      - investment-diligence-question-framework
+    plannedRecommendedAgentTemplate: vc_evaluation_analyst
+    recommendedAgentTemplate: vc_evaluation_analyst
+    supportedProjectTypes:
+      - vc_deal_room
+    instructions:
+      executionInstructions: >-
+        Apply `vc.embedded-deal-continuity` method version `1.0.0` to the required `deal_continuity_input`. Validate the input against `$defs.input` in the method schema before composing. Produce one `deal_continuity_output` matching `$defs.output` with all three sections: First Look, What Changed, and Next Decision. Preserve the exact cited claim, source revision, Fund/mandate method revision, S0/S1 consequence, authority, and uncertainty identities supplied by the Platform adapter. Place every change exactly once across added, preserved, stale, superseded, conflicting, and unresolved. Never present stale, superseded, conflicting, or unresolved evidence as current. First Look is provisional and must not claim final investment disposition. Next Decision must be one unresolved question, missing-evidence request, or explicitly human-owned judgment and must not encode an automatic invest/pass disposition, score, or equivalent posture. Set the approval boundary to pending human review with posture and IC export non-authoritative and approve/edit/reject as the only allowed review actions. Do not call providers, fetch private data, invent a general Fund ontology, create predictive scores, send messages, mutate CRM or project state, or export to IC. Return exact contract errors instead of filling missing citation, revision, authority, or uncertainty data.
+      missingInputPolicy: Stop and list the exact schema or reference failures when the versioned input, citation, source revision, authority, uncertainty, Fund/mandate method revision, or S0/S1 consequence is missing or inconsistent.
+      externalActionPolicy: Provisional output only. Human approval, edit, rejection, posture recording, IC export, external communication, and project or CRM mutation require separate explicit authority outside this task.
+      completionCriteria:
+        - First Look, What Changed, and Next Decision are present under method version 1.0.0.
+        - Every output claim and change resolves to supplied citations, revisions, authorities, and uncertainty.
+        - All six change-state buckets remain explicit and every supplied change appears exactly once.
+        - Next Decision contains no automatic investment disposition or score.
+        - The approval boundary remains pending human review and posture and IC export remain non-authoritative.
+    humanDecisionPoints:
+      - Approve, edit, or reject the provisional continuity bundle before any posture or IC export can become authoritative.
+      - Make every Fund-relative investment judgment, stage movement, external communication, and final investment decision.
+    orchestration:
+      parentTaskPolicy: none
+      suggestedChildTasks: []
+fields:
+  input:
+    - key: deal_continuity_input
+      name: Deal Continuity Input
+      fieldType: json
+      required: true
+      position: 0
+      config:
+        methodId: vc.embedded-deal-continuity
+        methodVersion: 1.0.0
+        schemaDefinition: '#/$defs/input'
+  output:
+    - key: deal_continuity_output
+      name: Deal Continuity Output
+      fieldType: json
+      required: true
+      position: 0
+      config:
+        methodId: vc.embedded-deal-continuity
+        methodVersion: 1.0.0
+        schemaDefinition: '#/$defs/output'
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc-workflows
+      taskKind: run_embedded_deal_continuity
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    requiresHumanConfirmationToComplete: true
+    preferredMode: guided_execution
+    preferredAgentType: vc_evaluation_analyst
+ui:
+  renderer: generic
+  surfaceKey: null
+  frameRef: null
