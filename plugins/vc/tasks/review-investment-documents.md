@@ -31,10 +31,10 @@ Coordinate investment document review by mapping document provisions back to the
 
 ## Reference Materials
 
-- [Investment Document Review Template](../alludium/documents/deal-room/investment-document-review-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
-- [Legal Diligence Guide](../alludium/documents/deal-room/legal-diligence-guide.md): Use as the analysis method.
-- [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.md): Follow for citations, claim language, assumptions, and evidence quality.
-- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+- [Investment Document Review Template](../alludium/documents/deal-room/investment-document-review-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Legal Diligence Guide](../alludium/documents/deal-room/legal-diligence-guide.html): Use as the analysis method.
+- [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.html): Follow for citations, claim language, assumptions, and evidence quality.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.html): Follow for process boundaries and review standards.
 
 ## Deliverable
 

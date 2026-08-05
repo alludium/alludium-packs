@@ -31,9 +31,9 @@ Review the latest outreach state, response evidence, CRM/list context, and candi
 
 ## Reference Materials
 
-- [Promotion Package Template](../alludium/documents/origination/promotion-package-template.md): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
-- [Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md): Use as the analysis method.
-- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+- [Promotion Package Template](../alludium/documents/origination/promotion-package-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
+- [Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.html): Use as the analysis method.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.html): Follow for process boundaries and review standards.
 
 ## Deliverable
 

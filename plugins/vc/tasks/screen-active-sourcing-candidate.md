@@ -31,10 +31,10 @@ Screen active origination candidates using the reference pipeline's fast thesis 
 
 ## Reference Materials
 
-- [Sourcing Scoring Rubric](../alludium/documents/origination/sourcing-scoring-rubric.md): Use as the analysis method.
-- [Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.md): Use as the analysis method.
-- [Dedupe And Novelty Policy](../alludium/documents/origination/dedupe-novelty-policy.md): Follow for process boundaries and review standards.
-- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.md): Follow for process boundaries and review standards.
+- [Sourcing Scoring Rubric](../alludium/documents/origination/sourcing-scoring-rubric.html): Use as the analysis method.
+- [Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.html): Use as the analysis method.
+- [Dedupe And Novelty Policy](../alludium/documents/origination/dedupe-novelty-policy.html): Follow for process boundaries and review standards.
+- [Template Use Guidance](../alludium/documents/shared/template-use-guidance.html): Follow for process boundaries and review standards.
 
 ## Deliverable
 
