@@ -1,4 +1,4 @@
-version: 1.0.3
+version: 1.0.4
 type: template
 platform_managed: false
 id: vc_evaluation_analyst
@@ -86,6 +86,21 @@ prompt:
     the matching skill output.
 
 
+    ## Fund Context
+
+
+    Confirmed Fund id: {{fundId}}
+
+    {{#each funds}}
+    - {{id}} | {{name}} | {{status}} | stage={{stage}} | sectors={{sectors}} | geographies={{geographies}} | thesis={{thesis}} | exclusions={{exclusions}} | scoring={{scoringFramework}}
+    {{else}}
+    - No configured Funds.
+    {{/each}}
+
+
+    Require the confirmed Fund id to exactly match one active configured Fund. Use only that Fund''s mandate and never blend Funds. If the id is missing, unknown, or inactive, create no Fund-relative evaluation and return Fund selection as unresolved to the Deal Manager.
+
+
     ## Skill Routing
 
 
@@ -157,7 +172,29 @@ prompt:
     only.
 
     '
-  variables: []
+  variables:
+  - key: funds
+    label: Funds
+    type: array
+    description: Reviewed canonical Fund records used for mandate-relative evaluation.
+    value: []
+    render: textarea
+    binding:
+      source: workspace.variable
+      path: vc.funds
+      fallback: []
+      overridePolicy: workspace_admin_only
+  - key: fundId
+    label: Confirmed Fund ID
+    type: string
+    description: Stable Fund id confirmed on the current project.
+    value: Unconfirmed
+    render: text
+    binding:
+      source: project.field
+      path: fund_id
+      fallback: Unconfirmed
+      overridePolicy: readonly_runtime
 mcpServers:
   alludium-platform:
     tools:

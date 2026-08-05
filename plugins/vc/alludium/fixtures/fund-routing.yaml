@@ -1,0 +1,108 @@
+schemaVersion: "0.1"
+description: Representative canonical Fund records and expected Deal Manager routing states.
+funds:
+  - id: europe-seed
+    name: Europe Seed Fund
+    status: actively_investing
+    stage: Pre-seed and Seed
+    sectors:
+      - Applied AI
+      - Fintech
+    geographies:
+      - Europe
+    thesis: B2B software with a credible initial wedge and capital-efficient expansion path.
+    minimumCheckSize: 250000
+    maximumCheckSize: 1500000
+    currency: EUR
+    exclusions:
+      - Capital-intensive hardware
+    scoringFramework: Seed screening rubric
+  - id: climate-growth
+    name: Climate Growth Fund
+    status: actively_investing
+    stage: Series B and Growth
+    sectors:
+      - Climate software
+      - Industrial decarbonisation
+    geographies:
+      - Europe
+      - North America
+    thesis: Proven climate infrastructure and software businesses with measurable emissions impact and repeatable enterprise revenue.
+    minimumCheckSize: 5000000
+    maximumCheckSize: 15000000
+    currency: EUR
+    exclusions:
+      - Pre-revenue companies
+    scoringFramework: Growth underwriting rubric
+  - id: legacy-opportunity
+    name: Legacy Opportunity Fund
+    status: closed_to_new_investments
+    stage: Any
+    sectors:
+      - Opportunistic
+    geographies:
+      - Global
+    thesis: Historical mandate retained for reference only.
+
+scenarios:
+  - id: no-configured-funds
+    configuredFundIds: []
+    projectFundId: null
+    expectedState: setup_incomplete
+    mayMakeFundFitClaim: false
+    mayPersistFundId: false
+  - id: one-plausible-active-fund
+    configuredFundIds:
+      - europe-seed
+    projectFundId: null
+    plausibleFundIds:
+      - europe-seed
+    expectedState: confirmation_required
+    expectedRanking:
+      - europe-seed
+    mayPersistFundId: false
+  - id: multiple-plausible-active-funds
+    configuredFundIds:
+      - europe-seed
+      - climate-growth
+    projectFundId: null
+    plausibleFundIds:
+      - europe-seed
+      - climate-growth
+    expectedState: ranked_confirmation_required
+    expectedRanking:
+      - europe-seed
+      - climate-growth
+    requiresConfidence: true
+    mayPersistFundId: false
+  - id: valid-confirmed-fund
+    configuredFundIds:
+      - europe-seed
+      - climate-growth
+    projectFundId: climate-growth
+    expectedState: confirmed
+    expectedSelectedFundId: climate-growth
+    mayBlendFunds: false
+  - id: unknown-confirmed-fund
+    configuredFundIds:
+      - europe-seed
+      - climate-growth
+    projectFundId: missing-fund
+    expectedState: correction_required
+    mayMakeFundFitClaim: false
+  - id: inactive-confirmed-fund
+    configuredFundIds:
+      - europe-seed
+      - legacy-opportunity
+    projectFundId: legacy-opportunity
+    expectedState: correction_required
+    mayMakeFundFitClaim: false
+  - id: deal-execution-handoff
+    configuredFundIds:
+      - europe-seed
+      - climate-growth
+    projectFundId: europe-seed
+    expectedState: handoff
+    expectedProjectCreation:
+      fieldValues:
+        fund_id: europe-seed

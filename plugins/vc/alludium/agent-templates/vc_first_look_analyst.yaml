@@ -1,4 +1,4 @@
-version: "1.0.9"
+version: "1.0.10"
 type: "template"
 platform_managed: false
 id: vc_first_look_analyst
@@ -55,11 +55,16 @@ prompt:
     ## Fund Context
 
 
-    - Fund thesis: {{fundThesis}}
+    Confirmed Fund id: {{fundId}}
+
+    {{#each funds}}
+    - {{id}} | {{name}} | {{status}} | stage={{stage}} | sectors={{sectors}} | geographies={{geographies}} | thesis={{thesis}} | exclusions={{exclusions}} | scoring={{scoringFramework}}
+    {{else}}
+    - No configured Funds.
+    {{/each}}
 
 
-    Use the configured fund thesis as the core reference for thesis-fit screening. If the thesis is not configured, say that explicitly and ask
-    for the thesis before making strong fund-fit claims.
+    Require the confirmed Fund id to exactly match one active configured Fund. Use only that Fund''s mandate. Never select a Fund or blend Fund theses. If the id is missing, unknown, or inactive, make no Fund-fit claim and return Fund selection as unresolved to the Deal Manager.
 
 
     ## Skill Routing
@@ -111,17 +116,28 @@ prompt:
 
     '
   variables:
-  - key: fundThesis
-    label: Fund Thesis
-    type: string
-    description: Workspace-level investment thesis used for thesis-fit screening, lead generation, and review-pack context.
-    value: Not configured
+  - key: funds
+    label: Funds
+    type: array
+    description: Reviewed canonical Fund records used for mandate matching.
+    value: []
     render: textarea
     binding:
       source: workspace.variable
-      path: vc.fundThesis
-      fallback: Not configured
+      path: vc.funds
+      fallback: []
       overridePolicy: workspace_admin_only
+  - key: fundId
+    label: Confirmed Fund ID
+    type: string
+    description: Stable Fund id confirmed on the current project.
+    value: Unconfirmed
+    render: text
+    binding:
+      source: project.field
+      path: fund_id
+      fallback: Unconfirmed
+      overridePolicy: readonly_runtime
 mcpServers:
   alludium-platform:
     tools:

@@ -37,16 +37,31 @@ PUBLIC_READINESS_PATTERNS = [
         r"craft-ai-agents",
     ]
 ]
-EXPECTED_WORKSPACE_VARIABLE_BINDINGS = {
-    "fundStage": "vc.fundStage",
-    "fundSectors": "vc.fundSectors",
-    "fundGeography": "vc.fundGeography",
-    "fundThesis": "vc.fundThesis",
+EXPECTED_PROMPT_VARIABLE_BINDINGS = {
+    "firmName": {
+        "source": "workspace.variable",
+        "path": "vc.firmName",
+        "fallback": "Not configured",
+        "overridePolicy": "workspace_admin_only",
+    },
+    "funds": {
+        "source": "workspace.variable",
+        "path": "vc.funds",
+        "fallback": [],
+        "overridePolicy": "workspace_admin_only",
+    },
+    "fundId": {
+        "source": "project.field",
+        "path": "fund_id",
+        "fallback": "Unconfirmed",
+        "overridePolicy": "readonly_runtime",
+    },
 }
 REQUIRED_AGENT_PROMPT_VARIABLES = {
-    "vc_first_look_analyst": {
-        "fundThesis": "vc.fundThesis",
-    },
+    "vc_deal_manager": {"firmName", "funds", "fundId"},
+    "vc_diligence_analyst": {"funds", "fundId"},
+    "vc_evaluation_analyst": {"funds", "fundId"},
+    "vc_first_look_analyst": {"funds", "fundId"},
 }
 REQUIRED_AGENT_TOOLS = {
     "vc_first_look_analyst": {
@@ -268,12 +283,7 @@ PROJECT_CREATION_SOURCE_REFERENCE_TARGET_KEYS = {
 }
 PROJECT_CREATION_COMPLETION_OUTPUT_KEY = "projectCreation"
 PROJECT_CREATION_VARIABLE_FIELD_ALIASES = {
-    "vc.fundStage": {"stage_focus"},
-    "vc.fundSectors": {"sector_focus"},
-    "vc.fundGeography": {"geography_focus"},
-    "vc.fundThesis": {"investment_thesis"},
     "vc.firmName": {"firm_name"},
-    "vc.fundName": {"fund_name"},
     "vc.originationEnabledSources": {"enabled_sources"},
     "vc.originationRunCadence": {"run_cadence"},
     "vc.originationDigestDestination": {"digest_channel"},
@@ -642,50 +652,38 @@ def validate_templates(manifest: dict[str, Any], skill_ids: set[str]) -> None:
             if isinstance(key, str):
                 variables_by_key[key] = variable
             binding = variable.get("binding")
-            expected_path = EXPECTED_WORKSPACE_VARIABLE_BINDINGS.get(key)
-            if expected_path is None:
+            expected_binding = EXPECTED_PROMPT_VARIABLE_BINDINGS.get(key)
+            if expected_binding is None:
                 if binding is not None:
                     fail(
-                        f"Template {template_id} variable {key} has unexpected workspace binding"
+                        f"Template {template_id} variable {key} has unexpected runtime binding"
                     )
                 continue
             if not isinstance(binding, dict):
-                fail(f"Template {template_id} variable {key} must bind to {expected_path}")
-            if binding.get("source") != "workspace.variable":
-                fail(f"Template {template_id} variable {key} binding source must be workspace.variable")
-            if binding.get("path") != expected_path:
-                fail(f"Template {template_id} variable {key} binding path must be {expected_path}")
-            if binding.get("fallback") != "Not configured":
-                fail(f"Template {template_id} variable {key} binding fallback must be Not configured")
-            if binding.get("overridePolicy") != "workspace_admin_only":
                 fail(
-                    f"Template {template_id} variable {key} binding overridePolicy must be workspace_admin_only"
+                    f"Template {template_id} variable {key} must declare its expected binding"
                 )
+            for binding_key, expected_value in expected_binding.items():
+                if binding.get(binding_key) != expected_value:
+                    fail(
+                        f"Template {template_id} variable {key} binding {binding_key} "
+                        f"must be {expected_value!r}"
+                    )
 
-        for required_key, required_path in REQUIRED_AGENT_PROMPT_VARIABLES.get(
-            template_id,
-            {},
-        ).items():
+        for required_key in REQUIRED_AGENT_PROMPT_VARIABLES.get(template_id, set()):
             required_variable = variables_by_key.get(required_key)
             if required_variable is None:
                 fail(f"Agent template {template_id} must declare prompt variable {required_key}")
             required_binding = required_variable.get("binding")
             if not isinstance(required_binding, dict):
-                fail(
-                    f"Agent template {template_id} prompt variable {required_key} must bind to {required_path}"
-                )
-            if required_binding.get("source") != "workspace.variable":
-                fail(
-                    f"Agent template {template_id} prompt variable {required_key} binding source must be workspace.variable"
-                )
-            if required_binding.get("path") != required_path:
-                fail(
-                    f"Agent template {template_id} prompt variable {required_key} binding path must be {required_path}"
-                )
+                fail(f"Agent template {template_id} prompt variable {required_key} must bind")
             interpolation = "{{" + required_key + "}}"
-            if not isinstance(prompt_template, str) or interpolation not in prompt_template:
+            each_interpolation = "{{#each " + required_key + "}}"
+            if not isinstance(prompt_template, str) or (
+                interpolation not in prompt_template and each_interpolation not in prompt_template
+            ):
                 fail(
-                    f"Agent template {template_id} prompt.template must interpolate {interpolation}"
+                    f"Agent template {template_id} prompt.template must interpolate {required_key}"
                 )
 
         mcp_servers = template.get("mcpServers") or {}
@@ -842,6 +840,204 @@ def validate_workspace_variables(manifest: dict[str, Any], project_type_ids: set
             fail(f"Public workspace variable {variable_key} must not declare defaultValue")
 
     return keys
+
+
+def validate_fund_routing_contract() -> None:
+    variables = read_yaml(ROOT / "alludium" / "workspace-variables.yaml").get(
+        "workspaceVariables",
+        [],
+    )
+    variable_by_key = {
+        f"{entry.get('namespace')}.{entry.get('key')}": entry
+        for entry in variables
+        if isinstance(entry, dict)
+    }
+    retired_keys = {
+        "vc.fundName",
+        "vc.fundStage",
+        "vc.fundSectors",
+        "vc.fundGeography",
+        "vc.fundThesis",
+        "vc.scoringFramework",
+    }
+    declared_retired = sorted(retired_keys & set(variable_by_key))
+    if declared_retired:
+        fail(f"Retired scalar Fund variables remain declared: {declared_retired}")
+
+    funds_variable = variable_by_key.get("vc.funds")
+    if not isinstance(funds_variable, dict) or funds_variable.get("valueType") != "array":
+        fail("vc.funds must be the canonical array-valued Fund workspace variable")
+    if set(funds_variable.get("supportedProjectTypes") or []) != {
+        "vc_deal_room",
+        "vc_investment_management",
+        "vc_origination_pipeline",
+    }:
+        fail("vc.funds must support all three canonical VC project types")
+    item_contract = (funds_variable.get("validationMetadata") or {}).get("items") or {}
+    if set(item_contract.get("required") or []) != {"id", "name", "status"}:
+        fail("vc.funds item contract must require id, name, and status")
+
+    fixture_path = ROOT / "alludium" / "fixtures" / "fund-routing.yaml"
+    fixture = read_yaml(fixture_path)
+    funds = fixture.get("funds") if isinstance(fixture, dict) else None
+    if not isinstance(funds, list):
+        fail(f"{fixture_path.relative_to(ROOT)} must declare funds")
+    fund_by_id: dict[str, dict[str, Any]] = {}
+    for fund in funds:
+        if not isinstance(fund, dict) or not all(fund.get(key) for key in ["id", "name", "status"]):
+            fail("Fund routing fixture records must declare id, name, and status")
+        fund_id = fund["id"]
+        if fund_id in fund_by_id:
+            fail(f"Duplicate Fund routing fixture id: {fund_id}")
+        fund_by_id[fund_id] = fund
+    active_funds = [fund for fund in funds if fund.get("status") == "actively_investing"]
+    if len(active_funds) < 2:
+        fail("Fund routing fixture must contain at least two actively investing Funds")
+    active_mandates = {
+        (fund.get("stage"), tuple(fund.get("sectors") or []), tuple(fund.get("geographies") or []))
+        for fund in active_funds
+    }
+    if len(active_mandates) < 2:
+        fail("Active Fund fixtures must have meaningfully different mandates")
+
+    scenarios = fixture.get("scenarios")
+    required_scenarios = {
+        "no-configured-funds",
+        "one-plausible-active-fund",
+        "multiple-plausible-active-funds",
+        "valid-confirmed-fund",
+        "unknown-confirmed-fund",
+        "inactive-confirmed-fund",
+        "deal-execution-handoff",
+    }
+    scenarios_by_id = {
+        scenario.get("id"): scenario
+        for scenario in scenarios or []
+        if isinstance(scenario, dict) and isinstance(scenario.get("id"), str)
+    }
+    missing_scenarios = sorted(required_scenarios - set(scenarios_by_id))
+    if missing_scenarios:
+        fail(f"Fund routing fixture is missing scenarios: {missing_scenarios}")
+    for scenario_id, scenario in scenarios_by_id.items():
+        unknown_ids = set(scenario.get("configuredFundIds") or []) - set(fund_by_id)
+        if unknown_ids:
+            fail(f"Fund routing scenario {scenario_id} references unknown Funds: {sorted(unknown_ids)}")
+    handoff = scenarios_by_id["deal-execution-handoff"]
+    handed_off_id = (((handoff.get("expectedProjectCreation") or {}).get("fieldValues") or {}).get("fund_id"))
+    if handed_off_id != handoff.get("projectFundId"):
+        fail("Deal Execution handoff fixture must preserve fund_id exactly")
+
+    deal_room = read_json(ROOT / "alludium" / "project-types" / "vc_deal_room.json")
+    deal_execution = read_json(
+        ROOT / "alludium" / "project-types" / "vc_investment_management.json"
+    )
+    deal_room_fields = {
+        field.get("key")
+        for field in deal_room.get("initialVersion", {}).get("fieldsSchema", [])
+        if isinstance(field, dict)
+    }
+    deal_execution_fields = {
+        field.get("key")
+        for field in deal_execution.get("initialVersion", {}).get("fieldsSchema", [])
+        if isinstance(field, dict)
+    }
+    for project_type_id, field_keys in [
+        ("vc_deal_room", deal_room_fields),
+        ("vc_investment_management", deal_execution_fields),
+    ]:
+        if "fund_id" not in field_keys:
+            fail(f"Project type {project_type_id} must declare fund_id")
+        if "suggested_fund_id" in field_keys:
+            fail(f"Project type {project_type_id} must not declare suggested_fund_id")
+
+    removed_deal_room_fields = {
+        "connected_systems",
+        "matching_signals",
+        "source_owner",
+        "crm_provider",
+        "meeting_notes_artifact_id",
+        "deal_room_url",
+        "drive_deal_room_url",
+        "investment_stage",
+        "fund_thesis_context",
+        "thesis_target_list_artifact_id",
+        "commercial_dd_artifact_id",
+        "financial_dd_artifact_id",
+        "founder_evaluation_artifact_id",
+        "technical_dd_artifact_id",
+        "legal_diligence_artifact_id",
+        "investment_document_review_artifact_id",
+        "closing_checklist_artifact_id",
+        "conditions_precedent_verification_artifact_id",
+        "completion_tracker_artifact_id",
+        "portfolio_onboarding_plan_artifact_id",
+    }
+    stale_fields = sorted(removed_deal_room_fields & deal_room_fields)
+    if stale_fields:
+        fail(f"Deal Pipeline still declares retired fields: {stale_fields}")
+
+    project_manager = deal_room.get("initialVersion", {}).get("projectManager") or {}
+    if "agentTemplateKey" in project_manager:
+        fail("Project Manager overlay must not emit unsupported agentTemplateKey")
+    manager_contract = " ".join(
+        (project_manager.get("identity") or {}).get("instructions") or []
+    )
+    for required_phrase in [
+        "no Funds are configured",
+        "unknown or inactive",
+        "explicitly confirms",
+        "never blend mandates",
+        "Deal Execution handoff",
+    ]:
+        if required_phrase not in manager_contract:
+            fail(f"Deal Manager overlay is missing Fund routing rule: {required_phrase}")
+
+    deal_manager = read_yaml(
+        ROOT / "alludium" / "agent-templates" / "vc_deal_manager.yaml"
+    )
+    declared_platform_tools = {
+        tool.get("name")
+        for tool in ((deal_manager.get("mcpServers") or {}).get("alludium-platform") or {}).get(
+            "tools",
+            [],
+        )
+        if isinstance(tool, dict)
+    }
+    required_manager_tools = {
+        "project.getAgentContext",
+        "project.update",
+        "project-task.listByProject",
+        "artifact.getArtifactsForChatContext",
+    }
+    missing_manager_tools = sorted(required_manager_tools - declared_platform_tools)
+    if missing_manager_tools:
+        fail(f"Deal Manager is missing supported context/update tools: {missing_manager_tools}")
+
+    handoff_task = read_yaml(
+        ROOT
+        / "alludium"
+        / "task-definition-templates"
+        / "vc-workflows"
+        / "capture-investment-management-handoff.yaml"
+    )
+    handoff_inputs = {
+        field.get("key")
+        for field in (handoff_task.get("fields") or {}).get("input") or []
+        if isinstance(field, dict) and field.get("required") is True
+    }
+    if "fund_id" not in handoff_inputs:
+        fail("Deal Execution handoff must require confirmed fund_id input")
+    project_creation_output = next(
+        (
+            field
+            for field in (handoff_task.get("fields") or {}).get("output") or []
+            if isinstance(field, dict) and field.get("key") == "projectCreation"
+        ),
+        {},
+    )
+    required_paths = (project_creation_output.get("config") or {}).get("requiredPaths") or []
+    if "fieldValues.fund_id" not in required_paths:
+        fail("Deal Execution handoff projectCreation must preserve fund_id")
 
 
 def validate_application_recommendations(
@@ -4073,6 +4269,7 @@ def main() -> None:
         fail(f"{recommendations_path} must be an object")
     validate_mcp_definitions(manifest, recommendations)
     validate_workspace_variables(manifest, project_type_ids)
+    validate_fund_routing_contract()
     validate_application_recommendations(manifest, recommendations, project_type_ids)
     validate_recommendation_management_actions(
         recommendations,

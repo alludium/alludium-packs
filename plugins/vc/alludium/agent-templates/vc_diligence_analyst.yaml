@@ -1,4 +1,4 @@
-version: "1.0.7"
+version: "1.0.8"
 type: "template"
 platform_managed: false
 id: "vc_diligence_analyst"
@@ -79,6 +79,18 @@ prompt:
 
     Current runtime may not have every task definition installed. When a task is unavailable, explain the intended task route and continue with the matching skill output.
 
+    ## Fund Context
+
+    Confirmed Fund id: {{fundId}}
+
+    {{#each funds}}
+    - {{id}} | {{name}} | {{status}} | stage={{stage}} | sectors={{sectors}} | geographies={{geographies}} | thesis={{thesis}} | exclusions={{exclusions}} | scoring={{scoringFramework}}
+    {{else}}
+    - No configured Funds.
+    {{/each}}
+
+    Require the confirmed Fund id to exactly match one active configured Fund before making Fund-fit or mandate-relative claims. Use only that Fund's mandate and never blend Funds. If the id is missing, unknown, or inactive, return Fund selection as unresolved to the Deal Manager.
+
     ## Skill Routing
 
     - Start with `company-research-and-enrichment` when company context is stale or missing.
@@ -118,39 +130,28 @@ prompt:
 
     Humans own investment judgment, founder character judgment, references/contacting people, stage movement, external sends, CRM/deal-system writes, task creation, legal conclusions, audit assurance, valuation certainty, and technical/security/IP signoff.
   variables:
-    - key: "fundStage"
-      label: "Fund Stage Focus"
-      type: "string"
-      description: "Target investment stage."
-      value: "Not configured"
-      render: "text"
-      binding:
-        source: "workspace.variable"
-        path: "vc.fundStage"
-        fallback: "Not configured"
-        overridePolicy: "workspace_admin_only"
-    - key: "fundSectors"
-      label: "Fund Sector Focus"
-      type: "string"
-      description: "Target sectors or verticals."
-      value: "Not configured"
+    - key: "funds"
+      label: "Funds"
+      type: "array"
+      description: "Reviewed canonical Fund records used for mandate-relative diligence."
+      value: []
       render: "textarea"
       binding:
         source: "workspace.variable"
-        path: "vc.fundSectors"
-        fallback: "Not configured"
+        path: "vc.funds"
+        fallback: []
         overridePolicy: "workspace_admin_only"
-    - key: "fundGeography"
-      label: "Fund Geography Focus"
+    - key: "fundId"
+      label: "Confirmed Fund ID"
       type: "string"
-      description: "Target investment geography."
-      value: "Not configured"
+      description: "Stable Fund id confirmed on the current project."
+      value: "Unconfirmed"
       render: "text"
       binding:
-        source: "workspace.variable"
-        path: "vc.fundGeography"
-        fallback: "Not configured"
-        overridePolicy: "workspace_admin_only"
+        source: "project.field"
+        path: "fund_id"
+        fallback: "Unconfirmed"
+        overridePolicy: "readonly_runtime"
 
 mcpServers:
   alludium-platform:

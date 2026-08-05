@@ -16,7 +16,7 @@ Best-effort, review-only discovery for VC Pack Setup variables and invite sugges
 
 ## What To Do
 
-Use only the task input, task context, and safe workspace/onboarding context provided to this task to suggest values for the declared VC setup variables. Return best-effort answers keyed by namespace.key and include a concise rationale for each answer when evidence exists. Also suggest likely internal invite candidates only when the provided context contains safe email, calendar, company, or workspace signals. Do not browse external systems, sample CRM data, create projects, send invites, connect apps, persist workspace facts, or write to external systems. Finish by calling task-management.completeTask with output containing summary, variable_answers, and invite_candidates. The parent Pack Setup task remains the only review and persistence surface.
+Use only the task input, task context, and safe workspace/onboarding context provided to this task to suggest values for the declared VC setup variables. Return best-effort answers keyed by namespace.key and include a concise rationale for each answer when evidence exists. Also when `vc.funds` is declared, propose zero or more Fund records using stable id, name, and status, plus only mandate fields supported by supplied firm materials. Do not invent missing stages, sectors, geographies, thesis, check sizes, currency, exclusions, or scoring frameworks. Mark each inferred or unknown Fund field as review-needed, and do not treat proposed Fund records as confirmed workspace context; only the parent human-reviewed Pack Setup flow may persist them. Also suggest likely internal invite candidates only when the provided context contains safe email, calendar, company, or workspace signals. Do not browse external systems, sample CRM data, create projects, send invites, connect apps, persist workspace facts, or write to external systems. Finish by calling task-management.completeTask with output containing summary, variable_answers, and invite_candidates. The parent Pack Setup task remains the only review and persistence surface.
 
 ## Available Context
 
@@ -43,4 +43,5 @@ No separate external-action policy is declared. Do not take external or persiste
 - Include variable_answers as an object keyed by namespace.key.
 - Include invite_candidates as an array only when safe context supports them.
 - Mark uncertain or missing answers as review-needed instead of inventing facts.
+- Proposed `vc.funds` records have stable identity and field-level review markers for any inference or unknown.
 - Do not claim persistence or activation has occurred.

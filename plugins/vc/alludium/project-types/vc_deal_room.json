@@ -211,7 +211,7 @@
       "company_domain",
       "company_logo_url",
       "deal_source",
-      "investment_stage",
+      "fund_id",
       "lead_partner",
       "founder_names",
       "founder_profiles",
@@ -222,8 +222,7 @@
       "source_thread_url",
       "source_thread_artifact_id",
       "source_material_artifact_ids",
-      "founder_materials_artifact_ids",
-      "drive_deal_room_url"
+      "founder_materials_artifact_ids"
     ],
     "sourceReference": {
       "label": "CRM source record",
@@ -269,7 +268,7 @@
     }
   ],
   "initialVersion": {
-    "version": "1.1.4",
+    "version": "1.1.5",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -296,14 +295,14 @@
         "vc.document.live_deal_status_report_template",
         "vc.document.ic_agenda_template",
         "vc.document.ic_decision_record_template",
-        "vc.document.formal_diligence_workstream_guide",
-        "vc.document.formal_diligence_checklist",
         "vc.document.review_pack_checklist",
         "vc.document.ic_memo_review_template",
         "vc.document.deal_terms_analysis_template",
         "vc.document.term_sheet_negotiation_brief_template",
         "vc.document.term_sheet_review_template",
-        "vc.document.origination_source_strategy_guide"
+        "vc.document.origination_source_strategy_guide",
+        "vc.document.formal_diligence_workstream_guide",
+        "vc.document.formal_diligence_checklist"
       ]
     },
     "fieldsSchema": [
@@ -332,6 +331,14 @@
         "required": false,
         "description": "Optional company logo image URL from Affinity enrichment or another approved source.",
         "placeholder": "https://example.com/logo.png"
+      },
+      {
+        "id": "field-fund-id",
+        "key": "fund_id",
+        "label": "Confirmed Fund ID",
+        "kind": "text",
+        "required": false,
+        "description": "Stable id of the active Fund explicitly confirmed for this Deal. The value must match one record in vc.funds."
       },
       {
         "id": "field-deal-source",
@@ -408,30 +415,6 @@
         "description": "Optional URL template for source records from the same system."
       },
       {
-        "id": "field-connected-systems",
-        "key": "connected_systems",
-        "label": "Connected Systems",
-        "kind": "text",
-        "required": false,
-        "description": "Systems known to touch this company or opportunity, kept compact until structured project fields exist."
-      },
-      {
-        "id": "field-matching-signals",
-        "key": "matching_signals",
-        "label": "Matching Signals",
-        "kind": "text",
-        "required": false,
-        "description": "Compact matching signals such as external IDs, domains, email domains, or source object IDs."
-      },
-      {
-        "id": "field-source-owner",
-        "key": "source_owner",
-        "label": "Source Owner",
-        "kind": "member",
-        "required": false,
-        "description": "Team member who owns the source relationship."
-      },
-      {
         "id": "field-lead-partner",
         "key": "lead_partner",
         "label": "Lead Partner",
@@ -446,14 +429,6 @@
         "kind": "text",
         "required": false,
         "description": "Person or organization that referred the opportunity, when known."
-      },
-      {
-        "id": "field-crm-provider",
-        "key": "crm_provider",
-        "label": "CRM Provider",
-        "kind": "text",
-        "required": false,
-        "description": "CRM or relationship system for the source record."
       },
       {
         "id": "field-affinity-import-status",
@@ -536,77 +511,6 @@
         "kind": "text",
         "required": false,
         "description": "Compact list of meeting transcript, summary, recording export, notes, or meeting-source artifact IDs."
-      },
-      {
-        "id": "field-meeting-notes-artifact-id",
-        "key": "meeting_notes_artifact_id",
-        "label": "Meeting Notes Artifact ID",
-        "kind": "text",
-        "required": false,
-        "description": "Uploaded or generated meeting notes artifact."
-      },
-      {
-        "id": "field-deal-room-url",
-        "key": "deal_room_url",
-        "label": "Deal Pipeline URL",
-        "kind": "text",
-        "required": false,
-        "description": "Canonical project deal-room URL when a manual link is needed."
-      },
-      {
-        "id": "field-drive-deal-room-url",
-        "key": "drive_deal_room_url",
-        "label": "Drive Deal Pipeline URL",
-        "kind": "text",
-        "required": false,
-        "description": "Manual Drive or document-room link.",
-        "placeholder": "https://drive.google.com/..."
-      },
-      {
-        "id": "field-investment-stage",
-        "key": "investment_stage",
-        "label": "Investment Stage",
-        "kind": "enum",
-        "required": false,
-        "description": "Current investment workflow stage for the Deal Pipeline.",
-        "options": [
-          {
-            "value": "intake",
-            "label": "Intake"
-          },
-          {
-            "value": "screening",
-            "label": "Screening"
-          },
-          {
-            "value": "evaluation",
-            "label": "Evaluation"
-          },
-          {
-            "value": "decision_review",
-            "label": "Decision Review"
-          },
-          {
-            "value": "deal_structuring",
-            "label": "Deal Structuring"
-          },
-          {
-            "value": "formal_diligence",
-            "label": "Formal Diligence"
-          },
-          {
-            "value": "contracts",
-            "label": "Contracts"
-          },
-          {
-            "value": "closing",
-            "label": "Closing"
-          },
-          {
-            "value": "watchlist",
-            "label": "Watchlist"
-          }
-        ]
       },
       {
         "id": "field-project-outcome",
@@ -815,14 +719,6 @@
         "description": "Thesis area used for source review or investment fit screening."
       },
       {
-        "id": "field-fund-thesis-context",
-        "key": "fund_thesis_context",
-        "label": "Fund Thesis Context",
-        "kind": "text",
-        "required": false,
-        "description": "Compact fund or partner thesis context for screening and evaluation tasks."
-      },
-      {
         "id": "field-founder-names",
         "key": "founder_names",
         "label": "Founder Names",
@@ -871,52 +767,12 @@
         "description": "Compact diligence workstream priorities; detailed plans belong in artifacts."
       },
       {
-        "id": "field-repo-or-code-access",
-        "key": "repo_or_code_access",
-        "label": "Repo Or Code Access",
-        "kind": "text",
-        "required": false,
-        "description": "Explicit approved source/access reference for technical diligence."
-      },
-      {
-        "id": "field-financial-source-artifact-ids",
-        "key": "financial_source_artifact_ids",
-        "label": "Financial Source Artifact IDs",
-        "kind": "text",
-        "required": false,
-        "description": "Compact list of financial diligence source artifacts, such as statements, forecasts, cap tables, data-room exports, and supporting models."
-      },
-      {
-        "id": "field-technical-source-artifact-ids",
-        "key": "technical_source_artifact_ids",
-        "label": "Technical Source Artifact IDs",
-        "kind": "text",
-        "required": false,
-        "description": "Compact list of technical diligence source artifacts, such as architecture docs, API docs, security materials, product docs, repository exports, or technical data-room files."
-      },
-      {
         "id": "field-cap-table-artifact-id",
         "key": "cap_table_artifact_id",
         "label": "Cap Table Artifact ID",
         "kind": "text",
         "required": false,
         "description": "Cap table artifact for founder or financial diligence."
-      },
-      {
-        "id": "field-market-source-artifact-ids",
-        "key": "market_source_artifact_ids",
-        "label": "Market Source Artifact IDs",
-        "kind": "text",
-        "required": false,
-        "description": "Market-source artifacts for commercial diligence."
-      },
-      {
-        "id": "field-customer-evidence-artifact-ids",
-        "key": "customer_evidence_artifact_ids",
-        "label": "Customer Evidence Artifact IDs",
-        "kind": "text",
-        "required": false,
-        "description": "Customer/user evidence artifacts for commercial diligence."
       },
       {
         "id": "field-current-term-sheet-artifact-id",
@@ -975,46 +831,6 @@
         "description": "Open commercial terms produced by deal terms analysis and used for negotiation tracking."
       },
       {
-        "id": "field-legal-source-artifact-ids",
-        "key": "legal_source_artifact_ids",
-        "label": "Legal Source Artifact IDs",
-        "kind": "text",
-        "required": false,
-        "description": "Compact list of legal diligence source artifacts, data-room documents, counsel notes, and legal search results."
-      },
-      {
-        "id": "field-investment-document-artifact-ids",
-        "key": "investment_document_artifact_ids",
-        "label": "Investment Document Artifact IDs",
-        "kind": "text",
-        "required": false,
-        "description": "Compact list of investment document artifacts for post-term-sheet document review."
-      },
-      {
-        "id": "field-transaction-bible-artifact-id",
-        "key": "transaction_bible_artifact_id",
-        "label": "Transaction Bible",
-        "kind": "text",
-        "required": false,
-        "description": "Transaction bible or completion bundle artifact used for final closing administration."
-      },
-      {
-        "id": "field-closing-source-artifact-ids",
-        "key": "closing_source_artifact_ids",
-        "label": "Closing Source Artifact IDs",
-        "kind": "text",
-        "required": false,
-        "description": "Compact list of closing source artifacts, such as workplans, legal docs, counsel notes, CP lists, signed docs, and evidence files."
-      },
-      {
-        "id": "field-legal-document-status",
-        "key": "legal_document_status",
-        "label": "Legal Document Status",
-        "kind": "text",
-        "required": false,
-        "description": "Current legal document status or counsel-provided closing workplan summary."
-      },
-      {
         "id": "field-ic-decision-outcome",
         "key": "ic_decision_outcome",
         "label": "IC Decision Outcome",
@@ -1045,148 +861,12 @@
         ]
       },
       {
-        "id": "field-term-approval-state",
-        "key": "term_approval_state",
-        "label": "Term Approval State",
-        "kind": "enum",
-        "required": false,
-        "description": "Reviewed term-sheet approval state.",
-        "options": [
-          {
-            "value": "not_started",
-            "label": "Not Started"
-          },
-          {
-            "value": "under_review",
-            "label": "Under Review"
-          },
-          {
-            "value": "approved",
-            "label": "Approved"
-          },
-          {
-            "value": "changes_requested",
-            "label": "Changes Requested"
-          },
-          {
-            "value": "rejected",
-            "label": "Rejected"
-          }
-        ]
-      },
-      {
-        "id": "field-closing-status",
-        "key": "closing_status",
-        "label": "Closing Status",
-        "kind": "enum",
-        "required": false,
-        "description": "Compact closing status.",
-        "options": [
-          {
-            "value": "not_started",
-            "label": "Not Started"
-          },
-          {
-            "value": "in_progress",
-            "label": "In Progress"
-          },
-          {
-            "value": "blocked",
-            "label": "Blocked"
-          },
-          {
-            "value": "ready_to_sign",
-            "label": "Ready To Sign"
-          },
-          {
-            "value": "signed",
-            "label": "Signed"
-          }
-        ]
-      },
-      {
-        "id": "field-close-readiness",
-        "key": "close_readiness",
-        "label": "Close Readiness",
-        "kind": "enum",
-        "required": false,
-        "description": "Reviewed close-readiness state.",
-        "options": [
-          {
-            "value": "unknown",
-            "label": "Unknown"
-          },
-          {
-            "value": "not_ready",
-            "label": "Not Ready"
-          },
-          {
-            "value": "blocked",
-            "label": "Blocked"
-          },
-          {
-            "value": "ready",
-            "label": "Ready"
-          }
-        ]
-      },
-      {
         "id": "field-active-conditions",
         "key": "active_conditions",
         "label": "Active Conditions",
         "kind": "text",
         "required": false,
         "description": "Compact active IC or closing conditions; detailed evidence lives in artifacts."
-      },
-      {
-        "id": "field-onboarding-readiness",
-        "key": "onboarding_readiness",
-        "label": "Onboarding Readiness",
-        "kind": "enum",
-        "required": false,
-        "description": "Portfolio onboarding readiness for closing handoff.",
-        "options": [
-          {
-            "value": "not_started",
-            "label": "Not Started"
-          },
-          {
-            "value": "blocked",
-            "label": "Blocked"
-          },
-          {
-            "value": "ready",
-            "label": "Ready"
-          },
-          {
-            "value": "complete",
-            "label": "Complete"
-          }
-        ]
-      },
-      {
-        "id": "field-board-rep",
-        "key": "board_rep",
-        "label": "Board Rep",
-        "kind": "text",
-        "required": false,
-        "description": "Board representative when known or approved."
-      },
-      {
-        "id": "field-reporting-cadence",
-        "key": "reporting_cadence",
-        "label": "Reporting Cadence",
-        "kind": "text",
-        "required": false,
-        "description": "Compact reporting cadence after investment approval."
-      },
-      {
-        "id": "field-thesis-target-list-artifact-id",
-        "key": "thesis_target_list_artifact_id",
-        "label": "Thesis target list",
-        "kind": "text",
-        "required": false,
-        "description": "Thesis target list artifact produced by source-thesis-targets."
       },
       {
         "id": "field-opportunity-intake-artifact-id",
@@ -1227,62 +907,6 @@
         "kind": "text",
         "required": false,
         "description": "Customer insights summary artifact produced by summarize-meeting-records."
-      },
-      {
-        "id": "field-commercial-dd-artifact-id",
-        "key": "commercial_dd_artifact_id",
-        "label": "Commercial DD report",
-        "kind": "text",
-        "required": false,
-        "description": "Commercial DD report artifact produced by run-commercial-dd."
-      },
-      {
-        "id": "field-market-analysis-artifact-id",
-        "key": "market_analysis_artifact_id",
-        "label": "Market analysis",
-        "kind": "text",
-        "required": false,
-        "description": "Market analysis artifact produced by run-commercial-dd."
-      },
-      {
-        "id": "field-customer-reference-summary-artifact-id",
-        "key": "customer_reference_summary_artifact_id",
-        "label": "Customer reference summary",
-        "kind": "text",
-        "required": false,
-        "description": "Customer reference summary artifact produced by run-commercial-dd."
-      },
-      {
-        "id": "field-financial-dd-artifact-id",
-        "key": "financial_dd_artifact_id",
-        "label": "Financial DD report",
-        "kind": "text",
-        "required": false,
-        "description": "Financial DD report artifact produced by run-financial-dd."
-      },
-      {
-        "id": "field-unit-economics-artifact-id",
-        "key": "unit_economics_artifact_id",
-        "label": "Unit economics analysis",
-        "kind": "text",
-        "required": false,
-        "description": "Unit economics analysis artifact produced by run-financial-dd."
-      },
-      {
-        "id": "field-founder-evaluation-artifact-id",
-        "key": "founder_evaluation_artifact_id",
-        "label": "Founder evaluation",
-        "kind": "text",
-        "required": false,
-        "description": "Founder evaluation artifact produced by run-founder-evaluation."
-      },
-      {
-        "id": "field-technical-dd-artifact-id",
-        "key": "technical_dd_artifact_id",
-        "label": "Technical DD report",
-        "kind": "text",
-        "required": false,
-        "description": "Technical DD report artifact produced by run-technical-dd."
       },
       {
         "id": "field-follow-up-evaluation-artifact-id",
@@ -1563,54 +1187,6 @@
         "kind": "text",
         "required": false,
         "description": "Term sheet negotiation brief artifact produced by track-term-sheet-negotiation."
-      },
-      {
-        "id": "field-legal-diligence-artifact-id",
-        "key": "legal_diligence_artifact_id",
-        "label": "Legal diligence",
-        "kind": "text",
-        "required": false,
-        "description": "Legal diligence tracker artifact produced by run-legal-diligence."
-      },
-      {
-        "id": "field-investment-document-review-artifact-id",
-        "key": "investment_document_review_artifact_id",
-        "label": "Investment document review",
-        "kind": "text",
-        "required": false,
-        "description": "Investment document review artifact produced by review-investment-documents."
-      },
-      {
-        "id": "field-closing-checklist-artifact-id",
-        "key": "closing_checklist_artifact_id",
-        "label": "Closing checklist",
-        "kind": "text",
-        "required": false,
-        "description": "Closing checklist artifact produced by manage-closing-checklist."
-      },
-      {
-        "id": "field-conditions-precedent-verification-artifact-id",
-        "key": "conditions_precedent_verification_artifact_id",
-        "label": "Conditions precedent verification",
-        "kind": "text",
-        "required": false,
-        "description": "Conditions precedent verification artifact produced by verify-conditions-precedent."
-      },
-      {
-        "id": "field-completion-tracker-artifact-id",
-        "key": "completion_tracker_artifact_id",
-        "label": "Completion tracker",
-        "kind": "text",
-        "required": false,
-        "description": "Completion tracker artifact produced by coordinate-capital-call-and-completion."
-      },
-      {
-        "id": "field-portfolio-onboarding-plan-artifact-id",
-        "key": "portfolio_onboarding_plan_artifact_id",
-        "label": "Portfolio onboarding plan",
-        "kind": "text",
-        "required": false,
-        "description": "Portfolio onboarding plan artifact produced by prepare-portfolio-onboarding."
       }
     ],
     "instructionTemplate": "This project is a Deal Pipeline for one investment opportunity through deal structuring. Treat source links, decks, transcripts, CRM references, and task outputs as evidence that should stay attached to the pipeline when supported. Ask for manual links or files when integrations are missing. External sends, CRM writes, Drive changes, investment decisions, legal decisions, and handoff into Deal Execution require explicit human approval.",
@@ -1629,19 +1205,26 @@
           "act as the primary point of contact for work inside this deal room",
           "use the active project type task catalog, live task state, attached files, and linked artifacts as the source of truth",
           "help the user start available tasks from chat and use real task or artifact links to open the right-hand workspace pane; when live context provides project and task IDs, render task links as /projects/{projectId}?tab=tasks&selectedTaskId={taskId}",
-          "state clearly when a file, task action, or artifact link is unavailable instead of implying access or completion"
+          "state clearly when a file, task action, or artifact link is unavailable instead of implying access or completion",
+          "use configured vc.funds records and the project fund_id as the only Fund-routing context; never blend mandates",
+          "when no Fund is confirmed, suggest only active plausible Funds with evidence and confidence, and do not persist fund_id until the user explicitly confirms the exact Fund",
+          "when fund_id is unknown or inactive, ask for correction; when no Funds are configured, state that setup is incomplete and make no Fund-fit claim",
+          "route First Look and later Fund-dependent work only after fund_id is confirmed, and preserve that value in the Deal Execution handoff",
+          "after explicit confirmation, use the typed project update capability to set only fund_id, then read the project again and report the confirmed value"
         ],
         "responsibilities": [
           "keep the deal room current",
           "surface diligence gaps, blockers, and next actions",
           "coordinate stage-appropriate deal tasks",
           "ground answers in attached evidence, source links, CRM references, and task outputs",
-          "return the created or selected task link and link produced artifacts back to the originating conversation when the platform provides them"
+          "return the created or selected task link and link produced artifacts back to the originating conversation when the platform provides them",
+          "confirm and maintain one active Fund routing decision for this Deal"
         ],
         "boundaries": [
           "do not send external messages, write CRM records, change Drive files, make investment decisions, or make legal decisions without explicit human approval",
           "do not treat missing integrations as connected; ask for manual links or files when needed",
-          "do not invent task availability, file readiness, task status, artifact links, or actions that the current runtime does not expose"
+          "do not invent task availability, file readiness, task status, artifact links, or actions that the current runtime does not expose",
+          "do not invent Funds, select an inactive Fund, blend Fund theses, or save a suggested fund_id before explicit user confirmation"
         ]
       },
       "greeting": {
@@ -1833,11 +1416,6 @@
           "id": "vc_ic_prep_producer",
           "name": "IC Prep Producer",
           "description": "IC memo and committee pack assembly"
-        },
-        {
-          "id": "vc_legal_compliance_desk",
-          "name": "Legal & Compliance Desk",
-          "description": "Closing, CP tracking, and legal coordination"
         }
       ],
       "outputSlots": [
@@ -2219,16 +1797,15 @@
       ],
       "summaryFields": [
         {
+          "key": "fund_id",
+          "label": "Fund",
+          "fieldKey": "fund_id"
+        },
+        {
           "key": "target_check_size",
           "label": "Check size",
           "fieldKey": "target_check_size",
           "format": "money"
-        },
-        {
-          "key": "investment_stage",
-          "label": "Stage",
-          "fieldKey": "investment_stage",
-          "format": "projectState"
         },
         {
           "key": "sector",
@@ -2349,6 +1926,12 @@
             "source": "project.field",
             "sourcePath": "referrer",
             "requiredForActivation": false
+          },
+          {
+            "taskField": "fund_id",
+            "source": "project.field",
+            "sourcePath": "fund_id",
+            "requiredForActivation": false
           }
         ],
         "outputMappings": [
@@ -2395,6 +1978,12 @@
             "taskField": "source_material_artifact_ids",
             "source": "project.field",
             "sourcePath": "source_material_artifact_ids",
+            "requiredForActivation": false
+          },
+          {
+            "taskField": "fund_id",
+            "source": "project.field",
+            "sourcePath": "fund_id",
             "requiredForActivation": false
           }
         ],
@@ -2501,12 +2090,6 @@
             "source": "project.field",
             "sourcePath": "company_name",
             "requiredForActivation": true
-          },
-          {
-            "taskField": "deal_room_url",
-            "source": "project.field",
-            "sourcePath": "deal_room_url",
-            "requiredForActivation": false
           }
         ],
         "outputMappings": [
@@ -2548,6 +2131,12 @@
             "source": "project.field",
             "sourcePath": "customer_insights_artifact_id",
             "requiredForActivation": true
+          },
+          {
+            "taskField": "fund_id",
+            "source": "project.field",
+            "sourcePath": "fund_id",
+            "requiredForActivation": false
           }
         ],
         "outputMappings": [
@@ -2930,30 +2519,6 @@
             "source": "project.field",
             "sourcePath": "diligence_question_bank_artifact_id",
             "requiredForActivation": true
-          },
-          {
-            "taskField": "commercial_dd_artifact_id",
-            "source": "project.field",
-            "sourcePath": "commercial_dd_artifact_id",
-            "requiredForActivation": false
-          },
-          {
-            "taskField": "financial_dd_artifact_id",
-            "source": "project.field",
-            "sourcePath": "financial_dd_artifact_id",
-            "requiredForActivation": false
-          },
-          {
-            "taskField": "founder_evaluation_artifact_id",
-            "source": "project.field",
-            "sourcePath": "founder_evaluation_artifact_id",
-            "requiredForActivation": false
-          },
-          {
-            "taskField": "technical_dd_artifact_id",
-            "source": "project.field",
-            "sourcePath": "technical_dd_artifact_id",
-            "requiredForActivation": false
           }
         ],
         "outputMappings": [
@@ -3013,30 +2578,6 @@
             "source": "project.field",
             "sourcePath": "diligence_question_bank_artifact_id",
             "requiredForActivation": true
-          },
-          {
-            "taskField": "commercial_dd_artifact_id",
-            "source": "project.field",
-            "sourcePath": "commercial_dd_artifact_id",
-            "requiredForActivation": false
-          },
-          {
-            "taskField": "financial_dd_artifact_id",
-            "source": "project.field",
-            "sourcePath": "financial_dd_artifact_id",
-            "requiredForActivation": false
-          },
-          {
-            "taskField": "founder_evaluation_artifact_id",
-            "source": "project.field",
-            "sourcePath": "founder_evaluation_artifact_id",
-            "requiredForActivation": false
-          },
-          {
-            "taskField": "technical_dd_artifact_id",
-            "source": "project.field",
-            "sourcePath": "technical_dd_artifact_id",
-            "requiredForActivation": false
           }
         ],
         "outputMappings": [
@@ -3102,30 +2643,6 @@
             "source": "project.field",
             "sourcePath": "diligence_question_bank_artifact_id",
             "requiredForActivation": true
-          },
-          {
-            "taskField": "commercial_dd_artifact_id",
-            "source": "project.field",
-            "sourcePath": "commercial_dd_artifact_id",
-            "requiredForActivation": false
-          },
-          {
-            "taskField": "financial_dd_artifact_id",
-            "source": "project.field",
-            "sourcePath": "financial_dd_artifact_id",
-            "requiredForActivation": false
-          },
-          {
-            "taskField": "founder_evaluation_artifact_id",
-            "source": "project.field",
-            "sourcePath": "founder_evaluation_artifact_id",
-            "requiredForActivation": false
-          },
-          {
-            "taskField": "technical_dd_artifact_id",
-            "source": "project.field",
-            "sourcePath": "technical_dd_artifact_id",
-            "requiredForActivation": false
           }
         ],
         "outputMappings": [

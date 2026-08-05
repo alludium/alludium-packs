@@ -20,7 +20,7 @@ Project-type setup and configuration tasks used before normal project execution.
 
 | Task | Agent | Skills | Documents | Integrations |
 | --- | --- | --- | --- | --- |
-| [Capture Deal Execution Handoff](../tasks/capture-investment-management-handoff.md) | [Legal & Compliance Desk](../agents/vc-legal-compliance-desk.md) | [Citation Enforcement](../skills/citation-enforcement/SKILL.md)<br>[VC Task & Next-Step Generation](../skills/vc-task-and-next-step-generation/SKILL.md) | [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.html) (style_guide)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.html) (operating_guidance) | `alludium-platform`<br>`affinity-mcp-server`<br>`exa-mcp-hosted`<br>`brave-search-mcp`<br>`dealroom-mcp`<br>`google_drive` |
+| [Capture Deal Execution Handoff](../tasks/capture-investment-management-handoff.md) | [Deal Manager](../agents/vc-deal-manager.md) | [Citation Enforcement](../skills/citation-enforcement/SKILL.md)<br>[VC Task & Next-Step Generation](../skills/vc-task-and-next-step-generation/SKILL.md) | [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.html) (style_guide)<br>[Template Use Guidance](../alludium/documents/shared/template-use-guidance.html) (operating_guidance) | `alludium-platform`<br>`harmonic-mcp-oauth`<br>`affinity-mcp-server`<br>`exa-mcp-hosted` |
 | [VC Pack Variable Discovery](../tasks/vc-pack-variable-discovery.md) | [Legal & Compliance Desk](../agents/vc-legal-compliance-desk.md) | None declared | None declared | `alludium-platform`<br>`affinity-mcp-server`<br>`exa-mcp-hosted`<br>`brave-search-mcp`<br>`dealroom-mcp`<br>`google_drive` |
 
 ## Formal Diligence
