@@ -14,7 +14,7 @@ The representative fixture is `alludium/fixtures/fund-routing.yaml`.
 
 ## Deal Pipeline fields removed
 
-The `vc_deal_room` project type version moves from `1.1.4` to `1.1.6`; draft `1.1.5` introduced the field cleanup and `1.1.6` adds the explicit Deal Manager template binding and task-coordination overlay. Existing projects remain readable on their pinned version.
+The `vc_deal_room` project type version moves from `1.1.4` to `1.1.8`; draft `1.1.5` introduced the field cleanup, `1.1.6` added the explicit Deal Manager template binding and task-coordination overlay, `1.1.7` completed the `0.5.47` coordination contract, and `1.1.8` adds the Platform-backed Fund option source and navigation allowlist. Existing projects remain readable on their pinned version.
 
 | Removed fields | Reason / canonical owner |
 | --- | --- |
@@ -47,12 +47,13 @@ The task also returns a bounded `open_questions` JSON index with stable IDs, evi
 
 Remi's platform work in issue `#3264` adds `agentTemplateKey` to the strict project-manager overlay schema and resolves a Pack template for canonical project chat. The Pack now emits that supported key. Platform issue `#3219` owns the remaining compact Deal context, progressive Fund access, and approved task-coordination policy needed to expose all declared tools safely.
 
-The following generic Platform contracts are intentionally not invented in this Pack before their schemas exist:
+Pack version `0.5.48` uses the reviewed generic Platform schemas for:
 
 - platform `#3464`: bind the VC workspace chat surface to `vc_pipeline_autopilot` without hard-coding Navigator or a deployment ID;
 - platform `#3465`: Pack-declared `navigationFieldKeys: ["fund_id"]`, bounded projection, and server-side Fund/Unassigned filters;
 - platform `#3448`: schema-driven collection settings for `vc.funds`;
 - platform `#3449`: workspace-variable-backed project field options and server validation for `fund_id`;
-- platform `#3466`: typed, reviewed workspace-chat-to-Deal creation.
 
-Until those consumers land, the Pack provides the stable agent IDs, project field, prompt/task behavior, report output, fixtures, and explicit dependencies. It does not add a VC-only repository method, raw deployment ID, copied Fund fields, or an unvalidated workspace-chat/navigation schema.
+Platform `#3466` remains a Platform-owned typed, reviewed workspace-chat-to-Deal workflow and does not require a new Pack declaration in this release.
+
+Until the paired Platform consumers land, these declarations do not provide the corresponding UI or server behavior on their own. The Pack does not add a VC-only repository method, raw deployment ID, copied Fund fields, or browser-authoritative selection and navigation behavior.

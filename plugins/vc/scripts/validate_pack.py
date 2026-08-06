@@ -883,6 +883,27 @@ def validate_fund_routing_contract() -> None:
     item_contract = (funds_variable.get("validationMetadata") or {}).get("items") or {}
     if set(item_contract.get("required") or []) != {"id", "name", "status"}:
         fail("vc.funds item contract must require id, name, and status")
+    collection_contract = (funds_variable.get("validationMetadata") or {}).get(
+        "collection"
+    ) or {}
+    expected_collection_contract = {
+        "identityProperty": "id",
+        "displayProperty": "name",
+        "statusProperty": "status",
+        "activeValue": "actively_investing",
+        "inactiveValue": "closed_to_new_investments",
+    }
+    for key, expected_value in expected_collection_contract.items():
+        if collection_contract.get(key) != expected_value:
+            fail(f"vc.funds collection metadata must declare {key}: {expected_value}")
+    if item_contract.get("additionalProperties") is not False:
+        fail("vc.funds item contract must reject undeclared properties")
+    status_contract = (item_contract.get("properties") or {}).get("status") or {}
+    if status_contract.get("enum") != [
+        "actively_investing",
+        "closed_to_new_investments",
+    ]:
+        fail("vc.funds status contract must distinguish active and closed Funds")
 
     fixture_path = ROOT / "alludium" / "fixtures" / "fund-routing.yaml"
     fixture = read_yaml(fixture_path)
@@ -1028,6 +1049,11 @@ def validate_fund_routing_contract() -> None:
         for field in deal_room.get("initialVersion", {}).get("fieldsSchema", [])
         if isinstance(field, dict)
     }
+    deal_room_field_by_key = {
+        field.get("key"): field
+        for field in deal_room.get("initialVersion", {}).get("fieldsSchema", [])
+        if isinstance(field, dict) and isinstance(field.get("key"), str)
+    }
     deal_execution_fields = {
         field.get("key")
         for field in deal_execution.get("initialVersion", {}).get("fieldsSchema", [])
@@ -1041,6 +1067,37 @@ def validate_fund_routing_contract() -> None:
             fail(f"Project type {project_type_id} must declare fund_id")
         if "suggested_fund_id" in field_keys:
             fail(f"Project type {project_type_id} must not declare suggested_fund_id")
+
+    expected_fund_option_source = {
+        "type": "workspaceVariableCollection",
+        "path": "vc.funds",
+        "valueKey": "id",
+        "labelKey": "name",
+        "statusKey": "status",
+        "selectableStatuses": ["actively_investing"],
+        "hintKeys": ["stage", "sectors", "geographies"],
+    }
+    if deal_room_field_by_key["fund_id"].get("optionSource") != expected_fund_option_source:
+        fail("Deal Pipeline fund_id must resolve selectable active Funds from vc.funds")
+    if (
+        deal_room.get("initialVersion", {}).get("commandView", {}).get(
+            "navigationFieldKeys"
+        )
+        != ["fund_id"]
+    ):
+        fail("Deal Pipeline command view must allowlist only fund_id for navigation")
+
+    manifest = read_yaml(ROOT / "alludium" / "manifest.yaml")
+    expected_workspace_agents = {
+        "bindings": [
+            {
+                "surface": "vc_workspace",
+                "agentTemplateKey": "vc_pipeline_autopilot",
+            }
+        ]
+    }
+    if (manifest.get("surfaces") or {}).get("workspaceAgents") != expected_workspace_agents:
+        fail("VC workspace chat must bind the Pack-owned Pipeline Manager template")
 
     removed_deal_room_fields = {
         "connected_systems",
