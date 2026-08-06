@@ -39,7 +39,9 @@ Deal Manager starts from a compact project context covering company identity, li
 
 `vc_pipeline_autopilot` retains its stable template ID but displays as **Pipeline Manager**. It is the intended non-Deal VC workspace chat agent. It begins with native Alludium Deal navigation, compares selected Deals, finds missing/invalid Fund assignments, prepares weekly and selected-Fund summaries, and produces reviewed task or chat-to-Deal proposals. It does not replace Deal Manager or persist model suggestions.
 
-The Live Deal Status Report remains an eleven-tab HTML artifact. Its task now also returns a bounded `open_questions` JSON index with stable IDs, evidence needs, suggested owner roles, statuses, and real source references. The report never creates tasks; Deal Manager may turn the index into a deduplicated proposal for human approval.
+The Live Deal Status Report remains an eleven-tab HTML artifact. Its optional `fund_id` input is mapped directly from the Deal. The report resolves that ID by exact equality against `vc.funds`, shows the matching actively-investing Fund's human-readable name, and evaluates Fund fit using only that record's mandate fields. Unassigned, unknown, inactive, and unconfigured states are displayed explicitly and make no Fund-relative fit claim; the report never selects or persists a Fund.
+
+The task also returns a bounded `open_questions` JSON index with stable IDs, evidence needs, suggested owner roles, statuses, and real source references. The report never creates tasks; Deal Manager may turn the index into a deduplicated proposal for human approval.
 
 ## Platform boundary
 

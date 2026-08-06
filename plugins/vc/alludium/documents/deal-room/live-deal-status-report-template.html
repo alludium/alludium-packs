@@ -147,7 +147,7 @@
     <header class="document-header">
       <div class="eyebrow">Live · manually refreshed</div>
       <h1>Live Deal Status Report</h1>
-      <p class="metadata">Company · fund · investment stage · report revision · generated time · source count</p>
+      <p class="metadata">Company · Fund: resolved Fund name or explicit unresolved state · investment stage · report revision · generated time · source count</p>
     </header>
 
     <div class="note">
@@ -174,7 +174,8 @@
     <main class="report-content">
       <section id="snapshot" class="report-section">
         <h2>Snapshot</h2>
-        <div class="finding"><div class="label">Fund fit</div><p>State fit against the selected fund mandate, including the fund-specific thesis, stage, geography, cheque and return requirements.</p></div>
+        <div class="summary-grid"><div><div class="label">Fund</div><div class="value">Resolved Fund name, Fund: Unassigned, Fund: Unknown (stored id), or resolved Fund name (inactive)</div></div><div><div class="label">Fund assignment</div><div class="value">Confirmed active, unresolved, correction required, or setup incomplete</div></div></div>
+        <div class="finding"><div class="label">Fund fit</div><p>For a confirmed actively investing Fund, state fit only against the exact <code>vc.funds</code> record matched by the Deal's <code>fund_id</code>, using that record's thesis, stage, sectors, geographies, check-size range, exclusions, and scoring framework. Treat the mandate as configured decision context rather than Deal evidence. For an unassigned, unknown, inactive, or unconfigured Fund state, make no Fund-relative fit claim and state what must be corrected.</p></div>
         <div class="finding"><div class="label">What the company is</div><p>Explain the problem, solution, buyer, business model and current traction in plain language.</p></div>
         <div class="finding"><div class="label">What the evidence supports</div><p>Summarise the strongest supported facts and distinguish company claims from independently corroborated evidence.</p></div>
         <div class="finding"><div class="label">Material risk</div><p>Name the risk most likely to change the current view.</p></div>
@@ -205,7 +206,7 @@
 
     <section class="section">
       <h2 id="standard">Standard</h2>
-      <p>Every material claim must cite a source or be labelled as a company claim, inference, assumption, or investor judgment. Unknowns remain unknown. The generated artifact contains the report only and keeps evidence and decision records on their separate product surfaces. This source-only standards section is authoring guidance and must be omitted from the generated report.</p>
+      <p>Every material claim must cite a source or be labelled as a company claim, inference, assumption, or investor judgment. Unknowns remain unknown. Resolve Fund identity by exact stable-ID equality only; never infer by display name, substitute another Fund, or blend mandates. The generated artifact contains the report only and keeps evidence and decision records on their separate product surfaces. This source-only standards section is authoring guidance and must be omitted from the generated report.</p>
     </section>
   </article>
 </body>

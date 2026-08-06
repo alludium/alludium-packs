@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.refresh_live_deal_status_report
-version: 1.0.1
+version: 1.0.2
 title: Refresh Live Deal Status Report
 category: Venture Capital
 visibility: workspace
@@ -39,6 +39,10 @@ definition:
       executionInstructions: >-
         Create or refresh the current Live Deal Status Report from the supplied source artifacts and every relevant READY Deal Pipeline file available in the task chat. Begin source discovery with `artifact.getArtifactsForChatContext` for the current task chat so the evidence inventory includes both directly attached files and project-shared files inherited by the chat. This is the report only: include Snapshot, Product, Technology, Market, Business model, Go-to-market, Competition, Team, Financials, Deal, and Open questions. Do not include the separate evidence ledger, human posture, votes, or decision record. Cite material claims inline, distinguish company claims from corroborated evidence, label inference and investor judgment, preserve material conflicts, and state missing information plainly.
 
+        Resolve the report Fund from the supplied project `fund_id` and the canonical `vc.funds` records available to the recommended agent. Match by exact stable-ID equality only. When exactly one matching record has `status: actively_investing`, show `Fund: <resolved Fund name>` prominently in the visible report metadata and Snapshot. The Fund-fit section must use only that Fund's configured thesis, stage, sectors, geographies, minimum and maximum check size, currency, exclusions, and scoring framework. Treat those fields as the configured decision frame, not as Deal evidence or proof that the company satisfies the mandate. Never infer a Fund from company details, report text, display name, lifecycle stage, or nearest apparent mandate; never substitute another active Fund or blend Fund records.
+
+        If `fund_id` is missing, show `Fund: Unassigned`, state that assignment is unresolved, and make no Fund-relative fit claim. If the stored ID matches no configured record, show `Fund: Unknown (<stored id>)`, make no Fund-relative fit claim, and flag assignment or configuration correction. If it matches a record whose status is not `actively_investing`, show `Fund: <resolved Fund name> (inactive)`, make no active-mandate fit claim, and flag correction. If no Funds are configured, show `Fund: Unassigned`, state that Fund setup is incomplete, and make no Fund-relative fit claim. Do not select or persist `fund_id` during this task.
+
         Use `definitionJson.documentRefs` as the durable source guidance for this output. Render one complete standalone safe static HTML artifact using the CSS-only tab pattern in `vc.document.live_deal_status_report_template`. The tabs must be ordinary fragment links backed by CSS `:target` selectors. Do not use JavaScript, forms, iframes, event handlers, external scripts, or external stylesheets. Follow Template Use Guidance for the shared token aliases, structural classes, source discipline, and pre-save HTML QA. The first visible tab must be Snapshot. Open questions must be grouped by area and include topic or sector labels where useful, priority, decision relevance, evidence needed, owner, and status. Do not invent generic questions merely to fill the table.
 
         This is a general Deal Pipeline task and must remain runnable at every lifecycle stage. The project mapping supplies the project's current report artifact as `existing_live_deal_status_report_artifact_id` when one exists. If that ID is supplied, this is a regeneration. Read that artifact's source metadata, then call `artifact.updateTextArtifact` with the same artifact ID, the complete replacement HTML, and the observed source revision number and content hash. Do not create a replacement artifact, change the artifact identity, or create a duplicate with the same filename. If the supplied artifact cannot be read or updated, stop and explain the problem instead of creating a duplicate.
@@ -58,6 +62,8 @@ definition:
         - The report is a standalone HTML artifact with eleven CSS-only report tabs and no JavaScript.
         - Material claims are cited or clearly labelled as company claim, inference, assumption, or investor judgment.
         - Missing information and open questions are explicit and decision-relevant.
+        - The visible report shows the resolved Fund name or an explicit unassigned, unknown, or inactive state.
+        - Fund fit uses only the exact active `vc.funds` record matched by the Deal's `fund_id`; unresolved states produce no Fund-relative fit claim.
         - A first run creates one artifact; a regeneration updates the supplied artifact without changing its ID.
         - The resulting artifact ID is saved to `live_deal_status_report_artifact_id`.
         - A bounded structured question index is saved to `open_questions`, with stable IDs and only verified source references; an empty array is valid.
@@ -78,17 +84,23 @@ fields:
       required: true
       position: 0
       config: {}
+    - key: fund_id
+      name: Confirmed Fund ID
+      fieldType: string
+      required: false
+      position: 1
+      config: {}
     - key: existing_live_deal_status_report_artifact_id
       name: Existing Live Deal Status Report
       fieldType: file
       required: false
-      position: 1
+      position: 2
       config: {}
     - key: source_artifact_ids
       name: Additional Source Artifact IDs
       fieldType: string
       required: false
-      position: 2
+      position: 3
       config: {}
   output:
     - key: live_deal_status_report_artifact_id
@@ -140,6 +152,7 @@ fields:
                   - financial
                   - deal
                   - legal
+                  - fund_fit
                   - other
               priority:
                 type: string

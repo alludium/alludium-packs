@@ -97,6 +97,44 @@ pipelineManagerScenarios:
       preserveSourceChat: true
       handoffToAgentTemplateKey: vc_deal_manager
 
+reportFundScenarios:
+  - id: confirmed-active-fund-report
+    projectFundId: europe-seed
+    matchingFund:
+      id: europe-seed
+      name: Europe Seed Fund
+      status: actively_investing
+    expected:
+      displayedFundName: Europe Seed Fund
+      fundFitSourceId: europe-seed
+      mayBlendFunds: false
+      mayMakeFundFitClaim: true
+
+  - id: unassigned-fund-report
+    projectFundId: null
+    expected:
+      displayedFundState: "Fund: Unassigned"
+      mayMakeFundFitClaim: false
+      mayPersistFundId: false
+
+  - id: unknown-fund-report
+    projectFundId: missing-fund
+    expected:
+      displayedFundState: "Fund: Unknown (missing-fund)"
+      mayMakeFundFitClaim: false
+      correctionRequired: true
+
+  - id: inactive-fund-report
+    projectFundId: legacy-opportunity
+    matchingFund:
+      id: legacy-opportunity
+      name: Legacy Opportunity Fund
+      status: closed_to_new_investments
+    expected:
+      displayedFundState: "Fund: Legacy Opportunity Fund (inactive)"
+      mayMakeFundFitClaim: false
+      correctionRequired: true
+
 reportQuestionScenarios:
   - id: no-supported-questions
     previousQuestions: []

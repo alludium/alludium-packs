@@ -952,6 +952,12 @@ def validate_fund_routing_contract() -> None:
             "selected-fund-weekly-summary",
             "reviewed-chat-to-deal",
         },
+        "reportFundScenarios": {
+            "confirmed-active-fund-report",
+            "unassigned-fund-report",
+            "unknown-fund-report",
+            "inactive-fund-report",
+        },
         "reportQuestionScenarios": {
             "no-supported-questions",
             "stable-question-across-refresh",
@@ -987,6 +993,31 @@ def validate_fund_routing_contract() -> None:
     )
     if (chat_to_deal_fixture.get("expected") or {}).get("mayCreateProject") is not False:
         fail("Chat-to-Deal fixture must prohibit project creation before human confirmation")
+
+    report_fund_scenarios = {
+        scenario.get("id"): scenario
+        for scenario in management_fixture["reportFundScenarios"]
+        if isinstance(scenario, dict) and isinstance(scenario.get("id"), str)
+    }
+    confirmed_report_fund = report_fund_scenarios["confirmed-active-fund-report"]
+    confirmed_matching_fund = confirmed_report_fund.get("matchingFund") or {}
+    confirmed_expected = confirmed_report_fund.get("expected") or {}
+    if (
+        confirmed_matching_fund.get("status") != "actively_investing"
+        or confirmed_expected.get("displayedFundName") != confirmed_matching_fund.get("name")
+        or confirmed_expected.get("fundFitSourceId") != confirmed_matching_fund.get("id")
+        or confirmed_expected.get("mayBlendFunds") is not False
+    ):
+        fail("Confirmed report Fund fixture must display and evaluate the same exact active Fund")
+    for scenario_id in [
+        "unassigned-fund-report",
+        "unknown-fund-report",
+        "inactive-fund-report",
+    ]:
+        if (report_fund_scenarios[scenario_id].get("expected") or {}).get(
+            "mayMakeFundFitClaim"
+        ) is not False:
+            fail(f"Report Fund fixture {scenario_id} must prohibit Fund-fit claims")
 
     deal_room = read_json(ROOT / "alludium" / "project-types" / "vc_deal_room.json")
     deal_execution = read_json(
@@ -1192,6 +1223,19 @@ def validate_fund_routing_contract() -> None:
         ((status_report.get("definition") or {}).get("definitionJson") or {}).get("instructions")
         or {}
     ).get("executionInstructions") or ""
+    status_report_inputs = {
+        field.get("key"): field
+        for field in (status_report.get("fields") or {}).get("input") or []
+        if isinstance(field, dict) and isinstance(field.get("key"), str)
+    }
+    report_fund_input = status_report_inputs.get("fund_id")
+    if not isinstance(report_fund_input, dict):
+        fail("Live Deal Status Report must accept the Deal's confirmed fund_id")
+    if (
+        report_fund_input.get("fieldType") != "string"
+        or report_fund_input.get("required") is not False
+    ):
+        fail("Live Deal Status Report fund_id input must be an optional string")
     for required_phrase in [
         "deterministic stable `id`",
         "must not create, assign, or update tasks",
@@ -1199,6 +1243,52 @@ def validate_fund_routing_contract() -> None:
     ]:
         if required_phrase not in status_report_instructions:
             fail(f"Live Deal Status Report is missing question/task boundary: {required_phrase}")
+    for required_phrase in [
+        "exact stable-ID equality",
+        "only that Fund's",
+        "`Fund: Unassigned`",
+        "`Fund: Unknown (<stored id>)`",
+        "make no Fund-relative fit claim",
+        "Do not select or persist `fund_id`",
+    ]:
+        if required_phrase not in status_report_instructions:
+            fail(f"Live Deal Status Report is missing Fund binding rule: {required_phrase}")
+
+    report_mapping = next(
+        (
+            mapping
+            for mapping in deal_room.get("initialVersion", {}).get("projectTaskMappings", [])
+            if isinstance(mapping, dict)
+            and mapping.get("taskDefinitionSlug") == "refresh-live-deal-status-report"
+        ),
+        {},
+    )
+    report_fund_mapping = next(
+        (
+            mapping
+            for mapping in report_mapping.get("inputMappings", [])
+            if isinstance(mapping, dict) and mapping.get("taskField") == "fund_id"
+        ),
+        {},
+    )
+    if (
+        report_fund_mapping.get("source") != "project.field"
+        or report_fund_mapping.get("sourcePath") != "fund_id"
+        or report_fund_mapping.get("requiredForActivation") is not False
+    ):
+        fail("Live Deal Status Report must map optional fund_id from the current Deal")
+
+    report_template = (
+        ROOT / "alludium" / "documents" / "deal-room" / "live-deal-status-report-template.html"
+    ).read_text(encoding="utf-8")
+    for required_phrase in [
+        "Resolved Fund name",
+        "exact <code>vc.funds</code> record",
+        "make no Fund-relative fit claim",
+        "never infer by display name",
+    ]:
+        if required_phrase not in report_template:
+            fail(f"Live Deal Status Report template is missing Fund display rule: {required_phrase}")
 
     handoff_task = read_yaml(
         ROOT

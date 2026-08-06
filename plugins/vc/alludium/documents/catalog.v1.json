@@ -411,7 +411,7 @@
     {
       "id": "vc.document.live_deal_status_report_template",
       "title": "Live Deal Status Report Template",
-      "description": "Reusable report-only deal status structure with CSS-only chapter tabs, deal dynamics, and grouped open questions.",
+      "description": "Reusable report-only deal status structure with CSS-only chapter tabs, exact confirmed-Fund identity and fit, deal dynamics, and grouped open questions.",
       "documentType": "template",
       "path": "deal-room/live-deal-status-report-template.html",
       "supportedProjectTypes": [
