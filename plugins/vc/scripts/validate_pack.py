@@ -58,10 +58,11 @@ EXPECTED_PROMPT_VARIABLE_BINDINGS = {
     },
 }
 REQUIRED_AGENT_PROMPT_VARIABLES = {
-    "vc_deal_manager": {"firmName", "funds", "fundId"},
+    "vc_deal_manager": {"firmName", "fundId"},
     "vc_diligence_analyst": {"funds", "fundId"},
     "vc_evaluation_analyst": {"funds", "fundId"},
     "vc_first_look_analyst": {"funds", "fundId"},
+    "vc_pipeline_autopilot": {"firmName"},
 }
 REQUIRED_AGENT_TOOLS = {
     "vc_first_look_analyst": {
@@ -182,7 +183,13 @@ PROJECT_MANAGER_OVERLAY_LONG_TEXT_MAX = 1000
 PROJECT_MANAGER_OVERLAY_SUFFIX_TEXT_MAX = 80
 PROJECT_MANAGER_OVERLAY_LIST_LIMIT = 12
 PROJECT_MANAGER_OVERLAY_STARTER_LIMIT = 8
-PROJECT_MANAGER_OVERLAY_ROOT_KEYS = {"displayName", "labels", "identity", "greeting"}
+PROJECT_MANAGER_OVERLAY_ROOT_KEYS = {
+    "agentTemplateKey",
+    "displayName",
+    "labels",
+    "identity",
+    "greeting",
+}
 PROJECT_MANAGER_OVERLAY_LABEL_KEYS = {
     "shortName",
     "chatTitleSuffix",
@@ -927,6 +934,60 @@ def validate_fund_routing_contract() -> None:
     if handed_off_id != handoff.get("projectFundId"):
         fail("Deal Execution handoff fixture must preserve fund_id exactly")
 
+    management_fixture_path = (
+        ROOT / "alludium" / "fixtures" / "deal-pipeline-management.yaml"
+    )
+    management_fixture = read_yaml(management_fixture_path)
+    if not isinstance(management_fixture, dict):
+        fail(f"{management_fixture_path.relative_to(ROOT)} must be an object")
+    required_management_scenarios = {
+        "dealManagerScenarios": {
+            "compact-context-with-confirmed-fund",
+            "predefined-task-match",
+            "approved-ad-hoc-financial-verification",
+            "report-questions-require-review",
+        },
+        "pipelineManagerScenarios": {
+            "unassigned-fund-review",
+            "selected-fund-weekly-summary",
+            "reviewed-chat-to-deal",
+        },
+        "reportQuestionScenarios": {
+            "no-supported-questions",
+            "stable-question-across-refresh",
+            "question-covered-by-existing-task",
+            "resolved-question",
+        },
+    }
+    for section, required_ids in required_management_scenarios.items():
+        declared_ids = {
+            scenario.get("id")
+            for scenario in management_fixture.get(section) or []
+            if isinstance(scenario, dict) and isinstance(scenario.get("id"), str)
+        }
+        missing_ids = sorted(required_ids - declared_ids)
+        if missing_ids:
+            fail(
+                f"{management_fixture_path.relative_to(ROOT)} {section} is missing "
+                f"scenarios: {missing_ids}"
+            )
+
+    report_review_fixture = next(
+        scenario
+        for scenario in management_fixture["dealManagerScenarios"]
+        if scenario.get("id") == "report-questions-require-review"
+    )
+    report_review_expected = report_review_fixture.get("expected") or {}
+    if report_review_expected.get("mayCreateTasks") is not False:
+        fail("Report-question fixture must prohibit task creation without approval")
+    chat_to_deal_fixture = next(
+        scenario
+        for scenario in management_fixture["pipelineManagerScenarios"]
+        if scenario.get("id") == "reviewed-chat-to-deal"
+    )
+    if (chat_to_deal_fixture.get("expected") or {}).get("mayCreateProject") is not False:
+        fail("Chat-to-Deal fixture must prohibit project creation before human confirmation")
+
     deal_room = read_json(ROOT / "alludium" / "project-types" / "vc_deal_room.json")
     deal_execution = read_json(
         ROOT / "alludium" / "project-types" / "vc_investment_management.json"
@@ -977,8 +1038,8 @@ def validate_fund_routing_contract() -> None:
         fail(f"Deal Pipeline still declares retired fields: {stale_fields}")
 
     project_manager = deal_room.get("initialVersion", {}).get("projectManager") or {}
-    if "agentTemplateKey" in project_manager:
-        fail("Project Manager overlay must not emit unsupported agentTemplateKey")
+    if project_manager.get("agentTemplateKey") != "vc_deal_manager":
+        fail("Deal Pipeline Project Manager overlay must resolve vc_deal_manager")
     manager_contract = " ".join(
         (project_manager.get("identity") or {}).get("instructions") or []
     )
@@ -988,6 +1049,10 @@ def validate_fund_routing_contract() -> None:
         "explicitly confirms",
         "never blend mandates",
         "Deal Execution handoff",
+        "task catalog",
+        "ad-hoc task",
+        "explicit human approval",
+        "eleven-tab",
     ]:
         if required_phrase not in manager_contract:
             fail(f"Deal Manager overlay is missing Fund routing rule: {required_phrase}")
@@ -1005,13 +1070,135 @@ def validate_fund_routing_contract() -> None:
     }
     required_manager_tools = {
         "project.getAgentContext",
+        "project.listAvailableMembers",
         "project.update",
         "project-task.listByProject",
+        "task-definitions.list",
+        "task-definitions.findById",
+        "task-management.createAdHocTask",
+        "task-management.createTaskFromDefinition",
+        "task-management.assignTask",
         "artifact.getArtifactsForChatContext",
     }
     missing_manager_tools = sorted(required_manager_tools - declared_platform_tools)
     if missing_manager_tools:
         fail(f"Deal Manager is missing supported context/update tools: {missing_manager_tools}")
+
+    deal_manager_prompt = (deal_manager.get("prompt") or {}).get("template") or ""
+    deal_manager_variable_keys = {
+        variable.get("key")
+        for variable in (deal_manager.get("prompt") or {}).get("variables") or []
+        if isinstance(variable, dict)
+    }
+    if "funds" in deal_manager_variable_keys or "{{#each funds}}" in deal_manager_prompt:
+        fail(
+            "Deal Manager must retrieve relevant Fund records progressively instead of "
+            "eagerly rendering the full vc.funds collection"
+        )
+    for required_phrase in [
+        "lifecycle stage",
+        "lead or owner",
+        "task definitions",
+        "ad-hoc task",
+        "explicit human approval",
+        "structured open questions",
+    ]:
+        if required_phrase not in deal_manager_prompt:
+            fail(f"Deal Manager prompt is missing runtime/task contract: {required_phrase}")
+
+    pipeline_manager = read_yaml(
+        ROOT / "alludium" / "agent-templates" / "vc_pipeline_autopilot.yaml"
+    )
+    if pipeline_manager.get("name") != "Pipeline Manager":
+        fail("vc_pipeline_autopilot must retain its stable id and display as Pipeline Manager")
+    pipeline_prompt = (pipeline_manager.get("prompt") or {}).get("template") or ""
+    pipeline_variable_keys = {
+        variable.get("key")
+        for variable in (pipeline_manager.get("prompt") or {}).get("variables") or []
+        if isinstance(variable, dict)
+    }
+    if "funds" in pipeline_variable_keys or "{{#each funds}}" in pipeline_prompt:
+        fail("Pipeline Manager must not eagerly render the full vc.funds collection")
+    pipeline_platform_tools = {
+        tool.get("name")
+        for tool in ((pipeline_manager.get("mcpServers") or {}).get("alludium-platform") or {}).get(
+            "tools",
+            [],
+        )
+        if isinstance(tool, dict)
+    }
+    required_pipeline_tools = {
+        "project.listNavigation",
+        "project.getAgentContext",
+        "project-task.listByProject",
+        "task-definitions.list",
+        "task-definitions.findById",
+        "task-management.createAdHocTask",
+        "task-management.createTaskFromDefinition",
+        "task-management.assignTask",
+    }
+    missing_pipeline_tools = sorted(required_pipeline_tools - pipeline_platform_tools)
+    if missing_pipeline_tools:
+        fail(f"Pipeline Manager is missing workspace/task tools: {missing_pipeline_tools}")
+    for required_phrase in [
+        "native Alludium",
+        "Unassigned",
+        "weekly pipeline summaries",
+        "selected-Fund reports",
+        "typed Deal proposal",
+        "explicit approval",
+    ]:
+        if required_phrase not in pipeline_prompt:
+            fail(f"Pipeline Manager prompt is missing workspace contract: {required_phrase}")
+
+    status_report = read_yaml(
+        ROOT
+        / "alludium"
+        / "task-definition-templates"
+        / "vc-workflows"
+        / "refresh-live-deal-status-report.yaml"
+    )
+    status_report_outputs = {
+        field.get("key"): field
+        for field in (status_report.get("fields") or {}).get("output") or []
+        if isinstance(field, dict) and isinstance(field.get("key"), str)
+    }
+    open_questions_output = status_report_outputs.get("open_questions")
+    if not isinstance(open_questions_output, dict):
+        fail("Live Deal Status Report must expose structured open_questions output")
+    if (
+        open_questions_output.get("fieldType") != "json"
+        or open_questions_output.get("required") is not True
+    ):
+        fail("Live Deal Status Report open_questions must be a required json output")
+    question_schema = (open_questions_output.get("config") or {}).get("schema") or {}
+    question_items = question_schema.get("items") or {}
+    required_question_keys = {
+        "id",
+        "question",
+        "area",
+        "priority",
+        "evidenceNeeded",
+        "suggestedOwnerRole",
+        "status",
+        "sourceRefs",
+    }
+    if (
+        question_schema.get("type") != "array"
+        or set(question_items.get("required") or []) != required_question_keys
+    ):
+        fail("Live Deal Status Report open_questions schema is incomplete")
+    status_report_instructions = (
+        ((status_report.get("definition") or {}).get("definitionJson") or {}).get("instructions")
+        or {}
+    ).get("executionInstructions") or ""
+    for required_phrase in [
+        "deterministic stable `id`",
+        "must not create, assign, or update tasks",
+        "human must approve",
+    ]:
+        if required_phrase not in status_report_instructions:
+            fail(f"Live Deal Status Report is missing question/task boundary: {required_phrase}")
 
     handoff_task = read_yaml(
         ROOT
@@ -1925,6 +2112,12 @@ def validate_project_manager_overlay(project_type_id: str, initial_version: dict
         context,
         allowed_keys=PROJECT_MANAGER_OVERLAY_ROOT_KEYS,
     )
+    if "agentTemplateKey" in project_manager:
+        validate_project_manager_overlay_text(
+            project_manager["agentTemplateKey"],
+            f"{context}.agentTemplateKey",
+            max_length=PROJECT_MANAGER_OVERLAY_SHORT_TEXT_MAX,
+        )
     if "displayName" not in project_manager:
         fail(f"{context}.displayName must be declared")
     validate_project_manager_overlay_text(

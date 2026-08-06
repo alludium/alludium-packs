@@ -196,7 +196,7 @@
     }
   },
   "initialVersion": {
-    "version": "0.2.3",
+    "version": "0.2.4",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -1034,8 +1034,8 @@
       "fallbackAgents": [
         {
           "id": "vc_pipeline_autopilot",
-          "name": "Pipeline Autopilot",
-          "description": "Pipeline configuration and source-readiness planning"
+          "name": "Pipeline Manager",
+          "description": "Cross-pipeline review, source-readiness planning, and approved next actions"
         },
         {
           "id": "vc_origination_scout",

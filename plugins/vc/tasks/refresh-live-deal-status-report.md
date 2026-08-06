@@ -25,6 +25,9 @@ Use `definitionJson.documentRefs` as the durable source guidance for this output
 This is a general Deal Pipeline task and must remain runnable at every lifecycle stage. The project mapping supplies the project's current report artifact as existing live deal status report artifact when one exists. If that ID is supplied, this is a regeneration. Read that artifact's source metadata, then call `artifact.updateTextArtifact` with the same artifact ID, the complete replacement HTML, and the observed source revision number and content hash. Do not create a replacement artifact, change the artifact identity, or create a duplicate with the same filename. If the supplied artifact cannot be read or updated, stop and explain the problem instead of creating a duplicate.
 If existing live deal status report artifact is not supplied, this is the first generation. Create exactly one project-shared HTML artifact with `artifact.createTextArtifact`, a clear `.html` filename, `mimeType: "text/html"`, and complete HTML beginning with `<!doctype html>`.
 In both cases, save the created or updated artifact ID to the required output field live deal status report artifact. The output ID is the ID that must be supplied as existing live deal status report artifact on the next manual refresh. Keep detailed report content inside the HTML artifact rather than duplicating it in task output fields.
+Also save a compact JSON array to the required output field open questions. This is a machine-actionable index for reviewed follow-up, not a second copy of the report narrative. Each item must contain id, question, area, priority, `evidenceNeeded`, `suggestedOwnerRole`, status, and `sourceRefs`. Use only the configured vocabularies in the field schema. Keep the array to at most 50 decision-relevant items and keep each string concise.
+Derive questions only from evidence gaps, material conflicts, blocked work, or explicitly unresolved decisions supported by sources you actually read. `sourceRefs` may contain only real artifact IDs, task IDs, or supplied source anchors. Use a deterministic stable id derived from the normalized underlying question area and evidence need; never use an array index, timestamp, or random UUID. Preserve the same ID across refreshes when the underlying need is unchanged. When a previously reported question is demonstrably answered or superseded, retain it only when useful for the refresh delta and set the corresponding status rather than creating a near-duplicate. If there are no supported questions, save `[]`. Never invent generic questions to fill the output.
+`suggestedOwnerRole` is advisory only. Do not put a fabricated person ID, agent ID, or guessed name in it. This report must not create, assign, or update tasks. Deal Manager may later compare these stable questions with existing work and present a predefined or ad-hoc task proposal, but a human must approve model-generated task creation and assignment separately.
 
 ## Available Context
 
@@ -42,6 +45,7 @@ In both cases, save the created or updated artifact ID to the required output fi
 ## Deliverable
 
 - Create or update **Live Deal Status Report** as a standalone safe HTML artifact. Use `.html`, `mimeType: "text/html"`, and complete static HTML suitable for the platform safe previewer.
+- Also include a short human-readable summary covering: Structured Open Questions. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
@@ -58,8 +62,11 @@ Do not send messages, mutate CRM records, create folders or projects, create chi
 - Missing information and open questions are explicit and decision-relevant.
 - A first run creates one artifact; a regeneration updates the supplied artifact without changing its ID.
 - The resulting artifact ID is saved to live deal status report artifact.
+- A bounded structured question index is saved to open questions, with stable IDs and only verified source references; an empty array is valid.
+- The report creates or assigns no follow-up tasks.
 
 ## Human Review
 
 - Confirm the report is an analytical synthesis and does not record a human investment decision.
+- Review any task proposal derived later from structured report questions before creation or assignment.
 - Approve any separate external communication, CRM write, stage movement, or investment decision outside this task.

@@ -1,6 +1,6 @@
 # VC Fund Routing and Deal Pipeline Cleanup
 
-Pack version `0.5.46` defines the interim multi-Fund contract.
+Pack version `0.5.47` extends the interim multi-Fund contract with project-scoped Deal Manager resolution, a workspace-scoped Pipeline Manager, progressive context rules, and structured report questions for reviewed task proposals.
 
 ## Canonical Fund contract
 
@@ -14,7 +14,7 @@ The representative fixture is `alludium/fixtures/fund-routing.yaml`.
 
 ## Deal Pipeline fields removed
 
-The `vc_deal_room` project type version moves from `1.1.4` to `1.1.5`. Existing projects remain readable on their pinned version.
+The `vc_deal_room` project type version moves from `1.1.4` to `1.1.6`; draft `1.1.5` introduced the field cleanup and `1.1.6` adds the explicit Deal Manager template binding and task-coordination overlay. Existing projects remain readable on their pinned version.
 
 | Removed fields | Reason / canonical owner |
 | --- | --- |
@@ -31,8 +31,26 @@ The `vc_deal_room` project type version moves from `1.1.4` to `1.1.5`. Existing 
 
 `cap_table_artifact_id`, term-sheet fields and outputs, `active_conditions`, IC records, source identity, source URLs, Affinity receipts, and evaluation outputs are retained because Deal Pipeline still owns provenance, decision review, and deal structuring.
 
+## Agent and context contract
+
+`vc_deal_room.initialVersion.projectManager.agentTemplateKey` is `vc_deal_manager`. The Pack change is from the generic platform `project_manager` runtime with VC display overlay copy to the stable Pack-owned Deal Manager template. The Deal Manager binds only the small `vc.firmName` and current project `fund_id` prompt values. It deliberately does not render the complete `vc.funds` array into every system prompt.
+
+Deal Manager starts from a compact project context covering company identity, lifecycle stage, lead or owner, round/size, CRM/source provenance, task state, and relevant artifact/report pointers. It then reads selected task definitions, task state, artifacts, and Fund mandate context progressively. It prefers a matching predefined task, uses ad-hoc tasks only for specific uncovered work, validates people/agent assignees, checks for existing work, and requires explicit approval for model- or report-generated task creation and assignment.
+
+`vc_pipeline_autopilot` retains its stable template ID but displays as **Pipeline Manager**. It is the intended non-Deal VC workspace chat agent. It begins with native Alludium Deal navigation, compares selected Deals, finds missing/invalid Fund assignments, prepares weekly and selected-Fund summaries, and produces reviewed task or chat-to-Deal proposals. It does not replace Deal Manager or persist model suggestions.
+
+The Live Deal Status Report remains an eleven-tab HTML artifact. Its task now also returns a bounded `open_questions` JSON index with stable IDs, evidence needs, suggested owner roles, statuses, and real source references. The report never creates tasks; Deal Manager may turn the index into a deduplicated proposal for human approval.
+
 ## Platform boundary
 
-The platform supports `workspace.variable` and `project.field` prompt bindings, and project chats expose typed project reads and updates. The pack-owned `vc_deal_manager` therefore binds `vc.firmName`, `vc.funds`, and `fund_id`, and declares supported project, task, artifact, and `project.update` tools.
+Remi's platform work in issue `#3264` adds `agentTemplateKey` to the strict project-manager overlay schema and resolves a Pack template for canonical project chat. The Pack now emits that supported key. Platform issue `#3219` owns the remaining compact Deal context, progressive Fund access, and approved task-coordination policy needed to expose all declared tools safely.
 
-The current platform project-manager overlay schema is strict and does not accept `agentTemplateKey`; canonical project chats always resolve the platform-managed `project_manager` deployment. That deployment does not bind pack workspace variables, and its project context/tool reads expose typed project fields but not effective `vc.funds` values. The pack therefore cannot honestly attach `vc_deal_manager` or supply Fund mandates to the canonical runtime identity without a platform change. For this interim slice, `vc_deal_room.initialVersion.projectManager` carries the safe routing, confirmation, and unresolved-selection rules, while the pack-owned template has the full bindings and owns supported task routes. The canonical chat must treat Fund setup as unavailable when the runtime has not supplied `vc.funds`; no unsupported `agentTemplateKey`, alias, fallback, or copied Fund data is emitted.
+The following generic Platform contracts are intentionally not invented in this Pack before their schemas exist:
+
+- platform `#3464`: bind the VC workspace chat surface to `vc_pipeline_autopilot` without hard-coding Navigator or a deployment ID;
+- platform `#3465`: Pack-declared `navigationFieldKeys: ["fund_id"]`, bounded projection, and server-side Fund/Unassigned filters;
+- platform `#3448`: schema-driven collection settings for `vc.funds`;
+- platform `#3449`: workspace-variable-backed project field options and server validation for `fund_id`;
+- platform `#3466`: typed, reviewed workspace-chat-to-Deal creation.
+
+Until those consumers land, the Pack provides the stable agent IDs, project field, prompt/task behavior, report output, fixtures, and explicit dependencies. It does not add a VC-only repository method, raw deployment ID, copied Fund fields, or an unvalidated workspace-chat/navigation schema.
