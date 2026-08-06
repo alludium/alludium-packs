@@ -1290,6 +1290,26 @@ def validate_fund_routing_contract() -> None:
         if required_phrase not in report_template:
             fail(f"Live Deal Status Report template is missing Fund display rule: {required_phrase}")
 
+    intake_task = read_yaml(
+        ROOT
+        / "alludium"
+        / "task-definition-templates"
+        / "vc-workflows"
+        / "capture-opportunity-intake.yaml"
+    )
+    intake_instructions = (
+        ((intake_task.get("definition") or {}).get("definitionJson") or {}).get("instructions")
+        or {}
+    ).get("executionInstructions") or ""
+    for required_phrase in [
+        "do not independently validate it against `vc.funds`",
+        "Deal Manager owns Fund validation and correction",
+        "without claiming that it is active, valid, or a fit",
+        "never make a Fund-fit claim",
+    ]:
+        if required_phrase not in intake_instructions:
+            fail(f"Opportunity intake is missing Fund ownership boundary: {required_phrase}")
+
     handoff_task = read_yaml(
         ROOT
         / "alludium"
