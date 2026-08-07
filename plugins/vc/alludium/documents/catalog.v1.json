@@ -10,7 +10,7 @@
       "path": "shared/investment-screening-framework.html",
       "supportedProjectTypes": [
         "vc_deal_room",
-        "vc_origination_pipeline"
+        "vc_origination_candidate"
       ],
       "relatedTaskDefinitionSlugs": [
         "run-investment-fit-screen",
@@ -28,7 +28,7 @@
       "path": "shared/investment-diligence-question-framework.html",
       "supportedProjectTypes": [
         "vc_deal_room",
-        "vc_origination_pipeline",
+        "vc_origination_candidate",
         "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
@@ -143,7 +143,8 @@
       "path": "shared/evidence-citation-style-guide.html",
       "supportedProjectTypes": [
         "vc_deal_room",
-        "vc_origination_pipeline",
+        "vc_sourcing_line",
+        "vc_origination_candidate",
         "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
@@ -175,15 +176,14 @@
       "path": "shared/template-use-guidance.html",
       "supportedProjectTypes": [
         "vc_deal_room",
-        "vc_origination_pipeline",
+        "vc_sourcing_line",
+        "vc_origination_candidate",
         "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
         "audit-linkedin-query-spend",
-        "configure-origination-pipeline",
         "create-ic-memo",
         "generate-diligence-questions",
-        "generate-sourcing-digest",
         "manage-closing-checklist",
         "prepare-ic-agenda",
         "prepare-meeting",
@@ -227,7 +227,8 @@
       "path": "shared/file-naming-source-index-sop.html",
       "supportedProjectTypes": [
         "vc_deal_room",
-        "vc_origination_pipeline",
+        "vc_sourcing_line",
+        "vc_origination_candidate",
         "vc_investment_management"
       ],
       "relatedTaskDefinitionSlugs": [
@@ -274,7 +275,7 @@
       "documentType": "template",
       "path": "deal-room/thesis-target-list-template.html",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_sourcing_line"
       ],
       "relatedTaskDefinitionSlugs": [
         "source-thesis-targets"
@@ -288,7 +289,7 @@
       "documentType": "template",
       "path": "deal-room/lead-generation-packet-template.html",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_sourcing_line"
       ],
       "relatedTaskDefinitionSlugs": [
         "prepare-lead-gen-packet"
@@ -689,15 +690,15 @@
     },
     {
       "id": "vc.document.origination_pipeline_sop",
-      "title": "Origination Pipeline Operating SOP",
-      "description": "Operating method for standing venture sourcing pipelines from source configuration through promotion packages.",
+      "title": "Origination Operating SOP",
+      "description": "Hub-free operating method for workspace origination, Fund-specific sourcing lines, multi-line candidates, and reviewed Deal promotion.",
       "documentType": "sop",
       "path": "origination/origination-pipeline-sop.html",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_sourcing_line",
+        "vc_origination_candidate"
       ],
       "relatedTaskDefinitionSlugs": [
-        "configure-origination-pipeline",
         "promote-candidate-to-deal-pipeline",
         "run-vc-sourcing-pipeline"
       ],
@@ -706,15 +707,15 @@
     {
       "id": "vc.document.origination_source_strategy_guide",
       "title": "Origination Source Strategy Guide",
-      "description": "Source strategy, source provenance, source quality, and promotion-readiness methodology for venture origination pipelines.",
+      "description": "Source strategy, provenance, quality, and promotion-readiness methodology for Fund-specific sourcing lines and multi-line candidates.",
       "documentType": "methodology",
       "path": "origination/origination-source-strategy-guide.html",
       "supportedProjectTypes": [
         "vc_deal_room",
-        "vc_origination_pipeline"
+        "vc_sourcing_line",
+        "vc_origination_candidate"
       ],
       "relatedTaskDefinitionSlugs": [
-        "configure-origination-pipeline",
         "prepare-lead-gen-packet",
         "prepare-prospect-summary",
         "promote-candidate-to-deal-pipeline",
@@ -732,11 +733,25 @@
       "documentType": "template",
       "path": "origination/source-registry-template.html",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_sourcing_line"
       ],
       "relatedTaskDefinitionSlugs": [
-        "configure-origination-pipeline",
+        "configure-sourcing-line",
         "run-vc-sourcing-pipeline"
+      ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.sourcing_line_template_catalog",
+      "title": "Sourcing Line Template Catalog",
+      "description": "Starter patterns for Fund-specific sourcing experiments defined by source mix, screen, cadence, review policy, outreach boundary, and learning question.",
+      "documentType": "methodology",
+      "path": "origination/sourcing-line-template-catalog.html",
+      "supportedProjectTypes": [
+        "vc_sourcing_line"
+      ],
+      "relatedTaskDefinitionSlugs": [
+        "configure-sourcing-line"
       ],
       "status": "source"
     },
@@ -747,7 +762,8 @@
       "documentType": "template",
       "path": "origination/candidate-batch-template.html",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_sourcing_line",
+        "vc_origination_candidate"
       ],
       "relatedTaskDefinitionSlugs": [
         "enrich-sourcing-candidate",
@@ -763,7 +779,7 @@
       "documentType": "methodology",
       "path": "origination/sourcing-scoring-rubric.html",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_origination_candidate"
       ],
       "relatedTaskDefinitionSlugs": [
         "score-sourcing-candidate",
@@ -778,7 +794,7 @@
       "documentType": "checklist",
       "path": "origination/source-health-review-checklist.html",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_sourcing_line"
       ],
       "relatedTaskDefinitionSlugs": [
         "review-source-errors-and-spend"
@@ -792,7 +808,7 @@
       "documentType": "checklist",
       "path": "origination/paid-source-spend-audit-checklist.html",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_sourcing_line"
       ],
       "relatedTaskDefinitionSlugs": [
         "audit-linkedin-query-spend",
@@ -807,10 +823,9 @@
       "documentType": "template",
       "path": "origination/sourcing-digest-template.html",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_sourcing_line"
       ],
       "relatedTaskDefinitionSlugs": [
-        "generate-sourcing-digest"
       ],
       "status": "source"
     },
@@ -821,7 +836,7 @@
       "documentType": "template",
       "path": "origination/outreach-queue-template.html",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_origination_candidate"
       ],
       "relatedTaskDefinitionSlugs": [
         "prepare-outreach-draft-queue"
@@ -835,7 +850,7 @@
       "documentType": "template",
       "path": "origination/promotion-package-template.html",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_origination_candidate"
       ],
       "relatedTaskDefinitionSlugs": [
         "prepare-prospect-summary",
@@ -850,7 +865,7 @@
       "documentType": "template",
       "path": "origination/sourcing-ic-summary-template.html",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_origination_candidate"
       ],
       "relatedTaskDefinitionSlugs": [
         "prepare-prospect-summary"
@@ -864,7 +879,7 @@
       "documentType": "policy",
       "path": "origination/dedupe-novelty-policy.html",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_origination_candidate"
       ],
       "relatedTaskDefinitionSlugs": [
         "screen-active-sourcing-candidate"
@@ -878,7 +893,7 @@
       "documentType": "checklist",
       "path": "origination/apify-source-setup-checklist.html",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_sourcing_line"
       ],
       "relatedTaskDefinitionSlugs": [
         "apify-discovery",
@@ -894,7 +909,7 @@
       "documentType": "checklist",
       "path": "origination/companies-house-source-setup-checklist.html",
       "supportedProjectTypes": [
-        "vc_origination_pipeline"
+        "vc_sourcing_line"
       ],
       "relatedTaskDefinitionSlugs": [
         "companies-house-discovery",

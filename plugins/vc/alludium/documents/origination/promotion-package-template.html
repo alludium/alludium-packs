@@ -106,7 +106,8 @@
 <thead><tr><th>Field</th><th>Content</th></tr></thead>
 <tbody>
 <tr><td>Candidate</td><td>Company name, domain, source ID</td></tr>
-<tr><td>Pipeline</td><td>Origination pipeline and thesis</td></tr>
+<tr><td>Candidate provenance</td><td>All contributing Sourcing Lines, Fund contexts, and source receipts</td></tr>
+<tr><td>Target Deal Fund</td><td>Explicitly selected active <code>vc.funds</code> record</td></tr>
 <tr><td>Recommended action</td><td>Create Deal Pipeline / update existing Deal Pipeline / hold</td></tr>
 <tr><td>Proposed Deal Pipeline owner</td><td>Name or role</td></tr>
 <tr><td>Approval status</td><td>Pending / approved / rejected</td></tr>
@@ -116,9 +117,10 @@
 <thead><tr><th>Area</th><th>Summary</th><th>Evidence</th></tr></thead>
 <tbody>
 <tr><td>Company snapshot</td><td>Product, customer, stage, geography</td><td></td></tr>
-<tr><td>Source path</td><td>How the candidate surfaced</td><td></td></tr>
+<tr><td>Source paths</td><td>How the Candidate surfaced through every contributing line</td><td></td></tr>
 <tr><td>Source quality</td><td>Source family, freshness, owner, relationship path, and evidence quality</td><td></td></tr>
-<tr><td>Thesis fit</td><td>Why it fits the fund</td><td></td></tr>
+<tr><td>Line-specific fit</td><td>Why it matched each line and where the results disagree</td><td></td></tr>
+<tr><td>Target Fund fit</td><td>Why current evidence fits the explicitly selected active Deal Fund</td><td></td></tr>
 <tr><td>Screening result</td><td>Score and rationale</td><td></td></tr>
 <tr><td>Novelty / dedupe</td><td>New, existing, ambiguous, prior reject</td><td></td></tr>
 <tr><td>Relationship context</td><td>Warm intro, known contact, no path</td><td></td></tr>
@@ -130,11 +132,12 @@
 <thead><tr><th>Field</th><th>Recommendation</th></tr></thead>
 <tbody>
 <tr><td>Suggested next task</td><td>Initial call, founder materials, investment screen, or pass note</td></tr>
-<tr><td>Initial artifacts to attach</td><td>Candidate batch, source receipts, screen, relationship check</td></tr>
+<tr><td>Initial artifacts to attach</td><td>Candidate record, all line receipts, screens, and relationship checks</td></tr>
+<tr><td>Required Deal field</td><td>Human-confirmed active <code>fund_id</code></td></tr>
 <tr><td>Required approval</td><td>Human approver and date</td></tr>
 </tbody></table></div>
 <h2 id="approval-rule">Approval Rule</h2>
-<p>Promotion should create or update a downstream opportunity only after a human approves the package and confirms the intended Deal Pipeline boundary.</p>
+<p>Promotion should create or update a downstream opportunity only after a human approves the package and explicitly selects the active target Fund. Never infer the Deal <code>fund_id</code> from the first, latest, or majority Sourcing Line. Preserve the Candidate-to-Deal relationship and all line provenance after promotion.</p>
   </article>
 </body>
 </html>

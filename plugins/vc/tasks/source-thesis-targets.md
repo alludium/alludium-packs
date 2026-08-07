@@ -21,12 +21,12 @@ Source Thesis Targets for one venture-capital opportunity with evidence capture,
 
 ## What To Do
 
-Research thesis-aligned companies for the requested thesis area, geography, stage focus, and market filters; return target companies, fit rationale, source links, warm intro paths, and confidence notes. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a polished Word-ready document named Thesis Target List.
+Resolve fund id by exact stable-ID equality against one active record in `vc.funds` and use only that Fund mandate. Research thesis-aligned companies for the requested thesis area, geography, stage focus, and market filters; return target companies, fit rationale, source links, warm intro paths, and confidence notes. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a polished Word-ready document named Thesis Target List.
 
 ## Available Context
 
 - Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
-- Especially look for: Thesis Area, Geography, Stage Focus, Market Filters.
+- Especially look for: Thesis Area, Geography, Fund ID, Stage Focus, Market Filters.
 - If a named input is absent, follow the missing-input policy rather than inventing facts.
 
 ## Reference Materials

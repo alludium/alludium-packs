@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_vc_sourcing_pipeline
-version: 0.1.14
+version: 0.1.16
 title: Run VC Sourcing Pipeline
 category: Venture Capital
 visibility: workspace
@@ -37,7 +37,7 @@ definition:
     recommendedAgentTemplate: vc_sourcing_operator
     plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
-    - vc_origination_pipeline
+    - vc_sourcing_line
     supportedProjectScopes:
     - project_instance
     scheduleDefaults:
@@ -67,10 +67,10 @@ definition:
       safety:
         externalWritesRequireApproval: true
     instructions:
-      executionInstructions: 'Run only approved origination sources and preserve the reference workflow order across Companies
+      executionInstructions: 'When running in a Sourcing Line, require `fund_id` to exactly match one active record in `vc.funds`, use only that Fund mandate, and keep receipts and candidate proposals line-scoped. Never require an Origination Pipeline hub. Run only approved origination sources and preserve the reference workflow order across Companies
         House recent and mature windows, GitHub builder signals, X/Twitter builder signals, cheap enrichment, Affinity relationship
         check, first verdict, LinkedIn company enrichment only for Meet or Watch, second verdict for fresh LinkedIn company
-        data, sync proposal, portfolio-overlap review, screen, outreach drafts, and digest. LinkedIn people discovery is weekly
+        data, sync proposal, portfolio-overlap review, screen, and outreach drafts. LinkedIn people discovery is weekly
         by default or explicit override only. Create child tasks for the enabled steps; keep each child within its own source/action
         boundary. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage:
         `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be
@@ -108,6 +108,12 @@ fields:
     fieldType: string
     required: false
     position: 1
+    config: {}
+  - key: fund_id
+    name: Fund ID
+    fieldType: string
+    required: false
+    position: 2
     config: {}
   output:
   - key: run_status
@@ -158,7 +164,7 @@ runtime:
     sourceMetadata:
       templateFamily: vc
       taskKind: run_sourcing_pipeline
-      projectType: vc_origination_pipeline
+      projectType: vc_sourcing_line
   requiredResources:
     requiresTaskChat: true
   executionProfile:

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Origination Pipeline Operating SOP</title>
+  <title>Origination Operating SOP</title>
   <style>
     :root {
       color-scheme: light;
@@ -97,26 +97,31 @@
   <article class="document document-source-template" data-document-id="vc.document.origination_pipeline_sop" data-document-type="sop">
     <header class="document-header">
       <div class="eyebrow">VC sop source</div>
-      <h1>Origination Pipeline Operating SOP</h1>
-      <p class="metadata">Operating method for standing venture sourcing pipelines.</p>
+      <h1>Origination Operating SOP</h1>
+      <p class="metadata">Hub-free operating method for workspace origination, Fund-specific lines, and multi-line candidates.</p>
     </header>
     <section class="note">When this source is used as a rendered task output, create the final deliverable as a standalone safe static HTML artifact with a <code>.html</code> filename and <code>mimeType: &quot;text/html&quot;</code>. Use the shared VC document styling rules from Template Use Guidance and make any generated links open in a new tab or window with <code>target=&quot;_blank&quot;</code> and <code>rel=&quot;noopener noreferrer&quot;</code>. Do not create Markdown output artifacts from this source.</section>
 <h2 id="purpose">Purpose</h2>
-<p>Use this SOP to operate a standing sourcing machine. Origination finds, enriches, dedupes, scores, and promotes candidates. Deal Pipeline work starts only after a candidate is promoted or a partner explicitly creates an opportunity workspace.</p>
+<p>Use this SOP to operate origination as a workspace projection over the Sourcing Lines and Candidates the current user may access. No singleton Origination Hub project is required. Each line owns one Fund-specific sourcing experiment; each Candidate owns company identity, all line provenance, evidence, decisions, outreach context, and reviewed Deal promotion.</p>
 <h2 id="workflow">Workflow</h2>
 <div class="table-wrap"><table>
 <thead><tr><th>Step</th><th>Output</th><th>Approval Gate</th></tr></thead>
 <tbody>
-<tr><td>Configure thesis, geography, stage, source scope, review policy, budgets, and source taxonomy</td><td>Source registry</td><td>Human confirms scope</td></tr>
-<tr><td>Run discovery and read-preview tasks</td><td>Setup and preview artifacts with source provenance</td><td>Human approves source readiness</td></tr>
-<tr><td>Batch candidates for enrichment, dedupe, scoring, and relationship checks</td><td>Candidate batch with source family, freshness, and evidence quality</td><td>Human reviews batch quality</td></tr>
-<tr><td>Produce digests and outreach queues</td><td>Sourcing digest and outreach queue</td><td>Human approves outreach or follow-up</td></tr>
-<tr><td>Promote qualified candidates</td><td>Promotion package with thesis rationale, source path, screening result, risks, and recommended Deal Pipeline posture</td><td>Human approves Deal Pipeline creation or update</td></tr>
+<tr><td>Create a Sourcing Line with <code>line_name</code> and an active canonical <code>fund_id</code></td><td>Minimal draft line</td><td>Human confirms the Fund and line identity</td></tr>
+<tr><td>Configure hypothesis, source scope, screen, cadence, review policy, budget, and outreach boundary</td><td>Fund-specific line configuration</td><td>Human approves the experiment; schedules remain disabled</td></tr>
+<tr><td>Run approved discovery and read tasks</td><td>Run receipts and candidate proposals with source provenance</td><td>Human approves source scope, limits, and spend</td></tr>
+<tr><td>Register, enrich, dedupe, score, and review Candidates</td><td>Durable Candidate projects with one relationship per contributing line</td><td>Human reviews identity, evidence, and disposition</td></tr>
+<tr><td>Prepare draft outreach or an on-demand line summary</td><td>Candidate outreach draft or line report</td><td>Human approves any external action</td></tr>
+<tr><td>Promote a qualified Candidate</td><td>Promotion package and Deal creation proposal preserving all provenance</td><td>Human explicitly chooses the active Deal Fund and approves creation</td></tr>
 </tbody></table></div>
 <h2 id="source-provenance">Source Provenance</h2>
-<p>Every candidate should preserve source family, source detail, owner, freshness, relationship path, thesis rationale, evidence quality, dedupe state, and promotion rationale. Promotion should carry that trail into the downstream Deal Pipeline.</p>
+<p>Every Candidate should preserve source family, source detail, owner, freshness, relationship path, evidence quality, dedupe state, and one native provenance relationship for every contributing Sourcing Line. A later discovery adds evidence; it does not replace earlier line context or create an exclusive primary line. When dedupe finds an exact existing Candidate, stop guided Candidate creation and use the reviewed <code>link-existing-origination-candidate</code> task to add the new line relationship from the platform receipt. Promotion carries that trail into the downstream Deal Pipeline.</p>
+<h2 id="fund-boundary">Fund Boundary</h2>
+<p>Each Sourcing Line uses only the active Fund record matching its <code>fund_id</code>. Candidate evidence may span lines associated with different Funds. The eventual Deal Fund is a separate human choice made during promotion and must never be inferred from the first, latest, or majority line.</p>
+<h2 id="workspace-reporting">Workspace Reporting</h2>
+<p>The Origination Manager derives attention, health, performance, and promotion readiness from current visible line and Candidate projects and their receipts. There is no mandatory cross-line digest schedule or cached hub count. State the reviewed scope and freshness, and link the underlying projects or artifacts.</p>
 <h2 id="controls">Controls</h2>
-<p>Do not create Deal Pipelines, mutate CRM records, contact founders, or enable recurring schedules without explicit human approval.</p>
+<p>Do not create Deals, mutate CRM records, contact founders, incur paid-source spend, or enable recurring schedules without explicit human approval. Connected applications are workspace resources; per-line configuration and evidence determine how they may be used.</p>
   </article>
 </body>
 </html>

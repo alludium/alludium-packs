@@ -38,7 +38,7 @@ Mirror the reference pipeline's verdict contract. Score from already-enriched da
 ## Deliverable
 
 - Create or update **Scoring Artifact** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Meet Candidate Count, Watch Candidate Count, Promotion Ready Count, Scoring Report. Do not output raw JSON unless the user explicitly asks for machine-readable data.
+- Also include a short human-readable summary covering: Meet Candidate Count, Watch Candidate Count, Promotion Ready Count, Scoring Report, Candidate Score, Review Verdict, Thesis Fit Summary. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 

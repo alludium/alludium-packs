@@ -19,7 +19,8 @@ recommendations:
     category: CRM
     supportedProjectTypes:
       - vc_deal_room
-      - vc_origination_pipeline
+      - vc_sourcing_line
+      - vc_origination_candidate
       - vc_investment_management
     use: Deal pipeline, CRM context, company/deal records, relationship context, and outreach history.
     pluginCredentialBoundary: user_or_workspace_api_key
@@ -50,7 +51,8 @@ recommendations:
     category: Company Intelligence
     supportedProjectTypes:
       - vc_deal_room
-      - vc_origination_pipeline
+      - vc_sourcing_line
+      - vc_origination_candidate
     use: Company enrichment, founder profiles, market intelligence, and sourcing context.
     pluginCredentialBoundary: user_or_workspace_oauth
     alludiumPlatformMapping: workspace_connection
@@ -78,7 +80,7 @@ recommendations:
     name: Apify Actors
     category: Source Automation
     supportedProjectTypes:
-      - vc_origination_pipeline
+      - vc_sourcing_line
     use: Approved actor-based source discovery for VC origination pipelines, including founder, company, launch, and hiring signals when a workspace authorizes those sources.
     recommendationStatus: recommended
     pluginCredentialBoundary: user_or_workspace_api_key
@@ -102,14 +104,14 @@ recommendations:
     actions:
       - kind: setup
         supportedProjectTypes:
-          - vc_origination_pipeline
+          - vc_sourcing_line
         label: Set up Apify for Origination
         taskDefinitionTemplateId: vc.apify_setup
   - externalId: companies-house-mcp
     name: Companies House
     category: Company Registry
     supportedProjectTypes:
-      - vc_origination_pipeline
+      - vc_sourcing_line
     status: future
     use: Future typed UK company registry connector candidate for VC origination pipelines if public-page extraction proves insufficient.
     recommendationStatus: optional
@@ -131,7 +133,8 @@ recommendations:
     category: Private Market Data
     supportedProjectTypes:
       - vc_deal_room
-      - vc_origination_pipeline
+      - vc_sourcing_line
+      - vc_origination_candidate
     use: Financing, investor, funding-round, and private-market context.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: workspace_connection
@@ -151,7 +154,8 @@ recommendations:
     category: Web Research
     supportedProjectTypes:
       - vc_deal_room
-      - vc_origination_pipeline
+      - vc_sourcing_line
+      - vc_origination_candidate
     use: Public web, company, people, code, and deeper research workflows.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: platform_or_workspace_connection
@@ -161,7 +165,8 @@ recommendations:
     category: Web Extraction
     supportedProjectTypes:
       - vc_deal_room
-      - vc_origination_pipeline
+      - vc_sourcing_line
+      - vc_origination_candidate
     use: First-party website extraction, website mapping, page evidence, source-material gathering, and public Companies House page previews for VC origination.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: platform_or_workspace_connection
@@ -172,7 +177,7 @@ recommendations:
     actions:
       - kind: setup
         supportedProjectTypes:
-          - vc_origination_pipeline
+          - vc_sourcing_line
         label: Configure Companies House public register preview
         taskDefinitionTemplateId: vc.companies_house_setup
   - externalId: brave-search-mcp
@@ -180,7 +185,8 @@ recommendations:
     category: Web Search
     supportedProjectTypes:
       - vc_deal_room
-      - vc_origination_pipeline
+      - vc_sourcing_line
+      - vc_origination_candidate
     use: Broad public web and news search fallback.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: platform_or_workspace_connection
@@ -190,7 +196,8 @@ recommendations:
     category: Web Search
     supportedProjectTypes:
       - vc_deal_room
-      - vc_origination_pipeline
+      - vc_sourcing_line
+      - vc_origination_candidate
     use: Broad search fallback across Google, Bing, YouTube, and other search surfaces.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: platform_or_workspace_connection
@@ -200,7 +207,8 @@ recommendations:
     category: Web Search
     supportedProjectTypes:
       - vc_deal_room
-      - vc_origination_pipeline
+      - vc_sourcing_line
+      - vc_origination_candidate
     use: Web search and extraction when a workspace prefers Tavily-backed research.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: workspace_connection
@@ -210,7 +218,8 @@ recommendations:
     category: Web Research
     supportedProjectTypes:
       - vc_deal_room
-      - vc_origination_pipeline
+      - vc_sourcing_line
+      - vc_origination_candidate
     use: Search, reasoning, and deep research workflows where Perplexity is connected.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: workspace_connection
@@ -220,7 +229,8 @@ recommendations:
     category: Web Extraction
     supportedProjectTypes:
       - vc_deal_room
-      - vc_origination_pipeline
+      - vc_sourcing_line
+      - vc_origination_candidate
     use: Real-time web access, search, and scraping where a workspace has Bright Data access.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: workspace_connection
@@ -230,7 +240,8 @@ recommendations:
     category: Media Intelligence
     supportedProjectTypes:
       - vc_deal_room
-      - vc_origination_pipeline
+      - vc_sourcing_line
+      - vc_origination_candidate
     use: News, media monitoring, and market-signal intelligence where a workspace has Meltwater access.
     pluginCredentialBoundary: user_or_workspace_api_key
     alludiumPlatformMapping: workspace_connection
@@ -295,7 +306,8 @@ recommendations:
     category: Private Market Data
     supportedProjectTypes:
       - vc_deal_room
-      - vc_origination_pipeline
+      - vc_sourcing_line
+      - vc_origination_candidate
     status: future
     use: Private-market data source for company, funding, investor, and competitive context.
     recommendationStatus: optional
@@ -316,7 +328,8 @@ recommendations:
     category: Private Market Data
     supportedProjectTypes:
       - vc_deal_room
-      - vc_origination_pipeline
+      - vc_sourcing_line
+      - vc_origination_candidate
     status: future
     use: Private-market data source for company, financing, investor, and comparable-company research.
     recommendationStatus: optional
@@ -337,7 +350,8 @@ recommendations:
     category: CRM
     supportedProjectTypes:
       - vc_deal_room
-      - vc_origination_pipeline
+      - vc_sourcing_line
+      - vc_origination_candidate
     status: future
     use: CRM or deal-tracking system alternative for firm pipeline and relationship workflows.
     recommendationStatus: optional
@@ -361,7 +375,8 @@ recommendations:
     category: CRM
     supportedProjectTypes:
       - vc_deal_room
-      - vc_origination_pipeline
+      - vc_sourcing_line
+      - vc_origination_candidate
     status: future
     use: CRM or deal-tracking system alternative for firm pipeline and relationship workflows.
     recommendationStatus: optional
@@ -384,7 +399,8 @@ recommendations:
     category: CRM
     supportedProjectTypes:
       - vc_deal_room
-      - vc_origination_pipeline
+      - vc_sourcing_line
+      - vc_origination_candidate
     status: future
     use: CRM or deal-tracking alternative for pipeline, relationship, and founder communication workflows.
     recommendationStatus: optional
@@ -407,7 +423,8 @@ recommendations:
     category: Deal Tracking
     supportedProjectTypes:
       - vc_deal_room
-      - vc_origination_pipeline
+      - vc_sourcing_line
+      - vc_origination_candidate
     status: future
     use: Lightweight deal-tracking or operating-table system used by some firms instead of a dedicated CRM.
     recommendationStatus: optional
@@ -429,7 +446,8 @@ recommendations:
     category: Docs and Workspace
     supportedProjectTypes:
       - vc_deal_room
-      - vc_origination_pipeline
+      - vc_sourcing_line
+      - vc_origination_candidate
     use: Lightweight deal-tracking, memo, knowledge-base, or operating-document workspace.
     recommendationStatus: optional
     pluginCredentialBoundary: user_or_workspace_oauth
@@ -461,7 +479,8 @@ recommendations:
     category: Document Storage
     supportedProjectTypes:
       - vc_deal_room
-      - vc_origination_pipeline
+      - vc_sourcing_line
+      - vc_origination_candidate
     use: Shared documents, founder materials, diligence files, memos, and meeting notes.
     recommendationStatus: recommended
     pluginCredentialBoundary: user_or_workspace_oauth
@@ -491,7 +510,8 @@ recommendations:
     category: Collaboration
     supportedProjectTypes:
       - vc_deal_room
-      - vc_origination_pipeline
+      - vc_sourcing_line
+      - vc_origination_candidate
     use: Team communication workspace for deal routing, approvals, and collaboration context.
     pluginCredentialBoundary: user_or_workspace_oauth
     alludiumPlatformMapping: workspace_connection
@@ -520,7 +540,8 @@ recommendations:
     category: Relationship Intelligence
     supportedProjectTypes:
       - vc_deal_room
-      - vc_origination_pipeline
+      - vc_sourcing_line
+      - vc_origination_candidate
     status: future
     use: Professional network context for founder research, warm intro paths, and relationship mapping.
     recommendationStatus: optional

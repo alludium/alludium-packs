@@ -69,6 +69,24 @@ REQUIRED_AGENT_TOOLS = {
     "vc_first_look_analyst": {
         "alludium-platform": {"artifact.readSourceRange"},
     },
+    "vc_sourcing_operator": {
+        "alludium-platform": {
+            "project.findById",
+            "project.listForCurrentWorkspace",
+            "project-relationship.findById",
+            "project-relationship.list",
+            "project-relationship.create",
+        },
+        "affinity-mcp-server": {
+            "affinity_search_companies",
+            "affinity_get_company",
+            "affinity_list_company_notes",
+            "affinity_search_persons",
+            "affinity_get_person",
+            "affinity_get_relationship_strengths",
+            "affinity_list_person_notes",
+        },
+    },
 }
 WORKSPACE_VARIABLE_VALUE_TYPES = {"string", "number", "boolean", "object", "array"}
 WORKSPACE_VARIABLE_RENDER_TYPES = {"text", "textarea", "select", "checkbox", "number"}
@@ -884,9 +902,13 @@ def validate_fund_routing_contract() -> None:
     if set(funds_variable.get("supportedProjectTypes") or []) != {
         "vc_deal_room",
         "vc_investment_management",
-        "vc_origination_pipeline",
+        "vc_sourcing_line",
+        "vc_origination_candidate",
     }:
-        fail("vc.funds must support all three canonical VC project types")
+        fail(
+            "vc.funds must support Deal Pipeline, Deal Execution, Sourcing Line, "
+            "and Origination Candidate"
+        )
     item_contract = (funds_variable.get("validationMetadata") or {}).get("items") or {}
     if set(item_contract.get("required") or []) != {"id", "name", "status"}:
         fail("vc.funds item contract must require id, name, and status")
@@ -1111,11 +1133,15 @@ def validate_fund_routing_contract() -> None:
             {
                 "surface": "vc_workspace",
                 "agentTemplateKey": "vc_pipeline_autopilot",
-            }
+            },
+            {
+                "surface": "vc_origination",
+                "agentTemplateKey": "vc_origination_manager",
+            },
         ]
     }
     if (manifest.get("surfaces") or {}).get("workspaceAgents") != expected_workspace_agents:
-        fail("VC workspace chat must bind the Pack-owned Pipeline Manager template")
+        fail("VC workspace and Origination chats must bind their Pack-owned managers")
 
     removed_deal_room_fields = {
         "connected_systems",
@@ -4285,8 +4311,456 @@ ORIGINATION_STAGE_LIFECYCLE_STAGES = {
 }
 
 
-def validate_origination_pipeline_task_mapping_contracts() -> None:
-    project_type_id = "vc_origination_pipeline"
+ORIGINATION_LINE_TASK_SLUGS = {
+    "create-sourcing-line",
+    "configure-sourcing-line",
+    "source-thesis-targets",
+    "run-vc-sourcing-pipeline",
+    "discover-companies-house-candidates",
+    "discover-linkedin-founder-candidates",
+    "discover-x-founder-signals",
+    "discover-github-builder-signals",
+    "discover-reddit-builder-signals",
+    "review-reddit-candidate-inbox",
+    "ingest-manual-sourcing-tip",
+    "link-existing-origination-candidate",
+    "prepare-lead-gen-packet",
+    "audit-linkedin-query-spend",
+    "review-source-errors-and-spend",
+    "apify-setup",
+    "apify-discovery",
+    "apify-sync-read",
+    "companies-house-setup",
+    "companies-house-discovery",
+    "companies-house-sync-read",
+}
+ORIGINATION_CANDIDATE_TASK_SLUGS = {
+    "register-origination-candidate",
+    "enrich-sourcing-candidate",
+    "check-affinity-relationship-context",
+    "score-sourcing-candidate",
+    "screen-identified-candidate",
+    "sync-sourcing-candidate",
+    "review-portfolio-overlap",
+    "run-deal-fit-analysis",
+    "screen-active-sourcing-candidate",
+    "review-unicorn-signature",
+    "prepare-prospect-summary",
+    "prepare-outreach-draft-queue",
+    "record-linkedin-connection-attempt",
+    "screen-founder-connected-candidate",
+    "prepare-initial-linkedin-reachout",
+    "prepare-second-reachout-email",
+    "review-outreach-outcome",
+    "promote-candidate-to-deal-pipeline",
+}
+
+
+def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
+    surfaces = manifest.get("surfaces") or {}
+    project_type_ids = set((surfaces.get("projectTypes") or {}).get("ids") or [])
+    expected_project_types = {"vc_sourcing_line", "vc_origination_candidate"}
+    if not expected_project_types.issubset(project_type_ids):
+        fail("Origination must expose Sourcing Line and Origination Candidate project types")
+    if "vc_origination_pipeline" in project_type_ids:
+        fail("Origination must not expose the retired vc_origination_pipeline hub")
+
+    agent_template_ids = set(
+        (surfaces.get("alludiumAgentTemplates") or {}).get("ids") or []
+    )
+    expected_manager_ids = {
+        "vc_origination_manager",
+        "vc_sourcing_line_manager",
+        "vc_origination_candidate_manager",
+    }
+    missing_manager_ids = sorted(expected_manager_ids - agent_template_ids)
+    if missing_manager_ids:
+        fail(f"Origination manager templates are missing: {missing_manager_ids}")
+
+    active_contract_paths = {
+        "manifest": ROOT / "alludium" / "manifest.yaml",
+        "workspace variables": ROOT / "alludium" / "workspace-variables.yaml",
+        "MCP recommendations": ROOT / "alludium" / "mcp-recommendations.yaml",
+        "project type catalog": ROOT / "alludium" / "project-types" / "catalog.v1.json",
+        "task template catalog": ROOT
+        / "alludium"
+        / "task-definition-templates"
+        / "catalog.v1.json",
+        "document catalog": ROOT / "alludium" / "documents" / "catalog.v1.json",
+    }
+    for label, path in active_contract_paths.items():
+        if "vc_origination_pipeline" in path.read_text(encoding="utf-8"):
+            fail(f"Active {label} still references the retired Origination Pipeline hub")
+
+    task_catalog = read_json(active_contract_paths["task template catalog"])
+    catalog_paths = {
+        template_path
+        for pack in task_catalog.get("packs", [])
+        if isinstance(pack, dict)
+        for template_path in pack.get("templates", [])
+        if isinstance(template_path, str)
+    }
+    for retired_path in {
+        "vc-workflows/configure-origination-pipeline.yaml",
+        "vc-workflows/generate-sourcing-digest.yaml",
+    }:
+        if retired_path in catalog_paths:
+            fail(f"Retired hub-only task remains active: {retired_path}")
+
+    task_contracts = load_task_template_contracts()
+    expected_task_owners = {
+        **{slug: "vc_sourcing_line" for slug in ORIGINATION_LINE_TASK_SLUGS},
+        **{
+            slug: "vc_origination_candidate"
+            for slug in ORIGINATION_CANDIDATE_TASK_SLUGS
+        },
+    }
+    for slug, expected_project_type in expected_task_owners.items():
+        contract = task_contracts.get(slug)
+        if contract is None:
+            fail(f"Required Origination task is missing from the active catalog: {slug}")
+        actual_project_types = set(contract.get("supportedProjectTypes") or [])
+        if actual_project_types != {expected_project_type}:
+            fail(
+                f"Origination task {slug} must support only {expected_project_type}; "
+                f"found {sorted(actual_project_types)}"
+            )
+        is_schedulable = (contract.get("scheduling") or {}).get("schedulable") is True
+        if slug == "run-vc-sourcing-pipeline":
+            if not is_schedulable:
+                fail("The Sourcing Line orchestrator must remain schedulable")
+        elif is_schedulable:
+            fail(
+                f"Origination child task {slug} must run under the line orchestrator, "
+                "not declare an independent schedule"
+            )
+    for slug, contract in task_contracts.items():
+        if "vc_origination_pipeline" in set(contract.get("supportedProjectTypes") or []):
+            fail(f"Task {slug} still supports the retired Origination Pipeline hub")
+
+    expected_fund_option_source = {
+        "type": "workspaceVariableCollection",
+        "path": "vc.funds",
+        "valueKey": "id",
+        "labelKey": "name",
+        "statusKey": "status",
+        "selectableStatuses": ["actively_investing"],
+        "hintKeys": ["stage", "sectors", "geographies"],
+    }
+    origination_project_types = {
+        project_type_id: read_json(
+            ROOT / "alludium" / "project-types" / f"{project_type_id}.json"
+        )
+        for project_type_id in expected_project_types
+    }
+    line = origination_project_types["vc_sourcing_line"]
+    candidate = origination_project_types["vc_origination_candidate"]
+    line_fields = {
+        field.get("key"): field
+        for field in (line.get("initialVersion") or {}).get("fieldsSchema", [])
+        if isinstance(field, dict) and isinstance(field.get("key"), str)
+    }
+    fund_field = line_fields.get("fund_id")
+    if not isinstance(fund_field, dict) or fund_field.get("required") is not True:
+        fail("Sourcing Line fund_id must be a required project field")
+    if fund_field.get("optionSource") != expected_fund_option_source:
+        fail("Sourcing Line fund_id must select an active Fund from canonical vc.funds")
+    line_creation = line.get("projectCreation") or {}
+    if set(line_creation.get("requiredFieldKeys") or []) != {"line_name", "fund_id"}:
+        fail("Sourcing Line creation must require exactly line_name and fund_id")
+    stale_line_fields = sorted(
+        {
+            "origination_pipeline_project_id",
+            "relationship_to_pipeline_key",
+        }
+        & set(line_fields)
+    )
+    if stale_line_fields:
+        fail(
+            "Sourcing Line must not depend on retired Hub fields: "
+            f"{stale_line_fields}"
+        )
+
+    forbidden_owner_fields = {
+        "fund_id",
+        "origination_pipeline_project_id",
+        "relationship_to_pipeline_key",
+        "sourcing_line_project_id",
+        "additional_sourcing_line_project_ids",
+        "relationship_to_line_key",
+    }
+    candidate_fields = {
+        field.get("key")
+        for field in (candidate.get("initialVersion") or {}).get("fieldsSchema", [])
+        if isinstance(field, dict)
+    }
+    stale_candidate_fields = sorted(forbidden_owner_fields & candidate_fields)
+    if stale_candidate_fields:
+        fail(
+            "Origination Candidate must derive multi-line provenance from relationships, "
+            f"not owner fields: {stale_candidate_fields}"
+        )
+
+    expected_relationships = {
+        "vc_sourcing_line": (
+            "vc.sourcing_line_originated_candidate",
+            ["vc_origination_candidate"],
+        ),
+        "vc_origination_candidate": (
+            "vc.origination_candidate_promoted_to_deal",
+            ["vc_deal_room"],
+        ),
+    }
+    expected_managers = {
+        "vc_sourcing_line": "vc_sourcing_line_manager",
+        "vc_origination_candidate": "vc_origination_candidate_manager",
+    }
+    for project_type_id, project_type in origination_project_types.items():
+        initial_version = project_type.get("initialVersion") or {}
+        manager = initial_version.get("projectManager") or {}
+        if manager.get("agentTemplateKey") != expected_managers[project_type_id]:
+            fail(
+                f"Project type {project_type_id} must bind "
+                f"{expected_managers[project_type_id]}"
+            )
+        relationship_type_key, target_project_type_keys = expected_relationships[
+            project_type_id
+        ]
+        relationships = (initial_version.get("extensions") or {}).get(
+            "projectRelationships"
+        ) or []
+        matching_relationships = [
+            relationship
+            for relationship in relationships
+            if isinstance(relationship, dict)
+            and relationship.get("typeKey") == relationship_type_key
+        ]
+        if len(matching_relationships) != 1:
+            fail(
+                f"Project type {project_type_id} must declare relationship "
+                f"{relationship_type_key} exactly once"
+            )
+        if matching_relationships[0].get("targetProjectTypeKeys") != target_project_type_keys:
+            fail(
+                f"Relationship {relationship_type_key} must target "
+                f"{target_project_type_keys}"
+            )
+
+    candidate_instructions = (candidate.get("initialVersion") or {}).get(
+        "instructionTemplate", ""
+    )
+    for required_phrase in [
+        "every line",
+        "no sourcing line or hub exclusively owns",
+        "never silently copy",
+    ]:
+        if required_phrase not in candidate_instructions:
+            fail(
+                "Origination Candidate instructions are missing multi-line or Fund "
+                f"boundary: {required_phrase}"
+            )
+
+    create_line = task_contracts["create-sourcing-line"]
+    create_line_output = create_line["fields"]["output"].get("projectCreation")
+    create_line_paths = set(
+        ((create_line_output or {}).get("config") or {}).get("requiredPaths") or []
+    )
+    if create_line_paths != {"fieldValues.line_name", "fieldValues.fund_id"}:
+        fail(
+            "Sourcing Line guided creation must require exactly line_name and fund_id "
+            "without a hub relationship"
+        )
+
+    registration = task_contracts["register-origination-candidate"]
+    registration_inputs = registration["fields"]["input"]
+    if "sourcing_line_project_id" not in registration_inputs:
+        fail("Candidate registration must collect its contributing Sourcing Line ID")
+    registration_output = registration["fields"]["output"].get("projectCreation")
+    registration_paths = set(
+        ((registration_output or {}).get("config") or {}).get("requiredPaths") or []
+    )
+    required_registration_paths = {
+        "fieldValues.company_name",
+        "fieldValues.candidate_key",
+        "fieldValues.source_evidence_summary",
+        "relationships",
+        "relationships[].direction",
+        "relationships[].relatedProjectId",
+        "relationships[].relationshipTypeKey",
+        "relationships[].metadata",
+    }
+    missing_registration_paths = sorted(
+        required_registration_paths - registration_paths
+    )
+    if missing_registration_paths:
+        fail(
+            "Candidate registration creation request is missing required paths: "
+            f"{missing_registration_paths}"
+        )
+    registration_template = read_yaml(
+        ROOT
+        / "alludium"
+        / "task-definition-templates"
+        / "vc-workflows"
+        / "register-origination-candidate.yaml"
+    )
+    registration_instructions = (
+        ((registration_template.get("definition") or {}).get("definitionJson") or {})
+        .get("instructions", {})
+        .get("executionInstructions", "")
+    )
+    for required_phrase in [
+        "vc.sourcing_line_originated_candidate",
+        "Multiple sourcing lines",
+        "Do not infer a Deal Fund",
+        "link-existing-origination-candidate",
+    ]:
+        if required_phrase not in registration_instructions:
+            fail(
+                "Candidate registration is missing a provenance boundary: "
+                f"{required_phrase}"
+            )
+
+    link_existing = task_contracts["link-existing-origination-candidate"]
+    link_inputs = link_existing["fields"]["input"]
+    if "sourcing_line_project_id" not in link_inputs:
+        fail("Existing Candidate linking must collect the Sourcing Line project ID")
+    if "candidate_project_id" not in link_inputs:
+        fail("Existing Candidate linking must collect the Candidate project ID")
+    for output_key in [
+        "relationship_id",
+        "candidate_project_id",
+        "link_status",
+        "relationship_summary",
+    ]:
+        if output_key not in link_existing["fields"]["output"]:
+            fail(f"Existing Candidate linking must emit {output_key}")
+    link_template = read_yaml(
+        ROOT
+        / "alludium"
+        / "task-definition-templates"
+        / "vc-workflows"
+        / "link-existing-origination-candidate.yaml"
+    )
+    link_definition_json = (
+        (link_template.get("definition") or {}).get("definitionJson") or {}
+    )
+    if link_definition_json.get("recommendedAgentTemplate") != "vc_sourcing_operator":
+        fail("Existing Candidate linking must run through vc_sourcing_operator")
+    link_instructions = (
+        (link_definition_json.get("instructions") or {}).get(
+            "executionInstructions", ""
+        )
+    )
+    for required_phrase in [
+        "project-relationship.create",
+        "sourceProjectId=sourcing_line_project_id",
+        "targetProjectId=candidate_project_id",
+        "vc.sourcing_line_originated_candidate",
+        "explicit human approval",
+        "terminal platform receipt",
+    ]:
+        if required_phrase not in link_instructions:
+            fail(
+                "Existing Candidate linking is missing an executable relationship "
+                f"boundary: {required_phrase}"
+            )
+
+    affinity_task = read_yaml(
+        ROOT
+        / "alludium"
+        / "task-definition-templates"
+        / "vc-workflows"
+        / "check-affinity-relationship-context.yaml"
+    )
+    affinity_definition_json = (
+        (affinity_task.get("definition") or {}).get("definitionJson") or {}
+    )
+    if affinity_definition_json.get("recommendedAgentTemplate") != "vc_sourcing_operator":
+        fail("Affinity relationship checks must run through vc_sourcing_operator")
+
+    run_template = read_yaml(
+        ROOT
+        / "alludium"
+        / "task-definition-templates"
+        / "vc-workflows"
+        / "run-vc-sourcing-pipeline.yaml"
+    )
+    run_instructions = (
+        (((run_template.get("definition") or {}).get("definitionJson") or {}).get(
+            "instructions"
+        ) or {}).get("executionInstructions", "")
+    )
+    if "generate-sourcing-digest" in run_instructions or "and digest" in run_instructions:
+        fail("The line orchestrator must not retain the retired digest child step")
+
+    promotion = task_contracts["promote-candidate-to-deal-pipeline"]
+    promotion_inputs = promotion["fields"]["input"]
+    if "origination_candidate_project_id" not in promotion_inputs:
+        fail("Candidate promotion must collect origination_candidate_project_id")
+    if "fund_id" not in promotion_inputs:
+        fail("Candidate promotion must collect an explicit Fund selection")
+    proposal = promotion["fields"]["output"].get("dealCreationProposal")
+    if not isinstance(proposal, dict) or proposal.get("fieldType") != "json":
+        fail("Candidate promotion must emit dealCreationProposal JSON")
+    proposal_paths = set((proposal.get("config") or {}).get("requiredPaths") or [])
+    required_proposal_paths = {
+        "createRequest.fieldValues",
+        "createRequest.fieldValues.fund_id",
+        "createRequest.relationships",
+        "createRequest.relationships[].direction",
+        "createRequest.relationships[].relatedProjectId",
+        "createRequest.relationships[].relationshipTypeKey",
+        "createRequest.relationships[].metadata",
+    }
+    missing_proposal_paths = sorted(required_proposal_paths - proposal_paths)
+    if missing_proposal_paths:
+        fail(
+            "Candidate promotion creation request is missing required paths: "
+            f"{missing_proposal_paths}"
+        )
+    promotion_template = read_yaml(
+        ROOT
+        / "alludium"
+        / "task-definition-templates"
+        / "vc-workflows"
+        / "promote-candidate-to-deal-pipeline.yaml"
+    )
+    promotion_instructions = (
+        ((promotion_template.get("definition") or {}).get("definitionJson") or {})
+        .get("instructions", {})
+        .get("executionInstructions", "")
+    )
+    if "vc.origination_candidate_promoted_to_deal" not in promotion_instructions:
+        fail("Candidate promotion must preserve the candidate-to-Deal relationship")
+    if "never infer" not in promotion_instructions:
+        fail("Candidate promotion must prohibit inferred Fund routing")
+
+    starter_template_field = line_fields.get("starter_template_key") or {}
+    declared_template_keys = {
+        option.get("value")
+        for option in starter_template_field.get("options") or []
+        if isinstance(option, dict) and isinstance(option.get("value"), str)
+    }
+    catalog_html = (
+        ROOT
+        / "alludium"
+        / "documents"
+        / "origination"
+        / "sourcing-line-template-catalog.html"
+    ).read_text(encoding="utf-8")
+    documented_template_keys = set(
+        re.findall(r"<tr><td><code>([a-z0-9_]+)</code></td>", catalog_html)
+    )
+    if documented_template_keys != declared_template_keys - {"custom"}:
+        fail(
+            "Sourcing Line starter template keys must match the HTML catalog; "
+            f"declared={sorted(declared_template_keys)}, "
+            f"documented={sorted(documented_template_keys)}"
+        )
+
+
+def validate_origination_project_task_mapping_contracts(project_type_id: str) -> None:
     project_type = read_json(ROOT / "alludium" / "project-types" / f"{project_type_id}.json")
     initial_version = project_type.get("initialVersion") or {}
     project_field_keys = {
@@ -4312,6 +4786,11 @@ def validate_origination_pipeline_task_mapping_contracts() -> None:
         if project_type_id in contract.get("supportedProjectTypes", [])
         and DEFAULT_PROJECT_SCOPE in contract.get("supportedProjectScopes", [])
     }
+    guided_task_slug = (
+        (project_type.get("projectCreation") or {}).get("guidedTask") or {}
+    ).get("taskDefinitionSlug")
+    if isinstance(guided_task_slug, str):
+        expected_project_instance_slugs.discard(guided_task_slug)
     mapped_project_instance_slugs: set[str] = set()
     mapping_ids: list[str] = []
 
@@ -4363,15 +4842,6 @@ def validate_origination_pipeline_task_mapping_contracts() -> None:
                 f"Project type {project_type_id} mapping {mapping_id} references unknown "
                 f"lifecycleStage {lifecycle_stage}"
             )
-        stage = task_contract.get("stage")
-        allowed_lifecycle_stages = ORIGINATION_STAGE_LIFECYCLE_STAGES.get(stage)
-        if allowed_lifecycle_stages is not None and lifecycle_stage not in allowed_lifecycle_stages:
-            fail(
-                f"Project type {project_type_id} mapping {mapping_id} maps task stage {stage} "
-                f"to lifecycleStage {lifecycle_stage}; expected one of "
-                f"{sorted(allowed_lifecycle_stages)}"
-            )
-
         if require_mapping_list(
             mapping.get("contextMappings"),
             f"Project type {project_type_id} mapping {mapping_id}.contextMappings",
@@ -4492,7 +4962,11 @@ def validate_origination_pipeline_task_mapping_contracts() -> None:
         for field_key, field in task_contracts[slug]["fields"]["output"].items():
             if (
                 field.get("fieldType") == "json"
-                and field_key != PROJECT_CREATION_COMPLETION_OUTPUT_KEY
+                and field_key
+                not in {
+                    PROJECT_CREATION_COMPLETION_OUTPUT_KEY,
+                    "dealCreationProposal",
+                }
             ):
                 fail(
                     f"Project type {project_type_id} task {slug} output {field_key} "
@@ -5295,7 +5769,12 @@ def main() -> None:
         document_types_by_id,
     )
     validate_project_task_mapping_contracts()
-    validate_origination_pipeline_task_mapping_contracts()
+    validate_origination_no_hub_contract(manifest)
+    for origination_project_type_id in [
+        "vc_sourcing_line",
+        "vc_origination_candidate",
+    ]:
+        validate_origination_project_task_mapping_contracts(origination_project_type_id)
     recommendations_path = manifest["surfaces"]["alludiumMcpRecommendations"]["path"]
     if not (ROOT / recommendations_path).exists():
         fail(f"Missing Alludium MCP recommendations file: {recommendations_path}")

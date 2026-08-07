@@ -7,8 +7,12 @@
       "path": "vc_deal_room.json"
     },
     {
-      "id": "vc_origination_pipeline",
-      "path": "vc_origination_pipeline.json"
+      "id": "vc_sourcing_line",
+      "path": "vc_sourcing_line.json"
+    },
+    {
+      "id": "vc_origination_candidate",
+      "path": "vc_origination_candidate.json"
     },
     {
       "id": "vc_investment_management",

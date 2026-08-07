@@ -21,18 +21,18 @@ Orchestrate one VC origination sourcing pass across approved sources with source
 
 ## What To Do
 
-Run only approved origination sources and preserve the reference workflow order across Companies House recent and mature windows, GitHub builder signals, X/Twitter builder signals, cheap enrichment, Affinity relationship check, first verdict, LinkedIn company enrichment only for Meet or Watch, second verdict for fresh LinkedIn company data, sync proposal, portfolio-overlap review, screen, outreach drafts, and digest. LinkedIn people discovery is weekly by default or explicit override only. Create child tasks for the enabled steps; keep each child within its own source/action boundary.
+When running in a Sourcing Line, require fund id to exactly match one active record in `vc.funds`, use only that Fund mandate, and keep receipts and candidate proposals line-scoped. Never require an Origination Pipeline hub. Run only approved origination sources and preserve the reference workflow order across Companies House recent and mature windows, GitHub builder signals, X/Twitter builder signals, cheap enrichment, Affinity relationship check, first verdict, LinkedIn company enrichment only for Meet or Watch, second verdict for fresh LinkedIn company data, sync proposal, portfolio-overlap review, screen, and outreach drafts. LinkedIn people discovery is weekly by default or explicit override only. Create child tasks for the enabled steps; keep each child within its own source/action boundary.
 
 ## Available Context
 
 - Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
-- Especially look for: Sourcing Run Scope, Run Mode.
+- Especially look for: Sourcing Run Scope, Run Mode, Fund ID.
 - If a named input is absent, follow the missing-input policy rather than inventing facts.
 
 ## Reference Materials
 
 - [Candidate Batch Template](../alludium/documents/origination/candidate-batch-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
-- [Origination Pipeline Operating SOP](../alludium/documents/origination/origination-pipeline-sop.html): Follow for process boundaries and review standards.
+- [Origination Operating SOP](../alludium/documents/origination/origination-pipeline-sop.html): Follow for process boundaries and review standards.
 - [Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.html): Use as the analysis method.
 - [Template Use Guidance](../alludium/documents/shared/template-use-guidance.html): Follow for process boundaries and review standards.
 

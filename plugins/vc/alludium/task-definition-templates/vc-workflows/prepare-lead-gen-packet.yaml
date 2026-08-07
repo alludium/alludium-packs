@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_lead_gen_packet
-version: 1.0.16
+version: 1.0.17
 title: Prepare Lead Gen Packet
 category: Venture Capital
 visibility: workspace
@@ -35,7 +35,7 @@ definition:
     plannedRecommendedAgentTemplate: vc_origination_scout
     recommendedAgentTemplate: vc_origination_scout
     supportedProjectTypes:
-    - vc_origination_pipeline
+    - vc_sourcing_line
     supportedProjectScopes:
     - project_management
     sourceAnchors:

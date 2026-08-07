@@ -1,0 +1,110 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.register_origination_candidate
+version: 0.2.0
+title: Register Origination Candidate
+category: Venture Capital
+visibility: workspace
+tags:
+- vc
+- origination
+- candidate
+- intake
+definition:
+  name: Register Origination Candidate
+  slug: register-origination-candidate
+  description: Create a new durable candidate from a reviewed sourcing result, with a native non-exclusive Sourcing Line provenance relationship.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    stage: identified
+    taskFamily: origination_candidate_registration
+    documentRefs:
+    - documentId: vc.document.candidate_batch_template
+      usage: operating_guidance
+    - documentId: vc.document.dedupe_novelty_policy
+      usage: policy
+    requiredSkills:
+    - vc-sourcing-dedupe-and-novelty-check
+    - citation-enforcement
+    recommendedAgentTemplate: vc_origination_candidate_manager
+    plannedRecommendedAgentTemplate: vc_origination_candidate_manager
+    supportedProjectTypes:
+    - vc_origination_candidate
+    supportedProjectScopes:
+    - project_instance
+    instructions:
+      executionInstructions: 'Normalize one reviewed source result into one new candidate. Capture company identity, stable dedupe key, source evidence, source record keys, discovery timestamp, and why the result matched the source line. Search the accessible candidate projection and resolve dedupe before proposing creation. If an exact existing Candidate is found, do not emit `projectCreation.createRequest` and do not complete this creation task; return the existing Candidate project link and route the Sourcing Line Manager to `link-existing-origination-candidate`. For a genuinely new Candidate, emit `projectCreation.createRequest` with candidate fields and an incoming `vc.sourcing_line_originated_candidate` relationship from `sourcing_line_project_id`. Do not persist an exclusive owner-line or hub ID on the candidate. Multiple sourcing lines may independently relate to the same candidate through the dedicated existing-candidate link task rather than by duplicating the candidate. Do not infer a Deal Fund from any provenance line. Use `definitionJson.documentRefs` as the durable document reference contract; apply operating guidance and policy references to evidence capture, dedupe, and relationship handling.'
+      missingInputPolicy: Keep registration incomplete when company identity, sourcing-line project ID, stable dedupe key, source evidence, or the new-versus-existing identity decision is missing or ambiguous.
+      externalActionPolicy: Normalize and propose only. Do not write CRM, contact founders, create Deals, or resolve ambiguous identity matches without human review.
+      humanConfirmationPolicy: always
+      completionCriteria:
+      - One candidate identity and stable dedupe key are captured.
+      - Source evidence and a non-exclusive sourcing-line relationship are independently reviewable.
+      - The candidate has no mandatory hub or exclusive owner-line field.
+      - Guided creation output contains all required candidate fields and relationship metadata.
+    humanDecisionPoints:
+    - Resolve ambiguous company or founder identity.
+    - Resolve whether an existing Candidate, prior pass, or Deal is the same company before approving creation.
+    - When an existing Candidate matches, stop creation and approve a separate link-existing-origination-candidate task instead.
+fields:
+  input:
+  - key: company_name
+    name: Company Name
+    fieldType: string
+    required: true
+    position: 0
+    config: {}
+  - key: sourcing_line_project_id
+    name: Sourcing Line Project ID
+    fieldType: string
+    required: true
+    position: 1
+    config: {}
+  - key: source_evidence
+    name: Source Evidence
+    fieldType: json
+    required: true
+    position: 2
+    config: {}
+  output:
+  - key: candidate_key
+    name: Candidate Dedupe Key
+    fieldType: string
+    required: true
+    position: 0
+    config: {}
+  - key: source_evidence_summary
+    name: Source Evidence Summary
+    fieldType: richtext
+    required: true
+    position: 1
+    config: {rows: 8}
+  - key: projectCreation
+    name: Project Creation Request
+    fieldType: json
+    required: true
+    position: 2
+    config:
+      contractRef: projectCreation.createRequest.v1
+      requiredPaths:
+      - fieldValues.company_name
+      - fieldValues.candidate_key
+      - fieldValues.source_evidence_summary
+      - relationships
+      - relationships[].direction
+      - relationships[].relatedProjectId
+      - relationships[].relationshipTypeKey
+      - relationships[].metadata
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc
+      taskKind: register_origination_candidate
+      projectType: vc_origination_candidate
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    preferredMode: guided_intake
+    requiresHumanConfirmationToComplete: true
