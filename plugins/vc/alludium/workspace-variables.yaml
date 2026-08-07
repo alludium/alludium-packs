@@ -16,45 +16,173 @@ workspaceVariables:
     valueType: array
     renderMetadata:
       render: textarea
-      placeholder: JSON array of reviewed Fund records with stable id, name, status, and mandate context.
+      placeholder: Add each Fund with a stable identity, lifecycle status, mandate, and check-size policy.
     validationMetadata:
+      collection:
+        identityProperty: id
+        displayProperty: name
+        statusProperty: status
+        activeValue: actively_investing
+        inactiveValue: closed_to_new_investments
+        summaryProperties:
+          - stage
+          - sectors
+          - geographies
+          - minimumCheckSize
+          - maximumCheckSize
+        groups:
+          - id: identity
+            label: Fund identity
+            description: Stable identity and investment lifecycle.
+            order: 10
+          - id: mandate
+            label: Investment mandate
+            description: Stage, sector, geography, and thesis context used for Fund-fit analysis.
+            order: 20
+          - id: check_size
+            label: Check size
+            description: Optional minimum and maximum investment amounts in one currency.
+            order: 30
+          - id: policy
+            label: Policy and scoring
+            description: Exclusions and the Fund-specific scoring framework.
+            order: 40
       items:
         type: object
+        additionalProperties: false
         required:
           - id
           - name
           - status
+        dependentRequired:
+          minimumCheckSize:
+            - currency
+          maximumCheckSize:
+            - currency
+        comparisons:
+          - left: minimumCheckSize
+            operator: lte
+            right: maximumCheckSize
+            message: Minimum check size must not exceed maximum check size.
         properties:
           id:
             type: string
+            minLength: 1
+            maxLength: 200
+            ui:
+              label: Fund ID
+              helpText: Stable identifier stored on Deals. It cannot be changed after the Fund is created.
+              order: 10
+              group: identity
+              control: text
           name:
             type: string
+            minLength: 1
+            maxLength: 240
+            ui:
+              label: Fund name
+              order: 20
+              group: identity
+              control: text
           status:
             type: string
+            enum:
+              - actively_investing
+              - closed_to_new_investments
+            enumNames:
+              - Actively investing
+              - Closed to new investments
+            ui:
+              label: Status
+              helpText: Closed Funds remain available for historical Deal references but cannot be selected for new Deals.
+              order: 30
+              group: identity
+              control: select
           stage:
             type: string
+            maxLength: 500
+            ui:
+              label: Investment stage
+              order: 40
+              group: mandate
+              control: text
           sectors:
             type: array
+            uniqueItems: true
             items:
               type: string
+              minLength: 1
+              maxLength: 240
+            ui:
+              label: Sectors
+              order: 50
+              group: mandate
+              control: string-list
           geographies:
             type: array
+            uniqueItems: true
             items:
               type: string
+              minLength: 1
+              maxLength: 240
+            ui:
+              label: Geographies
+              order: 60
+              group: mandate
+              control: string-list
           thesis:
             type: string
+            maxLength: 10000
+            ui:
+              label: Investment thesis
+              order: 70
+              group: mandate
+              control: textarea
           minimumCheckSize:
             type: number
+            minimum: 0
+            ui:
+              label: Minimum check size
+              order: 80
+              group: check_size
+              control: number
           maximumCheckSize:
             type: number
+            minimum: 0
+            ui:
+              label: Maximum check size
+              order: 90
+              group: check_size
+              control: number
           currency:
             type: string
+            format: currency-code
+            ui:
+              label: Currency
+              helpText: Three-letter ISO currency code, for example EUR or USD.
+              order: 100
+              group: check_size
+              control: text
           exclusions:
             type: array
+            uniqueItems: true
             items:
               type: string
+              minLength: 1
+              maxLength: 500
+            ui:
+              label: Exclusions
+              order: 110
+              group: policy
+              control: string-list
           scoringFramework:
             type: string
+            maxLength: 10000
+            ui:
+              label: Scoring framework
+              order: 120
+              group: policy
+              control: textarea
     requirement: recommended
     sensitivity: standard
   - namespace: vc
