@@ -1,0 +1,168 @@
+schemaVersion: "0.1"
+description: Representative Deal Manager, Pipeline Manager, and Live Deal Status Report coordination states.
+
+dealManagerScenarios:
+  - id: compact-context-with-confirmed-fund
+    context:
+      lifecycleStage: evaluation
+      leadOwner: partner-1
+      round: Seed
+      fundraisingAsk: 3000000
+      fundId: europe-seed
+      crmSourceUrl: https://example.invalid/opportunities/42
+      openTaskCount: 2
+      latestReportArtifactId: artifact-report-1
+    expected:
+      progressivelyReadDetails: true
+      eagerlyRenderAllFunds: false
+      useExactFundId: europe-seed
+
+  - id: predefined-task-match
+    userRequest: Refresh the current eleven-tab Deal status report.
+    availableTaskDefinitionSlugs:
+      - refresh-live-deal-status-report
+    expected:
+      taskKind: predefined
+      selectedTaskDefinitionSlug: refresh-live-deal-status-report
+      approvalRequiredBeforeModelGeneratedCreation: true
+
+  - id: approved-ad-hoc-financial-verification
+    userRequest: Ask the finance lead to verify the pitch deck financial claims against source statements.
+    availableTaskDefinitionSlugs:
+      - refresh-live-deal-status-report
+      - run-financial-evaluation
+    resolvedMemberIds:
+      - member-finance-1
+    humanApproval:
+      approvedTitle: Verify pitch deck financial claims
+      approvedAssigneeId: member-finance-1
+    expected:
+      taskKind: ad_hoc
+      assignmentTargetMustResolve: true
+      readBackCreatedTask: true
+
+  - id: report-questions-require-review
+    latestReportQuestions:
+      - id: financial-revenue-reconciliation
+        question: Can claimed ARR be reconciled to source statements?
+        area: financial
+        priority: high
+        evidenceNeeded: Revenue ledger and signed customer schedules
+        suggestedOwnerRole: finance
+        status: open
+        sourceRefs:
+          - artifact-report-1
+    existingOpenTasks: []
+    humanApproval: null
+    expected:
+      mayProposeTasks: true
+      mayCreateTasks: false
+      mayAssignTasks: false
+
+pipelineManagerScenarios:
+  - id: unassigned-fund-review
+    navigationFilter:
+      field: fund_id
+      operator: isNull
+    candidateDealIds:
+      - deal-1
+    expected:
+      inspectSelectedDealsOnly: true
+      rankRelevantActiveFunds: true
+      mayPersistFundId: false
+
+  - id: selected-fund-weekly-summary
+    selectedFundId: europe-seed
+    requestedPeriod: 7d
+    expectedSections:
+      - deal_movement
+      - stalled_or_blocked_work
+      - task_progress
+      - decision_points
+      - evidence_gaps
+      - next_actions
+    expected:
+      includeScopeAndFreshness: true
+      includeUnassignedDealsSeparately: true
+      eagerlyReadEveryDeal: false
+
+  - id: reviewed-chat-to-deal
+    sourceChatId: chat-1
+    extractedCompanyDomain: example.invalid
+    proposedFundId: europe-seed
+    humanConfirmation: null
+    expected:
+      mayPresentTypedProposal: true
+      mayCreateProject: false
+      preserveSourceChat: true
+      handoffToAgentTemplateKey: vc_deal_manager
+
+reportFundScenarios:
+  - id: confirmed-active-fund-report
+    projectFundId: europe-seed
+    matchingFund:
+      id: europe-seed
+      name: Europe Seed Fund
+      status: actively_investing
+    expected:
+      displayedFundName: Europe Seed Fund
+      fundFitSourceId: europe-seed
+      mayBlendFunds: false
+      mayMakeFundFitClaim: true
+
+  - id: unassigned-fund-report
+    projectFundId: null
+    expected:
+      displayedFundState: "Fund: Unassigned"
+      mayMakeFundFitClaim: false
+      mayPersistFundId: false
+
+  - id: unknown-fund-report
+    projectFundId: missing-fund
+    expected:
+      displayedFundState: "Fund: Unknown (missing-fund)"
+      mayMakeFundFitClaim: false
+      correctionRequired: true
+
+  - id: inactive-fund-report
+    projectFundId: legacy-opportunity
+    matchingFund:
+      id: legacy-opportunity
+      name: Legacy Opportunity Fund
+      status: closed_to_new_investments
+    expected:
+      displayedFundState: "Fund: Legacy Opportunity Fund (inactive)"
+      mayMakeFundFitClaim: false
+      correctionRequired: true
+
+reportQuestionScenarios:
+  - id: no-supported-questions
+    previousQuestions: []
+    currentEvidenceGaps: []
+    expectedOpenQuestions: []
+
+  - id: stable-question-across-refresh
+    previousQuestions:
+      - id: financial-revenue-reconciliation
+        status: open
+    currentEvidenceGaps:
+      - area: financial
+        evidenceNeeded: Revenue ledger and signed customer schedules
+    expected:
+      retainedQuestionId: financial-revenue-reconciliation
+      createsDuplicate: false
+
+  - id: question-covered-by-existing-task
+    currentQuestionId: financial-revenue-reconciliation
+    existingTaskIds:
+      - task-finance-1
+    expected:
+      createDuplicateTask: false
+      linkOrUpdateProposal: true
+
+  - id: resolved-question
+    previousQuestionId: financial-revenue-reconciliation
+    evidenceNowSupportsAnswer: true
+    expected:
+      status: answered
+      createReplacementQuestion: false

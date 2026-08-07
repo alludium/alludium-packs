@@ -2,7 +2,7 @@
 id: vc.request_founder_materials
 title: Request Founder Materials
 slug: request-founder-materials
-agent: vc-dealflow-concierge
+agent: vc-deal-manager
 skills:
 - citation-enforcement
 - founder-materials-request

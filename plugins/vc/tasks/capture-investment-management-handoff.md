@@ -2,7 +2,7 @@
 id: vc.capture_investment_management_handoff
 title: Capture Deal Execution Handoff
 slug: capture-investment-management-handoff
-agent: vc-legal-compliance-desk
+agent: vc-deal-manager
 skills:
 - citation-enforcement
 - vc-task-and-next-step-generation
@@ -20,12 +20,12 @@ Capture the reviewed deal-structuring handoff needed to create a Deal Execution 
 
 ## What To Do
 
-Capture the reviewed handoff from Deal Pipeline deal structuring into Deal Execution. Confirm company identity, lead owner, IC or partner-review decision context, current term-sheet status, diligence source materials, legal/finance workstream readiness, and missing evidence. Cite material claims, separate assumptions from evidence, and do not create projects, send messages, mutate CRM records, move stages, or start legal/finance work without explicit human approval. When this task is used as a guided project creation task, complete with structured output company name and include any confidently collected declared creation fields. Do not create the project; the platform finalizer owns deterministic project creation after task completion.
+Capture the reviewed handoff from Deal Pipeline deal structuring into Deal Execution. Require the source Deal's confirmed fund id, verify that it exactly matches one active record in `vc.funds`, and carry that exact value into fund id. Never substitute, infer, or blend a Fund during handoff. Confirm company identity, lead owner, IC or partner-review decision context, current term-sheet status, diligence source materials, legal/finance workstream readiness, and missing evidence. Cite material claims, separate assumptions from evidence, and do not create projects, send messages, mutate CRM records, move stages, or start legal/finance work without explicit human approval. When this task is used as a guided project creation task, complete with structured output company name and fund id, then include any confidently collected declared creation fields. Do not create the project; the platform finalizer owns deterministic project creation after task completion.
 
 ## Available Context
 
 - Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
-- Especially look for: Company Name, Lead Partner, Handoff Source Artifact IDs, IC Decision Record, Term Sheet Review.
+- Especially look for: Company Name, Lead Partner, Confirmed Fund ID, Handoff Source Artifact IDs, IC Decision Record, Term Sheet Review.
 - If a named input is absent, follow the missing-input policy rather than inventing facts.
 
 ## Reference Materials
@@ -40,7 +40,7 @@ Capture the reviewed handoff from Deal Pipeline deal structuring into Deal Execu
 
 ## Missing Input Policy
 
-Ask for company name and at least one reviewed handoff source such as an IC decision, term-sheet review, deal-terms artifact, partner review, or counsel note.
+Ask for company name, a confirmed active fund_id, and at least one reviewed handoff source such as an IC decision, term-sheet review, deal-terms artifact, partner review, or counsel note. If fund_id is missing, unknown, or inactive, return Fund selection to the Deal Manager instead of choosing a Fund.
 
 ## Guardrails
 
@@ -51,7 +51,7 @@ Draft only unless a human explicitly approves project creation, external communi
 - Required identity and handoff evidence are captured or listed as explicit gaps.
 - Formal diligence, contracts, and closing readiness are separated from assumptions.
 - Next actions identify owner, dependency, and required human approval point.
-- Guided project creation captures company name.
+- Guided project creation captures company name and preserves the exact confirmed fund id.
 
 ## Human Review
 

@@ -37,16 +37,32 @@ PUBLIC_READINESS_PATTERNS = [
         r"craft-ai-agents",
     ]
 ]
-EXPECTED_WORKSPACE_VARIABLE_BINDINGS = {
-    "fundStage": "vc.fundStage",
-    "fundSectors": "vc.fundSectors",
-    "fundGeography": "vc.fundGeography",
-    "fundThesis": "vc.fundThesis",
+EXPECTED_PROMPT_VARIABLE_BINDINGS = {
+    "firmName": {
+        "source": "workspace.variable",
+        "path": "vc.firmName",
+        "fallback": "Not configured",
+        "overridePolicy": "workspace_admin_only",
+    },
+    "funds": {
+        "source": "workspace.variable",
+        "path": "vc.funds",
+        "fallback": [],
+        "overridePolicy": "workspace_admin_only",
+    },
+    "fundId": {
+        "source": "project.field",
+        "path": "fund_id",
+        "fallback": "Unconfirmed",
+        "overridePolicy": "readonly_runtime",
+    },
 }
 REQUIRED_AGENT_PROMPT_VARIABLES = {
-    "vc_first_look_analyst": {
-        "fundThesis": "vc.fundThesis",
-    },
+    "vc_deal_manager": {"firmName", "fundId"},
+    "vc_diligence_analyst": {"funds", "fundId"},
+    "vc_evaluation_analyst": {"funds", "fundId"},
+    "vc_first_look_analyst": {"funds", "fundId"},
+    "vc_pipeline_autopilot": {"firmName"},
 }
 REQUIRED_AGENT_TOOLS = {
     "vc_first_look_analyst": {
@@ -167,7 +183,13 @@ PROJECT_MANAGER_OVERLAY_LONG_TEXT_MAX = 1000
 PROJECT_MANAGER_OVERLAY_SUFFIX_TEXT_MAX = 80
 PROJECT_MANAGER_OVERLAY_LIST_LIMIT = 12
 PROJECT_MANAGER_OVERLAY_STARTER_LIMIT = 8
-PROJECT_MANAGER_OVERLAY_ROOT_KEYS = {"displayName", "labels", "identity", "greeting"}
+PROJECT_MANAGER_OVERLAY_ROOT_KEYS = {
+    "agentTemplateKey",
+    "displayName",
+    "labels",
+    "identity",
+    "greeting",
+}
 PROJECT_MANAGER_OVERLAY_LABEL_KEYS = {
     "shortName",
     "chatTitleSuffix",
@@ -268,12 +290,7 @@ PROJECT_CREATION_SOURCE_REFERENCE_TARGET_KEYS = {
 }
 PROJECT_CREATION_COMPLETION_OUTPUT_KEY = "projectCreation"
 PROJECT_CREATION_VARIABLE_FIELD_ALIASES = {
-    "vc.fundStage": {"stage_focus"},
-    "vc.fundSectors": {"sector_focus"},
-    "vc.fundGeography": {"geography_focus"},
-    "vc.fundThesis": {"investment_thesis"},
     "vc.firmName": {"firm_name"},
-    "vc.fundName": {"fund_name"},
     "vc.originationEnabledSources": {"enabled_sources"},
     "vc.originationRunCadence": {"run_cadence"},
     "vc.originationDigestDestination": {"digest_channel"},
@@ -642,50 +659,38 @@ def validate_templates(manifest: dict[str, Any], skill_ids: set[str]) -> None:
             if isinstance(key, str):
                 variables_by_key[key] = variable
             binding = variable.get("binding")
-            expected_path = EXPECTED_WORKSPACE_VARIABLE_BINDINGS.get(key)
-            if expected_path is None:
+            expected_binding = EXPECTED_PROMPT_VARIABLE_BINDINGS.get(key)
+            if expected_binding is None:
                 if binding is not None:
                     fail(
-                        f"Template {template_id} variable {key} has unexpected workspace binding"
+                        f"Template {template_id} variable {key} has unexpected runtime binding"
                     )
                 continue
             if not isinstance(binding, dict):
-                fail(f"Template {template_id} variable {key} must bind to {expected_path}")
-            if binding.get("source") != "workspace.variable":
-                fail(f"Template {template_id} variable {key} binding source must be workspace.variable")
-            if binding.get("path") != expected_path:
-                fail(f"Template {template_id} variable {key} binding path must be {expected_path}")
-            if binding.get("fallback") != "Not configured":
-                fail(f"Template {template_id} variable {key} binding fallback must be Not configured")
-            if binding.get("overridePolicy") != "workspace_admin_only":
                 fail(
-                    f"Template {template_id} variable {key} binding overridePolicy must be workspace_admin_only"
+                    f"Template {template_id} variable {key} must declare its expected binding"
                 )
+            for binding_key, expected_value in expected_binding.items():
+                if binding.get(binding_key) != expected_value:
+                    fail(
+                        f"Template {template_id} variable {key} binding {binding_key} "
+                        f"must be {expected_value!r}"
+                    )
 
-        for required_key, required_path in REQUIRED_AGENT_PROMPT_VARIABLES.get(
-            template_id,
-            {},
-        ).items():
+        for required_key in REQUIRED_AGENT_PROMPT_VARIABLES.get(template_id, set()):
             required_variable = variables_by_key.get(required_key)
             if required_variable is None:
                 fail(f"Agent template {template_id} must declare prompt variable {required_key}")
             required_binding = required_variable.get("binding")
             if not isinstance(required_binding, dict):
-                fail(
-                    f"Agent template {template_id} prompt variable {required_key} must bind to {required_path}"
-                )
-            if required_binding.get("source") != "workspace.variable":
-                fail(
-                    f"Agent template {template_id} prompt variable {required_key} binding source must be workspace.variable"
-                )
-            if required_binding.get("path") != required_path:
-                fail(
-                    f"Agent template {template_id} prompt variable {required_key} binding path must be {required_path}"
-                )
+                fail(f"Agent template {template_id} prompt variable {required_key} must bind")
             interpolation = "{{" + required_key + "}}"
-            if not isinstance(prompt_template, str) or interpolation not in prompt_template:
+            each_interpolation = "{{#each " + required_key + "}}"
+            if not isinstance(prompt_template, str) or (
+                interpolation not in prompt_template and each_interpolation not in prompt_template
+            ):
                 fail(
-                    f"Agent template {template_id} prompt.template must interpolate {interpolation}"
+                    f"Agent template {template_id} prompt.template must interpolate {required_key}"
                 )
 
         mcp_servers = template.get("mcpServers") or {}
@@ -842,6 +847,494 @@ def validate_workspace_variables(manifest: dict[str, Any], project_type_ids: set
             fail(f"Public workspace variable {variable_key} must not declare defaultValue")
 
     return keys
+
+
+def validate_fund_routing_contract() -> None:
+    variables = read_yaml(ROOT / "alludium" / "workspace-variables.yaml").get(
+        "workspaceVariables",
+        [],
+    )
+    variable_by_key = {
+        f"{entry.get('namespace')}.{entry.get('key')}": entry
+        for entry in variables
+        if isinstance(entry, dict)
+    }
+    retired_keys = {
+        "vc.fundName",
+        "vc.fundStage",
+        "vc.fundSectors",
+        "vc.fundGeography",
+        "vc.fundThesis",
+        "vc.scoringFramework",
+    }
+    declared_retired = sorted(retired_keys & set(variable_by_key))
+    if declared_retired:
+        fail(f"Retired scalar Fund variables remain declared: {declared_retired}")
+
+    funds_variable = variable_by_key.get("vc.funds")
+    if not isinstance(funds_variable, dict) or funds_variable.get("valueType") != "array":
+        fail("vc.funds must be the canonical array-valued Fund workspace variable")
+    if set(funds_variable.get("supportedProjectTypes") or []) != {
+        "vc_deal_room",
+        "vc_investment_management",
+        "vc_origination_pipeline",
+    }:
+        fail("vc.funds must support all three canonical VC project types")
+    item_contract = (funds_variable.get("validationMetadata") or {}).get("items") or {}
+    if set(item_contract.get("required") or []) != {"id", "name", "status"}:
+        fail("vc.funds item contract must require id, name, and status")
+
+    fixture_path = ROOT / "alludium" / "fixtures" / "fund-routing.yaml"
+    fixture = read_yaml(fixture_path)
+    funds = fixture.get("funds") if isinstance(fixture, dict) else None
+    if not isinstance(funds, list):
+        fail(f"{fixture_path.relative_to(ROOT)} must declare funds")
+    fund_by_id: dict[str, dict[str, Any]] = {}
+    for fund in funds:
+        if not isinstance(fund, dict) or not all(fund.get(key) for key in ["id", "name", "status"]):
+            fail("Fund routing fixture records must declare id, name, and status")
+        fund_id = fund["id"]
+        if fund_id in fund_by_id:
+            fail(f"Duplicate Fund routing fixture id: {fund_id}")
+        fund_by_id[fund_id] = fund
+    active_funds = [fund for fund in funds if fund.get("status") == "actively_investing"]
+    if len(active_funds) < 2:
+        fail("Fund routing fixture must contain at least two actively investing Funds")
+    active_mandates = {
+        (fund.get("stage"), tuple(fund.get("sectors") or []), tuple(fund.get("geographies") or []))
+        for fund in active_funds
+    }
+    if len(active_mandates) < 2:
+        fail("Active Fund fixtures must have meaningfully different mandates")
+
+    scenarios = fixture.get("scenarios")
+    required_scenarios = {
+        "no-configured-funds",
+        "one-plausible-active-fund",
+        "multiple-plausible-active-funds",
+        "valid-confirmed-fund",
+        "unknown-confirmed-fund",
+        "inactive-confirmed-fund",
+        "deal-execution-handoff",
+    }
+    scenarios_by_id = {
+        scenario.get("id"): scenario
+        for scenario in scenarios or []
+        if isinstance(scenario, dict) and isinstance(scenario.get("id"), str)
+    }
+    missing_scenarios = sorted(required_scenarios - set(scenarios_by_id))
+    if missing_scenarios:
+        fail(f"Fund routing fixture is missing scenarios: {missing_scenarios}")
+    for scenario_id, scenario in scenarios_by_id.items():
+        unknown_ids = set(scenario.get("configuredFundIds") or []) - set(fund_by_id)
+        if unknown_ids:
+            fail(f"Fund routing scenario {scenario_id} references unknown Funds: {sorted(unknown_ids)}")
+    handoff = scenarios_by_id["deal-execution-handoff"]
+    handed_off_id = (((handoff.get("expectedProjectCreation") or {}).get("fieldValues") or {}).get("fund_id"))
+    if handed_off_id != handoff.get("projectFundId"):
+        fail("Deal Execution handoff fixture must preserve fund_id exactly")
+
+    management_fixture_path = (
+        ROOT / "alludium" / "fixtures" / "deal-pipeline-management.yaml"
+    )
+    management_fixture = read_yaml(management_fixture_path)
+    if not isinstance(management_fixture, dict):
+        fail(f"{management_fixture_path.relative_to(ROOT)} must be an object")
+    required_management_scenarios = {
+        "dealManagerScenarios": {
+            "compact-context-with-confirmed-fund",
+            "predefined-task-match",
+            "approved-ad-hoc-financial-verification",
+            "report-questions-require-review",
+        },
+        "pipelineManagerScenarios": {
+            "unassigned-fund-review",
+            "selected-fund-weekly-summary",
+            "reviewed-chat-to-deal",
+        },
+        "reportFundScenarios": {
+            "confirmed-active-fund-report",
+            "unassigned-fund-report",
+            "unknown-fund-report",
+            "inactive-fund-report",
+        },
+        "reportQuestionScenarios": {
+            "no-supported-questions",
+            "stable-question-across-refresh",
+            "question-covered-by-existing-task",
+            "resolved-question",
+        },
+    }
+    for section, required_ids in required_management_scenarios.items():
+        declared_ids = {
+            scenario.get("id")
+            for scenario in management_fixture.get(section) or []
+            if isinstance(scenario, dict) and isinstance(scenario.get("id"), str)
+        }
+        missing_ids = sorted(required_ids - declared_ids)
+        if missing_ids:
+            fail(
+                f"{management_fixture_path.relative_to(ROOT)} {section} is missing "
+                f"scenarios: {missing_ids}"
+            )
+
+    report_review_fixture = next(
+        scenario
+        for scenario in management_fixture["dealManagerScenarios"]
+        if scenario.get("id") == "report-questions-require-review"
+    )
+    report_review_expected = report_review_fixture.get("expected") or {}
+    if report_review_expected.get("mayCreateTasks") is not False:
+        fail("Report-question fixture must prohibit task creation without approval")
+    chat_to_deal_fixture = next(
+        scenario
+        for scenario in management_fixture["pipelineManagerScenarios"]
+        if scenario.get("id") == "reviewed-chat-to-deal"
+    )
+    if (chat_to_deal_fixture.get("expected") or {}).get("mayCreateProject") is not False:
+        fail("Chat-to-Deal fixture must prohibit project creation before human confirmation")
+
+    report_fund_scenarios = {
+        scenario.get("id"): scenario
+        for scenario in management_fixture["reportFundScenarios"]
+        if isinstance(scenario, dict) and isinstance(scenario.get("id"), str)
+    }
+    confirmed_report_fund = report_fund_scenarios["confirmed-active-fund-report"]
+    confirmed_matching_fund = confirmed_report_fund.get("matchingFund") or {}
+    confirmed_expected = confirmed_report_fund.get("expected") or {}
+    if (
+        confirmed_matching_fund.get("status") != "actively_investing"
+        or confirmed_expected.get("displayedFundName") != confirmed_matching_fund.get("name")
+        or confirmed_expected.get("fundFitSourceId") != confirmed_matching_fund.get("id")
+        or confirmed_expected.get("mayBlendFunds") is not False
+    ):
+        fail("Confirmed report Fund fixture must display and evaluate the same exact active Fund")
+    for scenario_id in [
+        "unassigned-fund-report",
+        "unknown-fund-report",
+        "inactive-fund-report",
+    ]:
+        if (report_fund_scenarios[scenario_id].get("expected") or {}).get(
+            "mayMakeFundFitClaim"
+        ) is not False:
+            fail(f"Report Fund fixture {scenario_id} must prohibit Fund-fit claims")
+
+    deal_room = read_json(ROOT / "alludium" / "project-types" / "vc_deal_room.json")
+    deal_execution = read_json(
+        ROOT / "alludium" / "project-types" / "vc_investment_management.json"
+    )
+    deal_room_fields = {
+        field.get("key")
+        for field in deal_room.get("initialVersion", {}).get("fieldsSchema", [])
+        if isinstance(field, dict)
+    }
+    deal_execution_fields = {
+        field.get("key")
+        for field in deal_execution.get("initialVersion", {}).get("fieldsSchema", [])
+        if isinstance(field, dict)
+    }
+    for project_type_id, field_keys in [
+        ("vc_deal_room", deal_room_fields),
+        ("vc_investment_management", deal_execution_fields),
+    ]:
+        if "fund_id" not in field_keys:
+            fail(f"Project type {project_type_id} must declare fund_id")
+        if "suggested_fund_id" in field_keys:
+            fail(f"Project type {project_type_id} must not declare suggested_fund_id")
+
+    removed_deal_room_fields = {
+        "connected_systems",
+        "matching_signals",
+        "source_owner",
+        "crm_provider",
+        "meeting_notes_artifact_id",
+        "deal_room_url",
+        "drive_deal_room_url",
+        "investment_stage",
+        "fund_thesis_context",
+        "thesis_target_list_artifact_id",
+        "commercial_dd_artifact_id",
+        "financial_dd_artifact_id",
+        "founder_evaluation_artifact_id",
+        "technical_dd_artifact_id",
+        "legal_diligence_artifact_id",
+        "investment_document_review_artifact_id",
+        "closing_checklist_artifact_id",
+        "conditions_precedent_verification_artifact_id",
+        "completion_tracker_artifact_id",
+        "portfolio_onboarding_plan_artifact_id",
+    }
+    stale_fields = sorted(removed_deal_room_fields & deal_room_fields)
+    if stale_fields:
+        fail(f"Deal Pipeline still declares retired fields: {stale_fields}")
+
+    project_manager = deal_room.get("initialVersion", {}).get("projectManager") or {}
+    if project_manager.get("agentTemplateKey") != "vc_deal_manager":
+        fail("Deal Pipeline Project Manager overlay must resolve vc_deal_manager")
+    manager_contract = " ".join(
+        (project_manager.get("identity") or {}).get("instructions") or []
+    )
+    for required_phrase in [
+        "no Funds are configured",
+        "unknown or inactive",
+        "explicitly confirms",
+        "never blend mandates",
+        "Deal Execution handoff",
+        "task catalog",
+        "ad-hoc task",
+        "explicit human approval",
+        "eleven-tab",
+    ]:
+        if required_phrase not in manager_contract:
+            fail(f"Deal Manager overlay is missing Fund routing rule: {required_phrase}")
+
+    deal_manager = read_yaml(
+        ROOT / "alludium" / "agent-templates" / "vc_deal_manager.yaml"
+    )
+    declared_platform_tools = {
+        tool.get("name")
+        for tool in ((deal_manager.get("mcpServers") or {}).get("alludium-platform") or {}).get(
+            "tools",
+            [],
+        )
+        if isinstance(tool, dict)
+    }
+    required_manager_tools = {
+        "project.getAgentContext",
+        "project.listAvailableMembers",
+        "project.update",
+        "project-task.listByProject",
+        "task-definitions.list",
+        "task-definitions.findById",
+        "task-management.createAdHocTask",
+        "task-management.createTaskFromDefinition",
+        "task-management.assignTask",
+        "artifact.getArtifactsForChatContext",
+    }
+    missing_manager_tools = sorted(required_manager_tools - declared_platform_tools)
+    if missing_manager_tools:
+        fail(f"Deal Manager is missing supported context/update tools: {missing_manager_tools}")
+
+    deal_manager_prompt = (deal_manager.get("prompt") or {}).get("template") or ""
+    deal_manager_variable_keys = {
+        variable.get("key")
+        for variable in (deal_manager.get("prompt") or {}).get("variables") or []
+        if isinstance(variable, dict)
+    }
+    if "funds" in deal_manager_variable_keys or "{{#each funds}}" in deal_manager_prompt:
+        fail(
+            "Deal Manager must retrieve relevant Fund records progressively instead of "
+            "eagerly rendering the full vc.funds collection"
+        )
+    for required_phrase in [
+        "lifecycle stage",
+        "lead or owner",
+        "task definitions",
+        "ad-hoc task",
+        "explicit human approval",
+        "structured open questions",
+    ]:
+        if required_phrase not in deal_manager_prompt:
+            fail(f"Deal Manager prompt is missing runtime/task contract: {required_phrase}")
+
+    pipeline_manager = read_yaml(
+        ROOT / "alludium" / "agent-templates" / "vc_pipeline_autopilot.yaml"
+    )
+    if pipeline_manager.get("name") != "Pipeline Manager":
+        fail("vc_pipeline_autopilot must retain its stable id and display as Pipeline Manager")
+    pipeline_prompt = (pipeline_manager.get("prompt") or {}).get("template") or ""
+    pipeline_variable_keys = {
+        variable.get("key")
+        for variable in (pipeline_manager.get("prompt") or {}).get("variables") or []
+        if isinstance(variable, dict)
+    }
+    if "funds" in pipeline_variable_keys or "{{#each funds}}" in pipeline_prompt:
+        fail("Pipeline Manager must not eagerly render the full vc.funds collection")
+    pipeline_platform_tools = {
+        tool.get("name")
+        for tool in ((pipeline_manager.get("mcpServers") or {}).get("alludium-platform") or {}).get(
+            "tools",
+            [],
+        )
+        if isinstance(tool, dict)
+    }
+    required_pipeline_tools = {
+        "project.listNavigation",
+        "project.getAgentContext",
+        "project-task.listByProject",
+        "task-definitions.list",
+        "task-definitions.findById",
+        "task-management.createAdHocTask",
+        "task-management.createTaskFromDefinition",
+        "task-management.assignTask",
+    }
+    missing_pipeline_tools = sorted(required_pipeline_tools - pipeline_platform_tools)
+    if missing_pipeline_tools:
+        fail(f"Pipeline Manager is missing workspace/task tools: {missing_pipeline_tools}")
+    for required_phrase in [
+        "native Alludium",
+        "Unassigned",
+        "weekly pipeline summaries",
+        "selected-Fund reports",
+        "typed Deal proposal",
+        "explicit approval",
+    ]:
+        if required_phrase not in pipeline_prompt:
+            fail(f"Pipeline Manager prompt is missing workspace contract: {required_phrase}")
+
+    status_report = read_yaml(
+        ROOT
+        / "alludium"
+        / "task-definition-templates"
+        / "vc-workflows"
+        / "refresh-live-deal-status-report.yaml"
+    )
+    status_report_outputs = {
+        field.get("key"): field
+        for field in (status_report.get("fields") or {}).get("output") or []
+        if isinstance(field, dict) and isinstance(field.get("key"), str)
+    }
+    open_questions_output = status_report_outputs.get("open_questions")
+    if not isinstance(open_questions_output, dict):
+        fail("Live Deal Status Report must expose structured open_questions output")
+    if (
+        open_questions_output.get("fieldType") != "json"
+        or open_questions_output.get("required") is not True
+    ):
+        fail("Live Deal Status Report open_questions must be a required json output")
+    question_schema = (open_questions_output.get("config") or {}).get("schema") or {}
+    question_items = question_schema.get("items") or {}
+    required_question_keys = {
+        "id",
+        "question",
+        "area",
+        "priority",
+        "evidenceNeeded",
+        "suggestedOwnerRole",
+        "status",
+        "sourceRefs",
+    }
+    if (
+        question_schema.get("type") != "array"
+        or set(question_items.get("required") or []) != required_question_keys
+    ):
+        fail("Live Deal Status Report open_questions schema is incomplete")
+    status_report_instructions = (
+        ((status_report.get("definition") or {}).get("definitionJson") or {}).get("instructions")
+        or {}
+    ).get("executionInstructions") or ""
+    status_report_inputs = {
+        field.get("key"): field
+        for field in (status_report.get("fields") or {}).get("input") or []
+        if isinstance(field, dict) and isinstance(field.get("key"), str)
+    }
+    report_fund_input = status_report_inputs.get("fund_id")
+    if not isinstance(report_fund_input, dict):
+        fail("Live Deal Status Report must accept the Deal's confirmed fund_id")
+    if (
+        report_fund_input.get("fieldType") != "string"
+        or report_fund_input.get("required") is not False
+    ):
+        fail("Live Deal Status Report fund_id input must be an optional string")
+    for required_phrase in [
+        "deterministic stable `id`",
+        "must not create, assign, or update tasks",
+        "human must approve",
+    ]:
+        if required_phrase not in status_report_instructions:
+            fail(f"Live Deal Status Report is missing question/task boundary: {required_phrase}")
+    for required_phrase in [
+        "exact stable-ID equality",
+        "only that Fund's",
+        "`Fund: Unassigned`",
+        "`Fund: Unknown (<stored id>)`",
+        "make no Fund-relative fit claim",
+        "Do not select or persist `fund_id`",
+    ]:
+        if required_phrase not in status_report_instructions:
+            fail(f"Live Deal Status Report is missing Fund binding rule: {required_phrase}")
+
+    report_mapping = next(
+        (
+            mapping
+            for mapping in deal_room.get("initialVersion", {}).get("projectTaskMappings", [])
+            if isinstance(mapping, dict)
+            and mapping.get("taskDefinitionSlug") == "refresh-live-deal-status-report"
+        ),
+        {},
+    )
+    report_fund_mapping = next(
+        (
+            mapping
+            for mapping in report_mapping.get("inputMappings", [])
+            if isinstance(mapping, dict) and mapping.get("taskField") == "fund_id"
+        ),
+        {},
+    )
+    if (
+        report_fund_mapping.get("source") != "project.field"
+        or report_fund_mapping.get("sourcePath") != "fund_id"
+        or report_fund_mapping.get("requiredForActivation") is not False
+    ):
+        fail("Live Deal Status Report must map optional fund_id from the current Deal")
+
+    report_template = (
+        ROOT / "alludium" / "documents" / "deal-room" / "live-deal-status-report-template.html"
+    ).read_text(encoding="utf-8")
+    for required_phrase in [
+        "Resolved Fund name",
+        "exact <code>vc.funds</code> record",
+        "make no Fund-relative fit claim",
+        "never infer by display name",
+    ]:
+        if required_phrase not in report_template:
+            fail(f"Live Deal Status Report template is missing Fund display rule: {required_phrase}")
+
+    intake_task = read_yaml(
+        ROOT
+        / "alludium"
+        / "task-definition-templates"
+        / "vc-workflows"
+        / "capture-opportunity-intake.yaml"
+    )
+    intake_instructions = (
+        ((intake_task.get("definition") or {}).get("definitionJson") or {}).get("instructions")
+        or {}
+    ).get("executionInstructions") or ""
+    for required_phrase in [
+        "do not independently validate it against `vc.funds`",
+        "Deal Manager owns Fund validation and correction",
+        "without claiming that it is active, valid, or a fit",
+        "never make a Fund-fit claim",
+    ]:
+        if required_phrase not in intake_instructions:
+            fail(f"Opportunity intake is missing Fund ownership boundary: {required_phrase}")
+
+    handoff_task = read_yaml(
+        ROOT
+        / "alludium"
+        / "task-definition-templates"
+        / "vc-workflows"
+        / "capture-investment-management-handoff.yaml"
+    )
+    handoff_inputs = {
+        field.get("key")
+        for field in (handoff_task.get("fields") or {}).get("input") or []
+        if isinstance(field, dict) and field.get("required") is True
+    }
+    if "fund_id" not in handoff_inputs:
+        fail("Deal Execution handoff must require confirmed fund_id input")
+    project_creation_output = next(
+        (
+            field
+            for field in (handoff_task.get("fields") or {}).get("output") or []
+            if isinstance(field, dict) and field.get("key") == "projectCreation"
+        ),
+        {},
+    )
+    required_paths = (project_creation_output.get("config") or {}).get("requiredPaths") or []
+    if "fieldValues.fund_id" not in required_paths:
+        fail("Deal Execution handoff projectCreation must preserve fund_id")
 
 
 def validate_application_recommendations(
@@ -1729,6 +2222,12 @@ def validate_project_manager_overlay(project_type_id: str, initial_version: dict
         context,
         allowed_keys=PROJECT_MANAGER_OVERLAY_ROOT_KEYS,
     )
+    if "agentTemplateKey" in project_manager:
+        validate_project_manager_overlay_text(
+            project_manager["agentTemplateKey"],
+            f"{context}.agentTemplateKey",
+            max_length=PROJECT_MANAGER_OVERLAY_SHORT_TEXT_MAX,
+        )
     if "displayName" not in project_manager:
         fail(f"{context}.displayName must be declared")
     validate_project_manager_overlay_text(
@@ -4073,6 +4572,7 @@ def main() -> None:
         fail(f"{recommendations_path} must be an object")
     validate_mcp_definitions(manifest, recommendations)
     validate_workspace_variables(manifest, project_type_ids)
+    validate_fund_routing_contract()
     validate_application_recommendations(manifest, recommendations, project_type_ids)
     validate_recommendation_management_actions(
         recommendations,

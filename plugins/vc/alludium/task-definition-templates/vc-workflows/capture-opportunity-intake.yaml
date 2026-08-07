@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.capture_opportunity_intake
-version: 1.0.28
+version: 1.0.30
 title: Verify Opportunity Intake
 category: Venture Capital
 visibility: workspace
@@ -54,7 +54,7 @@ definition:
       note: Discovery AI map
     instructions:
       executionInstructions: 'Verify whether the created Deal Pipeline has enough supplied or approved source context to move
-        into formal screening. Inspect project fields, task inputs, attached/source artifacts, source threads, founder materials,
+        into formal screening. Record the current `fund_id` when present, but do not independently validate it against `vc.funds`: the Intake Readiness Operator has no Fund-registry context and Deal Manager owns Fund validation and correction. If `fund_id` is absent, report Fund selection as unresolved for Deal Manager. If it is present, preserve it as project context without claiming that it is active, valid, or a fit. Intake must never make a Fund-fit claim or suggest, select, replace, or persist a Fund. Inspect project fields, task inputs, attached/source artifacts, source threads, founder materials,
         and approved CRM/source payloads such as `import_payload`. When an approved CRM/source payload is present, read only
         the approved source record scope needed to hydrate missing project fields and source provenance. When `source_system`
         and `source_object_url` identify a scoped CRM/source record such as an Affinity company or
@@ -221,6 +221,12 @@ fields:
     fieldType: string
     required: false
     position: 10
+    config: {}
+  - key: fund_id
+    name: Confirmed Fund ID
+    fieldType: string
+    required: false
+    position: 11
     config: {}
   output:
   - key: opportunity_intake_artifact_id

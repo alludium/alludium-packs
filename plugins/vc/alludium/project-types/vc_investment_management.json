@@ -88,6 +88,7 @@
       "company_name"
     ],
     "recommendedFieldKeys": [
+      "fund_id",
       "lead_partner",
       "ic_decision_record_artifact_id",
       "term_sheet_review_artifact_id",
@@ -108,7 +109,7 @@
     }
   },
   "initialVersion": {
-    "version": "0.1.3",
+    "version": "0.1.4",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -154,6 +155,14 @@
         "required": false,
         "description": "Optional company logo image URL from Affinity enrichment or another approved source.",
         "placeholder": "https://example.com/logo.png"
+      },
+      {
+        "id": "field-fund-id",
+        "key": "fund_id",
+        "label": "Confirmed Fund ID",
+        "kind": "text",
+        "required": false,
+        "description": "Stable id of the active Fund explicitly confirmed for this Deal Execution project. The value must match the source Deal and one record in vc.funds."
       },
       {
         "id": "field-deal-source",

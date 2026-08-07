@@ -6,83 +6,55 @@ description: >
   firm-specific values, credentials, or copied runtime state.
 workspaceVariables:
   - namespace: vc
-    key: fundStage
+    key: funds
     supportedProjectTypes:
       - vc_deal_room
       - vc_investment_management
       - vc_origination_pipeline
-    label: Fund Stage Focus
-    description: Target investment stages for thesis-fit screening and diligence context.
-    valueType: string
-    renderMetadata:
-      render: text
-      placeholder: Seed, Series A, growth, or stage-agnostic.
-    validationMetadata:
-      maxLength: 240
-    requirement: recommended
-    sensitivity: standard
-  - namespace: vc
-    key: fundSectors
-    supportedProjectTypes:
-      - vc_deal_room
-      - vc_investment_management
-      - vc_origination_pipeline
-    label: Fund Sector Focus
-    description: Target sectors, verticals, or themes used for thesis-fit screening.
-    valueType: string
+    label: Funds
+    description: Canonical workspace-owned Fund records used for mandate selection, confirmed Fund routing, screening, and diligence context.
+    valueType: array
     renderMetadata:
       render: textarea
-      placeholder: AI infrastructure, fintech, climate, healthcare, or other thesis areas.
+      placeholder: JSON array of reviewed Fund records with stable id, name, status, and mandate context.
     validationMetadata:
-      maxLength: 2000
-    requirement: recommended
-    sensitivity: standard
-  - namespace: vc
-    key: fundGeography
-    supportedProjectTypes:
-      - vc_deal_room
-      - vc_investment_management
-      - vc_origination_pipeline
-    label: Fund Geography Focus
-    description: Target investment geographies or market focus for fund-fit context.
-    valueType: string
-    renderMetadata:
-      render: text
-      placeholder: US, Europe, UK, global, or specific regional focus.
-    validationMetadata:
-      maxLength: 240
-    requirement: recommended
-    sensitivity: standard
-  - namespace: vc
-    key: fundThesis
-    supportedProjectTypes:
-      - vc_deal_room
-      - vc_investment_management
-      - vc_origination_pipeline
-    label: Fund Thesis
-    description: Workspace-level investment thesis used for thesis-fit screening, lead generation, and review-pack context.
-    valueType: string
-    renderMetadata:
-      render: textarea
-      placeholder: Summarize the fund thesis, ideal company profile, investment edge, and explicit exclusions.
-    validationMetadata:
-      maxLength: 4000
-    requirement: recommended
-    sensitivity: standard
-  - namespace: vc
-    key: scoringFramework
-    supportedProjectTypes:
-      - vc_deal_room
-      - vc_investment_management
-      - vc_origination_pipeline
-    label: Fund Scoring Framework
-    description: Workspace-level scoring or evaluation framework names and rubric notes used when screening and diligence workflows ask for configured methodology.
-    valueType: string
-    renderMetadata:
-      render: textarea
-      placeholder: Describe the active screening or diligence framework, such as custom screening, structured diligence, custom scorecard criteria, or when each method applies.
-    validationMetadata:
-      maxLength: 4000
+      items:
+        type: object
+        required:
+          - id
+          - name
+          - status
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+          status:
+            type: string
+          stage:
+            type: string
+          sectors:
+            type: array
+            items:
+              type: string
+          geographies:
+            type: array
+            items:
+              type: string
+          thesis:
+            type: string
+          minimumCheckSize:
+            type: number
+          maximumCheckSize:
+            type: number
+          currency:
+            type: string
+          exclusions:
+            type: array
+            items:
+              type: string
+          scoringFramework:
+            type: string
     requirement: recommended
     sensitivity: standard
   - namespace: vc
@@ -97,22 +69,6 @@ workspaceVariables:
     renderMetadata:
       render: text
       placeholder: Alludium Ventures
-    validationMetadata:
-      maxLength: 240
-    requirement: recommended
-    sensitivity: standard
-  - namespace: vc
-    key: fundName
-    supportedProjectTypes:
-      - vc_deal_room
-      - vc_investment_management
-      - vc_origination_pipeline
-    label: Fund Name
-    description: Workspace-level fund name or strategy label used in screening, sourcing, and review context.
-    valueType: string
-    renderMetadata:
-      render: text
-      placeholder: Fund I, Opportunity Fund, or seed strategy.
     validationMetadata:
       maxLength: 240
     requirement: recommended

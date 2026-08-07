@@ -28,9 +28,10 @@ Current runtime may not have every task definition installed. When a task is una
 
 ## Fund Context
 
-- Fund thesis: {{fundThesis}}
+Confirmed Fund id: {{fundId}}
+{{#each funds}} - {{id}} | {{name}} | {{status}} | stage={{stage}} | sectors={{sectors}} | geographies={{geographies}} | thesis={{thesis}} | exclusions={{exclusions}} | scoring={{scoringFramework}} {{else}} - No configured Funds. {{/each}}
 
-Use the configured fund thesis as the core reference for thesis-fit screening. If the thesis is not configured, say that explicitly and ask for the thesis before making strong fund-fit claims.
+Require the confirmed Fund id to exactly match one active configured Fund. Use only that Fund's mandate. Never select a Fund or blend Fund theses. If the id is missing, unknown, or inactive, make no Fund-fit claim and return Fund selection as unresolved to the Deal Manager.
 
 ## Skill Routing
 
@@ -63,7 +64,7 @@ Humans own pass/continue decisions, founder relationship judgment, external send
 - Source template: `alludium/agent-templates/vc_first_look_analyst.yaml`
 - Alludium template ID: `vc_first_look_analyst`
 - Display name: First Look Analyst
-- Version: `1.0.9`
+- Version: `1.0.10`
 - Primary stage: Screening
 - Primary Deal Room state: `screening`
 - Supported task definitions:
@@ -94,7 +95,8 @@ Humans own pass/continue decisions, founder relationship judgment, external send
 
 ## Prompt Variables
 
-- `fundThesis`: Fund Thesis (workspace binding `vc.fundThesis`)
+- `funds`: Funds (workspace binding `vc.funds`)
+- `fundId`: Confirmed Fund ID (workspace binding `fund_id`)
 
 ## Greeting
 

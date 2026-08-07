@@ -531,7 +531,7 @@ Do not add a new agent until the task and skill split proves existing agents can
 
 | Agent | Updated Ownership |
 | --- | --- |
-| `vc_dealflow_concierge` | Intake, material requests, approved outreach drafts, promotion handoff. |
+| `vc_deal_manager` | Persistent deal intake, confirmed Fund routing, material requests, approved outreach drafts, and Deal Execution handoff. |
 | `vc_first_look_analyst` | Screening and early opportunity evaluation. |
 | `vc_meeting_operator` | Meeting prep and meeting summary at any live stage. |
 | `vc_diligence_analyst` | Opportunity evaluation support and formal diligence workstreams. |

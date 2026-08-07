@@ -2,7 +2,7 @@
 id: vc.create_deal
 title: Create Deal
 slug: create-deal
-agent: vc-dealflow-concierge
+agent: vc-deal-manager
 skills:
 - deal-pipeline-setup-and-source-ingestion
 - company-research-and-enrichment
@@ -22,7 +22,7 @@ Gather enough structured context from chat, inbox material, CRM references, sour
 
 ## What To Do
 
-Guide the user through creating a Deal Pipeline project from whatever context is available: an inbox request, intro note, CRM/source record link, company domain, pitch deck, founder material, source thread, or origination promotion package. Ask only for the missing details needed to confidently identify the company and preserve source context. Capture company name; include domain, source, founder, pitch-deck, source-reference, confidentiality, and other declared Deal Pipeline creation fields only when confidently collected. Do not create the project, run intake, screen the opportunity, create child tasks, move stages, mutate CRM records, send messages, or write external files; the platform finalizer owns deterministic project creation after task completion.
+Guide the user through creating a Deal Pipeline project from whatever context is available: an inbox request, intro note, CRM/source record link, company domain, pitch deck, founder material, source thread, or origination promotion package. Ask only for the missing details needed to confidently identify the company and preserve source context. Compare the opportunity only with configured active records in `vc.funds`. If no Funds are configured, explain that Fund setup is incomplete and make no Fund-fit claim. If one Fund is plausible, suggest it with a short evidence-based rationale and ask for confirmation. If multiple Funds are plausible, rank them, distinguish their mandates, state confidence, and ask for confirmation. Never blend mandates or persist a suggestion. Capture company name; include fund id only after the user explicitly confirms the exact stable Fund id. If selection remains unresolved, omit fund id and state that Fund routing must return to the Deal Manager. Include domain, source, founder, pitch-deck, source-reference, confidentiality, and other declared Deal Pipeline creation fields only when confidently collected. Do not create the project, run intake, screen the opportunity, create child tasks, move stages, mutate CRM records, send messages, or write external files; the platform finalizer owns deterministic project creation after task completion.
 
 ## Available Context
 
@@ -55,6 +55,7 @@ Guided creation only. No CRM writes, external sends, Drive changes, project crea
 - Available source context is preserved as declared Deal Pipeline creation fields or summarized as creation notes.
 - Missing enrichment or screening inputs are listed for the post-create intake task rather than blocking creation unnecessarily.
 - The output distinguishes project-creation facts from later intake, enrichment, and screening judgments.
+- fund id is present only when the user explicitly confirmed an active configured Fund.
 
 ## Human Review
 

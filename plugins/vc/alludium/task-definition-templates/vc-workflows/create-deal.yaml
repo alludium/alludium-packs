@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.create_deal
-version: 1.0.0
+version: 1.0.1
 title: Create Deal
 category: Venture Capital
 visibility: workspace
@@ -32,8 +32,8 @@ definition:
     - company-research-and-enrichment
     - citation-enforcement
     - pitch-deck-explainer
-    plannedRecommendedAgentTemplate: vc_dealflow_concierge
-    recommendedAgentTemplate: vc_dealflow_concierge
+    plannedRecommendedAgentTemplate: vc_deal_manager
+    recommendedAgentTemplate: vc_deal_manager
     supportedProjectTypes:
     - vc_deal_room
     supportedProjectScopes:
@@ -42,7 +42,7 @@ definition:
       executionInstructions: 'Guide the user through creating a Deal Pipeline project from whatever context is available:
         an inbox request, intro note, CRM/source record link, company domain, pitch deck, founder material, source thread,
         or origination promotion package. Ask only for the missing details needed to confidently identify the company and
-        preserve source context. Complete with structured output `projectCreation.fieldValues.company_name`; include domain,
+        preserve source context. Compare the opportunity only with configured active records in `vc.funds`. If no Funds are configured, explain that Fund setup is incomplete and make no Fund-fit claim. If one Fund is plausible, suggest it with a short evidence-based rationale and ask for confirmation. If multiple Funds are plausible, rank them, distinguish their mandates, state confidence, and ask for confirmation. Never blend mandates or persist a suggestion. Complete with structured output `projectCreation.fieldValues.company_name`; include `projectCreation.fieldValues.fund_id` only after the user explicitly confirms the exact stable Fund id. If selection remains unresolved, omit `fund_id` and state that Fund routing must return to the Deal Manager. Include domain,
         source, founder, pitch-deck, source-reference, confidentiality, and other declared Deal Pipeline creation fields only
         when confidently collected. Do not create the project, run intake, screen the opportunity, create child tasks, move
         stages, mutate CRM records, send messages, or write external files; the platform finalizer owns deterministic project
@@ -59,6 +59,7 @@ definition:
       - Available source context is preserved as declared Deal Pipeline creation fields or summarized as creation notes.
       - Missing enrichment or screening inputs are listed for the post-create intake task rather than blocking creation unnecessarily.
       - The output distinguishes project-creation facts from later intake, enrichment, and screening judgments.
+      - '`projectCreation.fieldValues.fund_id` is present only when the user explicitly confirmed an active configured Fund.'
     humanDecisionPoints:
     - Confirm the target company identity when source material is ambiguous.
     - Confirm whether incomplete context is sufficient to create the project and let intake continue after creation.
@@ -136,7 +137,7 @@ runtime:
     agentStartsImmediately: true
     requiresHumanConfirmationToComplete: true
     preferredMode: guided_execution
-    preferredAgentType: vc_dealflow_concierge
+    preferredAgentType: vc_deal_manager
 ui:
   renderer: generic
   surfaceKey: null
