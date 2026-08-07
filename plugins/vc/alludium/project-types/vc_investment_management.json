@@ -109,7 +109,7 @@
     }
   },
   "initialVersion": {
-    "version": "0.1.4",
+    "version": "0.1.5",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -162,7 +162,22 @@
         "label": "Confirmed Fund ID",
         "kind": "text",
         "required": false,
-        "description": "Stable id of the active Fund explicitly confirmed for this Deal Execution project. The value must match the source Deal and one record in vc.funds."
+        "description": "Stable id of the active Fund explicitly confirmed for this Deal Execution project. The value must match the source Deal and one record in vc.funds.",
+        "optionSource": {
+          "type": "workspaceVariableCollection",
+          "path": "vc.funds",
+          "valueKey": "id",
+          "labelKey": "name",
+          "statusKey": "status",
+          "selectableStatuses": [
+            "actively_investing"
+          ],
+          "hintKeys": [
+            "stage",
+            "sectors",
+            "geographies"
+          ]
+        }
       },
       {
         "id": "field-deal-source",

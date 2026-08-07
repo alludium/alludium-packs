@@ -1059,6 +1059,11 @@ def validate_fund_routing_contract() -> None:
         for field in deal_execution.get("initialVersion", {}).get("fieldsSchema", [])
         if isinstance(field, dict)
     }
+    deal_execution_field_by_key = {
+        field.get("key"): field
+        for field in deal_execution.get("initialVersion", {}).get("fieldsSchema", [])
+        if isinstance(field, dict) and isinstance(field.get("key"), str)
+    }
     for project_type_id, field_keys in [
         ("vc_deal_room", deal_room_fields),
         ("vc_investment_management", deal_execution_fields),
@@ -1077,8 +1082,14 @@ def validate_fund_routing_contract() -> None:
         "selectableStatuses": ["actively_investing"],
         "hintKeys": ["stage", "sectors", "geographies"],
     }
-    if deal_room_field_by_key["fund_id"].get("optionSource") != expected_fund_option_source:
-        fail("Deal Pipeline fund_id must resolve selectable active Funds from vc.funds")
+    for project_type_name, field_by_key in [
+        ("Deal Pipeline", deal_room_field_by_key),
+        ("Deal Execution", deal_execution_field_by_key),
+    ]:
+        if field_by_key["fund_id"].get("optionSource") != expected_fund_option_source:
+            fail(
+                f"{project_type_name} fund_id must resolve selectable active Funds from vc.funds"
+            )
     if (
         deal_room.get("initialVersion", {}).get("commandView", {}).get(
             "navigationFieldKeys"
