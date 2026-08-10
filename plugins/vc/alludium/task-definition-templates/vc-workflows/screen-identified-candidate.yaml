@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.screen_identified_candidate
-version: 0.1.4
+version: 0.1.5
 title: Screen Identified Candidate
 category: Venture Capital
 visibility: workspace
@@ -39,7 +39,7 @@ definition:
     supportedProjectScopes:
     - project_instance
     instructions:
-      executionInstructions: 'Screen the task''s exact newly registered Candidate using the supplied `company_name`, `candidate_key`, and `source_evidence_summary`, then read every active incoming `vc.sourcing_line_originated_candidate` edge with `project-relationship.list` before drawing a provenance conclusion. Screen with the lightest useful evidence set: source receipt,
+      executionInstructions: 'Screen the task''s exact newly registered Candidate using the supplied `company_name`, `candidate_key`, and `source_evidence_summary`, then call `project-relationship.list` with the exact Candidate `projectId`, `direction: inbound`, `relationshipTypeKeys: [vc.sourcing_line_originated_candidate]`, `includeArchivedRelationships: false`, and `limit: 100`; follow each returned cursor until every readable active provenance edge is exhausted before drawing a provenance conclusion. Screen with the lightest useful evidence set: source receipt,
         normalized identity, stage/geography fit, obvious hard exclusions, basic AI/native software signal, founder signal,
         and duplicate/known-relationship status. This is not the full active-candidate screen; recommend only prioritize
         for outreach, watchlist, or pass, and list what must be enriched before outreach. Use `definitionJson.documentRefs` as the durable

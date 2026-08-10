@@ -4970,6 +4970,9 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
     )
     for required_phrase in [
         "project-relationship.list",
+        "direction: inbound",
+        "relationshipTypeKeys: [vc.sourcing_line_originated_candidate]",
+        "includeArchivedRelationships: false",
         "project.update",
         "identified_screen_artifact_id",
         "project.getAgentContext",
@@ -4980,6 +4983,58 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
                 "Initial Candidate screen is missing executable persistence/provenance: "
                 f"{required_phrase}"
             )
+
+    # Exact-Pack lifecycle flow: Platform project-created tasks receive raw typed
+    # project fields. Initial mappings must therefore be unique and their required
+    # inputs must be supplied by guided creation without synthetic inputMappings.
+    line_creation_fields = set(
+        (line.get("projectCreation") or {}).get("requiredFieldKeys") or []
+    )
+    line_initial_mappings = [
+        mapping
+        for mapping in (line.get("initialVersion") or {}).get(
+            "projectTaskMappings", []
+        )
+        if isinstance(mapping, dict)
+        and mapping.get("lifecycleStage")
+        == (line.get("projectCreation") or {}).get("defaultState")
+    ]
+    if [mapping.get("taskDefinitionSlug") for mapping in line_initial_mappings] != [
+        "configure-sourcing-line"
+    ]:
+        fail("Exact-Pack Sourcing Line creation must start only configure-sourcing-line")
+    if line_creation_fields != configure_required_inputs:
+        fail(
+            "Exact-Pack Sourcing Line create -> configure inputs must match typed "
+            f"project fields; creation={sorted(line_creation_fields)}, "
+            f"task={sorted(configure_required_inputs)}"
+        )
+
+    candidate_creation_fields = set(
+        (candidate.get("projectCreation") or {}).get("requiredFieldKeys") or []
+    )
+    candidate_initial_mappings = [
+        mapping
+        for mapping in (candidate.get("initialVersion") or {}).get(
+            "projectTaskMappings", []
+        )
+        if isinstance(mapping, dict)
+        and mapping.get("lifecycleStage")
+        == (candidate.get("projectCreation") or {}).get("defaultState")
+    ]
+    if [mapping.get("taskDefinitionSlug") for mapping in candidate_initial_mappings] != [
+        "screen-identified-candidate"
+    ]:
+        fail(
+            "Exact-Pack Candidate registration must start only "
+            "screen-identified-candidate"
+        )
+    if candidate_creation_fields != initial_screen_required_inputs:
+        fail(
+            "Exact-Pack Candidate register -> initial screen inputs must match typed "
+            f"project fields; creation={sorted(candidate_creation_fields)}, "
+            f"task={sorted(initial_screen_required_inputs)}"
+        )
 
     thesis_sourcing_template = read_yaml(
         ROOT
@@ -5104,7 +5159,9 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
         "projectTypeKey: vc_origination_candidate",
         "collection: active",
         "collection: portfolio",
-        "exact `candidate_key` field filter",
+        'fieldFilters: [{"key":"candidate_key","operator":"equals"',
+        '"values":[normalized_candidate_key]}]',
+        "limit: 20",
         "server-side lookup",
         "continuation cursor",
         "vc_origination_candidate",
