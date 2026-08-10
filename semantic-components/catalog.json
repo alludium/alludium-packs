@@ -1,0 +1,20 @@
+{
+  "schema_version": "alludium-semantic-component-catalog-v1",
+  "release_tag": "ontology-components-v1.0.0",
+  "bundles": [
+    {
+      "bundle_id": "alludium.finance-deal-screening",
+      "bundle_version": "1.0.0",
+      "bundle_sha256": "232635f3153b164dc2a8cd2978b729d90bc284bf02a98f926a441f901940ce20",
+      "domain": "finance",
+      "path": "semantic-components/releases/finance-deal-screening/1.0.0/bundle.json"
+    },
+    {
+      "bundle_id": "alludium.support-ticket-triage",
+      "bundle_version": "1.0.0",
+      "bundle_sha256": "20a5fb6cfd2be07a63fb4b00bf533183798d8894aba98fb58f2b3e0bae8eded2",
+      "domain": "support-operations",
+      "path": "semantic-components/releases/support-ticket-triage/1.0.0/bundle.json"
+    }
+  ]
+}

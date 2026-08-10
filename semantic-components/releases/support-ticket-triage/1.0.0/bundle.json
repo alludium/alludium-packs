@@ -1,0 +1,264 @@
+{
+  "schema_version": "alludium-semantic-component-bundle-v1",
+  "bundle_id": "alludium.support-ticket-triage",
+  "bundle_version": "1.0.0",
+  "bundle_sha256": "20a5fb6cfd2be07a63fb4b00bf533183798d8894aba98fb58f2b3e0bae8eded2",
+  "domain": "support-operations",
+  "release": {
+    "repository": "alludium/alludium-packs",
+    "tag": "ontology-components-v1.0.0",
+    "path": "semantic-components/releases/support-ticket-triage/1.0.0/bundle.json"
+  },
+  "components": [
+    {
+      "schema_version": "alludium-semantic-component-v1",
+      "component_id": "alludium.support.ticket-triage.ontology",
+      "kind": "ontology",
+      "version": "1.0.0",
+      "canonical_sha256": "8fa8c22411c6c127d1ef4ae94da270c448baf488e90e4f69a640ae48ed633dfe",
+      "dependencies": [],
+      "compatibility": {
+        "consumer_contract": "kmc-ontology-lock-v1",
+        "minimum_consumer_version": "1"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "allowed_purposes": [
+        "triage-support-request"
+      ],
+      "allowed_stages": [
+        "ingestion",
+        "learning",
+        "query",
+        "evaluation"
+      ],
+      "content": {
+        "terms": [
+          {
+            "term_id": "support.ticket",
+            "label": "Support ticket",
+            "definition": "A customer request requiring support-team assessment."
+          },
+          {
+            "term_id": "support.customer-impact",
+            "label": "Customer impact",
+            "definition": "The breadth and severity of customer disruption."
+          },
+          {
+            "term_id": "support.urgency",
+            "label": "Urgency",
+            "definition": "The required response priority for the support request."
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "alludium-semantic-component-v1",
+      "component_id": "alludium.support.ticket-triage.mapping",
+      "kind": "mapping",
+      "version": "1.0.0",
+      "canonical_sha256": "a2f4f1bca8d1005ee8420bcf6477d978c14a3d614ec605a6f7014ba4587d53b4",
+      "dependencies": [
+        {
+          "component_id": "alludium.support.ticket-triage.ontology",
+          "version": "1.0.0",
+          "canonical_sha256": "8fa8c22411c6c127d1ef4ae94da270c448baf488e90e4f69a640ae48ed633dfe"
+        }
+      ],
+      "compatibility": {
+        "consumer_contract": "kmc-ontology-lock-v1",
+        "minimum_consumer_version": "1"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "allowed_purposes": [
+        "triage-support-request"
+      ],
+      "allowed_stages": [
+        "ingestion",
+        "learning",
+        "query",
+        "evaluation"
+      ],
+      "content": {
+        "mappings": [
+          {
+            "source": "ticket_subject",
+            "term_id": "support.ticket"
+          },
+          {
+            "source": "affected_users",
+            "term_id": "support.customer-impact"
+          },
+          {
+            "source": "requested_priority",
+            "term_id": "support.urgency"
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "alludium-semantic-component-v1",
+      "component_id": "alludium.support.ticket-triage.constraints",
+      "kind": "constraints",
+      "version": "1.0.0",
+      "canonical_sha256": "2a7db42149d21dfd94369a2b4934afaf926c7594dcbffed00a82e7428f53e062",
+      "dependencies": [
+        {
+          "component_id": "alludium.support.ticket-triage.ontology",
+          "version": "1.0.0",
+          "canonical_sha256": "8fa8c22411c6c127d1ef4ae94da270c448baf488e90e4f69a640ae48ed633dfe"
+        }
+      ],
+      "compatibility": {
+        "consumer_contract": "kmc-ontology-lock-v1",
+        "minimum_consumer_version": "1"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "allowed_purposes": [
+        "triage-support-request"
+      ],
+      "allowed_stages": [
+        "ingestion",
+        "learning",
+        "query",
+        "evaluation"
+      ],
+      "content": {
+        "max_provider_terms": 3,
+        "qualifiers": [
+          {
+            "term_id": "support.customer-impact",
+            "name": "scope",
+            "values": [
+              "single-user",
+              "team",
+              "organization"
+            ]
+          },
+          {
+            "term_id": "support.urgency",
+            "name": "severity",
+            "values": [
+              "low",
+              "medium",
+              "high",
+              "critical"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "alludium-semantic-component-v1",
+      "component_id": "alludium.support.ticket-triage.projection",
+      "kind": "projection",
+      "version": "1.0.0",
+      "canonical_sha256": "696151f49603d09d702601eabd2237b8db95faef328319428bebcf907dc461eb",
+      "dependencies": [
+        {
+          "component_id": "alludium.support.ticket-triage.ontology",
+          "version": "1.0.0",
+          "canonical_sha256": "8fa8c22411c6c127d1ef4ae94da270c448baf488e90e4f69a640ae48ed633dfe"
+        },
+        {
+          "component_id": "alludium.support.ticket-triage.constraints",
+          "version": "1.0.0",
+          "canonical_sha256": "2a7db42149d21dfd94369a2b4934afaf926c7594dcbffed00a82e7428f53e062"
+        }
+      ],
+      "compatibility": {
+        "consumer_contract": "kmc-ontology-lock-v1",
+        "minimum_consumer_version": "1"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "allowed_purposes": [
+        "triage-support-request"
+      ],
+      "allowed_stages": [
+        "ingestion",
+        "learning",
+        "query",
+        "evaluation"
+      ],
+      "content": {
+        "term_ids": [
+          "support.ticket",
+          "support.customer-impact",
+          "support.urgency"
+        ],
+        "qualifiers": [
+          {
+            "term_id": "support.customer-impact",
+            "names": [
+              "scope"
+            ]
+          },
+          {
+            "term_id": "support.urgency",
+            "names": [
+              "severity"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "alludium-semantic-component-v1",
+      "component_id": "alludium.support.ticket-triage.profile",
+      "kind": "profile",
+      "version": "1.0.0",
+      "canonical_sha256": "7370a564072355999dabd69daf744c14ad83df9e60425ac0d7969dfe68922185",
+      "dependencies": [
+        {
+          "component_id": "alludium.support.ticket-triage.mapping",
+          "version": "1.0.0",
+          "canonical_sha256": "a2f4f1bca8d1005ee8420bcf6477d978c14a3d614ec605a6f7014ba4587d53b4"
+        },
+        {
+          "component_id": "alludium.support.ticket-triage.projection",
+          "version": "1.0.0",
+          "canonical_sha256": "696151f49603d09d702601eabd2237b8db95faef328319428bebcf907dc461eb"
+        },
+        {
+          "component_id": "alludium.support.ticket-triage.constraints",
+          "version": "1.0.0",
+          "canonical_sha256": "2a7db42149d21dfd94369a2b4934afaf926c7594dcbffed00a82e7428f53e062"
+        }
+      ],
+      "compatibility": {
+        "consumer_contract": "kmc-ontology-lock-v1",
+        "minimum_consumer_version": "1"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "allowed_purposes": [
+        "triage-support-request"
+      ],
+      "allowed_stages": [
+        "ingestion",
+        "learning",
+        "query",
+        "evaluation"
+      ],
+      "content": {
+        "default_term_ids": [
+          "support.ticket",
+          "support.customer-impact",
+          "support.urgency"
+        ],
+        "required_response_term_ids": [
+          "support.ticket",
+          "support.urgency"
+        ]
+      }
+    }
+  ]
+}

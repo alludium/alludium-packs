@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alludium.ai/schemas/packs/semantic-component-bundle-v1.schema.json",
+  "title": "Alludium Semantic Component Bundle v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "bundle_id",
+    "bundle_version",
+    "bundle_sha256",
+    "domain",
+    "release",
+    "components"
+  ],
+  "properties": {
+    "schema_version": {"const": "alludium-semantic-component-bundle-v1"},
+    "bundle_id": {"type": "string", "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)+$"},
+    "bundle_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "bundle_sha256": {"$ref": "#/$defs/sha256"},
+    "domain": {"type": "string", "minLength": 1, "maxLength": 128},
+    "release": {"$ref": "#/$defs/release"},
+    "components": {
+      "type": "array",
+      "minItems": 5,
+      "items": {"$ref": "#/$defs/component"}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "release": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "tag", "path"],
+      "properties": {
+        "repository": {"const": "alludium/alludium-packs"},
+        "tag": {"type": "string", "pattern": "^ontology-components-v[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "path": {"type": "string", "pattern": "^semantic-components/releases/.+/bundle\\.json$"}
+      }
+    },
+    "dependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["component_id", "version", "canonical_sha256"],
+      "properties": {
+        "component_id": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "canonical_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "component_id",
+        "kind",
+        "version",
+        "canonical_sha256",
+        "dependencies",
+        "compatibility",
+        "lifecycle",
+        "allowed_purposes",
+        "allowed_stages",
+        "content"
+      ],
+      "properties": {
+        "schema_version": {"const": "alludium-semantic-component-v1"},
+        "component_id": {"type": "string", "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)+$"},
+        "kind": {"enum": ["ontology", "mapping", "profile", "projection", "constraints"]},
+        "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "canonical_sha256": {"$ref": "#/$defs/sha256"},
+        "dependencies": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/dependency"}
+        },
+        "compatibility": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["consumer_contract", "minimum_consumer_version"],
+          "properties": {
+            "consumer_contract": {"const": "kmc-ontology-lock-v1"},
+            "minimum_consumer_version": {"const": "1"}
+          }
+        },
+        "lifecycle": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status"],
+          "properties": {
+            "status": {"enum": ["active", "retired"]},
+            "retired_at": {"type": "string", "format": "date-time"},
+            "successor": {"type": "string", "minLength": 1}
+          }
+        },
+        "allowed_purposes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"}
+        },
+        "allowed_stages": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["ingestion", "learning", "query", "evaluation"]}
+        },
+        "content": {"type": "object", "minProperties": 1}
+      }
+    }
+  }
+}

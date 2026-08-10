@@ -21,4 +21,9 @@ Before pushing pack changes, run the VC validation commands from the repository 
 python3 plugins/vc/scripts/validate_pack.py
 python3 plugins/vc/scripts/generate_markdown.py --check
 python3 plugins/vc/scripts/validate_release_contract.py
+python3 semantic-components/scripts/validate_components.py
 ```
+
+Semantic component release tags use the independent `ontology-components-vX.Y.Z` stream. Apply the
+same immutable-publication rule: declare the intended tag in a PR, but create it only on the merged
+`main` commit.

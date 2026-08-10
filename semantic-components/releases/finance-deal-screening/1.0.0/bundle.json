@@ -1,0 +1,263 @@
+{
+  "schema_version": "alludium-semantic-component-bundle-v1",
+  "bundle_id": "alludium.finance-deal-screening",
+  "bundle_version": "1.0.0",
+  "bundle_sha256": "232635f3153b164dc2a8cd2978b729d90bc284bf02a98f926a441f901940ce20",
+  "domain": "finance",
+  "release": {
+    "repository": "alludium/alludium-packs",
+    "tag": "ontology-components-v1.0.0",
+    "path": "semantic-components/releases/finance-deal-screening/1.0.0/bundle.json"
+  },
+  "components": [
+    {
+      "schema_version": "alludium-semantic-component-v1",
+      "component_id": "alludium.finance.deal-screening.ontology",
+      "kind": "ontology",
+      "version": "1.0.0",
+      "canonical_sha256": "2c7fbf613f5c4e73d4eae5b8c4cffe9e5d5db9621a3cb98e00fcf133f73dbec8",
+      "dependencies": [],
+      "compatibility": {
+        "consumer_contract": "kmc-ontology-lock-v1",
+        "minimum_consumer_version": "1"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "allowed_purposes": [
+        "screen-company"
+      ],
+      "allowed_stages": [
+        "ingestion",
+        "learning",
+        "query",
+        "evaluation"
+      ],
+      "content": {
+        "terms": [
+          {
+            "term_id": "finance.company",
+            "label": "Company",
+            "definition": "An organization being assessed as a potential investment."
+          },
+          {
+            "term_id": "finance.market",
+            "label": "Market",
+            "definition": "The customer and competitive arena in which the company operates."
+          },
+          {
+            "term_id": "finance.revenue-quality",
+            "label": "Revenue quality",
+            "definition": "The repeatability and concentration characteristics of company revenue."
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "alludium-semantic-component-v1",
+      "component_id": "alludium.finance.deal-screening.mapping",
+      "kind": "mapping",
+      "version": "1.0.0",
+      "canonical_sha256": "136f3e48693fac849fd11b3ca01c036765239d28c3f7fd2a5f57a61cef347cbd",
+      "dependencies": [
+        {
+          "component_id": "alludium.finance.deal-screening.ontology",
+          "version": "1.0.0",
+          "canonical_sha256": "2c7fbf613f5c4e73d4eae5b8c4cffe9e5d5db9621a3cb98e00fcf133f73dbec8"
+        }
+      ],
+      "compatibility": {
+        "consumer_contract": "kmc-ontology-lock-v1",
+        "minimum_consumer_version": "1"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "allowed_purposes": [
+        "screen-company"
+      ],
+      "allowed_stages": [
+        "ingestion",
+        "learning",
+        "query",
+        "evaluation"
+      ],
+      "content": {
+        "mappings": [
+          {
+            "source": "company_name",
+            "term_id": "finance.company"
+          },
+          {
+            "source": "target_market",
+            "term_id": "finance.market"
+          },
+          {
+            "source": "revenue_model",
+            "term_id": "finance.revenue-quality"
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "alludium-semantic-component-v1",
+      "component_id": "alludium.finance.deal-screening.constraints",
+      "kind": "constraints",
+      "version": "1.0.0",
+      "canonical_sha256": "65b7457092e7f85a44fa73817ae23ff7ecf09278ca9730c5a386e9f8e7c3ad68",
+      "dependencies": [
+        {
+          "component_id": "alludium.finance.deal-screening.ontology",
+          "version": "1.0.0",
+          "canonical_sha256": "2c7fbf613f5c4e73d4eae5b8c4cffe9e5d5db9621a3cb98e00fcf133f73dbec8"
+        }
+      ],
+      "compatibility": {
+        "consumer_contract": "kmc-ontology-lock-v1",
+        "minimum_consumer_version": "1"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "allowed_purposes": [
+        "screen-company"
+      ],
+      "allowed_stages": [
+        "ingestion",
+        "learning",
+        "query",
+        "evaluation"
+      ],
+      "content": {
+        "max_provider_terms": 3,
+        "qualifiers": [
+          {
+            "term_id": "finance.company",
+            "name": "company_stage",
+            "values": [
+              "seed",
+              "series-a",
+              "growth"
+            ]
+          },
+          {
+            "term_id": "finance.revenue-quality",
+            "name": "recurrence",
+            "values": [
+              "recurring",
+              "transactional",
+              "mixed"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "alludium-semantic-component-v1",
+      "component_id": "alludium.finance.deal-screening.projection",
+      "kind": "projection",
+      "version": "1.0.0",
+      "canonical_sha256": "30b4de005a669b2aa354cfdece445df4f389b3b2e41c02f03f0748be280f1d36",
+      "dependencies": [
+        {
+          "component_id": "alludium.finance.deal-screening.ontology",
+          "version": "1.0.0",
+          "canonical_sha256": "2c7fbf613f5c4e73d4eae5b8c4cffe9e5d5db9621a3cb98e00fcf133f73dbec8"
+        },
+        {
+          "component_id": "alludium.finance.deal-screening.constraints",
+          "version": "1.0.0",
+          "canonical_sha256": "65b7457092e7f85a44fa73817ae23ff7ecf09278ca9730c5a386e9f8e7c3ad68"
+        }
+      ],
+      "compatibility": {
+        "consumer_contract": "kmc-ontology-lock-v1",
+        "minimum_consumer_version": "1"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "allowed_purposes": [
+        "screen-company"
+      ],
+      "allowed_stages": [
+        "ingestion",
+        "learning",
+        "query",
+        "evaluation"
+      ],
+      "content": {
+        "term_ids": [
+          "finance.company",
+          "finance.market",
+          "finance.revenue-quality"
+        ],
+        "qualifiers": [
+          {
+            "term_id": "finance.company",
+            "names": [
+              "company_stage"
+            ]
+          },
+          {
+            "term_id": "finance.revenue-quality",
+            "names": [
+              "recurrence"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "alludium-semantic-component-v1",
+      "component_id": "alludium.finance.deal-screening.profile",
+      "kind": "profile",
+      "version": "1.0.0",
+      "canonical_sha256": "d5a7a79861faca95828899cf740ef7dd84bf26c3c305e234a61f7ec195f495d5",
+      "dependencies": [
+        {
+          "component_id": "alludium.finance.deal-screening.mapping",
+          "version": "1.0.0",
+          "canonical_sha256": "136f3e48693fac849fd11b3ca01c036765239d28c3f7fd2a5f57a61cef347cbd"
+        },
+        {
+          "component_id": "alludium.finance.deal-screening.projection",
+          "version": "1.0.0",
+          "canonical_sha256": "30b4de005a669b2aa354cfdece445df4f389b3b2e41c02f03f0748be280f1d36"
+        },
+        {
+          "component_id": "alludium.finance.deal-screening.constraints",
+          "version": "1.0.0",
+          "canonical_sha256": "65b7457092e7f85a44fa73817ae23ff7ecf09278ca9730c5a386e9f8e7c3ad68"
+        }
+      ],
+      "compatibility": {
+        "consumer_contract": "kmc-ontology-lock-v1",
+        "minimum_consumer_version": "1"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "allowed_purposes": [
+        "screen-company"
+      ],
+      "allowed_stages": [
+        "ingestion",
+        "learning",
+        "query",
+        "evaluation"
+      ],
+      "content": {
+        "default_term_ids": [
+          "finance.company",
+          "finance.market",
+          "finance.revenue-quality"
+        ],
+        "required_response_term_ids": [
+          "finance.company",
+          "finance.market"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alludium.ai/schemas/packs/semantic-component-catalog-v1.schema.json",
+  "title": "Alludium Semantic Component Catalog v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "release_tag", "bundles"],
+  "properties": {
+    "schema_version": {"const": "alludium-semantic-component-catalog-v1"},
+    "release_tag": {"type": "string", "pattern": "^ontology-components-v[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "bundles": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["bundle_id", "bundle_version", "bundle_sha256", "domain", "path"],
+        "properties": {
+          "bundle_id": {"type": "string", "minLength": 1},
+          "bundle_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+          "bundle_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "domain": {"type": "string", "minLength": 1},
+          "path": {"type": "string", "pattern": "^semantic-components/releases/.+/bundle\\.json$"}
+        }
+      }
+    }
+  }
+}

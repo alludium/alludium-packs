@@ -12,6 +12,23 @@ The repository is intentionally broader than the first VC use case. It is expect
 | --- | --- | --- | --- |
 | Alludium VC | `plugins/vc/` | Generated Markdown compatibility expansion | VC workflow skills, generated agent/task Markdown, Alludium runtime agent templates, VC task-definition templates, VC Deal Room and VC Origination Pipeline project types, workspace variable declarations, application recommendations, integration setup tasks, and pack metadata |
 
+## Semantic Components
+
+`semantic-components/` publishes versioned ontology, mapping, profile, projection, and constraint
+components independently from agent-tooling packs. Each release bundle carries stable component
+IDs, versions, canonical SHA-256 digests, dependency closure, compatibility, lifecycle,
+purpose/stage applicability, and intended release provenance. KMC may consume only exact catalog
+entries; `latest` references and runtime repository discovery are not part of the contract.
+
+The first candidate release, `ontology-components-v1.0.0`, contains finance deal-screening and
+support-operations ticket-triage fixtures. They prove contract isolation and deterministic
+conformance, not ontology quality. Validate them with:
+
+```bash
+python3 -m pip install -r semantic-components/requirements.txt
+python3 semantic-components/scripts/validate_components.py
+```
+
 ## Plugin vs Pack
 
 A plugin is the agent-tooling distribution shape. It carries skills, agent definitions, and MCP-friendly metadata in a structure that Claude Code and Codex-style tooling can understand.
@@ -40,8 +57,13 @@ alludium-packs/
 │       ├── tasks/
 │       ├── alludium/
 │       └── scripts/
-└── .github/
-    └── workflows/
+├── .github/
+│   └── workflows/
+└── semantic-components/
+│   ├── catalog.json
+│   ├── releases/
+│   ├── schemas/
+│   └── scripts/
 ```
 
 Within a pack:
