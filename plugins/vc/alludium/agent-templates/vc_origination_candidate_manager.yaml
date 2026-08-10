@@ -1,11 +1,11 @@
-version: "1.0.1"
+version: "1.0.2"
 type: "template"
 platform_managed: false
 id: "vc_origination_candidate_manager"
 name: "Candidate Manager"
 description: "Persistent project-scoped manager for one Origination Candidate, preserving multi-line provenance while coordinating enrichment, screening, relationship review, outreach drafts, and explicitly Fund-routed Deal promotion."
 icon: "FcBusinessman"
-color: "bg-amber-100"
+color: "bg-orange-100"
 category: "Alludium"
 metadata:
   gitBranch: main

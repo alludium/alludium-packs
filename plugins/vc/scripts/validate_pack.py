@@ -102,6 +102,21 @@ WORKSPACE_VARIABLE_SENSITIVITY_LEVELS = {"standard", "sensitive"}
 APPLICATION_RECOMMENDATION_STATUSES = {"available", "future", "missing"}
 APPLICATION_RECOMMENDATION_LEVELS = {"required", "recommended", "optional"}
 APPLICATION_ONLY_AVAILABLE_EXTERNAL_IDS = {"google_drive", "notion", "slack_v2"}
+AGENT_AVATAR_COLORS = {
+    "bg-white",
+    "bg-blue-100",
+    "bg-purple-100",
+    "bg-green-100",
+    "bg-orange-100",
+    "bg-pink-100",
+    "bg-yellow-100",
+    "bg-red-100",
+    "bg-indigo-100",
+    "bg-teal-100",
+    "bg-cyan-100",
+    "bg-sky-100",
+    "bg-emerald-100",
+}
 INTEGRATION_ENTITY_ROLES = {
     "document",
     "message_or_conversation",
@@ -663,6 +678,14 @@ def validate_templates(manifest: dict[str, Any], skill_ids: set[str]) -> None:
             fail(f"Agent template file/id mismatch for {template_id}")
         if not isinstance(template.get("platform_managed"), bool):
             fail(f"Agent template {template_id} must explicitly declare platform_managed")
+        color = template.get("color")
+        if color is not None and (
+            not isinstance(color, str) or color not in AGENT_AVATAR_COLORS
+        ):
+            fail(
+                f"Agent template {template_id} color must be one of "
+                f"{sorted(AGENT_AVATAR_COLORS)}; found {color!r}"
+            )
         metadata = template.get("metadata") or {}
         if not isinstance(metadata, dict):
             fail(f"Agent template {template_id} metadata must be an object when declared")

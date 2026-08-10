@@ -58,7 +58,7 @@ Humans own candidate disposition, outreach sends, CRM writes, Fund selection, De
 - Source template: `alludium/agent-templates/vc_origination_candidate_manager.yaml`
 - Alludium template ID: `vc_origination_candidate_manager`
 - Display name: Candidate Manager
-- Version: `1.0.1`
+- Version: `1.0.2`
 - Primary stage: Origination Candidate
 - Supported task definitions:
   - `register-origination-candidate`
