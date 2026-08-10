@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.link_existing_origination_candidate
-version: 0.1.0
+version: 0.1.1
 title: Link Existing Origination Candidate
 category: Venture Capital
 visibility: workspace
@@ -58,7 +58,7 @@ fields:
   - key: candidate_project_id
     name: Existing Candidate Project ID
     fieldType: string
-    required: false
+    required: true
     position: 1
     config: {}
   - key: source_receipt_reference

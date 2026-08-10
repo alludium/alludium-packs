@@ -99,7 +99,7 @@
     "postCreate": {"triggerInitialStateTasks": true}
   },
   "initialVersion": {
-    "version": "0.2.2",
+    "version": "0.2.3",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -383,7 +383,7 @@
         "lifecycleStage": "active",
         "projectScope": "project_instance",
         "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "manual_tip", "source": "project.id", "requiredForActivation": true}],
+        "inputMappings": [],
         "outputMappings": [{"taskField": "manual_tip_ingestion_artifact_id", "target": "project.field", "targetPath": "latest_manual_tip_ingestion_artifact_id"}]
       },
       {

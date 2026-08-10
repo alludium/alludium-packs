@@ -306,6 +306,9 @@ PROJECT_SCOPES = {"project_instance", "project_management"}
 DEFAULT_PROJECT_SCOPE = "project_instance"
 PROJECT_MANAGEMENT_SCOPE = "project_management"
 REVIEWED_MANUAL_PROJECT_TASK_INPUTS = {
+    "ingest-manual-sourcing-tip": {"manual_tip"},
+    "link-existing-origination-candidate": {"candidate_project_id"},
+    "promote-candidate-to-deal-pipeline": {"fund_id"},
     "score-sourcing-candidate": {
         "candidate_line_relationship_id",
         "fund_id",
@@ -4638,6 +4641,12 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
     }
     line = origination_project_types["vc_sourcing_line"]
     candidate = origination_project_types["vc_origination_candidate"]
+    candidate_post_create = (candidate.get("projectCreation") or {}).get("postCreate") or {}
+    if candidate_post_create.get("triggerInitialStateTasks") is not False:
+        fail(
+            "Origination Candidate guided creation must not rerun registration as a "
+            "post-create setup task"
+        )
     line_fields = {
         field.get("key"): field
         for field in (line.get("initialVersion") or {}).get("fieldsSchema", [])
@@ -4933,6 +4942,8 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
         fail("Existing Candidate linking must collect the Sourcing Line project ID")
     if "candidate_project_id" not in link_inputs:
         fail("Existing Candidate linking must collect the Candidate project ID")
+    if link_inputs["candidate_project_id"].get("required") is not True:
+        fail("Existing Candidate linking must require the Candidate project ID")
     for output_key in [
         "relationship_id",
         "candidate_project_id",
@@ -4999,6 +5010,62 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
     )
     if "generate-sourcing-digest" in run_instructions or "and digest" in run_instructions:
         fail("The line orchestrator must not retain the retired digest child step")
+    sourcing_operator = read_yaml(
+        ROOT / "alludium" / "agent-templates" / "vc_sourcing_operator.yaml"
+    )
+    sourcing_operator_tools = {
+        tool.get("name")
+        for server in (sourcing_operator.get("mcpServers") or {}).values()
+        if isinstance(server, dict)
+        for tool in server.get("tools") or []
+        if isinstance(tool, dict)
+    }
+    for required_tool in {
+        "task-definitions.list",
+        "task-definitions.findById",
+        "task-management.createTaskFromDefinition",
+    }:
+        if required_tool not in sourcing_operator_tools:
+            fail(
+                "Sourcing Operator cannot execute declared sourcing child tasks; "
+                f"missing {required_tool}"
+            )
+    for required_phrase in [
+        "task-definitions.list",
+        "task-definitions.findById",
+        "task-management.createTaskFromDefinition",
+        "parentTaskId",
+        "projectId",
+        "returned task ID",
+    ]:
+        if required_phrase not in run_instructions:
+            fail(
+                "The line orchestrator is missing its executable child-task "
+                f"contract: {required_phrase}"
+            )
+
+    manual_tip = task_contracts["ingest-manual-sourcing-tip"]
+    if manual_tip["fields"]["input"].get("manual_tip", {}).get("required") is not True:
+        fail("Manual sourcing tip intake must require a structured manual_tip payload")
+    manual_tip_mapping = next(
+        (
+            mapping
+            for mapping in (line.get("initialVersion") or {}).get("projectTaskMappings", [])
+            if mapping.get("taskDefinitionSlug") == "ingest-manual-sourcing-tip"
+        ),
+        None,
+    )
+    if manual_tip_mapping is None:
+        fail("Sourcing Line must expose reviewed manual-tip intake")
+    if any(
+        entry.get("taskField") == "manual_tip"
+        for entry in manual_tip_mapping.get("inputMappings") or []
+        if isinstance(entry, dict)
+    ):
+        fail(
+            "Manual sourcing tip must be collected during reviewed intake, not mapped "
+            "from a scalar Sourcing Line field"
+        )
 
     promotion = task_contracts["promote-candidate-to-deal-pipeline"]
     promotion_inputs = promotion["fields"]["input"]
@@ -5006,6 +5073,8 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
         fail("Candidate promotion must collect origination_candidate_project_id")
     if "fund_id" not in promotion_inputs:
         fail("Candidate promotion must collect an explicit Fund selection")
+    if promotion_inputs["fund_id"].get("required") is not True:
+        fail("Candidate promotion must require an explicit Fund selection")
     proposal = promotion["fields"]["output"].get("dealCreationProposal")
     if not isinstance(proposal, dict) or proposal.get("fieldType") != "json":
         fail("Candidate promotion must emit dealCreationProposal JSON")

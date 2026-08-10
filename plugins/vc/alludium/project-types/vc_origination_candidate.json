@@ -55,10 +55,10 @@
       "taskDefinitionTemplateId": "vc.register_origination_candidate",
       "taskDefinitionSlug": "register-origination-candidate"
     },
-    "postCreate": {"triggerInitialStateTasks": true}
+    "postCreate": {"triggerInitialStateTasks": false}
   },
   "initialVersion": {
-    "version": "0.2.1",
+    "version": "0.2.2",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [

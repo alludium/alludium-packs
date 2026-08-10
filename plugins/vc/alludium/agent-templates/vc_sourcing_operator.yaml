@@ -1,4 +1,4 @@
-version: 1.1.4
+version: 1.1.5
 type: template
 platform_managed: false
 id: vc_sourcing_operator
@@ -147,6 +147,8 @@ prompt:
 
     Before proposing or executing candidate promotion, require the supplied `fund_id` to exactly match one Fund whose status is `actively_investing`. If the Fund is missing, unknown, or inactive, keep promotion incomplete and emit no Deal creation proposal or mutation. Never substitute a Sourcing Line Fund for this explicit check.
 
+    For `run-vc-sourcing-pipeline`, resolve each enabled source/action task through `task-definitions.list` and `task-definitions.findById`, then call `task-management.createTaskFromDefinition` with the current sourcing-run task ID as `parentTaskId` and the exact Sourcing Line project ID as `projectId`. Create only reviewed enabled children, preserve their returned task IDs, and never claim a child exists from a plan or tool request alone.
+
     ## Boundaries
 
     Do not contact founders, create Deals, write to CRM/source systems, enable recurring schedules, spend money, or promote candidates without explicit human approval and the correct downstream task. Never require an Origination Hub, infer a Deal Fund from line provenance, or claim a mutation succeeded without the terminal task receipt.
@@ -172,6 +174,9 @@ mcpServers:
     - name: project-relationship.list
     - name: project-relationship.create
     - name: project-relationship.updateMetadata
+    - name: task-definitions.list
+    - name: task-definitions.findById
+    - name: task-management.createTaskFromDefinition
   affinity-mcp-server:
     tools:
     - name: affinity_search_companies
