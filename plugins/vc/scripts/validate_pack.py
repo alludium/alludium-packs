@@ -4639,9 +4639,17 @@ def _reject_unpinned_ontology_values(value: Any, *, context: str) -> None:
             if isinstance(key, str):
                 normalized_key = re.sub(r"[^a-z0-9]", "", key.casefold())
                 if (
-                    "prompt" in normalized_key
-                    or "credential" in normalized_key
-                    or normalized_key.endswith(("apikey", "password", "secret", "token"))
+                    any(
+                        marker in normalized_key
+                        for marker in (
+                            "apikey",
+                            "credential",
+                            "password",
+                            "prompt",
+                            "secret",
+                            "token",
+                        )
+                    )
                 ):
                     fail(f"{context} must not embed runtime control {key}")
             _reject_unpinned_ontology_values(nested, context=context)

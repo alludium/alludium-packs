@@ -82,23 +82,30 @@ class OntologyComponentContractRegressionTests(unittest.TestCase):
         )
 
     def test_component_content_rejects_composite_provider_control_keys(self) -> None:
-        with tempfile.TemporaryDirectory() as temporary_root:
-            pack_root = self._copy_pack(temporary_root)
-            component_root = pack_root / "alludium" / "ontology-components"
-            component_path = component_root / "components" / "finance-screening.profile.v1.json"
-            component = _read_json(component_path)
-            component["content"]["providerPrompt"] = "forbidden runtime instruction"
-            _write_canonical(component_path, component)
-            _rehash_component(
-                component_root,
-                "finance-screening.v1.json",
-                "finance-screening.profile.v1.json",
+        for forbidden_key in ("providerPrompt", "apiTokens"):
+            with self.subTest(forbidden_key=forbidden_key), tempfile.TemporaryDirectory(
+            ) as temporary_root:
+                pack_root = self._copy_pack(temporary_root)
+                component_root = pack_root / "alludium" / "ontology-components"
+                component_path = (
+                    component_root / "components" / "finance-screening.profile.v1.json"
+                )
+                component = _read_json(component_path)
+                component["content"][forbidden_key] = "forbidden runtime instruction"
+                _write_canonical(component_path, component)
+                _rehash_component(
+                    component_root,
+                    "finance-screening.v1.json",
+                    "finance-screening.profile.v1.json",
+                )
+
+                result = self._run_validator(pack_root)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn(
+                f"must not embed runtime control {forbidden_key}",
+                result.stderr,
             )
-
-            result = self._run_validator(pack_root)
-
-        self.assertEqual(result.returncode, 1)
-        self.assertIn("must not embed runtime control providerPrompt", result.stderr)
 
     def test_catalog_rejects_an_unrecognized_api_version(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_root:
