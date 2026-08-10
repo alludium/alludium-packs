@@ -93,6 +93,7 @@ REQUIRED_AGENT_TOOLS = {
     },
     "vc_origination_candidate_manager": {
         "alludium-platform": {
+            "project.getAgentContext",
             "project.findById",
             "project.listForCurrentWorkspace",
         },
@@ -4754,6 +4755,36 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
             "Sourcing Line guided creation must require exactly line_name and fund_id "
             "without a hub relationship"
         )
+    create_line_template = read_yaml(
+        ROOT
+        / "alludium"
+        / "task-definition-templates"
+        / "vc-workflows"
+        / "create-sourcing-line.yaml"
+    )
+    create_line_definition_json = (
+        (create_line_template.get("definition") or {}).get("definitionJson") or {}
+    )
+    if (
+        create_line_definition_json.get("recommendedAgentTemplate")
+        != "vc_sourcing_line_manager"
+    ):
+        fail("Sourcing Line guided creation must run through vc_sourcing_line_manager")
+    create_line_instructions = (
+        (create_line_definition_json.get("instructions") or {}).get(
+            "executionInstructions", ""
+        )
+    )
+    for required_phrase in [
+        "runtime-bound canonical `vc.funds`",
+        "project-scoped `fundId` fallback",
+        "actively_investing",
+    ]:
+        if required_phrase not in create_line_instructions:
+            fail(
+                "Sourcing Line guided creation is missing its executable Fund "
+                f"validation boundary: {required_phrase}"
+            )
 
     registration = task_contracts["register-origination-candidate"]
     registration_inputs = registration["fields"]["input"]
@@ -4808,7 +4839,13 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
         "project.listForCurrentWorkspace",
         "limit",
         "offset",
-        "project.findById",
+        "project.getAgentContext",
+        "`projectId` set to that summary's `id`",
+        "projectType.key",
+        "vc_origination_candidate",
+        "candidate_key",
+        "fieldValues",
+        "Do not use `project.findById` for this dedupe check",
         "vc.sourcing_line_originated_candidate",
         "Multiple sourcing lines",
         "Do not infer a Deal Fund",
