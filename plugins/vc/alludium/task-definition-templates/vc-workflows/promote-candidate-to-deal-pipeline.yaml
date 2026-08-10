@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.promote_candidate_to_deal_pipeline
-version: 0.1.12
+version: 0.1.13
 title: Promote Candidate to Deal Pipeline
 category: Venture Capital
 visibility: workspace
@@ -39,8 +39,8 @@ definition:
     supportedProjectScopes:
     - project_instance
     instructions:
-      executionInstructions: 'Promote only human-approved candidates. Require `fund_id` to exactly match one active record
-        in canonical `vc.funds`; never infer it from the primary, latest, or majority Sourcing Line, even when every contributing
+      executionInstructions: 'Promote only human-approved candidates. Validate `fund_id` against the executor''s runtime-bound
+        canonical `vc.funds` records and require an exact match whose status is `actively_investing`; never infer it from the primary, latest, or majority Sourcing Line, even when every contributing
         line currently has the same Fund. Prepare a Deal Pipeline creation package with the explicitly selected Fund, company
         identity, founder evidence, every contributing Sourcing Line, all source receipts, enrichment/verdict/screen summaries,
         relationship context, outreach state, conflicts, and open questions. Preserve the Candidate project and its complete

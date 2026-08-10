@@ -99,7 +99,7 @@
     "postCreate": {"triggerInitialStateTasks": true}
   },
   "initialVersion": {
-    "version": "0.2.0",
+    "version": "0.2.1",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -193,6 +193,42 @@
       {"from": "active", "to": "paused"}, {"from": "paused", "to": "active"},
       {"from": "paused", "to": "retired"}, {"from": "retired", "to": "archived"}
     ],
+    "commandView": {
+      "key": "vc-sourcing-line",
+      "typeLabel": "Sourcing Line",
+      "collectionLabel": "Sourcing Lines",
+      "overviewTitle": "Sourcing Line overview",
+      "overviewAriaLabel": "Open sourcing line data",
+      "overviewFallback": "Configure the Fund, sources, screen, cadence, and review policy for this sourcing line.",
+      "executionTitle": "Alludium is executing",
+      "navigationFieldKeys": ["fund_id"],
+      "stageGroups": [
+        {
+          "key": "current",
+          "label": "Current",
+          "navigationRole": "active",
+          "states": ["draft", "ready", "active", "degraded", "paused"]
+        },
+        {
+          "key": "history",
+          "label": "History",
+          "navigationRole": "hidden",
+          "states": ["retired", "archived"]
+        }
+      ],
+      "fallbackAgents": [],
+      "outputSlots": [],
+      "summaryFields": [
+        {"key": "fund", "label": "Fund", "fieldKey": "fund_id", "format": "text"},
+        {"key": "last_run", "label": "Last run", "fieldKey": "last_run_at", "format": "text"},
+        {"key": "new_candidates", "label": "New candidates", "fieldKey": "new_candidates_last_run", "format": "text"}
+      ],
+      "primarySummaryField": {"key": "fund", "label": "Fund", "fieldKey": "fund_id", "format": "text"},
+      "badgeFields": [
+        {"key": "source_health", "label": "Source health", "fieldKey": "source_health_status", "format": "text"},
+        {"key": "last_run_status", "label": "Last run status", "fieldKey": "last_run_status", "format": "text"}
+      ]
+    },
     "extensions": {
       "projectRelationships": [
         {

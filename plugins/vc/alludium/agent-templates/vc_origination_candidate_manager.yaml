@@ -1,4 +1,4 @@
-version: "1.0.0"
+version: "1.0.1"
 type: "template"
 platform_managed: false
 id: "vc_origination_candidate_manager"
@@ -113,6 +113,7 @@ mcpServers:
     tools:
       - name: project.getAgentContext
       - name: project.findById
+      - name: project.listForCurrentWorkspace
       - name: project.update
       - name: project.listAvailableMembers
       - name: project-task.listByProject

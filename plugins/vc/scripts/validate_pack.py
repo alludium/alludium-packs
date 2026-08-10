@@ -64,6 +64,7 @@ REQUIRED_AGENT_PROMPT_VARIABLES = {
     "vc_evaluation_analyst": {"funds", "fundId"},
     "vc_first_look_analyst": {"funds", "fundId"},
     "vc_pipeline_autopilot": {"firmName"},
+    "vc_sourcing_operator": {"funds"},
 }
 REQUIRED_AGENT_TOOLS = {
     "vc_first_look_analyst": {
@@ -85,6 +86,12 @@ REQUIRED_AGENT_TOOLS = {
             "affinity_get_person",
             "affinity_get_relationship_strengths",
             "affinity_list_person_notes",
+        },
+    },
+    "vc_origination_candidate_manager": {
+        "alludium-platform": {
+            "project.findById",
+            "project.listForCurrentWorkspace",
         },
     },
 }
@@ -2407,6 +2414,123 @@ def validate_project_manager_overlay(project_type_id: str, initial_version: dict
             )
 
 
+def validate_project_command_view_platform_contract(
+    project_type_id: str,
+    initial_version: dict[str, Any],
+    field_keys: set[str],
+    lifecycle_states: set[str],
+) -> None:
+    command_view = initial_version.get("commandView")
+    if not isinstance(command_view, dict):
+        fail(f"Project type {project_type_id} initialVersion.commandView must be an object")
+
+    for field_name in [
+        "key",
+        "typeLabel",
+        "collectionLabel",
+        "overviewTitle",
+        "overviewAriaLabel",
+        "overviewFallback",
+        "executionTitle",
+    ]:
+        if not isinstance(command_view.get(field_name), str) or not command_view.get(field_name):
+            fail(f"Project type {project_type_id} commandView.{field_name} must be declared")
+
+    navigation_field_keys = command_view.get("navigationFieldKeys", [])
+    if not isinstance(navigation_field_keys, list) or not all(
+        isinstance(field_key, str) and field_key.strip()
+        for field_key in navigation_field_keys
+    ):
+        fail(
+            f"Project type {project_type_id} commandView.navigationFieldKeys "
+            "must be a list of non-empty strings"
+        )
+    if len(navigation_field_keys) > 5:
+        fail(
+            f"Project type {project_type_id} commandView.navigationFieldKeys "
+            "must contain at most five fields"
+        )
+    if len(navigation_field_keys) != len(set(navigation_field_keys)):
+        fail(
+            f"Project type {project_type_id} commandView.navigationFieldKeys "
+            "must not contain duplicates"
+        )
+    unknown_navigation_fields = sorted(set(navigation_field_keys) - field_keys)
+    if unknown_navigation_fields:
+        fail(
+            f"Project type {project_type_id} commandView.navigationFieldKeys references "
+            f"unknown fields: {unknown_navigation_fields}"
+        )
+
+    stage_groups = command_view.get("stageGroups")
+    if not isinstance(stage_groups, list) or not stage_groups:
+        fail(f"Project type {project_type_id} commandView.stageGroups must be a non-empty list")
+    stage_group_keys: set[str] = set()
+    for stage_group in stage_groups:
+        if not isinstance(stage_group, dict):
+            fail(f"Project type {project_type_id} commandView.stageGroups entries must be objects")
+        for field_name in ["key", "label"]:
+            if not isinstance(stage_group.get(field_name), str) or not stage_group.get(field_name):
+                fail(
+                    f"Project type {project_type_id} commandView.stageGroups entries "
+                    f"must declare {field_name}"
+                )
+        stage_group_key = stage_group["key"]
+        if stage_group_key in stage_group_keys:
+            fail(
+                f"Project type {project_type_id} commandView.stageGroups has duplicate "
+                f"key {stage_group_key}"
+            )
+        stage_group_keys.add(stage_group_key)
+        states = require_string_list(
+            stage_group.get("states"),
+            f"Project type {project_type_id} commandView.stageGroups.{stage_group_key}.states",
+        )
+        if not states:
+            fail(
+                f"Project type {project_type_id} commandView.stageGroups."
+                f"{stage_group_key}.states must be non-empty"
+            )
+        unknown_states = sorted(set(states) - lifecycle_states)
+        if unknown_states:
+            fail(
+                f"Project type {project_type_id} commandView stage group "
+                f"{stage_group_key} references unknown lifecycle states: {unknown_states}"
+            )
+        navigation_role = stage_group.get("navigationRole")
+        if navigation_role is not None and navigation_role not in {
+            "active",
+            "portfolio",
+            "hidden",
+        }:
+            fail(
+                f"Project type {project_type_id} commandView.stageGroups."
+                f"{stage_group_key}.navigationRole is invalid"
+            )
+
+    for list_field in ["fallbackAgents", "outputSlots", "summaryFields", "badgeFields"]:
+        value = command_view.get(list_field, [])
+        if not isinstance(value, list):
+            fail(f"Project type {project_type_id} commandView.{list_field} must be a list")
+
+    summary_fields = list(command_view.get("summaryFields", [])) + list(
+        command_view.get("badgeFields", [])
+    )
+    for singular_field in ["primarySummaryField", "secondarySummaryField", "scoreField"]:
+        value = command_view.get(singular_field)
+        if value is not None:
+            summary_fields.append(value)
+    for summary_field in summary_fields:
+        if not isinstance(summary_field, dict):
+            fail(f"Project type {project_type_id} commandView summary fields must be objects")
+        field_key = summary_field.get("fieldKey")
+        if field_key is not None and field_key not in field_keys:
+            fail(
+                f"Project type {project_type_id} commandView summary field references "
+                f"unknown field {field_key}"
+            )
+
+
 def validate_vc_deal_room_command_view(project_type_id: str, initial_version: dict[str, Any]) -> None:
     command_view = initial_version.get("commandView")
     if not isinstance(command_view, dict):
@@ -3200,6 +3324,14 @@ def validate_project_type_file(path: Path, expected_id: str) -> str:
         fail(f"Project type {expected_id} has duplicate lifecycle transitions")
 
     validate_project_manager_overlay(expected_id, initial_version)
+
+    if initial_version.get("commandView") is not None:
+        validate_project_command_view_platform_contract(
+            expected_id,
+            initial_version,
+            set(field_keys),
+            lifecycle_state_set,
+        )
 
     if expected_id == "vc_deal_room":
         validate_vc_deal_room_command_view(expected_id, initial_version)
@@ -4465,6 +4597,9 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
         fail("Sourcing Line fund_id must be a required project field")
     if fund_field.get("optionSource") != expected_fund_option_source:
         fail("Sourcing Line fund_id must select an active Fund from canonical vc.funds")
+    line_command_view = (line.get("initialVersion") or {}).get("commandView") or {}
+    if line_command_view.get("navigationFieldKeys") != ["fund_id"]:
+        fail("Sourcing Line command view must allowlist only fund_id for navigation")
     line_creation = line.get("projectCreation") or {}
     if set(line_creation.get("requiredFieldKeys") or []) != {"line_name", "fund_id"}:
         fail("Sourcing Line creation must require exactly line_name and fund_id")
@@ -4609,7 +4744,22 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
         .get("instructions", {})
         .get("executionInstructions", "")
     )
+    registration_definition_json = (
+        (registration_template.get("definition") or {}).get("definitionJson") or {}
+    )
+    if (
+        registration_definition_json.get("recommendedAgentTemplate")
+        != "vc_origination_candidate_manager"
+    ):
+        fail(
+            "Candidate registration must run through "
+            "vc_origination_candidate_manager"
+        )
     for required_phrase in [
+        "project.listForCurrentWorkspace",
+        "limit",
+        "offset",
+        "project.findById",
         "vc.sourcing_line_originated_candidate",
         "Multiple sourcing lines",
         "Do not infer a Deal Fund",
@@ -4731,10 +4881,21 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
         .get("instructions", {})
         .get("executionInstructions", "")
     )
+    promotion_definition_json = (
+        (promotion_template.get("definition") or {}).get("definitionJson") or {}
+    )
+    if promotion_definition_json.get("recommendedAgentTemplate") != "vc_sourcing_operator":
+        fail("Candidate promotion must run through vc_sourcing_operator")
     if "vc.origination_candidate_promoted_to_deal" not in promotion_instructions:
         fail("Candidate promotion must preserve the candidate-to-Deal relationship")
     if "never infer" not in promotion_instructions:
         fail("Candidate promotion must prohibit inferred Fund routing")
+    for required_phrase in ["runtime-bound", "vc.funds", "actively_investing"]:
+        if required_phrase not in promotion_instructions:
+            fail(
+                "Candidate promotion is missing an executable Fund-validation "
+                f"boundary: {required_phrase}"
+            )
 
     starter_template_field = line_fields.get("starter_template_key") or {}
     declared_template_keys = {

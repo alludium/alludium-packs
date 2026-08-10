@@ -58,7 +58,7 @@ Humans own candidate disposition, outreach sends, CRM writes, Fund selection, De
 - Source template: `alludium/agent-templates/vc_origination_candidate_manager.yaml`
 - Alludium template ID: `vc_origination_candidate_manager`
 - Display name: Candidate Manager
-- Version: `1.0.0`
+- Version: `1.0.1`
 - Primary stage: Origination Candidate
 - Supported task definitions:
   - `register-origination-candidate`
@@ -77,7 +77,7 @@ Humans own candidate disposition, outreach sends, CRM writes, Fund selection, De
 
 ## MCP And Tool Context
 
-- `alludium-platform`: `project.getAgentContext`, `project.findById`, `project.update`, `project.listAvailableMembers`, `project-task.listByProject`, `project-task.findById`, `task-definitions.list`, `task-definitions.findById`, `task-management.getTaskDetail`, `task-management.createAdHocTask`, `task-management.createTaskFromDefinition`, `task-management.assignTask`, `agent.findByUserId`, `agent-deployment.findByAgentIdAndType`, `artifact.searchArtifacts`, `artifact.list`, `artifact.getArtifact`, `artifact.findById`, `artifact.createTextArtifact`, `artifact.attachToChat`, `artifact.detachFromChat`, `artifact.getArtifactsLinkedToChat`, `artifact.getArtifactsForChatContext`, `artifact.readSourceRange`
+- `alludium-platform`: `project.getAgentContext`, `project.findById`, `project.listForCurrentWorkspace`, `project.update`, `project.listAvailableMembers`, `project-task.listByProject`, `project-task.findById`, `task-definitions.list`, `task-definitions.findById`, `task-management.getTaskDetail`, `task-management.createAdHocTask`, `task-management.createTaskFromDefinition`, `task-management.assignTask`, `agent.findByUserId`, `agent-deployment.findByAgentIdAndType`, `artifact.searchArtifacts`, `artifact.list`, `artifact.getArtifact`, `artifact.findById`, `artifact.createTextArtifact`, `artifact.attachToChat`, `artifact.detachFromChat`, `artifact.getArtifactsLinkedToChat`, `artifact.getArtifactsForChatContext`, `artifact.readSourceRange`
 - `affinity-mcp-server`: `affinity_search_companies`, `affinity_get_company`, `affinity_list_company_notes`, `affinity_search_persons`, `affinity_get_person`, `affinity_get_relationship_strengths`, `affinity_list_person_notes`
 - `harmonic-mcp-oauth`: `get_companies`, `typeahead_search`, `search_companies_natural_language`, `get_people`
 - `exa-mcp-hosted`: `web_search_exa`, `company_research_exa`, `people_search_exa`

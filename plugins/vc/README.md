@@ -7,7 +7,9 @@ Alludium VC packages reusable venture capital workflows for sourcing, screening,
 Version `0.6.6` makes Origination hub-free and projection-first. It adds Fund-specific Sourcing Lines,
 multi-line Origination Candidates, a workspace Origination Manager, dedicated line and Candidate managers,
 and explicit active-Fund selection at Deal promotion. The retired Origination Pipeline project type is no
-longer installable, and only the line orchestrator may be scheduled.
+longer installable, and only the line orchestrator may be scheduled. Candidate registration searches the
+accessible Candidate projection before creation, promotion validates the selected Fund against runtime-bound
+`vc.funds`, and Sourcing Line navigation projects its allowlisted `fund_id`.
 
 This release carries forward the canonical, hash-pinned finance and operations ontology component
 fixtures published in `0.5.49`, including their exact release provenance, dependency closure,
