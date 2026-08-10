@@ -5332,6 +5332,8 @@ def validate_origination_project_task_mapping_contracts(project_type_id: str) ->
             "Every populated matched Fund field is authoritative",
             "only to supply missing, non-conflicting detail",
             "never override or weaken a populated matched Fund field",
+            "unless the matched Fund's populated stage",
+            "explicitly allows that later stage or company size",
             "project-relationship.updateMetadata",
             "scoring_by_fund[fund_id]",
             "actively_investing",
