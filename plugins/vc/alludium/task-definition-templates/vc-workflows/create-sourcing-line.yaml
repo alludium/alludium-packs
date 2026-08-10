@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.create_sourcing_line
-version: 0.2.0
+version: 0.2.1
 title: Create Sourcing Line
 category: Venture Capital
 visibility: workspace
@@ -28,7 +28,7 @@ definition:
     supportedProjectScopes:
     - project_instance
     instructions:
-      executionInstructions: 'Capture a human-readable line name and require `fund_id` to exactly match one active record in the canonical `vc.funds` collection. Emit `projectCreation.createRequest` with only those required field values. Do not require or create an Origination Pipeline hub relationship. The platform finalizer creates the draft Sourcing Line, then opens its canonical chat. Defer the hypothesis, sources, screen, cadence, review policy, and outreach policy to `configure-sourcing-line`.'
+      executionInstructions: 'Capture a human-readable line name and validate the supplied task `fund_id` against the executor''s runtime-bound canonical `vc.funds` collection; do not use the project-scoped `fundId` fallback because no line exists yet. Require exact stable-ID equality with one record whose status is `actively_investing`. Emit `projectCreation.createRequest` with only those required field values. Do not require or create an Origination Pipeline hub relationship. The platform finalizer creates the draft Sourcing Line, then opens its canonical chat. Defer the hypothesis, sources, screen, cadence, review policy, and outreach policy to `configure-sourcing-line`.'
       missingInputPolicy: Ask for a short line name and an active configured Fund. Keep creation incomplete when fund_id is missing, unknown, or inactive.
       externalActionPolicy: Create only the draft project. Do not run sources, enable schedules, create candidates, spend money, write external systems, or send outreach.
       humanConfirmationPolicy: always

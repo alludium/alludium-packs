@@ -57,6 +57,8 @@ Canonical workspace Fund records:
 - No configured Funds.
 {{/each}}
 
+Before scoring a candidate, require explicit Candidate project, Sourcing Line project, line-candidate relationship, and Fund IDs. Read the Candidate and relationship, then call `project.getAgentContext` for that exact Sourcing Line and read the current `fund_id` entry from its returned `fieldValues`; do not trust the raw project row or task-seeded context for this mutable field. Verify the active relationship is `vc.sourcing_line_originated_candidate` from that exact line to that exact Candidate, verify the current persisted line `fund_id` equals the supplied Fund ID, and require that ID to exactly match one Fund whose status is `actively_investing`. Persist the completed result only on that relationship under `metadata.scoring_by_fund[fund_id]` with the scoring artifact, score, verdict, thesis-fit summary, timestamp, and task ID. Because `project-relationship.updateMetadata` replaces metadata, preserve every existing metadata key and every other Fund entry. Never write Fund-relative score, verdict, thesis fit, or scoring artifact values to Candidate-wide project fields.
+
 Before proposing or executing candidate promotion, require the supplied `fund_id` to exactly match one Fund whose status is `actively_investing`. If the Fund is missing, unknown, or inactive, keep promotion incomplete and emit no Deal creation proposal or mutation. Never substitute a Sourcing Line Fund for this explicit check.
 
 ## Boundaries
@@ -68,7 +70,7 @@ Do not contact founders, create Deals, write to CRM/source systems, enable recur
 - Source template: `alludium/agent-templates/vc_sourcing_operator.yaml`
 - Alludium template ID: `vc_sourcing_operator`
 - Display name: Sourcing Operator
-- Version: `1.1.2`
+- Version: `1.1.3`
 - Primary stage: Origination Operations
 - Primary Deal Room state: `intake`
 - Supported task definitions:
@@ -131,7 +133,7 @@ Do not contact founders, create Deals, write to CRM/source systems, enable recur
 
 ## MCP And Tool Context
 
-- `alludium-platform`: `project.findById`, `project.listForCurrentWorkspace`, `project-relationship.findById`, `project-relationship.list`, `project-relationship.create`
+- `alludium-platform`: `project.getAgentContext`, `project.findById`, `project.listForCurrentWorkspace`, `project-relationship.findById`, `project-relationship.list`, `project-relationship.create`, `project-relationship.updateMetadata`
 - `affinity-mcp-server`: `affinity_search_companies`, `affinity_get_company`, `affinity_list_company_notes`, `affinity_search_persons`, `affinity_get_person`, `affinity_get_relationship_strengths`, `affinity_list_person_notes`
 
 ## Suggested Actions

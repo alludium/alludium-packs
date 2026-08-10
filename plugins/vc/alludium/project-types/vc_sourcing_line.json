@@ -99,7 +99,7 @@
     "postCreate": {"triggerInitialStateTasks": true}
   },
   "initialVersion": {
-    "version": "0.2.1",
+    "version": "0.2.2",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -235,7 +235,7 @@
           "typeKey": "vc.sourcing_line_originated_candidate",
           "label": "Originated candidate",
           "inverseLabel": "Sourced through line",
-          "description": "Records one provenance edge from a sourcing line to a durable candidate. Multiple sourcing lines may link to the same candidate.",
+          "description": "Records one provenance edge from a sourcing line to a durable candidate. Multiple lines may link to the same candidate; Fund-relative scoring is stored only on this edge under metadata.scoring_by_fund[fund_id].",
           "targetProjectTypeKeys": ["vc_origination_candidate"]
         }
       ]

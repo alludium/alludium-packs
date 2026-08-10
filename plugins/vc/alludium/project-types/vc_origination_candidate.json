@@ -58,7 +58,7 @@
     "postCreate": {"triggerInitialStateTasks": true}
   },
   "initialVersion": {
-    "version": "0.2.0",
+    "version": "0.2.1",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -84,11 +84,6 @@
       {"id": "field-source-evidence", "key": "source_evidence_summary", "label": "Source Evidence Summary", "kind": "text", "required": true},
       {"id": "field-source-record-keys", "key": "source_record_keys", "label": "Source Record Keys", "kind": "text", "required": false},
       {"id": "field-discovered-at", "key": "discovered_at", "label": "First Discovered At", "kind": "date", "required": false},
-      {"id": "field-thesis-fit", "key": "thesis_fit_summary", "label": "Thesis Fit Summary", "kind": "text", "required": false},
-      {"id": "field-candidate-score", "key": "candidate_score", "label": "Candidate Score", "kind": "number", "required": false},
-      {"id": "field-review-verdict", "key": "review_verdict", "label": "Review Verdict", "kind": "enum", "required": false, "options": [
-        {"value": "meet", "label": "Meet"}, {"value": "watch", "label": "Watch"}, {"value": "pass", "label": "Pass"}, {"value": "needs_review", "label": "Needs Review"}
-      ]},
       {"id": "field-do-not-contact", "key": "do_not_contact_status", "label": "Do Not Contact Status", "kind": "enum", "required": false, "options": [
         {"value": "clear", "label": "Clear"}, {"value": "blocked", "label": "Blocked"}, {"value": "needs_review", "label": "Needs Review"}, {"value": "unknown", "label": "Unknown"}
       ]},
@@ -96,7 +91,6 @@
         {"value": "not_started", "label": "Not Started"}, {"value": "drafted", "label": "Drafted"}, {"value": "approved", "label": "Approved"}, {"value": "contacted", "label": "Contacted"}, {"value": "engaged", "label": "Engaged"}, {"value": "no_response", "label": "No Response"}, {"value": "opted_out", "label": "Opted Out"}
       ]},
       {"id": "field-latest-enrichment", "key": "latest_enrichment_artifact_id", "label": "Latest Enrichment", "kind": "text", "required": false},
-      {"id": "field-latest-scoring", "key": "latest_scoring_artifact_id", "label": "Latest Scoring", "kind": "text", "required": false},
       {"id": "field-relationship-context", "key": "relationship_context_artifact_id", "label": "Relationship Context", "kind": "text", "required": false},
       {"id": "field-identified-screen", "key": "identified_screen_artifact_id", "label": "Identified Candidate Screen", "kind": "text", "required": false},
       {"id": "field-sync-plan", "key": "sync_plan_artifact_id", "label": "Sync Plan", "kind": "text", "required": false},
@@ -168,13 +162,11 @@
         "lifecycleStage": "qualified",
         "projectScope": "project_instance",
         "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "enriched_candidate_batch", "source": "project.field", "sourcePath": "latest_enrichment_artifact_id", "requiredForActivation": true}],
-        "outputMappings": [
-          {"taskField": "scoring_artifact_id", "target": "project.field", "targetPath": "latest_scoring_artifact_id"},
-          {"taskField": "candidate_score", "target": "project.field", "targetPath": "candidate_score"},
-          {"taskField": "review_verdict", "target": "project.field", "targetPath": "review_verdict"},
-          {"taskField": "thesis_fit_summary", "target": "project.field", "targetPath": "thesis_fit_summary"}
-        ]
+        "inputMappings": [
+          {"taskField": "candidate_project_id", "source": "project.id", "requiredForActivation": true},
+          {"taskField": "enriched_candidate_batch", "source": "project.field", "sourcePath": "latest_enrichment_artifact_id", "requiredForActivation": true}
+        ],
+        "outputMappings": []
       },
       {
         "id": "mapping-promote-candidate",

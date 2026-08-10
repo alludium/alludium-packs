@@ -19,7 +19,7 @@ Create a minimal Fund-specific Sourcing Line so its configuration continues in t
 
 ## What To Do
 
-Capture a human-readable line name and require fund id to exactly match one active record in the canonical `vc.funds` collection. Emit `projectCreation.createRequest` with only those required field values. Do not require or create an Origination Pipeline hub relationship. The platform finalizer creates the draft Sourcing Line, then opens its canonical chat. Defer the hypothesis, sources, screen, cadence, review policy, and outreach policy to `configure-sourcing-line`.
+Capture a human-readable line name and validate the supplied task fund id against the executor's runtime-bound canonical `vc.funds` collection; do not use the project-scoped `fundId` fallback because no line exists yet. Require exact stable-ID equality with one record whose status is actively investing. Emit `projectCreation.createRequest` with only those required field values. Do not require or create an Origination Pipeline hub relationship. The platform finalizer creates the draft Sourcing Line, then opens its canonical chat. Defer the hypothesis, sources, screen, cadence, review policy, and outreach policy to `configure-sourcing-line`.
 
 ## Available Context
 

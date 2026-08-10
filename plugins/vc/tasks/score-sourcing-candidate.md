@@ -17,16 +17,16 @@ skills:
 
 ## Objective
 
-Produce Meet/Watch/Pass verdicts and urgency scores for enriched origination candidates.
+Produce a Fund-specific Meet/Watch/Pass verdict and urgency score for one Candidate in one Sourcing Line context.
 
 ## What To Do
 
-Mirror the reference pipeline's verdict contract. Score from already-enriched data, separate evidence from inference, and return Meet, Watch, or Pass plus urgency. Apply hard stage safety by passing companies with Series A+ funding or more than 20 employees when reliable LinkedIn company data is present. Run the second-pass verdict only for Meet/Watch rows with fresh LinkedIn company data so paid scraping and model cost stay bounded.
+Require explicit candidate project id, sourcing line project id, candidate line relationship id, and fund id before scoring. Read the Candidate and relationship, then call `project.getAgentContext` with the exact sourcing line project id and read the current fund id entry from its returned `fieldValues`; do not use the raw project row or task-seeded context for this mutable field. Confirm the relationship is active, has type `vc.sourcing_line_originated_candidate`, and runs from that exact line to that exact Candidate. Confirm the current persisted line fund id equals the supplied ID, then require exact stable-ID equality with one runtime-bound `vc.funds` record whose status is actively investing; do not blend another line or Fund policy. Mirror the reference pipeline's verdict contract using that Fund and line policy. Score from already-enriched data, separate evidence from inference, and return Meet, Watch, or Pass plus urgency. Apply hard stage safety by passing companies with Series A+ funding or more than 20 employees when reliable LinkedIn company data is present. Run the second-pass verdict only for Meet/Watch rows with fresh LinkedIn company data so paid scraping and model cost stay bounded. After producing the scoring artifact, read the relationship again and call `project-relationship.updateMetadata` once. Because that operation replaces metadata, copy every existing key and every existing scoring by fund entry unchanged, then set only `scoring_by_fund[fund_id]` to an object containing `schema_version: vc.sourcing_line_candidate_scoring.v1`, the exact Candidate, line, relationship and Fund IDs, scoring artifact, candidate score, review verdict, thesis fit summary, scored at, and the current task ID. Never write these Fund-relative values to Candidate-wide project fields.
 
 ## Available Context
 
 - Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
-- Especially look for: Enriched Candidate Batch, Scoring Policy.
+- Especially look for: Candidate Project ID, Sourcing Line Project ID, Candidate-Line Relationship ID, Fund ID, Enriched Candidate Batch, Scoring Policy.
 - If a named input is absent, follow the missing-input policy rather than inventing facts.
 
 ## Reference Materials
@@ -38,18 +38,20 @@ Mirror the reference pipeline's verdict contract. Score from already-enriched da
 ## Deliverable
 
 - Create or update **Scoring Artifact** as a polished Word-ready document. The source template may be Markdown, but the intended artifact should be suitable for `.docx`/Word export.
-- Also include a short human-readable summary covering: Meet Candidate Count, Watch Candidate Count, Promotion Ready Count, Scoring Report, Candidate Score, Review Verdict, Thesis Fit Summary. Do not output raw JSON unless the user explicitly asks for machine-readable data.
+- Also include a short human-readable summary covering: Meet Candidate Count, Watch Candidate Count, Promotion Ready Count, Scoring Report, Candidate Score, Review Verdict, Thesis Fit Summary, Relationship Scoring Persisted. Do not output raw JSON unless the user explicitly asks for machine-readable data.
 
 ## Missing Input Policy
 
-Ask for enriched candidates, thesis, geography/stage policy, relationship context, LinkedIn company data availability, and scoring thresholds before scoring.
+Keep scoring incomplete until the exact Candidate project, Sourcing Line project, active provenance relationship, active Fund, enriched evidence, line/Fund policy, LinkedIn data availability, and scoring thresholds are available and mutually consistent.
 
 ## Guardrails
 
-Scoring only. Do not sync external records, change manual decisions, send outreach, or create Deal Pipelines.
+The only allowed persistent mutation is replacing metadata on the verified line-candidate relationship while preserving all prior metadata and other Fund entries. Do not update Candidate-wide score fields, sync external records, change manual decisions, send outreach, or create Deal Pipelines.
 
 ## Completion Criteria
 
-- Each scored candidate has action, urgency, thesis fit, confidence, funding status, HQ/geography concern, frontier-pedigree evidence, reasons, and receipts.
+- The exact Candidate, Sourcing Line, active provenance relationship, and actively-investing Fund are recorded and verified.
+- The scored candidate has action, urgency, thesis fit, confidence, funding status, HQ/geography concern, frontier-pedigree evidence, reasons, and receipts for that exact line/Fund context.
 - Auto-pass decisions name the specific rule and evidence.
 - Second-pass rows are limited to candidates with fresh LinkedIn company data.
+- The terminal platform receipt confirms the result was stored only at `relationship.metadata.scoring_by_fund[fund_id]` without removing prior metadata or another Fund entry.

@@ -64,6 +64,7 @@ REQUIRED_AGENT_PROMPT_VARIABLES = {
     "vc_evaluation_analyst": {"funds", "fundId"},
     "vc_first_look_analyst": {"funds", "fundId"},
     "vc_pipeline_autopilot": {"firmName"},
+    "vc_sourcing_line_manager": {"firmName", "fundId", "funds"},
     "vc_sourcing_operator": {"funds"},
 }
 REQUIRED_AGENT_TOOLS = {
@@ -72,11 +73,13 @@ REQUIRED_AGENT_TOOLS = {
     },
     "vc_sourcing_operator": {
         "alludium-platform": {
+            "project.getAgentContext",
             "project.findById",
             "project.listForCurrentWorkspace",
             "project-relationship.findById",
             "project-relationship.list",
             "project-relationship.create",
+            "project-relationship.updateMetadata",
         },
         "affinity-mcp-server": {
             "affinity_search_companies",
@@ -300,6 +303,13 @@ PROJECT_TASK_ACTIVATION_MODES = {"manual", "manual_review", "auto_start"}
 PROJECT_SCOPES = {"project_instance", "project_management"}
 DEFAULT_PROJECT_SCOPE = "project_instance"
 PROJECT_MANAGEMENT_SCOPE = "project_management"
+REVIEWED_MANUAL_PROJECT_TASK_INPUTS = {
+    "score-sourcing-candidate": {
+        "candidate_line_relationship_id",
+        "fund_id",
+        "sourcing_line_project_id",
+    },
+}
 TASK_SCHEDULING_SETUP_STEPS = {"schedules"}
 TASK_SCHEDULING_TYPES = {"cron", "one_off"}
 TASK_SCHEDULING_DEFAULT_REFS = {"scheduleDefaults"}
@@ -3397,6 +3407,7 @@ def validate_project_types(manifest: dict[str, Any]) -> set[str]:
 
     discovered_ids: list[str] = []
     discovered_paths: set[Path] = set()
+    project_type_versions: dict[str, str] = {}
     catalog_entries = catalog.get("projectTypes")
     if not isinstance(catalog_entries, list) or not catalog_entries:
         fail(f"{catalog_path.relative_to(ROOT)} projectTypes must be a non-empty list")
@@ -3422,6 +3433,8 @@ def validate_project_types(manifest: dict[str, Any]) -> set[str]:
             fail(f"Project type catalog references missing file {relative_project_type_path}")
         discovered_paths.add(resolved_project_type_path)
         discovered_ids.append(validate_project_type_file(resolved_project_type_path, project_type_id))
+        project_type = read_json(resolved_project_type_path)
+        project_type_versions[project_type_id] = project_type["initialVersion"]["version"]
 
     if len(discovered_ids) != len(set(discovered_ids)):
         fail("Duplicate project type IDs in catalog files")
@@ -3441,6 +3454,19 @@ def validate_project_types(manifest: dict[str, Any]) -> set[str]:
             "Project type files present on disk but missing from catalog: "
             f"{sorted(str(path.relative_to(project_type_root)) for path in extra_json_paths)}"
         )
+
+    inventory_lines = (ROOT / "alludium" / "inventory.md").read_text(
+        encoding="utf-8"
+    ).splitlines()
+    for project_type_id, version in project_type_versions.items():
+        if not any(
+            f"`{project_type_id}`" in line and f"`{version}`" in line
+            for line in inventory_lines
+        ):
+            fail(
+                f"alludium/inventory.md must list project type {project_type_id} "
+                f"at current version {version}"
+            )
 
     return set(discovered_ids)
 
@@ -5069,7 +5095,10 @@ def validate_origination_project_task_mapping_contracts(project_type_id: str) ->
             for field_key, field in task_contract["fields"]["input"].items()
             if field.get("required") is True
         }
-        missing_required_inputs = sorted(required_input_fields - mapped_input_fields)
+        reviewed_manual_inputs = REVIEWED_MANUAL_PROJECT_TASK_INPUTS.get(slug, set())
+        missing_required_inputs = sorted(
+            required_input_fields - mapped_input_fields - reviewed_manual_inputs
+        )
         if missing_required_inputs:
             fail(
                 f"Project type {project_type_id} mapping {mapping_id} is missing "
@@ -5141,6 +5170,99 @@ def validate_origination_project_task_mapping_contracts(project_type_id: str) ->
             f"Project type {project_type_id} is missing projectTaskMappings for "
             f"{missing_project_instance_mappings}"
         )
+
+    if project_type_id == "vc_origination_candidate":
+        forbidden_candidate_score_fields = {
+            "candidate_score",
+            "latest_scoring_artifact_id",
+            "review_verdict",
+            "thesis_fit_summary",
+        }
+        retained_forbidden_fields = sorted(
+            forbidden_candidate_score_fields & project_field_keys
+        )
+        if retained_forbidden_fields:
+            fail(
+                "Origination Candidate must keep Fund-relative scoring off Candidate-wide "
+                f"fields: {retained_forbidden_fields}"
+            )
+
+        score_mapping = next(
+            (
+                mapping
+                for mapping in mappings
+                if mapping.get("taskDefinitionSlug") == "score-sourcing-candidate"
+            ),
+            None,
+        )
+        if score_mapping is None:
+            fail("Origination Candidate must map score-sourcing-candidate")
+        if require_mapping_list(
+            score_mapping.get("outputMappings"),
+            "Origination Candidate score mapping outputMappings",
+        ):
+            fail(
+                "Origination Candidate score mapping must persist through verified "
+                "line-candidate relationship metadata, not Candidate-wide outputMappings"
+            )
+
+        score_task = read_yaml(
+            ROOT
+            / "alludium"
+            / "task-definition-templates"
+            / "vc-workflows"
+            / "score-sourcing-candidate.yaml"
+        )
+        score_input_fields = {
+            field.get("key"): field
+            for field in ((score_task.get("fields") or {}).get("input") or [])
+            if isinstance(field, dict) and isinstance(field.get("key"), str)
+        }
+        required_context_keys = {
+            "candidate_project_id",
+            "sourcing_line_project_id",
+            "candidate_line_relationship_id",
+            "fund_id",
+        }
+        missing_context_keys = sorted(required_context_keys - set(score_input_fields))
+        if missing_context_keys:
+            fail(
+                "Score Sourcing Candidate is missing explicit line/Fund context inputs: "
+                f"{missing_context_keys}"
+            )
+        non_required_context_keys = sorted(
+            key
+            for key in required_context_keys
+            if score_input_fields[key].get("required") is not True
+        )
+        if non_required_context_keys:
+            fail(
+                "Score Sourcing Candidate line/Fund context inputs must be required: "
+                f"{non_required_context_keys}"
+            )
+        score_instructions = (
+            (
+                ((score_task.get("definition") or {}).get("definitionJson") or {}).get(
+                    "instructions"
+                )
+                or {}
+            ).get("executionInstructions")
+            or ""
+        )
+        for required_phrase in [
+            "vc.sourcing_line_originated_candidate",
+            "project.getAgentContext",
+            "returned `fieldValues`",
+            "project-relationship.updateMetadata",
+            "scoring_by_fund[fund_id]",
+            "actively_investing",
+            "Never write these Fund-relative values to Candidate-wide project fields",
+        ]:
+            if required_phrase not in score_instructions:
+                fail(
+                    "Score Sourcing Candidate is missing line/Fund persistence rule: "
+                    f"{required_phrase}"
+                )
 
     for slug in expected_project_instance_slugs:
         for field_key, field in task_contracts[slug]["fields"]["output"].items():
