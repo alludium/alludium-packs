@@ -305,16 +305,6 @@ PROJECT_TASK_ACTIVATION_MODES = {"manual", "manual_review", "auto_start"}
 PROJECT_SCOPES = {"project_instance", "project_management"}
 DEFAULT_PROJECT_SCOPE = "project_instance"
 PROJECT_MANAGEMENT_SCOPE = "project_management"
-REVIEWED_MANUAL_PROJECT_TASK_INPUTS = {
-    "ingest-manual-sourcing-tip": {"manual_tip"},
-    "link-existing-origination-candidate": {"candidate_project_id"},
-    "promote-candidate-to-deal-pipeline": {"fund_id"},
-    "score-sourcing-candidate": {
-        "candidate_line_relationship_id",
-        "fund_id",
-        "sourcing_line_project_id",
-    },
-}
 TASK_SCHEDULING_SETUP_STEPS = {"schedules"}
 TASK_SCHEDULING_TYPES = {"cron", "one_off"}
 TASK_SCHEDULING_DEFAULT_REFS = {"scheduleDefaults"}
@@ -929,6 +919,23 @@ def validate_fund_routing_contract() -> None:
         for entry in variables
         if isinstance(entry, dict)
     }
+    inventory_text = (ROOT / "alludium" / "inventory.md").read_text(encoding="utf-8")
+    inventory_variable_section = re.search(
+        r"## Workspace Variable Declarations\n(?P<body>.*?)(?=\n## |\Z)",
+        inventory_text,
+        re.DOTALL,
+    )
+    if inventory_variable_section is None:
+        fail("VC inventory must include Workspace Variable Declarations")
+    documented_variable_keys = set(
+        re.findall(r"^- `([^`]+)`$", inventory_variable_section.group("body"), re.MULTILINE)
+    )
+    if documented_variable_keys != set(variable_by_key):
+        fail(
+            "VC inventory workspace variables must exactly match the manifest; "
+            f"documented={sorted(documented_variable_keys)}, "
+            f"declared={sorted(variable_by_key)}"
+        )
     retired_keys = {
         "vc.fundName",
         "vc.fundStage",
@@ -4642,10 +4649,9 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
     line = origination_project_types["vc_sourcing_line"]
     candidate = origination_project_types["vc_origination_candidate"]
     candidate_post_create = (candidate.get("projectCreation") or {}).get("postCreate") or {}
-    if candidate_post_create.get("triggerInitialStateTasks") is not False:
+    if candidate_post_create.get("triggerInitialStateTasks") is not True:
         fail(
-            "Origination Candidate guided creation must not rerun registration as a "
-            "post-create setup task"
+            "Origination Candidate guided creation must start the distinct initial-screen task"
         )
     line_fields = {
         field.get("key"): field
@@ -4695,6 +4701,45 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
             "Origination Candidate must derive multi-line provenance from relationships, "
             f"not owner fields: {stale_candidate_fields}"
         )
+    candidate_command_view = (candidate.get("initialVersion") or {}).get("commandView") or {}
+    if candidate_command_view.get("navigationFieldKeys") != ["candidate_key"]:
+        fail(
+            "Origination Candidate command view must allowlist only candidate_key "
+            "for server-side dedupe"
+        )
+    candidate_navigation_roles = {
+        group.get("key"): group.get("navigationRole")
+        for group in candidate_command_view.get("stageGroups") or []
+        if isinstance(group, dict)
+    }
+    if candidate_navigation_roles != {"current": "active", "history": "portfolio"}:
+        fail(
+            "Origination Candidate navigation must expose current and historical "
+            "collections for bounded dedupe"
+        )
+
+    candidate_mappings = (candidate.get("initialVersion") or {}).get(
+        "projectTaskMappings"
+    ) or []
+    candidate_mapping_by_slug = {
+        mapping.get("taskDefinitionSlug"): mapping
+        for mapping in candidate_mappings
+        if isinstance(mapping, dict)
+        and isinstance(mapping.get("taskDefinitionSlug"), str)
+    }
+    if "register-origination-candidate" in candidate_mapping_by_slug:
+        fail(
+            "Candidate registration is creation-only and must not be a post-create mapping"
+        )
+    initial_screen_mapping = candidate_mapping_by_slug.get(
+        "screen-identified-candidate"
+    )
+    if not isinstance(initial_screen_mapping, dict) or initial_screen_mapping.get(
+        "lifecycleStage"
+    ) != "identified":
+        fail(
+            "Candidate creation must map the distinct initial screen at identified"
+        )
 
     expected_relationships = {
         "vc_sourcing_line": (
@@ -4740,6 +4785,59 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
                 f"Relationship {relationship_type_key} must target "
                 f"{target_project_type_keys}"
             )
+
+    for manager_id in [
+        "vc_origination_manager",
+        "vc_sourcing_line_manager",
+        "vc_origination_candidate_manager",
+    ]:
+        manager_template = read_yaml(
+            ROOT / "alludium" / "agent-templates" / f"{manager_id}.yaml"
+        )
+        manager_tools = {
+            tool.get("name")
+            for server in (manager_template.get("mcpServers") or {}).values()
+            if isinstance(server, dict)
+            for tool in server.get("tools") or []
+            if isinstance(tool, dict)
+        }
+        missing_relationship_tools = sorted(
+            {"project-relationship.list", "project-relationship.traverse"}
+            - manager_tools
+        )
+        if missing_relationship_tools:
+            fail(
+                f"Origination manager {manager_id} cannot enumerate provenance; "
+                f"missing {missing_relationship_tools}"
+            )
+        manager_prompt = (manager_template.get("prompt") or {}).get("template") or ""
+        for required_phrase in [
+            "project-relationship.list",
+            "project-relationship.traverse",
+        ]:
+            if required_phrase not in manager_prompt:
+                fail(
+                    f"Origination manager {manager_id} prompt is missing "
+                    f"relationship-read guidance: {required_phrase}"
+                )
+
+    candidate_manager = read_yaml(
+        ROOT
+        / "alludium"
+        / "agent-templates"
+        / "vc_origination_candidate_manager.yaml"
+    )
+    candidate_manager_tools = {
+        tool.get("name")
+        for server in (candidate_manager.get("mcpServers") or {}).values()
+        if isinstance(server, dict)
+        for tool in server.get("tools") or []
+        if isinstance(tool, dict)
+    }
+    if "project.listNavigation" not in candidate_manager_tools:
+        fail(
+            "Candidate Manager must use project.listNavigation for bounded server-side dedupe"
+        )
 
     candidate_instructions = (candidate.get("initialVersion") or {}).get(
         "instructionTemplate", ""
@@ -4794,6 +4892,93 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
             fail(
                 "Sourcing Line guided creation is missing its executable Fund "
                 f"validation boundary: {required_phrase}"
+            )
+
+    line_mappings = (line.get("initialVersion") or {}).get("projectTaskMappings") or []
+    line_mapping_by_slug = {
+        mapping.get("taskDefinitionSlug"): mapping
+        for mapping in line_mappings
+        if isinstance(mapping, dict)
+        and isinstance(mapping.get("taskDefinitionSlug"), str)
+    }
+    configure_mapping = line_mapping_by_slug.get("configure-sourcing-line")
+    if not isinstance(configure_mapping, dict) or configure_mapping.get(
+        "lifecycleStage"
+    ) != "draft":
+        fail("Sourcing Line creation must select configure-sourcing-line at draft")
+    if "run-vc-sourcing-pipeline" not in line_mapping_by_slug:
+        fail("Sourcing Line must expose the reviewed run-vc-sourcing-pipeline task")
+
+    configure_line = task_contracts["configure-sourcing-line"]
+    configure_required_inputs = {
+        key
+        for key, field in configure_line["fields"]["input"].items()
+        if field.get("required") is True
+    }
+    if not {"line_name", "fund_id"}.issubset(configure_required_inputs):
+        fail("Sourcing Line configure task must require creation-seeded line_name and fund_id")
+    configure_template = read_yaml(
+        ROOT
+        / "alludium"
+        / "task-definition-templates"
+        / "vc-workflows"
+        / "configure-sourcing-line.yaml"
+    )
+    configure_instructions = (
+        (((configure_template.get("definition") or {}).get("definitionJson") or {}).get(
+            "instructions"
+        ) or {}).get("executionInstructions", "")
+    )
+    for required_phrase in [
+        "project.update",
+        "line_hypothesis",
+        "inbox_threshold",
+        "project.getAgentContext",
+        "Do not mutate",
+    ]:
+        if required_phrase not in configure_instructions:
+            fail(
+                "Sourcing Line configuration is missing guarded project persistence: "
+                f"{required_phrase}"
+            )
+
+    initial_screen = task_contracts["screen-identified-candidate"]
+    initial_screen_required_inputs = {
+        key
+        for key, field in initial_screen["fields"]["input"].items()
+        if field.get("required") is True
+    }
+    if initial_screen_required_inputs != {
+        "company_name",
+        "candidate_key",
+        "source_evidence_summary",
+    }:
+        fail(
+            "Initial Candidate screen must require exactly the fields seeded by guided creation"
+        )
+    initial_screen_template = read_yaml(
+        ROOT
+        / "alludium"
+        / "task-definition-templates"
+        / "vc-workflows"
+        / "screen-identified-candidate.yaml"
+    )
+    initial_screen_instructions = (
+        (((initial_screen_template.get("definition") or {}).get("definitionJson") or {}).get(
+            "instructions"
+        ) or {}).get("executionInstructions", "")
+    )
+    for required_phrase in [
+        "project-relationship.list",
+        "project.update",
+        "identified_screen_artifact_id",
+        "project.getAgentContext",
+        "Do not mutate",
+    ]:
+        if required_phrase not in initial_screen_instructions:
+            fail(
+                "Initial Candidate screen is missing executable persistence/provenance: "
+                f"{required_phrase}"
             )
 
     thesis_sourcing_template = read_yaml(
@@ -4915,16 +5100,16 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
             "vc_origination_candidate_manager"
         )
     for required_phrase in [
-        "project.listForCurrentWorkspace",
-        "limit",
-        "offset",
-        "project.getAgentContext",
-        "`projectId` set to that summary's `id`",
-        "projectType.key",
+        "project.listNavigation",
+        "projectTypeKey: vc_origination_candidate",
+        "collection: active",
+        "collection: portfolio",
+        "exact `candidate_key` field filter",
+        "server-side lookup",
+        "continuation cursor",
         "vc_origination_candidate",
         "candidate_key",
-        "fieldValues",
-        "Do not use `project.findById` for this dedupe check",
+        "fail closed",
         "vc.sourcing_line_originated_candidate",
         "Multiple sourcing lines",
         "Do not infer a Deal Fund",
@@ -4996,6 +5181,29 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
     if affinity_definition_json.get("recommendedAgentTemplate") != "vc_sourcing_operator":
         fail("Affinity relationship checks must run through vc_sourcing_operator")
 
+    orchestration_skill = (
+        ROOT / "skills" / "origination-pipeline-orchestration" / "SKILL.md"
+    ).read_text(encoding="utf-8")
+    for stale_phrase in [
+        "standing VC origination pipeline",
+    ]:
+        if stale_phrase in orchestration_skill:
+            fail(
+                "Origination orchestration skill retains retired singleton guidance: "
+                f"{stale_phrase}"
+            )
+    for required_phrase in [
+        "one Sourcing Line",
+        "one Fund-specific",
+        "Workspace summaries are explicitly on demand",
+        "Do not create or rely on a singleton Origination Pipeline",
+    ]:
+        if required_phrase not in orchestration_skill:
+            fail(
+                "Origination orchestration skill is missing line-scoped guidance: "
+                f"{required_phrase}"
+            )
+
     run_template = read_yaml(
         ROOT
         / "alludium"
@@ -5010,6 +5218,16 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
     )
     if "generate-sourcing-digest" in run_instructions or "and digest" in run_instructions:
         fail("The line orchestrator must not retain the retired digest child step")
+    run_input_keys = {
+        field.get("key")
+        for field in (run_template.get("fields") or {}).get("input") or []
+        if isinstance(field, dict)
+    }
+    if "fund_id" in run_input_keys:
+        fail(
+            "Sourcing Line runs must read persisted fund_id from project context, "
+            "not accept stale task-seeded Fund input"
+        )
     sourcing_operator = read_yaml(
         ROOT / "alludium" / "agent-templates" / "vc_sourcing_operator.yaml"
     )
@@ -5021,6 +5239,7 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
         if isinstance(tool, dict)
     }
     for required_tool in {
+        "project.update",
         "task-definitions.list",
         "task-definitions.findById",
         "task-management.createTaskFromDefinition",
@@ -5037,6 +5256,12 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
         "parentTaskId",
         "projectId",
         "returned task ID",
+        "task's exact project",
+        "persisted `fund_id`",
+        "project.update",
+        "last_run_status",
+        "latest_run_receipt_artifact_id",
+        "project.getAgentContext",
     ]:
         if required_phrase not in run_instructions:
             fail(
@@ -5234,83 +5459,11 @@ def validate_origination_project_task_mapping_contracts(project_type_id: str) ->
         ):
             fail(f"Project type {project_type_id} mapping {mapping_id} must not declare contextMappings")
 
-        mapped_input_fields: set[str] = set()
-        for entry in require_mapping_list(
-            mapping.get("inputMappings"),
-            f"Project type {project_type_id} mapping {mapping_id}.inputMappings",
-        ):
-            task_field = entry.get("taskField")
-            if not isinstance(task_field, str) or not task_field:
-                fail(f"Project type {project_type_id} mapping {mapping_id}.inputMappings entries must declare taskField")
-            if task_field not in task_contract["fields"]["input"]:
-                fail(
-                    f"Project type {project_type_id} mapping {mapping_id}.inputMappings.{task_field} "
-                    "references an unknown task input field"
-                )
-            mapped_input_fields.add(task_field)
-            source = entry.get("source")
-            if source not in PROJECT_TASK_MAPPING_SOURCES:
-                fail(
-                    f"Project type {project_type_id} mapping {mapping_id}.inputMappings.{task_field} "
-                    f"source must be one of {sorted(PROJECT_TASK_MAPPING_SOURCES)}"
-                )
-            source_path = entry.get("sourcePath")
-            if source == "project.field" and source_path not in project_field_keys:
-                fail(
-                    f"Project type {project_type_id} mapping {mapping_id}.inputMappings.{task_field} "
-                    f"sourcePath references unknown project field {source_path}"
-                )
-            if source == "constant" and "constantValue" not in entry:
-                fail(
-                    f"Project type {project_type_id} mapping {mapping_id}.inputMappings.{task_field} "
-                    "must declare constantValue for source constant"
-                )
-
-        required_input_fields = {
-            field_key
-            for field_key, field in task_contract["fields"]["input"].items()
-            if field.get("required") is True
-        }
-        reviewed_manual_inputs = REVIEWED_MANUAL_PROJECT_TASK_INPUTS.get(slug, set())
-        missing_required_inputs = sorted(
-            required_input_fields - mapped_input_fields - reviewed_manual_inputs
-        )
-        if missing_required_inputs:
+        if "inputMappings" in mapping or "outputMappings" in mapping:
             fail(
-                f"Project type {project_type_id} mapping {mapping_id} is missing "
-                f"required task input mappings: {missing_required_inputs}"
+                f"Project type {project_type_id} mapping {mapping_id} must be selection-only; "
+                "the current Platform does not execute project task input/output mappings"
             )
-
-        for entry in require_mapping_list(
-            mapping.get("outputMappings"),
-            f"Project type {project_type_id} mapping {mapping_id}.outputMappings",
-        ):
-            task_field = entry.get("taskField")
-            if not isinstance(task_field, str) or not task_field:
-                fail(f"Project type {project_type_id} mapping {mapping_id}.outputMappings entries must declare taskField")
-            if task_field not in task_contract["fields"]["output"]:
-                fail(
-                    f"Project type {project_type_id} mapping {mapping_id}.outputMappings.{task_field} "
-                    "references an unknown task output field"
-                )
-            target = entry.get("target")
-            if target not in PROJECT_TASK_MAPPING_TARGETS:
-                fail(
-                    f"Project type {project_type_id} mapping {mapping_id}.outputMappings.{task_field} "
-                    f"target must be one of {sorted(PROJECT_TASK_MAPPING_TARGETS)}"
-                )
-            target_path = entry.get("targetPath")
-            if target == "project.field" and target_path not in project_field_keys:
-                fail(
-                    f"Project type {project_type_id} mapping {mapping_id}.outputMappings.{task_field} "
-                    f"targetPath references unknown project field {target_path}"
-                )
-            output_field = task_contract["fields"]["output"][task_field]
-            if output_field.get("fieldType") == "json":
-                fail(
-                    f"Project type {project_type_id} mapping {mapping_id}.outputMappings.{task_field} "
-                    "must not map bulky JSON output into project data"
-                )
 
         activation_policy = mapping.get("activationPolicy")
         if not isinstance(activation_policy, dict):
@@ -5373,10 +5526,7 @@ def validate_origination_project_task_mapping_contracts(project_type_id: str) ->
         )
         if score_mapping is None:
             fail("Origination Candidate must map score-sourcing-candidate")
-        if require_mapping_list(
-            score_mapping.get("outputMappings"),
-            "Origination Candidate score mapping outputMappings",
-        ):
+        if "outputMappings" in score_mapping:
             fail(
                 "Origination Candidate score mapping must persist through verified "
                 "line-candidate relationship metadata, not Candidate-wide outputMappings"

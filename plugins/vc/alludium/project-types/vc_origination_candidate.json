@@ -55,10 +55,10 @@
       "taskDefinitionTemplateId": "vc.register_origination_candidate",
       "taskDefinitionSlug": "register-origination-candidate"
     },
-    "postCreate": {"triggerInitialStateTasks": false}
+    "postCreate": {"triggerInitialStateTasks": true}
   },
   "initialVersion": {
-    "version": "0.2.2",
+    "version": "0.2.3",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -121,6 +121,40 @@
       {"from": "promotion_ready", "to": "promoted"}, {"from": "watchlist", "to": "enriched"},
       {"from": "passed", "to": "archived"}, {"from": "promoted", "to": "archived"}
     ],
+    "commandView": {
+      "key": "vc-origination-candidate",
+      "typeLabel": "Origination Candidate",
+      "collectionLabel": "Origination Candidates",
+      "overviewTitle": "Origination Candidate overview",
+      "overviewAriaLabel": "Open origination candidate data",
+      "overviewFallback": "Review candidate identity, provenance, evidence, and the next decision.",
+      "executionTitle": "Alludium is executing",
+      "navigationFieldKeys": ["candidate_key"],
+      "stageGroups": [
+        {
+          "key": "current",
+          "label": "Current",
+          "navigationRole": "active",
+          "states": ["identified", "enriched", "qualified", "outreach_ready", "contacted", "engaged", "watchlist", "promotion_ready"]
+        },
+        {
+          "key": "history",
+          "label": "History",
+          "navigationRole": "portfolio",
+          "states": ["passed", "promoted", "archived"]
+        }
+      ],
+      "fallbackAgents": [],
+      "outputSlots": [],
+      "summaryFields": [
+        {"key": "candidate_key", "label": "Candidate key", "fieldKey": "candidate_key", "format": "text"},
+        {"key": "outbound_status", "label": "Outbound status", "fieldKey": "outbound_status", "format": "text"}
+      ],
+      "primarySummaryField": {"key": "candidate_key", "label": "Candidate key", "fieldKey": "candidate_key", "format": "text"},
+      "badgeFields": [
+        {"key": "do_not_contact", "label": "Do not contact", "fieldKey": "do_not_contact_status", "format": "text"}
+      ]
+    },
     "extensions": {
       "projectRelationships": [
         {
@@ -151,9 +185,7 @@
         "taskDefinitionTemplateId": "vc.enrich_sourcing_candidate",
         "lifecycleStage": "enriched",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "candidate_batch", "source": "project.id", "requiredForActivation": true}],
-        "outputMappings": [{"taskField": "enrichment_artifact_id", "target": "project.field", "targetPath": "latest_enrichment_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-score-candidate",
@@ -161,12 +193,7 @@
         "taskDefinitionTemplateId": "vc.score_sourcing_candidate",
         "lifecycleStage": "qualified",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [
-          {"taskField": "candidate_project_id", "source": "project.id", "requiredForActivation": true},
-          {"taskField": "enriched_candidate_batch", "source": "project.field", "sourcePath": "latest_enrichment_artifact_id", "requiredForActivation": true}
-        ],
-        "outputMappings": []
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-promote-candidate",
@@ -174,12 +201,7 @@
         "taskDefinitionTemplateId": "vc.promote_candidate_to_deal_pipeline",
         "lifecycleStage": "promotion_ready",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [
-          {"taskField": "origination_candidate_project_id", "source": "project.id", "requiredForActivation": true},
-          {"taskField": "promotion_candidate", "source": "project.id", "requiredForActivation": true}
-        ],
-        "outputMappings": [{"taskField": "promotion_package_artifact_id", "target": "project.field", "targetPath": "latest_promotion_package_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-check-relationship-context",
@@ -187,9 +209,7 @@
         "taskDefinitionTemplateId": "vc.check_affinity_relationship_context",
         "lifecycleStage": "enriched",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "relationship_check_scope", "source": "project.id", "requiredForActivation": true}],
-        "outputMappings": [{"taskField": "relationship_context_artifact_id", "target": "project.field", "targetPath": "relationship_context_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-screen-identified-candidate",
@@ -197,9 +217,7 @@
         "taskDefinitionTemplateId": "vc.screen_identified_candidate",
         "lifecycleStage": "identified",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "identified_candidate_batch", "source": "project.id", "requiredForActivation": true}],
-        "outputMappings": [{"taskField": "identified_screen_artifact_id", "target": "project.field", "targetPath": "identified_screen_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-sync-candidate",
@@ -207,9 +225,7 @@
         "taskDefinitionTemplateId": "vc.sync_sourcing_candidate",
         "lifecycleStage": "qualified",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "sync_scope", "source": "project.id", "requiredForActivation": true}],
-        "outputMappings": [{"taskField": "sync_plan_artifact_id", "target": "project.field", "targetPath": "sync_plan_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-review-portfolio-overlap",
@@ -217,9 +233,7 @@
         "taskDefinitionTemplateId": "vc.review_portfolio_overlap",
         "lifecycleStage": "qualified",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "portfolio_overlap_scope", "source": "project.id", "requiredForActivation": true}],
-        "outputMappings": [{"taskField": "portfolio_overlap_artifact_id", "target": "project.field", "targetPath": "portfolio_overlap_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-run-deal-fit-analysis",
@@ -227,9 +241,7 @@
         "taskDefinitionTemplateId": "vc.run_deal_fit_analysis",
         "lifecycleStage": "qualified",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "deal_fit_scope", "source": "project.id", "requiredForActivation": true}],
-        "outputMappings": [{"taskField": "deal_fit_artifact_id", "target": "project.field", "targetPath": "deal_fit_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-screen-active-candidate",
@@ -237,9 +249,7 @@
         "taskDefinitionTemplateId": "vc.screen_active_sourcing_candidate",
         "lifecycleStage": "qualified",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "screening_scope", "source": "project.id", "requiredForActivation": true}],
-        "outputMappings": [{"taskField": "screening_artifact_id", "target": "project.field", "targetPath": "active_screen_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-review-unicorn-signature",
@@ -247,9 +257,7 @@
         "taskDefinitionTemplateId": "vc.review_unicorn_signature",
         "lifecycleStage": "qualified",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "unicorn_signature_scope", "source": "project.id", "requiredForActivation": true}],
-        "outputMappings": [{"taskField": "unicorn_signature_artifact_id", "target": "project.field", "targetPath": "unicorn_signature_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-prepare-prospect-summary",
@@ -257,9 +265,7 @@
         "taskDefinitionTemplateId": "vc.prepare_prospect_summary",
         "lifecycleStage": "qualified",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "prospect_summary_candidate", "source": "project.id", "requiredForActivation": true}],
-        "outputMappings": [{"taskField": "prospect_summary_artifact_id", "target": "project.field", "targetPath": "latest_prospect_summary_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-prepare-outreach-draft-queue",
@@ -267,9 +273,7 @@
         "taskDefinitionTemplateId": "vc.prepare_outreach_draft_queue",
         "lifecycleStage": "outreach_ready",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "outreach_scope", "source": "project.id", "requiredForActivation": true}],
-        "outputMappings": [{"taskField": "outreach_queue_artifact_id", "target": "project.field", "targetPath": "outreach_queue_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-record-linkedin-connection-attempt",
@@ -277,9 +281,7 @@
         "taskDefinitionTemplateId": "vc.record_linkedin_connection_attempt",
         "lifecycleStage": "contacted",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "connection_attempt", "source": "project.id", "requiredForActivation": true}],
-        "outputMappings": [{"taskField": "connection_record_artifact_id", "target": "project.field", "targetPath": "connection_record_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-prepare-initial-linkedin-reachout",
@@ -287,9 +289,7 @@
         "taskDefinitionTemplateId": "vc.prepare_initial_linkedin_reachout",
         "lifecycleStage": "outreach_ready",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "initial_reachout_scope", "source": "project.id", "requiredForActivation": true}],
-        "outputMappings": [{"taskField": "initial_linkedin_reachout_artifact_id", "target": "project.field", "targetPath": "initial_reachout_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-screen-founder-connected-candidate",
@@ -297,9 +297,7 @@
         "taskDefinitionTemplateId": "vc.screen_founder_connected_candidate",
         "lifecycleStage": "engaged",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "founder_connection_context", "source": "project.field", "sourcePath": "connection_record_artifact_id", "requiredForActivation": true}],
-        "outputMappings": [{"taskField": "founder_connected_screen_artifact_id", "target": "project.field", "targetPath": "founder_connected_screen_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-prepare-second-reachout-email",
@@ -307,9 +305,7 @@
         "taskDefinitionTemplateId": "vc.prepare_second_reachout_email",
         "lifecycleStage": "contacted",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "second_reachout_scope", "source": "project.id", "requiredForActivation": true}],
-        "outputMappings": [{"taskField": "second_reachout_email_artifact_id", "target": "project.field", "targetPath": "second_reachout_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-review-outreach-outcome",
@@ -317,9 +313,7 @@
         "taskDefinitionTemplateId": "vc.review_outreach_outcome",
         "lifecycleStage": "engaged",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "outreach_state", "source": "project.id", "requiredForActivation": true}],
-        "outputMappings": [{"taskField": "outreach_outcome_artifact_id", "target": "project.field", "targetPath": "outreach_outcome_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       }
     ]
   }

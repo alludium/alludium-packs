@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.configure_sourcing_line
-version: 0.2.0
+version: 0.2.1
 title: Configure Sourcing Line
 category: Venture Capital
 visibility: workspace
@@ -34,7 +34,7 @@ definition:
     supportedProjectScopes:
     - project_instance
     instructions:
-      executionInstructions: 'Resolve `fund_id` by exact stable-ID equality against one active record in `vc.funds`, then use only that Fund mandate. Shape one measurable sourcing experiment: registered sources, query or screen, evidence requirements, cadence, timezone, cursor/window, result limit, budget, Inbox threshold, review policy, outreach boundary, success measures, review date, and retirement condition. Do not require an Origination Pipeline hub or copy hub registry, counts, health caches, or digest configuration into the line. Leave schedules disabled until separately approved. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries.'
+      executionInstructions: 'Resolve `fund_id` by exact stable-ID equality against one active record in `vc.funds`, then use only that Fund mandate. Shape one measurable sourcing experiment: registered sources, query or screen, evidence requirements, cadence, timezone, cursor/window, result limit, budget, Inbox threshold, review policy, outreach boundary, success measures, review date, and retirement condition. Do not require an Origination Pipeline hub or copy hub registry, counts, health caches, or digest configuration into the line. Leave schedules disabled until separately approved. After the user explicitly approves the complete configuration, call `project.update` for the task''s exact Sourcing Line project with typed field values for `line_hypothesis`, `source_keys`, `screen_definition`, `cadence_policy`, `review_policy`, `outreach_policy`, `success_metrics`, `result_limit`, `budget_limit`, `timezone`, `review_date`, `retirement_condition`, and `inbox_threshold`. Do not mutate on missing inputs, rejected approval, or a failed update. Re-read the exact project with `project.getAgentContext` and complete only when every approved value is persisted; the task output alone is not project state. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries.'
       missingInputPolicy: Keep setup incomplete until an active Fund, line hypothesis, source mix, screen, cadence, budget posture, review policy, and outreach boundary are explicit.
       externalActionPolicy: Configuration only. Do not read paid sources, enable schedules, create candidates, write external systems, or send outreach.
       humanConfirmationPolicy: always

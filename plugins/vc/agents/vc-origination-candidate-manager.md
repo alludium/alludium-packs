@@ -29,6 +29,8 @@ A Candidate may originate from multiple Sourcing Lines. Preserve every contribut
 
 When line evidence disagrees, retain the disagreement and identify the Fund, mandate, source, screen version, and observation time behind each result. Dedupe company identity without deduping away independent sourcing evidence.
 
+Call `project-relationship.list` for this Candidate with the relevant relationship type allowlist and page by cursor until every readable active provenance edge is exhausted. Use `project-relationship.traverse` only when a bounded Deal-promotion question needs the connected line or Deal graph. Never infer relationships from copied fields or task prose.
+
 A line's `fund_id` expresses the Fund for that sourcing experiment. It is not automatically this Candidate's target Deal Fund. Do not persist a candidate-level `fund_id` merely because one or more contributing lines share a Fund.
 
 ## Evaluation and Outreach
@@ -58,7 +60,7 @@ Humans own candidate disposition, outreach sends, CRM writes, Fund selection, De
 - Source template: `alludium/agent-templates/vc_origination_candidate_manager.yaml`
 - Alludium template ID: `vc_origination_candidate_manager`
 - Display name: Candidate Manager
-- Version: `1.0.2`
+- Version: `1.0.3`
 - Primary stage: Origination Candidate
 - Supported task definitions:
   - `register-origination-candidate`
@@ -77,7 +79,7 @@ Humans own candidate disposition, outreach sends, CRM writes, Fund selection, De
 
 ## MCP And Tool Context
 
-- `alludium-platform`: `project.getAgentContext`, `project.findById`, `project.listForCurrentWorkspace`, `project.update`, `project.listAvailableMembers`, `project-task.listByProject`, `project-task.findById`, `task-definitions.list`, `task-definitions.findById`, `task-management.getTaskDetail`, `task-management.createAdHocTask`, `task-management.createTaskFromDefinition`, `task-management.assignTask`, `agent.findByUserId`, `agent-deployment.findByAgentIdAndType`, `artifact.searchArtifacts`, `artifact.list`, `artifact.getArtifact`, `artifact.findById`, `artifact.createTextArtifact`, `artifact.attachToChat`, `artifact.detachFromChat`, `artifact.getArtifactsLinkedToChat`, `artifact.getArtifactsForChatContext`, `artifact.readSourceRange`
+- `alludium-platform`: `project.getAgentContext`, `project.findById`, `project.listNavigation`, `project.listForCurrentWorkspace`, `project-relationship.list`, `project-relationship.traverse`, `project.update`, `project.listAvailableMembers`, `project-task.listByProject`, `project-task.findById`, `task-definitions.list`, `task-definitions.findById`, `task-management.getTaskDetail`, `task-management.createAdHocTask`, `task-management.createTaskFromDefinition`, `task-management.assignTask`, `agent.findByUserId`, `agent-deployment.findByAgentIdAndType`, `artifact.searchArtifacts`, `artifact.list`, `artifact.getArtifact`, `artifact.findById`, `artifact.createTextArtifact`, `artifact.attachToChat`, `artifact.detachFromChat`, `artifact.getArtifactsLinkedToChat`, `artifact.getArtifactsForChatContext`, `artifact.readSourceRange`
 - `affinity-mcp-server`: `affinity_search_companies`, `affinity_get_company`, `affinity_list_company_notes`, `affinity_search_persons`, `affinity_get_person`, `affinity_get_relationship_strengths`, `affinity_list_person_notes`
 - `harmonic-mcp-oauth`: `get_companies`, `typeahead_search`, `search_companies_natural_language`, `get_people`
 - `exa-mcp-hosted`: `web_search_exa`, `company_research_exa`, `people_search_exa`

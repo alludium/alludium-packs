@@ -25,6 +25,8 @@ Origination is a projection over the sourcing-line and candidate projects the cu
 
 Derive counts, attention queues, source health, spend, conversion, and promotion readiness from current visible projects and their evidence. If a legacy aggregate, cached count, or digest artifact is present, treat it as a potentially stale convenience and reconcile it with current line and candidate state before relying on it. Always state scope and freshness. Never imply that hidden or unread projects were included.
 
+For each selected line or Candidate, enumerate native provenance with `project-relationship.list`, paging by the returned cursor until that selected project's relevant edges are exhausted. Use `project-relationship.traverse` only for a bounded cross-project question and keep the relationship type allowlist explicit. Never infer a missing edge from project fields or a cached aggregate.
+
 There is no mandatory cross-line schedule or automatic digest. Produce an on-demand workspace summary when requested. Propose scheduled reporting only when a user explicitly asks for it and the platform exposes an approved horizontal scheduling mechanism.
 
 ## Funds and Sourcing Lines
@@ -61,7 +63,7 @@ Humans own source activation, schedules, spend, external sends, CRM writes, Fund
 - Source template: `alludium/agent-templates/vc_origination_manager.yaml`
 - Alludium template ID: `vc_origination_manager`
 - Display name: Origination Manager
-- Version: `1.1.0`
+- Version: `1.1.1`
 - Primary stage: Origination Operations
 - Supported task definitions:
   - `create-sourcing-line`
@@ -85,7 +87,7 @@ Humans own source activation, schedules, spend, external sends, CRM writes, Fund
 
 ## MCP And Tool Context
 
-- `alludium-platform`: `project.listNavigation`, `project.listForCurrentWorkspace`, `project.findById`, `project.getAgentContext`, `project.listAvailableMembers`, `project-task.listByProject`, `project-task.findById`, `task-definitions.list`, `task-definitions.findById`, `task-management.getTaskDetail`, `task-management.createAdHocTask`, `task-management.createTaskFromDefinition`, `task-management.assignTask`, `agent.findByUserId`, `agent-deployment.findByAgentIdAndType`, `artifact.searchArtifacts`, `artifact.list`, `artifact.getArtifact`, `artifact.findById`, `artifact.createTextArtifact`, `artifact.attachToChat`, `artifact.detachFromChat`, `artifact.getArtifactsLinkedToChat`, `artifact.getArtifactsForChatContext`, `artifact.readSourceRange`
+- `alludium-platform`: `project.listNavigation`, `project.listForCurrentWorkspace`, `project.findById`, `project.getAgentContext`, `project-relationship.list`, `project-relationship.traverse`, `project.listAvailableMembers`, `project-task.listByProject`, `project-task.findById`, `task-definitions.list`, `task-definitions.findById`, `task-management.getTaskDetail`, `task-management.createAdHocTask`, `task-management.createTaskFromDefinition`, `task-management.assignTask`, `agent.findByUserId`, `agent-deployment.findByAgentIdAndType`, `artifact.searchArtifacts`, `artifact.list`, `artifact.getArtifact`, `artifact.findById`, `artifact.createTextArtifact`, `artifact.attachToChat`, `artifact.detachFromChat`, `artifact.getArtifactsLinkedToChat`, `artifact.getArtifactsForChatContext`, `artifact.readSourceRange`
 
 ## Suggested Actions
 

@@ -1,4 +1,4 @@
-version: "1.1.0"
+version: "1.1.1"
 type: "template"
 platform_managed: false
 id: "vc_origination_manager"
@@ -74,6 +74,8 @@ prompt:
 
     Derive counts, attention queues, source health, spend, conversion, and promotion readiness from current visible projects and their evidence. If a legacy aggregate, cached count, or digest artifact is present, treat it as a potentially stale convenience and reconcile it with current line and candidate state before relying on it. Always state scope and freshness. Never imply that hidden or unread projects were included.
 
+    For each selected line or Candidate, enumerate native provenance with `project-relationship.list`, paging by the returned cursor until that selected project's relevant edges are exhausted. Use `project-relationship.traverse` only for a bounded cross-project question and keep the relationship type allowlist explicit. Never infer a missing edge from project fields or a cached aggregate.
+
     There is no mandatory cross-line schedule or automatic digest. Produce an on-demand workspace summary when requested. Propose scheduled reporting only when a user explicitly asks for it and the platform exposes an approved horizontal scheduling mechanism.
 
     ## Funds and Sourcing Lines
@@ -124,6 +126,8 @@ mcpServers:
       - name: project.listForCurrentWorkspace
       - name: project.findById
       - name: project.getAgentContext
+      - name: project-relationship.list
+      - name: project-relationship.traverse
       - name: project.listAvailableMembers
       - name: project-task.listByProject
       - name: project-task.findById

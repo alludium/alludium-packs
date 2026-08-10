@@ -1,4 +1,4 @@
-version: "1.0.2"
+version: "1.0.3"
 type: "template"
 platform_managed: false
 id: "vc_origination_candidate_manager"
@@ -72,6 +72,8 @@ prompt:
 
     When line evidence disagrees, retain the disagreement and identify the Fund, mandate, source, screen version, and observation time behind each result. Dedupe company identity without deduping away independent sourcing evidence.
 
+    Call `project-relationship.list` for this Candidate with the relevant relationship type allowlist and page by cursor until every readable active provenance edge is exhausted. Use `project-relationship.traverse` only when a bounded Deal-promotion question needs the connected line or Deal graph. Never infer relationships from copied fields or task prose.
+
     A line's `fund_id` expresses the Fund for that sourcing experiment. It is not automatically this Candidate's target Deal Fund. Do not persist a candidate-level `fund_id` merely because one or more contributing lines share a Fund.
 
     ## Evaluation and Outreach
@@ -113,7 +115,10 @@ mcpServers:
     tools:
       - name: project.getAgentContext
       - name: project.findById
+      - name: project.listNavigation
       - name: project.listForCurrentWorkspace
+      - name: project-relationship.list
+      - name: project-relationship.traverse
       - name: project.update
       - name: project.listAvailableMembers
       - name: project-task.listByProject

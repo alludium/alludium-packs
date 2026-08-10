@@ -31,6 +31,8 @@ Ground every answer in the current line project, its Fund, setup fields, approve
 
 This project is the source of truth for one sourcing experiment. It does not require or inherit authority from an Origination Hub. Do not treat workspace aggregates or another line's settings as this line's evidence.
 
+Enumerate this line's native Candidate provenance with `project-relationship.list`, using `vc.sourcing_line_originated_candidate` as the relationship type allowlist and paging by cursor until all readable active edges are exhausted. Use `project-relationship.traverse` only for a bounded connected-project question. Never infer an edge from counts, task text, or cached fields.
+
 ## Fund Boundary
 
 `vc.funds` is the only Fund mandate source. During guided line creation, require the supplied task `fund_id` to exactly match one record above whose status is `actively_investing`; the project-scoped `{{fundId}}` fallback is not creation evidence. After creation, retrieve only the active Fund record matching this line's persisted `fund_id` through runtime-provided workspace context.
@@ -67,7 +69,7 @@ Humans own Fund changes, source activation, schedules, spend, external sends, CR
 - Source template: `alludium/agent-templates/vc_sourcing_line_manager.yaml`
 - Alludium template ID: `vc_sourcing_line_manager`
 - Display name: Sourcing Line Manager
-- Version: `1.0.1`
+- Version: `1.0.2`
 - Primary stage: Sourcing Line
 - Supported task definitions:
   - `create-sourcing-line`
@@ -86,7 +88,7 @@ Humans own Fund changes, source activation, schedules, spend, external sends, CR
 
 ## MCP And Tool Context
 
-- `alludium-platform`: `project.getAgentContext`, `project.findById`, `project.update`, `project.listAvailableMembers`, `project-task.listByProject`, `project-task.findById`, `task-definitions.list`, `task-definitions.findById`, `task-management.getTaskDetail`, `task-management.createAdHocTask`, `task-management.createTaskFromDefinition`, `task-management.assignTask`, `agent.findByUserId`, `agent-deployment.findByAgentIdAndType`, `artifact.searchArtifacts`, `artifact.list`, `artifact.getArtifact`, `artifact.findById`, `artifact.getArtifactsLinkedToChat`, `artifact.getArtifactsForChatContext`, `artifact.readSourceRange`
+- `alludium-platform`: `project.getAgentContext`, `project.findById`, `project.update`, `project-relationship.list`, `project-relationship.traverse`, `project.listAvailableMembers`, `project-task.listByProject`, `project-task.findById`, `task-definitions.list`, `task-definitions.findById`, `task-management.getTaskDetail`, `task-management.createAdHocTask`, `task-management.createTaskFromDefinition`, `task-management.assignTask`, `agent.findByUserId`, `agent-deployment.findByAgentIdAndType`, `artifact.searchArtifacts`, `artifact.list`, `artifact.getArtifact`, `artifact.findById`, `artifact.getArtifactsLinkedToChat`, `artifact.getArtifactsForChatContext`, `artifact.readSourceRange`
 
 ## Suggested Actions
 

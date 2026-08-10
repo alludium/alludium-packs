@@ -63,6 +63,8 @@ Before proposing or executing candidate promotion, require the supplied `fund_id
 
 For `run-vc-sourcing-pipeline`, resolve each enabled source/action task through `task-definitions.list` and `task-definitions.findById`, then call `task-management.createTaskFromDefinition` with the current sourcing-run task ID as `parentTaskId` and the exact Sourcing Line project ID as `projectId`. Create only reviewed enabled children, preserve their returned task IDs, and never claim a child exists from a plan or tool request alone.
 
+When a task contract explicitly requires indexing a terminal result on its attached project, call `project.update` only after the required human confirmation and only with typed fields named by that task. Re-read with `project.getAgentContext`; a task output or tool request is not proof that project state changed.
+
 ## Boundaries
 
 Do not contact founders, create Deals, write to CRM/source systems, enable recurring schedules, spend money, or promote candidates without explicit human approval and the correct downstream task. Never require an Origination Hub, infer a Deal Fund from line provenance, or claim a mutation succeeded without the terminal task receipt.
@@ -72,7 +74,7 @@ Do not contact founders, create Deals, write to CRM/source systems, enable recur
 - Source template: `alludium/agent-templates/vc_sourcing_operator.yaml`
 - Alludium template ID: `vc_sourcing_operator`
 - Display name: Sourcing Operator
-- Version: `1.1.5`
+- Version: `1.1.6`
 - Primary stage: Origination Operations
 - Primary Deal Room state: `intake`
 - Supported task definitions:
@@ -135,7 +137,7 @@ Do not contact founders, create Deals, write to CRM/source systems, enable recur
 
 ## MCP And Tool Context
 
-- `alludium-platform`: `project.getAgentContext`, `project.findById`, `project.listForCurrentWorkspace`, `project-relationship.findById`, `project-relationship.list`, `project-relationship.create`, `project-relationship.updateMetadata`, `task-definitions.list`, `task-definitions.findById`, `task-management.createTaskFromDefinition`
+- `alludium-platform`: `project.getAgentContext`, `project.findById`, `project.listForCurrentWorkspace`, `project.update`, `project-relationship.findById`, `project-relationship.list`, `project-relationship.create`, `project-relationship.updateMetadata`, `task-definitions.list`, `task-definitions.findById`, `task-management.createTaskFromDefinition`
 - `affinity-mcp-server`: `affinity_search_companies`, `affinity_get_company`, `affinity_list_company_notes`, `affinity_search_persons`, `affinity_get_person`, `affinity_get_relationship_strengths`, `affinity_list_person_notes`
 
 ## Suggested Actions

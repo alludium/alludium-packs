@@ -21,12 +21,12 @@ Run a lightweight first-pass fit screen on newly identified origination candidat
 
 ## What To Do
 
-Screen newly identified candidates with the lightest useful evidence set: source receipt, normalized identity, stage/geography fit, obvious hard exclusions, basic AI/native software signal, founder signal, and duplicate/known-relationship status. This is not the full active-candidate screen; recommend only prioritize for outreach, watchlist, or pass, and list what must be enriched before outreach.
+Screen the task's exact newly registered Candidate using the supplied company name, candidate key, and source evidence summary, then read every active incoming `vc.sourcing_line_originated_candidate` edge with `project-relationship.list` before drawing a provenance conclusion. Screen with the lightest useful evidence set: source receipt, normalized identity, stage/geography fit, obvious hard exclusions, basic AI/native software signal, founder signal, and duplicate/known-relationship status. This is not the full active-candidate screen; recommend only prioritize for outreach, watchlist, or pass, and list what must be enriched before outreach. After the user approves completion, call `project.update` for the exact Candidate with the platform-returned artifact ID in identified screen artifact, then re-read it through `project.getAgentContext`. Do not mutate on missing inputs, rejected approval, or an unverified artifact ID, and do not claim the screen is indexed until the read confirms the persisted value.
 
 ## Available Context
 
 - Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
-- Especially look for: Identified Candidate Batch, First-Pass Screen Policy.
+- Especially look for: Company Name, Candidate Dedupe Key, Source Evidence Summary, First-Pass Screen Policy.
 - If a named input is absent, follow the missing-input policy rather than inventing facts.
 
 ## Reference Materials
@@ -43,7 +43,7 @@ Screen newly identified candidates with the lightest useful evidence set: source
 
 ## Missing Input Policy
 
-Ask for the identified candidate batch, source receipts, thesis policy, hard exclusions, and dedupe state before screening.
+Ask for the registered company name, stable candidate key, source evidence, sourcing-line relationships, thesis policy, hard exclusions, and dedupe state before screening.
 
 ## Guardrails
 

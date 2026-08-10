@@ -99,7 +99,7 @@
     "postCreate": {"triggerInitialStateTasks": true}
   },
   "initialVersion": {
-    "version": "0.2.3",
+    "version": "0.2.4",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -259,27 +259,7 @@
         "taskDefinitionTemplateId": "vc.configure_sourcing_line",
         "lifecycleStage": "draft",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [
-          {"taskField": "line_name", "source": "project.field", "sourcePath": "line_name", "requiredForActivation": true},
-          {"taskField": "fund_id", "source": "project.field", "sourcePath": "fund_id", "requiredForActivation": true},
-          {"taskField": "starter_template_key", "source": "project.field", "sourcePath": "starter_template_key", "requiredForActivation": false}
-        ],
-        "outputMappings": [
-          {"taskField": "line_hypothesis", "target": "project.field", "targetPath": "line_hypothesis"},
-          {"taskField": "source_keys", "target": "project.field", "targetPath": "source_keys"},
-          {"taskField": "screen_definition", "target": "project.field", "targetPath": "screen_definition"},
-          {"taskField": "cadence_policy", "target": "project.field", "targetPath": "cadence_policy"},
-          {"taskField": "review_policy", "target": "project.field", "targetPath": "review_policy"},
-          {"taskField": "outreach_policy", "target": "project.field", "targetPath": "outreach_policy"},
-          {"taskField": "success_metrics", "target": "project.field", "targetPath": "success_metrics"},
-          {"taskField": "result_limit", "target": "project.field", "targetPath": "result_limit"},
-          {"taskField": "budget_limit", "target": "project.field", "targetPath": "budget_limit"},
-          {"taskField": "timezone", "target": "project.field", "targetPath": "timezone"},
-          {"taskField": "review_date", "target": "project.field", "targetPath": "review_date"},
-          {"taskField": "retirement_condition", "target": "project.field", "targetPath": "retirement_condition"},
-          {"taskField": "inbox_threshold", "target": "project.field", "targetPath": "inbox_threshold"}
-        ]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-link-existing-candidate",
@@ -287,11 +267,7 @@
         "taskDefinitionTemplateId": "vc.link_existing_origination_candidate",
         "lifecycleStage": "active",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [
-          {"taskField": "sourcing_line_project_id", "source": "project.id", "requiredForActivation": true}
-        ],
-        "outputMappings": []
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-run-sourcing-line",
@@ -299,19 +275,7 @@
         "taskDefinitionTemplateId": "vc.run_vc_sourcing_pipeline",
         "lifecycleStage": "active",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [
-          {"taskField": "sourcing_run_scope", "source": "project.id", "requiredForActivation": true},
-          {"taskField": "fund_id", "source": "project.field", "sourcePath": "fund_id", "requiredForActivation": true}
-        ],
-        "outputMappings": [
-          {"taskField": "run_status", "target": "project.field", "targetPath": "last_run_status"},
-          {"taskField": "new_candidates_count", "target": "project.field", "targetPath": "new_candidates_last_run"},
-          {"taskField": "run_completed_at", "target": "project.field", "targetPath": "last_run_at"},
-          {"taskField": "run_receipt_artifact_id", "target": "project.field", "targetPath": "latest_run_receipt_artifact_id"},
-          {"taskField": "candidate_batch_artifact_id", "target": "project.field", "targetPath": "latest_candidate_batch_artifact_id"},
-          {"taskField": "source_state_artifact_id", "target": "project.field", "targetPath": "latest_source_state_artifact_id"}
-        ]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-review-line-source-health",
@@ -319,12 +283,7 @@
         "taskDefinitionTemplateId": "vc.review_source_errors_and_spend",
         "lifecycleStage": "degraded",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "source_health_scope", "source": "project.field", "sourcePath": "latest_run_receipt_artifact_id", "requiredForActivation": true}],
-        "outputMappings": [
-          {"taskField": "source_health_artifact_id", "target": "project.field", "targetPath": "latest_source_health_artifact_id"},
-          {"taskField": "source_health_status", "target": "project.field", "targetPath": "source_health_status"}
-        ]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-discover-companies-house-candidates",
@@ -332,9 +291,7 @@
         "taskDefinitionTemplateId": "vc.discover_companies_house_candidates",
         "lifecycleStage": "active",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "companies_house_discovery_scope", "source": "project.id", "requiredForActivation": true}],
-        "outputMappings": [{"taskField": "companies_house_discovery_artifact_id", "target": "project.field", "targetPath": "latest_companies_house_discovery_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-discover-linkedin-founder-candidates",
@@ -342,9 +299,7 @@
         "taskDefinitionTemplateId": "vc.discover_linkedin_founder_candidates",
         "lifecycleStage": "active",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "linkedin_discovery_scope", "source": "project.id", "requiredForActivation": true}],
-        "outputMappings": [{"taskField": "linkedin_discovery_artifact_id", "target": "project.field", "targetPath": "latest_linkedin_discovery_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-discover-x-founder-signals",
@@ -352,9 +307,7 @@
         "taskDefinitionTemplateId": "vc.discover_x_founder_signals",
         "lifecycleStage": "active",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "x_discovery_scope", "source": "project.id", "requiredForActivation": true}],
-        "outputMappings": [{"taskField": "x_founder_discovery_artifact_id", "target": "project.field", "targetPath": "latest_x_founder_discovery_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-discover-github-builder-signals",
@@ -362,9 +315,7 @@
         "taskDefinitionTemplateId": "vc.discover_github_builder_signals",
         "lifecycleStage": "active",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "github_discovery_scope", "source": "project.id", "requiredForActivation": true}],
-        "outputMappings": [{"taskField": "github_discovery_artifact_id", "target": "project.field", "targetPath": "latest_github_discovery_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-discover-reddit-builder-signals",
@@ -372,9 +323,7 @@
         "taskDefinitionTemplateId": "vc.discover_reddit_builder_signals",
         "lifecycleStage": "active",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "reddit_discovery_scope", "source": "project.id", "requiredForActivation": true}],
-        "outputMappings": [{"taskField": "reddit_discovery_artifact_id", "target": "project.field", "targetPath": "latest_reddit_discovery_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-ingest-manual-sourcing-tip",
@@ -382,9 +331,7 @@
         "taskDefinitionTemplateId": "vc.ingest_manual_sourcing_tip",
         "lifecycleStage": "active",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [],
-        "outputMappings": [{"taskField": "manual_tip_ingestion_artifact_id", "target": "project.field", "targetPath": "latest_manual_tip_ingestion_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-review-reddit-candidate-inbox",
@@ -392,9 +339,7 @@
         "taskDefinitionTemplateId": "vc.review_reddit_candidate_inbox",
         "lifecycleStage": "active",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "reddit_inbox_scope", "source": "project.id", "requiredForActivation": true}],
-        "outputMappings": [{"taskField": "reddit_inbox_review_artifact_id", "target": "project.field", "targetPath": "latest_reddit_inbox_review_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-audit-linkedin-query-spend",
@@ -402,9 +347,7 @@
         "taskDefinitionTemplateId": "vc.audit_linkedin_query_spend",
         "lifecycleStage": "active",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [{"taskField": "spend_audit_scope", "source": "project.id", "requiredForActivation": true}],
-        "outputMappings": [{"taskField": "linkedin_spend_audit_artifact_id", "target": "project.field", "targetPath": "latest_linkedin_spend_audit_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       },
       {
         "id": "mapping-source-thesis-targets",
@@ -412,12 +355,7 @@
         "taskDefinitionTemplateId": "vc.source_thesis_targets",
         "lifecycleStage": "active",
         "projectScope": "project_instance",
-        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false},
-        "inputMappings": [
-          {"taskField": "thesis_area", "source": "project.field", "sourcePath": "line_hypothesis", "requiredForActivation": true},
-          {"taskField": "fund_id", "source": "project.field", "sourcePath": "fund_id", "requiredForActivation": true}
-        ],
-        "outputMappings": [{"taskField": "thesis_target_list_artifact_id", "target": "project.field", "targetPath": "latest_thesis_target_list_artifact_id"}]
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
       }
     ]
   }
