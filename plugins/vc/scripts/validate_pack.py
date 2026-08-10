@@ -247,6 +247,7 @@ DOCUMENT_REF_STRUCTURED_ARTIFACT_OUTPUT_FIELDS = {
     "sync_plan_artifact_id",
 }
 ONTOLOGY_COMPONENT_CONTRACT = "alludium-kmc-ontology-composition-v1"
+ONTOLOGY_COMPONENT_API_VERSION = "alludium/v1alpha1"
 ONTOLOGY_COMPONENT_KINDS = {"constraints", "mapping", "ontology", "profile", "projection"}
 ONTOLOGY_COMPONENT_LIFECYCLES = {"active", "deprecated", "retired"}
 ONTOLOGY_COMPONENT_STAGES = ("ingestion", "learning", "query", "evaluation")
@@ -4615,11 +4616,26 @@ def _require_string_set(value: Any, *, context: str) -> set[str]:
     return set(value)
 
 
+def _require_exact_keys(value: dict[str, Any], expected: set[str], *, context: str) -> None:
+    actual = set(value)
+    if actual != expected:
+        fail(
+            f"{context} keys must be exact; missing={sorted(expected - actual)}, "
+            f"unexpected={sorted(actual - expected)}"
+        )
+
+
 def _reject_unpinned_ontology_values(value: Any, *, context: str) -> None:
     if isinstance(value, dict):
         for key, nested in value.items():
-            if isinstance(key, str) and key.lower() in {"prompt", "credentials", "secret"}:
-                fail(f"{context} must not embed {key}")
+            if isinstance(key, str):
+                normalized_key = re.sub(r"[^a-z0-9]", "", key.casefold())
+                if (
+                    "prompt" in normalized_key
+                    or "credential" in normalized_key
+                    or normalized_key.endswith(("apikey", "password", "secret", "token"))
+                ):
+                    fail(f"{context} must not embed runtime control {key}")
             _reject_unpinned_ontology_values(nested, context=context)
     elif isinstance(value, list):
         for nested in value:
@@ -4753,6 +4769,13 @@ def validate_ontology_components(manifest: dict[str, Any]) -> set[str]:
         context="ontologyComponents catalog",
     )
     catalog = _read_canonical_json(catalog_path)
+    _require_exact_keys(
+        catalog,
+        {"apiVersion", "consumerContract", "kind", "packages", "release"},
+        context="Ontology component catalog",
+    )
+    if catalog.get("apiVersion") != ONTOLOGY_COMPONENT_API_VERSION:
+        fail(f"Ontology component catalog must use {ONTOLOGY_COMPONENT_API_VERSION}")
     if catalog.get("kind") != "ontology-component-catalog":
         fail("Ontology component catalog kind must be ontology-component-catalog")
     if catalog.get("consumerContract") != ONTOLOGY_COMPONENT_CONTRACT:
@@ -4784,6 +4807,13 @@ def validate_ontology_components(manifest: dict[str, Any]) -> set[str]:
         fail("Manifest ontologyComponents.ids must exactly match the catalog")
 
     for package_ref in package_refs:
+        if not isinstance(package_ref, dict):
+            fail("Ontology component package reference must be an object")
+        _require_exact_keys(
+            package_ref,
+            {"id", "lifecycle", "path", "sha256", "version"},
+            context="Ontology component package reference",
+        )
         package_id = package_ref["id"]
         package_path = _require_ontology_path(
             component_root,
@@ -4793,6 +4823,27 @@ def validate_ontology_components(manifest: dict[str, Any]) -> set[str]:
         if package_ref.get("sha256") != _sha256(package_path):
             fail(f"Ontology component package {package_id} hash drift")
         package = _read_canonical_json(package_path)
+        _require_exact_keys(
+            package,
+            {
+                "apiVersion",
+                "compatibility",
+                "components",
+                "consumerContract",
+                "id",
+                "kind",
+                "lifecycle",
+                "release",
+                "stageBindings",
+                "version",
+            },
+            context=f"Ontology component package {package_id}",
+        )
+        if package.get("apiVersion") != ONTOLOGY_COMPONENT_API_VERSION:
+            fail(
+                f"Ontology component package {package_id} must use "
+                f"{ONTOLOGY_COMPONENT_API_VERSION}"
+            )
         if package.get("kind") != "ontology-component-package":
             fail(f"Ontology component package {package_id} has the wrong kind")
         if package.get("consumerContract") != ONTOLOGY_COMPONENT_CONTRACT:
@@ -4820,6 +4871,24 @@ def validate_ontology_components(manifest: dict[str, Any]) -> set[str]:
         refs_by_id = {item["id"]: item for item in component_refs}
         components_by_kind: dict[str, dict[str, Any]] = {}
         for component_ref in component_refs:
+            if not isinstance(component_ref, dict):
+                fail(f"Ontology component package {package_id} references must be objects")
+            _require_exact_keys(
+                component_ref,
+                {
+                    "allowedPurposes",
+                    "allowedStages",
+                    "dependencies",
+                    "id",
+                    "kind",
+                    "lifecycle",
+                    "path",
+                    "releaseProvenance",
+                    "sha256",
+                    "version",
+                },
+                context=f"Ontology component reference in {package_id}",
+            )
             component_id = component_ref["id"]
             kind = component_ref.get("kind")
             if kind not in ONTOLOGY_COMPONENT_KINDS or kind in components_by_kind:
@@ -4850,6 +4919,20 @@ def validate_ontology_components(manifest: dict[str, Any]) -> set[str]:
             if component_ref.get("sha256") != _sha256(component_path):
                 fail(f"Ontology component {component_id} hash drift")
             component = _read_canonical_json(component_path)
+            _require_exact_keys(
+                component,
+                {"apiVersion", "content", "id", "kind", "lifecycle", "version"},
+                context=f"Ontology component {component_id}",
+            )
+            if component.get("apiVersion") != ONTOLOGY_COMPONENT_API_VERSION:
+                fail(
+                    f"Ontology component {component_id} must use "
+                    f"{ONTOLOGY_COMPONENT_API_VERSION}"
+                )
+            _reject_unpinned_ontology_values(
+                component,
+                context=f"Ontology component {component_id}",
+            )
             for field_name in ("id", "version", "kind", "lifecycle"):
                 if component.get(field_name) != component_ref.get(field_name):
                     fail(f"Ontology component {component_id} {field_name} does not match reference")
@@ -4868,6 +4951,11 @@ def validate_ontology_components(manifest: dict[str, Any]) -> set[str]:
             for dependency in dependencies:
                 if not isinstance(dependency, dict):
                     fail(f"Ontology component {component_id} dependency must be an object")
+                _require_exact_keys(
+                    dependency,
+                    {"id", "sha256", "version"},
+                    context=f"Ontology component {component_id} dependency",
+                )
                 dependency_id = dependency.get("id")
                 declared = refs_by_id.get(dependency_id)
                 if declared is None:
@@ -4909,6 +4997,13 @@ def validate_ontology_components(manifest: dict[str, Any]) -> set[str]:
         ):
             fail(f"Ontology component package {package_id} must bind every supported stage once")
         for binding in stage_bindings:
+            if not isinstance(binding, dict):
+                fail(f"Ontology component package {package_id} stage binding must be an object")
+            _require_exact_keys(
+                binding,
+                {"componentIds", "purpose", "stage"},
+                context=f"Ontology component package {package_id} stage binding",
+            )
             stage = binding["stage"]
             if binding.get("purpose") != stage:
                 fail(f"Ontology component package {package_id} stage purpose must be explicit")
