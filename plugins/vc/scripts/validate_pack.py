@@ -5286,10 +5286,47 @@ def validate_origination_project_task_mapping_contracts(project_type_id: str) ->
             ).get("executionInstructions")
             or ""
         )
+        sourcing_operator = read_yaml(
+            ROOT
+            / "alludium"
+            / "agent-templates"
+            / "vc_sourcing_operator.yaml"
+        )
+        sourcing_operator_prompt = (sourcing_operator.get("prompt") or {}).get(
+            "template", ""
+        )
+        required_fund_render_fields = [
+            "stage",
+            "sectors",
+            "geographies",
+            "thesis",
+            "minimumCheckSize",
+            "maximumCheckSize",
+            "currency",
+            "exclusions",
+            "scoringFramework",
+        ]
+        for field_key in required_fund_render_fields:
+            if f"{{{{{field_key}}}}}" not in sourcing_operator_prompt:
+                fail(
+                    "Sourcing Operator must render the canonical Fund mandate for "
+                    f"scoring: {field_key}"
+                )
         for required_phrase in [
             "vc.sourcing_line_originated_candidate",
             "project.getAgentContext",
             "returned `fieldValues`",
+            "rendered canonical",
+            "`stage`",
+            "`sectors`",
+            "`geographies`",
+            "`thesis`",
+            "`minimumCheckSize`",
+            "`maximumCheckSize`",
+            "`currency`",
+            "`exclusions`",
+            "`scoringFramework`",
+            "never as a replacement for the matched Fund mandate",
             "project-relationship.updateMetadata",
             "scoring_by_fund[fund_id]",
             "actively_investing",
