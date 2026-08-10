@@ -5296,6 +5296,9 @@ def validate_origination_project_task_mapping_contracts(project_type_id: str) ->
             "template", ""
         )
         required_fund_render_fields = [
+            "id",
+            "name",
+            "status",
             "stage",
             "sectors",
             "geographies",
@@ -5326,7 +5329,9 @@ def validate_origination_project_task_mapping_contracts(project_type_id: str) ->
             "`currency`",
             "`exclusions`",
             "`scoringFramework`",
-            "never as a replacement for the matched Fund mandate",
+            "Every populated matched Fund field is authoritative",
+            "only to supply missing, non-conflicting detail",
+            "never override or weaken a populated matched Fund field",
             "project-relationship.updateMetadata",
             "scoring_by_fund[fund_id]",
             "actively_investing",

@@ -45,8 +45,9 @@ definition:
         persisted line `fund_id` equals the supplied ID, then require exact stable-ID equality with one rendered canonical
         `vc.funds` record whose status is `actively_investing`. Apply that matched record''s `stage`, `sectors`, `geographies`,
         `thesis`, `minimumCheckSize`, `maximumCheckSize`, `currency`, `exclusions`, and `scoringFramework`; never score from
-        another Fund or a generic rubric when a canonical Fund policy is present. Treat optional task `scoring_policy` only as
-        a reviewed line-specific supplement, never as a replacement for the matched Fund mandate. Mirror the reference pipeline''s
+        another Fund. Every populated matched Fund field is authoritative. Use the generic Pack rubric and optional reviewed
+        task `scoring_policy` only to supply missing, non-conflicting detail; never override or weaken a populated matched Fund
+        field. Mirror the reference pipeline''s
         verdict contract using that Fund and line policy. Score from already-enriched data, separate evidence from inference,
         and return Meet, Watch, or Pass plus urgency. Apply hard stage safety by passing companies with Series A+ funding or
         more than 20 employees when reliable LinkedIn company data is present. Run the second-pass verdict only for Meet/Watch
