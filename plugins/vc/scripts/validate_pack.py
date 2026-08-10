@@ -4625,6 +4625,14 @@ def _require_exact_keys(value: dict[str, Any], expected: set[str], *, context: s
         )
 
 
+def _require_exact_ontology_version(value: Any, *, context: str) -> str:
+    if not isinstance(value, str) or not value.strip():
+        fail(f"{context} must declare a non-empty exact version")
+    if value.strip().casefold() == "latest":
+        fail(f"{context} must not use an unpinned latest version")
+    return value
+
+
 def _reject_unpinned_ontology_values(value: Any, *, context: str) -> None:
     if isinstance(value, dict):
         for key, nested in value.items():
@@ -4815,6 +4823,10 @@ def validate_ontology_components(manifest: dict[str, Any]) -> set[str]:
             context="Ontology component package reference",
         )
         package_id = package_ref["id"]
+        _require_exact_ontology_version(
+            package_ref.get("version"),
+            context=f"Ontology component package {package_id}",
+        )
         package_path = _require_ontology_path(
             component_root,
             package_ref.get("path"),
@@ -4844,6 +4856,10 @@ def validate_ontology_components(manifest: dict[str, Any]) -> set[str]:
                 f"Ontology component package {package_id} must use "
                 f"{ONTOLOGY_COMPONENT_API_VERSION}"
             )
+        _require_exact_ontology_version(
+            package.get("version"),
+            context=f"Ontology component package {package_id}",
+        )
         if package.get("kind") != "ontology-component-package":
             fail(f"Ontology component package {package_id} has the wrong kind")
         if package.get("consumerContract") != ONTOLOGY_COMPONENT_CONTRACT:
@@ -4863,7 +4879,11 @@ def validate_ontology_components(manifest: dict[str, Any]) -> set[str]:
         if not isinstance(component_refs, list) or not component_refs:
             fail(f"Ontology component package {package_id} must declare components")
         component_ids = [item.get("id") for item in component_refs if isinstance(item, dict)]
-        if len(component_ids) != len(component_refs) or component_ids != sorted(component_ids):
+        if (
+            len(component_ids) != len(component_refs)
+            or not all(isinstance(item, str) and item for item in component_ids)
+            or component_ids != sorted(component_ids)
+        ):
             fail(f"Ontology component package {package_id} component IDs must be sorted")
         if len(component_ids) != len(set(component_ids)):
             fail(f"Ontology component package {package_id} component IDs must be unique")
@@ -4890,6 +4910,10 @@ def validate_ontology_components(manifest: dict[str, Any]) -> set[str]:
                 context=f"Ontology component reference in {package_id}",
             )
             component_id = component_ref["id"]
+            _require_exact_ontology_version(
+                component_ref.get("version"),
+                context=f"Ontology component {component_id}",
+            )
             kind = component_ref.get("kind")
             if kind not in ONTOLOGY_COMPONENT_KINDS or kind in components_by_kind:
                 fail(f"Ontology component package {package_id} must declare one component per kind")
@@ -4956,6 +4980,10 @@ def validate_ontology_components(manifest: dict[str, Any]) -> set[str]:
                     {"id", "sha256", "version"},
                     context=f"Ontology component {component_id} dependency",
                 )
+                _require_exact_ontology_version(
+                    dependency.get("version"),
+                    context=f"Ontology component {component_id} dependency",
+                )
                 dependency_id = dependency.get("id")
                 declared = refs_by_id.get(dependency_id)
                 if declared is None:
@@ -5008,7 +5036,11 @@ def validate_ontology_components(manifest: dict[str, Any]) -> set[str]:
             if binding.get("purpose") != stage:
                 fail(f"Ontology component package {package_id} stage purpose must be explicit")
             bound_ids = binding.get("componentIds")
-            if not isinstance(bound_ids, list) or bound_ids != sorted(set(bound_ids)):
+            bound_id_set = _require_string_set(
+                bound_ids,
+                context=f"Ontology component package {package_id} stage componentIds",
+            )
+            if bound_ids != sorted(bound_id_set):
                 fail(f"Ontology component package {package_id} stage bindings must be unique and sorted")
             if not set(bound_ids) <= set(component_ids):
                 fail(f"Ontology component package {package_id} stage binds an unknown component")

@@ -30,6 +30,42 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _rehash_package(component_root: Path, package_filename: str) -> None:
+    package_path = component_root / "packages" / package_filename
+    catalog_path = component_root / "catalog.v1.json"
+    catalog = _read_json(catalog_path)
+    for package_ref in catalog["packages"]:
+        if package_ref["path"] == f"packages/{package_filename}":
+            package_ref["sha256"] = _sha256(package_path)
+            break
+    _write_canonical(catalog_path, catalog)
+
+
+def _rehash_component(
+    component_root: Path,
+    package_filename: str,
+    component_filename: str,
+) -> None:
+    component_path = component_root / "components" / component_filename
+    package_path = component_root / "packages" / package_filename
+    package = _read_json(package_path)
+    component_id: str | None = None
+    component_sha256 = _sha256(component_path)
+    for component_ref in package["components"]:
+        if component_ref["path"] == f"components/{component_filename}":
+            component_ref["sha256"] = component_sha256
+            component_id = component_ref["id"]
+            break
+    if component_id is None:  # pragma: no cover - fixture invariant
+        raise AssertionError(f"missing component {component_filename}")
+    for component_ref in package["components"]:
+        for dependency in component_ref["dependencies"]:
+            if dependency["id"] == component_id:
+                dependency["sha256"] = component_sha256
+    _write_canonical(package_path, package)
+    _rehash_package(component_root, package_filename)
+
+
 class OntologyComponentContractRegressionTests(unittest.TestCase):
     def _copy_pack(self, temporary_root: str) -> Path:
         pack_root = Path(temporary_root) / "repository" / "plugins" / "vc"
@@ -53,22 +89,11 @@ class OntologyComponentContractRegressionTests(unittest.TestCase):
             component = _read_json(component_path)
             component["content"]["providerPrompt"] = "forbidden runtime instruction"
             _write_canonical(component_path, component)
-
-            package_path = component_root / "packages" / "finance-screening.v1.json"
-            package = _read_json(package_path)
-            for component_ref in package["components"]:
-                if component_ref["path"] == "components/finance-screening.profile.v1.json":
-                    component_ref["sha256"] = _sha256(component_path)
-                    break
-            _write_canonical(package_path, package)
-
-            catalog_path = component_root / "catalog.v1.json"
-            catalog = _read_json(catalog_path)
-            for package_ref in catalog["packages"]:
-                if package_ref["path"] == "packages/finance-screening.v1.json":
-                    package_ref["sha256"] = _sha256(package_path)
-                    break
-            _write_canonical(catalog_path, catalog)
+            _rehash_component(
+                component_root,
+                "finance-screening.v1.json",
+                "finance-screening.profile.v1.json",
+            )
 
             result = self._run_validator(pack_root)
 
@@ -89,6 +114,49 @@ class OntologyComponentContractRegressionTests(unittest.TestCase):
 
         self.assertEqual(result.returncode, 1)
         self.assertIn("must use alludium/v1alpha1", result.stderr)
+
+    def test_required_versions_and_stage_components_cannot_be_empty(self) -> None:
+        for case in ("package_version", "component_version", "stage_components"):
+            with self.subTest(case=case), tempfile.TemporaryDirectory() as temporary_root:
+                pack_root = self._copy_pack(temporary_root)
+                component_root = pack_root / "alludium" / "ontology-components"
+                package_path = component_root / "packages" / "finance-screening.v1.json"
+                package = _read_json(package_path)
+
+                if case == "package_version":
+                    package["version"] = ""
+                    catalog_path = component_root / "catalog.v1.json"
+                    catalog = _read_json(catalog_path)
+                    catalog["packages"][0]["version"] = ""
+                    _write_canonical(catalog_path, catalog)
+                elif case == "component_version":
+                    component_path = (
+                        component_root
+                        / "components"
+                        / "finance-screening.constraints.v1.json"
+                    )
+                    component = _read_json(component_path)
+                    component["version"] = ""
+                    _write_canonical(component_path, component)
+                    component_id = package["components"][0]["id"]
+                    package["components"][0]["version"] = ""
+                    for component_ref in package["components"]:
+                        for dependency in component_ref["dependencies"]:
+                            if dependency["id"] == component_id:
+                                dependency["version"] = ""
+                    package["components"][0]["sha256"] = _sha256(component_path)
+                else:
+                    package["stageBindings"][0]["componentIds"] = []
+
+                _write_canonical(package_path, package)
+                _rehash_package(component_root, "finance-screening.v1.json")
+                result = self._run_validator(pack_root)
+
+            self.assertEqual(result.returncode, 1)
+            if case == "stage_components":
+                self.assertIn("componentIds must be a non-empty list", result.stderr)
+            else:
+                self.assertIn("must declare a non-empty exact version", result.stderr)
 
 
 if __name__ == "__main__":
