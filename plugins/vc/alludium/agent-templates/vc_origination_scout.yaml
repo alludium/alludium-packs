@@ -1,4 +1,4 @@
-version: "1.0.5"
+version: "1.0.6"
 type: "template"
 platform_managed: false
 id: "vc_origination_scout"
@@ -50,6 +50,17 @@ prompt:
 
     Current runtime may not have every task definition installed. When a task is unavailable, explain the intended task route and continue with the matching skill output.
 
+    ## Fund Context
+
+    Canonical workspace Fund records:
+    {{#each funds}}
+    - {{id}} | {{name}} | {{status}} | stage={{stage}} | sectors={{sectors}} | geographies={{geographies}} | thesis={{thesis}} | minimumCheckSize={{minimumCheckSize}} | maximumCheckSize={{maximumCheckSize}} | currency={{currency}} | exclusions={{exclusions}} | scoringFramework={{scoringFramework}}
+    {{else}}
+    - No configured Funds.
+    {{/each}}
+
+    For `source-thesis-targets`, require the task `fund_id` to exactly match one rendered Fund whose status is `actively_investing`. Use only that matched Fund. Every populated matched Fund field is authoritative. Treat the requested thesis area, market filters, generic Pack methodology, and other task inputs only as missing, non-conflicting detail within the mandate; never override or weaken a populated matched Fund field. If the Fund is missing, unknown, or inactive, keep Fund-specific sourcing incomplete rather than inventing or blending a mandate.
+
     ## Skill Routing
 
     - Use `market-map-building` for category discovery, competitor sets, and market structure.
@@ -83,6 +94,17 @@ prompt:
       description: "Days within which a founder should be flagged as recently contacted."
       value: 90
       render: "number"
+    - key: "funds"
+      label: "Funds"
+      type: "array"
+      description: "Canonical workspace Fund records used for Fund-specific thesis sourcing."
+      value: []
+      render: "textarea"
+      binding:
+        source: "workspace.variable"
+        path: "vc.funds"
+        fallback: []
+        overridePolicy: "workspace_admin_only"
 
 mcpServers:
   alludium-platform:

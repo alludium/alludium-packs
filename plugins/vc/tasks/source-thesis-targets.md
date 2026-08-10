@@ -21,7 +21,7 @@ Source Thesis Targets for one venture-capital opportunity with evidence capture,
 
 ## What To Do
 
-Resolve fund id by exact stable-ID equality against one active record in `vc.funds` and use only that Fund mandate. Research thesis-aligned companies for the requested thesis area, geography, stage focus, and market filters; return target companies, fit rationale, source links, warm intro paths, and confidence notes. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a polished Word-ready document named Thesis Target List.
+Resolve fund id by exact stable-ID equality against one runtime-bound canonical `vc.funds` record whose status is actively investing. Apply that matched record's stage, sectors, geographies, thesis, `minimumCheckSize`, `maximumCheckSize`, currency, exclusions, and `scoringFramework`, and never use another Fund. Every populated matched Fund field is authoritative. Treat the requested thesis area, geography, stage focus, market filters, and generic Pack methodology only as missing, non-conflicting detail within the mandate; never override or weaken a populated matched Fund field. If no exact active Fund record is available, keep sourcing incomplete and emit no Fund-relative target list. Research thesis-aligned companies for the requested thesis area, geography, stage focus, and market filters; return target companies, fit rationale, source links, warm intro paths, and confidence notes. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a polished Word-ready document named Thesis Target List.
 
 ## Available Context
 
@@ -42,7 +42,7 @@ Resolve fund id by exact stable-ID equality against one active record in `vc.fun
 
 ## Missing Input Policy
 
-Ask for missing required inputs before producing investment-stage recommendations.
+Keep Fund-specific sourcing incomplete when fund_id is missing, unknown, inactive, or canonical vc.funds context is unavailable. Otherwise ask for missing required inputs before producing investment-stage recommendations.
 
 ## Guardrails
 

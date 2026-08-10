@@ -63,6 +63,7 @@ REQUIRED_AGENT_PROMPT_VARIABLES = {
     "vc_diligence_analyst": {"funds", "fundId"},
     "vc_evaluation_analyst": {"funds", "fundId"},
     "vc_first_look_analyst": {"funds", "fundId"},
+    "vc_origination_scout": {"funds"},
     "vc_pipeline_autopilot": {"firmName"},
     "vc_sourcing_line_manager": {"firmName", "fundId", "funds"},
     "vc_sourcing_operator": {"funds"},
@@ -4784,6 +4785,75 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
             fail(
                 "Sourcing Line guided creation is missing its executable Fund "
                 f"validation boundary: {required_phrase}"
+            )
+
+    thesis_sourcing_template = read_yaml(
+        ROOT
+        / "alludium"
+        / "task-definition-templates"
+        / "vc-workflows"
+        / "source-thesis-targets.yaml"
+    )
+    thesis_sourcing_definition_json = (
+        (thesis_sourcing_template.get("definition") or {}).get("definitionJson") or {}
+    )
+    if (
+        thesis_sourcing_definition_json.get("recommendedAgentTemplate")
+        != "vc_origination_scout"
+    ):
+        fail("Thesis sourcing must run through vc_origination_scout")
+    thesis_sourcing_instructions = (
+        (thesis_sourcing_definition_json.get("instructions") or {}).get(
+            "executionInstructions", ""
+        )
+    )
+    origination_scout = read_yaml(
+        ROOT / "alludium" / "agent-templates" / "vc_origination_scout.yaml"
+    )
+    origination_scout_prompt = (origination_scout.get("prompt") or {}).get(
+        "template", ""
+    )
+    for field_key in [
+        "id",
+        "name",
+        "status",
+        "stage",
+        "sectors",
+        "geographies",
+        "thesis",
+        "minimumCheckSize",
+        "maximumCheckSize",
+        "currency",
+        "exclusions",
+        "scoringFramework",
+    ]:
+        if f"{{{{{field_key}}}}}" not in origination_scout_prompt:
+            fail(
+                "Origination Scout must render the canonical Fund mandate for "
+                f"thesis sourcing: {field_key}"
+            )
+    for required_phrase in [
+        "runtime-bound canonical `vc.funds`",
+        "actively_investing",
+        "`stage`",
+        "`sectors`",
+        "`geographies`",
+        "`thesis`",
+        "`minimumCheckSize`",
+        "`maximumCheckSize`",
+        "`currency`",
+        "`exclusions`",
+        "`scoringFramework`",
+        "Every populated matched Fund field is authoritative",
+        "only as missing, non-conflicting detail within the mandate",
+        "never override or weaken a populated matched Fund field",
+        "If no exact active Fund record is available",
+        "emit no Fund-relative target list",
+    ]:
+        if required_phrase not in thesis_sourcing_instructions:
+            fail(
+                "Thesis sourcing is missing its executable Fund mandate rule: "
+                f"{required_phrase}"
             )
 
     registration = task_contracts["register-origination-candidate"]
