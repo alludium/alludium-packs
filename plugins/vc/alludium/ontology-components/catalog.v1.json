@@ -1,0 +1,27 @@
+{
+  "apiVersion": "alludium/v1alpha1",
+  "consumerContract": "alludium-kmc-ontology-composition-v1",
+  "kind": "ontology-component-catalog",
+  "packages": [
+    {
+      "id": "vc.finance-screening",
+      "lifecycle": "active",
+      "path": "packages/finance-screening.v1.json",
+      "sha256": "e5c21936393b407a0c6b342b2a37c0bf668eaa7c615e22d2ad0bdff3ad3a292c",
+      "version": "1.0.0"
+    },
+    {
+      "id": "vc.operations-incident",
+      "lifecycle": "active",
+      "path": "packages/operations-incident.v1.json",
+      "sha256": "0a4f57b36685ae1edeafb07ed3c5d0b0e5a45c5988a4aebde7800829074e3f5c",
+      "version": "1.0.0"
+    }
+  ],
+  "release": {
+    "packId": "vc",
+    "packVersion": "0.5.49",
+    "repository": "https://github.com/alludium/alludium-packs",
+    "tag": "v0.5.49"
+  }
+}

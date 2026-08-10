@@ -1,0 +1,59 @@
+{
+  "apiVersion": "alludium/v1alpha1",
+  "content": {
+    "qualifiers": [
+      {
+        "id": "operations.qualifier.observed",
+        "label": "Observed"
+      },
+      {
+        "id": "operations.qualifier.production",
+        "label": "Production"
+      },
+      {
+        "id": "operations.qualifier.target",
+        "label": "Target"
+      }
+    ],
+    "terms": [
+      {
+        "allowedQualifierIds": [
+          "operations.qualifier.production"
+        ],
+        "id": "operations.term.affected_service",
+        "label": "Affected service",
+        "valueType": "string"
+      },
+      {
+        "allowedQualifierIds": [
+          "operations.qualifier.observed",
+          "operations.qualifier.target"
+        ],
+        "id": "operations.term.recovery_time_minutes",
+        "label": "Recovery time minutes",
+        "valueType": "number"
+      },
+      {
+        "allowedQualifierIds": [
+          "operations.qualifier.observed",
+          "operations.qualifier.production"
+        ],
+        "id": "operations.term.severity",
+        "label": "Severity",
+        "valueType": "string"
+      },
+      {
+        "allowedQualifierIds": [
+          "operations.qualifier.production"
+        ],
+        "id": "operations.term.service_owner",
+        "label": "Service owner",
+        "valueType": "string"
+      }
+    ]
+  },
+  "id": "vc.operations-incident.ontology",
+  "kind": "ontology",
+  "lifecycle": "active",
+  "version": "1.0.0"
+}

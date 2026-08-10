@@ -1,0 +1,27 @@
+{
+  "apiVersion": "alludium/v1alpha1",
+  "content": {
+    "aliases": [
+      {
+        "alias": "MTTR",
+        "termId": "operations.term.recovery_time_minutes"
+      },
+      {
+        "alias": "impacted service",
+        "termId": "operations.term.affected_service"
+      },
+      {
+        "alias": "incident owner",
+        "termId": "operations.term.service_owner"
+      },
+      {
+        "alias": "sev",
+        "termId": "operations.term.severity"
+      }
+    ]
+  },
+  "id": "vc.operations-incident.mapping",
+  "kind": "mapping",
+  "lifecycle": "active",
+  "version": "1.0.0"
+}

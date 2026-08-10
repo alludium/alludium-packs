@@ -1,0 +1,24 @@
+{
+  "apiVersion": "alludium/v1alpha1",
+  "content": {
+    "providerSlice": {
+      "maxQualifiers": 3,
+      "maxTerms": 4,
+      "qualifierIds": [
+        "operations.qualifier.observed",
+        "operations.qualifier.production",
+        "operations.qualifier.target"
+      ],
+      "termIds": [
+        "operations.term.affected_service",
+        "operations.term.recovery_time_minutes",
+        "operations.term.service_owner",
+        "operations.term.severity"
+      ]
+    }
+  },
+  "id": "vc.operations-incident.profile",
+  "kind": "profile",
+  "lifecycle": "active",
+  "version": "1.0.0"
+}

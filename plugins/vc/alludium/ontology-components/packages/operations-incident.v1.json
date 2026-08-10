@@ -1,0 +1,208 @@
+{
+  "apiVersion": "alludium/v1alpha1",
+  "compatibility": {
+    "consumerContracts": [
+      "alludium-kmc-ontology-composition-v1"
+    ]
+  },
+  "components": [
+    {
+      "allowedPurposes": [
+        "ingestion",
+        "learning",
+        "query",
+        "evaluation"
+      ],
+      "allowedStages": [
+        "ingestion",
+        "learning",
+        "query",
+        "evaluation"
+      ],
+      "dependencies": [
+        {
+          "id": "vc.operations-incident.ontology",
+          "sha256": "9c3744ce7c973f6767f884f6ff363286a414ec7fee2ff4a693dadd0e9c58fe4e",
+          "version": "1.0.0"
+        }
+      ],
+      "id": "vc.operations-incident.constraints",
+      "kind": "constraints",
+      "lifecycle": "active",
+      "path": "components/operations-incident.constraints.v1.json",
+      "releaseProvenance": {
+        "packId": "vc",
+        "packVersion": "0.5.49",
+        "repository": "https://github.com/alludium/alludium-packs",
+        "tag": "v0.5.49"
+      },
+      "sha256": "a77bfa6ae27a5465ced79ae505d7962d04b5694d49bca0b3d28da70e0365edce",
+      "version": "1.0.0"
+    },
+    {
+      "allowedPurposes": [
+        "ingestion",
+        "learning"
+      ],
+      "allowedStages": [
+        "ingestion",
+        "learning"
+      ],
+      "dependencies": [
+        {
+          "id": "vc.operations-incident.ontology",
+          "sha256": "9c3744ce7c973f6767f884f6ff363286a414ec7fee2ff4a693dadd0e9c58fe4e",
+          "version": "1.0.0"
+        }
+      ],
+      "id": "vc.operations-incident.mapping",
+      "kind": "mapping",
+      "lifecycle": "active",
+      "path": "components/operations-incident.mapping.v1.json",
+      "releaseProvenance": {
+        "packId": "vc",
+        "packVersion": "0.5.49",
+        "repository": "https://github.com/alludium/alludium-packs",
+        "tag": "v0.5.49"
+      },
+      "sha256": "54d36dd7db0b343ac9115b7126dcb423faf43778fc015ceb528925b441b9f3fe",
+      "version": "1.0.0"
+    },
+    {
+      "allowedPurposes": [
+        "ingestion",
+        "learning",
+        "query",
+        "evaluation"
+      ],
+      "allowedStages": [
+        "ingestion",
+        "learning",
+        "query",
+        "evaluation"
+      ],
+      "dependencies": [],
+      "id": "vc.operations-incident.ontology",
+      "kind": "ontology",
+      "lifecycle": "active",
+      "path": "components/operations-incident.ontology.v1.json",
+      "releaseProvenance": {
+        "packId": "vc",
+        "packVersion": "0.5.49",
+        "repository": "https://github.com/alludium/alludium-packs",
+        "tag": "v0.5.49"
+      },
+      "sha256": "9c3744ce7c973f6767f884f6ff363286a414ec7fee2ff4a693dadd0e9c58fe4e",
+      "version": "1.0.0"
+    },
+    {
+      "allowedPurposes": [
+        "ingestion",
+        "evaluation"
+      ],
+      "allowedStages": [
+        "ingestion",
+        "evaluation"
+      ],
+      "dependencies": [
+        {
+          "id": "vc.operations-incident.ontology",
+          "sha256": "9c3744ce7c973f6767f884f6ff363286a414ec7fee2ff4a693dadd0e9c58fe4e",
+          "version": "1.0.0"
+        }
+      ],
+      "id": "vc.operations-incident.profile",
+      "kind": "profile",
+      "lifecycle": "active",
+      "path": "components/operations-incident.profile.v1.json",
+      "releaseProvenance": {
+        "packId": "vc",
+        "packVersion": "0.5.49",
+        "repository": "https://github.com/alludium/alludium-packs",
+        "tag": "v0.5.49"
+      },
+      "sha256": "6ab5ddb674eeb6eb7b8343749c4362d149fd042d84776c5e09c5aae14520cbbf",
+      "version": "1.0.0"
+    },
+    {
+      "allowedPurposes": [
+        "query",
+        "evaluation"
+      ],
+      "allowedStages": [
+        "query",
+        "evaluation"
+      ],
+      "dependencies": [
+        {
+          "id": "vc.operations-incident.ontology",
+          "sha256": "9c3744ce7c973f6767f884f6ff363286a414ec7fee2ff4a693dadd0e9c58fe4e",
+          "version": "1.0.0"
+        }
+      ],
+      "id": "vc.operations-incident.projection",
+      "kind": "projection",
+      "lifecycle": "active",
+      "path": "components/operations-incident.projection.v1.json",
+      "releaseProvenance": {
+        "packId": "vc",
+        "packVersion": "0.5.49",
+        "repository": "https://github.com/alludium/alludium-packs",
+        "tag": "v0.5.49"
+      },
+      "sha256": "98a46e4c97d2d6afe7dc780a34e868a6feb797a531550179c30e17bde83c4f6d",
+      "version": "1.0.0"
+    }
+  ],
+  "consumerContract": "alludium-kmc-ontology-composition-v1",
+  "id": "vc.operations-incident",
+  "kind": "ontology-component-package",
+  "lifecycle": "active",
+  "release": {
+    "packId": "vc",
+    "packVersion": "0.5.49",
+    "repository": "https://github.com/alludium/alludium-packs",
+    "tag": "v0.5.49"
+  },
+  "stageBindings": [
+    {
+      "componentIds": [
+        "vc.operations-incident.constraints",
+        "vc.operations-incident.mapping",
+        "vc.operations-incident.ontology",
+        "vc.operations-incident.profile"
+      ],
+      "purpose": "ingestion",
+      "stage": "ingestion"
+    },
+    {
+      "componentIds": [
+        "vc.operations-incident.constraints",
+        "vc.operations-incident.mapping",
+        "vc.operations-incident.ontology"
+      ],
+      "purpose": "learning",
+      "stage": "learning"
+    },
+    {
+      "componentIds": [
+        "vc.operations-incident.constraints",
+        "vc.operations-incident.ontology",
+        "vc.operations-incident.projection"
+      ],
+      "purpose": "query",
+      "stage": "query"
+    },
+    {
+      "componentIds": [
+        "vc.operations-incident.constraints",
+        "vc.operations-incident.ontology",
+        "vc.operations-incident.profile",
+        "vc.operations-incident.projection"
+      ],
+      "purpose": "evaluation",
+      "stage": "evaluation"
+    }
+  ],
+  "version": "1.0.0"
+}

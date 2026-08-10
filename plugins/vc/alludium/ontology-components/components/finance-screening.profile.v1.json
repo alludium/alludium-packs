@@ -1,0 +1,24 @@
+{
+  "apiVersion": "alludium/v1alpha1",
+  "content": {
+    "providerSlice": {
+      "maxQualifiers": 3,
+      "maxTerms": 4,
+      "qualifierIds": [
+        "finance.qualifier.actual",
+        "finance.qualifier.forecast",
+        "finance.qualifier.reporting_period"
+      ],
+      "termIds": [
+        "finance.term.annual_recurring_revenue",
+        "finance.term.monthly_burn",
+        "finance.term.round_size",
+        "finance.term.runway_months"
+      ]
+    }
+  },
+  "id": "vc.finance-screening.profile",
+  "kind": "profile",
+  "lifecycle": "active",
+  "version": "1.0.0"
+}

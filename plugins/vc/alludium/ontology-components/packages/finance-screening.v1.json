@@ -1,0 +1,208 @@
+{
+  "apiVersion": "alludium/v1alpha1",
+  "compatibility": {
+    "consumerContracts": [
+      "alludium-kmc-ontology-composition-v1"
+    ]
+  },
+  "components": [
+    {
+      "allowedPurposes": [
+        "ingestion",
+        "learning",
+        "query",
+        "evaluation"
+      ],
+      "allowedStages": [
+        "ingestion",
+        "learning",
+        "query",
+        "evaluation"
+      ],
+      "dependencies": [
+        {
+          "id": "vc.finance-screening.ontology",
+          "sha256": "3987a8705a04e7ea62fc4d270aae6887025a9a1a84cbd2b9a1d38dced1d94a49",
+          "version": "1.0.0"
+        }
+      ],
+      "id": "vc.finance-screening.constraints",
+      "kind": "constraints",
+      "lifecycle": "active",
+      "path": "components/finance-screening.constraints.v1.json",
+      "releaseProvenance": {
+        "packId": "vc",
+        "packVersion": "0.5.49",
+        "repository": "https://github.com/alludium/alludium-packs",
+        "tag": "v0.5.49"
+      },
+      "sha256": "3f16db203ef98e2b829729830dcbfa1036c6cbf612f9dba54a43bd13bed124e2",
+      "version": "1.0.0"
+    },
+    {
+      "allowedPurposes": [
+        "ingestion",
+        "learning"
+      ],
+      "allowedStages": [
+        "ingestion",
+        "learning"
+      ],
+      "dependencies": [
+        {
+          "id": "vc.finance-screening.ontology",
+          "sha256": "3987a8705a04e7ea62fc4d270aae6887025a9a1a84cbd2b9a1d38dced1d94a49",
+          "version": "1.0.0"
+        }
+      ],
+      "id": "vc.finance-screening.mapping",
+      "kind": "mapping",
+      "lifecycle": "active",
+      "path": "components/finance-screening.mapping.v1.json",
+      "releaseProvenance": {
+        "packId": "vc",
+        "packVersion": "0.5.49",
+        "repository": "https://github.com/alludium/alludium-packs",
+        "tag": "v0.5.49"
+      },
+      "sha256": "87ca02982554cda04a48a73e92e6aff9b7df5a7f2b5d475757e1cdba99eaf254",
+      "version": "1.0.0"
+    },
+    {
+      "allowedPurposes": [
+        "ingestion",
+        "learning",
+        "query",
+        "evaluation"
+      ],
+      "allowedStages": [
+        "ingestion",
+        "learning",
+        "query",
+        "evaluation"
+      ],
+      "dependencies": [],
+      "id": "vc.finance-screening.ontology",
+      "kind": "ontology",
+      "lifecycle": "active",
+      "path": "components/finance-screening.ontology.v1.json",
+      "releaseProvenance": {
+        "packId": "vc",
+        "packVersion": "0.5.49",
+        "repository": "https://github.com/alludium/alludium-packs",
+        "tag": "v0.5.49"
+      },
+      "sha256": "3987a8705a04e7ea62fc4d270aae6887025a9a1a84cbd2b9a1d38dced1d94a49",
+      "version": "1.0.0"
+    },
+    {
+      "allowedPurposes": [
+        "ingestion",
+        "evaluation"
+      ],
+      "allowedStages": [
+        "ingestion",
+        "evaluation"
+      ],
+      "dependencies": [
+        {
+          "id": "vc.finance-screening.ontology",
+          "sha256": "3987a8705a04e7ea62fc4d270aae6887025a9a1a84cbd2b9a1d38dced1d94a49",
+          "version": "1.0.0"
+        }
+      ],
+      "id": "vc.finance-screening.profile",
+      "kind": "profile",
+      "lifecycle": "active",
+      "path": "components/finance-screening.profile.v1.json",
+      "releaseProvenance": {
+        "packId": "vc",
+        "packVersion": "0.5.49",
+        "repository": "https://github.com/alludium/alludium-packs",
+        "tag": "v0.5.49"
+      },
+      "sha256": "7bb78347b33865823cf036e35a5428124979fcb0a9058a015c0de13b7b885974",
+      "version": "1.0.0"
+    },
+    {
+      "allowedPurposes": [
+        "query",
+        "evaluation"
+      ],
+      "allowedStages": [
+        "query",
+        "evaluation"
+      ],
+      "dependencies": [
+        {
+          "id": "vc.finance-screening.ontology",
+          "sha256": "3987a8705a04e7ea62fc4d270aae6887025a9a1a84cbd2b9a1d38dced1d94a49",
+          "version": "1.0.0"
+        }
+      ],
+      "id": "vc.finance-screening.projection",
+      "kind": "projection",
+      "lifecycle": "active",
+      "path": "components/finance-screening.projection.v1.json",
+      "releaseProvenance": {
+        "packId": "vc",
+        "packVersion": "0.5.49",
+        "repository": "https://github.com/alludium/alludium-packs",
+        "tag": "v0.5.49"
+      },
+      "sha256": "130e4ab2ac750fa26c93cef4e0859b7161a20f711f0b51e4e2e577317d75ad17",
+      "version": "1.0.0"
+    }
+  ],
+  "consumerContract": "alludium-kmc-ontology-composition-v1",
+  "id": "vc.finance-screening",
+  "kind": "ontology-component-package",
+  "lifecycle": "active",
+  "release": {
+    "packId": "vc",
+    "packVersion": "0.5.49",
+    "repository": "https://github.com/alludium/alludium-packs",
+    "tag": "v0.5.49"
+  },
+  "stageBindings": [
+    {
+      "componentIds": [
+        "vc.finance-screening.constraints",
+        "vc.finance-screening.mapping",
+        "vc.finance-screening.ontology",
+        "vc.finance-screening.profile"
+      ],
+      "purpose": "ingestion",
+      "stage": "ingestion"
+    },
+    {
+      "componentIds": [
+        "vc.finance-screening.constraints",
+        "vc.finance-screening.mapping",
+        "vc.finance-screening.ontology"
+      ],
+      "purpose": "learning",
+      "stage": "learning"
+    },
+    {
+      "componentIds": [
+        "vc.finance-screening.constraints",
+        "vc.finance-screening.ontology",
+        "vc.finance-screening.projection"
+      ],
+      "purpose": "query",
+      "stage": "query"
+    },
+    {
+      "componentIds": [
+        "vc.finance-screening.constraints",
+        "vc.finance-screening.ontology",
+        "vc.finance-screening.profile",
+        "vc.finance-screening.projection"
+      ],
+      "purpose": "evaluation",
+      "stage": "evaluation"
+    }
+  ],
+  "version": "1.0.0"
+}
