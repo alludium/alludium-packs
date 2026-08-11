@@ -1,0 +1,22 @@
+{
+  "apiVersion": "alludium/v1alpha1",
+  "content": {
+    "allowedQualifierIds": [
+      "finance.qualifier.actual",
+      "finance.qualifier.forecast",
+      "finance.qualifier.reporting_period"
+    ],
+    "allowedTermIds": [
+      "finance.term.annual_recurring_revenue",
+      "finance.term.monthly_burn",
+      "finance.term.round_size",
+      "finance.term.runway_months"
+    ],
+    "unknownQualifierPolicy": "reject",
+    "unknownTermPolicy": "reject"
+  },
+  "id": "vc.finance-screening.constraints",
+  "kind": "constraints",
+  "lifecycle": "active",
+  "version": "1.0.0"
+}

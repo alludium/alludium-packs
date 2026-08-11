@@ -1,0 +1,27 @@
+{
+  "apiVersion": "alludium/v1alpha1",
+  "content": {
+    "fields": [
+      {
+        "outputKey": "annual_recurring_revenue",
+        "termId": "finance.term.annual_recurring_revenue"
+      },
+      {
+        "outputKey": "monthly_burn",
+        "termId": "finance.term.monthly_burn"
+      },
+      {
+        "outputKey": "round_size",
+        "termId": "finance.term.round_size"
+      },
+      {
+        "outputKey": "runway_months",
+        "termId": "finance.term.runway_months"
+      }
+    ]
+  },
+  "id": "vc.finance-screening.projection",
+  "kind": "projection",
+  "lifecycle": "active",
+  "version": "1.0.0"
+}

@@ -1,0 +1,22 @@
+{
+  "apiVersion": "alludium/v1alpha1",
+  "content": {
+    "allowedQualifierIds": [
+      "operations.qualifier.observed",
+      "operations.qualifier.production",
+      "operations.qualifier.target"
+    ],
+    "allowedTermIds": [
+      "operations.term.affected_service",
+      "operations.term.recovery_time_minutes",
+      "operations.term.service_owner",
+      "operations.term.severity"
+    ],
+    "unknownQualifierPolicy": "reject",
+    "unknownTermPolicy": "reject"
+  },
+  "id": "vc.operations-incident.constraints",
+  "kind": "constraints",
+  "lifecycle": "active",
+  "version": "1.0.0"
+}

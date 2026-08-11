@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import sys
@@ -245,6 +246,12 @@ DOCUMENT_REF_STRUCTURED_ARTIFACT_OUTPUT_FIELDS = {
     "source_state_artifact_id",
     "sync_plan_artifact_id",
 }
+ONTOLOGY_COMPONENT_CONTRACT = "alludium-kmc-ontology-composition-v1"
+ONTOLOGY_COMPONENT_API_VERSION = "alludium/v1alpha1"
+ONTOLOGY_COMPONENT_KINDS = {"constraints", "mapping", "ontology", "profile", "projection"}
+ONTOLOGY_COMPONENT_LIFECYCLES = {"active", "deprecated", "retired"}
+ONTOLOGY_COMPONENT_STAGES = ("ingestion", "learning", "query", "evaluation")
+ONTOLOGY_COMPONENT_SURFACE_STATUS = "released-ontology-component-packages"
 EXPECTED_VC_TASK_TEMPLATE_VERTICAL_KEYS = ["venture_capital", "vc"]
 PROJECT_TYPE_FIELD_KINDS = {"date", "enum", "member", "number", "text"}
 PROJECT_TASK_MAPPING_SOURCES = {"constant", "project.field", "project.id", "project.state"}
@@ -4571,6 +4578,663 @@ def validate_mcp_definitions(manifest: dict[str, Any], recommendations: dict[str
             fail(f"Template MCP references missing from .mcp.json: {sorted(unexpected_missing)}")
 
 
+def _canonical_json_bytes(value: Any) -> bytes:
+    return (json.dumps(value, indent=2, sort_keys=True) + "\n").encode()
+
+
+def _read_canonical_json(path: Path) -> dict[str, Any]:
+    parsed = read_json(path)
+    if not isinstance(parsed, dict):
+        fail(f"{path.relative_to(ROOT)} must be a JSON object")
+    if path.read_bytes() != _canonical_json_bytes(parsed):
+        fail(f"{path.relative_to(ROOT)} must use canonical sorted JSON encoding")
+    return parsed
+
+
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _is_nonempty_ontology_string(value: Any) -> bool:
+    return isinstance(value, str) and bool(value.strip())
+
+
+def _require_ontology_root(surface: dict[str, Any]) -> Path:
+    relative_path = surface.get("path")
+    if not _is_nonempty_ontology_string(relative_path):
+        fail("surfaces.ontologyComponents.path must be declared")
+    pack_root = ROOT.absolute()
+    component_root = (ROOT / relative_path).absolute()
+    if component_root == pack_root or not component_root.is_relative_to(pack_root):
+        fail("surfaces.ontologyComponents.path must stay beneath the pack root")
+    if component_root.is_symlink() or any(
+        parent != pack_root and parent.is_symlink()
+        for parent in component_root.parents
+        if parent.is_relative_to(pack_root)
+    ):
+        fail("surfaces.ontologyComponents.path must not use symlinks")
+    if not component_root.resolve().is_relative_to(pack_root.resolve()):
+        fail("surfaces.ontologyComponents.path must stay beneath the pack root")
+    if not component_root.is_dir():
+        fail("surfaces.ontologyComponents.path must reference an existing directory")
+    return component_root
+
+
+def _require_ontology_path(component_root: Path, relative_path: Any, *, context: str) -> Path:
+    if not _is_nonempty_ontology_string(relative_path):
+        fail(f"{context} must declare a non-empty path")
+    root = component_root.absolute()
+    path = (component_root / relative_path).absolute()
+    if not path.is_relative_to(root):
+        fail(f"{context} path must stay inside the ontology component surface")
+    if path.is_symlink() or any(
+        parent != root and parent.is_symlink()
+        for parent in path.parents
+        if parent.is_relative_to(root)
+    ):
+        fail(f"{context} path must not use symlinks")
+    if not path.resolve().is_relative_to(root.resolve()):
+        fail(f"{context} path must stay inside the ontology component surface")
+    if not path.is_file():
+        fail(f"{context} path does not exist: {relative_path}")
+    return path
+
+
+def _ontology_surface_files(component_root: Path) -> set[Path]:
+    root = component_root.absolute()
+    entries = tuple(component_root.rglob("*"))
+    symlink_paths = sorted(
+        path.absolute().relative_to(root).as_posix()
+        for path in entries
+        if path.is_symlink()
+    )
+    if symlink_paths:
+        fail(
+            "Ontology component surface must not contain symlink artifacts: "
+            f"{symlink_paths}"
+        )
+    return {path.absolute() for path in entries if path.is_file()}
+
+
+def _require_string_set(value: Any, *, context: str) -> set[str]:
+    if not isinstance(value, list) or not value:
+        fail(f"{context} must be a non-empty list")
+    if not all(_is_nonempty_ontology_string(item) for item in value):
+        fail(f"{context} entries must be non-empty strings")
+    if len(value) != len(set(value)):
+        fail(f"{context} entries must be unique")
+    return set(value)
+
+
+def _require_exact_keys(value: dict[str, Any], expected: set[str], *, context: str) -> None:
+    actual = set(value)
+    if actual != expected:
+        fail(
+            f"{context} keys must be exact; missing={sorted(expected - actual)}, "
+            f"unexpected={sorted(actual - expected)}"
+        )
+
+
+def _require_exact_ontology_version(value: Any, *, context: str) -> str:
+    if not isinstance(value, str) or not value.strip():
+        fail(f"{context} must declare a non-empty exact version")
+    if re.fullmatch(r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)", value) is None:
+        fail(f"{context} must use an exact semantic version")
+    return value
+
+
+def _reject_unpinned_ontology_values(value: Any, *, context: str) -> None:
+    if isinstance(value, dict):
+        for key, nested in value.items():
+            if isinstance(key, str):
+                normalized_key = re.sub(r"[^a-z0-9]", "", key.casefold())
+                if (
+                    any(
+                        marker in normalized_key
+                        for marker in (
+                            "apikey",
+                            "credential",
+                            "password",
+                            "prompt",
+                            "secret",
+                            "token",
+                        )
+                    )
+                ):
+                    fail(f"{context} must not embed runtime control {key}")
+            _reject_unpinned_ontology_values(nested, context=context)
+    elif isinstance(value, list):
+        for nested in value:
+            _reject_unpinned_ontology_values(nested, context=context)
+    elif isinstance(value, str) and value.strip().lower() == "latest":
+        fail(f"{context} must not use an unpinned latest reference")
+
+
+def _validate_ontology_component_semantics(
+    components_by_kind: dict[str, dict[str, Any]],
+    *,
+    package_id: str,
+) -> None:
+    ontology = components_by_kind["ontology"].get("content")
+    if not isinstance(ontology, dict):
+        fail(f"Ontology package {package_id} ontology content must be an object")
+    _require_exact_keys(
+        ontology,
+        {"qualifiers", "terms"},
+        context=f"Ontology package {package_id} ontology content",
+    )
+    terms = ontology.get("terms")
+    qualifiers = ontology.get("qualifiers")
+    if not isinstance(terms, list) or not terms:
+        fail(f"Ontology package {package_id} must declare terms")
+    if not isinstance(qualifiers, list) or not qualifiers:
+        fail(f"Ontology package {package_id} must declare qualifiers")
+
+    for term in terms:
+        if not isinstance(term, dict):
+            fail(f"Ontology package {package_id} terms must be objects")
+        _require_exact_keys(
+            term,
+            {"allowedQualifierIds", "id", "label", "valueType"},
+            context=f"Ontology package {package_id} ontology term",
+        )
+        if not all(
+            _is_nonempty_ontology_string(term.get(field))
+            for field in ("id", "label", "valueType")
+        ):
+            fail(f"Ontology package {package_id} ontology terms are incomplete")
+    for qualifier in qualifiers:
+        if not isinstance(qualifier, dict):
+            fail(f"Ontology package {package_id} qualifiers must be objects")
+        _require_exact_keys(
+            qualifier,
+            {"id", "label"},
+            context=f"Ontology package {package_id} ontology qualifier",
+        )
+        if not all(
+            _is_nonempty_ontology_string(qualifier.get(field))
+            for field in ("id", "label")
+        ):
+            fail(f"Ontology package {package_id} ontology qualifiers are incomplete")
+
+    term_ids = [term["id"] for term in terms]
+    qualifier_ids = [qualifier["id"] for qualifier in qualifiers]
+    if len(term_ids) != len(terms) or not all(
+        _is_nonempty_ontology_string(item) for item in term_ids
+    ):
+        fail(f"Ontology package {package_id} terms must declare IDs")
+    if len(qualifier_ids) != len(qualifiers) or not all(
+        _is_nonempty_ontology_string(item) for item in qualifier_ids
+    ):
+        fail(f"Ontology package {package_id} qualifiers must declare IDs")
+    if len(term_ids) != len(set(term_ids)) or len(qualifier_ids) != len(set(qualifier_ids)):
+        fail(f"Ontology package {package_id} term and qualifier IDs must be unique")
+    term_id_set = set(term_ids)
+    qualifier_id_set = set(qualifier_ids)
+    for term in terms:
+        allowed = _require_string_set(
+            term.get("allowedQualifierIds"),
+            context=f"Ontology package {package_id} term allowedQualifierIds",
+        )
+        if not allowed <= qualifier_id_set:
+            fail(f"Ontology package {package_id} term references an unknown qualifier")
+
+    mapping = components_by_kind["mapping"].get("content")
+    if not isinstance(mapping, dict):
+        fail(f"Ontology package {package_id} mapping content must be an object")
+    _require_exact_keys(
+        mapping,
+        {"aliases"},
+        context=f"Ontology package {package_id} mapping content",
+    )
+    aliases = mapping.get("aliases") if isinstance(mapping, dict) else None
+    if not isinstance(aliases, list) or not aliases:
+        fail(f"Ontology package {package_id} mapping must declare aliases")
+    alias_names: list[str] = []
+    for alias in aliases:
+        if not isinstance(alias, dict):
+            fail(f"Ontology package {package_id} mapping aliases must be objects")
+        _require_exact_keys(
+            alias,
+            {"alias", "termId"},
+            context=f"Ontology package {package_id} mapping alias",
+        )
+        if alias.get("termId") not in term_id_set:
+            fail(f"Ontology package {package_id} mapping references an unknown term")
+        alias_name = alias.get("alias")
+        if not _is_nonempty_ontology_string(alias_name):
+            fail(f"Ontology package {package_id} mapping aliases must declare names")
+        alias_names.append(alias_name.casefold())
+    if len(alias_names) != len(set(alias_names)):
+        fail(f"Ontology package {package_id} mapping aliases must be unique")
+
+    profile = components_by_kind["profile"].get("content")
+    if not isinstance(profile, dict):
+        fail(f"Ontology package {package_id} profile content must be an object")
+    _require_exact_keys(
+        profile,
+        {"providerSlice"},
+        context=f"Ontology package {package_id} profile content",
+    )
+    provider_slice = profile.get("providerSlice") if isinstance(profile, dict) else None
+    if not isinstance(provider_slice, dict):
+        fail(f"Ontology package {package_id} profile must declare providerSlice")
+    _require_exact_keys(
+        provider_slice,
+        {"maxQualifiers", "maxTerms", "qualifierIds", "termIds"},
+        context=f"Ontology package {package_id} providerSlice",
+    )
+    slice_terms = _require_string_set(
+        provider_slice.get("termIds"),
+        context=f"Ontology package {package_id} providerSlice.termIds",
+    )
+    slice_qualifiers = _require_string_set(
+        provider_slice.get("qualifierIds"),
+        context=f"Ontology package {package_id} providerSlice.qualifierIds",
+    )
+    max_terms = provider_slice.get("maxTerms")
+    max_qualifiers = provider_slice.get("maxQualifiers")
+    if type(max_terms) is not int or not 1 <= max_terms <= 32 or len(slice_terms) > max_terms:
+        fail(f"Ontology package {package_id} provider term slice is not bounded")
+    if (
+        type(max_qualifiers) is not int
+        or not 1 <= max_qualifiers <= 16
+        or len(slice_qualifiers) > max_qualifiers
+    ):
+        fail(f"Ontology package {package_id} provider qualifier slice is not bounded")
+    if not slice_terms <= term_id_set or not slice_qualifiers <= qualifier_id_set:
+        fail(f"Ontology package {package_id} provider slice references unknown semantics")
+
+    projection = components_by_kind["projection"].get("content")
+    if not isinstance(projection, dict):
+        fail(f"Ontology package {package_id} projection content must be an object")
+    _require_exact_keys(
+        projection,
+        {"fields"},
+        context=f"Ontology package {package_id} projection content",
+    )
+    fields = projection.get("fields") if isinstance(projection, dict) else None
+    if not isinstance(fields, list) or not fields:
+        fail(f"Ontology package {package_id} projection must declare fields")
+    output_keys: list[str] = []
+    for field in fields:
+        if not isinstance(field, dict):
+            fail(f"Ontology package {package_id} projection fields must be objects")
+        _require_exact_keys(
+            field,
+            {"outputKey", "termId"},
+            context=f"Ontology package {package_id} projection field",
+        )
+        if field.get("termId") not in term_id_set:
+            fail(f"Ontology package {package_id} projection references an unknown term")
+        output_key = field.get("outputKey")
+        if not _is_nonempty_ontology_string(output_key):
+            fail(f"Ontology package {package_id} projection fields must declare outputKey")
+        output_keys.append(output_key)
+    if len(output_keys) != len(set(output_keys)):
+        fail(f"Ontology package {package_id} projection output keys must be unique")
+
+    constraints = components_by_kind["constraints"].get("content")
+    if not isinstance(constraints, dict):
+        fail(f"Ontology package {package_id} constraints content must be an object")
+    _require_exact_keys(
+        constraints,
+        {
+            "allowedQualifierIds",
+            "allowedTermIds",
+            "unknownQualifierPolicy",
+            "unknownTermPolicy",
+        },
+        context=f"Ontology package {package_id} constraints content",
+    )
+    if constraints.get("unknownTermPolicy") != "reject":
+        fail(f"Ontology package {package_id} must reject unknown terms")
+    if constraints.get("unknownQualifierPolicy") != "reject":
+        fail(f"Ontology package {package_id} must reject unknown qualifiers")
+    allowed_terms = _require_string_set(
+        constraints.get("allowedTermIds"),
+        context=f"Ontology package {package_id} constraints.allowedTermIds",
+    )
+    allowed_qualifiers = _require_string_set(
+        constraints.get("allowedQualifierIds"),
+        context=f"Ontology package {package_id} constraints.allowedQualifierIds",
+    )
+    if allowed_terms != term_id_set or allowed_qualifiers != qualifier_id_set:
+        fail(f"Ontology package {package_id} constraints must cover the exact ontology semantics")
+
+
+def validate_ontology_components(manifest: dict[str, Any]) -> set[str]:
+    surface = manifest.get("surfaces", {}).get("ontologyComponents")
+    if not isinstance(surface, dict):
+        fail("Manifest must declare surfaces.ontologyComponents")
+    if surface.get("status") != ONTOLOGY_COMPONENT_SURFACE_STATUS:
+        fail(
+            "ontologyComponents must declare status: "
+            f"{ONTOLOGY_COMPONENT_SURFACE_STATUS}"
+        )
+    component_root = _require_ontology_root(surface)
+    _ontology_surface_files(component_root)
+    catalog_path = _require_ontology_path(
+        component_root,
+        surface.get("catalog"),
+        context="ontologyComponents catalog",
+    )
+    referenced_paths = {catalog_path.absolute()}
+    catalog = _read_canonical_json(catalog_path)
+    _require_exact_keys(
+        catalog,
+        {"apiVersion", "consumerContract", "kind", "packages", "release"},
+        context="Ontology component catalog",
+    )
+    if catalog.get("apiVersion") != ONTOLOGY_COMPONENT_API_VERSION:
+        fail(f"Ontology component catalog must use {ONTOLOGY_COMPONENT_API_VERSION}")
+    if catalog.get("kind") != "ontology-component-catalog":
+        fail("Ontology component catalog kind must be ontology-component-catalog")
+    if catalog.get("consumerContract") != ONTOLOGY_COMPONENT_CONTRACT:
+        fail(f"Ontology component catalog must target {ONTOLOGY_COMPONENT_CONTRACT}")
+    _reject_unpinned_ontology_values(catalog, context="Ontology component catalog")
+
+    pack_version = manifest.get("pack", {}).get("version")
+    expected_release = {
+        "packId": manifest.get("pack", {}).get("id"),
+        "packVersion": pack_version,
+        "repository": manifest.get("pack", {}).get("repository"),
+        "tag": f"v{pack_version}",
+    }
+    if catalog.get("release") != expected_release:
+        fail("Ontology component catalog release provenance must match the exact pack release")
+
+    package_refs = catalog.get("packages")
+    if not isinstance(package_refs, list) or len(package_refs) < 2:
+        fail("Ontology component catalog must publish at least two fixture packages")
+    package_ids = [item.get("id") for item in package_refs if isinstance(item, dict)]
+    if len(package_ids) != len(package_refs) or not all(
+        _is_nonempty_ontology_string(item) for item in package_ids
+    ):
+        fail("Ontology component package references must declare IDs")
+    if package_ids != sorted(package_ids) or len(package_ids) != len(set(package_ids)):
+        fail("Ontology component package IDs must be unique and sorted")
+    manifest_ids = surface.get("ids")
+    if manifest_ids != package_ids:
+        fail("Manifest ontologyComponents.ids must exactly match the catalog")
+
+    for package_ref in package_refs:
+        if not isinstance(package_ref, dict):
+            fail("Ontology component package reference must be an object")
+        _require_exact_keys(
+            package_ref,
+            {"id", "lifecycle", "path", "sha256", "version"},
+            context="Ontology component package reference",
+        )
+        package_id = package_ref["id"]
+        _require_exact_ontology_version(
+            package_ref.get("version"),
+            context=f"Ontology component package {package_id}",
+        )
+        package_path = _require_ontology_path(
+            component_root,
+            package_ref.get("path"),
+            context=f"Ontology component package {package_id}",
+        )
+        referenced_paths.add(package_path.absolute())
+        if package_ref.get("sha256") != _sha256(package_path):
+            fail(f"Ontology component package {package_id} hash drift")
+        package = _read_canonical_json(package_path)
+        _require_exact_keys(
+            package,
+            {
+                "apiVersion",
+                "compatibility",
+                "components",
+                "consumerContract",
+                "id",
+                "kind",
+                "lifecycle",
+                "release",
+                "stageBindings",
+                "version",
+            },
+            context=f"Ontology component package {package_id}",
+        )
+        if package.get("apiVersion") != ONTOLOGY_COMPONENT_API_VERSION:
+            fail(
+                f"Ontology component package {package_id} must use "
+                f"{ONTOLOGY_COMPONENT_API_VERSION}"
+            )
+        _require_exact_ontology_version(
+            package.get("version"),
+            context=f"Ontology component package {package_id}",
+        )
+        if package.get("kind") != "ontology-component-package":
+            fail(f"Ontology component package {package_id} has the wrong kind")
+        if package.get("consumerContract") != ONTOLOGY_COMPONENT_CONTRACT:
+            fail(f"Ontology component package {package_id} has incompatible consumer contract")
+        if package.get("compatibility") != {"consumerContracts": [ONTOLOGY_COMPONENT_CONTRACT]}:
+            fail(f"Ontology component package {package_id} compatibility is not exact")
+        if package.get("release") != expected_release:
+            fail(f"Ontology component package {package_id} release provenance changed")
+        for field_name in ("id", "version", "lifecycle"):
+            if package.get(field_name) != package_ref.get(field_name):
+                fail(f"Ontology component package {package_id} {field_name} does not match catalog")
+        if package.get("lifecycle") not in ONTOLOGY_COMPONENT_LIFECYCLES:
+            fail(f"Ontology component package {package_id} has invalid lifecycle")
+        _reject_unpinned_ontology_values(package, context=f"Ontology component package {package_id}")
+
+        component_refs = package.get("components")
+        if not isinstance(component_refs, list) or not component_refs:
+            fail(f"Ontology component package {package_id} must declare components")
+        component_ids = [item.get("id") for item in component_refs if isinstance(item, dict)]
+        if (
+            len(component_ids) != len(component_refs)
+            or not all(_is_nonempty_ontology_string(item) for item in component_ids)
+            or component_ids != sorted(component_ids)
+        ):
+            fail(f"Ontology component package {package_id} component IDs must be sorted")
+        if len(component_ids) != len(set(component_ids)):
+            fail(f"Ontology component package {package_id} component IDs must be unique")
+
+        refs_by_id = {item["id"]: item for item in component_refs}
+        components_by_kind: dict[str, dict[str, Any]] = {}
+        for component_ref in component_refs:
+            if not isinstance(component_ref, dict):
+                fail(f"Ontology component package {package_id} references must be objects")
+            _require_exact_keys(
+                component_ref,
+                {
+                    "allowedPurposes",
+                    "allowedStages",
+                    "dependencies",
+                    "id",
+                    "kind",
+                    "lifecycle",
+                    "path",
+                    "releaseProvenance",
+                    "sha256",
+                    "version",
+                },
+                context=f"Ontology component reference in {package_id}",
+            )
+            component_id = component_ref["id"]
+            _require_exact_ontology_version(
+                component_ref.get("version"),
+                context=f"Ontology component {component_id}",
+            )
+            kind = component_ref.get("kind")
+            if kind not in ONTOLOGY_COMPONENT_KINDS or kind in components_by_kind:
+                fail(f"Ontology component package {package_id} must declare one component per kind")
+            lifecycle = component_ref.get("lifecycle")
+            if lifecycle not in ONTOLOGY_COMPONENT_LIFECYCLES:
+                fail(f"Ontology component {component_id} has invalid lifecycle")
+            if component_ref.get("releaseProvenance") != expected_release:
+                fail(f"Ontology component {component_id} release provenance changed")
+            allowed_purposes = _require_string_set(
+                component_ref.get("allowedPurposes"),
+                context=f"Ontology component {component_id} allowedPurposes",
+            )
+            allowed_stages = _require_string_set(
+                component_ref.get("allowedStages"),
+                context=f"Ontology component {component_id} allowedStages",
+            )
+            if not allowed_purposes <= set(ONTOLOGY_COMPONENT_STAGES):
+                fail(f"Ontology component {component_id} has an unsupported purpose")
+            if not allowed_stages <= set(ONTOLOGY_COMPONENT_STAGES):
+                fail(f"Ontology component {component_id} has an unsupported stage")
+
+            component_path = _require_ontology_path(
+                component_root,
+                component_ref.get("path"),
+                context=f"Ontology component {component_id}",
+            )
+            referenced_paths.add(component_path.absolute())
+            if component_ref.get("sha256") != _sha256(component_path):
+                fail(f"Ontology component {component_id} hash drift")
+            component = _read_canonical_json(component_path)
+            _require_exact_keys(
+                component,
+                {"apiVersion", "content", "id", "kind", "lifecycle", "version"},
+                context=f"Ontology component {component_id}",
+            )
+            if component.get("apiVersion") != ONTOLOGY_COMPONENT_API_VERSION:
+                fail(
+                    f"Ontology component {component_id} must use "
+                    f"{ONTOLOGY_COMPONENT_API_VERSION}"
+                )
+            _require_exact_ontology_version(
+                component.get("version"),
+                context=f"Ontology component {component_id}",
+            )
+            _reject_unpinned_ontology_values(
+                component,
+                context=f"Ontology component {component_id}",
+            )
+            for field_name in ("id", "version", "kind", "lifecycle"):
+                if component.get(field_name) != component_ref.get(field_name):
+                    fail(f"Ontology component {component_id} {field_name} does not match reference")
+            components_by_kind[kind] = component
+
+        if set(components_by_kind) != ONTOLOGY_COMPONENT_KINDS:
+            fail(f"Ontology component package {package_id} is missing a required component kind")
+
+        dependencies_by_id: dict[str, set[str]] = {}
+        for component_ref in component_refs:
+            component_id = component_ref["id"]
+            dependencies = component_ref.get("dependencies")
+            if not isinstance(dependencies, list):
+                fail(f"Ontology component {component_id} dependencies must be a list")
+            dependency_ids: set[str] = set()
+            for dependency in dependencies:
+                if not isinstance(dependency, dict):
+                    fail(f"Ontology component {component_id} dependency must be an object")
+                _require_exact_keys(
+                    dependency,
+                    {"id", "sha256", "version"},
+                    context=f"Ontology component {component_id} dependency",
+                )
+                _require_exact_ontology_version(
+                    dependency.get("version"),
+                    context=f"Ontology component {component_id} dependency",
+                )
+                dependency_id = dependency.get("id")
+                declared = refs_by_id.get(dependency_id)
+                if declared is None:
+                    fail(f"Ontology component {component_id} has an undeclared dependency")
+                expected_dependency = {
+                    "id": declared["id"],
+                    "sha256": declared["sha256"],
+                    "version": declared["version"],
+                }
+                if dependency != expected_dependency:
+                    fail(f"Ontology component {component_id} dependency identity changed")
+                if dependency_id == component_id or dependency_id in dependency_ids:
+                    fail(f"Ontology component {component_id} has an invalid dependency graph")
+                dependency_ids.add(dependency_id)
+            dependencies_by_id[component_id] = dependency_ids
+
+        ontology_component_id = next(
+            component_ref["id"]
+            for component_ref in component_refs
+            if component_ref["kind"] == "ontology"
+        )
+        for component_ref in component_refs:
+            component_id = component_ref["id"]
+            if (
+                component_ref["kind"] != "ontology"
+                and ontology_component_id not in dependencies_by_id[component_id]
+            ):
+                fail(
+                    f"Ontology component {component_id} must depend directly on "
+                    f"{ontology_component_id}"
+                )
+
+        visiting: set[str] = set()
+        visited: set[str] = set()
+
+        def visit(component_id: str) -> None:
+            if component_id in visiting:
+                fail(f"Ontology component package {package_id} dependency graph is cyclic")
+            if component_id in visited:
+                return
+            visiting.add(component_id)
+            for dependency_id in dependencies_by_id[component_id]:
+                visit(dependency_id)
+            visiting.remove(component_id)
+            visited.add(component_id)
+
+        for component_id in component_ids:
+            visit(component_id)
+
+        stage_bindings = package.get("stageBindings")
+        if not isinstance(stage_bindings, list):
+            fail(f"Ontology component package {package_id} must declare stage bindings")
+        if [binding.get("stage") for binding in stage_bindings if isinstance(binding, dict)] != list(
+            ONTOLOGY_COMPONENT_STAGES
+        ):
+            fail(f"Ontology component package {package_id} must bind every supported stage once")
+        for binding in stage_bindings:
+            if not isinstance(binding, dict):
+                fail(f"Ontology component package {package_id} stage binding must be an object")
+            _require_exact_keys(
+                binding,
+                {"componentIds", "purpose", "stage"},
+                context=f"Ontology component package {package_id} stage binding",
+            )
+            stage = binding["stage"]
+            if binding.get("purpose") != stage:
+                fail(f"Ontology component package {package_id} stage purpose must be explicit")
+            bound_ids = binding.get("componentIds")
+            bound_id_set = _require_string_set(
+                bound_ids,
+                context=f"Ontology component package {package_id} stage componentIds",
+            )
+            if bound_ids != sorted(bound_id_set):
+                fail(f"Ontology component package {package_id} stage bindings must be unique and sorted")
+            if not set(bound_ids) <= set(component_ids):
+                fail(f"Ontology component package {package_id} stage binds an unknown component")
+            for component_id in bound_ids:
+                component_ref = refs_by_id[component_id]
+                if stage not in component_ref["allowedStages"]:
+                    fail(f"Ontology component {component_id} is not allowed at stage {stage}")
+                if stage not in component_ref["allowedPurposes"]:
+                    fail(f"Ontology component {component_id} is not allowed for purpose {stage}")
+                if not dependencies_by_id[component_id] <= set(bound_ids):
+                    fail(f"Ontology component {component_id} stage binding lacks dependency closure")
+
+        _validate_ontology_component_semantics(components_by_kind, package_id=package_id)
+
+    released_paths = _ontology_surface_files(component_root)
+    unreferenced_paths = sorted(
+        path.relative_to(component_root.absolute()).as_posix()
+        for path in released_paths - referenced_paths
+    )
+    if unreferenced_paths:
+        fail(
+            "Ontology component surface contains unreferenced artifacts: "
+            f"{unreferenced_paths}"
+        )
+
+    return set(package_ids)
+
+
 def validate_no_obvious_secrets() -> None:
     for path in ROOT.rglob("*"):
         if not path.is_file() or ".git" in path.parts:
@@ -4641,6 +5305,7 @@ def main() -> None:
     validate_mcp_definitions(manifest, recommendations)
     validate_workspace_variables(manifest, project_type_ids)
     validate_fund_routing_contract()
+    ontology_package_ids = validate_ontology_components(manifest)
     validate_application_recommendations(manifest, recommendations, project_type_ids)
     validate_recommendation_management_actions(
         recommendations,
@@ -4656,7 +5321,8 @@ def main() -> None:
         f"{len(manifest['surfaces']['alludiumAgentTemplates']['ids'])} agent templates, "
         f"{len(manifest['surfaces']['taskDefinitionTemplates']['ids'])} task definition templates, "
         f"{len(project_type_ids)} project types, "
-        f"{len(manifest['surfaces']['documents']['ids'])} documents"
+        f"{len(manifest['surfaces']['documents']['ids'])} documents, "
+        f"{len(ontology_package_ids)} ontology component packages"
     )
 
 

@@ -1,0 +1,27 @@
+{
+  "apiVersion": "alludium/v1alpha1",
+  "content": {
+    "fields": [
+      {
+        "outputKey": "affected_service",
+        "termId": "operations.term.affected_service"
+      },
+      {
+        "outputKey": "recovery_time_minutes",
+        "termId": "operations.term.recovery_time_minutes"
+      },
+      {
+        "outputKey": "service_owner",
+        "termId": "operations.term.service_owner"
+      },
+      {
+        "outputKey": "severity",
+        "termId": "operations.term.severity"
+      }
+    ]
+  },
+  "id": "vc.operations-incident.projection",
+  "kind": "projection",
+  "lifecycle": "active",
+  "version": "1.0.0"
+}

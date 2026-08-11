@@ -1,0 +1,27 @@
+{
+  "apiVersion": "alludium/v1alpha1",
+  "content": {
+    "aliases": [
+      {
+        "alias": "ARR",
+        "termId": "finance.term.annual_recurring_revenue"
+      },
+      {
+        "alias": "cash runway",
+        "termId": "finance.term.runway_months"
+      },
+      {
+        "alias": "monthly cash burn",
+        "termId": "finance.term.monthly_burn"
+      },
+      {
+        "alias": "raise amount",
+        "termId": "finance.term.round_size"
+      }
+    ]
+  },
+  "id": "vc.finance-screening.mapping",
+  "kind": "mapping",
+  "lifecycle": "active",
+  "version": "1.0.0"
+}

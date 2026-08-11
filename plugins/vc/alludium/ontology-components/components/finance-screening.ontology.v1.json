@@ -1,0 +1,63 @@
+{
+  "apiVersion": "alludium/v1alpha1",
+  "content": {
+    "qualifiers": [
+      {
+        "id": "finance.qualifier.actual",
+        "label": "Actual"
+      },
+      {
+        "id": "finance.qualifier.forecast",
+        "label": "Forecast"
+      },
+      {
+        "id": "finance.qualifier.reporting_period",
+        "label": "Reporting period"
+      }
+    ],
+    "terms": [
+      {
+        "allowedQualifierIds": [
+          "finance.qualifier.actual",
+          "finance.qualifier.forecast",
+          "finance.qualifier.reporting_period"
+        ],
+        "id": "finance.term.annual_recurring_revenue",
+        "label": "Annual recurring revenue",
+        "valueType": "currency"
+      },
+      {
+        "allowedQualifierIds": [
+          "finance.qualifier.actual",
+          "finance.qualifier.forecast",
+          "finance.qualifier.reporting_period"
+        ],
+        "id": "finance.term.monthly_burn",
+        "label": "Monthly burn",
+        "valueType": "currency"
+      },
+      {
+        "allowedQualifierIds": [
+          "finance.qualifier.actual",
+          "finance.qualifier.forecast"
+        ],
+        "id": "finance.term.runway_months",
+        "label": "Runway months",
+        "valueType": "number"
+      },
+      {
+        "allowedQualifierIds": [
+          "finance.qualifier.actual",
+          "finance.qualifier.forecast"
+        ],
+        "id": "finance.term.round_size",
+        "label": "Round size",
+        "valueType": "currency"
+      }
+    ]
+  },
+  "id": "vc.finance-screening.ontology",
+  "kind": "ontology",
+  "lifecycle": "active",
+  "version": "1.0.0"
+}
