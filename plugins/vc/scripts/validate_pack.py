@@ -4595,6 +4595,27 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _require_ontology_root(surface: dict[str, Any]) -> Path:
+    relative_path = surface.get("path")
+    if not isinstance(relative_path, str) or not relative_path:
+        fail("surfaces.ontologyComponents.path must be declared")
+    pack_root = ROOT.absolute()
+    component_root = (ROOT / relative_path).absolute()
+    if component_root == pack_root or not component_root.is_relative_to(pack_root):
+        fail("surfaces.ontologyComponents.path must stay beneath the pack root")
+    if component_root.is_symlink() or any(
+        parent != pack_root and parent.is_symlink()
+        for parent in component_root.parents
+        if parent.is_relative_to(pack_root)
+    ):
+        fail("surfaces.ontologyComponents.path must not use symlinks")
+    if not component_root.resolve().is_relative_to(pack_root.resolve()):
+        fail("surfaces.ontologyComponents.path must stay beneath the pack root")
+    if not component_root.is_dir():
+        fail("surfaces.ontologyComponents.path must reference an existing directory")
+    return component_root
+
+
 def _require_ontology_path(component_root: Path, relative_path: Any, *, context: str) -> Path:
     if not isinstance(relative_path, str) or not relative_path:
         fail(f"{context} must declare a non-empty path")
@@ -4885,7 +4906,7 @@ def validate_ontology_components(manifest: dict[str, Any]) -> set[str]:
             "ontologyComponents must declare status: "
             f"{ONTOLOGY_COMPONENT_SURFACE_STATUS}"
         )
-    component_root = ROOT / str(surface.get("path", ""))
+    component_root = _require_ontology_root(surface)
     _ontology_surface_files(component_root)
     catalog_path = _require_ontology_path(
         component_root,

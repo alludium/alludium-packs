@@ -166,6 +166,36 @@ class OntologyComponentContractRegressionTests(unittest.TestCase):
             self.assertIn("must not contain symlink artifacts", result.stderr)
             self.assertIn("components/alias.v1.json", result.stderr)
 
+    def test_ontology_surface_root_stays_beneath_pack_and_is_not_a_symlink(self) -> None:
+        for case in ("traversal", "symlink"):
+            with self.subTest(case=case), tempfile.TemporaryDirectory() as temporary_root:
+                pack_root = self._copy_pack(temporary_root)
+                manifest_path = pack_root / "alludium" / "manifest.yaml"
+                manifest_text = manifest_path.read_text(encoding="utf-8")
+                if case == "traversal":
+                    outside_root = pack_root.parent / "outside"
+                    shutil.copytree(
+                        pack_root / "alludium" / "ontology-components",
+                        outside_root,
+                    )
+                    replacement = "path: ../outside"
+                else:
+                    alias_root = pack_root / "alludium" / "ontology-components-link"
+                    alias_root.symlink_to("ontology-components")
+                    replacement = "path: alludium/ontology-components-link"
+                manifest_path.write_text(
+                    manifest_text.replace(
+                        "path: alludium/ontology-components",
+                        replacement,
+                    ),
+                    encoding="utf-8",
+                )
+
+                result = self._run_validator(pack_root)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("surfaces.ontologyComponents.path must", result.stderr)
+
     def test_versions_reject_ranges_wildcards_and_arbitrary_text(self) -> None:
         cases = (
             ("package", "^1.0.0"),
