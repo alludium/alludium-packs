@@ -107,6 +107,100 @@ class OntologyComponentContractRegressionTests(unittest.TestCase):
                 result.stderr,
             )
 
+    def test_component_content_schema_rejects_unrecognized_runtime_controls(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_root:
+            pack_root = self._copy_pack(temporary_root)
+            component_root = pack_root / "alludium" / "ontology-components"
+            component_path = (
+                component_root / "components" / "finance-screening.profile.v1.json"
+            )
+            component = _read_json(component_path)
+            component["content"]["temperature"] = 0
+            _write_canonical(component_path, component)
+            _rehash_component(
+                component_root,
+                "finance-screening.v1.json",
+                "finance-screening.profile.v1.json",
+            )
+
+            result = self._run_validator(pack_root)
+
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("profile content keys must be exact", result.stderr)
+
+    def test_ontology_surface_rejects_unreferenced_artifacts(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_root:
+            pack_root = self._copy_pack(temporary_root)
+            component_root = pack_root / "alludium" / "ontology-components"
+            orphan_path = component_root / "components" / "orphan.v1.json"
+            _write_canonical(
+                orphan_path,
+                {
+                    "apiVersion": "alludium/v1alpha1",
+                    "content": {"temperature": 0},
+                    "id": "fixture.orphan",
+                    "kind": "profile",
+                    "lifecycle": "active",
+                    "version": "latest",
+                },
+            )
+
+            result = self._run_validator(pack_root)
+
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("contains unreferenced artifacts", result.stderr)
+        self.assertIn("components/orphan.v1.json", result.stderr)
+
+    def test_versions_reject_ranges_wildcards_and_arbitrary_text(self) -> None:
+        cases = (
+            ("package", "^1.0.0"),
+            ("component_reference", ">=1.0"),
+            ("component_artifact", "1.x"),
+            ("dependency", "release-one"),
+        )
+        for case, invalid_version in cases:
+            with self.subTest(case=case), tempfile.TemporaryDirectory() as temporary_root:
+                pack_root = self._copy_pack(temporary_root)
+                component_root = pack_root / "alludium" / "ontology-components"
+                package_path = component_root / "packages" / "finance-screening.v1.json"
+                package = _read_json(package_path)
+
+                if case == "package":
+                    package["version"] = invalid_version
+                    _write_canonical(package_path, package)
+                    catalog_path = component_root / "catalog.v1.json"
+                    catalog = _read_json(catalog_path)
+                    catalog["packages"][0]["version"] = invalid_version
+                    catalog["packages"][0]["sha256"] = _sha256(package_path)
+                    _write_canonical(catalog_path, catalog)
+                elif case == "component_reference":
+                    package["components"][0]["version"] = invalid_version
+                    _write_canonical(package_path, package)
+                    _rehash_package(component_root, "finance-screening.v1.json")
+                elif case == "component_artifact":
+                    component_path = (
+                        component_root
+                        / "components"
+                        / "finance-screening.constraints.v1.json"
+                    )
+                    component = _read_json(component_path)
+                    component["version"] = invalid_version
+                    _write_canonical(component_path, component)
+                    _rehash_component(
+                        component_root,
+                        "finance-screening.v1.json",
+                        "finance-screening.constraints.v1.json",
+                    )
+                else:
+                    package["components"][0]["dependencies"][0]["version"] = invalid_version
+                    _write_canonical(package_path, package)
+                    _rehash_package(component_root, "finance-screening.v1.json")
+
+                result = self._run_validator(pack_root)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("must use an exact semantic version", result.stderr)
+
     def test_catalog_rejects_an_unrecognized_api_version(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_root:
             pack_root = self._copy_pack(temporary_root)
