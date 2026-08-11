@@ -30,6 +30,14 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _replace_string(value: Any, old: str, new: str) -> Any:
+    if isinstance(value, dict):
+        return {key: _replace_string(item, old, new) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_replace_string(item, old, new) for item in value]
+    return new if value == old else value
+
+
 def _rehash_package(component_root: Path, package_filename: str) -> None:
     package_path = component_root / "packages" / package_filename
     catalog_path = component_root / "catalog.v1.json"
@@ -195,6 +203,54 @@ class OntologyComponentContractRegressionTests(unittest.TestCase):
 
             self.assertEqual(result.returncode, 1)
             self.assertIn("surfaces.ontologyComponents.path must", result.stderr)
+
+    def test_ontology_terms_reject_whitespace_only_semantic_fields(self) -> None:
+        for field_name in ("id", "label", "valueType"):
+            with self.subTest(field_name=field_name), tempfile.TemporaryDirectory(
+            ) as temporary_root:
+                pack_root = self._copy_pack(temporary_root)
+                component_root = pack_root / "alludium" / "ontology-components"
+                ontology_path = (
+                    component_root / "components" / "finance-screening.ontology.v1.json"
+                )
+                ontology = _read_json(ontology_path)
+                term = ontology["content"]["terms"][0]
+                old_value = term[field_name]
+                if field_name == "id":
+                    package = _read_json(
+                        component_root / "packages" / "finance-screening.v1.json"
+                    )
+                    component_filenames = [
+                        Path(component_ref["path"]).name
+                        for component_ref in package["components"]
+                    ]
+                    for component_filename in component_filenames:
+                        component_path = component_root / "components" / component_filename
+                        component = _replace_string(
+                            _read_json(component_path),
+                            old_value,
+                            "   ",
+                        )
+                        _write_canonical(component_path, component)
+                    for component_filename in component_filenames:
+                        _rehash_component(
+                            component_root,
+                            "finance-screening.v1.json",
+                            component_filename,
+                        )
+                else:
+                    term[field_name] = "   "
+                    _write_canonical(ontology_path, ontology)
+                    _rehash_component(
+                        component_root,
+                        "finance-screening.v1.json",
+                        "finance-screening.ontology.v1.json",
+                    )
+
+                result = self._run_validator(pack_root)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("ontology terms", result.stderr)
 
     def test_versions_reject_ranges_wildcards_and_arbitrary_text(self) -> None:
         cases = (

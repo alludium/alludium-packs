@@ -4595,9 +4595,13 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _is_nonempty_ontology_string(value: Any) -> bool:
+    return isinstance(value, str) and bool(value.strip())
+
+
 def _require_ontology_root(surface: dict[str, Any]) -> Path:
     relative_path = surface.get("path")
-    if not isinstance(relative_path, str) or not relative_path:
+    if not _is_nonempty_ontology_string(relative_path):
         fail("surfaces.ontologyComponents.path must be declared")
     pack_root = ROOT.absolute()
     component_root = (ROOT / relative_path).absolute()
@@ -4617,7 +4621,7 @@ def _require_ontology_root(surface: dict[str, Any]) -> Path:
 
 
 def _require_ontology_path(component_root: Path, relative_path: Any, *, context: str) -> Path:
-    if not isinstance(relative_path, str) or not relative_path:
+    if not _is_nonempty_ontology_string(relative_path):
         fail(f"{context} must declare a non-empty path")
     root = component_root.absolute()
     path = (component_root / relative_path).absolute()
@@ -4655,7 +4659,7 @@ def _ontology_surface_files(component_root: Path) -> set[Path]:
 def _require_string_set(value: Any, *, context: str) -> set[str]:
     if not isinstance(value, list) or not value:
         fail(f"{context} must be a non-empty list")
-    if not all(isinstance(item, str) and item for item in value):
+    if not all(_is_nonempty_ontology_string(item) for item in value):
         fail(f"{context} entries must be non-empty strings")
     if len(value) != len(set(value)):
         fail(f"{context} entries must be unique")
@@ -4735,7 +4739,7 @@ def _validate_ontology_component_semantics(
             context=f"Ontology package {package_id} ontology term",
         )
         if not all(
-            isinstance(term.get(field), str) and term.get(field)
+            _is_nonempty_ontology_string(term.get(field))
             for field in ("id", "label", "valueType")
         ):
             fail(f"Ontology package {package_id} ontology terms are incomplete")
@@ -4748,17 +4752,19 @@ def _validate_ontology_component_semantics(
             context=f"Ontology package {package_id} ontology qualifier",
         )
         if not all(
-            isinstance(qualifier.get(field), str) and qualifier.get(field)
+            _is_nonempty_ontology_string(qualifier.get(field))
             for field in ("id", "label")
         ):
             fail(f"Ontology package {package_id} ontology qualifiers are incomplete")
 
     term_ids = [term["id"] for term in terms]
     qualifier_ids = [qualifier["id"] for qualifier in qualifiers]
-    if len(term_ids) != len(terms) or not all(isinstance(item, str) and item for item in term_ids):
+    if len(term_ids) != len(terms) or not all(
+        _is_nonempty_ontology_string(item) for item in term_ids
+    ):
         fail(f"Ontology package {package_id} terms must declare IDs")
     if len(qualifier_ids) != len(qualifiers) or not all(
-        isinstance(item, str) and item for item in qualifier_ids
+        _is_nonempty_ontology_string(item) for item in qualifier_ids
     ):
         fail(f"Ontology package {package_id} qualifiers must declare IDs")
     if len(term_ids) != len(set(term_ids)) or len(qualifier_ids) != len(set(qualifier_ids)):
@@ -4796,7 +4802,7 @@ def _validate_ontology_component_semantics(
         if alias.get("termId") not in term_id_set:
             fail(f"Ontology package {package_id} mapping references an unknown term")
         alias_name = alias.get("alias")
-        if not isinstance(alias_name, str) or not alias_name:
+        if not _is_nonempty_ontology_string(alias_name):
             fail(f"Ontology package {package_id} mapping aliases must declare names")
         alias_names.append(alias_name.casefold())
     if len(alias_names) != len(set(alias_names)):
@@ -4862,7 +4868,7 @@ def _validate_ontology_component_semantics(
         if field.get("termId") not in term_id_set:
             fail(f"Ontology package {package_id} projection references an unknown term")
         output_key = field.get("outputKey")
-        if not isinstance(output_key, str) or not output_key:
+        if not _is_nonempty_ontology_string(output_key):
             fail(f"Ontology package {package_id} projection fields must declare outputKey")
         output_keys.append(output_key)
     if len(output_keys) != len(set(output_keys)):
@@ -4943,7 +4949,7 @@ def validate_ontology_components(manifest: dict[str, Any]) -> set[str]:
         fail("Ontology component catalog must publish at least two fixture packages")
     package_ids = [item.get("id") for item in package_refs if isinstance(item, dict)]
     if len(package_ids) != len(package_refs) or not all(
-        isinstance(item, str) and item for item in package_ids
+        _is_nonempty_ontology_string(item) for item in package_ids
     ):
         fail("Ontology component package references must declare IDs")
     if package_ids != sorted(package_ids) or len(package_ids) != len(set(package_ids)):
@@ -5020,7 +5026,7 @@ def validate_ontology_components(manifest: dict[str, Any]) -> set[str]:
         component_ids = [item.get("id") for item in component_refs if isinstance(item, dict)]
         if (
             len(component_ids) != len(component_refs)
-            or not all(isinstance(item, str) and item for item in component_ids)
+            or not all(_is_nonempty_ontology_string(item) for item in component_ids)
             or component_ids != sorted(component_ids)
         ):
             fail(f"Ontology component package {package_id} component IDs must be sorted")
