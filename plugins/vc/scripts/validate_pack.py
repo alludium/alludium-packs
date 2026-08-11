@@ -5150,6 +5150,22 @@ def validate_ontology_components(manifest: dict[str, Any]) -> set[str]:
                 dependency_ids.add(dependency_id)
             dependencies_by_id[component_id] = dependency_ids
 
+        ontology_component_id = next(
+            component_ref["id"]
+            for component_ref in component_refs
+            if component_ref["kind"] == "ontology"
+        )
+        for component_ref in component_refs:
+            component_id = component_ref["id"]
+            if (
+                component_ref["kind"] != "ontology"
+                and ontology_component_id not in dependencies_by_id[component_id]
+            ):
+                fail(
+                    f"Ontology component {component_id} must depend directly on "
+                    f"{ontology_component_id}"
+                )
+
         visiting: set[str] = set()
         visited: set[str] = set()
 

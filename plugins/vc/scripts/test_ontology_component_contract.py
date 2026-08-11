@@ -252,6 +252,32 @@ class OntologyComponentContractRegressionTests(unittest.TestCase):
             self.assertEqual(result.returncode, 1)
             self.assertIn("ontology terms", result.stderr)
 
+    def test_semantic_components_must_depend_directly_on_their_ontology(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_root:
+            pack_root = self._copy_pack(temporary_root)
+            component_root = pack_root / "alludium" / "ontology-components"
+            package_path = component_root / "packages" / "finance-screening.v1.json"
+            package = _read_json(package_path)
+            ontology_id = next(
+                component_ref["id"]
+                for component_ref in package["components"]
+                if component_ref["kind"] == "ontology"
+            )
+            for component_ref in package["components"]:
+                if component_ref["kind"] != "ontology":
+                    component_ref["dependencies"] = []
+            query_binding = next(
+                binding for binding in package["stageBindings"] if binding["stage"] == "query"
+            )
+            query_binding["componentIds"].remove(ontology_id)
+            _write_canonical(package_path, package)
+            _rehash_package(component_root, "finance-screening.v1.json")
+
+            result = self._run_validator(pack_root)
+
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("must depend directly on", result.stderr)
+
     def test_versions_reject_ranges_wildcards_and_arbitrary_text(self) -> None:
         cases = (
             ("package", "^1.0.0"),
