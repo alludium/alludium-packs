@@ -4598,12 +4598,37 @@ def _sha256(path: Path) -> str:
 def _require_ontology_path(component_root: Path, relative_path: Any, *, context: str) -> Path:
     if not isinstance(relative_path, str) or not relative_path:
         fail(f"{context} must declare a non-empty path")
-    path = (component_root / relative_path).resolve()
-    if not path.is_relative_to(component_root.resolve()):
+    root = component_root.absolute()
+    path = (component_root / relative_path).absolute()
+    if not path.is_relative_to(root):
+        fail(f"{context} path must stay inside the ontology component surface")
+    if path.is_symlink() or any(
+        parent != root and parent.is_symlink()
+        for parent in path.parents
+        if parent.is_relative_to(root)
+    ):
+        fail(f"{context} path must not use symlinks")
+    if not path.resolve().is_relative_to(root.resolve()):
         fail(f"{context} path must stay inside the ontology component surface")
     if not path.is_file():
         fail(f"{context} path does not exist: {relative_path}")
     return path
+
+
+def _ontology_surface_files(component_root: Path) -> set[Path]:
+    root = component_root.absolute()
+    entries = tuple(component_root.rglob("*"))
+    symlink_paths = sorted(
+        path.absolute().relative_to(root).as_posix()
+        for path in entries
+        if path.is_symlink()
+    )
+    if symlink_paths:
+        fail(
+            "Ontology component surface must not contain symlink artifacts: "
+            f"{symlink_paths}"
+        )
+    return {path.absolute() for path in entries if path.is_file()}
 
 
 def _require_string_set(value: Any, *, context: str) -> set[str]:
@@ -4861,12 +4886,13 @@ def validate_ontology_components(manifest: dict[str, Any]) -> set[str]:
             f"{ONTOLOGY_COMPONENT_SURFACE_STATUS}"
         )
     component_root = ROOT / str(surface.get("path", ""))
+    _ontology_surface_files(component_root)
     catalog_path = _require_ontology_path(
         component_root,
         surface.get("catalog"),
         context="ontologyComponents catalog",
     )
-    referenced_paths = {catalog_path.resolve()}
+    referenced_paths = {catalog_path.absolute()}
     catalog = _read_canonical_json(catalog_path)
     _require_exact_keys(
         catalog,
@@ -4923,7 +4949,7 @@ def validate_ontology_components(manifest: dict[str, Any]) -> set[str]:
             package_ref.get("path"),
             context=f"Ontology component package {package_id}",
         )
-        referenced_paths.add(package_path.resolve())
+        referenced_paths.add(package_path.absolute())
         if package_ref.get("sha256") != _sha256(package_path):
             fail(f"Ontology component package {package_id} hash drift")
         package = _read_canonical_json(package_path)
@@ -5032,7 +5058,7 @@ def validate_ontology_components(manifest: dict[str, Any]) -> set[str]:
                 component_ref.get("path"),
                 context=f"Ontology component {component_id}",
             )
-            referenced_paths.add(component_path.resolve())
+            referenced_paths.add(component_path.absolute())
             if component_ref.get("sha256") != _sha256(component_path):
                 fail(f"Ontology component {component_id} hash drift")
             component = _read_canonical_json(component_path)
@@ -5152,13 +5178,9 @@ def validate_ontology_components(manifest: dict[str, Any]) -> set[str]:
 
         _validate_ontology_component_semantics(components_by_kind, package_id=package_id)
 
-    released_paths = {
-        path.resolve()
-        for path in component_root.rglob("*")
-        if path.is_file()
-    }
+    released_paths = _ontology_surface_files(component_root)
     unreferenced_paths = sorted(
-        path.relative_to(component_root.resolve()).as_posix()
+        path.relative_to(component_root.absolute()).as_posix()
         for path in released_paths - referenced_paths
     )
     if unreferenced_paths:

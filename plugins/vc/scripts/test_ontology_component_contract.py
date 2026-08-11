@@ -151,6 +151,21 @@ class OntologyComponentContractRegressionTests(unittest.TestCase):
         self.assertIn("contains unreferenced artifacts", result.stderr)
         self.assertIn("components/orphan.v1.json", result.stderr)
 
+    def test_ontology_surface_rejects_symlink_artifacts(self) -> None:
+        for target_name in ("finance-screening.profile.v1.json", "missing.v1.json"):
+            with self.subTest(target_name=target_name), tempfile.TemporaryDirectory(
+            ) as temporary_root:
+                pack_root = self._copy_pack(temporary_root)
+                component_root = pack_root / "alludium" / "ontology-components"
+                alias_path = component_root / "components" / "alias.v1.json"
+                alias_path.symlink_to(target_name)
+
+                result = self._run_validator(pack_root)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("must not contain symlink artifacts", result.stderr)
+            self.assertIn("components/alias.v1.json", result.stderr)
+
     def test_versions_reject_ranges_wildcards_and_arbitrary_text(self) -> None:
         cases = (
             ("package", "^1.0.0"),
