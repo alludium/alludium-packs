@@ -28,11 +28,12 @@ This is not a research or screening task. Do not run public-web research, market
    - If an approved CRM/source payload is present, read only the approved record scope needed to hydrate missing project fields and provenance.
    - If `source_system` and `source_object_url` identify a scoped CRM/source record such as an Affinity company or opportunity, treat it as an approved scoped read. If the URL path resembles `.../companies/<id>`, treat it as a company and read it with `affinity_get_company` using that ID; if it resembles `.../lists/<id>` or a list-entry path, read it with `affinity_get_list_entries`; otherwise treat it as an opportunity and read it with `affinity_get_opportunity`. If the URL cannot be parsed or the direct read is empty, confirm the record with `affinity_search_companies` using the confirmed company identity before reading. Read the record and hydrate fields with provenance before assessing readiness or listing fields as missing.
    - If the required CRM/source read tool is unavailable or the connection is inactive, do not complete intake from the URL string. Stop and ask the user to connect the source, approve the read, supply an export/snapshot, or run the appropriate import task.
-4. If `pitch_deck_artifact_id` is present, inspect, extract, search, or route the deck through `pitch-deck-explainer` before using it as evidence or marking deck-contained fields missing. If it cannot be inspected, mark it `present_unreadable`, do not count it as satisfying source readiness, and ask for a readable deck, extracted text, approved extraction path, or manual field values before saving a final readiness artifact.
-5. Build a compact source index and hydrated field map.
-6. Report readiness as `ready_for_screening`, `needs_more_info`, or `blocked`. Do not set `ready_for_screening` on the basis of an anchor that was recorded but never read.
-7. Ask for the smallest missing item when intake is not ready.
-8. Do not create or save an Opportunity Intake Readiness Summary when source anchoring is missing, unless a human explicitly approves a partial artifact with gaps.
+4. If `pitch_deck_artifact_id` is present, inspect, extract, search, or route the deck through `pitch-deck-explainer` before using it as evidence or marking deck-contained fields missing. When supplied artifacts are `POLLING` or processing, collect their IDs and call `artifact_waitForArtifactsReady` once with the maximum supported timeout before retrying inspection; do not replace the bounded wait with repeated status-list calls. If the wait times out, keep the task pending with a concise processing-status update instead of asking the user to confirm identity that the attached material can resolve after indexing. If a deck cannot be inspected after processing finishes, mark it `present_unreadable`, do not count it as satisfying source readiness, and ask for a readable deck, extracted text, approved extraction path, or manual field values before saving a final readiness artifact.
+5. Hydrate project identity without broad research. Return the confirmed canonical company name as `company_name` when it improves or normalizes the submitted name. When a normalized company domain is already present or is found in an inspected approved source, return it as `company_domain`. Prefer an explicit HTTPS logo URL on the confirmed company's host family from that approved source; otherwise derive `company_logo_url` as `https://<normalized-domain>/favicon.ico`. Do not treat the derived first-party favicon as inspected evidence, and do not block intake when no logo is available.
+6. Build a compact source index and hydrated field map.
+7. Report readiness as `ready_for_screening`, `needs_more_info`, or `blocked`. Do not set `ready_for_screening` on the basis of an anchor that was recorded but never read.
+8. Ask for the smallest missing item when intake is not ready.
+9. Do not create or save an Opportunity Intake Readiness Summary when source anchoring is missing, unless a human explicitly approves a partial artifact with gaps.
 
 ## Output
 
@@ -79,6 +80,9 @@ The rest of the document must include:
 
 When saving structured task output fields, keep them separate from the HTML artifact:
 - `opportunity_intake_artifact_id`: the returned artifact UUID only
+- `company_name`: the confirmed canonical company name only; omit it when identity remains ambiguous
+- `company_domain`: the normalized confirmed domain only, with no scheme, path, or trailing slash; omit it when unresolved
+- `company_logo_url`: an approved HTTP(S) logo URL on the confirmed company's host family or the deterministic first-party favicon URL derived from `company_domain`; omit it when unavailable
 - `intake_readiness_status`: one status string only (`ready_for_screening`, `needs_more_info`, or `blocked`)
 - `hydrated_field_map`: leave unset when the HTML artifact contains the full table; if a value is required, use one plain-text sentence under 180 characters with no HTML tags, for example `See HTML artifact for full hydrated field map (12 fields; 8 high confidence)`
 - `source_index`: leave unset when the HTML artifact contains the full table; if a value is required, use one plain-text sentence under 180 characters with no HTML tags, for example `See HTML artifact for full source index (2 inspected sources; CRM unavailable)`
@@ -88,14 +92,14 @@ Do not copy HTML tables, full field maps, full source indexes, long prose, or ma
 
 ## Boundaries
 
-Do not mutate CRM records, send communications, create folders, create child tasks, create projects, or move stages. Humans approve final readiness and any external/system-of-record action.
+Do not mutate CRM records, send communications, create folders, create child tasks, create projects, move stages, or run public-web research. Deterministic favicon derivation from an already confirmed domain is allowed; discovering a domain or logo through broad web search is not. Humans approve final readiness and any external/system-of-record action.
 
 ## Alludium Source
 
 - Source template: `alludium/agent-templates/vc_intake_readiness_operator.yaml`
 - Alludium template ID: `vc_intake_readiness_operator`
 - Display name: Intake Readiness Operator
-- Version: `1.0.6`
+- Version: `1.0.8`
 - Primary stage: Intake
 - Primary Deal Room state: `intake`
 - Supported task definitions:

@@ -268,7 +268,7 @@
     }
   ],
   "initialVersion": {
-    "version": "1.1.8",
+    "version": "1.1.9",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -329,7 +329,7 @@
         "label": "Company Logo URL",
         "kind": "text",
         "required": false,
-        "description": "Optional company logo image URL from Affinity enrichment or another approved source.",
+        "description": "Optional company logo image URL on the confirmed company's host family or deterministic first-party favicon URL derived from the confirmed company domain.",
         "placeholder": "https://example.com/logo.png"
       },
       {
@@ -1966,6 +1966,24 @@
             "taskField": "opportunity_intake_artifact_id",
             "target": "project.field",
             "targetPath": "opportunity_intake_artifact_id",
+            "requiredForCompletion": false
+          },
+          {
+            "taskField": "company_name",
+            "target": "project.field",
+            "targetPath": "company_name",
+            "requiredForCompletion": false
+          },
+          {
+            "taskField": "company_domain",
+            "target": "project.field",
+            "targetPath": "company_domain",
+            "requiredForCompletion": false
+          },
+          {
+            "taskField": "company_logo_url",
+            "target": "project.field",
+            "targetPath": "company_logo_url",
             "requiredForCompletion": false
           }
         ],

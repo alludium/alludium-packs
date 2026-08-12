@@ -120,10 +120,33 @@ names and titles, sector or category, geography, investment stage or round,
 business model, traction or key metrics, and source snippets for any hydrated
 fields.
 
-If the available tools cannot inspect the deck, record the deck as
+If supplied artifacts are still `POLLING` or processing, collect their artifact IDs and call
+`artifact_waitForArtifactsReady` once with the maximum supported timeout before retrying
+inspection. Do not substitute repeated status-list calls for the bounded wait. If it times out,
+keep the task pending with a concise processing-status update; do not ask the user to confirm an
+identity that the attached material can resolve after indexing. Do not treat a processing deck as
+unreadable and do not complete intake while that supplied deck is still processing.
+
+If the available tools cannot inspect the deck after processing finishes, record the deck as
 `present_unreadable` in the source index, do not count it as satisfying source
 readiness, and ask for a readable deck, extracted text, an approved extraction
 path, or manual field values before saving a final-looking readiness artifact.
+
+## Optional Identity Asset Hydration
+
+Intake may hydrate `company_name`, `company_domain`, and `company_logo_url` without widening into
+public research:
+
+- Emit `company_name` when an inspected approved source confirms a canonical name that improves or
+  normalizes the submitted project name. Omit it when identity remains ambiguous.
+- Use a domain only when it is already present in project/task context or was obtained from an
+  inspected supplied or approved source.
+- Prefer an explicit HTTPS logo URL returned by that approved source.
+- Otherwise, derive `company_logo_url` as
+  `https://<normalized-domain>/favicon.ico` from the confirmed domain.
+- Do not search the public web solely to discover a domain or logo, and do not claim the derived
+  favicon URL was inspected evidence.
+- Logo enrichment is optional and must never block intake readiness.
 
 ## Do Not Use Public Research
 
@@ -148,6 +171,11 @@ continue, watch, or pass.
 
 Return:
 
+- `company_name`: confirmed canonical company name when it improves or normalizes the submitted name
+- `company_domain`: confirmed normalized company domain when supplied or found in an
+  inspected approved source
+- `company_logo_url`: approved HTTPS logo URL on the confirmed company's host family or deterministic first-party favicon URL derived from the
+  confirmed domain
 - `intake_readiness_status`: one readiness status
 - `source_index`: supplied or approved source anchors used for intake, distinguishing inspected deck evidence from decks that are attached but unreadable or not inspected
 - `hydrated_field_map`: project fields observed or filled, with provenance
