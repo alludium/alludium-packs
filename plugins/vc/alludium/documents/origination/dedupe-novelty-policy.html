@@ -120,12 +120,12 @@
 <tbody>
 <tr><td>New</td><td>No meaningful match found</td><td>Continue screening or promotion package</td></tr>
 <tr><td>Existing opportunity</td><td>Candidate maps to current Deal Pipeline</td><td>Attach evidence to existing opportunity recommendation</td></tr>
-<tr><td>Existing pipeline candidate</td><td>Candidate already exists upstream</td><td>Update candidate batch or source registry</td></tr>
+<tr><td>Existing Origination Candidate</td><td>The company already has a Candidate project</td><td>Add the current Sourcing Line relationship and preserve its independent receipts</td></tr>
 <tr><td>Prior reject or watch</td><td>Candidate was previously rejected or watched</td><td>Require partner review before promotion</td></tr>
 <tr><td>Ambiguous</td><td>Competing matches remain plausible</td><td>Hold promotion and list matches</td></tr>
 </tbody></table></div>
 <h2 id="standard">Standard</h2>
-<p>Novelty is a decision input, not a guarantee. When uncertain, mark ambiguous and include the competing matches.</p>
+<p>Novelty is a decision input, not a guarantee. When uncertain, mark ambiguous and include the competing matches. Dedupe company identity without deduping away independent Sourcing Line provenance. An exact existing Candidate match must stop guided creation and route to <code>link-existing-origination-candidate</code>, which adds the reviewed native line relationship without overwriting other provenance.</p>
   </article>
 </body>
 </html>

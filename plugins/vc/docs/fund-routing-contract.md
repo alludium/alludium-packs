@@ -1,12 +1,14 @@
 # VC Fund Routing and Deal Pipeline Cleanup
 
-Pack version `0.5.47` extends the interim multi-Fund contract with project-scoped Deal Manager resolution, a workspace-scoped Pipeline Manager, progressive context rules, and structured report questions for reviewed task proposals.
+Pack version `0.5.48` established the canonical multi-Fund collection, project-scoped Deal Manager resolution, a workspace-scoped Pipeline Manager, progressive context rules, and Platform-backed Fund selection. The hub-free Origination follow-on applies that same Fund identity contract to Sourcing Lines and explicit Candidate-to-Deal promotion.
 
 ## Canonical Fund contract
 
-- `vc.funds` is the only workspace Fund variable for Deal Pipeline, Deal Execution, and Origination Pipeline.
+- `vc.funds` is the only workspace Fund variable for Deal Pipeline, Deal Execution, Sourcing Lines, and Origination Candidates.
 - Each Fund has stable `id`, `name`, and `status`; mandate fields remain workspace-owned context.
 - Deal projects store only a human-confirmed `fund_id`.
+- Each Sourcing Line stores one required, active `fund_id` and uses only that Fund's mandate for its experiment.
+- Origination Candidates do not inherit or persist a Fund from their contributing lines. Deal promotion requires a separate explicit target-Fund choice.
 - Suggestions remain conversational until the user explicitly confirms the exact Fund.
 - First Look, evaluation, diligence, and the Deal Execution handoff use one matching active Fund and never blend mandates.
 
@@ -23,7 +25,7 @@ The `vc_deal_room` project type version moves from `1.1.4` to `1.1.8`; draft `1.
 | `deal_room_url`, `drive_deal_room_url` | The project and consolidated Data Room are canonical. |
 | `investment_stage` | Duplicated the project lifecycle state. |
 | `fund_thesis_context` | Replaced by confirmed `fund_id` plus `vc.funds`. |
-| `thesis_target_list_artifact_id` | Origination Pipeline owns target-list output. |
+| `thesis_target_list_artifact_id` | Sourcing Lines own target-list output. |
 | `repo_or_code_access`, `financial_source_artifact_ids`, `technical_source_artifact_ids`, `market_source_artifact_ids`, `customer_evidence_artifact_ids` | Copied formal-diligence inputs; current Deal Pipeline evaluation uses its evaluation evidence fields, while Deal Execution retains formal diligence sources. |
 | `legal_source_artifact_ids`, `investment_document_artifact_ids`, `transaction_bible_artifact_id`, `closing_source_artifact_ids`, `legal_document_status` | Deal Execution owns legal, contract, and closing evidence. |
 | `term_approval_state`, `closing_status`, `close_readiness`, `onboarding_readiness`, `board_rep`, `reporting_cadence` | Deal Execution owns post-structuring status and portfolio handoff. |
@@ -57,3 +59,14 @@ Pack version `0.5.48` uses the reviewed generic Platform schemas for:
 Platform `#3466` remains a Platform-owned typed, reviewed workspace-chat-to-Deal workflow and does not require a new Pack declaration in this release.
 
 Until the paired Platform consumers land, these declarations do not provide the corresponding UI or server behavior on their own. The Pack does not add a VC-only repository method, raw deployment ID, copied Fund fields, or browser-authoritative selection and navigation behavior.
+
+## Hub retirement and Origination routing
+
+The active Origination contract no longer requires `vc_origination_pipeline`. `/vc/origination` is a workspace projection over the Sourcing Line and Origination Candidate projects the current user may access:
+
+- `vc_sourcing_line` requires only `line_name` and an active canonical `fund_id` at creation.
+- `vc_origination_candidate` preserves every contributing line through native `vc.sourcing_line_originated_candidate` relationships; it has no exclusive owner-line or candidate-level Fund.
+- The workspace Origination Manager derives attention, health, counts, performance, and promotion readiness from current visible projects and receipts. Hub caches and a scheduled cross-line digest are not evidence or prerequisites.
+- Promotion preserves all line provenance and requires the user to select the exact active Deal Fund. The creation proposal must carry that choice as `createRequest.fieldValues.fund_id`.
+
+The retired `vc_origination_pipeline` key is historical migration context only. Because Origination was not previously used as a released production workflow, this release does not transform Hub projects into lines or Candidates. Existing pinned project-type versions remain readable under the platform's normal versioning rules, but the current Pack catalog must not offer Hub creation or require a Hub relationship.

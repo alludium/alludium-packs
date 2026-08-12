@@ -1,0 +1,160 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.configure_sourcing_line
+version: 0.2.1
+title: Configure Sourcing Line
+category: Venture Capital
+visibility: workspace
+tags:
+- vc
+- origination
+- sourcing-line
+- setup
+definition:
+  name: Configure Sourcing Line
+  slug: configure-sourcing-line
+  description: Turn a sourcing hypothesis into a paused, measurable Fund-specific line with approved sources, screen, cadence, review policy, and outreach boundaries.
+  allowSubtasks: true
+  definitionJson:
+    vertical: vc
+    stage: setup
+    taskFamily: sourcing_line_setup
+    documentRefs:
+    - documentId: vc.document.source_registry_template
+      usage: operating_guidance
+    - documentId: vc.document.origination_source_strategy_guide
+      usage: methodology
+    requiredSkills:
+    - origination-pipeline-orchestration
+    - vc-source-registry-and-state-management
+    recommendedAgentTemplate: vc_sourcing_line_manager
+    plannedRecommendedAgentTemplate: vc_sourcing_line_manager
+    supportedProjectTypes:
+    - vc_sourcing_line
+    supportedProjectScopes:
+    - project_instance
+    instructions:
+      executionInstructions: 'Resolve `fund_id` by exact stable-ID equality against one active record in `vc.funds`, then use only that Fund mandate. Shape one measurable sourcing experiment: registered sources, query or screen, evidence requirements, cadence, timezone, cursor/window, result limit, budget, Inbox threshold, review policy, outreach boundary, success measures, review date, and retirement condition. Do not require an Origination Pipeline hub or copy hub registry, counts, health caches, or digest configuration into the line. Leave schedules disabled until separately approved. After the user explicitly approves the complete configuration, call `project.update` for the task''s exact Sourcing Line project with typed field values for `line_hypothesis`, `source_keys`, `screen_definition`, `cadence_policy`, `review_policy`, `outreach_policy`, `success_metrics`, `result_limit`, `budget_limit`, `timezone`, `review_date`, `retirement_condition`, and `inbox_threshold`. Do not mutate on missing inputs, rejected approval, or a failed update. Re-read the exact project with `project.getAgentContext` and complete only when every approved value is persisted; the task output alone is not project state. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries.'
+      missingInputPolicy: Keep setup incomplete until an active Fund, line hypothesis, source mix, screen, cadence, budget posture, review policy, and outreach boundary are explicit.
+      externalActionPolicy: Configuration only. Do not read paid sources, enable schedules, create candidates, write external systems, or send outreach.
+      humanConfirmationPolicy: always
+      completionCriteria:
+      - fund_id matches exactly one active vc.funds record and only its mandate is used.
+      - The line has one coherent, testable learning question.
+      - Sources, cadence, result limits, budget, review threshold, and retirement condition are explicit.
+      - Outreach is disabled or approval-gated.
+    humanDecisionPoints:
+    - Approve the Fund-specific source mix and screen.
+    - Approve paid-source budget and result limits.
+    - Approve any later schedule enablement or outreach separately.
+fields:
+  input:
+  - key: line_name
+    name: Line Name
+    fieldType: string
+    required: true
+    position: 0
+    config: {}
+  - key: fund_id
+    name: Fund ID
+    fieldType: string
+    required: true
+    position: 1
+    config: {}
+  - key: starter_template_key
+    name: Starter Template Key
+    fieldType: string
+    required: false
+    position: 2
+    config: {}
+  output:
+  - key: line_hypothesis
+    name: Line Hypothesis
+    fieldType: string
+    required: true
+    position: 0
+    config: {}
+  - key: source_keys
+    name: Registered Source Keys
+    fieldType: string
+    required: true
+    position: 1
+    config: {}
+  - key: screen_definition
+    name: Query And Screen
+    fieldType: richtext
+    required: true
+    position: 2
+    config: {rows: 6}
+  - key: cadence_policy
+    name: Cadence Policy
+    fieldType: richtext
+    required: true
+    position: 3
+    config: {rows: 4}
+  - key: review_policy
+    name: Review And Inbox Policy
+    fieldType: richtext
+    required: true
+    position: 4
+    config: {rows: 4}
+  - key: outreach_policy
+    name: Outreach Policy
+    fieldType: richtext
+    required: true
+    position: 5
+    config: {rows: 4}
+  - key: success_metrics
+    name: Success Metrics
+    fieldType: richtext
+    required: true
+    position: 6
+    config: {rows: 4}
+  - key: result_limit
+    name: Result Limit
+    fieldType: number
+    required: true
+    position: 7
+    config: {}
+  - key: budget_limit
+    name: Budget Limit
+    fieldType: number
+    required: true
+    position: 8
+    config: {}
+  - key: timezone
+    name: Timezone
+    fieldType: string
+    required: true
+    position: 9
+    config: {}
+  - key: review_date
+    name: Review Date
+    fieldType: date
+    required: true
+    position: 10
+    config: {}
+  - key: retirement_condition
+    name: Retirement Condition
+    fieldType: richtext
+    required: true
+    position: 11
+    config: {rows: 4}
+  - key: inbox_threshold
+    name: Inbox Threshold
+    fieldType: number
+    required: true
+    position: 12
+    config: {}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata:
+      templateFamily: vc
+      taskKind: configure_sourcing_line
+      projectType: vc_sourcing_line
+  requiredResources:
+    requiresTaskChat: true
+  executionProfile:
+    agentStartsImmediately: true
+    preferredMode: guided_configuration
+    requiresHumanConfirmationToComplete: true

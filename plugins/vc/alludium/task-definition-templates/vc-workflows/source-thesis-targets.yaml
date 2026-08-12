@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.source_thesis_targets
-version: 1.0.14
+version: 1.0.17
 title: Source Thesis Targets
 category: Venture Capital
 visibility: workspace
@@ -36,7 +36,7 @@ definition:
     plannedRecommendedAgentTemplate: vc_origination_scout
     recommendedAgentTemplate: vc_origination_scout
     supportedProjectTypes:
-    - vc_origination_pipeline
+    - vc_sourcing_line
     sourceAnchors:
     - source: investment-management-process-slides
       anchor: slide-8
@@ -57,7 +57,13 @@ definition:
       anchor: worksheet-atomic-agents
       note: Spreadsheet rows 17-25
     instructions:
-      executionInstructions: 'Research thesis-aligned companies for the requested thesis area, geography, stage focus, and
+      executionInstructions: 'Resolve `fund_id` by exact stable-ID equality against one runtime-bound canonical `vc.funds`
+        record whose status is `actively_investing`. Apply that matched record''s `stage`, `sectors`, `geographies`, `thesis`,
+        `minimumCheckSize`, `maximumCheckSize`, `currency`, `exclusions`, and `scoringFramework`, and never use another Fund.
+        Every populated matched Fund field is authoritative. Treat the requested thesis area, geography, stage focus, market
+        filters, and generic Pack methodology only as missing, non-conflicting detail within the mandate; never override or
+        weaken a populated matched Fund field. If no exact active Fund record is available, keep sourcing incomplete and emit
+        no Fund-relative target list. Research thesis-aligned companies for the requested thesis area, geography, stage focus, and
         market filters; return target companies, fit rationale, source links, warm intro paths, and confidence notes. Cite
         material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects,
         create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM
@@ -69,7 +75,7 @@ definition:
         `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval
         boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the
         document ID alongside the output artifact.'
-      missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
+      missingInputPolicy: Keep Fund-specific sourcing incomplete when fund_id is missing, unknown, inactive, or canonical vc.funds context is unavailable. Otherwise ask for missing required inputs before producing investment-stage recommendations.
       externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation,
         child task creation, or stage transition.
       completionCriteria:
@@ -96,6 +102,12 @@ fields:
   - key: geography
     name: Geography
     fieldType: string
+    required: false
+    position: 2
+    config: {}
+  - key: fund_id
+    name: Fund ID
+    fieldType: string
     required: true
     position: 1
     config: {}
@@ -103,13 +115,13 @@ fields:
     name: Stage Focus
     fieldType: string
     required: false
-    position: 2
+    position: 3
     config: {}
   - key: market_filters
     name: Market Filters
     fieldType: json
     required: false
-    position: 3
+    position: 4
     config: {}
   output:
   - key: thesis_target_list_artifact_id

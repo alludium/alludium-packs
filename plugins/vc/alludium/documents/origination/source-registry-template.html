@@ -98,12 +98,12 @@
     <header class="document-header">
       <div class="eyebrow">VC template source</div>
       <h1>Source Registry Template</h1>
-      <p class="metadata">Reusable source registry for selected sourcing channels.</p>
+      <p class="metadata">Line-scoped record of approved sourcing channels and connection assumptions.</p>
     </header>
     <section class="note">When this source is used as a rendered task output, create the final deliverable as a standalone safe static HTML artifact with a <code>.html</code> filename and <code>mimeType: &quot;text/html&quot;</code>. Use the shared VC document styling rules from Template Use Guidance and make any generated links open in a new tab or window with <code>target=&quot;_blank&quot;</code> and <code>rel=&quot;noopener noreferrer&quot;</code>. Do not create Markdown output artifacts from this source.</section>
 <h2 id="registry">Registry</h2>
 <div class="table-wrap"><table>
-<thead><tr><th>Source Key</th><th>Source Type</th><th>Owner</th><th>Connection State</th><th>Scope And Filters</th><th>Cadence</th><th>Budget / Limit</th><th>Review Policy</th><th>Last Successful Run</th><th>Known Issues</th><th>Enablement</th></tr></thead>
+<thead><tr><th>Source Key</th><th>Source Type</th><th>Owner</th><th>Connection State</th><th>Line Scope And Filters</th><th>Cadence</th><th>Budget / Limit</th><th>Review Policy</th><th>Last Successful Run</th><th>Known Issues</th><th>Enablement</th></tr></thead>
 <tbody>
 <tr><td></td><td>CRM / database / public source / paid source / manual</td><td></td><td>Ready / Missing / Expired / Blocked</td><td></td><td>Manual / weekly / monthly / disabled</td><td></td><td>Human review / auto-preview / disabled</td><td></td><td></td><td>Proposed / enabled / paused / retired</td></tr>
 </tbody></table></div>
@@ -114,7 +114,7 @@
 <tr><td></td><td></td><td>Pass / Issue / Blocked</td><td>Approved / Pending / Rejected</td></tr>
 </tbody></table></div>
 <h2 id="usage">Usage</h2>
-<p>Keep this registry compact and operational. Detailed source-specific configuration can live in linked setup notes or task artifacts.</p>
+<p>Keep this line record compact and operational. Workspace application connections remain the connection source of truth; this document records only how the current Fund-specific line is approved to use them. Detailed source configuration belongs in linked setup notes or task artifacts, not a Hub project.</p>
   </article>
 </body>
 </html>

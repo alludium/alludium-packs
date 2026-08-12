@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.companies_house_discovery
-version: 0.1.4
+version: 0.1.5
 title: Explore Companies House Public Register Scope
 category: Venture Capital
 visibility: workspace
@@ -25,7 +25,7 @@ definition:
     recommendedAgentTemplate: vc_integration_operator
     plannedRecommendedAgentTemplate: vc_integration_operator
     supportedProjectTypes:
-    - vc_origination_pipeline
+    - vc_sourcing_line
     supportedProjectScopes:
     - project_management
     instructions:

@@ -21,7 +21,7 @@ Orchestrate one VC origination sourcing pass across approved sources with source
 
 ## What To Do
 
-Run only approved origination sources and preserve the reference workflow order across Companies House recent and mature windows, GitHub builder signals, X/Twitter builder signals, cheap enrichment, Affinity relationship check, first verdict, LinkedIn company enrichment only for Meet or Watch, second verdict for fresh LinkedIn company data, sync proposal, portfolio-overlap review, screen, outreach drafts, and digest. LinkedIn people discovery is weekly by default or explicit override only. Create child tasks for the enabled steps; keep each child within its own source/action boundary.
+When running in a Sourcing Line, call `project.getAgentContext` for the task's exact project and read its persisted fund id; do not trust optional task-seeded Fund context. Require that exact fund id to match one active record in `vc.funds`, use only that Fund mandate, and keep receipts and candidate proposals line-scoped. Never require an Origination Pipeline hub. Run only approved origination sources and preserve the reference workflow order across Companies House recent and mature windows, GitHub builder signals, X/Twitter builder signals, cheap enrichment, Affinity relationship check, first verdict, LinkedIn company enrichment only for Meet or Watch, second verdict for fresh LinkedIn company data, sync proposal, portfolio-overlap review, screen, and outreach drafts. LinkedIn people discovery is weekly by default or explicit override only. Resolve each enabled child definition with `task-definitions.list` and `task-definitions.findById`, then call `task-management.createTaskFromDefinition` with the current sourcing-run task as `parentTaskId`, the exact Sourcing Line as `projectId`, and only the reviewed inputs for that source/action boundary. Do not claim a child exists until the platform supplies the returned task ID, and do not create disabled children. After the run reaches a terminal receipt and the user approves completion, call `project.update` for the exact Sourcing Line with typed field values for last run status, new candidates last run, last run at, latest run receipt artifact, latest candidate batch artifact, and latest source state artifact. Use only terminal output values and platform-returned artifact IDs. Do not mutate on missing inputs, rejected approval, or before child tasks finish. Re-read the exact line through `project.getAgentContext` and report persisted run state only after the read matches.
 
 ## Available Context
 
@@ -32,7 +32,7 @@ Run only approved origination sources and preserve the reference workflow order 
 ## Reference Materials
 
 - [Candidate Batch Template](../alludium/documents/origination/candidate-batch-template.html): Use as the starting structure for the deliverable; adapt it to the facts and avoid generic filler.
-- [Origination Pipeline Operating SOP](../alludium/documents/origination/origination-pipeline-sop.html): Follow for process boundaries and review standards.
+- [Origination Operating SOP](../alludium/documents/origination/origination-pipeline-sop.html): Follow for process boundaries and review standards.
 - [Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.html): Use as the analysis method.
 - [Template Use Guidance](../alludium/documents/shared/template-use-guidance.html): Follow for process boundaries and review standards.
 

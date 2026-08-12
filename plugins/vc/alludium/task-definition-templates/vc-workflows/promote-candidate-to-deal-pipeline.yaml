@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.promote_candidate_to_deal_pipeline
-version: 0.1.10
+version: 0.1.14
 title: Promote Candidate to Deal Pipeline
 category: Venture Capital
 visibility: workspace
@@ -13,8 +13,8 @@ tags:
 definition:
   name: Promote Candidate to Deal Pipeline
   slug: promote-candidate-to-deal-pipeline
-  description: Prepare a reviewed promotion package for creating or updating a Deal Pipeline from an approved origination
-    candidate.
+  description: Prepare a reviewed, explicitly Fund-routed promotion package for creating a Deal Pipeline from an approved
+    origination candidate while preserving every sourcing-line provenance path.
   allowSubtasks: true
   definitionJson:
     vertical: vc
@@ -35,34 +35,53 @@ definition:
     recommendedAgentTemplate: vc_sourcing_operator
     plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
-    - vc_origination_pipeline
+    - vc_origination_candidate
     supportedProjectScopes:
     - project_instance
     instructions:
-      executionInstructions: 'Promote only human-approved candidates. Prepare a Deal Pipeline creation/update package with
-        company identity, founder evidence, source receipts, enrichment/verdict/screen summaries, relationship context, outreach
-        state, and open questions. Do not create or update the Deal Pipeline unless the platform action is explicitly approved.
+      executionInstructions: 'Promote only human-approved candidates. Validate `fund_id` against the executor''s runtime-bound
+        canonical `vc.funds` records and require an exact match whose status is `actively_investing`; never infer it from the primary, latest, or majority Sourcing Line, even when every contributing
+        line currently has the same Fund. Prepare a Deal Pipeline creation package with the explicitly selected Fund, company
+        identity, founder evidence, every contributing Sourcing Line, all source receipts, enrichment/verdict/screen summaries,
+        relationship context, outreach state, conflicts, and open questions. Preserve the Candidate project and its complete
+        multi-line provenance after promotion. Emit `dealCreationProposal.createRequest` with the selected Fund and an incoming
+        `vc.origination_candidate_promoted_to_deal` relationship from `origination_candidate_project_id`. Do not create or
+        update the Deal Pipeline unless the platform action is explicitly approved.
         Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template`
         sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status,
         evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains
         process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document
         and preserve the document ID alongside the output artifact.'
-      missingInputPolicy: Ask for approved candidate, target Deal Pipeline policy, promotion threshold evidence, owner, and
-        required source artifacts.
+      missingInputPolicy: Ask for the approved candidate, an explicit active `fund_id`, target Deal Pipeline policy, promotion
+        threshold evidence, owner, every contributing Sourcing Line and source receipt, and required source artifacts. If
+        `fund_id` is missing, unknown, or inactive, keep promotion incomplete rather than inheriting a Fund from line provenance.
       externalActionPolicy: Promotion package by default. Deal Pipeline creation/update, CRM changes, document creation, and
         notifications require separate explicit approval.
       humanConfirmationPolicy: always_before_project_creation_or_external_write
       completionCriteria:
-      - Promotion package includes source receipts, candidate evidence, recommended initial Deal Pipeline state, required
-        tasks, owner, and unresolved risks.
+      - Promotion package includes the explicitly selected active fund_id, every Sourcing Line and source receipt, candidate
+        evidence, recommended initial Deal Pipeline state, required tasks, owner, and unresolved risks.
       - Human approval boundary for project creation/update is explicit.
+      - Deal creation request includes `createRequest.fieldValues.fund_id` and the incoming candidate-to-Deal relationship.
 fields:
   input:
+  - key: origination_candidate_project_id
+    name: Origination Candidate Project ID
+    fieldType: string
+    required: true
+    position: 0
+    config: {}
   - key: promotion_candidate
     name: Promotion Candidate
     fieldType: json
     required: true
-    position: 0
+    position: 1
+    config: {}
+  - key: fund_id
+    name: Target Fund ID
+    fieldType: string
+    required: true
+    position: 2
     config: {}
   output:
   - key: promotion_package_artifact_id
@@ -72,3 +91,18 @@ fields:
     position: 0
     config:
       documentRefId: vc.document.promotion_package_template
+  - key: dealCreationProposal
+    name: Deal Creation Proposal
+    fieldType: json
+    required: true
+    position: 1
+    config:
+      contractRef: dealCreationProposal.createRequest.v1
+      requiredPaths:
+      - createRequest.fieldValues
+      - createRequest.fieldValues.fund_id
+      - createRequest.relationships
+      - createRequest.relationships[].direction
+      - createRequest.relationships[].relatedProjectId
+      - createRequest.relationships[].relationshipTypeKey
+      - createRequest.relationships[].metadata

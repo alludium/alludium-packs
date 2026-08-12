@@ -3,7 +3,7 @@
 Status: implementation slices 1-5 complete; release metadata pending
 Owner surface: `plugins/vc/alludium`
 Primary project type: `vc_deal_room`
-Related project type: `vc_origination_pipeline`
+Related project types: `vc_sourcing_line`, `vc_origination_candidate`
 Baseline: `origin/main` at `01e177376000d8e29862f86f54925a2419c77e0c`
 
 ## Problem
@@ -12,7 +12,7 @@ The current Deal Pipeline lifecycle collapses several distinct investment workfl
 
 The pack already has the right high-level product split:
 
-- `vc_origination_pipeline` owns standing sourcing, source configuration, candidate enrichment, outreach drafts, and promotion into a Deal Pipeline.
+- The workspace Origination projection coordinates visible `vc_sourcing_line` and `vc_origination_candidate` projects without a singleton Hub. Each line owns one Fund-specific sourcing experiment; each Candidate owns company-specific provenance, enrichment, outreach context, and reviewed promotion into a Deal Pipeline.
 - `vc_deal_room` owns one promoted investment opportunity from intake through investment, pass, or archive.
 
 The main gap is the Deal Pipeline stage model and task contracts. The pack should preserve generic, reusable VC terminology rather than source-specific methodology names. Fund-specific frameworks can remain documents, workspace configuration, or optional methodology skills.
@@ -29,7 +29,7 @@ The main gap is the Deal Pipeline stage model and task contracts. The pack shoul
 ## Non-Goals
 
 - Do not add fund-specific names to public task titles, stage names, skill names, or document IDs.
-- Do not collapse `vc_origination_pipeline` into `vc_deal_room`.
+- Do not collapse Sourcing Lines or Origination Candidates into `vc_deal_room`.
 - Do not make tasks send external messages, write CRM records, create projects, move stages, negotiate terms, or provide legal advice without explicit human approval and platform-supported actions.
 - Do not add a large new agent set. Prefer extending existing agents and adding narrowly scoped skills.
 
@@ -51,7 +51,7 @@ At that baseline, the `assessment` stage owns:
 
 That is too broad. It mixes source/origination work, project creation, fund-fit screening, meeting operations, material collection, and deeper evaluation.
 
-`vc_origination_pipeline` currently models upstream sourcing separately. That boundary is correct and should be preserved.
+Upstream origination remains separate from Deal Pipeline, but the active boundary is now represented by Sourcing Line and Origination Candidate projects rather than a Hub project.
 
 ## Branch Implementation State
 
@@ -113,8 +113,8 @@ The command-view stage groups should use these groups:
 | `request-founder-materials` | all active stages, initial mapping `evaluation` | Treat as a reusable material-request task. |
 | `generate-diligence-questions` | `evaluation`, `formal_diligence`, all active stages when invoked manually | Treat as reusable question generation, not formal diligence only. |
 | `review-opportunity-status` | all active stages | Treat as stage-agnostic operations/status review. |
-| `source-thesis-targets` | primarily `vc_origination_pipeline` | Remove or de-emphasize Deal Pipeline stage mapping unless used for a specific opportunity gap. |
-| `prepare-lead-gen-packet` | primarily `vc_origination_pipeline` | Remove or de-emphasize Deal Pipeline stage mapping. |
+| `source-thesis-targets` | primarily `vc_sourcing_line` | Remove or de-emphasize Deal Pipeline stage mapping unless used for a specific opportunity gap. |
+| `prepare-lead-gen-packet` | primarily `vc_sourcing_line` | Remove or de-emphasize Deal Pipeline stage mapping. |
 | `prepare-team-review-pack` | `decision_review` | Keep as decision-review prep unless later split into evaluation pack vs IC pack. |
 | `prepare-partner-review-pack` | `decision_review` | Keep as decision-review prep. |
 | `create-ic-memo` | `decision_review` | Keep. |

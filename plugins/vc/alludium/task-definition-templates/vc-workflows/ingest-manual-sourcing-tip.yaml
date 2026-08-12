@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.ingest_manual_sourcing_tip
-version: 0.1.4
+version: 0.1.6
 title: Ingest Manual Sourcing Tip
 category: Venture Capital
 visibility: workspace
@@ -25,7 +25,7 @@ definition:
     recommendedAgentTemplate: vc_sourcing_operator
     plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
-    - vc_origination_pipeline
+    - vc_sourcing_line
     supportedProjectScopes:
     - project_instance
     instructions:

@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.audit_linkedin_query_spend
-version: 0.1.9
+version: 0.1.11
 title: Audit LinkedIn Query Spend
 category: Venture Capital
 visibility: workspace
@@ -32,28 +32,9 @@ definition:
     recommendedAgentTemplate: vc_sourcing_operator
     plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
-      - vc_origination_pipeline
+      - vc_sourcing_line
     supportedProjectScopes:
       - project_instance
-    scheduleDefaults:
-      enabledByDefault: false
-      requiresHumanApprovalToEnable: true
-      cadence: weekly
-      dayOfWeek: monday
-      localTime: "09:00"
-      dryRunFirst: true
-    scheduling:
-      schedulable: true
-      showInProjectSetup: true
-      setupStep: schedules
-      scheduleType: cron
-      defaultScheduleRef: scheduleDefaults
-      requiresHumanApprovalToEnable: true
-      canCreateTestRun: true
-      testRunCreatesVisibleTask: true
-      dryRunFirst: true
-      safety:
-        externalWritesRequireApproval: true
     instructions:
       executionInstructions: >-
         Mirror the reference pipeline's read-only LinkedIn query audit. Compare query/track run depth, pages or result batches paid, candidate yield, duplicate or seen rate, exhaustion state, estimated cost, and cost per surfaced company. Recommend KEEP, REVIEW, or PRUNE for manual query-list maintenance. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID alongside the output artifact.

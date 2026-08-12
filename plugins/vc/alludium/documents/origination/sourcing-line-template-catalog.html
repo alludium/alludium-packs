@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sourcing Line Template Catalog</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --brand: 229 56% 34%;
+      --brand-primary: var(--brand);
+      --brand-primary-strong: 229 58% 24%;
+      --brand-secondary: 215 18% 38%;
+      --brand-secondary-surface: 220 18% 94%;
+      --foreground: 222 27% 14%;
+      --muted-foreground: 218 12% 42%;
+      --card: 0 0% 100%;
+      --muted: 220 18% 96%;
+      --border: 220 16% 86%;
+      --color-primary: hsl(var(--brand-primary));
+      --color-primary-strong: hsl(var(--brand-primary-strong));
+      --color-secondary: hsl(var(--brand-secondary));
+      --color-secondary-surface: hsl(var(--brand-secondary-surface));
+      --color-text: hsl(var(--foreground));
+      --color-muted-text: hsl(var(--muted-foreground));
+      --color-card: hsl(var(--card));
+      --color-page: hsl(var(--muted));
+      --color-border: hsl(var(--border));
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--color-page);
+      color: var(--color-text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.58;
+    }
+    .document { max-width: 1080px; margin: 0 auto; padding: 32px 28px 48px; background: var(--color-card); }
+    .document-header { border-bottom: 2px solid var(--color-primary); margin-bottom: 24px; padding-bottom: 16px; }
+    .eyebrow, .metadata { color: var(--color-muted-text); font-size: 13px; letter-spacing: .04em; text-transform: uppercase; }
+    h1, h2, h3 { color: var(--color-primary); line-height: 1.22; letter-spacing: 0; }
+    h1 { font-size: 30px; margin: 8px 0; }
+    h2 { border-top: 1px solid var(--color-border); font-size: 21px; margin-top: 28px; padding-top: 20px; }
+    h3 { font-size: 17px; margin-top: 22px; }
+    p { margin: 10px 0; }
+    a { color: var(--color-primary-strong); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+    code { background: var(--color-secondary-surface); border-radius: 4px; padding: 1px 4px; }
+    ul, ol { padding-left: 22px; }
+    li { margin: 6px 0; }
+    .note { border-left: 4px solid var(--color-primary); background: var(--color-secondary-surface); padding: 12px 14px; margin: 16px 0; }
+    .table-wrap { overflow-x: auto; margin: 14px 0 22px; border: 1px solid var(--color-border); border-radius: 6px; }
+    table { width: 100%; border-collapse: collapse; min-width: 680px; }
+    th, td { border-bottom: 1px solid var(--color-border); padding: 10px 12px; text-align: left; vertical-align: top; }
+    th { background: var(--color-secondary-surface); color: var(--color-secondary); font-weight: 700; }
+    tr:last-child td { border-bottom: 0; }
+    @media (max-width: 720px) {
+      body { font-size: 15px; }
+      .document { padding: 24px 18px 36px; }
+      h1 { font-size: 26px; }
+      h2 { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+  <article class="document document-source-template" data-document-id="vc.document.sourcing_line_template_catalog" data-document-type="methodology">
+    <header class="document-header">
+      <div class="eyebrow">VC methodology source</div>
+      <h1>Sourcing Line Template Catalog</h1>
+      <p class="metadata">Starter patterns for Fund-specific, repeatable sourcing experiments.</p>
+    </header>
+    <section class="note">When this source is used as a rendered task output, create the final deliverable as a standalone safe static HTML artifact with a <code>.html</code> filename and <code>mimeType: &quot;text/html&quot;</code>. Use the shared VC document styling rules from Template Use Guidance. Do not create Markdown output artifacts from this source.</section>
+    <section class="note">Use these templates as starting hypotheses, not immutable provider recipes. Every Sourcing Line is a first-class project with its own active Fund, configuration, receipts, candidates, and learning history. No Origination Hub project is required.</section>
+<h2 id="line-contract">Sourcing Line Contract</h2>
+<p>A line is <code>Fund x registered sources x query or screen x cadence x review policy x outreach policy</code>. Create only <code>line_name</code> and an active canonical <code>fund_id</code> initially. Configure the experiment in its own manager chat. Schedules, paid reads, external writes, candidate creation, and outreach remain disabled until separately reviewed and approved.</p>
+<h2 id="starter-patterns">Starter Patterns</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Key</th><th>Use When</th><th>Typical Source Mix</th><th>Learning Question</th></tr></thead>
+<tbody>
+<tr><td><code>thesis_radar</code></td><td>Broad, persistent coverage of one Fund mandate.</td><td>Structured company data, first-party sites, optional registry confirmation.</td><td>Which parts of the mandate produce qualified, previously unknown companies?</td></tr>
+<tr><td><code>trigger_event_watch</code></td><td>Time-sensitive incorporation, launch, hiring, grant, funding, or regulatory signals.</td><td>Event or registry source plus first-party verification.</td><td>Which observable triggers predict a worthwhile conversation early enough to act?</td></tr>
+<tr><td><code>builder_signal_convergence</code></td><td>Public technical and product-building activity may reveal founders.</td><td>Developer signals plus company and founder identity enrichment.</td><td>Which combinations of technical activity and commercial intent lead to qualified founders?</td></tr>
+<tr><td><code>ecosystem_community_scout</code></td><td>Emerging founders appear in communities, accelerators, universities, events, or specialist forums.</td><td>Community signal plus independent first-party verification.</td><td>Which communities and signal patterns consistently yield novel, mandate-fit candidates?</td></tr>
+<tr><td><code>relationship_reactivation</code></td><td>New evidence may justify revisiting a known company or person.</td><td>CRM relationship context plus approved public change signals.</td><td>Which changes justify reopening a prior conversation, and after what interval?</td></tr>
+<tr><td><code>targeted_outbound_experiment</code></td><td>A tightly defined cohort can test an evidence-backed outreach proposition.</td><td>Reviewed candidate cohort plus relationship and do-not-contact checks.</td><td>Which proposition and channel produce qualified replies without harming relationships?</td></tr>
+</tbody></table></div>
+<h2 id="required-record">Required Instantiation Record</h2>
+<ul>
+<li><code>line_name</code>, stable Sourcing Line project identity, and active canonical <code>fund_id</code>.</li>
+<li><code>starter_template_key</code> and one coherent hypothesis or learning question.</li>
+<li>Approved source keys, connection assumptions, scope, filters, exclusions, and evidence requirements.</li>
+<li>Cadence, timezone, cursor/window policy, result limit, budget, review threshold, and owner.</li>
+<li>Outreach mode, approval owner, do-not-contact rules, success measures, review date, and retirement condition.</li>
+</ul>
+<h2 id="candidate-provenance">Candidate Provenance</h2>
+<p>Every proposed candidate must preserve the originating Sourcing Line relationship and its source receipts. If another line later finds the same company, add that independent provenance relationship to the existing Candidate rather than choosing an exclusive owner line or duplicating the Candidate.</p>
+<h2 id="fund-and-promotion-boundary">Fund And Promotion Boundary</h2>
+<p>The line uses only the active Fund record matching its <code>fund_id</code>. That Fund does not automatically become the Candidate's eventual Deal Fund. Deal promotion requires the user to explicitly select the active target Fund after reviewing all line provenance and candidate evidence.</p>
+  </article>
+</body>
+</html>

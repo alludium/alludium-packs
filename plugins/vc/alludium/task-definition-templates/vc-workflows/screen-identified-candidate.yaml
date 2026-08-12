@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.screen_identified_candidate
-version: 0.1.1
+version: 0.1.5
 title: Screen Identified Candidate
 category: Venture Capital
 visibility: workspace
@@ -35,29 +35,11 @@ definition:
     recommendedAgentTemplate: vc_sourcing_operator
     plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
-    - vc_origination_pipeline
+    - vc_origination_candidate
     supportedProjectScopes:
     - project_instance
-    scheduleDefaults:
-      enabledByDefault: false
-      requiresHumanApprovalToEnable: true
-      cadence: daily
-      localTime: 08:10
-      dryRunFirst: true
-    scheduling:
-      schedulable: true
-      showInProjectSetup: true
-      setupStep: schedules
-      scheduleType: cron
-      defaultScheduleRef: scheduleDefaults
-      requiresHumanApprovalToEnable: true
-      canCreateTestRun: true
-      testRunCreatesVisibleTask: true
-      dryRunFirst: true
-      safety:
-        externalWritesRequireApproval: true
     instructions:
-      executionInstructions: 'Screen newly identified candidates with the lightest useful evidence set: source receipt,
+      executionInstructions: 'Screen the task''s exact newly registered Candidate using the supplied `company_name`, `candidate_key`, and `source_evidence_summary`, then call `project-relationship.list` with the exact Candidate `projectId`, `direction: inbound`, `relationshipTypeKeys: [vc.sourcing_line_originated_candidate]`, `includeArchivedRelationships: false`, and `limit: 100`; follow each returned cursor until every readable active provenance edge is exhausted before drawing a provenance conclusion. Screen with the lightest useful evidence set: source receipt,
         normalized identity, stage/geography fit, obvious hard exclusions, basic AI/native software signal, founder signal,
         and duplicate/known-relationship status. This is not the full active-candidate screen; recommend only prioritize
         for outreach, watchlist, or pass, and list what must be enriched before outreach. Use `definitionJson.documentRefs` as the durable
@@ -65,8 +47,8 @@ definition:
         supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner, `style_guide`
         governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval boundaries.
         For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the document ID
-        alongside the output artifact.'
-      missingInputPolicy: Ask for the identified candidate batch, source receipts, thesis policy, hard exclusions, and
+        alongside the output artifact. After the user approves completion, call `project.update` for the exact Candidate with the platform-returned artifact ID in `identified_screen_artifact_id`, then re-read it through `project.getAgentContext`. Do not mutate on missing inputs, rejected approval, or an unverified artifact ID, and do not claim the screen is indexed until the read confirms the persisted value.'
+      missingInputPolicy: Ask for the registered company name, stable candidate key, source evidence, sourcing-line relationships, thesis policy, hard exclusions, and
         dedupe state before screening.
       externalActionPolicy: Screening recommendation only. Do not contact founders, write CRM/list records, send outreach,
         or create Deal Pipeline projects.
@@ -76,17 +58,29 @@ definition:
       - Outreach-ready recommendations include the next enrichment or outreach-prep evidence needed.
 fields:
   input:
-  - key: identified_candidate_batch
-    name: Identified Candidate Batch
-    fieldType: json
+  - key: company_name
+    name: Company Name
+    fieldType: string
     required: true
     position: 0
     config: {}
+  - key: candidate_key
+    name: Candidate Dedupe Key
+    fieldType: string
+    required: true
+    position: 1
+    config: {}
+  - key: source_evidence_summary
+    name: Source Evidence Summary
+    fieldType: richtext
+    required: true
+    position: 2
+    config: {rows: 8}
   - key: first_pass_screen_policy
     name: First-Pass Screen Policy
     fieldType: json
     required: false
-    position: 1
+    position: 3
     config: {}
   output:
   - key: identified_screen_artifact_id

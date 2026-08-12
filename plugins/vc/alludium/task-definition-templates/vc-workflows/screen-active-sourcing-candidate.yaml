@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.screen_active_sourcing_candidate
-version: 0.1.12
+version: 0.1.14
 title: Screen Active Sourcing Candidate
 category: Venture Capital
 visibility: workspace
@@ -35,27 +35,9 @@ definition:
     recommendedAgentTemplate: vc_sourcing_operator
     plannedRecommendedAgentTemplate: vc_sourcing_operator
     supportedProjectTypes:
-    - vc_origination_pipeline
+    - vc_origination_candidate
     supportedProjectScopes:
     - project_instance
-    scheduleDefaults:
-      enabledByDefault: false
-      requiresHumanApprovalToEnable: true
-      cadence: daily
-      localTime: 08:20
-      dryRunFirst: true
-    scheduling:
-      schedulable: true
-      showInProjectSetup: true
-      setupStep: schedules
-      scheduleType: cron
-      defaultScheduleRef: scheduleDefaults
-      requiresHumanApprovalToEnable: true
-      canCreateTestRun: true
-      testRunCreatesVisibleTask: true
-      dryRunFirst: true
-      safety:
-        externalWritesRequireApproval: true
     instructions:
       executionInstructions: 'Screen active origination candidates using the reference pipeline''s fast thesis filter rather
         than the downstream Deal Pipeline first-look task. Assess stage, geography, enterprise software, AI-native depth,

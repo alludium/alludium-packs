@@ -1,0 +1,362 @@
+{
+  "kind": "project-type",
+  "apiVersion": "alludium/v1alpha1",
+  "key": "vc_sourcing_line",
+  "name": "Sourcing Line",
+  "description": "A fund-specific, measurable origination experiment with its own sources, screen, cadence, evidence receipts, review policy, and learning history.",
+  "projectSetup": {
+    "setupLabel": "Sourcing Line Setup",
+    "starterId": "configure-sourcing-line",
+    "starterLabel": "Configure Sourcing Line",
+    "starterResumeLabel": "Continue Sourcing Line Setup",
+    "starterDescription": "Shape one repeatable sourcing experiment for a configured Fund.",
+    "recommendedSetupAgent": "vc_sourcing_line_manager",
+    "requiredEvidence": ["variables", "schedules"],
+    "setupSteps": [
+      {
+        "key": "variables",
+        "label": "Shape the sourcing experiment",
+        "purpose": "Review the Fund, hypothesis, sources, screen, cadence, review policy, outreach boundary, and success measures.",
+        "stepType": "variables",
+        "evidenceKey": "variables",
+        "required": true,
+        "taskDefinitionTemplateId": "vc.configure_sourcing_line",
+        "taskDefinitionSlug": "configure-sourcing-line"
+      },
+      {
+        "key": "schedules",
+        "label": "Review sourcing-line schedules",
+        "purpose": "Review the recurring line run; every schedule remains disabled until explicitly approved.",
+        "stepType": "schedules",
+        "evidenceKey": "schedules",
+        "required": true,
+        "taskDefinitionSlug": "project-schedule-review"
+      }
+    ],
+    "postApprovalActions": {
+      "applyVariables": {
+        "enabled": true,
+        "label": "Apply reviewed sourcing-line configuration",
+        "sourceEvidenceKeys": ["variables"],
+        "target": "workspace_and_project_setup_context",
+        "actionMode": "platform_variable_application",
+        "requiresReviewedUserApproval": true,
+        "setupTasksMayPersistValues": false
+      },
+      "importProjects": {
+        "enabled": false,
+        "reason": "A sourcing-line run proposes candidates; candidate project creation is a separately reviewed platform action."
+      },
+      "inviteCollaborators": {
+        "enabled": false,
+        "reason": "Line setup does not send invitations."
+      },
+      "enableSchedules": {
+        "enabled": true,
+        "label": "Enable approved sourcing-line schedules",
+        "sourceEvidenceKeys": ["schedules"],
+        "target": "configuredProject",
+        "scheduleGroupsRef": "projectSetup.scheduleGroups",
+        "defaultEnabled": false,
+        "requiresReviewedUserApproval": true,
+        "setupTasksMayEnableRecurringSync": false
+      }
+    },
+    "scheduleGroups": [
+      {
+        "key": "line_execution",
+        "label": "Line execution",
+        "description": "Run this Fund-specific sourcing hypothesis and retain line-scoped receipts and candidate proposals.",
+        "taskDefinitionSlugs": ["run-vc-sourcing-pipeline"],
+        "defaultExpanded": true,
+        "advanced": false
+      }
+    ],
+    "defaultChildTask": {
+      "label": "Configure sourcing line",
+      "taskDefinitionSlug": "configure-sourcing-line",
+      "setupGoal": "Shape one measurable Fund-specific sourcing experiment before any source run, schedule enablement, candidate creation, or outreach."
+    },
+    "variableDiscoveryTask": {
+      "label": "VC Variable Discovery",
+      "taskDefinitionTemplateId": "vc.vc_pack_variable_discovery",
+      "taskDefinitionSlug": "vc-pack-variable-discovery"
+    },
+    "sourceSetupTasks": []
+  },
+  "projectCreation": {
+    "launcherLabel": "Create Sourcing Line",
+    "starterId": "create-sourcing-line-project",
+    "aliases": ["sourcing line", "sourcing experiment", "origination search"],
+    "requiredFieldKeys": ["line_name", "fund_id"],
+    "recommendedFieldKeys": ["starter_template_key", "line_hypothesis", "source_keys", "screen_definition", "cadence_policy", "review_policy", "outreach_policy", "success_metrics", "review_date"],
+    "advancedFieldKeys": ["result_limit", "budget_limit", "timezone", "retirement_condition"],
+    "defaultState": "draft",
+    "guidedTask": {
+      "taskDefinitionTemplateId": "vc.create_sourcing_line",
+      "taskDefinitionSlug": "create-sourcing-line"
+    },
+    "postCreate": {"triggerInitialStateTasks": true}
+  },
+  "initialVersion": {
+    "version": "0.2.4",
+    "documentLibrary": {
+      "catalogPath": "alludium/documents/catalog.v1.json",
+      "documentIds": [
+        "vc.document.origination_source_strategy_guide",
+        "vc.document.origination_pipeline_sop",
+        "vc.document.source_registry_template",
+        "vc.document.sourcing_line_template_catalog",
+        "vc.document.candidate_batch_template",
+        "vc.document.source_health_review_checklist",
+        "vc.document.paid_source_spend_audit_checklist",
+        "vc.document.sourcing_digest_template",
+        "vc.document.apify_source_setup_checklist",
+        "vc.document.companies_house_source_setup_checklist",
+        "vc.document.template_use_guidance",
+        "vc.document.evidence_citation_style_guide",
+        "vc.document.file_naming_source_index_sop",
+        "vc.document.lead_generation_packet_template",
+        "vc.document.thesis_target_list_template"
+      ]
+    },
+    "fieldsSchema": [
+      {"id": "field-line-name", "key": "line_name", "label": "Line Name", "kind": "text", "required": true},
+      {
+        "id": "field-fund-id",
+        "key": "fund_id",
+        "label": "Fund",
+        "kind": "text",
+        "required": true,
+        "description": "Stable id of the active Fund whose mandate governs this sourcing line. The value must match one active record in vc.funds.",
+        "optionSource": {
+          "type": "workspaceVariableCollection",
+          "path": "vc.funds",
+          "valueKey": "id",
+          "labelKey": "name",
+          "statusKey": "status",
+          "selectableStatuses": ["actively_investing"],
+          "hintKeys": ["stage", "sectors", "geographies"]
+        }
+      },
+      {"id": "field-template-key", "key": "starter_template_key", "label": "Starter Template", "kind": "enum", "required": false, "options": [
+        {"value": "thesis_radar", "label": "Thesis Radar"},
+        {"value": "trigger_event_watch", "label": "Trigger And Event Watch"},
+        {"value": "builder_signal_convergence", "label": "Builder-Signal Convergence"},
+        {"value": "ecosystem_community_scout", "label": "Ecosystem And Community Scout"},
+        {"value": "relationship_reactivation", "label": "Relationship-Led Reactivation"},
+        {"value": "targeted_outbound_experiment", "label": "Targeted Outbound Message Experiment"},
+        {"value": "custom", "label": "Custom"}
+      ]},
+      {"id": "field-line-hypothesis", "key": "line_hypothesis", "label": "Line Hypothesis", "kind": "text", "required": false},
+      {"id": "field-source-keys", "key": "source_keys", "label": "Registered Source Keys", "kind": "text", "required": false},
+      {"id": "field-screen-definition", "key": "screen_definition", "label": "Query And Screen", "kind": "text", "required": false},
+      {"id": "field-cadence-policy", "key": "cadence_policy", "label": "Cadence Policy", "kind": "text", "required": false},
+      {"id": "field-review-policy", "key": "review_policy", "label": "Review And Inbox Policy", "kind": "text", "required": false},
+      {"id": "field-outreach-policy", "key": "outreach_policy", "label": "Outreach Policy", "kind": "text", "required": false},
+      {"id": "field-success-metrics", "key": "success_metrics", "label": "Success Metrics", "kind": "text", "required": false},
+      {"id": "field-result-limit", "key": "result_limit", "label": "Result Limit", "kind": "number", "required": false},
+      {"id": "field-inbox-threshold", "key": "inbox_threshold", "label": "Inbox Threshold", "kind": "number", "required": false},
+      {"id": "field-budget-limit", "key": "budget_limit", "label": "Budget Limit", "kind": "number", "required": false},
+      {"id": "field-timezone", "key": "timezone", "label": "Timezone", "kind": "text", "required": false},
+      {"id": "field-review-date", "key": "review_date", "label": "Review Date", "kind": "date", "required": false},
+      {"id": "field-retirement-condition", "key": "retirement_condition", "label": "Retirement Condition", "kind": "text", "required": false},
+      {"id": "field-last-run-at", "key": "last_run_at", "label": "Last Run At", "kind": "date", "required": false},
+      {"id": "field-last-run-status", "key": "last_run_status", "label": "Last Run Status", "kind": "enum", "required": false, "options": [
+        {"value": "dry_run", "label": "Dry Run"}, {"value": "completed", "label": "Completed"}, {"value": "partial", "label": "Partial"}, {"value": "blocked", "label": "Blocked"}, {"value": "failed", "label": "Failed"}
+      ]},
+      {"id": "field-new-candidates", "key": "new_candidates_last_run", "label": "New Candidates Last Run", "kind": "number", "required": false},
+      {"id": "field-source-health", "key": "source_health_status", "label": "Source Health", "kind": "enum", "required": false, "options": [
+        {"value": "healthy", "label": "Healthy"}, {"value": "degraded", "label": "Degraded"}, {"value": "needs_credentials", "label": "Needs Credentials"}, {"value": "budget_blocked", "label": "Budget Blocked"}, {"value": "unknown", "label": "Unknown"}
+      ]},
+      {"id": "field-latest-run-receipt", "key": "latest_run_receipt_artifact_id", "label": "Latest Run Receipt", "kind": "text", "required": false},
+      {"id": "field-latest-candidate-batch", "key": "latest_candidate_batch_artifact_id", "label": "Latest Candidate Batch", "kind": "text", "required": false},
+      {"id": "field-latest-source-state", "key": "latest_source_state_artifact_id", "label": "Latest Source State", "kind": "text", "required": false},
+      {"id": "field-latest-source-health", "key": "latest_source_health_artifact_id", "label": "Latest Source Health Review", "kind": "text", "required": false},
+      {"id": "field-latest-companies-house-discovery", "key": "latest_companies_house_discovery_artifact_id", "label": "Latest Companies House Discovery", "kind": "text", "required": false},
+      {"id": "field-latest-linkedin-discovery", "key": "latest_linkedin_discovery_artifact_id", "label": "Latest LinkedIn Discovery", "kind": "text", "required": false},
+      {"id": "field-latest-x-discovery", "key": "latest_x_founder_discovery_artifact_id", "label": "Latest X Founder Discovery", "kind": "text", "required": false},
+      {"id": "field-latest-github-discovery", "key": "latest_github_discovery_artifact_id", "label": "Latest GitHub Discovery", "kind": "text", "required": false},
+      {"id": "field-latest-reddit-discovery", "key": "latest_reddit_discovery_artifact_id", "label": "Latest Reddit Discovery", "kind": "text", "required": false},
+      {"id": "field-latest-manual-tip-ingestion", "key": "latest_manual_tip_ingestion_artifact_id", "label": "Latest Manual Tip Ingestion", "kind": "text", "required": false},
+      {"id": "field-latest-reddit-inbox-review", "key": "latest_reddit_inbox_review_artifact_id", "label": "Latest Reddit Inbox Review", "kind": "text", "required": false},
+      {"id": "field-latest-linkedin-spend-audit", "key": "latest_linkedin_spend_audit_artifact_id", "label": "Latest LinkedIn Spend Audit", "kind": "text", "required": false},
+      {"id": "field-latest-thesis-target-list", "key": "latest_thesis_target_list_artifact_id", "label": "Latest Thesis Target List", "kind": "text", "required": false},
+      {"id": "field-owner", "key": "owner", "label": "Owner", "kind": "member", "required": false}
+    ],
+    "instructionTemplate": "Maintain one Fund-specific sourcing experiment. Resolve fund_id only against the canonical vc.funds collection and use only that Fund mandate. Retain line-scoped source receipts and learning history. Candidate provenance is represented by project relationships, and the same candidate may be linked from multiple sourcing lines. Never require an Origination Pipeline hub, send outreach, enable schedules, spend money, create candidate projects, or write external systems without reviewed approval.",
+    "lifecycleStates": ["draft", "ready", "active", "degraded", "paused", "retired", "archived"],
+    "lifecycleTransitions": [
+      {"from": "draft", "to": "ready"}, {"from": "draft", "to": "paused"},
+      {"from": "paused", "to": "ready"}, {"from": "ready", "to": "active"},
+      {"from": "active", "to": "degraded"}, {"from": "degraded", "to": "active"},
+      {"from": "active", "to": "paused"}, {"from": "paused", "to": "active"},
+      {"from": "paused", "to": "retired"}, {"from": "retired", "to": "archived"}
+    ],
+    "commandView": {
+      "key": "vc-sourcing-line",
+      "typeLabel": "Sourcing Line",
+      "collectionLabel": "Sourcing Lines",
+      "overviewTitle": "Sourcing Line overview",
+      "overviewAriaLabel": "Open sourcing line data",
+      "overviewFallback": "Configure the Fund, sources, screen, cadence, and review policy for this sourcing line.",
+      "executionTitle": "Alludium is executing",
+      "navigationFieldKeys": ["fund_id"],
+      "stageGroups": [
+        {
+          "key": "current",
+          "label": "Current",
+          "navigationRole": "active",
+          "states": ["draft", "ready", "active", "degraded", "paused"]
+        },
+        {
+          "key": "history",
+          "label": "History",
+          "navigationRole": "hidden",
+          "states": ["retired", "archived"]
+        }
+      ],
+      "fallbackAgents": [],
+      "outputSlots": [],
+      "summaryFields": [
+        {"key": "fund", "label": "Fund", "fieldKey": "fund_id", "format": "text"},
+        {"key": "last_run", "label": "Last run", "fieldKey": "last_run_at", "format": "text"},
+        {"key": "new_candidates", "label": "New candidates", "fieldKey": "new_candidates_last_run", "format": "text"}
+      ],
+      "primarySummaryField": {"key": "fund", "label": "Fund", "fieldKey": "fund_id", "format": "text"},
+      "badgeFields": [
+        {"key": "source_health", "label": "Source health", "fieldKey": "source_health_status", "format": "text"},
+        {"key": "last_run_status", "label": "Last run status", "fieldKey": "last_run_status", "format": "text"}
+      ]
+    },
+    "extensions": {
+      "projectRelationships": [
+        {
+          "typeKey": "vc.sourcing_line_originated_candidate",
+          "label": "Originated candidate",
+          "inverseLabel": "Sourced through line",
+          "description": "Records one provenance edge from a sourcing line to a durable candidate. Multiple lines may link to the same candidate; Fund-relative scoring is stored only on this edge under metadata.scoring_by_fund[fund_id].",
+          "targetProjectTypeKeys": ["vc_origination_candidate"]
+        }
+      ]
+    },
+    "projectManager": {
+      "agentTemplateKey": "vc_sourcing_line_manager",
+      "displayName": "Sourcing Line Manager",
+      "labels": {"shortName": "Line Manager", "chatTitleSuffix": " Sourcing Line Manager", "roleNoun": "sourcing line manager", "projectNoun": "sourcing line", "collectionNoun": "sourcing lines", "taskShortcutLabel": "New line task"},
+      "identity": {
+        "roleDescription": "Owns the context, execution history, and learning loop for one Fund-specific sourcing experiment.",
+        "tone": "Concise, evidence-led, experimentally minded, and explicit about approval boundaries.",
+        "responsibilities": ["Maintain the Fund, hypothesis, sources, screen, cadence, thresholds, and success measures.", "Explain each run, candidate proposal, source degradation, cost, and learning in line context.", "Preserve provenance relationships when a candidate is found by this or another line."],
+        "boundaries": ["Do not enable schedules or paid reads without approval.", "Do not create candidates or write external systems without reviewed approval.", "Do not send outreach automatically."]
+      },
+      "greeting": {"message": "I manage this Fund-specific sourcing line and retain its hypothesis, runs, candidates, costs, and learnings.", "instructions": "Ground answers in this line's configured Fund and receipts; separate proposed changes from approved execution.", "starterPrompts": ["What changed since the last run?", "Show the candidates that most need review.", "How is this line performing against its hypothesis?", "Propose a safe change to the screen."]}
+    },
+    "projectTaskMappings": [
+      {
+        "id": "mapping-configure-sourcing-line",
+        "taskDefinitionSlug": "configure-sourcing-line",
+        "taskDefinitionTemplateId": "vc.configure_sourcing_line",
+        "lifecycleStage": "draft",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
+      },
+      {
+        "id": "mapping-link-existing-candidate",
+        "taskDefinitionSlug": "link-existing-origination-candidate",
+        "taskDefinitionTemplateId": "vc.link_existing_origination_candidate",
+        "lifecycleStage": "active",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
+      },
+      {
+        "id": "mapping-run-sourcing-line",
+        "taskDefinitionSlug": "run-vc-sourcing-pipeline",
+        "taskDefinitionTemplateId": "vc.run_vc_sourcing_pipeline",
+        "lifecycleStage": "active",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
+      },
+      {
+        "id": "mapping-review-line-source-health",
+        "taskDefinitionSlug": "review-source-errors-and-spend",
+        "taskDefinitionTemplateId": "vc.review_source_errors_and_spend",
+        "lifecycleStage": "degraded",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
+      },
+      {
+        "id": "mapping-discover-companies-house-candidates",
+        "taskDefinitionSlug": "discover-companies-house-candidates",
+        "taskDefinitionTemplateId": "vc.discover_companies_house_candidates",
+        "lifecycleStage": "active",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
+      },
+      {
+        "id": "mapping-discover-linkedin-founder-candidates",
+        "taskDefinitionSlug": "discover-linkedin-founder-candidates",
+        "taskDefinitionTemplateId": "vc.discover_linkedin_founder_candidates",
+        "lifecycleStage": "active",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
+      },
+      {
+        "id": "mapping-discover-x-founder-signals",
+        "taskDefinitionSlug": "discover-x-founder-signals",
+        "taskDefinitionTemplateId": "vc.discover_x_founder_signals",
+        "lifecycleStage": "active",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
+      },
+      {
+        "id": "mapping-discover-github-builder-signals",
+        "taskDefinitionSlug": "discover-github-builder-signals",
+        "taskDefinitionTemplateId": "vc.discover_github_builder_signals",
+        "lifecycleStage": "active",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
+      },
+      {
+        "id": "mapping-discover-reddit-builder-signals",
+        "taskDefinitionSlug": "discover-reddit-builder-signals",
+        "taskDefinitionTemplateId": "vc.discover_reddit_builder_signals",
+        "lifecycleStage": "active",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
+      },
+      {
+        "id": "mapping-ingest-manual-sourcing-tip",
+        "taskDefinitionSlug": "ingest-manual-sourcing-tip",
+        "taskDefinitionTemplateId": "vc.ingest_manual_sourcing_tip",
+        "lifecycleStage": "active",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
+      },
+      {
+        "id": "mapping-review-reddit-candidate-inbox",
+        "taskDefinitionSlug": "review-reddit-candidate-inbox",
+        "taskDefinitionTemplateId": "vc.review_reddit_candidate_inbox",
+        "lifecycleStage": "active",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
+      },
+      {
+        "id": "mapping-audit-linkedin-query-spend",
+        "taskDefinitionSlug": "audit-linkedin-query-spend",
+        "taskDefinitionTemplateId": "vc.audit_linkedin_query_spend",
+        "lifecycleStage": "active",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
+      },
+      {
+        "id": "mapping-source-thesis-targets",
+        "taskDefinitionSlug": "source-thesis-targets",
+        "taskDefinitionTemplateId": "vc.source_thesis_targets",
+        "lifecycleStage": "active",
+        "projectScope": "project_instance",
+        "activationPolicy": {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": false, "requiresHumanApproval": true, "createTaskWhenLifecycleStageEntered": false}
+      }
+    ]
+  }
+}

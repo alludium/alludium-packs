@@ -21,7 +21,7 @@ Review degraded source runs, cost warnings, retry safety, and required human act
 
 ## What To Do
 
-Review run receipts and degraded-source notes from the latest origination pass. Classify missing credentials, auth expiry, provider failure, rate limits, budget caps, exhausted queries, schema drift, no-yield sources, and blocked writes. Recommend retry, setup, query pruning, schedule pause, or human review.
+Review run receipts and degraded-source notes from the current project. For Sourcing Lines, keep diagnosis and retry recommendations line-scoped and do not depend on hub health caches. Classify missing credentials, auth expiry, provider failure, rate limits, budget caps, exhausted queries, schema drift, no-yield sources, and blocked writes. Recommend retry, setup, query pruning, schedule pause, or human review.
 
 ## Available Context
 
