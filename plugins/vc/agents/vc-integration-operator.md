@@ -51,7 +51,7 @@ Do not create projects, enable recurring sync, send messages, change sharing, mu
 - Source template: `alludium/agent-templates/vc_integration_operator.yaml`
 - Alludium template ID: `vc_integration_operator`
 - Display name: Integration Operator
-- Version: `1.0.1`
+- Version: `1.0.2`
 - Primary stage: Integration Management
 - Primary Deal Room state: `intake`
 - Supported task definitions:
