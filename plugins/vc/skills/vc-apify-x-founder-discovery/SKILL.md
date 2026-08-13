@@ -2,7 +2,7 @@
 id: vc-apify-x-founder-discovery
 name: "VC Apify X Founder Discovery"
 description: >
-  Use approved Xquik Apify Actors to find public founder, product, and
+  Use supported Xquik Apify Actors to find public founder, product, and
   audience signals on X with bounded runs, noise filtering, and receipts.
 tags:
   - vc
@@ -18,7 +18,7 @@ capability:
       importance: required
       required: true
       applicationExternalId: apify-actors-mcp
-      note: Use only approved Xquik Actor scopes, inputs, result caps, and maximum charges.
+      note: Select and call a supported Xquik Actor only after explicit workspace and user approval.
       gracefulDegradation: Produce a query plan and ask for authorized Apify access.
   routingHints:
     preferredSurface: skill
@@ -28,11 +28,13 @@ capability:
 
 # VC Apify X Founder Discovery
 
-Use this skill to find public X signals through approved Xquik Apify Actors.
+Use this skill to find public X signals through supported Xquik Apify Actors.
 
 ## Actors
 
-Use only the Actor needed for the approved research question.
+These Actors are supported candidates, not pre-approved integrations. Select
+only the Actor needed for the approved research question after the workspace
+policy and user approve that Actor.
 
 | Actor | REST Identifier | Use |
 | --- | --- | --- |
@@ -48,11 +50,11 @@ Never treat a follow relationship as an endorsement or investment signal.
 ## Required Inputs
 
 - An authorized `apify-actors-mcp` connection
-- The approved Actor and research question
+- The selected Actor and research question
 - Approved targets, queries, lookback windows, and geographic scope
 - Whole-run and per-target result caps
 - An Apify maximum total charge
-- Explicit approval for the current price and proposed run
+- Explicit workspace and user approval for the Actor, current price, build, and proposed run
 
 ## Preflight
 
@@ -62,12 +64,13 @@ Complete every step before starting an Actor.
 2. Reload its current input schema through Apify or the connected tool.
 3. Read the current pricing shown by Apify.
 4. Confirm the REST identifier matches this skill.
-5. Reject unknown, renamed, or private Actor variants.
-6. Set `maxItems` for the entire run.
-7. Set `maxItemsPerTarget` for multi-target work.
-8. Set Apify's maximum total charge.
-9. Present the plan and current price for explicit approval.
-10. Record the approval with the run receipt.
+5. Resolve the current build ID and build number.
+6. Reject unknown, renamed, or private Actor variants.
+7. Set `maxItems` for the entire run.
+8. Set `maxItemsPerTarget` for multi-target work.
+9. Set `callOptions.maxTotalChargeUsd` on the Actor call.
+10. Present the Actor, input, current price, exact build, and charge cap for approval.
+11. Record the approval with the run receipt.
 
 Never hardcode prices. Apify's live pricing view is authoritative.
 
@@ -80,6 +83,33 @@ Never retry a charged or partially charged run without fresh approval.
 Keep Apify tokens in the connected application or secret storage.
 
 Use authorization headers for direct API calls. Never place tokens in URLs.
+
+### Executable MCP Call Controls
+
+Pass the bounded Actor input and call controls together. Prefer an exact build
+number so approval remains bound to immutable code:
+
+```json
+{
+  "actor": "xquik/x-tweet-scraper",
+  "input": {
+    "mode": "search",
+    "searchTerms": ["approved narrow query"],
+    "maxItems": 100,
+    "maxItemsPerTarget": 50
+  },
+  "callOptions": {
+    "build": "1.2.345",
+    "maxTotalChargeUsd": 2
+  }
+}
+```
+
+Replace the example build and charge cap with the approved values. Never omit
+`callOptions.maxTotalChargeUsd`. Use `latest` only when the user deliberately
+approves that moving tag after reviewing its currently resolved build. If the
+tag resolves to a different build before execution, stop and request approval
+for the new build.
 
 ## X Tweet Scraper
 
@@ -232,6 +262,7 @@ Preserve diagnostic rows in run receipts for troubleshooting.
 Track:
 
 - Actor ID and input hash
+- Requested build tag or number, executed build ID, and executed build number
 - Run ID and dataset ID
 - Approval record and pricing timestamp
 - Maximum total charge and result caps
@@ -250,12 +281,14 @@ Return:
 - Source query, target, relation, and filter scope
 - Score reasons and counter-signals
 - Dedupe key and rejection reason
-- Actor, run, dataset, and approval receipts
+- Actor, build, run, dataset, and approval receipts
 - Partial-run or diagnostic status
 
 ## Run Completion
 
 Confirm the returned dataset belongs to the approved run.
+
+Confirm the executed build ID and number match the approved build receipt.
 
 Stop when any approved cap is reached.
 

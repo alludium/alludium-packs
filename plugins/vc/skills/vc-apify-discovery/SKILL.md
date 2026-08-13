@@ -49,15 +49,16 @@ Return:
 
 Route X founder, product, and audience scopes to `vc-apify-x-founder-discovery`.
 
-That skill defines the approved Xquik Actors and their bounded inputs.
+That skill documents supported Xquik Actor candidates and their bounded inputs.
 
 Before recommending either Actor:
 
 - Reload its current Apify input schema.
 - Read its current Apify pricing.
+- Resolve its current build ID and build number.
 - Require whole-run and per-target limits.
-- Require an Apify maximum total charge.
-- Require explicit approval before any run.
+- Require `callOptions.maxTotalChargeUsd` on the Actor call.
+- Require explicit workspace and user approval before Actor selection or execution.
 
 Do not substitute similarly named Actors without a separate approval.
 
