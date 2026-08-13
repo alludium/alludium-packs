@@ -13,19 +13,16 @@ markers, not as PR validation aids.
 - If a paired platform PR references a future pack tag, keep that dependency explicit. Do not push
   an early tag just to satisfy platform external-pack validation.
 
-## Shared Installed Plugins
+## Shared Skills
 
-- Use the installed `platform-investigation:platform-investigation` plugin for Alludium platform
+- Use `platform-investigation:platform-investigation` for Alludium platform
   runtime or observability investigations when that evidence is needed.
-- In a fresh Codex checkout, run `bash scripts/install-shared-plugins.sh` first, or add the
-  `alludium/alludium-claude-marketplace` source from Codex Plugins and install
-  `platform-investigation`.
-- The installed `issue-workflow:*` plugin is currently policy-bound to Craft's issue repository.
+- The shared `issue-workflow:*` skills are currently policy-bound to Craft's issue repository.
   Do not use its `create-issue`, `claim-issue`, or `update-issue` skills as Packs issue intake,
   ownership, lifecycle, or parent-child workflow.
 - This repository has no local issue-intake workflow configured; keep pack release and VC
   validation guidance here authoritative, and do not create a duplicate local copy of either
-  marketplace plugin.
+  shared skill.
 
 ## Validation
 
