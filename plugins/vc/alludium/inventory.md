@@ -1,16 +1,20 @@
 # Alludium VC Inventory
 
-**Version**: 0.6.6
-**Status**: Fund-aware, hub-free Origination project model
+**Version**: 0.6.7
+**Status**: Intake identity hydration and bounded artifact readiness
 
-Version `0.6.6` makes Origination a workspace projection over Fund-specific Sourcing Lines and
+Version `0.6.7` lets Verify Opportunity Intake return confirmed company identity to the Deal Pipeline,
+keeps its readiness report in the standalone HTML contract, and performs one bounded wait for supplied
+artifacts that are still processing. Logo availability remains optional and never blocks readiness.
+
+Version `0.6.6` made Origination a workspace projection over Fund-specific Sourcing Lines and
 multi-line Origination Candidates. It binds dedicated workspace, line, and Candidate managers,
 retires the singleton Hub project and cross-line digest schedule, and requires an explicit active
 Fund when a Candidate is promoted into a Deal. Candidate registration searches accessible projects
 before creation, the promotion executor receives canonical `vc.funds`, and Sourcing Line navigation
 projects its allowlisted `fund_id`.
 
-This release follows `0.5.49`, which added canonical, hash-pinned finance and operations ontology
+This release carries forward the canonical, hash-pinned finance and operations ontology
 component fixtures with exact release provenance, dependency closure, lifecycle, compatibility,
 stage-purpose bindings, bounded provider slices, and reject-unknown constraints for KMC composition
 testing. Those fixtures remain Packs-owned meaning; they do not activate Platform behavior or claim
@@ -180,7 +184,7 @@ Review notes:
 
 Review notes:
 
-- `vc_deal_room` covers one investment opportunity from source capture through deal structuring and keeps version `1.1.8`.
+- `vc_deal_room` covers one investment opportunity from source capture through deal structuring and uses version `1.1.9` for intake identity output mappings.
 - `vc_investment_management` is user-facing as Deal Execution, covers formal diligence, contracts, closing, completion, and portfolio handoff after Deal Pipeline deal structuring, and keeps version `0.1.5`.
 - `vc_sourcing_line` version `0.2.4` owns one measurable, active-Fund-specific source/screen/cadence experiment and its receipts, with `fund_id` available to the allowlisted navigation projection, Fund-keyed candidate scoring retained on each provenance relationship, and guarded task-owned project updates after reviewed configuration or runs.
 - `vc_origination_candidate` version `0.2.3` owns one company's durable pre-Deal evidence, decisions, outreach context, and multi-line provenance without collapsing Fund-relative scores into Candidate-wide fields; guided creation starts the distinct initial screen and never reruns registration.

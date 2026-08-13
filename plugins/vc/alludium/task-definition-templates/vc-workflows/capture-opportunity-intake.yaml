@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.capture_opportunity_intake
-version: 1.0.30
+version: 1.0.33
 title: Verify Opportunity Intake
 category: Venture Capital
 visibility: workspace
@@ -70,12 +70,23 @@ definition:
         basis of a CRM/source URL whose record has not actually been read. If the required CRM/source read tool is unavailable
         or the connection is inactive, do not complete intake from the URL string; stop and ask the user to connect the source,
         approve the read, supply an export/snapshot, or run the appropriate import task. Capture the source
-        index, hydrated field map, missing information, and screening-readiness status. Do not run public-web research, Exa,
+        index, hydrated field map, missing information, and screening-readiness status. Emit the confirmed canonical company
+        name as `company_name` when it improves or normalizes the submitted name. When a normalized company domain is already
+        present or is found in an inspected approved source, save it as `company_domain`. Prefer an explicit
+        HTTPS logo URL on the confirmed company''s host family from that approved source; otherwise derive `company_logo_url`
+        as `https://<normalized-domain>/favicon.ico`. This deterministic first-party favicon derivation is
+        optional identity hydration, not inspected evidence, and must never block intake. Do not run public-web research, Exa,
         Brave, SerpAPI, Firecrawl, competitor discovery, market research, investment scoring, red-flag analysis, or continue/watch/pass
         recommendations during intake; those belong in screening or later evaluation. Do not require a pitch deck when another
         supplied source explains the opportunity. When `pitch_deck_artifact_id` is present, inspect, extract, search, or route
         the deck through `pitch-deck-explainer` before using it as evidence or declaring deck-contained fields missing. Deck
-        presence alone is not evidence. If the deck cannot be inspected with available tools, mark it as unreadable, do not
+        presence alone is not evidence. A deck whose indexing or extraction status is `POLLING` or processing is not yet
+        unreadable: collect the processing artifact IDs and call `artifact_waitForArtifactsReady` once with the maximum
+        supported timeout before retrying inspection. Do not substitute repeated status-list calls for the bounded wait. If
+        the wait times out, keep the task pending with a concise processing-status update; do not ask the user to confirm an
+        identity that the attached material can resolve after indexing, and do not complete intake while that supplied deck
+        is still processing.
+        If the deck cannot be inspected with available tools after processing finishes, mark it as unreadable, do not
         count it as satisfying source readiness, and ask for a readable deck, extracted text, an approved extraction path, or
         manual field values before saving a final readiness artifact. Ask for the smallest missing context needed to identify
         the company and cite at least one source anchor. If identity or source anchoring is insufficient, do not create or save an
@@ -113,6 +124,11 @@ definition:
         and approval boundaries.'
       outputFormatting: 'Keep the HTML artifact separate from structured task output fields. `opportunity_intake_artifact_id`
         must be omitted when no artifact is created and must contain only the returned artifact UUID when present.
+        `company_name` must contain only the confirmed canonical company name and should be omitted when identity remains
+        ambiguous. `company_domain` must contain only the normalized domain with no scheme, path, or trailing slash.
+        `company_logo_url` must contain only an HTTP(S) image URL on the confirmed company''s host family from an inspected
+        approved source or the deterministic first-party favicon URL derived from `company_domain`; omit it when no domain
+        or approved logo is available.
         `intake_readiness_status` must contain only one status string:
         ready_for_screening, needs_more_info, or blocked. `hydrated_field_map`, `source_index`, and `missing_information`
         must be plain text with no HTML tags, no `<table>`, no `<tr>`, no `<td>`, and no escaped HTML. Keep these structured
@@ -142,8 +158,12 @@ definition:
         anchor is requested without creating an artifact.
       - Any supplied CRM/source record anchor is read with an available tool before readiness or missing fields are decided, or
         the user is asked to connect/approve the source or supply an export when the record cannot be read.
-      - Any attached pitch deck is inspected and cited, or recorded as unreadable and excluded from readiness evidence.
+      - Any attached pitch deck has finished processing and is inspected and cited, or is recorded as unreadable and excluded
+        from readiness evidence; intake does not complete while a supplied deck is still polling.
       - Hydrated project fields list provenance and confidence without using public-web enrichment.
+      - The confirmed canonical company name is emitted when it improves or normalizes the submitted project name.
+      - Confirmed company domain and optional logo URL are emitted when available, without making logo enrichment a readiness
+        requirement.
       - Missing information names the smallest inputs needed before or during screening.
       - Intake readiness is reported as ready_for_screening, needs_more_info, or blocked.
     humanDecisionPoints:
@@ -258,6 +278,24 @@ fields:
     fieldType: string
     required: false
     position: 4
+    config: {}
+  - key: company_name
+    name: Canonical Company Name
+    fieldType: string
+    required: false
+    position: 5
+    config: {}
+  - key: company_domain
+    name: Company Domain
+    fieldType: string
+    required: false
+    position: 6
+    config: {}
+  - key: company_logo_url
+    name: Company Logo URL
+    fieldType: string
+    required: false
+    position: 7
     config: {}
 runtime:
   defaultExecutionContext:
