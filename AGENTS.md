@@ -17,6 +17,9 @@ markers, not as PR validation aids.
 
 - Use the installed `platform-investigation:platform-investigation` plugin for Alludium platform
   runtime or observability investigations when that evidence is needed.
+- In a fresh Codex checkout, run `bash scripts/install-shared-plugins.sh` first, or add the
+  `alludium/alludium-claude-marketplace` source from Codex Plugins and install
+  `platform-investigation`.
 - The installed `issue-workflow:*` plugin is currently policy-bound to Craft's issue repository.
   Do not use its `create-issue`, `claim-issue`, or `update-issue` skills as Packs issue intake,
   ownership, lifecycle, or parent-child workflow.
