@@ -120,6 +120,7 @@ mcpServers:
       - name: artifact.getArtifact
       - name: artifact.findById
       - name: artifact.getTextStructure
+      - name: artifact.waitForArtifactsReady
       - name: artifact.readSourceRange
       - name: artifact.createTextArtifact
       - name: artifact.attachToChat

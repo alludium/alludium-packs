@@ -113,7 +113,7 @@ Do not mutate CRM records, send communications, create folders, create child tas
 
 ## MCP And Tool Context
 
-- `alludium-platform`: `artifact.searchArtifacts`, `artifact.list`, `artifact.getArtifact`, `artifact.findById`, `artifact.getTextStructure`, `artifact.readSourceRange`, `artifact.createTextArtifact`, `artifact.attachToChat`, `artifact.getArtifactsLinkedToChat`, `task-management.getTaskContent`, `task-management.getTaskDetail`, `task-management.askTaskQuestion`, `task-management.askTaskQuestions`
+- `alludium-platform`: `artifact.searchArtifacts`, `artifact.list`, `artifact.getArtifact`, `artifact.findById`, `artifact.getTextStructure`, `artifact.waitForArtifactsReady`, `artifact.readSourceRange`, `artifact.createTextArtifact`, `artifact.attachToChat`, `artifact.getArtifactsLinkedToChat`, `task-management.getTaskContent`, `task-management.getTaskDetail`, `task-management.askTaskQuestion`, `task-management.askTaskQuestions`
 - `affinity-mcp-server`: `affinity_search_companies`, `affinity_get_company`, `affinity_list_company_notes`, `affinity_list_opportunities`, `affinity_get_opportunity`, `affinity_get_list_entries`, `affinity_search_persons`, `affinity_get_person`
 
 ## Suggested Actions
