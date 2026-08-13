@@ -1,7 +1,10 @@
 # Alludium VC Inventory
 
-**Version**: 0.6.7
-**Status**: Intake identity hydration and bounded artifact readiness
+**Version**: 0.6.8
+**Status**: Workspace-connected Integration Operator tools
+
+Version `0.6.8` makes Integration Operator inherit workspace-connected applications and declares the
+Affinity read-preview task's required connection without hard-coding individual Affinity tools.
 
 Version `0.6.7` lets Verify Opportunity Intake return confirmed company identity to the Deal Pipeline,
 keeps its readiness report in the standalone HTML contract, and performs one bounded wait for supplied
