@@ -51,7 +51,7 @@ Do not create projects, enable recurring sync, send messages, change sharing, mu
 - Source template: `alludium/agent-templates/vc_integration_operator.yaml`
 - Alludium template ID: `vc_integration_operator`
 - Display name: Integration Operator
-- Version: `1.0.1`
+- Version: `1.0.2`
 - Primary stage: Integration Management
 - Primary Deal Room state: `intake`
 - Supported task definitions:
@@ -105,7 +105,7 @@ Do not create projects, enable recurring sync, send messages, change sharing, mu
 
 ## MCP And Tool Context
 
-- None declared
+- `affinity-mcp-server`: `affinity_get_list_entries`, `affinity_list_opportunities`, `affinity_get_opportunity`, `affinity_search_companies`, `affinity_get_company`, `affinity_search_persons`, `affinity_get_person`, `affinity_list_company_notes`
 
 ## Suggested Actions
 
