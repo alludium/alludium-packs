@@ -1254,6 +1254,7 @@ def validate_fund_routing_contract() -> None:
         bounded_update_fixture.get("toolName") != "project.applyPortfolioOperations"
         or bounded_update_operation.get("type") != "update_fields"
         or not bounded_update_operation.get("operationId")
+        or not bounded_update_operation.get("projectId")
         or not bounded_update_operation.get("expectedProjectTypeVersionId")
         or bounded_update_expected.get("exactActionApproved")
         != "update_allowlisted_fields"
@@ -1280,6 +1281,7 @@ def validate_fund_routing_contract() -> None:
         != {"archive", "restore"}
         or not all(
             operation.get("operationId")
+            and operation.get("projectId")
             and operation.get("expectedProjectTypeVersionId")
             for operation in archive_restore_operations
         )

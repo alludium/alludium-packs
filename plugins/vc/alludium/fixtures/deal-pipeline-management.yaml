@@ -185,6 +185,7 @@ pipelineManagerScenarios:
     targetDealUrl: https://example.invalid/deals/example-labs
     operation:
       operationId: update-example-labs-fund
+      projectId: 7f56a2d1-8c43-4b91-a6e0-2d93f4c5b718
       type: update_fields
       expectedProjectTypeVersionId: version-deal-room-1
       fieldValues:
@@ -203,12 +204,14 @@ pipelineManagerScenarios:
         targetDealUrl: https://example.invalid/deals/example-labs
         operation:
           operationId: archive-example-labs
+          projectId: 7f56a2d1-8c43-4b91-a6e0-2d93f4c5b718
           type: archive
           expectedProjectTypeVersionId: version-deal-room-1
       - instruction: Restore Example Labs.
         targetDealUrl: https://example.invalid/deals/example-labs
         operation:
           operationId: restore-example-labs
+          projectId: 7f56a2d1-8c43-4b91-a6e0-2d93f4c5b718
           type: restore
           expectedProjectTypeVersionId: version-deal-room-1
     expected:
