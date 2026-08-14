@@ -1341,6 +1341,16 @@ def validate_fund_routing_contract() -> None:
         for field in deal_room.get("initialVersion", {}).get("fieldsSchema", [])
         if isinstance(field, dict) and isinstance(field.get("key"), str)
     }
+    deal_room_member_fields = {
+        field_key
+        for field_key, field in deal_room_field_by_key.items()
+        if field.get("kind") == "member"
+    }
+    if deal_room_member_fields != {"lead_partner"}:
+        fail(
+            "Deal Pipeline member-field contract must expose only lead_partner; found "
+            f"{sorted(deal_room_member_fields)}"
+        )
     deal_execution_fields = {
         field.get("key")
         for field in deal_execution.get("initialVersion", {}).get("fieldsSchema", [])
@@ -1587,6 +1597,9 @@ def validate_fund_routing_contract() -> None:
         "unique `operationId`, exact `projectId`, and current `expectedProjectTypeVersionId`",
         "`update_fields`",
         "`set_member_field`",
+        "supported `lead_partner` field",
+        "`set_member_field` only for `fieldKey: lead_partner`",
+        "`lead_partner` assignment or clearing",
         "`transition`",
         "`archive`",
         "`restore`",
@@ -1615,6 +1628,9 @@ def validate_fund_routing_contract() -> None:
         "Before every mutation, tell the user plainly",
         "named clickable Deal link",
         "After creation, send Deal Manager",
+        "lead or owner",
+        "by lifecycle stage, owner",
+        "ownership change",
     ]:
         if forbidden_phrase in pipeline_prompt:
             fail(
@@ -1622,26 +1638,38 @@ def validate_fund_routing_contract() -> None:
                 f"{forbidden_phrase}"
             )
 
-    pipeline_action_titles = {
-        action.get("Title")
+    pipeline_actions_by_title = {
+        action.get("Title"): action
         for action in pipeline_manager.get("actions") or []
         if isinstance(action, dict)
     }
+    pipeline_action_titles = set(pipeline_actions_by_title)
     required_deal_action_titles = {"Create Deal", "Update Deal", "Archive or Restore"}
     if not required_deal_action_titles.issubset(pipeline_action_titles):
         fail(
             "Pipeline Manager actions must expose actual bounded Deal management: "
             f"{sorted(required_deal_action_titles)}"
         )
+    for action_title in ["Update Deal", "Stale Deals"]:
+        action_message = (pipeline_actions_by_title.get(action_title) or {}).get(
+            "Message"
+        ) or ""
+        if "Lead Partner" not in action_message or "owner" in action_message.lower():
+            fail(
+                f"Pipeline Manager {action_title} action must use the supported Lead Partner field"
+            )
     pipeline_greeting = pipeline_manager.get("greeting") or ""
     for required_phrase in [
         "create a Deal from this chat",
+        "Lead Partner",
         "archive or restore an exact Deal",
         "direct instruction for an exact change",
         "ask one focused question in chat",
     ]:
         if required_phrase not in pipeline_greeting:
             fail(f"Pipeline Manager greeting is missing Deal operation contract: {required_phrase}")
+    if "owner" in pipeline_greeting.lower():
+        fail("Pipeline Manager greeting must not advertise an unsupported owner mutation")
 
     status_report = read_yaml(
         ROOT
