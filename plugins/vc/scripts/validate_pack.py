@@ -391,6 +391,10 @@ OPTIONAL_ARTIFACT_OUTPUTS = {
     "capture-opportunity-intake": {"opportunity_intake_artifact_id"},
 }
 VC_ARTIFACT_OUTPUTS = {
+    "generate-refresh-screening-report": ["screening_report_artifact_id"],
+    "generate-refresh-evaluation-report": ["evaluation_report_artifact_id"],
+    "prepare-refresh-ic-memo": ["ic_memo_artifact_id"],
+    "review-refresh-term-sheet": ["term_sheet_review_artifact_id"],
     "source-thesis-targets": ["thesis_target_list_artifact_id"],
     "prepare-lead-gen-packet": ["lead_generation_packet_artifact_id"],
     "capture-opportunity-intake": ["opportunity_intake_artifact_id"],
@@ -508,6 +512,22 @@ VC_ARTIFACT_INPUTS = {
     ],
 }
 OPTIONAL_ARTIFACT_INPUTS = {
+    "generate-refresh-screening-report": {"existing_screening_report_artifact_id"},
+    "generate-refresh-evaluation-report": {
+        "screening_report_artifact_id",
+        "existing_evaluation_report_artifact_id",
+    },
+    "prepare-refresh-ic-memo": {
+        "evaluation_report_artifact_id",
+        "term_sheet_review_artifact_id",
+        "existing_ic_memo_artifact_id",
+    },
+    "review-refresh-term-sheet": {
+        "previous_term_sheet_artifact_id",
+        "evaluation_report_artifact_id",
+        "ic_memo_artifact_id",
+        "existing_term_sheet_review_artifact_id",
+    },
     "prepare-meeting": {"pitch_deck_artifact_id"},
     "run-commercial-evaluation": {"follow_up_evaluation_artifact_id"},
     "run-technical-evaluation": {"follow_up_evaluation_artifact_id"},
@@ -956,10 +976,11 @@ def validate_fund_routing_contract() -> None:
         "vc_investment_management",
         "vc_sourcing_line",
         "vc_origination_candidate",
+        "vc_deal_pipeline",
     }:
         fail(
-            "vc.funds must support Deal Pipeline, Deal Execution, Sourcing Line, "
-            "and Origination Candidate"
+            "vc.funds must support both Deal Pipeline types, Deal Execution, "
+            "Sourcing Line, and Origination Candidate"
         )
     item_contract = (funds_variable.get("validationMetadata") or {}).get("items") or {}
     if set(item_contract.get("required") or []) != {"id", "name", "status"}:
@@ -1046,13 +1067,18 @@ def validate_fund_routing_contract() -> None:
         "dealManagerScenarios": {
             "compact-context-with-confirmed-fund",
             "predefined-task-match",
-            "approved-ad-hoc-financial-verification",
+            "approved-custom-financial-verification",
             "report-questions-require-review",
+        },
+        "dealAnalystScenarios": {
+            "bounded-task-recommendation-to-deal-manager",
         },
         "pipelineManagerScenarios": {
             "unassigned-fund-review",
             "selected-fund-weekly-summary",
             "direct-chat-to-deal",
+            "direct-chat-to-existing-deal-room",
+            "approved-custom-task-with-assignment",
             "missing-required-field-clarification",
             "duplicate-deal-ambiguity",
             "bounded-deal-update",
@@ -1070,6 +1096,10 @@ def validate_fund_routing_contract() -> None:
             "stable-question-across-refresh",
             "question-covered-by-existing-task",
             "resolved-question",
+        },
+        "livingReportScenarios": {
+            "first-generation-discovers-corpus",
+            "refresh-updates-in-place-and-classifies-corpus",
         },
     }
     for section, required_ids in required_management_scenarios.items():
@@ -1093,12 +1123,95 @@ def validate_fund_routing_contract() -> None:
     report_review_expected = report_review_fixture.get("expected") or {}
     if report_review_expected.get("mayCreateTasks") is not False:
         fail("Report-question fixture must prohibit task creation without approval")
-    chat_to_deal_fixture = next(
+
+    first_report_fixture = next(
         scenario
-        for scenario in management_fixture["pipelineManagerScenarios"]
-        if scenario.get("id") == "direct-chat-to-deal"
+        for scenario in management_fixture["livingReportScenarios"]
+        if scenario.get("id") == "first-generation-discovers-corpus"
     )
-    chat_to_deal_expected = chat_to_deal_fixture.get("expected") or {}
+    expected_first_report_contract = {
+        "includedArtifactIds": ["deck", "founder-call"],
+        "excludedArtifactIds": ["screening-template", "workspace-settings"],
+        "focusDoesNotRestrictCorpus": True,
+        "createdArtifactCount": 1,
+        "updatedArtifactCount": 0,
+        "createsProjectSharedArtifact": True,
+        "writesEvidenceBasisManifest": True,
+    }
+    if (first_report_fixture.get("expected") or {}) != expected_first_report_contract:
+        fail("First-generation living-report fixture must create one report from the full corpus")
+
+    refresh_report_fixture = next(
+        scenario
+        for scenario in management_fixture["livingReportScenarios"]
+        if scenario.get("id") == "refresh-updates-in-place-and-classifies-corpus"
+    )
+    expected_refresh_report_contract = {
+        "includedArtifactIds": [
+            "customer-reference",
+            "deck",
+            "financial-model",
+            "founder-call",
+            "screening-upstream",
+        ],
+        "excludedArtifactIds": ["evaluation-template", "screening-report"],
+        "focusDoesNotRestrictCorpus": True,
+        "sourceChanges": {
+            "added": ["customer-reference", "financial-model", "screening-upstream"],
+            "changed": ["deck"],
+            "removed": ["old-market-note"],
+            "unchanged": ["founder-call"],
+        },
+        "createdArtifactCount": 0,
+        "updatedArtifactId": "screening-report",
+        "updateUsesObservedRevisionAndHash": True,
+        "duplicateFallbackAllowed": False,
+    }
+    if (refresh_report_fixture.get("expected") or {}) != expected_refresh_report_contract:
+        fail("Refresh living-report fixture must update in place and classify corpus changes")
+    custom_deal_task_fixture = next(
+        scenario
+        for scenario in management_fixture["dealManagerScenarios"]
+        if scenario.get("id") == "approved-custom-financial-verification"
+    )
+    expected_custom_task_contract = {
+        "taskKind": "custom",
+        "toolName": "task-management.createAdHocTask",
+        "taskDefinitionId": None,
+        "maySubstituteGeneralTask": False,
+        "assignmentTargetMustResolve": True,
+        "readBackCreatedTask": True,
+        "requiresPersistedOutputOrQuestion": True,
+    }
+    for key, expected_value in expected_custom_task_contract.items():
+        if (custom_deal_task_fixture.get("expected") or {}).get(key) != expected_value:
+            fail(
+                "Custom Deal task fixture must declare "
+                f"{key}={expected_value!r}"
+            )
+    analyst_handoff_fixture = next(
+        scenario
+        for scenario in management_fixture["dealAnalystScenarios"]
+        if scenario.get("id") == "bounded-task-recommendation-to-deal-manager"
+    )
+    expected_analyst_handoff_contract = {
+        "toolName": "project.sendManagerMessage",
+        "purpose": "task_recommendation",
+        "resolvesCanonicalManagerChatServerSide": True,
+        "persistsAsUserRoleWithAgentOriginMetadata": True,
+        "invokesDealManager": True,
+        "idempotentPerRecommendation": True,
+        "confersHumanApproval": False,
+        "mayCreateTask": False,
+    }
+    if (analyst_handoff_fixture.get("expected") or {}) != expected_analyst_handoff_contract:
+        fail("Deal Analyst handoff fixture must use the bounded attributed manager-message contract")
+    chat_creation_fixtures = {
+        scenario.get("id"): scenario
+        for scenario in management_fixture["pipelineManagerScenarios"]
+        if scenario.get("id")
+        in {"direct-chat-to-deal", "direct-chat-to-existing-deal-room"}
+    }
     expected_direct_create_contract = {
         "exactActionApproved": "create",
         "mayExecuteBoundedMutation": True,
@@ -1115,63 +1228,81 @@ def validate_fund_routing_contract() -> None:
         "constructsNavigationLink": False,
         "usesReturnedPlatformActionExclusively": True,
         "duplicatesHandoffInSourceResponse": False,
-        "handoffToAgentTemplateKey": "vc_deal_manager",
         "handoffAuthor": "Pipeline Manager",
         "handoffIncludesRawIds": False,
         "handoffIncludesTranscriptDump": False,
     }
-    for key, expected_value in expected_direct_create_contract.items():
-        if chat_to_deal_expected.get(key) != expected_value:
+    expected_chat_creation_targets = {
+        "direct-chat-to-deal": {
+            "projectTypeKey": "vc_deal_pipeline",
+            "handoffToAgentTemplateKey": "vc_deal_pipeline_manager",
+        },
+        "direct-chat-to-existing-deal-room": {
+            "projectTypeKey": "vc_deal_room",
+            "handoffToAgentTemplateKey": "vc_deal_manager",
+        },
+    }
+    for scenario_id, target in expected_chat_creation_targets.items():
+        fixture = chat_creation_fixtures[scenario_id]
+        fixture_expected = fixture.get("expected") or {}
+        expected_contract = {
+            **expected_direct_create_contract,
+            "handoffToAgentTemplateKey": target["handoffToAgentTemplateKey"],
+        }
+        for key, expected_value in expected_contract.items():
+            if fixture_expected.get(key) != expected_value:
+                fail(
+                    f"Chat-to-Deal fixture {scenario_id} must declare "
+                    f"{key}={expected_value!r}"
+                )
+        if (
+            fixture.get("toolName") != "project.createFromChat"
+            or fixture.get("projectTypeKey") != target["projectTypeKey"]
+            or not fixture.get("idempotencyKey")
+            or not fixture.get("sourceChatArtifacts")
+        ):
             fail(
-                "Direct Chat-to-Deal fixture must declare "
+                f"Chat-to-Deal fixture {scenario_id} must use project.createFromChat "
+                "with stable intent, the selected Deal type, and source-chat artifact context"
+            )
+        if set((fixture.get("handoff") or {}).keys()) != {
+            "whyCreated",
+            "sourceSummary",
+            "unresolvedQuestions",
+        }:
+            fail(
+                f"Chat-to-Deal fixture {scenario_id} handoff must contain only "
+                "whyCreated, sourceSummary, and unresolvedQuestions"
+            )
+    custom_pipeline_task_fixture = next(
+        scenario
+        for scenario in management_fixture["pipelineManagerScenarios"]
+        if scenario.get("id") == "approved-custom-task-with-assignment"
+    )
+    expected_pipeline_custom_task_contract = {
+        "exactTaskApproved": True,
+        "taskKind": "custom",
+        "toolName": "task-management.createTask",
+        "taskDefinitionId": None,
+        "maySubstituteGeneralTask": False,
+        "assignmentIsAtomic": True,
+        "defaultHumanOwner": "current_user",
+        "agentExecutorFromProjectType": "vc_deal_analyst",
+        "readBackToolName": "task-management.getTaskDetail",
+        "requiresPersistedOutputOrQuestion": True,
+        "visibleReceiptUsesHumanReadableValuesOnly": True,
+    }
+    for key, expected_value in expected_pipeline_custom_task_contract.items():
+        if (custom_pipeline_task_fixture.get("expected") or {}).get(key) != expected_value:
+            fail(
+                "Pipeline Manager custom-task fixture must declare "
                 f"{key}={expected_value!r}"
             )
-    if (
-        chat_to_deal_fixture.get("toolName") != "project.createFromChat"
-        or chat_to_deal_fixture.get("projectTypeKey") != "vc_deal_room"
-        or not chat_to_deal_fixture.get("idempotencyKey")
-        or not chat_to_deal_fixture.get("sourceChatArtifacts")
-    ):
-        fail(
-            "Direct Chat-to-Deal fixture must use project.createFromChat with stable "
-            "intent, Deal type, and source-chat artifact context"
-        )
-    if set((chat_to_deal_fixture.get("handoff") or {}).keys()) != {
-        "whyCreated",
-        "sourceSummary",
-        "unresolvedQuestions",
-    }:
-        fail(
-            "Direct Chat-to-Deal handoff must contain only whyCreated, sourceSummary, "
-            "and unresolvedQuestions"
-        )
 
-    complete_visible_response = chat_to_deal_fixture.get(
-        "completeVisibleAssistantResponse"
-    )
-    tool_only_values = chat_to_deal_fixture.get("toolOnlyValues") or {}
-    server_receipt = chat_to_deal_fixture.get("serverReceipt") or {}
-    rendered_platform_actions = chat_to_deal_fixture.get("renderedPlatformActions") or []
-    if not isinstance(complete_visible_response, str) or not complete_visible_response.strip():
-        fail("Direct Chat-to-Deal fixture must include the complete visible assistant response")
     uuid_pattern = re.compile(
         r"\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b",
         re.IGNORECASE,
     )
-    if uuid_pattern.search(complete_visible_response):
-        fail("Pipeline Manager complete visible response must not expose UUIDs")
-    if not isinstance(tool_only_values, dict) or not tool_only_values:
-        fail("Direct Chat-to-Deal fixture must declare realistic tool-only identifiers")
-    leaked_tool_values = sorted(
-        str(value)
-        for value in tool_only_values.values()
-        if isinstance(value, str) and value and value in complete_visible_response
-    )
-    if leaked_tool_values:
-        fail(
-            "Pipeline Manager complete visible response leaked tool-only values: "
-            f"{leaked_tool_values}"
-        )
     forbidden_visible_identifier_labels = {
         "sourceChatId",
         "projectId",
@@ -1182,49 +1313,68 @@ def validate_fund_routing_contract() -> None:
         "operationId",
         "idempotencyKey",
     }
-    leaked_identifier_labels = sorted(
-        label
-        for label in forbidden_visible_identifier_labels
-        if label in complete_visible_response
-    )
-    if leaked_identifier_labels:
-        fail(
-            "Pipeline Manager complete visible response exposed identifier labels: "
-            f"{leaked_identifier_labels}"
+    for scenario_id, fixture in chat_creation_fixtures.items():
+        complete_visible_response = fixture.get("completeVisibleAssistantResponse")
+        tool_only_values = fixture.get("toolOnlyValues") or {}
+        server_receipt = fixture.get("serverReceipt") or {}
+        rendered_platform_actions = fixture.get("renderedPlatformActions") or []
+        if not isinstance(complete_visible_response, str) or not complete_visible_response.strip():
+            fail(f"Chat-to-Deal fixture {scenario_id} must include the complete visible response")
+        if uuid_pattern.search(complete_visible_response):
+            fail(f"Chat-to-Deal fixture {scenario_id} visible response must not expose UUIDs")
+        if not isinstance(tool_only_values, dict) or not tool_only_values:
+            fail(f"Chat-to-Deal fixture {scenario_id} must declare tool-only identifiers")
+        leaked_tool_values = sorted(
+            str(value)
+            for value in tool_only_values.values()
+            if isinstance(value, str) and value and value in complete_visible_response
         )
-    if re.search(
-        r"\[[^\]]+\]\([^)]+\)|<a\b|javascript:|https?://|www\.",
-        complete_visible_response,
-        re.IGNORECASE,
-    ):
-        fail("Pipeline Manager complete visible response must not construct navigation links")
-    visible_sentences = [
-        sentence
-        for sentence in re.split(r"(?<=[.!?])\s+", complete_visible_response.strip())
-        if sentence
-    ]
-    if len(visible_sentences) > 1:
-        fail("Pipeline Manager success response must be at most one short sentence")
-    handoff = chat_to_deal_fixture.get("handoff") or {}
-    visible_handoff_values = [
-        handoff.get("whyCreated"),
-        handoff.get("sourceSummary"),
-        *((handoff.get("unresolvedQuestions") or [])),
-    ]
-    if any(
-        isinstance(value, str)
-        and value
-        and value in complete_visible_response
-        for value in visible_handoff_values
-    ):
-        fail("Pipeline Manager success response must not duplicate the Deal Manager handoff")
-    if (
-        server_receipt.get("status") not in {"created", "reused", "partial"}
-        or rendered_platform_actions != [server_receipt.get("action")]
-    ):
-        fail(
-            "Pipeline Manager success fixture must use only the returned Platform action"
+        if leaked_tool_values:
+            fail(
+                f"Chat-to-Deal fixture {scenario_id} visible response leaked tool-only values: "
+                f"{leaked_tool_values}"
+            )
+        leaked_identifier_labels = sorted(
+            label
+            for label in forbidden_visible_identifier_labels
+            if label in complete_visible_response
         )
+        if leaked_identifier_labels:
+            fail(
+                f"Chat-to-Deal fixture {scenario_id} visible response exposed identifier labels: "
+                f"{leaked_identifier_labels}"
+            )
+        if re.search(
+            r"\[[^\]]+\]\([^)]+\)|<a\b|javascript:|https?://|www\.",
+            complete_visible_response,
+            re.IGNORECASE,
+        ):
+            fail(f"Chat-to-Deal fixture {scenario_id} must not construct navigation links")
+        visible_sentences = [
+            sentence
+            for sentence in re.split(r"(?<=[.!?])\s+", complete_visible_response.strip())
+            if sentence
+        ]
+        if len(visible_sentences) > 1:
+            fail(f"Chat-to-Deal fixture {scenario_id} response must be at most one sentence")
+        handoff = fixture.get("handoff") or {}
+        visible_handoff_values = [
+            handoff.get("whyCreated"),
+            handoff.get("sourceSummary"),
+            *((handoff.get("unresolvedQuestions") or [])),
+        ]
+        if any(
+            isinstance(value, str)
+            and value
+            and value in complete_visible_response
+            for value in visible_handoff_values
+        ):
+            fail(f"Chat-to-Deal fixture {scenario_id} must not duplicate the manager handoff")
+        if (
+            server_receipt.get("status") not in {"created", "reused", "partial"}
+            or rendered_platform_actions != [server_receipt.get("action")]
+        ):
+            fail(f"Chat-to-Deal fixture {scenario_id} must use only the returned Platform action")
 
     pipeline_scenarios_by_id = {
         scenario.get("id"): scenario
@@ -1341,16 +1491,6 @@ def validate_fund_routing_contract() -> None:
         for field in deal_room.get("initialVersion", {}).get("fieldsSchema", [])
         if isinstance(field, dict) and isinstance(field.get("key"), str)
     }
-    deal_room_member_fields = {
-        field_key
-        for field_key, field in deal_room_field_by_key.items()
-        if field.get("kind") == "member"
-    }
-    if deal_room_member_fields != {"lead_partner"}:
-        fail(
-            "Deal Pipeline member-field contract must expose only lead_partner; found "
-            f"{sorted(deal_room_member_fields)}"
-        )
     deal_execution_fields = {
         field.get("key")
         for field in deal_execution.get("initialVersion", {}).get("fieldsSchema", [])
@@ -1530,18 +1670,34 @@ def validate_fund_routing_contract() -> None:
     required_pipeline_tools = {
         "project.listNavigation",
         "project.getAgentContext",
+        "project.listMembers",
         "project.createFromChat",
         "project.applyPortfolioOperations",
         "project-task.listByProject",
         "task-definitions.list",
         "task-definitions.findById",
-        "task-management.createAdHocTask",
-        "task-management.createTaskFromDefinition",
-        "task-management.assignTask",
+        "task-management.createTask",
+        "task-management.getTaskDetail",
     }
     missing_pipeline_tools = sorted(required_pipeline_tools - pipeline_platform_tools)
     if missing_pipeline_tools:
         fail(f"Pipeline Manager is missing workspace/task tools: {missing_pipeline_tools}")
+    forbidden_pipeline_task_tools = {
+        "project.listAvailableMembers",
+        "task-management.createAdHocTask",
+        "task-management.createTaskFromDefinition",
+        "task-management.assignTask",
+        "agent.findByUserId",
+        "agent-deployment.findByAgentIdAndType",
+    }
+    unexpected_pipeline_task_tools = sorted(
+        forbidden_pipeline_task_tools & pipeline_platform_tools
+    )
+    if unexpected_pipeline_task_tools:
+        fail(
+            "Pipeline Manager must use bounded task creation and current project members, "
+            f"not legacy task/assignment discovery tools: {unexpected_pipeline_task_tools}"
+        )
     bounded_portfolio_mutations = {
         "project.createFromChat",
         "project.applyPortfolioOperations",
@@ -1586,9 +1742,11 @@ def validate_fund_routing_contract() -> None:
         "are tool-only",
         "must never appear in visible prose, reasoning summaries, code blocks, tables, URLs, links, or receipts",
         "Say “this chat” and use human-readable names and filenames instead",
-        "Use `project.createFromChat` only to create a `vc_deal_room` Deal",
+        "Use `project.createFromChat` only to create a Deal of the workspace-selected Deal Pipeline type",
         "stable `idempotencyKey` reused only for an exact retry",
-        "`projectTypeKey: vc_deal_room`",
+        "the exact selected `projectTypeKey` (`vc_deal_room` or `vc_deal_pipeline`)",
+        "preserve its released chat-creation route and fields",
+        "use that type's Screening default and declared creation fields",
         "`whyCreated`, `sourceSummary`, and material `unresolvedQuestions`",
         "Do not send selected message IDs or artifact IDs",
         "server re-reads the accessible source chat",
@@ -1618,6 +1776,15 @@ def validate_fund_routing_contract() -> None:
         "never duplicate the Deal Manager handoff before or after the action",
         "unsupported inferred values",
         "every Deal mutation they did not directly and unambiguously request",
+        "Use `task-management.createTask` for every task",
+        "Creation and assignment are atomic",
+        "Platform assigns the current user",
+        "Never leave a task unassigned",
+        "Platform must route the agent executor",
+        "call all work simply a task",
+        "Keep internal catalog, routing, and creation details private",
+        "task-management.getTaskDetail",
+        "persisted task output, an explicit question, or a review gate",
     ]:
         if required_phrase not in pipeline_prompt:
             fail(f"Pipeline Manager prompt is missing workspace contract: {required_phrase}")
@@ -4824,6 +4991,376 @@ def validate_project_task_mapping_contracts() -> None:
             )
 
 
+def validate_vc_deal_pipeline_contract() -> None:
+    project_type_id = "vc_deal_pipeline"
+    project_type = read_json(ROOT / "alludium" / "project-types" / f"{project_type_id}.json")
+    initial_version = project_type.get("initialVersion") or {}
+
+    expected_states = {
+        "screening",
+        "evaluation",
+        "decision",
+        "term_sheet",
+        "passed",
+        "promoted_to_investment_execution",
+        "archived",
+    }
+    if set(initial_version.get("lifecycleStates") or []) != expected_states:
+        fail("vc_deal_pipeline must expose the four active statuses and three explicit outcomes")
+    project_creation = project_type.get("projectCreation") or {}
+    if project_creation.get("defaultState") != "screening":
+        fail("vc_deal_pipeline must start in screening; Intake is source ingestion, not a stage")
+    if (project_creation.get("postCreate") or {}).get("triggerInitialStateTasks") is not False:
+        fail("vc_deal_pipeline must not create tasks when a project is created")
+
+    project_fields = {
+        field.get("key")
+        for field in initial_version.get("fieldsSchema") or []
+        if isinstance(field, dict) and isinstance(field.get("key"), str)
+    }
+    if "source_material_artifact_ids" in project_fields:
+        fail("vc_deal_pipeline must discover report evidence instead of maintaining a source inventory")
+    if "source_material_artifact_ids" in set(project_creation.get("advancedFieldKeys") or []):
+        fail("vc_deal_pipeline creation must not expose a source inventory field")
+
+    command_view = initial_version.get("commandView") or {}
+    if "outputSlots" in command_view:
+        fail("vc_deal_pipeline must not expose generic commandView output cards")
+
+    living_report_skill_path = ROOT / "skills" / "generate-or-refresh-living-report" / "SKILL.md"
+    living_report_skill = living_report_skill_path.read_text(encoding="utf-8")
+    for phrase in [
+        "Enumerate all artifacts linked to the current project and task chat",
+        "Exclude methodology and output templates",
+        "Add every readable upstream report or specially identified document",
+        "Focus IDs increase attention; they are never a whitelist",
+        "observed revision and content hash",
+        "data-evidence-basis-manifest",
+        "`added`",
+        "`changed`",
+        "`removed`",
+        "`unchanged`",
+        "create exactly one project-shared",
+        "update that exact artifact in place",
+        "Never create a duplicate fallback",
+    ]:
+        if phrase not in living_report_skill:
+            fail(f"Living-report skill is missing lifecycle rule: {phrase}")
+
+    expected_tasks = {
+        "generate-refresh-screening-report": (
+            "vc.generate_refresh_screening_report",
+            "screening_report_artifact_id",
+            "existing_screening_report_artifact_id",
+            "vc.document.deal_pipeline_screening_criteria",
+            "vc.document.deal_pipeline_screening_report_template",
+        ),
+        "generate-refresh-evaluation-report": (
+            "vc.generate_refresh_evaluation_report",
+            "evaluation_report_artifact_id",
+            "existing_evaluation_report_artifact_id",
+            "vc.document.deal_pipeline_evaluation_criteria",
+            "vc.document.deal_pipeline_evaluation_report_template",
+        ),
+        "prepare-refresh-ic-memo": (
+            "vc.prepare_refresh_ic_memo",
+            "ic_memo_artifact_id",
+            "existing_ic_memo_artifact_id",
+            "vc.document.deal_pipeline_ic_criteria",
+            "vc.document.deal_pipeline_ic_memo_template",
+        ),
+        "review-refresh-term-sheet": (
+            "vc.review_refresh_term_sheet",
+            "term_sheet_review_artifact_id",
+            "existing_term_sheet_review_artifact_id",
+            "vc.document.deal_pipeline_term_sheet_review_policy",
+            "vc.document.deal_pipeline_term_sheet_review_template",
+        ),
+    }
+    expected_input_mappings = {
+        "generate-refresh-screening-report": {
+            "company_name": "company_name",
+            "fund_id": "fund_id",
+            "existing_screening_report_artifact_id": "screening_report_artifact_id",
+        },
+        "generate-refresh-evaluation-report": {
+            "company_name": "company_name",
+            "fund_id": "fund_id",
+            "screening_report_artifact_id": "screening_report_artifact_id",
+            "existing_evaluation_report_artifact_id": "evaluation_report_artifact_id",
+        },
+        "prepare-refresh-ic-memo": {
+            "company_name": "company_name",
+            "fund_id": "fund_id",
+            "evaluation_report_artifact_id": "evaluation_report_artifact_id",
+            "decision_record_artifact_ids": "decision_record_artifact_ids",
+            "term_sheet_review_artifact_id": "term_sheet_review_artifact_id",
+            "existing_ic_memo_artifact_id": "ic_memo_artifact_id",
+        },
+        "review-refresh-term-sheet": {
+            "company_name": "company_name",
+            "current_term_sheet_artifact_id": "current_term_sheet_artifact_id",
+            "previous_term_sheet_artifact_id": "previous_term_sheet_artifact_id",
+            "evaluation_report_artifact_id": "evaluation_report_artifact_id",
+            "ic_memo_artifact_id": "ic_memo_artifact_id",
+            "existing_term_sheet_review_artifact_id": "term_sheet_review_artifact_id",
+        },
+    }
+    task_contracts = load_task_template_contracts()
+    mappings = initial_version.get("projectTaskMappings") or []
+    mappings_by_slug = {mapping.get("taskDefinitionSlug"): mapping for mapping in mappings}
+    if set(mappings_by_slug) != set(expected_tasks) or len(mappings) != len(expected_tasks):
+        fail("vc_deal_pipeline must map exactly the four durable document tasks")
+
+    for slug, (template_id, output_field, existing_input, criteria_id, template_document_id) in expected_tasks.items():
+        contract = task_contracts.get(slug)
+        if contract is None or contract.get("id") != template_id:
+            fail(f"vc_deal_pipeline durable task {slug} has the wrong template id")
+        if contract.get("stageIndependent") is not True or contract.get("stage") is not None:
+            fail(f"vc_deal_pipeline durable task {slug} must be stage-independent")
+        if contract.get("supportedProjectTypes") != [project_type_id]:
+            fail(f"vc_deal_pipeline durable task {slug} must support only vc_deal_pipeline")
+        if output_field not in contract["fields"]["output"] or existing_input not in contract["fields"]["input"]:
+            fail(f"vc_deal_pipeline durable task {slug} must expose stable refresh input/output fields")
+        focus_field = contract["fields"]["input"].get("focus_artifact_ids")
+        if focus_field is None or focus_field.get("required") is not False:
+            fail(f"vc_deal_pipeline durable task {slug} must expose optional additive focus_artifact_ids")
+        if "source_artifact_ids" in contract["fields"]["input"]:
+            fail(f"vc_deal_pipeline durable task {slug} must not accept a source inventory")
+
+        task_path = ROOT / "alludium" / "task-definition-templates" / "vc-workflows" / f"{slug}.yaml"
+        task_template = read_yaml(task_path)
+        definition_json = task_template["definition"]["definitionJson"]
+        if "generate-or-refresh-living-report" not in set(definition_json.get("requiredSkills") or []):
+            fail(f"vc_deal_pipeline durable task {slug} must require the shared living-report skill")
+        refs = {entry.get("documentId") for entry in definition_json.get("documentRefs") or []}
+        if not {criteria_id, template_document_id}.issubset(refs):
+            fail(f"vc_deal_pipeline durable task {slug} is missing its stable criteria/template refs")
+        execution_instructions = definition_json.get("instructions", {}).get("executionInstructions", "")
+        if "generate-or-refresh-living-report" not in execution_instructions:
+            fail(f"vc_deal_pipeline durable task {slug} must invoke the shared report lifecycle")
+        if "focus_artifact_ids" not in execution_instructions:
+            fail(f"vc_deal_pipeline durable task {slug} must treat focus artifacts as additive")
+        for duplicated_lifecycle_instruction in ["artifact.createTextArtifact", "artifact.updateTextArtifact"]:
+            if duplicated_lifecycle_instruction in execution_instructions:
+                fail(
+                    f"vc_deal_pipeline durable task {slug} duplicates shared lifecycle instruction "
+                    f"{duplicated_lifecycle_instruction}"
+                )
+
+        mapping = mappings_by_slug[slug]
+        if "lifecycleStage" in mapping:
+            fail(f"vc_deal_pipeline mapping for {slug} must omit lifecycleStage")
+        activation = mapping.get("activationPolicy") or {}
+        if activation != {
+            "mode": "manual_review",
+            "autoStartWhenRequiredInputsAvailable": False,
+            "requiresHumanApproval": True,
+            "createTaskWhenLifecycleStageEntered": False,
+        }:
+            fail(f"vc_deal_pipeline mapping for {slug} must be manual and never stage-created")
+        input_mapping_entries = mapping.get("inputMappings") or []
+        mapped_inputs = {
+            entry.get("taskField"): entry.get("sourcePath")
+            for entry in input_mapping_entries
+        }
+        if len(mapped_inputs) != len(input_mapping_entries):
+            fail(f"vc_deal_pipeline mapping for {slug} has duplicate or missing task input fields")
+        if mapped_inputs != expected_input_mappings[slug]:
+            fail(f"vc_deal_pipeline mapping for {slug} has incorrect task/project input fields")
+        for entry in input_mapping_entries:
+            task_field = entry.get("taskField")
+            project_field = entry.get("sourcePath")
+            if entry.get("source") != "project.field":
+                fail(f"vc_deal_pipeline mapping for {slug} inputs must come from project fields")
+            if task_field not in contract["fields"]["input"]:
+                fail(f"vc_deal_pipeline mapping for {slug} references unknown task input {task_field}")
+            if project_field not in project_fields:
+                fail(f"vc_deal_pipeline mapping for {slug} references unknown project field {project_field}")
+        if mapped_inputs.get(existing_input) != output_field:
+            fail(f"vc_deal_pipeline mapping for {slug} must map its report field to {existing_input}")
+
+        output_mapping_entries = mapping.get("outputMappings") or []
+        mapped_outputs = {
+            entry.get("taskField"): entry.get("targetPath")
+            for entry in output_mapping_entries
+        }
+        if len(mapped_outputs) != len(output_mapping_entries):
+            fail(f"vc_deal_pipeline mapping for {slug} has duplicate or missing task output fields")
+        if mapped_outputs != {output_field: output_field}:
+            fail(f"vc_deal_pipeline mapping for {slug} must preserve one stable artifact pointer")
+        for entry in output_mapping_entries:
+            task_field = entry.get("taskField")
+            project_field = entry.get("targetPath")
+            if entry.get("target") != "project.field":
+                fail(f"vc_deal_pipeline mapping for {slug} outputs must target project fields")
+            if task_field not in contract["fields"]["output"]:
+                fail(f"vc_deal_pipeline mapping for {slug} references unknown task output {task_field}")
+            if project_field not in project_fields:
+                fail(f"vc_deal_pipeline mapping for {slug} targets unknown project field {project_field}")
+
+    expected_document_ids = {
+        "vc.document.evidence_citation_style_guide",
+        "vc.document.template_use_guidance",
+        "vc.document.deal_pipeline_screening_criteria",
+        "vc.document.deal_pipeline_screening_report_template",
+        "vc.document.deal_pipeline_evaluation_criteria",
+        "vc.document.deal_pipeline_evaluation_report_template",
+        "vc.document.deal_pipeline_ic_criteria",
+        "vc.document.deal_pipeline_ic_memo_template",
+        "vc.document.deal_pipeline_decision_record_template",
+        "vc.document.deal_pipeline_term_sheet_review_policy",
+        "vc.document.deal_pipeline_term_sheet_review_template",
+    }
+    document_library = initial_version.get("documentLibrary") or {}
+    document_id_list = document_library.get("documentIds") or []
+    document_ids = set(document_id_list)
+    if document_ids != expected_document_ids:
+        fail("vc_deal_pipeline document library must contain the nine stable role documents and shared guidance")
+    if len(document_id_list) != len(document_ids):
+        fail("vc_deal_pipeline document library must not declare duplicate document IDs")
+
+    exclusivity_rule = (
+        "This workspace must activate exactly one Deal Pipeline project type: "
+        "vc_deal_pipeline and vc_deal_room must never be active together."
+    )
+    if exclusivity_rule not in (initial_version.get("instructionTemplate") or ""):
+        fail("vc_deal_pipeline must declare the one Deal Pipeline type per workspace invariant")
+
+    pipeline_manager = read_yaml(ROOT / "alludium" / "agent-templates" / "vc_pipeline_autopilot.yaml")
+    pipeline_manager_prompt = (pipeline_manager.get("prompt") or {}).get("template") or ""
+    for phrase in [
+        "A workspace activates exactly one Deal Pipeline project type",
+        "If the authorized workspace projection exposes both types as active",
+        "do not create or mutate Deals until it is resolved",
+        "Never activate or create the other Deal Pipeline type alongside the workspace-selected type",
+    ]:
+        if phrase not in pipeline_manager_prompt:
+            fail(f"VC Pipeline Manager is missing workspace project-type exclusivity rule: {phrase}")
+
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    inventory = (ROOT / "alludium" / "inventory.md").read_text(encoding="utf-8")
+    for public_path, public_text in [("README.md", readme), ("alludium/inventory.md", inventory)]:
+        if "each workspace activates exactly one" not in public_text and "a workspace activates exactly one" not in public_text:
+            fail(f"{public_path} must state that each workspace activates exactly one Deal Pipeline type")
+        if "side-by-side" in public_text.lower():
+            fail(f"{public_path} must not imply simultaneous Deal Pipeline activation with side-by-side wording")
+
+    supported_task_slugs = {
+        slug
+        for slug, contract in task_contracts.items()
+        if project_type_id in contract.get("supportedProjectTypes", [])
+    }
+    if supported_task_slugs != {"create-pipeline-deal", *expected_tasks}:
+        fail("vc_deal_pipeline must expose only its guided creation task and four durable document tasks")
+    if any("decision" in slug and "create-pipeline-deal" != slug for slug in supported_task_slugs):
+        fail("Decision Record must remain a confirmed Deal Manager action, not a mapped task")
+
+    if (initial_version.get("projectManager") or {}).get("agentTemplateKey") != "vc_deal_pipeline_manager":
+        fail("vc_deal_pipeline must bind the dedicated Deal Manager")
+    expected_task_routing = {
+        "defaultAgentType": "vc_deal_analyst",
+        "requireAgentExecutor": True,
+        "defaultHumanOwner": "current_user",
+        "requireHumanOwner": True,
+    }
+    if initial_version.get("taskRouting") != expected_task_routing:
+        fail("vc_deal_pipeline must require Deal Analyst execution and current-user human ownership")
+    fallback_agent_ids = {
+        agent.get("id") for agent in (initial_version.get("commandView") or {}).get("fallbackAgents") or []
+    }
+    if fallback_agent_ids != {"vc_deal_analyst"}:
+        fail("vc_deal_pipeline presentation fallback must mirror its Deal Analyst task routing")
+
+    manager = read_yaml(ROOT / "alludium" / "agent-templates" / "vc_deal_pipeline_manager.yaml")
+    manager_prompt = (manager.get("prompt") or {}).get("template") or ""
+    manager_tools = {
+        tool.get("name")
+        for tool in ((manager.get("mcpServers") or {}).get("alludium-platform") or {}).get("tools", [])
+        if isinstance(tool, dict)
+    }
+    required_manager_tools = {
+        "project.listMembers",
+        "project-task.listByProject",
+        "task-definitions.list",
+        "task-definitions.findById",
+        "task-management.createTask",
+        "task-management.getTaskDetail",
+    }
+    missing_manager_tools = sorted(required_manager_tools - manager_tools)
+    if missing_manager_tools:
+        fail(f"vc_deal_pipeline Deal Manager is missing custom-task tools: {missing_manager_tools}")
+    forbidden_manager_task_tools = {
+        "project.listAvailableMembers",
+        "task-management.createAdHocTask",
+        "task-management.createTaskFromDefinition",
+        "task-management.assignTask",
+        "agent.findByUserId",
+        "agent-deployment.findByAgentIdAndType",
+    }
+    unexpected_manager_task_tools = sorted(forbidden_manager_task_tools & manager_tools)
+    if unexpected_manager_task_tools:
+        fail(
+            "vc_deal_pipeline Deal Manager must use bounded task creation and current Deal members, "
+            f"not legacy task/assignment discovery tools: {unexpected_manager_task_tools}"
+        )
+    for phrase in [
+        "Use `task-management.createTask` for every task",
+        "otherwise omit it and create the specific bounded task",
+        "small reusable catalog is intentional and must never be used as a reason to refuse useful Deal work",
+        "A direct, unambiguous user instruction to create a task approves only that exact task",
+        "agent-origin metadata never confers human approval",
+        "ask the user for approval before creating the proposed task",
+        "Task creation and assignment are one atomic action",
+        "Platform assigns the current user",
+        "Every task must have a human owner and an agent executor",
+        "Platform routes `vc_deal_pipeline` tasks to Deal Analyst",
+        "call all work simply a task",
+        "Keep internal catalog, routing, and creation details private",
+        "task-management.getTaskDetail",
+        "persist task output, ask an explicit question, or create a review gate",
+        "Never create work merely because a project was created or entered a stage",
+    ]:
+        if phrase not in manager_prompt:
+            fail(f"vc_deal_pipeline Deal Manager prompt is missing task rule: {phrase}")
+
+    analyst = read_yaml(ROOT / "alludium" / "agent-templates" / "vc_deal_analyst.yaml")
+    analyst_prompt = (analyst.get("prompt") or {}).get("template") or ""
+    analyst_tools = {
+        tool.get("name")
+        for tool in ((analyst.get("mcpServers") or {}).get("alludium-platform") or {}).get("tools", [])
+        if isinstance(tool, dict)
+    }
+    forbidden_analyst_tools = {
+        "task-management.createTask",
+        "task-management.createAdHocTask",
+        "task-management.createTaskFromDefinition",
+        "task-management.assignTask",
+    }
+    if analyst_tools & forbidden_analyst_tools:
+        fail("vc_deal_pipeline Deal Analyst must recommend custom work to Deal Manager, not create tasks")
+    for phrase in [
+        "use `project.sendManagerMessage` with purpose `task_recommendation`",
+        "objective, evidence scope, expected output or review question, and completion boundary",
+        "This handoff is a recommendation, not user approval and not a created task",
+        "Do not create or assign the task yourself",
+    ]:
+        if phrase not in analyst_prompt:
+            fail(f"vc_deal_pipeline Deal Analyst prompt is missing custom-task routing: {phrase}")
+    if "project.sendManagerMessage" not in analyst_tools:
+        fail("vc_deal_pipeline Deal Analyst must have the bounded Deal Manager handoff tool")
+
+    relationships = (initial_version.get("extensions") or {}).get("projectRelationships") or []
+    if relationships != [{
+        "typeKey": "vc.deal_pipeline_promoted_to_investment_execution",
+        "label": "Promoted to Investment Execution",
+        "inverseLabel": "Promoted from VC Deal Pipeline",
+        "description": "Links a reviewed Deal Pipeline opportunity to its downstream Deal Execution project.",
+        "targetProjectTypeKeys": ["vc_investment_management"],
+    }]:
+        fail("vc_deal_pipeline must declare its reviewed promotion relationship to Deal Execution")
+
+
 ORIGINATION_STAGE_LIFECYCLE_STAGES = {
     "setup": {"draft", "configured", "needs_credentials"},
     "source": {"source", "identified", "source_degraded"},
@@ -6794,7 +7331,13 @@ def validate_no_obvious_secrets() -> None:
 
 def validate_no_public_readiness_leakage() -> None:
     for path in REPO_ROOT.rglob("*"):
-        if not path.is_file() or ".git" in path.parts or path.resolve() == THIS_FILE:
+        if (
+            not path.is_file()
+            or ".git" in path.parts
+            or ".codex-local" in path.parts
+            or ".venv" in path.parts
+            or path.resolve() == THIS_FILE
+        ):
             continue
         if "__pycache__" in path.parts or path.suffix == ".pyc":
             continue
@@ -6838,6 +7381,7 @@ def main() -> None:
         document_types_by_id,
     )
     validate_project_task_mapping_contracts()
+    validate_vc_deal_pipeline_contract()
     validate_origination_no_hub_contract(manifest)
     for origination_project_type_id in [
         "vc_sourcing_line",

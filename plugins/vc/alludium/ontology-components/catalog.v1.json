@@ -7,21 +7,21 @@
       "id": "vc.finance-screening",
       "lifecycle": "active",
       "path": "packages/finance-screening.v1.json",
-      "sha256": "ce7f9dcd25ec6ee9e676f47861e32be57977564b913a4aca9cbf608177d5c065",
+      "sha256": "1611fdf8945aa72d05b4dd4b4ea4c360f55f9321150a3dbadcd19ed8f9cc1f7e",
       "version": "1.0.0"
     },
     {
       "id": "vc.operations-incident",
       "lifecycle": "active",
       "path": "packages/operations-incident.v1.json",
-      "sha256": "358e09096265efab47a3d5717e4ba6957ba3f7fe8285115ec4f7cda54271fcc6",
+      "sha256": "936409491d07747ee8431db1a78e7fec3fa69516fa7bc78f421890eb51f7768f",
       "version": "1.0.0"
     }
   ],
   "release": {
     "packId": "vc",
-    "packVersion": "0.6.9",
+    "packVersion": "0.6.10",
     "repository": "https://github.com/alludium/alludium-packs",
-    "tag": "v0.6.9"
+    "tag": "v0.6.10"
   }
 }

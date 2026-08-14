@@ -1,0 +1,61 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.create_pipeline_deal
+version: 1.0.0
+title: Create Pipeline Deal
+category: Venture Capital
+visibility: workspace
+tags: [vc, deal-pipeline, project-creation]
+definition:
+  name: Create Pipeline Deal
+  slug: create-pipeline-deal
+  description: Gather the minimum reviewed identity, source, and Fund context needed to create one simplified VC Deal Pipeline project.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    stage: setup
+    taskFamily: deal_pipeline_project_creation
+    documentRefs:
+      - documentId: vc.document.evidence_citation_style_guide
+        usage: style_guide
+    requiredSkills:
+      - company-research-and-enrichment
+      - citation-enforcement
+    plannedRecommendedAgentTemplate: vc_deal_pipeline_manager
+    recommendedAgentTemplate: vc_deal_pipeline_manager
+    supportedProjectTypes: [vc_deal_pipeline]
+    supportedProjectScopes: [project_instance]
+    instructions:
+      executionInstructions: >-
+        Use `definitionJson.documentRefs` as the durable style contract. Identify one company from the supplied chat, domain, deck, source link, or artifact. Preserve source provenance, distinguish verified facts from assumptions, and capture only confidently supported optional fields. A Fund is optional at creation; when supplied, require an exact active `vc.funds` id and never infer or blend mandates. Complete with `projectCreation.fieldValues.company_name` and any reviewed optional fields. Do not create the project directly: the platform finalizer owns deterministic creation after human approval. Creation must not trigger initial-state tasks.
+      missingInputPolicy: Ask only when the company cannot be identified confidently from the available context.
+      externalActionPolicy: Do not send messages, write CRM records, create projects, create tasks, or move lifecycle state.
+      completionCriteria:
+        - The company identity is explicit and source context is preserved.
+        - The output contains projectCreation.fieldValues.company_name.
+        - Any supplied Fund is an exact active configured Fund id.
+    humanDecisionPoints:
+      - Approve creation of the Deal Pipeline project and its reviewed fields.
+fields:
+  input:
+    - {key: company_name, name: Company Name, fieldType: string, required: true, position: 0, config: {}}
+    - {key: company_domain, name: Company Domain, fieldType: string, required: false, position: 1, config: {}}
+    - {key: fund_id, name: Confirmed Fund ID, fieldType: string, required: false, position: 2, config: {}}
+    - {key: source_artifact_ids, name: Source Artifact IDs, fieldType: string, required: false, position: 3, config: {}}
+  output:
+    - key: projectCreation
+      name: Project Creation Payload
+      fieldType: json
+      required: true
+      position: 0
+      config:
+        requiredPaths: [fieldValues.company_name]
+runtime:
+  defaultExecutionContext:
+    sourceMetadata: {templateFamily: vc-workflows, taskKind: create_pipeline_deal}
+  requiredResources: {requiresTaskChat: true}
+  executionProfile:
+    agentStartsImmediately: true
+    preferredMode: guided_execution
+    preferredAgentType: vc_deal_pipeline_manager
+ui: {renderer: generic, surfaceKey: null, frameRef: null}

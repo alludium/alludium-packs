@@ -2,17 +2,19 @@ schemaVersion: '0.1'
 pack:
   id: vc
   name: Alludium VC
-  version: 0.6.9
+  version: 0.6.10
   description: >
     Public VC workflow plugin and pack seed for Alludium, published as the
     first bundle in the broader Alludium packs catalog. This release contains
     VC skills, Alludium runtime agent templates, VC task-definition templates,
-    Deal Pipeline, Sourcing Line, Origination Candidate, and Deal Execution project type definitions,
+    Deal Pipeline, simplified VC Deal Pipeline, Sourcing Line, Origination Candidate, and Deal Execution project type definitions,
     workspace variable declarations, application recommendation metadata,
     project-manager identity overlays, single-entry integration setup task
     recommendations, pack-native project methodology documents, and
     per-project creation metadata for VC project instances. It also publishes
     the first release-pinned ontology component packages for KMC composition.
+    The release contains both Deal Pipeline type definitions, but each workspace
+    activates exactly one of vc_deal_room or vc_deal_pipeline, never both.
   publisher: Alludium
   license: Apache-2.0
   repository: https://github.com/alludium/alludium-packs
@@ -38,6 +40,7 @@ surfaces:
     - founder-evaluation-and-reference-checking
     - founder-materials-request
     - founder-outreach-and-intro-paths
+    - generate-or-refresh-living-report
     - ic-memo-assembly
     - ic-risk-checklist-and-decision-log
     - investment-diligence-question-framework
@@ -113,6 +116,8 @@ surfaces:
     - vc_sourcing_line_manager
     - vc_sourcing_operator
     - vc_deal_room_setup_guide
+    - vc_deal_pipeline_manager
+    - vc_deal_analyst
   workspaceAgents:
     bindings:
     - surface: vc_workspace
@@ -191,6 +196,15 @@ surfaces:
     - vc.document.dedupe_novelty_policy
     - vc.document.apify_source_setup_checklist
     - vc.document.companies_house_source_setup_checklist
+    - vc.document.deal_pipeline_screening_criteria
+    - vc.document.deal_pipeline_screening_report_template
+    - vc.document.deal_pipeline_evaluation_criteria
+    - vc.document.deal_pipeline_evaluation_report_template
+    - vc.document.deal_pipeline_ic_criteria
+    - vc.document.deal_pipeline_ic_memo_template
+    - vc.document.deal_pipeline_decision_record_template
+    - vc.document.deal_pipeline_term_sheet_review_policy
+    - vc.document.deal_pipeline_term_sheet_review_template
   taskDefinitionTemplates:
     path: alludium/task-definition-templates
     platformIngest:
@@ -271,6 +285,11 @@ surfaces:
     - vc.promote_candidate_to_deal_pipeline
     - vc.audit_linkedin_query_spend
     - vc.review_source_errors_and_spend
+    - vc.create_pipeline_deal
+    - vc.generate_refresh_screening_report
+    - vc.generate_refresh_evaluation_report
+    - vc.prepare_refresh_ic_memo
+    - vc.review_refresh_term_sheet
     - vc.affinity_setup
     - vc.affinity_discovery
     - vc.affinity_sync_read
@@ -312,6 +331,7 @@ surfaces:
     - vc_sourcing_line
     - vc_origination_candidate
     - vc_investment_management
+    - vc_deal_pipeline
   ontologyComponents:
     path: alludium/ontology-components
     status: released-ontology-component-packages

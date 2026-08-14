@@ -1,0 +1,61 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.prepare_refresh_ic_memo
+version: 1.0.0
+title: Prepare or Refresh IC Memo
+category: Venture Capital
+visibility: workspace
+tags: [vc, investment-committee, living-document]
+definition:
+  name: Prepare or Refresh IC Memo
+  slug: prepare-refresh-ic-memo
+  description: Prepare or refresh the deliberative IC Memo for one Deal at any active stage without recording the human decision.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    stageIndependent: true
+    taskFamily: decision_support
+    documentRefs:
+      - {documentId: vc.document.deal_pipeline_ic_criteria, usage: methodology}
+      - {documentId: vc.document.deal_pipeline_ic_memo_template, usage: output_template, outputFieldKey: ic_memo_artifact_id}
+      - {documentId: vc.document.evidence_citation_style_guide, usage: style_guide}
+      - {documentId: vc.document.template_use_guidance, usage: operating_guidance}
+    requiredSkills: [generate-or-refresh-living-report, ic-memo-assembly, ic-risk-checklist-and-decision-log, citation-enforcement]
+    plannedRecommendedAgentTemplate: vc_deal_analyst
+    recommendedAgentTemplate: vc_deal_analyst
+    supportedProjectTypes: [vc_deal_pipeline]
+    supportedProjectScopes: [project_instance]
+    instructions:
+      executionInstructions: >-
+        Apply `generate-or-refresh-living-report` to discover the current project-linked evidence corpus, include the mapped Evaluation Report, prior Decision Records, Term Sheet Review and any additive `focus_artifact_ids`, compare the prior evidence basis when refreshing, and preserve the report lifecycle. Use `definitionJson.documentRefs` as the durable criteria, template, style, and operating-guidance contract. Prepare a decision-ready IC Memo that states the decision ask, recommendation, core thesis, evidence, risks, sensitivities, dissent, unresolved questions, and changes since the prior IC round. Render from the IC Memo Template and return the resulting artifact ID as `ic_memo_artifact_id`. The memo is deliberative and must not state or persist the human outcome.
+      missingInputPolicy: Ask for a readable Evaluation Report when no equivalent evaluation evidence is available; otherwise mark gaps explicitly.
+      externalActionPolicy: Do not record a Decision Record, send messages, mutate CRM, create tasks or projects, or move stage.
+      completionCriteria:
+        - The memo is a cited deliberative synthesis with an explicit ask and recommendation.
+        - It does not represent the recommendation as the committee decision.
+        - The shared living-report lifecycle and evidence-basis manifest contract is satisfied.
+        - The resulting ID is saved to ic_memo_artifact_id.
+    humanDecisionPoints:
+      - The committee confirms any decision separately; the Deal Manager records a new Decision Record only after explicit confirmation.
+fields:
+  input:
+    - {key: company_name, name: Company Name, fieldType: string, required: true, position: 0, config: {}}
+    - {key: fund_id, name: Confirmed Fund ID, fieldType: string, required: false, position: 1, config: {}}
+    - {key: focus_artifact_ids, name: Focus Artifact IDs, fieldType: string, required: false, position: 2, config: {description: "Optional sources to emphasize in addition to all readable project-linked evidence."}}
+    - {key: evaluation_report_artifact_id, name: Evaluation Report, fieldType: file, required: false, position: 3, config: {}}
+    - {key: decision_record_artifact_ids, name: Prior Decision Record IDs, fieldType: string, required: false, position: 4, config: {}}
+    - {key: term_sheet_review_artifact_id, name: Term Sheet Review, fieldType: file, required: false, position: 5, config: {}}
+    - {key: existing_ic_memo_artifact_id, name: Existing IC Memo, fieldType: file, required: false, position: 6, config: {}}
+  output:
+    - key: ic_memo_artifact_id
+      name: IC Memo
+      fieldType: file
+      required: true
+      position: 0
+      config: {documentRefId: vc.document.deal_pipeline_ic_memo_template}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata: {templateFamily: vc-workflows, taskKind: ic_memo}
+  requiredResources: {requiresTaskChat: true}
+  executionProfile: {agentStartsImmediately: true, requiresHumanConfirmationToComplete: true, preferredMode: guided_execution, preferredAgentType: vc_deal_analyst}
+ui: {renderer: generic, surfaceKey: null, frameRef: null}

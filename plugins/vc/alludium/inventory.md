@@ -1,14 +1,22 @@
 # Alludium VC Inventory
 
-**Version**: 0.6.9
-**Status**: Chat-native bounded Deal operations contract
+**Version**: 0.6.10
+**Status**: Workspace-selectable simplified VC Deal Pipeline
 
-Version `0.6.9` makes Pipeline Manager's conversational authority boundary explicit for Deal create,
-update, lifecycle, ownership, archive, and restore operations. It requires exact-action user intent,
-focused clarification for required or material ambiguity, source provenance and artifact carry-through,
-Pipeline Manager-attributed Deal Manager handoff, a one-sentence readback, and the returned Platform Open
-project action. Pipeline Manager allowlists the Platform `#3589` exports `project.createFromChat` and
-`project.applyPortfolioOperations`; unrestricted generic project mutation is forbidden.
+Version `0.6.10` adds `vc_deal_pipeline` as a workspace-selectable alternative to the existing Deal Pipeline. It provides four
+stage-independent living-document tasks, nine replaceable role documents, a minimal Deal Manager
+and Deal Analyst, no creation or stage-entry task fan-out, and separate confirmed Decision Records.
+The workspace Pipeline Manager uses the new Deal type for chat-native creation and both managers
+route uncovered work into assignable custom tasks without substituting a generic definition. A shared
+living-report skill discovers current project evidence, compares a revision-aware evidence manifest,
+and refreshes the same report artifact without project-maintained source inventories or generic output cards.
+The release contains both project type definitions, but a workspace activates exactly one. Existing
+workspaces may retain `vc_deal_room`; selected workspaces may activate `vc_deal_pipeline`; the two types
+must never be active together in one workspace.
+
+Version `0.6.9` introduced bounded chat-native Deal creation and portfolio operations for the existing
+Deal Pipeline, including source-artifact linking, duplicate clarification, idempotent retries, structured
+readback, and a Pipeline Manager-attributed Deal Manager handoff.
 
 Version `0.6.8` makes Integration Operator inherit workspace-connected applications and declares the
 Affinity read-preview task's required connection without hard-coding individual Affinity tools.
@@ -179,7 +187,7 @@ Review notes:
 - The task-template catalog preserves the current platform `vc-workflows` pack metadata, template IDs, and template versions while advertising both supported vertical keys: `venture_capital` and `vc`.
 - Platform eligibility is driven by catalog `verticalKeys`, which the platform loader persists to `task_definitions.vertical_keys`; the per-template `definitionJson.vertical: vc` field remains legacy workflow metadata and is not used for workspace eligibility checks.
 - The task-template surface requires platform capability `external-task-definition-template-ingest`.
-- Task templates advertise `vc_deal_room`, `vc_investment_management`, `vc_sourcing_line`, `vc_origination_candidate`, or a combination according to their declared workflow scope; all four active project types are included in this pack's `projectTypes` surface.
+- Task templates advertise `vc_deal_room`, `vc_deal_pipeline`, `vc_investment_management`, `vc_sourcing_line`, `vc_origination_candidate`, or a combination according to their declared workflow scope; all five active project types are included in this pack's `projectTypes` surface.
 - Task templates without `supportedProjectScopes` are single-project `project_instance` tasks. Templates with `project_management` scope support pipeline, admin, or project-type management work and keep outputs on the task or future management surface unless an explicit management mapping is introduced.
 - The integration templates are application-specific `project_management` tasks. Each integration now exposes one setup task (`vc.*_setup`) in recommendation metadata. That setup task owns the discovery/read/write child task references and approval policy; the lower-level discovery, read-preview, and write-proposal templates remain available as setup-owned child tasks rather than direct application-card actions.
 
@@ -191,6 +199,7 @@ Review notes:
 - `vc_investment_management`
 - `vc_sourcing_line`
 - `vc_origination_candidate`
+- `vc_deal_pipeline`
 
 Review notes:
 
@@ -198,6 +207,7 @@ Review notes:
 - `vc_investment_management` is user-facing as Deal Execution, covers formal diligence, contracts, closing, completion, and portfolio handoff after Deal Pipeline deal structuring, and keeps version `0.1.5`.
 - `vc_sourcing_line` version `0.2.4` owns one measurable, active-Fund-specific source/screen/cadence experiment and its receipts, with `fund_id` available to the allowlisted navigation projection, Fund-keyed candidate scoring retained on each provenance relationship, and guarded task-owned project updates after reviewed configuration or runs.
 - `vc_origination_candidate` version `0.2.3` owns one company's durable pre-Deal evidence, decisions, outreach context, and multi-line provenance without collapsing Fund-relative scores into Candidate-wide fields; guided creation starts the distinct initial screen and never reruns registration.
+- `vc_deal_pipeline` version `1.0.0` is a workspace-selectable simplified pipeline with Screening, Evaluation, Decision, and Term Sheet statuses; four manually reviewed durable document mappings that omit `lifecycleStage`; and Passed, Promoted to Investment Execution, and Archived outcomes. A workspace activates it instead of, never together with, `vc_deal_room`.
 - Generated project blueprints live in `project-blueprints/` and show each project type's setup/general tasks plus lifecycle-stage task mappings, recommended agents, and task-referenced skills. Platform-owned setup tasks are labeled with their canonical platform task IDs.
 - The definitions include project fields, instruction templates, lifecycle states, lifecycle transitions, command-view metadata, project-manager identity overlays, selection-only `projectTaskMappings`, pack-owned `projectSetup` metadata, project-type document references, and separate `projectCreation` metadata for one-project launchers.
 - Deal Pipeline setup declares source, variables, schedules, and invite steps plus post-approval platform actions. Sourcing Line setup configures one Fund-specific experiment and leaves its single orchestrator schedule disabled until approval. Candidate work is event-driven and has no recurring schedule.
@@ -237,6 +247,18 @@ Included Deal Pipeline documents:
 - `vc.document.conditions_precedent_tracker_template`
 - `vc.document.completion_tracker_template`
 - `vc.document.portfolio_onboarding_plan_template`
+
+Included simplified VC Deal Pipeline documents:
+
+- `vc.document.deal_pipeline_screening_criteria`
+- `vc.document.deal_pipeline_screening_report_template`
+- `vc.document.deal_pipeline_evaluation_criteria`
+- `vc.document.deal_pipeline_evaluation_report_template`
+- `vc.document.deal_pipeline_ic_criteria`
+- `vc.document.deal_pipeline_ic_memo_template`
+- `vc.document.deal_pipeline_decision_record_template`
+- `vc.document.deal_pipeline_term_sheet_review_policy`
+- `vc.document.deal_pipeline_term_sheet_review_template`
 
 Included Origination documents:
 
