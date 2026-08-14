@@ -86,16 +86,150 @@ pipelineManagerScenarios:
       includeUnassignedDealsSeparately: true
       eagerlyReadEveryDeal: false
 
-  - id: reviewed-chat-to-deal
-    sourceChatId: chat-1
-    extractedCompanyDomain: example.invalid
-    proposedFundId: europe-seed
-    humanConfirmation: null
+  - id: direct-chat-to-deal
+    toolName: project.createFromChat
+    sourceChatId: 2d5c7f18-6f0a-4f5d-9b75-6bf6d871b4c2
+    idempotencyKey: pipeline-manager:example-labs:create:2026-08-14
+    projectTypeKey: vc_deal_room
+    userInstruction: Create a Deal for Example Labs from this conversation and use the attached deck.
+    resolvedCompany:
+      name: Example Labs
+      domain: example.invalid
+    confirmedFundId: null
+    duplicateCandidates: []
+    sourceLinks:
+      - https://example.invalid/company
+    sourceChatArtifacts:
+      - source-note.md
+    handoff:
+      whyCreated: The user asked Pipeline Manager to add Example Labs to the Deal Pipeline.
+      sourceSummary: Example Labs is raising a Seed round; source-note.md is the primary source.
+      unresolvedQuestions:
+        - Confirm the round target from source evidence.
+    toolOnlyValues:
+      sourceChatId: 2d5c7f18-6f0a-4f5d-9b75-6bf6d871b4c2
+      projectId: 7f56a2d1-8c43-4b91-a6e0-2d93f4c5b718
+      projectTypeVersionId: 91b7d4e2-3a68-4f25-8c10-5d6e7f8a9b20
+      profileId: 4c8d1e73-2b90-4a65-9f31-7e5d6c4b3a21
+      artifactId: 6a2f9c84-1d57-4b30-8e62-9c7d5a4b3f10
+      messageId: 8b3e7d95-2c61-4a40-9f73-1d6e5c4b2a09
+      operationId: create-example-labs-from-chat
+      idempotencyKey: pipeline-manager:example-labs:create:2026-08-14
+    serverReceipt:
+      status: created
+      project:
+        id: 7f56a2d1-8c43-4b91-a6e0-2d93f4c5b718
+        name: Example Labs
+        projectTypeVersionId: 91b7d4e2-3a68-4f25-8c10-5d6e7f8a9b20
+      linkedArtifacts:
+        - filename: source-note.md
+      action:
+        type: open_project
+        projectId: 7f56a2d1-8c43-4b91-a6e0-2d93f4c5b718
+        label: Open Example Labs
+    completeVisibleAssistantResponse: "Created Example Labs and linked source-note.md."
+    renderedPlatformActions:
+      - type: open_project
+        projectId: 7f56a2d1-8c43-4b91-a6e0-2d93f4c5b718
+        label: Open Example Labs
     expected:
-      mayPresentTypedProposal: true
-      mayCreateProject: false
+      exactActionApproved: create
+      mayExecuteBoundedMutation: true
+      requiresProposalCard: false
+      requiresReviewButton: false
+      requiresModal: false
+      requiresRedundantConfirmation: false
       preserveSourceChat: true
+      requestIncludesArtifactIds: false
+      serverDiscoversAndLinksSourceChatArtifacts: true
+      structuredReceiptRequiredBeforeSuccess: true
+      visibleReadbackSentenceLimit: 1
+      visibleResponseContainsToolOnlyIdentifiers: false
+      constructsNavigationLink: false
+      usesReturnedPlatformActionExclusively: true
+      duplicatesHandoffInSourceResponse: false
       handoffToAgentTemplateKey: vc_deal_manager
+      handoffAuthor: Pipeline Manager
+      handoffIncludesRawIds: false
+      handoffIncludesTranscriptDump: false
+
+  - id: missing-required-field-clarification
+    sourceChatId: chat-2
+    userInstruction: Create a Deal from this conversation.
+    resolvedCompany:
+      name: null
+      domain: null
+    expected:
+      askOneFocusedQuestion: true
+      unresolvedField: company_name
+      mayExecuteBoundedMutation: false
+
+  - id: duplicate-deal-ambiguity
+    sourceChatId: chat-3
+    userInstruction: Add Example Labs to the pipeline.
+    resolvedCompany:
+      name: Example Labs
+      domain: example.invalid
+    duplicateCandidates:
+      - name: Example Labs
+        dealUrl: https://example.invalid/deals/example-labs
+    separateDealIntent: null
+    expected:
+      linkExistingDeal: true
+      askOneFocusedQuestion: true
+      mayExecuteBoundedMutation: false
+
+  - id: bounded-deal-update
+    toolName: project.applyPortfolioOperations
+    userInstruction: Assign Example Labs to the Europe Seed Fund.
+    targetDealUrl: https://example.invalid/deals/example-labs
+    operation:
+      operationId: update-example-labs-fund
+      type: update_fields
+      expectedProjectTypeVersionId: version-deal-room-1
+      fieldValues:
+        fund_id: europe-seed
+    expected:
+      exactActionApproved: update_allowlisted_fields
+      revalidateActiveFundOption: true
+      mayChangeLifecycleStage: false
+      mayMakeInvestmentDecision: false
+      readBackBeforeReceipt: true
+
+  - id: bounded-archive-restore
+    toolName: project.applyPortfolioOperations
+    requests:
+      - instruction: Archive Example Labs.
+        targetDealUrl: https://example.invalid/deals/example-labs
+        operation:
+          operationId: archive-example-labs
+          type: archive
+          expectedProjectTypeVersionId: version-deal-room-1
+      - instruction: Restore Example Labs.
+        targetDealUrl: https://example.invalid/deals/example-labs
+        operation:
+          operationId: restore-example-labs
+          type: restore
+          expectedProjectTypeVersionId: version-deal-room-1
+    expected:
+      mayUseGenericProjectMutation: false
+      readBackBeforeReceipt: true
+
+  - id: multi-deal-partial-failure
+    toolName: project.applyPortfolioOperations
+    userInstruction: Archive Example Labs and Northstar.
+    topLevelStatus: partial
+    results:
+      - operationId: archive-example-labs
+        dealUrl: https://example.invalid/deals/example-labs
+        status: succeeded
+      - operationId: archive-northstar
+        dealUrl: https://example.invalid/deals/northstar
+        status: failed
+        reason: permission_lost
+    expected:
+      reportPerDealResult: true
+      mayClaimWholeRequestSuccess: false
 
 reportFundScenarios:
   - id: confirmed-active-fund-report

@@ -1052,7 +1052,12 @@ def validate_fund_routing_contract() -> None:
         "pipelineManagerScenarios": {
             "unassigned-fund-review",
             "selected-fund-weekly-summary",
-            "reviewed-chat-to-deal",
+            "direct-chat-to-deal",
+            "missing-required-field-clarification",
+            "duplicate-deal-ambiguity",
+            "bounded-deal-update",
+            "bounded-archive-restore",
+            "multi-deal-partial-failure",
         },
         "reportFundScenarios": {
             "confirmed-active-fund-report",
@@ -1091,10 +1096,209 @@ def validate_fund_routing_contract() -> None:
     chat_to_deal_fixture = next(
         scenario
         for scenario in management_fixture["pipelineManagerScenarios"]
-        if scenario.get("id") == "reviewed-chat-to-deal"
+        if scenario.get("id") == "direct-chat-to-deal"
     )
-    if (chat_to_deal_fixture.get("expected") or {}).get("mayCreateProject") is not False:
-        fail("Chat-to-Deal fixture must prohibit project creation before human confirmation")
+    chat_to_deal_expected = chat_to_deal_fixture.get("expected") or {}
+    expected_direct_create_contract = {
+        "exactActionApproved": "create",
+        "mayExecuteBoundedMutation": True,
+        "requiresProposalCard": False,
+        "requiresReviewButton": False,
+        "requiresModal": False,
+        "requiresRedundantConfirmation": False,
+        "preserveSourceChat": True,
+        "requestIncludesArtifactIds": False,
+        "serverDiscoversAndLinksSourceChatArtifacts": True,
+        "structuredReceiptRequiredBeforeSuccess": True,
+        "visibleReadbackSentenceLimit": 1,
+        "visibleResponseContainsToolOnlyIdentifiers": False,
+        "constructsNavigationLink": False,
+        "usesReturnedPlatformActionExclusively": True,
+        "duplicatesHandoffInSourceResponse": False,
+        "handoffToAgentTemplateKey": "vc_deal_manager",
+        "handoffAuthor": "Pipeline Manager",
+        "handoffIncludesRawIds": False,
+        "handoffIncludesTranscriptDump": False,
+    }
+    for key, expected_value in expected_direct_create_contract.items():
+        if chat_to_deal_expected.get(key) != expected_value:
+            fail(
+                "Direct Chat-to-Deal fixture must declare "
+                f"{key}={expected_value!r}"
+            )
+    if (
+        chat_to_deal_fixture.get("toolName") != "project.createFromChat"
+        or chat_to_deal_fixture.get("projectTypeKey") != "vc_deal_room"
+        or not chat_to_deal_fixture.get("idempotencyKey")
+        or not chat_to_deal_fixture.get("sourceChatArtifacts")
+    ):
+        fail(
+            "Direct Chat-to-Deal fixture must use project.createFromChat with stable "
+            "intent, Deal type, and source-chat artifact context"
+        )
+    if set((chat_to_deal_fixture.get("handoff") or {}).keys()) != {
+        "whyCreated",
+        "sourceSummary",
+        "unresolvedQuestions",
+    }:
+        fail(
+            "Direct Chat-to-Deal handoff must contain only whyCreated, sourceSummary, "
+            "and unresolvedQuestions"
+        )
+
+    complete_visible_response = chat_to_deal_fixture.get(
+        "completeVisibleAssistantResponse"
+    )
+    tool_only_values = chat_to_deal_fixture.get("toolOnlyValues") or {}
+    server_receipt = chat_to_deal_fixture.get("serverReceipt") or {}
+    rendered_platform_actions = chat_to_deal_fixture.get("renderedPlatformActions") or []
+    if not isinstance(complete_visible_response, str) or not complete_visible_response.strip():
+        fail("Direct Chat-to-Deal fixture must include the complete visible assistant response")
+    uuid_pattern = re.compile(
+        r"\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b",
+        re.IGNORECASE,
+    )
+    if uuid_pattern.search(complete_visible_response):
+        fail("Pipeline Manager complete visible response must not expose UUIDs")
+    if not isinstance(tool_only_values, dict) or not tool_only_values:
+        fail("Direct Chat-to-Deal fixture must declare realistic tool-only identifiers")
+    leaked_tool_values = sorted(
+        str(value)
+        for value in tool_only_values.values()
+        if isinstance(value, str) and value and value in complete_visible_response
+    )
+    if leaked_tool_values:
+        fail(
+            "Pipeline Manager complete visible response leaked tool-only values: "
+            f"{leaked_tool_values}"
+        )
+    forbidden_visible_identifier_labels = {
+        "sourceChatId",
+        "projectId",
+        "projectTypeVersionId",
+        "profileId",
+        "artifactId",
+        "messageId",
+        "operationId",
+        "idempotencyKey",
+    }
+    leaked_identifier_labels = sorted(
+        label
+        for label in forbidden_visible_identifier_labels
+        if label in complete_visible_response
+    )
+    if leaked_identifier_labels:
+        fail(
+            "Pipeline Manager complete visible response exposed identifier labels: "
+            f"{leaked_identifier_labels}"
+        )
+    if re.search(
+        r"\[[^\]]+\]\([^)]+\)|<a\b|javascript:|https?://|www\.",
+        complete_visible_response,
+        re.IGNORECASE,
+    ):
+        fail("Pipeline Manager complete visible response must not construct navigation links")
+    visible_sentences = [
+        sentence
+        for sentence in re.split(r"(?<=[.!?])\s+", complete_visible_response.strip())
+        if sentence
+    ]
+    if len(visible_sentences) > 1:
+        fail("Pipeline Manager success response must be at most one short sentence")
+    handoff = chat_to_deal_fixture.get("handoff") or {}
+    visible_handoff_values = [
+        handoff.get("whyCreated"),
+        handoff.get("sourceSummary"),
+        *((handoff.get("unresolvedQuestions") or [])),
+    ]
+    if any(
+        isinstance(value, str)
+        and value
+        and value in complete_visible_response
+        for value in visible_handoff_values
+    ):
+        fail("Pipeline Manager success response must not duplicate the Deal Manager handoff")
+    if (
+        server_receipt.get("status") not in {"created", "reused", "partial"}
+        or rendered_platform_actions != [server_receipt.get("action")]
+    ):
+        fail(
+            "Pipeline Manager success fixture must use only the returned Platform action"
+        )
+
+    pipeline_scenarios_by_id = {
+        scenario.get("id"): scenario
+        for scenario in management_fixture["pipelineManagerScenarios"]
+        if isinstance(scenario, dict) and isinstance(scenario.get("id"), str)
+    }
+    for scenario_id in [
+        "missing-required-field-clarification",
+        "duplicate-deal-ambiguity",
+    ]:
+        expected = pipeline_scenarios_by_id[scenario_id].get("expected") or {}
+        if (
+            expected.get("askOneFocusedQuestion") is not True
+            or expected.get("mayExecuteBoundedMutation") is not False
+        ):
+            fail(
+                f"Pipeline Manager fixture {scenario_id} must ask one focused question "
+                "and prohibit mutation while ambiguity remains"
+            )
+
+    bounded_update_expected = (
+        pipeline_scenarios_by_id["bounded-deal-update"].get("expected") or {}
+    )
+    bounded_update_fixture = pipeline_scenarios_by_id["bounded-deal-update"]
+    bounded_update_operation = bounded_update_fixture.get("operation") or {}
+    if (
+        bounded_update_fixture.get("toolName") != "project.applyPortfolioOperations"
+        or bounded_update_operation.get("type") != "update_fields"
+        or not bounded_update_operation.get("operationId")
+        or not bounded_update_operation.get("expectedProjectTypeVersionId")
+        or bounded_update_expected.get("exactActionApproved")
+        != "update_allowlisted_fields"
+        or bounded_update_expected.get("mayChangeLifecycleStage") is not False
+        or bounded_update_expected.get("mayMakeInvestmentDecision") is not False
+        or bounded_update_expected.get("readBackBeforeReceipt") is not True
+    ):
+        fail(
+            "Bounded Deal update fixture must constrain exact fields and require readback"
+        )
+
+    archive_restore_expected = (
+        pipeline_scenarios_by_id["bounded-archive-restore"].get("expected") or {}
+    )
+    archive_restore_fixture = pipeline_scenarios_by_id["bounded-archive-restore"]
+    archive_restore_operations = [
+        request.get("operation")
+        for request in archive_restore_fixture.get("requests") or []
+        if isinstance(request, dict) and isinstance(request.get("operation"), dict)
+    ]
+    if (
+        archive_restore_fixture.get("toolName") != "project.applyPortfolioOperations"
+        or {operation.get("type") for operation in archive_restore_operations}
+        != {"archive", "restore"}
+        or not all(
+            operation.get("operationId")
+            and operation.get("expectedProjectTypeVersionId")
+            for operation in archive_restore_operations
+        )
+        or archive_restore_expected.get("mayUseGenericProjectMutation") is not False
+        or archive_restore_expected.get("readBackBeforeReceipt") is not True
+    ):
+        fail("Archive/restore fixture must prohibit generic mutation and require readback")
+
+    partial_failure_expected = (
+        pipeline_scenarios_by_id["multi-deal-partial-failure"].get("expected") or {}
+    )
+    partial_failure_fixture = pipeline_scenarios_by_id["multi-deal-partial-failure"]
+    if (
+        partial_failure_fixture.get("toolName") != "project.applyPortfolioOperations"
+        or partial_failure_fixture.get("topLevelStatus") != "partial"
+        or partial_failure_expected.get("reportPerDealResult") is not True
+        or partial_failure_expected.get("mayClaimWholeRequestSuccess") is not False
+    ):
+        fail("Multi-Deal fixture must preserve partial failure in the mutation receipt")
 
     report_fund_scenarios = {
         scenario.get("id"): scenario
@@ -1314,6 +1518,8 @@ def validate_fund_routing_contract() -> None:
     required_pipeline_tools = {
         "project.listNavigation",
         "project.getAgentContext",
+        "project.createFromChat",
+        "project.applyPortfolioOperations",
         "project-task.listByProject",
         "task-definitions.list",
         "task-definitions.findById",
@@ -1324,16 +1530,116 @@ def validate_fund_routing_contract() -> None:
     missing_pipeline_tools = sorted(required_pipeline_tools - pipeline_platform_tools)
     if missing_pipeline_tools:
         fail(f"Pipeline Manager is missing workspace/task tools: {missing_pipeline_tools}")
+    bounded_portfolio_mutations = {
+        "project.createFromChat",
+        "project.applyPortfolioOperations",
+    }
+    forbidden_generic_project_mutations = {
+        "project.create",
+        "project.createReviewedFromChat",
+        "project.update",
+        "project.updateState",
+        "project.updateStatus",
+    }
+    known_portfolio_mutation_tools = (
+        bounded_portfolio_mutations | forbidden_generic_project_mutations
+    )
+    exposed_portfolio_mutation_tools = (
+        known_portfolio_mutation_tools & pipeline_platform_tools
+    )
+    if exposed_portfolio_mutation_tools != bounded_portfolio_mutations:
+        fail(
+            "Pipeline Manager portfolio mutation allowlist must be exactly "
+            f"{sorted(bounded_portfolio_mutations)}; found "
+            f"{sorted(exposed_portfolio_mutation_tools)}"
+        )
+    exposed_generic_project_mutations = sorted(
+        forbidden_generic_project_mutations & pipeline_platform_tools
+    )
+    if exposed_generic_project_mutations:
+        fail(
+            "Pipeline Manager must use bounded Deal operations instead of generic project "
+            f"mutations: {exposed_generic_project_mutations}"
+        )
     for required_phrase in [
         "native Alludium",
         "Unassigned",
         "weekly pipeline summaries",
         "selected-Fund reports",
-        "typed Deal proposal",
-        "explicit approval",
+        "direct, unambiguous user instruction is approval for only the exact Deal action",
+        "proposal card, review button, modal, or redundant confirmation",
+        "ask one focused question in chat before acting",
+        "do not narrate tool arguments before acting",
+        "brief acknowledgement is optional and must use only human-readable",
+        "are tool-only",
+        "must never appear in visible prose, reasoning summaries, code blocks, tables, URLs, links, or receipts",
+        "Say “this chat” and use human-readable names and filenames instead",
+        "Use `project.createFromChat` only to create a `vc_deal_room` Deal",
+        "stable `idempotencyKey` reused only for an exact retry",
+        "`projectTypeKey: vc_deal_room`",
+        "`whyCreated`, `sourceSummary`, and material `unresolvedQuestions`",
+        "Do not send selected message IDs or artifact IDs",
+        "server re-reads the accessible source chat",
+        "submit `duplicateResolution` only after the user explicitly confirms",
+        "Use `project.applyPortfolioOperations` only for exact user-authorized operations",
+        "unique `operationId`, exact `projectId`, and current `expectedProjectTypeVersionId`",
+        "`update_fields`",
+        "`set_member_field`",
+        "`transition`",
+        "`archive`",
+        "`restore`",
+        "Rely on the structured server receipt before claiming success",
+        "`created` and `reused` are successful readbacks",
+        "`requires_clarification` is not success",
+        "top-level `succeeded`, `partial`, or `failed` status",
+        "durable source provenance",
+        "every attachable source-chat artifact",
+        "create the Deal Manager handoff server-side, authored and attributed to Pipeline Manager",
+        "Do not repeat, paraphrase, or summarize that handoff",
+        "raw IDs, transcript dumps, duplicated user messages",
+        "write at most one short readback sentence",
+        "Use the returned Platform Open project action exclusively",
+        "Never construct a Markdown, HTML, or `javascript:` link",
+        "never duplicate the Deal Manager handoff before or after the action",
+        "unsupported inferred values",
+        "every Deal mutation they did not directly and unambiguously request",
     ]:
         if required_phrase not in pipeline_prompt:
             fail(f"Pipeline Manager prompt is missing workspace contract: {required_phrase}")
+    for forbidden_phrase in [
+        "typed Deal proposal",
+        "reviewed Create Deal action",
+        "after the user confirms creation",
+        "Before every mutation, tell the user plainly",
+        "named clickable Deal link",
+        "After creation, send Deal Manager",
+    ]:
+        if forbidden_phrase in pipeline_prompt:
+            fail(
+                "Pipeline Manager prompt retains the legacy reviewed-creation flow: "
+                f"{forbidden_phrase}"
+            )
+
+    pipeline_action_titles = {
+        action.get("Title")
+        for action in pipeline_manager.get("actions") or []
+        if isinstance(action, dict)
+    }
+    required_deal_action_titles = {"Create Deal", "Update Deal", "Archive or Restore"}
+    if not required_deal_action_titles.issubset(pipeline_action_titles):
+        fail(
+            "Pipeline Manager actions must expose actual bounded Deal management: "
+            f"{sorted(required_deal_action_titles)}"
+        )
+    pipeline_greeting = pipeline_manager.get("greeting") or ""
+    for required_phrase in [
+        "create a Deal from this chat",
+        "archive or restore an exact Deal",
+        "direct instruction for an exact change",
+        "ask one focused question in chat",
+    ]:
+        if required_phrase not in pipeline_greeting:
+            fail(f"Pipeline Manager greeting is missing Deal operation contract: {required_phrase}")
 
     status_report = read_yaml(
         ROOT
