@@ -1,7 +1,14 @@
 # Alludium VC Inventory
 
-**Version**: 0.6.8
-**Status**: Workspace-connected Integration Operator tools
+**Version**: 0.6.9
+**Status**: Chat-native bounded Deal operations contract
+
+Version `0.6.9` makes Pipeline Manager's conversational authority boundary explicit for Deal create,
+update, lifecycle, ownership, archive, and restore operations. It requires exact-action user intent,
+focused clarification for required or material ambiguity, source provenance and artifact carry-through,
+Pipeline Manager-attributed Deal Manager handoff, a one-sentence readback, and the returned Platform Open
+project action. Pipeline Manager allowlists the Platform `#3589` exports `project.createFromChat` and
+`project.applyPortfolioOperations`; unrestricted generic project mutation is forbidden.
 
 Version `0.6.8` makes Integration Operator inherit workspace-connected applications and declares the
 Affinity read-preview task's required connection without hard-coding individual Affinity tools.
