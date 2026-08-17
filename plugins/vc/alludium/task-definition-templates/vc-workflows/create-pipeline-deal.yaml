@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.create_pipeline_deal
-version: 1.0.0
+version: 1.0.1
 title: Create Pipeline Deal
 category: Venture Capital
 visibility: workspace
@@ -38,7 +38,7 @@ definition:
       - Approve creation of the Deal Pipeline project and its reviewed fields.
 fields:
   input:
-    - {key: company_name, name: Company Name, fieldType: string, required: true, position: 0, config: {}}
+    - {key: company_name, name: Company Name, fieldType: string, required: false, position: 0, config: {}}
     - {key: company_domain, name: Company Domain, fieldType: string, required: false, position: 1, config: {}}
     - {key: fund_id, name: Confirmed Fund ID, fieldType: string, required: false, position: 2, config: {}}
     - {key: source_artifact_ids, name: Source Artifact IDs, fieldType: string, required: false, position: 3, config: {}}

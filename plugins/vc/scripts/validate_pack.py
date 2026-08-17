@@ -6,6 +6,7 @@ import json
 import re
 import sys
 from functools import lru_cache
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
 
@@ -1781,10 +1782,10 @@ def validate_fund_routing_contract() -> None:
         "Platform assigns the current user",
         "Never leave a task unassigned",
         "Platform must route the agent executor",
-        "call all work simply a task",
-        "Keep internal catalog, routing, and creation details private",
+        "describe work by its purpose and expected result",
+        "Never require the user to choose or understand an internal task type",
         "task-management.getTaskDetail",
-        "persisted task output, an explicit question, or a review gate",
+        "persisted result, an explicit question, or a review gate",
     ]:
         if required_phrase not in pipeline_prompt:
             fail(f"Pipeline Manager prompt is missing workspace contract: {required_phrase}")
@@ -4054,8 +4055,75 @@ def validate_document_html(
     for fragment in required_fragments:
         if fragment not in html_text:
             fail(f"Document {relative_path} must include {fragment!r}")
+    validate_html_table_shapes(relative_path, html_text)
     validate_document_output_hygiene(relative_path, html_text)
     validate_document_quality_sections(relative_path, html_text, catalog_entry)
+
+
+class HTMLTableShapeParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.tables: list[list[tuple[int, int]]] = []
+        self.table_stack: list[int] = []
+        self.active_rows: dict[int, tuple[int, int]] = {}
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag == "table":
+            self.tables.append([])
+            self.table_stack.append(len(self.tables) - 1)
+            return
+        if not self.table_stack:
+            return
+        table_index = self.table_stack[-1]
+        if tag == "tr":
+            self.active_rows[table_index] = (self.getpos()[0], 0)
+            return
+        if tag not in {"th", "td"} or table_index not in self.active_rows:
+            return
+        attributes = dict(attrs)
+        colspan_text = attributes.get("colspan") or "1"
+        try:
+            colspan = int(colspan_text)
+        except ValueError:
+            colspan = 0
+        if colspan < 1:
+            colspan = 0
+        line_number, cell_count = self.active_rows[table_index]
+        self.active_rows[table_index] = (line_number, cell_count + colspan)
+
+    def handle_endtag(self, tag: str) -> None:
+        if not self.table_stack:
+            return
+        table_index = self.table_stack[-1]
+        if tag == "tr":
+            row = self.active_rows.pop(table_index, None)
+            if row is not None:
+                self.tables[table_index].append(row)
+            return
+        if tag == "table":
+            self.active_rows.pop(table_index, None)
+            self.table_stack.pop()
+
+
+def validate_html_table_shapes(relative_path: Path, html_text: str) -> None:
+    parser = HTMLTableShapeParser()
+    parser.feed(html_text)
+    parser.close()
+    for table_number, rows in enumerate(parser.tables, start=1):
+        if not rows:
+            fail(f"Document {relative_path} table {table_number} must contain at least one row")
+        expected_columns = rows[0][1]
+        if expected_columns < 1:
+            fail(
+                f"Document {relative_path}:{rows[0][0]} table {table_number} "
+                "must contain at least one cell"
+            )
+        for line_number, cell_count in rows[1:]:
+            if cell_count != expected_columns:
+                fail(
+                    f"Document {relative_path}:{line_number} table {table_number} has "
+                    f"{cell_count} columns; expected {expected_columns}"
+                )
 
 
 def validate_markdown_tables(relative_path: Path, markdown_text: str) -> None:
@@ -5022,6 +5090,15 @@ def validate_vc_deal_pipeline_contract() -> None:
         fail("vc_deal_pipeline must discover report evidence instead of maintaining a source inventory")
     if "source_material_artifact_ids" in set(project_creation.get("advancedFieldKeys") or []):
         fail("vc_deal_pipeline creation must not expose a source inventory field")
+    unsupported_decision_artifact_pointers = {
+        "latest_decision_record_artifact_id",
+        "decision_record_artifact_ids",
+    } & project_fields
+    if unsupported_decision_artifact_pointers:
+        fail(
+            "vc_deal_pipeline must not treat mutable artifact pointers as the canonical Decision Record: "
+            f"{sorted(unsupported_decision_artifact_pointers)}"
+        )
 
     command_view = initial_version.get("commandView") or {}
     if "outputSlots" in command_view:
@@ -5030,7 +5107,7 @@ def validate_vc_deal_pipeline_contract() -> None:
     living_report_skill_path = ROOT / "skills" / "generate-or-refresh-living-report" / "SKILL.md"
     living_report_skill = living_report_skill_path.read_text(encoding="utf-8")
     for phrase in [
-        "Enumerate all artifacts linked to the current project and task chat",
+        "Enumerate the stable identities of all artifacts linked to the current project and task chat",
         "Exclude methodology and output templates",
         "Add every readable upstream report or specially identified document",
         "Focus IDs increase attention; they are never a whitelist",
@@ -5039,7 +5116,10 @@ def validate_vc_deal_pipeline_contract() -> None:
         "`added`",
         "`changed`",
         "`removed`",
+        "`unavailable`",
         "`unchanged`",
+        "no longer linked and no longer specially identified",
+        "Never infer removal from an authorization, provider, indexing, or transient read failure",
         "create exactly one project-shared",
         "update that exact artifact in place",
         "Never create a duplicate fallback",
@@ -5093,7 +5173,6 @@ def validate_vc_deal_pipeline_contract() -> None:
             "company_name": "company_name",
             "fund_id": "fund_id",
             "evaluation_report_artifact_id": "evaluation_report_artifact_id",
-            "decision_record_artifact_ids": "decision_record_artifact_ids",
             "term_sheet_review_artifact_id": "term_sheet_review_artifact_id",
             "existing_ic_memo_artifact_id": "ic_memo_artifact_id",
         },
@@ -5220,12 +5299,77 @@ def validate_vc_deal_pipeline_contract() -> None:
     if len(document_id_list) != len(document_ids):
         fail("vc_deal_pipeline document library must not declare duplicate document IDs")
 
+    current_decision_field = next(
+        (
+            field
+            for field in initial_version.get("fieldsSchema") or []
+            if isinstance(field, dict) and field.get("key") == "current_decision"
+        ),
+        None,
+    )
+    current_decision_options = {
+        option.get("value")
+        for option in (current_decision_field or {}).get("options") or []
+        if isinstance(option, dict)
+    }
+    if "watch" not in current_decision_options:
+        fail("vc_deal_pipeline current_decision must expose the durable watch/hold posture")
+
+    screening_report_template = (
+        ROOT / "alludium" / "documents" / "deal-pipeline" / "screening-report-template.html"
+    ).read_text(encoding="utf-8")
+    evaluation_report_template = (
+        ROOT / "alludium" / "documents" / "deal-pipeline" / "evaluation-report-template.html"
+    ).read_text(encoding="utf-8")
+    for template_name, template_text in [
+        ("Screening Report", screening_report_template),
+        ("Evaluation Report", evaluation_report_template),
+    ]:
+        if "<strong>Confidence:</strong>" in template_text:
+            fail(f"{template_name} must not expose a global confidence headline")
+        for required_phrase in [
+            "<strong>Evidence position:</strong>",
+            "coverage",
+            "conflicts",
+            "gaps",
+            "provenance",
+            "authority",
+            "next decision",
+        ]:
+            if required_phrase not in template_text:
+                fail(f"{template_name} headline is missing evidence framing: {required_phrase}")
+
+    decision_record_template = (
+        ROOT / "alludium" / "documents" / "deal-pipeline" / "decision-record-template.html"
+    ).read_text(encoding="utf-8")
+    for required_phrase in [
+        "Non-canonical rendering structure for a Platform-owned decision-record version",
+        "Do not create this HTML directly or treat it as the decision authority",
+        "materialized, versioned Decision Record",
+        "If that capability is unavailable, stop without creating a fallback artifact",
+    ]:
+        if required_phrase not in decision_record_template:
+            fail(f"Decision Record template is missing Platform ownership boundary: {required_phrase}")
+
     exclusivity_rule = (
         "This workspace must activate exactly one Deal Pipeline project type: "
         "vc_deal_pipeline and vc_deal_room must never be active together."
     )
     if exclusivity_rule not in (initial_version.get("instructionTemplate") or ""):
         fail("vc_deal_pipeline must declare the one Deal Pipeline type per workspace invariant")
+    instruction_template = initial_version.get("instructionTemplate") or ""
+    for required_phrase in [
+        "Do not treat generated HTML or mutable project fields as a canonical Decision Record",
+        "Platform provides its materialized, versioned, human-authorized record contract",
+    ]:
+        if required_phrase not in instruction_template:
+            fail(f"vc_deal_pipeline is missing Decision Record ownership boundary: {required_phrase}")
+    project_manager_identity = (initial_version.get("projectManager") or {}).get("identity") or {}
+    identity_text = json.dumps(project_manager_identity)
+    if "describe user-visible work by its purpose" not in identity_text:
+        fail("vc_deal_pipeline must keep task and orchestration vocabulary internal")
+    if "refer to all user-visible work simply as tasks" in identity_text:
+        fail("vc_deal_pipeline must not expose task vocabulary as the consumer model")
 
     pipeline_manager = read_yaml(ROOT / "alludium" / "agent-templates" / "vc_pipeline_autopilot.yaml")
     pipeline_manager_prompt = (pipeline_manager.get("prompt") or {}).get("template") or ""
@@ -5253,8 +5397,24 @@ def validate_vc_deal_pipeline_contract() -> None:
     }
     if supported_task_slugs != {"create-pipeline-deal", *expected_tasks}:
         fail("vc_deal_pipeline must expose only its guided creation task and four durable document tasks")
+    creation_contract = task_contracts.get("create-pipeline-deal") or {}
+    creation_company_field = (creation_contract.get("fields") or {}).get("input", {}).get(
+        "company_name"
+    )
+    if not isinstance(creation_company_field, dict) or creation_company_field.get("required") is not False:
+        fail(
+            "vc_deal_pipeline guided creation must allow source-only execution and infer or clarify company_name"
+        )
+    creation_output = (creation_contract.get("fields") or {}).get("output", {}).get(
+        "projectCreation"
+    )
+    required_creation_paths = set(
+        ((creation_output or {}).get("config") or {}).get("requiredPaths") or []
+    )
+    if "fieldValues.company_name" not in required_creation_paths:
+        fail("vc_deal_pipeline guided creation must still produce company_name before finalization")
     if any("decision" in slug and "create-pipeline-deal" != slug for slug in supported_task_slugs):
-        fail("Decision Record must remain a confirmed Deal Manager action, not a mapped task")
+        fail("Decision Record must not be a Pack-owned mapped task")
 
     if (initial_version.get("projectManager") or {}).get("agentTemplateKey") != "vc_deal_pipeline_manager":
         fail("vc_deal_pipeline must bind the dedicated Deal Manager")
@@ -5315,11 +5475,14 @@ def validate_vc_deal_pipeline_contract() -> None:
         "Platform assigns the current user",
         "Every task must have a human owner and an agent executor",
         "Platform routes `vc_deal_pipeline` tasks to Deal Analyst",
-        "call all work simply a task",
-        "Keep internal catalog, routing, and creation details private",
+        "describe work by its purpose and expected result",
+        "Never require the user to choose or understand an internal task type",
         "task-management.getTaskDetail",
-        "persist task output, ask an explicit question, or create a review gate",
+        "persist its result, ask an explicit question, or create a review gate",
         "Never create work merely because a project was created or entered a stage",
+        "Do not create a standalone Decision Record HTML artifact",
+        "Generated HTML and mutable project fields are not the decision authority",
+        "canonical recording is unavailable",
     ]:
         if phrase not in manager_prompt:
             fail(f"vc_deal_pipeline Deal Manager prompt is missing task rule: {phrase}")

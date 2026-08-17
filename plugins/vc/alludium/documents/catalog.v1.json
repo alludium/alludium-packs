@@ -991,7 +991,7 @@
     {
       "id": "vc.document.deal_pipeline_decision_record_template",
       "title": "Deal Pipeline Decision Record Template",
-      "description": "Append-only template for one explicitly confirmed investment decision or reapproval.",
+      "description": "Non-canonical presentation template for a Platform-owned materialized and versioned investment Decision Record.",
       "documentType": "template",
       "path": "deal-pipeline/decision-record-template.html",
       "supportedProjectTypes": ["vc_deal_pipeline"],

@@ -119,11 +119,9 @@
       {"id":"field-current-term-sheet-artifact-id","key":"current_term_sheet_artifact_id","label":"Current Term Sheet Artifact ID","kind":"text","required":false},
       {"id":"field-previous-term-sheet-artifact-id","key":"previous_term_sheet_artifact_id","label":"Previous Term Sheet Artifact ID","kind":"text","required":false},
       {"id":"field-term-sheet-review-artifact-id","key":"term_sheet_review_artifact_id","label":"Term Sheet Review Artifact ID","kind":"text","required":false},
-      {"id":"field-latest-decision-record-artifact-id","key":"latest_decision_record_artifact_id","label":"Latest Decision Record Artifact ID","kind":"text","required":false},
-      {"id":"field-decision-record-artifact-ids","key":"decision_record_artifact_ids","label":"Decision Record Artifact IDs","kind":"text","required":false},
-      {"id":"field-current-decision","key":"current_decision","label":"Current Confirmed Decision","kind":"enum","required":false,"options":[{"value":"undecided","label":"Undecided"},{"value":"proceed","label":"Proceed"},{"value":"conditional_approval","label":"Conditional Approval"},{"value":"continue_evaluation","label":"Continue Evaluation"},{"value":"pass","label":"Pass"},{"value":"reapprove","label":"Reapprove"}]},
-      {"id":"field-decision-rationale","key":"decision_rationale","label":"Decision Rationale","kind":"text","required":false},
-      {"id":"field-decision-conditions","key":"decision_conditions","label":"Decision Conditions","kind":"text","required":false},
+      {"id":"field-current-decision","key":"current_decision","label":"Decision Posture Projection","kind":"enum","required":false,"options":[{"value":"undecided","label":"Undecided"},{"value":"proceed","label":"Proceed"},{"value":"watch","label":"Watch / Hold"},{"value":"conditional_approval","label":"Conditional Approval"},{"value":"continue_evaluation","label":"Continue Evaluation"},{"value":"pass","label":"Pass"},{"value":"reapprove","label":"Reapprove"}]},
+      {"id":"field-decision-rationale","key":"decision_rationale","label":"Decision Rationale Projection","kind":"text","required":false},
+      {"id":"field-decision-conditions","key":"decision_conditions","label":"Decision Conditions Projection","kind":"text","required":false},
       {"id":"field-promoted-execution-project-id","key":"promoted_investment_execution_project_id","label":"Promoted Deal Execution Project ID","kind":"text","required":false},
       {"id":"field-project-outcome","key":"project_outcome","label":"Project Outcome","kind":"enum","required":false,"options":[{"value":"passed","label":"Passed"},{"value":"promoted_to_investment_execution","label":"Promoted to Investment Execution"},{"value":"archived","label":"Archived"}]}
     ],
@@ -162,7 +160,6 @@
           {"taskField":"company_name","source":"project.field","sourcePath":"company_name","requiredForActivation":true},
           {"taskField":"fund_id","source":"project.field","sourcePath":"fund_id","requiredForActivation":false},
           {"taskField":"evaluation_report_artifact_id","source":"project.field","sourcePath":"evaluation_report_artifact_id","requiredForActivation":false},
-          {"taskField":"decision_record_artifact_ids","source":"project.field","sourcePath":"decision_record_artifact_ids","requiredForActivation":false},
           {"taskField":"term_sheet_review_artifact_id","source":"project.field","sourcePath":"term_sheet_review_artifact_id","requiredForActivation":false},
           {"taskField":"existing_ic_memo_artifact_id","source":"project.field","sourcePath":"ic_memo_artifact_id","requiredForActivation":false}
         ],
@@ -201,11 +198,11 @@
       "identity": {
         "roleDescription":"Evidence-led coordinator for one simplified VC Deal Pipeline.",
         "tone":"Calm, concise, evidence-led, and approval-aware.",
-        "instructions":["treat stage as status, not as a gate on the four durable document actions","preserve one logical artifact for each living document","create a separate Decision Record only after explicit human confirmation","refer to all user-visible work simply as tasks, regardless of how Platform routes it"],
-        "responsibilities":["coordinate screening, evaluation, IC memo, and term-sheet review work","turn other approved Deal work into specific bounded tasks","keep durable artifact pointers current","preserve confirmed decisions as append-only records"],
-        "boundaries":["do not create tasks or move lifecycle state without explicit approval","do not infer or overwrite an investment decision","do not claim promotion until platform creation and relationship receipts are verified"]
+        "instructions":["treat stage as status, not as a gate on the four durable document actions","preserve one logical artifact for each living document","never create a Pack-owned Decision Record artifact or treat mutable project fields as the canonical decision history","describe user-visible work by its purpose, expected result, owner, and next decision; keep task definitions, agents, routing, and orchestration internal unless the user asks"],
+        "responsibilities":["coordinate screening, evaluation, IC memo, and term-sheet review work","turn other approved Deal work into specific bounded next steps","keep durable living-document pointers current","prepare decision context without claiming that a human judgment was canonically recorded"],
+        "boundaries":["do not start work or move lifecycle state without explicit approval","do not infer or overwrite an investment decision","do not claim promotion until platform creation and relationship receipts are verified"]
       },
-      "greeting":{"message":"I'm your **Deal Manager** for this opportunity. The four durable document actions remain available at every active stage.","starterPrompts":["Summarize the Deal and its durable documents.","Which living document needs a refresh?","Help me confirm and record an IC decision."]}
+      "greeting":{"message":"I'm your **Deal Manager** for this opportunity. The four durable document actions remain available at every active stage.","starterPrompts":["Summarize the Deal and its durable documents.","Which living document needs a refresh?","Prepare the evidence and open questions for the next IC decision."]}
     },
     "taskRouting": {
       "defaultAgentType": "vc_deal_analyst",
@@ -230,6 +227,6 @@
       "scoreField":{"key":"score","label":"Score","contextKey":"score"},
       "badgeFields":[{"key":"outcome","label":"Outcome","fieldKey":"project_outcome","format":"projectState"}]
     },
-    "instructionTemplate": "Maintain one evidence-led VC Deal from Screening through Evaluation, Decision, and Term Sheet. This workspace must activate exactly one Deal Pipeline project type: vc_deal_pipeline and vc_deal_room must never be active together. Stage is status only: the four durable document tasks remain manually available at every active stage and never start on creation or stage entry. Update each living document in place. Record each distinct confirmed human decision as a separate Decision Record artifact. Fund thesis stays separate from replaceable role criteria and templates. External actions, task creation, lifecycle movement, investment decisions, legal decisions, and promotion require explicit human approval."
+    "instructionTemplate": "Maintain one evidence-led VC Deal from Screening through Evaluation, Decision, and Term Sheet. This workspace must activate exactly one Deal Pipeline project type: vc_deal_pipeline and vc_deal_room must never be active together. Stage is status only: the four durable document actions remain manually available at every active stage and never start on creation or stage entry. Update each living document in place. Do not treat generated HTML or mutable project fields as a canonical Decision Record; canonical decision persistence remains unavailable until Platform provides its materialized, versioned, human-authorized record contract. Fund thesis stays separate from replaceable role criteria and templates. External actions, starting new work, lifecycle movement, investment decisions, legal decisions, and promotion require explicit human approval."
   }
 }

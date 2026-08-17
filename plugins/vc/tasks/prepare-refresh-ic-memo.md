@@ -22,12 +22,12 @@ Prepare or refresh the deliberative IC Memo for one Deal at any active stage wit
 
 ## What To Do
 
-Apply `generate-or-refresh-living-report` to discover the current project-linked evidence corpus, include the mapped Evaluation Report, prior Decision Records, Term Sheet Review and any additive focus artifacts, compare the prior evidence basis when refreshing, and preserve the report lifecycle. Use `definitionJson.documentRefs` as the durable criteria, template, style, and operating-guidance contract. Prepare a decision-ready IC Memo that states the decision ask, recommendation, core thesis, evidence, risks, sensitivities, dissent, unresolved questions, and changes since the prior IC round. Render from the IC Memo Template and return the resulting artifact ID as ic memo artifact. The memo is deliberative and must not state or persist the human outcome.
+Apply `generate-or-refresh-living-report` to discover the current project-linked evidence corpus, include the mapped Evaluation Report, Term Sheet Review and any additive focus artifacts, compare the prior evidence basis when refreshing, and preserve the report lifecycle. Use `definitionJson.documentRefs` as the durable criteria, template, style, and operating-guidance contract. Prepare a decision-ready IC Memo that states the decision ask, recommendation, core thesis, evidence, risks, sensitivities, dissent, unresolved questions, and changes since the prior IC round. Render from the IC Memo Template and return the resulting artifact ID as ic memo artifact. The memo is deliberative and must not state or persist the human outcome.
 
 ## Available Context
 
 - Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
-- Especially look for: Company Name, Confirmed Fund ID, Focus Artifact IDs, Evaluation Report, Prior Decision Record IDs, Term Sheet Review, Existing IC Memo.
+- Especially look for: Company Name, Confirmed Fund ID, Focus Artifact IDs, Evaluation Report, Term Sheet Review, Existing IC Memo.
 - If a named input is absent, follow the missing-input policy rather than inventing facts.
 
 ## Reference Materials
@@ -58,4 +58,4 @@ Do not record a Decision Record, send messages, mutate CRM, create tasks or proj
 
 ## Human Review
 
-- The committee confirms any decision separately; the Deal Manager records a new Decision Record only after explicit confirmation.
+- The committee confirms any decision separately; canonical recording requires the Platform-owned materialized, versioned Decision Record contract.

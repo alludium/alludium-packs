@@ -5,7 +5,7 @@
 
 Version `0.6.10` adds `vc_deal_pipeline` as a workspace-selectable alternative to the existing Deal Pipeline. It provides four
 stage-independent living-document tasks, nine replaceable role documents, a minimal Deal Manager
-and Deal Analyst, no creation or stage-entry task fan-out, and separate confirmed Decision Records.
+and Deal Analyst, no creation or stage-entry task fan-out, and a non-canonical Decision Record presentation template awaiting the Platform-owned persistence contract.
 The workspace Pipeline Manager uses the new Deal type for chat-native creation and both managers
 route uncovered work into assignable custom tasks without substituting a generic definition. A shared
 living-report skill discovers current project evidence, compares a revision-aware evidence manifest,
