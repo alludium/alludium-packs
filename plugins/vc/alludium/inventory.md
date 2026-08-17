@@ -5,14 +5,15 @@
 
 Version `0.6.10` adds `vc_deal_pipeline` as a workspace-selectable alternative to the existing Deal Pipeline. It provides four
 stage-independent living-document tasks, nine replaceable role documents, a minimal Deal Manager
-and Deal Analyst, no creation or stage-entry task fan-out, and a non-canonical Decision Record presentation template awaiting the Platform-owned persistence contract.
+and Deal Analyst, no creation or stage-entry task fan-out, and separate append-only Decision Record artifacts created only after direct human confirmation.
 The workspace Pipeline Manager uses the new Deal type for chat-native creation and both managers
 route uncovered work into assignable custom tasks without substituting a generic definition. A shared
 living-report skill discovers current project evidence, compares a revision-aware evidence manifest,
 and refreshes the same report artifact without project-maintained source inventories or generic output cards.
-The release contains both project type definitions, but a workspace activates exactly one. Existing
-workspaces may retain `vc_deal_room`; selected workspaces may activate `vc_deal_pipeline`; the two types
-must never be active together in one workspace.
+The release contains both project type definitions. A workspace's authoritative
+`vc.deals.projectTypeKey` binding selects the one used by its VC surface. Existing workspaces may remain
+bound to `vc_deal_room`; comparison workspaces may bind `vc_deal_pipeline`; the unbound definition may
+remain installed and available.
 
 Version `0.6.9` introduced bounded chat-native Deal creation and portfolio operations for the existing
 Deal Pipeline, including source-artifact linking, duplicate clarification, idempotent retries, structured
@@ -207,7 +208,7 @@ Review notes:
 - `vc_investment_management` is user-facing as Deal Execution, covers formal diligence, contracts, closing, completion, and portfolio handoff after Deal Pipeline deal structuring, and keeps version `0.1.5`.
 - `vc_sourcing_line` version `0.2.4` owns one measurable, active-Fund-specific source/screen/cadence experiment and its receipts, with `fund_id` available to the allowlisted navigation projection, Fund-keyed candidate scoring retained on each provenance relationship, and guarded task-owned project updates after reviewed configuration or runs.
 - `vc_origination_candidate` version `0.2.3` owns one company's durable pre-Deal evidence, decisions, outreach context, and multi-line provenance without collapsing Fund-relative scores into Candidate-wide fields; guided creation starts the distinct initial screen and never reruns registration.
-- `vc_deal_pipeline` version `1.0.0` is a workspace-selectable simplified pipeline with Screening, Evaluation, Decision, and Term Sheet statuses; four manually reviewed durable document mappings that omit `lifecycleStage`; and Passed, Promoted to Investment Execution, and Archived outcomes. A workspace activates it instead of, never together with, `vc_deal_room`.
+- `vc_deal_pipeline` version `1.0.1` is a workspace-selectable simplified pipeline with Screening, Evaluation, Decision, and Term Sheet statuses; four manually reviewed durable document mappings that omit `lifecycleStage`; and Passed, Promoted to Investment Execution, and Archived outcomes. A workspace uses it when its authoritative `vc.deals.projectTypeKey` binding selects it; both Deal definitions may remain installed.
 - Generated project blueprints live in `project-blueprints/` and show each project type's setup/general tasks plus lifecycle-stage task mappings, recommended agents, and task-referenced skills. Platform-owned setup tasks are labeled with their canonical platform task IDs.
 - The definitions include project fields, instruction templates, lifecycle states, lifecycle transitions, command-view metadata, project-manager identity overlays, selection-only `projectTaskMappings`, pack-owned `projectSetup` metadata, project-type document references, and separate `projectCreation` metadata for one-project launchers.
 - Deal Pipeline setup declares source, variables, schedules, and invite steps plus post-approval platform actions. Sourcing Line setup configures one Fund-specific experiment and leaves its single orchestrator schedule disabled until approval. Candidate work is event-driven and has no recurring schedule.

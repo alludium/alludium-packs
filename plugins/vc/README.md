@@ -11,9 +11,11 @@ Analyst model. The workspace Pipeline Manager creates the new type through the b
 Deal operations and both managers can create and assign true custom tasks when no definition fits.
 One shared living-report skill discovers the current project evidence corpus, records a revision-aware
 evidence manifest, and updates existing reports in place without a manually maintained source list.
-The release supports both Deal Pipeline types, but each workspace activates exactly one: existing
-workspaces may retain `vc_deal_room`, while selected workspaces use `vc_deal_pipeline`. They must never
-be active together in one workspace. The existing `vc_deal_room` contract is unchanged.
+The release installs both Deal Pipeline definitions. Each workspace's authoritative
+`vc.deals.projectTypeKey` binding selects one for the VC surface: existing workspaces may remain bound
+to `vc_deal_room`, while comparison workspaces may bind `vc_deal_pipeline`. The unbound definition may
+remain installed and available; VC routes and mutations use only the bound type. The existing
+`vc_deal_room` contract is unchanged.
 
 Version `0.6.9` updates Pipeline Manager's contract for chat-native Deal creation and management.
 Direct, unambiguous instructions approve only their exact bounded Deal action, while missing required
