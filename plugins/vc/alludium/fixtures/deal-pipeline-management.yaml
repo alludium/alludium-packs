@@ -26,7 +26,7 @@ dealManagerScenarios:
       selectedTaskDefinitionSlug: refresh-live-deal-status-report
       approvalRequiredBeforeModelGeneratedCreation: true
 
-  - id: approved-ad-hoc-financial-verification
+  - id: approved-custom-financial-verification
     userRequest: Ask the finance lead to verify the pitch deck financial claims against source statements.
     availableTaskDefinitionSlugs:
       - refresh-live-deal-status-report
@@ -37,9 +37,13 @@ dealManagerScenarios:
       approvedTitle: Verify pitch deck financial claims
       approvedAssigneeId: member-finance-1
     expected:
-      taskKind: ad_hoc
+      taskKind: custom
+      toolName: task-management.createAdHocTask
+      taskDefinitionId: null
+      maySubstituteGeneralTask: false
       assignmentTargetMustResolve: true
       readBackCreatedTask: true
+      requiresPersistedOutputOrQuestion: true
 
   - id: report-questions-require-review
     latestReportQuestions:
@@ -58,6 +62,27 @@ dealManagerScenarios:
       mayProposeTasks: true
       mayCreateTasks: false
       mayAssignTasks: false
+
+dealAnalystScenarios:
+  - id: bounded-task-recommendation-to-deal-manager
+    sourceTask:
+      title: Refresh Evaluation Report
+      projectTypeKey: vc_deal_pipeline
+    finding: Customer concentration remains unverified and needs a bounded source reconciliation.
+    recommendation:
+      objective: Reconcile customer concentration claims to the latest customer-level revenue schedule.
+      evidenceScope: Current revenue schedule, management concentration claims, and cited customer contracts.
+      expectedOutput: A cited concentration table with discrepancies and one explicit review question for unresolved gaps.
+      completionBoundary: Material concentration claims are reconciled or the missing source is identified precisely.
+    expected:
+      toolName: project.sendManagerMessage
+      purpose: task_recommendation
+      resolvesCanonicalManagerChatServerSide: true
+      persistsAsUserRoleWithAgentOriginMetadata: true
+      invokesDealManager: true
+      idempotentPerRecommendation: true
+      confersHumanApproval: false
+      mayCreateTask: false
 
 pipelineManagerScenarios:
   - id: unassigned-fund-review
@@ -90,7 +115,7 @@ pipelineManagerScenarios:
     toolName: project.createFromChat
     sourceChatId: 2d5c7f18-6f0a-4f5d-9b75-6bf6d871b4c2
     idempotencyKey: pipeline-manager:example-labs:create:2026-08-14
-    projectTypeKey: vc_deal_room
+    projectTypeKey: vc_deal_pipeline
     userInstruction: Create a Deal for Example Labs from this conversation and use the attached deck.
     resolvedCompany:
       name: Example Labs
@@ -148,10 +173,104 @@ pipelineManagerScenarios:
       constructsNavigationLink: false
       usesReturnedPlatformActionExclusively: true
       duplicatesHandoffInSourceResponse: false
+      handoffToAgentTemplateKey: vc_deal_pipeline_manager
+      handoffAuthor: Pipeline Manager
+      handoffIncludesRawIds: false
+      handoffIncludesTranscriptDump: false
+
+  - id: direct-chat-to-existing-deal-room
+    toolName: project.createFromChat
+    sourceChatId: 3e6d8a29-7f1b-4a6e-8c86-7cf7e982c5d3
+    idempotencyKey: pipeline-manager:legacy-labs:create:2026-08-17
+    projectTypeKey: vc_deal_room
+    userInstruction: Create a Deal for Legacy Labs from this conversation and use the attached deck.
+    resolvedCompany:
+      name: Legacy Labs
+      domain: legacy.invalid
+    confirmedFundId: null
+    duplicateCandidates: []
+    sourceLinks:
+      - https://legacy.invalid/company
+    sourceChatArtifacts:
+      - legacy-deck.pdf
+    handoff:
+      whyCreated: The user asked Pipeline Manager to add Legacy Labs to the existing Deal Pipeline.
+      sourceSummary: Legacy Labs is raising a Seed round; legacy-deck.pdf is the primary source.
+      unresolvedQuestions:
+        - Confirm the round target from source evidence.
+    toolOnlyValues:
+      sourceChatId: 3e6d8a29-7f1b-4a6e-8c86-7cf7e982c5d3
+      projectId: 8a67b3e2-9d54-4c18-a7f2-6d8e1b3c5a90
+      projectTypeVersionId: 42c8e5b1-6d93-4a20-8f76-2e9b7c1d5a34
+      profileId: 5d9e2f84-3c01-4b76-a8e2-9f6d5c4b3a10
+      artifactId: 7b3f0d95-2e68-4c41-9f73-8d6e5a4b3c21
+      messageId: 9c4e8a06-3d72-4b51-8f64-2e7d6c5b4a32
+      operationId: create-legacy-labs-from-chat
+      idempotencyKey: pipeline-manager:legacy-labs:create:2026-08-17
+    serverReceipt:
+      status: created
+      project:
+        id: 8a67b3e2-9d54-4c18-a7f2-6d8e1b3c5a90
+        name: Legacy Labs
+        projectTypeVersionId: 42c8e5b1-6d93-4a20-8f76-2e9b7c1d5a34
+      linkedArtifacts:
+        - filename: legacy-deck.pdf
+      action:
+        type: open_project
+        projectId: 8a67b3e2-9d54-4c18-a7f2-6d8e1b3c5a90
+        label: Open Legacy Labs
+    completeVisibleAssistantResponse: "Created Legacy Labs and linked legacy-deck.pdf."
+    renderedPlatformActions:
+      - type: open_project
+        projectId: 8a67b3e2-9d54-4c18-a7f2-6d8e1b3c5a90
+        label: Open Legacy Labs
+    expected:
+      exactActionApproved: create
+      mayExecuteBoundedMutation: true
+      requiresProposalCard: false
+      requiresReviewButton: false
+      requiresModal: false
+      requiresRedundantConfirmation: false
+      preserveSourceChat: true
+      requestIncludesArtifactIds: false
+      serverDiscoversAndLinksSourceChatArtifacts: true
+      structuredReceiptRequiredBeforeSuccess: true
+      visibleReadbackSentenceLimit: 1
+      visibleResponseContainsToolOnlyIdentifiers: false
+      constructsNavigationLink: false
+      usesReturnedPlatformActionExclusively: true
+      duplicatesHandoffInSourceResponse: false
       handoffToAgentTemplateKey: vc_deal_manager
       handoffAuthor: Pipeline Manager
       handoffIncludesRawIds: false
       handoffIncludesTranscriptDump: false
+
+  - id: approved-custom-task-with-assignment
+    selectedDeal:
+      name: Example Labs
+      projectTypeKey: vc_deal_pipeline
+    userInstruction: Create a task for the Deal Analyst to reconcile the ARR claim to signed customer schedules.
+    availableTaskDefinitionSlugs:
+      - generate-refresh-screening-report
+      - generate-refresh-evaluation-report
+      - prepare-refresh-ic-memo
+      - review-refresh-term-sheet
+    openTasks: []
+    projectTaskRouting:
+      defaultAgentType: vc_deal_analyst
+      requireAgentExecutor: true
+    expected:
+      exactTaskApproved: true
+      taskKind: custom
+      toolName: task-management.createTask
+      taskDefinitionId: null
+      maySubstituteGeneralTask: false
+      assignmentIsAtomic: true
+      defaultHumanOwner: current_user
+      agentExecutorFromProjectType: vc_deal_analyst
+      readBackToolName: task-management.getTaskDetail
+      requiresPersistedOutputOrQuestion: true
+      visibleReceiptUsesHumanReadableValuesOnly: true
 
   - id: missing-required-field-clarification
     sourceChatId: chat-2
@@ -303,3 +422,55 @@ reportQuestionScenarios:
     expected:
       status: answered
       createReplacementQuestion: false
+
+livingReportScenarios:
+  - id: first-generation-discovers-corpus
+    existingReportArtifactId: null
+    projectLinkedArtifacts:
+      - {id: deck, observedRevision: "1", contentHash: deck-v1, kind: evidence, readable: true}
+      - {id: founder-call, observedRevision: "3", contentHash: call-v3, kind: evidence, readable: true}
+      - {id: screening-template, observedRevision: "1", contentHash: template-v1, kind: template, readable: true}
+      - {id: workspace-settings, observedRevision: "2", contentHash: config-v2, kind: configuration, readable: true}
+    focusArtifactIds: [founder-call]
+    expected:
+      includedArtifactIds: [deck, founder-call]
+      excludedArtifactIds: [screening-template, workspace-settings]
+      focusDoesNotRestrictCorpus: true
+      createdArtifactCount: 1
+      updatedArtifactCount: 0
+      createsProjectSharedArtifact: true
+      writesEvidenceBasisManifest: true
+
+  - id: refresh-updates-in-place-and-classifies-corpus
+    existingReportArtifactId: screening-report
+    existingReportObservedRevision: "4"
+    existingReportContentHash: report-v4
+    previousManifest:
+      sources:
+        - {artifactId: deck, observedRevision: "1", contentHash: deck-v1}
+        - {artifactId: founder-call, observedRevision: "3", contentHash: call-v3}
+        - {artifactId: old-market-note, observedRevision: "1", contentHash: market-v1}
+    projectLinkedArtifacts:
+      - {id: deck, observedRevision: "2", contentHash: deck-v2, kind: evidence, readable: true}
+      - {id: founder-call, observedRevision: "3", contentHash: call-v3, kind: evidence, readable: true}
+      - {id: financial-model, observedRevision: "1", contentHash: model-v1, kind: evidence, readable: true}
+      - {id: screening-report, observedRevision: "4", contentHash: report-v4, kind: report, readable: true}
+      - {id: evaluation-template, observedRevision: "1", contentHash: template-v1, kind: template, readable: true}
+    additionalReadableArtifacts:
+      - {id: screening-upstream, observedRevision: "5", contentHash: screening-v5, kind: upstream_report}
+      - {id: customer-reference, observedRevision: "1", contentHash: reference-v1, kind: evidence}
+    taskDeclaredArtifactIds: [screening-upstream]
+    focusArtifactIds: [customer-reference]
+    expected:
+      includedArtifactIds: [customer-reference, deck, financial-model, founder-call, screening-upstream]
+      excludedArtifactIds: [evaluation-template, screening-report]
+      focusDoesNotRestrictCorpus: true
+      sourceChanges:
+        added: [customer-reference, financial-model, screening-upstream]
+        changed: [deck]
+        removed: [old-market-note]
+        unchanged: [founder-call]
+      createdArtifactCount: 0
+      updatedArtifactId: screening-report
+      updateUsesObservedRevisionAndHash: true
+      duplicateFallbackAllowed: false

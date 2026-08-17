@@ -1,0 +1,235 @@
+{
+  "kind": "project-type",
+  "apiVersion": "alludium/v1alpha1",
+  "key": "vc_deal_pipeline",
+  "name": "VC Deal Pipeline",
+  "description": "A simplified, evidence-led VC Deal Pipeline with stage-independent living documents from screening through term-sheet review.",
+  "projectSetup": {
+    "setupLabel": "VC Deal Pipeline Setup",
+    "starterId": "create-vc-deal-pipeline",
+    "starterLabel": "Create VC Deal Pipeline Setup",
+    "starterResumeLabel": "Continue VC Deal Pipeline Setup",
+    "starterDescription": "Create or resume the simplified VC Deal Pipeline setup flow.",
+    "recommendedSetupAgent": "vc_deal_pipeline_manager",
+    "requiredEvidence": ["variables", "invite"],
+    "setupSteps": [
+      {
+        "key": "variables",
+        "label": "Review variables",
+        "purpose": "Review Fund and firm variables before Deal work starts.",
+        "stepType": "variables",
+        "evidenceKey": "variables",
+        "required": true,
+        "taskDefinitionSlug": "project-variable-review"
+      },
+      {
+        "key": "invite",
+        "label": "Invite team",
+        "purpose": "Review Deal collaborator suggestions without sending invitations.",
+        "stepType": "invite",
+        "evidenceKey": "invite",
+        "required": true,
+        "taskDefinitionSlug": "project-team-invite"
+      }
+    ],
+    "postApprovalActions": {
+      "applyVariables": {
+        "enabled": true,
+        "label": "Apply reviewed VC variables",
+        "sourceEvidenceKeys": ["variables"],
+        "target": "workspace_and_created_projects",
+        "actionMode": "platform_variable_application",
+        "requiresReviewedUserApproval": true,
+        "setupTasksMayPersistValues": false
+      },
+      "importProjects": {
+        "enabled": false,
+        "reason": "Deal creation is handled by the reviewed guided creation flow rather than setup import."
+      },
+      "inviteCollaborators": {
+        "enabled": true,
+        "label": "Invite approved Deal collaborators",
+        "sourceEvidenceKeys": ["invite"],
+        "target": "createdProjects",
+        "actionMode": "platform_project_membership",
+        "requiresReviewedUserApproval": true,
+        "setupTasksMaySendInvites": false
+      },
+      "enableSchedules": {
+        "enabled": false,
+        "reason": "This project type has no recurring or stage-entry task creation."
+      }
+    },
+    "scheduleGroups": [],
+    "variableDiscoveryTask": {
+      "label": "VC Variable Discovery",
+      "taskDefinitionTemplateId": "vc.vc_pack_variable_discovery",
+      "taskDefinitionSlug": "vc-pack-variable-discovery"
+    }
+  },
+  "projectCreation": {
+    "launcherLabel": "Create VC Deal Pipeline",
+    "starterId": "create-pipeline-deal",
+    "aliases": ["vc deal pipeline", "simplified deal pipeline", "investment opportunity"],
+    "requiredFieldKeys": ["company_name"],
+    "recommendedFieldKeys": ["company_domain", "fund_id", "lead_partner", "deal_source", "pitch_deck_artifact_id", "confidentiality_level"],
+    "advancedFieldKeys": ["source_object_url", "source_thread_url", "source_thread_artifact_id", "founder_materials_artifact_ids", "meeting_record_artifact_ids"],
+    "defaultState": "screening",
+    "guidedTask": {
+      "taskDefinitionTemplateId": "vc.create_pipeline_deal",
+      "taskDefinitionSlug": "create-pipeline-deal"
+    },
+    "postCreate": {"triggerInitialStateTasks": false}
+  },
+  "initialVersion": {
+    "version": "1.0.1",
+    "documentLibrary": {
+      "catalogPath": "alludium/documents/catalog.v1.json",
+      "documentIds": [
+        "vc.document.evidence_citation_style_guide",
+        "vc.document.template_use_guidance",
+        "vc.document.deal_pipeline_screening_criteria",
+        "vc.document.deal_pipeline_screening_report_template",
+        "vc.document.deal_pipeline_evaluation_criteria",
+        "vc.document.deal_pipeline_evaluation_report_template",
+        "vc.document.deal_pipeline_ic_criteria",
+        "vc.document.deal_pipeline_ic_memo_template",
+        "vc.document.deal_pipeline_decision_record_template",
+        "vc.document.deal_pipeline_term_sheet_review_policy",
+        "vc.document.deal_pipeline_term_sheet_review_template"
+      ]
+    },
+    "fieldsSchema": [
+      {"id":"field-company-name","key":"company_name","label":"Company Name","kind":"text","required":true,"placeholder":"Acme AI"},
+      {"id":"field-company-domain","key":"company_domain","label":"Company Domain","kind":"text","required":false},
+      {"id":"field-company-logo-url","key":"company_logo_url","label":"Company Logo URL","kind":"text","required":false},
+      {"id":"field-fund-id","key":"fund_id","label":"Confirmed Fund ID","kind":"text","required":false,"description":"Stable id of the active Fund explicitly confirmed for this Deal.","optionSource":{"type":"workspaceVariableCollection","path":"vc.funds","valueKey":"id","labelKey":"name","statusKey":"status","selectableStatuses":["actively_investing"],"hintKeys":["stage","sectors","geographies"]}},
+      {"id":"field-lead-partner","key":"lead_partner","label":"Lead Partner","kind":"member","required":false},
+      {"id":"field-deal-source","key":"deal_source","label":"Deal Source","kind":"enum","required":false,"options":[{"value":"inbound","label":"Inbound"},{"value":"outbound","label":"Outbound"},{"value":"referral","label":"Referral"},{"value":"thesis","label":"Thesis"},{"value":"portfolio_intro","label":"Portfolio Intro"},{"value":"event","label":"Event"},{"value":"crm","label":"CRM"},{"value":"other","label":"Other"}]},
+      {"id":"field-source-object-url","key":"source_object_url","label":"Source Object URL","kind":"text","required":false},
+      {"id":"field-source-thread-url","key":"source_thread_url","label":"Source Thread URL","kind":"text","required":false},
+      {"id":"field-source-thread-artifact-id","key":"source_thread_artifact_id","label":"Source Thread Artifact ID","kind":"text","required":false},
+      {"id":"field-pitch-deck-artifact-id","key":"pitch_deck_artifact_id","label":"Pitch Deck Artifact ID","kind":"text","required":false},
+      {"id":"field-founder-materials-artifact-ids","key":"founder_materials_artifact_ids","label":"Founder Materials Artifact IDs","kind":"text","required":false},
+      {"id":"field-meeting-record-artifact-ids","key":"meeting_record_artifact_ids","label":"Meeting Record Artifact IDs","kind":"text","required":false},
+      {"id":"field-confidentiality-level","key":"confidentiality_level","label":"Confidentiality Level","kind":"enum","required":false,"options":[{"value":"internal","label":"Internal"},{"value":"confidential","label":"Confidential"},{"value":"highly_confidential","label":"Highly Confidential"}]},
+      {"id":"field-screening-report-artifact-id","key":"screening_report_artifact_id","label":"Screening Report Artifact ID","kind":"text","required":false},
+      {"id":"field-evaluation-report-artifact-id","key":"evaluation_report_artifact_id","label":"Evaluation Report Artifact ID","kind":"text","required":false},
+      {"id":"field-ic-memo-artifact-id","key":"ic_memo_artifact_id","label":"IC Memo Artifact ID","kind":"text","required":false},
+      {"id":"field-current-term-sheet-artifact-id","key":"current_term_sheet_artifact_id","label":"Current Term Sheet Artifact ID","kind":"text","required":false},
+      {"id":"field-previous-term-sheet-artifact-id","key":"previous_term_sheet_artifact_id","label":"Previous Term Sheet Artifact ID","kind":"text","required":false},
+      {"id":"field-term-sheet-review-artifact-id","key":"term_sheet_review_artifact_id","label":"Term Sheet Review Artifact ID","kind":"text","required":false},
+      {"id":"field-latest-decision-record-artifact-id","key":"latest_decision_record_artifact_id","label":"Latest Decision Record Artifact ID","kind":"text","required":false},
+      {"id":"field-decision-record-artifact-ids","key":"decision_record_artifact_ids","label":"Decision Record Artifact IDs","kind":"text","required":false,"description":"Append-only ordered IDs for explicitly human-confirmed Decision Record artifacts."},
+      {"id":"field-current-decision","key":"current_decision","label":"Decision Posture Projection","kind":"enum","required":false,"options":[{"value":"undecided","label":"Undecided"},{"value":"proceed","label":"Proceed"},{"value":"watch","label":"Watch / Hold"},{"value":"conditional_approval","label":"Conditional Approval"},{"value":"continue_evaluation","label":"Continue Evaluation"},{"value":"pass","label":"Pass"},{"value":"reapprove","label":"Reapprove"}]},
+      {"id":"field-decision-rationale","key":"decision_rationale","label":"Decision Rationale Projection","kind":"text","required":false},
+      {"id":"field-decision-conditions","key":"decision_conditions","label":"Decision Conditions Projection","kind":"text","required":false},
+      {"id":"field-promoted-execution-project-id","key":"promoted_investment_execution_project_id","label":"Promoted Deal Execution Project ID","kind":"text","required":false},
+      {"id":"field-project-outcome","key":"project_outcome","label":"Project Outcome","kind":"enum","required":false,"options":[{"value":"passed","label":"Passed"},{"value":"promoted_to_investment_execution","label":"Promoted to Investment Execution"},{"value":"archived","label":"Archived"}]}
+    ],
+    "lifecycleStates": ["screening", "evaluation", "decision", "term_sheet", "passed", "promoted_to_investment_execution", "archived"],
+    "lifecycleTransitions": [
+      {"from":"screening","to":"evaluation"},{"from":"screening","to":"passed"},{"from":"screening","to":"archived"},
+      {"from":"evaluation","to":"decision"},{"from":"evaluation","to":"screening"},{"from":"evaluation","to":"passed"},{"from":"evaluation","to":"archived"},
+      {"from":"decision","to":"term_sheet"},{"from":"decision","to":"evaluation"},{"from":"decision","to":"passed"},{"from":"decision","to":"archived"},
+      {"from":"term_sheet","to":"decision"},{"from":"term_sheet","to":"passed"},{"from":"term_sheet","to":"promoted_to_investment_execution"},{"from":"term_sheet","to":"archived"}
+    ],
+    "projectTaskMappings": [
+      {
+        "id":"map-generate-refresh-screening-report","taskDefinitionTemplateId":"vc.generate_refresh_screening_report","taskDefinitionSlug":"generate-refresh-screening-report","projectScope":"project_instance",
+        "inputMappings":[
+          {"taskField":"company_name","source":"project.field","sourcePath":"company_name","requiredForActivation":true},
+          {"taskField":"fund_id","source":"project.field","sourcePath":"fund_id","requiredForActivation":false},
+          {"taskField":"existing_screening_report_artifact_id","source":"project.field","sourcePath":"screening_report_artifact_id","requiredForActivation":false}
+        ],
+        "outputMappings":[{"taskField":"screening_report_artifact_id","target":"project.field","targetPath":"screening_report_artifact_id","requiredForCompletion":true}],
+        "activationPolicy":{"mode":"manual_review","autoStartWhenRequiredInputsAvailable":false,"requiresHumanApproval":true,"createTaskWhenLifecycleStageEntered":false}
+      },
+      {
+        "id":"map-generate-refresh-evaluation-report","taskDefinitionTemplateId":"vc.generate_refresh_evaluation_report","taskDefinitionSlug":"generate-refresh-evaluation-report","projectScope":"project_instance",
+        "inputMappings":[
+          {"taskField":"company_name","source":"project.field","sourcePath":"company_name","requiredForActivation":true},
+          {"taskField":"fund_id","source":"project.field","sourcePath":"fund_id","requiredForActivation":false},
+          {"taskField":"screening_report_artifact_id","source":"project.field","sourcePath":"screening_report_artifact_id","requiredForActivation":false},
+          {"taskField":"existing_evaluation_report_artifact_id","source":"project.field","sourcePath":"evaluation_report_artifact_id","requiredForActivation":false}
+        ],
+        "outputMappings":[{"taskField":"evaluation_report_artifact_id","target":"project.field","targetPath":"evaluation_report_artifact_id","requiredForCompletion":true}],
+        "activationPolicy":{"mode":"manual_review","autoStartWhenRequiredInputsAvailable":false,"requiresHumanApproval":true,"createTaskWhenLifecycleStageEntered":false}
+      },
+      {
+        "id":"map-prepare-refresh-ic-memo","taskDefinitionTemplateId":"vc.prepare_refresh_ic_memo","taskDefinitionSlug":"prepare-refresh-ic-memo","projectScope":"project_instance",
+        "inputMappings":[
+          {"taskField":"company_name","source":"project.field","sourcePath":"company_name","requiredForActivation":true},
+          {"taskField":"fund_id","source":"project.field","sourcePath":"fund_id","requiredForActivation":false},
+          {"taskField":"evaluation_report_artifact_id","source":"project.field","sourcePath":"evaluation_report_artifact_id","requiredForActivation":false},
+          {"taskField":"decision_record_artifact_ids","source":"project.field","sourcePath":"decision_record_artifact_ids","requiredForActivation":false},
+          {"taskField":"term_sheet_review_artifact_id","source":"project.field","sourcePath":"term_sheet_review_artifact_id","requiredForActivation":false},
+          {"taskField":"existing_ic_memo_artifact_id","source":"project.field","sourcePath":"ic_memo_artifact_id","requiredForActivation":false}
+        ],
+        "outputMappings":[{"taskField":"ic_memo_artifact_id","target":"project.field","targetPath":"ic_memo_artifact_id","requiredForCompletion":true}],
+        "activationPolicy":{"mode":"manual_review","autoStartWhenRequiredInputsAvailable":false,"requiresHumanApproval":true,"createTaskWhenLifecycleStageEntered":false}
+      },
+      {
+        "id":"map-review-refresh-term-sheet","taskDefinitionTemplateId":"vc.review_refresh_term_sheet","taskDefinitionSlug":"review-refresh-term-sheet","projectScope":"project_instance",
+        "inputMappings":[
+          {"taskField":"company_name","source":"project.field","sourcePath":"company_name","requiredForActivation":true},
+          {"taskField":"current_term_sheet_artifact_id","source":"project.field","sourcePath":"current_term_sheet_artifact_id","requiredForActivation":true},
+          {"taskField":"previous_term_sheet_artifact_id","source":"project.field","sourcePath":"previous_term_sheet_artifact_id","requiredForActivation":false},
+          {"taskField":"evaluation_report_artifact_id","source":"project.field","sourcePath":"evaluation_report_artifact_id","requiredForActivation":false},
+          {"taskField":"ic_memo_artifact_id","source":"project.field","sourcePath":"ic_memo_artifact_id","requiredForActivation":false},
+          {"taskField":"existing_term_sheet_review_artifact_id","source":"project.field","sourcePath":"term_sheet_review_artifact_id","requiredForActivation":false}
+        ],
+        "outputMappings":[{"taskField":"term_sheet_review_artifact_id","target":"project.field","targetPath":"term_sheet_review_artifact_id","requiredForCompletion":true}],
+        "activationPolicy":{"mode":"manual_review","autoStartWhenRequiredInputsAvailable":false,"requiresHumanApproval":true,"createTaskWhenLifecycleStageEntered":false}
+      }
+    ],
+    "extensions": {
+      "projectRelationships": [
+        {
+          "typeKey": "vc.deal_pipeline_promoted_to_investment_execution",
+          "label": "Promoted to Investment Execution",
+          "inverseLabel": "Promoted from VC Deal Pipeline",
+          "description": "Links a reviewed Deal Pipeline opportunity to its downstream Deal Execution project.",
+          "targetProjectTypeKeys": ["vc_investment_management"]
+        }
+      ]
+    },
+    "projectManager": {
+      "agentTemplateKey": "vc_deal_pipeline_manager",
+      "displayName": "Deal Manager",
+      "labels": {"chatTitleSuffix":" Deal Manager","roleNoun":"deal manager","projectNoun":"deal","collectionNoun":"deals"},
+      "identity": {
+        "roleDescription":"Evidence-led coordinator for one simplified VC Deal Pipeline.",
+        "tone":"Calm, concise, evidence-led, and approval-aware.",
+        "instructions":["treat stage as status, not as a gate on the four durable document actions","preserve one logical artifact for each living document","create a separate append-only Decision Record artifact only after direct authenticated human confirmation","describe user-visible work by its purpose, expected result, owner, and next decision; keep task definitions, agents, routing, and orchestration internal unless the user asks"],
+        "responsibilities":["coordinate screening, evaluation, IC memo, and term-sheet review work","turn other approved Deal work into specific bounded next steps","keep durable living-document pointers current","preserve explicitly confirmed decisions as append-only artifacts and current projections"],
+        "boundaries":["do not start work or move lifecycle state without explicit approval","do not infer or overwrite an investment decision","do not claim promotion until platform creation and relationship receipts are verified"]
+      },
+      "greeting":{"message":"I'm your **Deal Manager** for this opportunity. The four durable document actions remain available at every active stage.","starterPrompts":["Summarize the Deal and its durable documents.","Which living document needs a refresh?","Help me confirm and record an IC decision."]}
+    },
+    "taskRouting": {
+      "defaultAgentType": "vc_deal_analyst",
+      "requireAgentExecutor": true,
+      "defaultHumanOwner": "current_user",
+      "requireHumanOwner": true
+    },
+    "commandView": {
+      "key":"vc-deal-pipeline","typeLabel":"VC Deal Pipeline","collectionLabel":"Deals","overviewTitle":"VC Deal Pipeline overview","overviewAriaLabel":"Open VC deal data","overviewFallback":"Add company and evidence context in Data.","executionTitle":"Alludium is executing",
+      "navigationFieldKeys":["fund_id"],
+      "stageGroups":[
+        {"key":"screening","label":"Screening","states":["screening"]},
+        {"key":"evaluation","label":"Evaluation","states":["evaluation"]},
+        {"key":"decision","label":"Decision","states":["decision"]},
+        {"key":"term_sheet","label":"Term Sheet","states":["term_sheet"]},
+        {"key":"outcomes","label":"Outcomes","states":["passed","promoted_to_investment_execution","archived"]}
+      ],
+      "fallbackAgents":[{"id":"vc_deal_analyst","name":"Deal Analyst","description":"Screening, evaluation, IC memo, and term-sheet analysis"}],
+      "summaryFields":[{"key":"fund_id","label":"Fund","fieldKey":"fund_id"},{"key":"decision","label":"Decision","fieldKey":"current_decision"}],
+      "primarySummaryField":{"key":"company_name","label":"Company","fieldKey":"company_name"},
+      "secondarySummaryField":{"key":"company_domain","label":"Domain","fieldKey":"company_domain"},
+      "scoreField":{"key":"score","label":"Score","contextKey":"score"},
+      "badgeFields":[{"key":"outcome","label":"Outcome","fieldKey":"project_outcome","format":"projectState"}]
+    },
+    "instructionTemplate": "Maintain one evidence-led VC Deal from Screening through Evaluation, Decision, and Term Sheet. The workspace's authoritative vc.deals.projectTypeKey binding selects this project type; fail closed if that binding is absent, invalid, or unavailable. Both Deal Pipeline definitions may be installed, but every VC route and mutation must use only the bound type. Stage is status only: the four durable document actions remain manually available at every active stage and never start on creation or stage entry. Update each living document in place. Record each distinct directly confirmed human decision as a separate append-only Decision Record artifact and retain earlier records. Fund thesis stays separate from replaceable role criteria and templates. External actions, starting new work, lifecycle movement, investment decisions, legal decisions, and promotion require explicit human approval."
+  }
+}

@@ -145,7 +145,8 @@
         "vc_deal_room",
         "vc_sourcing_line",
         "vc_origination_candidate",
-        "vc_investment_management"
+        "vc_investment_management",
+        "vc_deal_pipeline"
       ],
       "relatedTaskDefinitionSlugs": [
         "create-ic-memo",
@@ -165,6 +166,10 @@
         "run-technical-evaluation",
         "run-financial-evaluation",
         "run-team-evaluation"
+        ,"generate-refresh-screening-report"
+        ,"generate-refresh-evaluation-report"
+        ,"prepare-refresh-ic-memo"
+        ,"review-refresh-term-sheet"
       ],
       "status": "source"
     },
@@ -178,7 +183,8 @@
         "vc_deal_room",
         "vc_sourcing_line",
         "vc_origination_candidate",
-        "vc_investment_management"
+        "vc_investment_management",
+        "vc_deal_pipeline"
       ],
       "relatedTaskDefinitionSlugs": [
         "audit-linkedin-query-spend",
@@ -216,6 +222,10 @@
         "source-thesis-targets",
         "summarize-meeting-records",
         "verify-conditions-precedent"
+        ,"generate-refresh-screening-report"
+        ,"generate-refresh-evaluation-report"
+        ,"prepare-refresh-ic-memo"
+        ,"review-refresh-term-sheet"
       ],
       "status": "source"
     },
@@ -916,6 +926,96 @@
         "companies-house-setup",
         "companies-house-sync-read"
       ],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.deal_pipeline_screening_criteria",
+      "title": "Deal Pipeline Screening Criteria",
+      "description": "Replaceable source-neutral screening methodology for the simplified VC Deal Pipeline.",
+      "documentType": "methodology",
+      "path": "deal-pipeline/screening-criteria.html",
+      "supportedProjectTypes": ["vc_deal_pipeline"],
+      "relatedTaskDefinitionSlugs": ["generate-refresh-screening-report"],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.deal_pipeline_screening_report_template",
+      "title": "Deal Pipeline Screening Report Template",
+      "description": "Compact evidence-backed first assessment template for repeated screening refreshes.",
+      "documentType": "template",
+      "path": "deal-pipeline/screening-report-template.html",
+      "supportedProjectTypes": ["vc_deal_pipeline"],
+      "relatedTaskDefinitionSlugs": ["generate-refresh-screening-report"],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.deal_pipeline_evaluation_criteria",
+      "title": "Deal Pipeline Evaluation Criteria",
+      "description": "Replaceable grouped evidence-domain methodology for evaluating a venture opportunity.",
+      "documentType": "methodology",
+      "path": "deal-pipeline/evaluation-criteria.html",
+      "supportedProjectTypes": ["vc_deal_pipeline"],
+      "relatedTaskDefinitionSlugs": ["generate-refresh-evaluation-report"],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.deal_pipeline_evaluation_report_template",
+      "title": "Deal Pipeline Evaluation Report Template",
+      "description": "Living evidence, change, risk, and open-question template for evaluation.",
+      "documentType": "template",
+      "path": "deal-pipeline/evaluation-report-template.html",
+      "supportedProjectTypes": ["vc_deal_pipeline"],
+      "relatedTaskDefinitionSlugs": ["generate-refresh-evaluation-report"],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.deal_pipeline_ic_criteria",
+      "title": "Deal Pipeline IC Criteria and Guidance",
+      "description": "Replaceable firm guidance for investment-committee preparation and decision quality.",
+      "documentType": "methodology",
+      "path": "deal-pipeline/ic-criteria.html",
+      "supportedProjectTypes": ["vc_deal_pipeline"],
+      "relatedTaskDefinitionSlugs": ["prepare-refresh-ic-memo"],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.deal_pipeline_ic_memo_template",
+      "title": "Deal Pipeline IC Memo Template",
+      "description": "Deliberative investment-committee memo template maintained as one logical living artifact.",
+      "documentType": "template",
+      "path": "deal-pipeline/ic-memo-template.html",
+      "supportedProjectTypes": ["vc_deal_pipeline"],
+      "relatedTaskDefinitionSlugs": ["prepare-refresh-ic-memo"],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.deal_pipeline_decision_record_template",
+      "title": "Deal Pipeline Decision Record Template",
+      "description": "Append-only artifact template for one directly human-confirmed investment decision or reapproval.",
+      "documentType": "template",
+      "path": "deal-pipeline/decision-record-template.html",
+      "supportedProjectTypes": ["vc_deal_pipeline"],
+      "relatedTaskDefinitionSlugs": [],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.deal_pipeline_term_sheet_review_policy",
+      "title": "Deal Pipeline Term Sheet Review Policy",
+      "description": "Replaceable business-review policy and default red lines for supplied term sheets.",
+      "documentType": "policy",
+      "path": "deal-pipeline/term-sheet-review-policy.html",
+      "supportedProjectTypes": ["vc_deal_pipeline"],
+      "relatedTaskDefinitionSlugs": ["review-refresh-term-sheet"],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.deal_pipeline_term_sheet_review_template",
+      "title": "Deal Pipeline Term Sheet Review Template",
+      "description": "Living review template for current and prior term-sheet versions, deviations, and approvals.",
+      "documentType": "template",
+      "path": "deal-pipeline/term-sheet-review-template.html",
+      "supportedProjectTypes": ["vc_deal_pipeline"],
+      "relatedTaskDefinitionSlugs": ["review-refresh-term-sheet"],
       "status": "source"
     }
   ]

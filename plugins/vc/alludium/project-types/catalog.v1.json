@@ -17,6 +17,10 @@
     {
       "id": "vc_investment_management",
       "path": "vc_investment_management.json"
+    },
+    {
+      "id": "vc_deal_pipeline",
+      "path": "vc_deal_pipeline.json"
     }
   ]
 }

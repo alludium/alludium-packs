@@ -12,6 +12,7 @@ workspaceVariables:
       - vc_investment_management
       - vc_sourcing_line
       - vc_origination_candidate
+      - vc_deal_pipeline
     label: Funds
     description: Canonical workspace-owned Fund records used for mandate selection, confirmed Fund routing, screening, and diligence context.
     valueType: array
@@ -193,6 +194,7 @@ workspaceVariables:
       - vc_investment_management
       - vc_sourcing_line
       - vc_origination_candidate
+      - vc_deal_pipeline
     label: Firm Name
     description: Workspace-level firm name used in VC workflow context, reporting, and generated project artifacts.
     valueType: string
