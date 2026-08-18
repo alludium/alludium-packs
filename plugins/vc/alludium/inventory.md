@@ -1,10 +1,11 @@
 # Alludium VC Inventory
 
-**Version**: 0.6.12
+**Version**: 0.6.13
 **Status**: Workspace-selectable simplified VC Deal Pipeline
 
-Version `0.6.12` gives the simplified Deal Manager explicit read-only Affinity, Harmonic, and Exa
-integration parity with the existing Deal Manager without enabling all connected applications.
+Version `0.6.13` advances `vc_deal_pipeline` to project-type version `1.0.2` so Platform task-routing
+metadata is installed as a new immutable version. It carries forward the explicit read-only Affinity,
+Harmonic, and Exa integration parity added for the simplified Deal Manager in `0.6.12`.
 
 Version `0.6.10` adds `vc_deal_pipeline` as a workspace-selectable alternative to the existing Deal Pipeline. It provides four
 stage-independent living-document tasks, nine replaceable role documents, a minimal Deal Manager
