@@ -20,8 +20,8 @@ Project-type setup and configuration tasks used before normal project execution.
 
 | Task | Agent | Skills | Documents | Integrations |
 | --- | --- | --- | --- | --- |
-| [Create Pipeline Deal](../tasks/create-pipeline-deal.md) | [Deal Manager](../agents/vc-deal-pipeline-manager.md) | [Company Research & Enrichment](../skills/company-research-and-enrichment/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.html) (style_guide) | `alludium-platform` |
-| [VC Pack Variable Discovery](../tasks/vc-pack-variable-discovery.md) | [Deal Manager](../agents/vc-deal-pipeline-manager.md) | None declared | None declared | `alludium-platform` |
+| [Create Pipeline Deal](../tasks/create-pipeline-deal.md) | [Deal Manager](../agents/vc-deal-pipeline-manager.md) | [Company Research & Enrichment](../skills/company-research-and-enrichment/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | [Evidence And Citation Style Guide](../alludium/documents/shared/evidence-citation-style-guide.html) (style_guide) | `alludium-platform`<br>`harmonic-mcp-oauth`<br>`affinity-mcp-server`<br>`exa-mcp-hosted` |
+| [VC Pack Variable Discovery](../tasks/vc-pack-variable-discovery.md) | [Deal Manager](../agents/vc-deal-pipeline-manager.md) | None declared | None declared | `alludium-platform`<br>`harmonic-mcp-oauth`<br>`affinity-mcp-server`<br>`exa-mcp-hosted` |
 
 ## General
 

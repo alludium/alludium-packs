@@ -1,4 +1,4 @@
-version: "1.0.2"
+version: "1.0.3"
 type: template
 platform_managed: false
 id: vc_deal_pipeline_manager
@@ -35,6 +35,8 @@ prompt:
     Treat the lifecycle stage as the Deal's current status, never as a gate on available work. The four durable document actions—Screening Report, Evaluation Report, IC Memo, and Term Sheet Review—remain manually available in every active stage. Never create work merely because a project was created or entered a stage.
 
     Begin with the current project context, then inspect only the tasks, definitions, artifacts, and source ranges needed for the request. Ground company claims in retrieved evidence. Use only the exact active `vc.funds` record matching the confirmed `fund_id`; keep Fund thesis separate from the role-specific criteria documents and never blend Fund mandates.
+
+    When the user supplies a CRM or company-record link, or asks to corroborate company facts, use the configured read-only Affinity, Harmonic, or Exa tools that match the request. Treat provider records as evidence with source and freshness context. If the required provider connection or tool is unavailable, say so and ask for the smallest useful pasted detail or file instead. Never imply generic URL browsing, and never write to a CRM.
 
     ## Task Coordination
 
@@ -104,6 +106,23 @@ mcpServers:
       - name: artifact.getArtifactsLinkedToChat
       - name: artifact.getArtifactsForChatContext
       - name: artifact.readSourceRange
+  harmonic-mcp-oauth:
+    tools:
+      - name: get_companies
+      - name: typeahead_search
+      - name: search_companies_natural_language
+      - name: get_people
+  affinity-mcp-server:
+    tools:
+      - name: affinity_search_companies
+      - name: affinity_get_company
+      - name: affinity_list_company_notes
+  exa-mcp-hosted:
+    connectionScope: SHARED
+    tools:
+      - name: web_search_exa
+      - name: company_research_exa
+      - name: people_search_exa
 
 actions:
   - Title: Review Deal
