@@ -40,6 +40,11 @@ PUBLIC_READINESS_PATTERNS = [
     ]
 ]
 EXPECTED_PROMPT_VARIABLE_BINDINGS = {
+    "dealProjectTypeKey": {
+        "source": "system",
+        "path": "workspace.workspaceChat.projectTypeKey",
+        "overridePolicy": "readonly_runtime",
+    },
     "firmName": {
         "source": "workspace.variable",
         "path": "vc.firmName",
@@ -65,7 +70,7 @@ REQUIRED_AGENT_PROMPT_VARIABLES = {
     "vc_evaluation_analyst": {"funds", "fundId"},
     "vc_first_look_analyst": {"funds", "fundId"},
     "vc_origination_scout": {"funds"},
-    "vc_pipeline_autopilot": {"firmName"},
+    "vc_pipeline_autopilot": {"dealProjectTypeKey", "firmName"},
     "vc_sourcing_line_manager": {"firmName", "fundId", "funds"},
     "vc_sourcing_operator": {"funds"},
 }
@@ -1532,9 +1537,33 @@ def validate_fund_routing_contract() -> None:
         deal_room.get("initialVersion", {}).get("commandView", {}).get(
             "navigationFieldKeys"
         )
-        != ["fund_id"]
+        != ["fund_id", "lead_partner"]
     ):
-        fail("Deal Pipeline command view must allowlist only fund_id for navigation")
+        fail("Deal Pipeline command view must allowlist fund_id and lead_partner for navigation")
+    deal_room_stage_groups = (
+        deal_room.get("initialVersion", {}).get("commandView", {}).get("stageGroups") or []
+    )
+    deal_room_navigation_states = {
+        role: {
+            state
+            for group in deal_room_stage_groups
+            if group.get("navigationRole") == role
+            for state in group.get("states") or []
+        }
+        for role in ["active", "portfolio"]
+    }
+    if deal_room_navigation_states != {
+        "active": {
+            "intake",
+            "screening",
+            "evaluation",
+            "decision_review",
+            "deal_structuring",
+            "watchlist",
+        },
+        "portfolio": {"passed", "archived"},
+    }:
+        fail("Deal Pipeline navigation roles must separate active and terminal lifecycle states")
 
     manifest = read_yaml(ROOT / "alludium" / "manifest.yaml")
     expected_workspace_agents = {
@@ -1542,6 +1571,7 @@ def validate_fund_routing_contract() -> None:
             {
                 "surface": "vc_workspace",
                 "agentTemplateKey": "vc_pipeline_autopilot",
+                "projectTypeKeys": ["vc_deal_room", "vc_deal_pipeline"],
             },
             {
                 "surface": "vc_origination",
@@ -1733,6 +1763,17 @@ def validate_fund_routing_contract() -> None:
     for required_phrase in [
         "native Alludium",
         "Unassigned",
+        "“My attention,” including the workspace quick prompt “Summarize the deals that need my attention,” means Deals whose `lead_partner` is the requesting user, plus unassigned Deals created by the requesting user",
+        '`projectTypeKey: "{{dealProjectTypeKey}}"`',
+        '`collection: "active"`',
+        '`fieldFilters: [{"key":"lead_partner","operator":"isCurrentUserOrUnassignedCreator"}]`',
+        "`returnedItemCount` as the authoritative count for that page",
+        "If `hasMore` is true, follow `nextCursor`",
+        "do not estimate, invent or duplicate a record",
+        "explicit Lead Partner precedence over creation ownership",
+        "never supply or infer a profile ID",
+        "Exclude Deals led by another user even when the requester created them",
+        "exclude unassigned Deals created by another user",
         "weekly pipeline summaries",
         "selected-Fund reports",
         "direct, unambiguous user instruction is approval for only the exact Deal action",
@@ -5102,6 +5143,22 @@ def validate_vc_deal_pipeline_contract() -> None:
         )
 
     command_view = initial_version.get("commandView") or {}
+    if command_view.get("navigationFieldKeys") != ["fund_id", "lead_partner"]:
+        fail("vc_deal_pipeline must allowlist fund_id and lead_partner for navigation")
+    pipeline_navigation_states = {
+        role: {
+            state
+            for group in command_view.get("stageGroups") or []
+            if group.get("navigationRole") == role
+            for state in group.get("states") or []
+        }
+        for role in ["active", "portfolio"]
+    }
+    if pipeline_navigation_states != {
+        "active": {"screening", "evaluation", "decision", "term_sheet"},
+        "portfolio": {"passed", "promoted_to_investment_execution", "archived"},
+    }:
+        fail("vc_deal_pipeline navigation roles must separate active and terminal states")
     if "outputSlots" in command_view:
         fail("vc_deal_pipeline must not expose generic commandView output cards")
 
@@ -5375,11 +5432,27 @@ def validate_vc_deal_pipeline_contract() -> None:
 
     pipeline_manager = read_yaml(ROOT / "alludium" / "agent-templates" / "vc_pipeline_autopilot.yaml")
     pipeline_manager_prompt = (pipeline_manager.get("prompt") or {}).get("template") or ""
+    pipeline_manager_variables = {
+        variable.get("key"): variable
+        for variable in ((pipeline_manager.get("prompt") or {}).get("variables") or [])
+        if isinstance(variable, dict)
+    }
+    deal_project_type_binding = (
+        pipeline_manager_variables.get("dealProjectTypeKey", {}).get("binding") or {}
+    )
+    if deal_project_type_binding != {
+        "source": "system",
+        "path": "workspace.workspaceChat.projectTypeKey",
+        "overridePolicy": "readonly_runtime",
+        "required": True,
+    }:
+        fail("VC Pipeline Manager must use the readonly runtime workspace Deal binding")
     for phrase in [
-        "authoritative `vc.deals.projectTypeKey` binding selects one Deal Pipeline type",
+        "runtime workspace-agent binding selects `{{dealProjectTypeKey}}`",
         "Both definitions may be installed and available",
         "binding is absent, invalid, unavailable",
-        "do not create or mutate Deals until it is resolved",
+        "do not create, list, summarize, or mutate Deals until it is resolved",
+        "Never guess a project type or probe both definitions",
         "Never create a Deal of the installed-but-unbound type",
         "Never operate on an installed-but-unbound Deal type",
     ]:
