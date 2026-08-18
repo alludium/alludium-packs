@@ -82,7 +82,7 @@
     "postCreate": {"triggerInitialStateTasks": false}
   },
   "initialVersion": {
-    "version": "1.0.1",
+    "version": "1.0.2",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
