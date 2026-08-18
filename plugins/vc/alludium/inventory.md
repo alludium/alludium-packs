@@ -1,9 +1,9 @@
 # Alludium VC Inventory
 
-**Version**: 0.6.12
+**Version**: 0.6.13
 **Status**: Workspace-selectable simplified VC Deal Pipeline
 
-Version `0.6.12` gives the simplified Deal Manager explicit read-only Affinity, Harmonic, and Exa
+Version `0.6.13` gives the simplified Deal Manager explicit read-only Affinity, Harmonic, and Exa
 integration parity with the existing Deal Manager without enabling all connected applications.
 
 Version `0.6.10` adds `vc_deal_pipeline` as a workspace-selectable alternative to the existing Deal Pipeline. It provides four
@@ -207,11 +207,11 @@ Review notes:
 
 Review notes:
 
-- `vc_deal_room` covers one investment opportunity from source capture through deal structuring and uses version `1.1.9` for intake identity output mappings.
-- `vc_investment_management` is user-facing as Deal Execution, covers formal diligence, contracts, closing, completion, and portfolio handoff after Deal Pipeline deal structuring, and keeps version `0.1.5`.
+- `vc_deal_room` covers one investment opportunity from source capture through deal structuring and uses version `1.1.11`; its allowlisted navigation projection includes the confirmed Fund and Lead Partner for bounded personal attention summaries.
+- `vc_investment_management` is user-facing as Deal Execution, covers formal diligence, contracts, closing, completion, and portfolio handoff after Deal Pipeline deal structuring, and keeps version `0.1.6`.
 - `vc_sourcing_line` version `0.2.4` owns one measurable, active-Fund-specific source/screen/cadence experiment and its receipts, with `fund_id` available to the allowlisted navigation projection, Fund-keyed candidate scoring retained on each provenance relationship, and guarded task-owned project updates after reviewed configuration or runs.
 - `vc_origination_candidate` version `0.2.3` owns one company's durable pre-Deal evidence, decisions, outreach context, and multi-line provenance without collapsing Fund-relative scores into Candidate-wide fields; guided creation starts the distinct initial screen and never reruns registration.
-- `vc_deal_pipeline` version `1.0.1` is a workspace-selectable simplified pipeline with Screening, Evaluation, Decision, and Term Sheet statuses; four manually reviewed durable document mappings that omit `lifecycleStage`; and Passed, Promoted to Investment Execution, and Archived outcomes. A workspace uses it when its authoritative `vc.deals.projectTypeKey` binding selects it; both Deal definitions may remain installed.
+- `vc_deal_pipeline` version `1.0.3` is a workspace-selectable simplified pipeline with Screening, Evaluation, Decision, and Term Sheet statuses; four manually reviewed durable document mappings that omit `lifecycleStage`; and Passed, Promoted to Investment Execution, and Archived outcomes. Its allowlisted navigation projection includes the confirmed Fund and Lead Partner for bounded personal attention summaries. A workspace uses it when its authoritative `vc.deals.projectTypeKey` binding selects it; both Deal definitions may remain installed.
 - Generated project blueprints live in `project-blueprints/` and show each project type's setup/general tasks plus lifecycle-stage task mappings, recommended agents, and task-referenced skills. Platform-owned setup tasks are labeled with their canonical platform task IDs.
 - The definitions include project fields, instruction templates, lifecycle states, lifecycle transitions, command-view metadata, project-manager identity overlays, selection-only `projectTaskMappings`, pack-owned `projectSetup` metadata, project-type document references, and separate `projectCreation` metadata for one-project launchers.
 - Deal Pipeline setup declares source, variables, schedules, and invite steps plus post-approval platform actions. Sourcing Line setup configures one Fund-specific experiment and leaves its single orchestrator schedule disabled until approval. Candidate work is event-driven and has no recurring schedule.

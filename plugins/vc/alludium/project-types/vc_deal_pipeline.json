@@ -82,7 +82,7 @@
     "postCreate": {"triggerInitialStateTasks": false}
   },
   "initialVersion": {
-    "version": "1.0.1",
+    "version": "1.0.3",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -215,13 +215,13 @@
     },
     "commandView": {
       "key":"vc-deal-pipeline","typeLabel":"VC Deal Pipeline","collectionLabel":"Deals","overviewTitle":"VC Deal Pipeline overview","overviewAriaLabel":"Open VC deal data","overviewFallback":"Add company and evidence context in Data.","executionTitle":"Alludium is executing",
-      "navigationFieldKeys":["fund_id"],
+      "navigationFieldKeys":["fund_id", "lead_partner"],
       "stageGroups":[
-        {"key":"screening","label":"Screening","states":["screening"]},
-        {"key":"evaluation","label":"Evaluation","states":["evaluation"]},
-        {"key":"decision","label":"Decision","states":["decision"]},
-        {"key":"term_sheet","label":"Term Sheet","states":["term_sheet"]},
-        {"key":"outcomes","label":"Outcomes","states":["passed","promoted_to_investment_execution","archived"]}
+        {"key":"screening","label":"Screening","navigationRole":"active","states":["screening"]},
+        {"key":"evaluation","label":"Evaluation","navigationRole":"active","states":["evaluation"]},
+        {"key":"decision","label":"Decision","navigationRole":"active","states":["decision"]},
+        {"key":"term_sheet","label":"Term Sheet","navigationRole":"active","states":["term_sheet"]},
+        {"key":"outcomes","label":"Outcomes","navigationRole":"portfolio","states":["passed","promoted_to_investment_execution","archived"]}
       ],
       "fallbackAgents":[{"id":"vc_deal_analyst","name":"Deal Analyst","description":"Screening, evaluation, IC memo, and term-sheet analysis"}],
       "summaryFields":[{"key":"fund_id","label":"Fund","fieldKey":"fund_id"},{"key":"decision","label":"Decision","fieldKey":"current_decision"}],
