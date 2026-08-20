@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import os
 import re
 import subprocess
 import sys
@@ -232,9 +231,6 @@ TASK_TEMPLATE_AGENT_TEMPLATE_REFERENCE_FIELDS = [
 ]
 TASK_TEMPLATE_PLATFORM_CAPABILITY = "external-task-definition-template-ingest"
 PROJECT_TYPE_PLATFORM_CAPABILITY = "external-project-type-ingest"
-HISTORICAL_REPO_ROOT = Path(
-    os.environ.get("VC_HISTORICAL_REPO_ROOT", str(REPO_ROOT))
-).resolve()
 HISTORICAL_VC_DEAL_ROOM_TAGS = {
     "1.0.0": ("v0.3.0", "v0.3.2"),
     "1.0.2": ("v0.3.5",),
@@ -250,6 +246,9 @@ HISTORICAL_VC_DEAL_ROOM_TAGS = {
     "1.1.8": ("v0.5.48",),
     "1.1.9": ("v0.6.8",),
 }
+HISTORICAL_VC_DEAL_ROOM_SNAPSHOT_PATH = (
+    ROOT / "scripts" / "fixtures" / "vc_deal_room_historical_lifecycle.v1.json"
+)
 EXPECTED_VC_DEAL_ROOM_1_0_0_MAPPINGS = {
     "lead_gen": "screening",
     "deal_flow": "screening",
@@ -646,7 +645,7 @@ def read_historical_vc_deal_room(tag: str) -> dict[str, Any]:
     try:
         result = subprocess.run(
             ["git", "show", f"{tag}:{path}"],
-            cwd=HISTORICAL_REPO_ROOT,
+            cwd=REPO_ROOT,
             capture_output=True,
             text=True,
             check=False,
@@ -662,6 +661,98 @@ def read_historical_vc_deal_room(tag: str) -> dict[str, Any]:
     if not isinstance(project_type, dict):
         fail(f"Historical Pack tag {tag} project type must be an object")
     return project_type
+
+
+def read_historical_vc_deal_room_snapshot() -> dict[str, set[str]]:
+    snapshot = read_json(HISTORICAL_VC_DEAL_ROOM_SNAPSHOT_PATH)
+    if snapshot.get("schemaVersion") != "1":
+        fail(
+            "Historical vc_deal_room lifecycle snapshot must declare schemaVersion '1'"
+        )
+    if snapshot.get("projectType") != "vc_deal_room":
+        fail("Historical vc_deal_room lifecycle snapshot must describe vc_deal_room")
+    sources = snapshot.get("sources")
+    if not isinstance(sources, dict):
+        fail("Historical vc_deal_room lifecycle snapshot must declare sources")
+    expected_source_versions = set(HISTORICAL_VC_DEAL_ROOM_TAGS)
+    if set(sources) != expected_source_versions:
+        fail(
+            "Historical vc_deal_room lifecycle snapshot must cover the tagged historical "
+            f"source versions exactly: {sorted(expected_source_versions)}"
+        )
+
+    states_by_version: dict[str, set[str]] = {}
+    for source_version, expected_tags in HISTORICAL_VC_DEAL_ROOM_TAGS.items():
+        source = sources.get(source_version)
+        if not isinstance(source, dict):
+            fail(
+                "Historical vc_deal_room lifecycle snapshot entry for "
+                f"{source_version} must be an object"
+            )
+        tags = require_string_list(
+            source.get("tags"),
+            f"Historical vc_deal_room lifecycle snapshot {source_version}.tags",
+        )
+        if tuple(tags) != expected_tags:
+            fail(
+                "Historical vc_deal_room lifecycle snapshot tags for "
+                f"{source_version} must be {list(expected_tags)}"
+            )
+        lifecycle_states = require_string_list(
+            source.get("lifecycleStates"),
+            "Historical vc_deal_room lifecycle snapshot "
+            f"{source_version}.lifecycleStates",
+        )
+        if not lifecycle_states or len(lifecycle_states) != len(set(lifecycle_states)):
+            fail(
+                "Historical vc_deal_room lifecycle snapshot lifecycleStates for "
+                f"{source_version} must be a non-empty unique list"
+            )
+        states_by_version[source_version] = set(lifecycle_states)
+    return states_by_version
+
+
+def historical_git_available() -> bool:
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "--show-toplevel"],
+            cwd=REPO_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+    except OSError:
+        return False
+    if result.returncode != 0:
+        return False
+    try:
+        return Path(result.stdout.strip()).resolve() == REPO_ROOT.resolve()
+    except OSError:
+        return False
+
+
+def validate_historical_vc_deal_room_tags(
+    historical_states_by_version: dict[str, set[str]],
+) -> None:
+    for source_version, tags in HISTORICAL_VC_DEAL_ROOM_TAGS.items():
+        for tag in tags:
+            historical_project_type = read_historical_vc_deal_room(tag)
+            historical_initial_version = historical_project_type.get("initialVersion") or {}
+            actual_version = historical_initial_version.get("version")
+            if actual_version != source_version:
+                fail(
+                    f"Historical Pack tag {tag} declares vc_deal_room@{actual_version}, "
+                    f"not the expected source version {source_version}"
+                )
+            historical_states = set(require_string_list(
+                historical_initial_version.get("lifecycleStates"),
+                f"Historical Pack tag {tag} vc_deal_room.lifecycleStates",
+            ))
+            if historical_states != historical_states_by_version[source_version]:
+                fail(
+                    f"Historical Pack tag {tag} disagrees with the immutable lifecycle "
+                    f"snapshot for vc_deal_room@{source_version}"
+                )
 
 
 def validate_historical_vc_deal_room_migrations() -> None:
@@ -681,28 +772,9 @@ def validate_historical_vc_deal_room_migrations() -> None:
             f"source versions exactly: {sorted(expected_source_versions)}"
         )
 
-    historical_states_by_version: dict[str, set[str]] = {}
-    for source_version, tags in HISTORICAL_VC_DEAL_ROOM_TAGS.items():
-        for tag in tags:
-            historical_project_type = read_historical_vc_deal_room(tag)
-            historical_initial_version = historical_project_type.get("initialVersion") or {}
-            actual_version = historical_initial_version.get("version")
-            if actual_version != source_version:
-                fail(
-                    f"Historical Pack tag {tag} declares vc_deal_room@{actual_version}, "
-                    f"not the expected source version {source_version}"
-                )
-            historical_states = set(require_string_list(
-                historical_initial_version.get("lifecycleStates"),
-                f"Historical Pack tag {tag} vc_deal_room.lifecycleStates",
-            ))
-            previous_states = historical_states_by_version.get(source_version)
-            if previous_states is not None and historical_states != previous_states:
-                fail(
-                    f"Historical Pack tags for vc_deal_room@{source_version} disagree on "
-                    f"lifecycle states: {tag} differs from the earlier tagged source"
-                )
-            historical_states_by_version[source_version] = historical_states
+    historical_states_by_version = read_historical_vc_deal_room_snapshot()
+    if historical_git_available():
+        validate_historical_vc_deal_room_tags(historical_states_by_version)
 
     for source_version, source_states in historical_states_by_version.items():
         recipe = migration_definitions.get(source_version)

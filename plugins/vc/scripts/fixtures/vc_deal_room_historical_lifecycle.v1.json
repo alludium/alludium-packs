@@ -1,0 +1,226 @@
+{
+  "projectType": "vc_deal_room",
+  "schemaVersion": "1",
+  "sources": {
+    "1.0.0": {
+      "tags": [
+        "v0.3.0",
+        "v0.3.2"
+      ],
+      "lifecycleStates": [
+        "archived",
+        "commercial_dd",
+        "deal_flow",
+        "final_dd",
+        "financial_dd",
+        "follow_up",
+        "founder_evaluation",
+        "initial_call",
+        "invested",
+        "investment_committee",
+        "lead_gen",
+        "legal_diligence",
+        "legal_review",
+        "partner_review",
+        "passed",
+        "portfolio_onboarding",
+        "screening",
+        "signing",
+        "team_review",
+        "technical_dd",
+        "term_sheet"
+      ]
+    },
+    "1.0.2": {
+      "tags": [
+        "v0.3.5"
+      ],
+      "lifecycleStates": [
+        "archived",
+        "assessment",
+        "closing",
+        "diligence",
+        "intake",
+        "invested",
+        "passed",
+        "review",
+        "term_sheet"
+      ]
+    },
+    "1.0.3": {
+      "tags": [
+        "v0.4.1"
+      ],
+      "lifecycleStates": [
+        "archived",
+        "assessment",
+        "closing",
+        "diligence",
+        "intake",
+        "invested",
+        "passed",
+        "review",
+        "term_sheet"
+      ]
+    },
+    "1.0.5": {
+      "tags": [
+        "v0.5.4"
+      ],
+      "lifecycleStates": [
+        "archived",
+        "assessment",
+        "closing",
+        "diligence",
+        "intake",
+        "invested",
+        "passed",
+        "review",
+        "term_sheet"
+      ]
+    },
+    "1.0.11": {
+      "tags": [
+        "v0.5.19"
+      ],
+      "lifecycleStates": [
+        "archived",
+        "closing",
+        "contracts",
+        "deal_structuring",
+        "decision_review",
+        "evaluation",
+        "formal_diligence",
+        "intake",
+        "invested",
+        "passed",
+        "screening",
+        "watchlist"
+      ]
+    },
+    "1.0.12": {
+      "tags": [
+        "v0.5.22"
+      ],
+      "lifecycleStates": [
+        "archived",
+        "closing",
+        "contracts",
+        "deal_structuring",
+        "decision_review",
+        "evaluation",
+        "formal_diligence",
+        "intake",
+        "invested",
+        "passed",
+        "screening",
+        "watchlist"
+      ]
+    },
+    "1.1.0": {
+      "tags": [
+        "v0.5.25"
+      ],
+      "lifecycleStates": [
+        "archived",
+        "deal_structuring",
+        "decision_review",
+        "evaluation",
+        "intake",
+        "passed",
+        "screening",
+        "watchlist"
+      ]
+    },
+    "1.1.1": {
+      "tags": [
+        "v0.5.29"
+      ],
+      "lifecycleStates": [
+        "archived",
+        "deal_structuring",
+        "decision_review",
+        "evaluation",
+        "intake",
+        "passed",
+        "screening",
+        "watchlist"
+      ]
+    },
+    "1.1.2": {
+      "tags": [
+        "v0.5.32"
+      ],
+      "lifecycleStates": [
+        "archived",
+        "deal_structuring",
+        "decision_review",
+        "evaluation",
+        "intake",
+        "passed",
+        "screening",
+        "watchlist"
+      ]
+    },
+    "1.1.3": {
+      "tags": [
+        "v0.5.42"
+      ],
+      "lifecycleStates": [
+        "archived",
+        "deal_structuring",
+        "decision_review",
+        "evaluation",
+        "intake",
+        "passed",
+        "screening",
+        "watchlist"
+      ]
+    },
+    "1.1.4": {
+      "tags": [
+        "v0.5.43"
+      ],
+      "lifecycleStates": [
+        "archived",
+        "deal_structuring",
+        "decision_review",
+        "evaluation",
+        "intake",
+        "passed",
+        "screening",
+        "watchlist"
+      ]
+    },
+    "1.1.8": {
+      "tags": [
+        "v0.5.48"
+      ],
+      "lifecycleStates": [
+        "archived",
+        "deal_structuring",
+        "decision_review",
+        "evaluation",
+        "intake",
+        "passed",
+        "screening",
+        "watchlist"
+      ]
+    },
+    "1.1.9": {
+      "tags": [
+        "v0.6.8"
+      ],
+      "lifecycleStates": [
+        "archived",
+        "deal_structuring",
+        "decision_review",
+        "evaluation",
+        "intake",
+        "passed",
+        "screening",
+        "watchlist"
+      ]
+    }
+  }
+}
