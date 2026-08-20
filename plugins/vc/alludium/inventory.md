@@ -9,6 +9,10 @@ creator-backed Platform filter, with no Lead Partner assignment, navigation, or 
 It carries forward the corrected historical `vc_deal_room` lifecycle recipes published in `0.6.16`,
 which are required for convergence of older deployed project versions.
 
+Version `0.6.18` also lets the workspace Pipeline Manager resolve bounded, Pack-declared
+creation-field options such as active Funds through the generic Platform operation before creating a
+Deal. Returned option values remain tool-only and a Fund must be explicitly confirmed before creation.
+
 Version `0.6.17` gives the Affinity read-preview task an explicit eight-tool read allow-list so task
 capability routing and runtime expansion cannot silently treat the whole Affinity application as required.
 
