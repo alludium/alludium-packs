@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -81,12 +82,15 @@ class OntologyComponentContractRegressionTests(unittest.TestCase):
         return pack_root
 
     def _run_validator(self, pack_root: Path) -> subprocess.CompletedProcess[str]:
+        environment = os.environ.copy()
+        environment["VC_HISTORICAL_REPO_ROOT"] = str(SOURCE_ROOT.parents[1])
         return subprocess.run(
             [sys.executable, str(pack_root / "scripts" / "validate_pack.py")],
             cwd=pack_root.parents[1],
             check=False,
             capture_output=True,
             text=True,
+            env=environment,
         )
 
     def test_component_content_rejects_composite_provider_control_keys(self) -> None:

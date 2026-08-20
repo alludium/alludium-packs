@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 import subprocess
 import sys
@@ -231,6 +232,9 @@ TASK_TEMPLATE_AGENT_TEMPLATE_REFERENCE_FIELDS = [
 ]
 TASK_TEMPLATE_PLATFORM_CAPABILITY = "external-task-definition-template-ingest"
 PROJECT_TYPE_PLATFORM_CAPABILITY = "external-project-type-ingest"
+HISTORICAL_REPO_ROOT = Path(
+    os.environ.get("VC_HISTORICAL_REPO_ROOT", str(REPO_ROOT))
+).resolve()
 HISTORICAL_VC_DEAL_ROOM_TAGS = {
     "1.0.0": ("v0.3.0", "v0.3.2"),
     "1.0.2": ("v0.3.5",),
@@ -642,7 +646,7 @@ def read_historical_vc_deal_room(tag: str) -> dict[str, Any]:
     try:
         result = subprocess.run(
             ["git", "show", f"{tag}:{path}"],
-            cwd=REPO_ROOT,
+            cwd=HISTORICAL_REPO_ROOT,
             capture_output=True,
             text=True,
             check=False,
