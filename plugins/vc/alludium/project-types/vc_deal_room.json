@@ -268,20 +268,52 @@
     }
   ],
   "initialVersion": {
-    "version": "1.1.12",
+    "version": "1.1.13",
     "migrationDefinitions": {
       "1.0.0": {
         "lifecycleStateMappings": [
           {
-            "sourceState": "assessment",
+            "sourceState": "lead_gen",
             "targetState": "screening"
           },
           {
-            "sourceState": "diligence",
+            "sourceState": "deal_flow",
+            "targetState": "screening"
+          },
+          {
+            "sourceState": "initial_call",
+            "targetState": "screening"
+          },
+          {
+            "sourceState": "follow_up",
+            "targetState": "screening"
+          },
+          {
+            "sourceState": "founder_evaluation",
+            "targetState": "screening"
+          },
+          {
+            "sourceState": "team_review",
+            "targetState": "screening"
+          },
+          {
+            "sourceState": "partner_review",
+            "targetState": "screening"
+          },
+          {
+            "sourceState": "commercial_dd",
             "targetState": "evaluation"
           },
           {
-            "sourceState": "review",
+            "sourceState": "technical_dd",
+            "targetState": "evaluation"
+          },
+          {
+            "sourceState": "financial_dd",
+            "targetState": "evaluation"
+          },
+          {
+            "sourceState": "investment_committee",
             "targetState": "decision_review"
           },
           {
@@ -289,7 +321,23 @@
             "targetState": "deal_structuring"
           },
           {
-            "sourceState": "closing",
+            "sourceState": "legal_review",
+            "targetState": "deal_structuring"
+          },
+          {
+            "sourceState": "legal_diligence",
+            "targetState": "deal_structuring"
+          },
+          {
+            "sourceState": "final_dd",
+            "targetState": "deal_structuring"
+          },
+          {
+            "sourceState": "signing",
+            "targetState": "deal_structuring"
+          },
+          {
+            "sourceState": "portfolio_onboarding",
             "targetState": "deal_structuring"
           },
           {

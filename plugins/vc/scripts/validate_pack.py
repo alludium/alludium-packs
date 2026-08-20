@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import subprocess
 import sys
 from functools import lru_cache
 from html.parser import HTMLParser
@@ -230,6 +231,41 @@ TASK_TEMPLATE_AGENT_TEMPLATE_REFERENCE_FIELDS = [
 ]
 TASK_TEMPLATE_PLATFORM_CAPABILITY = "external-task-definition-template-ingest"
 PROJECT_TYPE_PLATFORM_CAPABILITY = "external-project-type-ingest"
+HISTORICAL_VC_DEAL_ROOM_TAGS = {
+    "1.0.0": ("v0.3.0", "v0.3.2"),
+    "1.0.2": ("v0.3.5",),
+    "1.0.3": ("v0.4.1",),
+    "1.0.5": ("v0.5.4",),
+    "1.0.11": ("v0.5.19",),
+    "1.0.12": ("v0.5.22",),
+    "1.1.0": ("v0.5.25",),
+    "1.1.1": ("v0.5.29",),
+    "1.1.2": ("v0.5.32",),
+    "1.1.3": ("v0.5.42",),
+    "1.1.4": ("v0.5.43",),
+    "1.1.8": ("v0.5.48",),
+    "1.1.9": ("v0.6.8",),
+}
+EXPECTED_VC_DEAL_ROOM_1_0_0_MAPPINGS = {
+    "lead_gen": "screening",
+    "deal_flow": "screening",
+    "initial_call": "screening",
+    "follow_up": "screening",
+    "founder_evaluation": "screening",
+    "team_review": "screening",
+    "partner_review": "screening",
+    "commercial_dd": "evaluation",
+    "technical_dd": "evaluation",
+    "financial_dd": "evaluation",
+    "investment_committee": "decision_review",
+    "term_sheet": "deal_structuring",
+    "legal_review": "deal_structuring",
+    "legal_diligence": "deal_structuring",
+    "final_dd": "deal_structuring",
+    "signing": "deal_structuring",
+    "portfolio_onboarding": "deal_structuring",
+    "invested": "archived",
+}
 PROJECT_MANAGER_OVERLAY_SHORT_TEXT_MAX = 120
 PROJECT_MANAGER_OVERLAY_LONG_TEXT_MAX = 1000
 PROJECT_MANAGER_OVERLAY_SUFFIX_TEXT_MAX = 80
@@ -599,6 +635,126 @@ def read_json(path: Path) -> Any:
             return json.load(handle)
     except Exception as exc:  # pragma: no cover - defensive CLI guard
         fail(f"Failed to parse JSON {path.relative_to(ROOT)}: {exc}")
+
+
+def read_historical_vc_deal_room(tag: str) -> dict[str, Any]:
+    path = "plugins/vc/alludium/project-types/vc_deal_room.json"
+    try:
+        result = subprocess.run(
+            ["git", "show", f"{tag}:{path}"],
+            cwd=REPO_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+    except OSError as exc:  # pragma: no cover - defensive CLI guard
+        fail(f"Unable to read historical Pack tag {tag}: {exc}")
+    if result.returncode != 0:
+        fail(f"Historical Pack tag {tag} does not contain {path}")
+    try:
+        project_type = json.loads(result.stdout)
+    except json.JSONDecodeError as exc:  # pragma: no cover - defensive CLI guard
+        fail(f"Historical Pack tag {tag} has invalid JSON in {path}: {exc}")
+    if not isinstance(project_type, dict):
+        fail(f"Historical Pack tag {tag} project type must be an object")
+    return project_type
+
+
+def validate_historical_vc_deal_room_migrations() -> None:
+    project_type = read_json(ROOT / "alludium" / "project-types" / "vc_deal_room.json")
+    initial_version = project_type.get("initialVersion") or {}
+    target_states = set(require_string_list(
+        initial_version.get("lifecycleStates"),
+        "Project type vc_deal_room initialVersion.lifecycleStates",
+    ))
+    migration_definitions = initial_version.get("migrationDefinitions")
+    if not isinstance(migration_definitions, dict):
+        fail("Project type vc_deal_room must declare migrationDefinitions")
+    expected_source_versions = set(HISTORICAL_VC_DEAL_ROOM_TAGS)
+    if set(migration_definitions) != expected_source_versions:
+        fail(
+            "Project type vc_deal_room migrationDefinitions must cover the tagged historical "
+            f"source versions exactly: {sorted(expected_source_versions)}"
+        )
+
+    historical_states_by_version: dict[str, set[str]] = {}
+    for source_version, tags in HISTORICAL_VC_DEAL_ROOM_TAGS.items():
+        for tag in tags:
+            historical_project_type = read_historical_vc_deal_room(tag)
+            historical_initial_version = historical_project_type.get("initialVersion") or {}
+            actual_version = historical_initial_version.get("version")
+            if actual_version != source_version:
+                fail(
+                    f"Historical Pack tag {tag} declares vc_deal_room@{actual_version}, "
+                    f"not the expected source version {source_version}"
+                )
+            historical_states = set(require_string_list(
+                historical_initial_version.get("lifecycleStates"),
+                f"Historical Pack tag {tag} vc_deal_room.lifecycleStates",
+            ))
+            previous_states = historical_states_by_version.get(source_version)
+            if previous_states is not None and historical_states != previous_states:
+                fail(
+                    f"Historical Pack tags for vc_deal_room@{source_version} disagree on "
+                    f"lifecycle states: {tag} differs from the earlier tagged source"
+                )
+            historical_states_by_version[source_version] = historical_states
+
+    for source_version, source_states in historical_states_by_version.items():
+        recipe = migration_definitions.get(source_version)
+        if not isinstance(recipe, dict):
+            fail(f"Migration recipe for vc_deal_room@{source_version} must be an object")
+        mappings = recipe.get("lifecycleStateMappings") or []
+        if not isinstance(mappings, list):
+            fail(
+                f"Migration recipe for vc_deal_room@{source_version} "
+                "lifecycleStateMappings must be a list"
+            )
+        mapping_by_source: dict[str, str] = {}
+        for mapping in mappings:
+            if not isinstance(mapping, dict):
+                fail(
+                    f"Migration recipe for vc_deal_room@{source_version} "
+                    "lifecycle mapping must be an object"
+                )
+            source_state = mapping.get("sourceState")
+            target_state = mapping.get("targetState")
+            if not isinstance(source_state, str) or not isinstance(target_state, str):
+                fail(
+                    f"Migration recipe for vc_deal_room@{source_version} lifecycle mappings "
+                    "must declare string sourceState and targetState"
+                )
+            if source_state in mapping_by_source:
+                fail(
+                    f"Migration recipe for vc_deal_room@{source_version} maps "
+                    f"{source_state} more than once"
+                )
+            if source_state not in source_states:
+                fail(
+                    f"Migration recipe for vc_deal_room@{source_version} maps unknown "
+                    f"historical state {source_state}"
+                )
+            if target_state not in target_states:
+                fail(
+                    f"Migration recipe for vc_deal_room@{source_version} maps to unknown "
+                    f"target state {target_state}"
+                )
+            mapping_by_source[source_state] = target_state
+
+        uncovered_states = sorted(source_states - target_states - set(mapping_by_source))
+        if uncovered_states:
+            fail(
+                f"Migration recipe for vc_deal_room@{source_version} does not cover "
+                f"tagged historical states {uncovered_states}"
+            )
+        if (
+            source_version == "1.0.0"
+            and mapping_by_source != EXPECTED_VC_DEAL_ROOM_1_0_0_MAPPINGS
+        ):
+            fail(
+                "Migration recipe for vc_deal_room@1.0.0 does not match the explicit "
+                "mapping derived from tagged v0.3.0/v0.3.2 lifecycle groups"
+            )
 
 
 def load_vc_project_lifecycle_states() -> set[str]:
@@ -7657,6 +7813,7 @@ def main() -> None:
     validate_templates(manifest, skill_ids)
     agent_template_ids = set(manifest["surfaces"]["alludiumAgentTemplates"]["ids"])
     project_type_ids = validate_project_types(manifest)
+    validate_historical_vc_deal_room_migrations()
     document_ids_by_project_type, document_types_by_id = validate_documents(manifest, project_type_ids)
     validate_project_type_document_references(manifest, document_ids_by_project_type)
     document_ids = set(manifest["surfaces"]["documents"]["ids"])
