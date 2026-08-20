@@ -1,12 +1,12 @@
 # Alludium VC Inventory
 
-**Version**: 0.6.15
+**Version**: 0.6.16
 **Status**: Workspace-selectable simplified VC Deal Pipeline
 
-Version `0.6.15` adds exact migration recipes for the deployed historical `vc_deal_room` versions,
-including the lifecycle states removed when Deal Pipeline was narrowed to intake through deal
-structuring. It carries forward the simplified Deal Manager's explicit read-only Affinity, Harmonic,
-and Exa integration parity without enabling all connected applications.
+Version `0.6.16` corrects the `vc_deal_room@1.0.0` migration recipe using the lifecycle groups in
+the immutable `v0.3.0` and `v0.3.2` Pack definitions, while preserving exact recipes for the other
+deployed historical versions. It carries forward the simplified Deal Manager's explicit read-only
+Affinity, Harmonic, and Exa integration parity without enabling all connected applications.
 
 Version `0.6.10` adds `vc_deal_pipeline` as a workspace-selectable alternative to the existing Deal Pipeline. It provides four
 stage-independent living-document tasks, nine replaceable role documents, a minimal Deal Manager
@@ -209,7 +209,7 @@ Review notes:
 
 Review notes:
 
-- `vc_deal_room` covers one investment opportunity from source capture through deal structuring and uses version `1.1.12`; its allowlisted navigation projection includes the confirmed Fund and Lead Partner for bounded personal attention summaries.
+- `vc_deal_room` covers one investment opportunity from source capture through deal structuring and uses version `1.1.13`; its allowlisted navigation projection includes the confirmed Fund and Lead Partner for bounded personal attention summaries.
 - `vc_investment_management` is user-facing as Deal Execution, covers formal diligence, contracts, closing, completion, and portfolio handoff after Deal Pipeline deal structuring, and keeps version `0.1.6`.
 - `vc_sourcing_line` version `0.2.4` owns one measurable, active-Fund-specific source/screen/cadence experiment and its receipts, with `fund_id` available to the allowlisted navigation projection, Fund-keyed candidate scoring retained on each provenance relationship, and guarded task-owned project updates after reviewed configuration or runs.
 - `vc_origination_candidate` version `0.2.3` owns one company's durable pre-Deal evidence, decisions, outreach context, and multi-line provenance without collapsing Fund-relative scores into Candidate-wide fields; guided creation starts the distinct initial screen and never reruns registration.
