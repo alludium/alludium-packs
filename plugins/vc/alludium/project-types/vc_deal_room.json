@@ -268,7 +268,168 @@
     }
   ],
   "initialVersion": {
-    "version": "1.1.11",
+    "version": "1.1.12",
+    "migrationDefinitions": {
+      "1.0.0": {
+        "lifecycleStateMappings": [
+          {
+            "sourceState": "assessment",
+            "targetState": "screening"
+          },
+          {
+            "sourceState": "diligence",
+            "targetState": "evaluation"
+          },
+          {
+            "sourceState": "review",
+            "targetState": "decision_review"
+          },
+          {
+            "sourceState": "term_sheet",
+            "targetState": "deal_structuring"
+          },
+          {
+            "sourceState": "closing",
+            "targetState": "deal_structuring"
+          },
+          {
+            "sourceState": "invested",
+            "targetState": "archived"
+          }
+        ]
+      },
+      "1.0.2": {
+        "lifecycleStateMappings": [
+          {
+            "sourceState": "assessment",
+            "targetState": "screening"
+          },
+          {
+            "sourceState": "diligence",
+            "targetState": "evaluation"
+          },
+          {
+            "sourceState": "review",
+            "targetState": "decision_review"
+          },
+          {
+            "sourceState": "term_sheet",
+            "targetState": "deal_structuring"
+          },
+          {
+            "sourceState": "closing",
+            "targetState": "deal_structuring"
+          },
+          {
+            "sourceState": "invested",
+            "targetState": "archived"
+          }
+        ]
+      },
+      "1.0.3": {
+        "lifecycleStateMappings": [
+          {
+            "sourceState": "assessment",
+            "targetState": "screening"
+          },
+          {
+            "sourceState": "diligence",
+            "targetState": "evaluation"
+          },
+          {
+            "sourceState": "review",
+            "targetState": "decision_review"
+          },
+          {
+            "sourceState": "term_sheet",
+            "targetState": "deal_structuring"
+          },
+          {
+            "sourceState": "closing",
+            "targetState": "deal_structuring"
+          },
+          {
+            "sourceState": "invested",
+            "targetState": "archived"
+          }
+        ]
+      },
+      "1.0.5": {
+        "lifecycleStateMappings": [
+          {
+            "sourceState": "assessment",
+            "targetState": "screening"
+          },
+          {
+            "sourceState": "diligence",
+            "targetState": "evaluation"
+          },
+          {
+            "sourceState": "review",
+            "targetState": "decision_review"
+          },
+          {
+            "sourceState": "term_sheet",
+            "targetState": "deal_structuring"
+          },
+          {
+            "sourceState": "closing",
+            "targetState": "deal_structuring"
+          },
+          {
+            "sourceState": "invested",
+            "targetState": "archived"
+          }
+        ]
+      },
+      "1.0.11": {
+        "lifecycleStateMappings": [
+          {
+            "sourceState": "formal_diligence",
+            "targetState": "deal_structuring"
+          },
+          {
+            "sourceState": "contracts",
+            "targetState": "deal_structuring"
+          },
+          {
+            "sourceState": "closing",
+            "targetState": "deal_structuring"
+          },
+          {
+            "sourceState": "invested",
+            "targetState": "archived"
+          }
+        ]
+      },
+      "1.0.12": {
+        "lifecycleStateMappings": [
+          {
+            "sourceState": "formal_diligence",
+            "targetState": "deal_structuring"
+          },
+          {
+            "sourceState": "contracts",
+            "targetState": "deal_structuring"
+          },
+          {
+            "sourceState": "closing",
+            "targetState": "deal_structuring"
+          },
+          {
+            "sourceState": "invested",
+            "targetState": "archived"
+          }
+        ]
+      },
+      "1.1.0": {},
+      "1.1.1": {},
+      "1.1.2": {},
+      "1.1.3": {},
+      "1.1.4": {},
+      "1.1.8": {},
+      "1.1.9": {}
+    },
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
