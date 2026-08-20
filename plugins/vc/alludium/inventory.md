@@ -1,16 +1,19 @@
 # Alludium VC Inventory
 
-**Version**: 0.6.17
-**Status**: Capability-routed Affinity read boundary
+**Version**: 0.6.18
+**Status**: Workspace-selectable simplified VC Deal Pipeline with capability-routed Affinity read boundary
+
+Version `0.6.18` removes the Lead Partner concept from VC Deal contracts and makes immutable Deal
+creation ownership the sole personal-attention predicate. Deal navigation uses the existing
+creator-backed Platform filter, with no Lead Partner assignment, navigation, or handoff contract.
+It carries forward the corrected historical `vc_deal_room` lifecycle recipes published in `0.6.16`,
+which are required for convergence of older deployed project versions.
 
 Version `0.6.17` gives the Affinity read-preview task an explicit eight-tool read allow-list so task
 capability routing and runtime expansion cannot silently treat the whole Affinity application as required.
 
-Version `0.6.16` removes the Lead Partner concept from VC Deal contracts and makes immutable Deal
-creation ownership the sole personal-attention predicate. Deal navigation uses the existing
-creator-backed Platform filter, with no Lead Partner assignment, navigation, or handoff contract.
-The release also carries the historical `vc_deal_room` lifecycle recipes required for convergence
-of older deployed project versions.
+Version `0.6.16` corrects the historical `vc_deal_room` lifecycle recipes using the immutable Pack
+definitions, while preserving exact recipes for the other deployed historical versions.
 
 Version `0.6.13` gives the simplified Deal Manager explicit read-only Affinity, Harmonic, and Exa
 integration parity with the existing Deal Manager without enabling all connected applications.
@@ -216,7 +219,7 @@ Review notes:
 
 Review notes:
 
-- `vc_deal_room` covers one investment opportunity from source capture through deal structuring and uses version `1.1.13`; its allowlisted navigation projection includes the confirmed Fund, while personal attention is derived from immutable project creation ownership.
+- `vc_deal_room` covers one investment opportunity from source capture through deal structuring and uses version `1.1.14`; its allowlisted navigation projection includes the confirmed Fund, while personal attention is derived from immutable project creation ownership.
 - `vc_investment_management` is user-facing as Deal Execution, covers formal diligence, contracts, closing, completion, and portfolio handoff after Deal Pipeline deal structuring, and uses version `0.1.7` without a Lead Partner field.
 - `vc_sourcing_line` version `0.2.4` owns one measurable, active-Fund-specific source/screen/cadence experiment and its receipts, with `fund_id` available to the allowlisted navigation projection, Fund-keyed candidate scoring retained on each provenance relationship, and guarded task-owned project updates after reviewed configuration or runs.
 - `vc_origination_candidate` version `0.2.3` owns one company's durable pre-Deal evidence, decisions, outreach context, and multi-line provenance without collapsing Fund-relative scores into Candidate-wide fields; guided creation starts the distinct initial screen and never reruns registration.
