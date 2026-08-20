@@ -1747,6 +1747,8 @@ def validate_fund_routing_contract() -> None:
             fail(f"Project type {project_type_id} must declare fund_id")
         if "suggested_fund_id" in field_keys:
             fail(f"Project type {project_type_id} must not declare suggested_fund_id")
+        if "lead_partner" in field_keys:
+            fail(f"Project type {project_type_id} must not declare lead_partner")
 
     expected_fund_option_source = {
         "type": "workspaceVariableCollection",
@@ -1769,9 +1771,9 @@ def validate_fund_routing_contract() -> None:
         deal_room.get("initialVersion", {}).get("commandView", {}).get(
             "navigationFieldKeys"
         )
-        != ["fund_id", "lead_partner"]
+        != ["fund_id"]
     ):
-        fail("Deal Pipeline command view must allowlist fund_id and lead_partner for navigation")
+        fail("Deal Pipeline command view must allowlist only fund_id for navigation")
     deal_room_stage_groups = (
         deal_room.get("initialVersion", {}).get("commandView", {}).get("stageGroups") or []
     )
@@ -1995,17 +1997,15 @@ def validate_fund_routing_contract() -> None:
     for required_phrase in [
         "native Alludium",
         "Unassigned",
-        "“My attention,” including the workspace quick prompt “Summarize the deals that need my attention,” means Deals whose `lead_partner` is the requesting user, plus unassigned Deals created by the requesting user",
+        "“My attention,” including the workspace quick prompt “Summarize the deals that need my attention,” means active Deals whose `projects.createdBy` equals the requesting user",
         '`projectTypeKey: "{{dealProjectTypeKey}}"`',
         '`collection: "active"`',
-        '`fieldFilters: [{"key":"lead_partner","operator":"isCurrentUserOrUnassignedCreator"}]`',
+        '`ownerFilter: "mine"`',
         "`returnedItemCount` as the authoritative count for that page",
         "If `hasMore` is true, follow `nextCursor`",
         "do not estimate, invent or duplicate a record",
-        "explicit Lead Partner precedence over creation ownership",
         "never supply or infer a profile ID",
-        "Exclude Deals led by another user even when the requester created them",
-        "exclude unassigned Deals created by another user",
+        "Deal ownership follows the immutable project creator",
         "weekly pipeline summaries",
         "selected-Fund reports",
         "direct, unambiguous user instruction is approval for only the exact Deal action",
@@ -2028,10 +2028,6 @@ def validate_fund_routing_contract() -> None:
         "Use `project.applyPortfolioOperations` only for exact user-authorized operations",
         "unique `operationId`, exact `projectId`, and current `expectedProjectTypeVersionId`",
         "`update_fields`",
-        "`set_member_field`",
-        "supported `lead_partner` field",
-        "`set_member_field` only for `fieldKey: lead_partner`",
-        "`lead_partner` assignment or clearing",
         "`transition`",
         "`archive`",
         "`restore`",
@@ -2072,6 +2068,9 @@ def validate_fund_routing_contract() -> None:
         "lead or owner",
         "by lifecycle stage, owner",
         "ownership change",
+        "Lead Partner",
+        "lead_partner",
+        "set_member_field",
     ]:
         if forbidden_phrase in pipeline_prompt:
             fail(
@@ -2095,14 +2094,15 @@ def validate_fund_routing_contract() -> None:
         action_message = (pipeline_actions_by_title.get(action_title) or {}).get(
             "Message"
         ) or ""
-        if "Lead Partner" not in action_message or "owner" in action_message.lower():
-            fail(
-                f"Pipeline Manager {action_title} action must use the supported Lead Partner field"
-            )
+        if action_title == "Update Deal":
+            if "confirmed Fund or valid lifecycle stage" not in action_message:
+                fail("Pipeline Manager Update Deal action must expose only Fund and lifecycle updates")
+        elif "bounded internal follow-up proposals" not in action_message:
+            fail("Pipeline Manager Stale Deals action must remain a bounded follow-up proposal")
     pipeline_greeting = pipeline_manager.get("greeting") or ""
     for required_phrase in [
         "create a Deal from this chat",
-        "Lead Partner",
+        "confirmed Fund or valid lifecycle stage",
         "archive or restore an exact Deal",
         "direct instruction for an exact change",
         "ask one focused question in chat",
@@ -5359,6 +5359,8 @@ def validate_vc_deal_pipeline_contract() -> None:
         for field in initial_version.get("fieldsSchema") or []
         if isinstance(field, dict) and isinstance(field.get("key"), str)
     }
+    if "lead_partner" in project_fields:
+        fail("vc_deal_pipeline must not declare lead_partner")
     if "source_material_artifact_ids" in project_fields:
         fail("vc_deal_pipeline must discover report evidence instead of maintaining a source inventory")
     if "source_material_artifact_ids" in set(project_creation.get("advancedFieldKeys") or []):
@@ -5375,8 +5377,8 @@ def validate_vc_deal_pipeline_contract() -> None:
         )
 
     command_view = initial_version.get("commandView") or {}
-    if command_view.get("navigationFieldKeys") != ["fund_id", "lead_partner"]:
-        fail("vc_deal_pipeline must allowlist fund_id and lead_partner for navigation")
+    if command_view.get("navigationFieldKeys") != ["fund_id"]:
+        fail("vc_deal_pipeline must allowlist only fund_id for navigation")
     pipeline_navigation_states = {
         role: {
             state

@@ -72,7 +72,7 @@
     "starterId": "create-pipeline-deal",
     "aliases": ["vc deal pipeline", "simplified deal pipeline", "investment opportunity"],
     "requiredFieldKeys": ["company_name"],
-    "recommendedFieldKeys": ["company_domain", "fund_id", "lead_partner", "deal_source", "pitch_deck_artifact_id", "confidentiality_level"],
+    "recommendedFieldKeys": ["company_domain", "fund_id", "deal_source", "pitch_deck_artifact_id", "confidentiality_level"],
     "advancedFieldKeys": ["source_object_url", "source_thread_url", "source_thread_artifact_id", "founder_materials_artifact_ids", "meeting_record_artifact_ids"],
     "defaultState": "screening",
     "guidedTask": {
@@ -82,7 +82,7 @@
     "postCreate": {"triggerInitialStateTasks": false}
   },
   "initialVersion": {
-    "version": "1.0.3",
+    "version": "1.0.4",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -104,7 +104,6 @@
       {"id":"field-company-domain","key":"company_domain","label":"Company Domain","kind":"text","required":false},
       {"id":"field-company-logo-url","key":"company_logo_url","label":"Company Logo URL","kind":"text","required":false},
       {"id":"field-fund-id","key":"fund_id","label":"Confirmed Fund ID","kind":"text","required":false,"description":"Stable id of the active Fund explicitly confirmed for this Deal.","optionSource":{"type":"workspaceVariableCollection","path":"vc.funds","valueKey":"id","labelKey":"name","statusKey":"status","selectableStatuses":["actively_investing"],"hintKeys":["stage","sectors","geographies"]}},
-      {"id":"field-lead-partner","key":"lead_partner","label":"Lead Partner","kind":"member","required":false},
       {"id":"field-deal-source","key":"deal_source","label":"Deal Source","kind":"enum","required":false,"options":[{"value":"inbound","label":"Inbound"},{"value":"outbound","label":"Outbound"},{"value":"referral","label":"Referral"},{"value":"thesis","label":"Thesis"},{"value":"portfolio_intro","label":"Portfolio Intro"},{"value":"event","label":"Event"},{"value":"crm","label":"CRM"},{"value":"other","label":"Other"}]},
       {"id":"field-source-object-url","key":"source_object_url","label":"Source Object URL","kind":"text","required":false},
       {"id":"field-source-thread-url","key":"source_thread_url","label":"Source Thread URL","kind":"text","required":false},
@@ -215,7 +214,7 @@
     },
     "commandView": {
       "key":"vc-deal-pipeline","typeLabel":"VC Deal Pipeline","collectionLabel":"Deals","overviewTitle":"VC Deal Pipeline overview","overviewAriaLabel":"Open VC deal data","overviewFallback":"Add company and evidence context in Data.","executionTitle":"Alludium is executing",
-      "navigationFieldKeys":["fund_id", "lead_partner"],
+      "navigationFieldKeys":["fund_id"],
       "stageGroups":[
         {"key":"screening","label":"Screening","navigationRole":"active","states":["screening"]},
         {"key":"evaluation","label":"Evaluation","navigationRole":"active","states":["evaluation"]},

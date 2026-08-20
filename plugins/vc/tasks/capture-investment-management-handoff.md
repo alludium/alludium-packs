@@ -20,12 +20,12 @@ Capture the reviewed deal-structuring handoff needed to create a Deal Execution 
 
 ## What To Do
 
-Capture the reviewed handoff from Deal Pipeline deal structuring into Deal Execution. Require the source Deal's confirmed fund id, verify that it exactly matches one active record in `vc.funds`, and carry that exact value into fund id. Never substitute, infer, or blend a Fund during handoff. Confirm company identity, lead owner, IC or partner-review decision context, current term-sheet status, diligence source materials, legal/finance workstream readiness, and missing evidence. Cite material claims, separate assumptions from evidence, and do not create projects, send messages, mutate CRM records, move stages, or start legal/finance work without explicit human approval. When this task is used as a guided project creation task, complete with structured output company name and fund id, then include any confidently collected declared creation fields. Do not create the project; the platform finalizer owns deterministic project creation after task completion.
+Capture the reviewed handoff from Deal Pipeline deal structuring into Deal Execution. Require the source Deal's confirmed fund id, verify that it exactly matches one active record in `vc.funds`, and carry that exact value into fund id. Never substitute, infer, or blend a Fund during handoff. Confirm company identity, IC or partner-review decision context, current term-sheet status, diligence source materials, legal/finance workstream readiness, and missing evidence. Cite material claims, separate assumptions from evidence, and do not create projects, send messages, mutate CRM records, move stages, or start legal/finance work without explicit human approval. When this task is used as a guided project creation task, complete with structured output company name and fund id, then include any confidently collected declared creation fields. Do not create the project; the platform finalizer owns deterministic project creation after task completion.
 
 ## Available Context
 
 - Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
-- Especially look for: Company Name, Lead Partner, Confirmed Fund ID, Handoff Source Artifact IDs, IC Decision Record, Term Sheet Review.
+- Especially look for: Company Name, Confirmed Fund ID, Handoff Source Artifact IDs, IC Decision Record, Term Sheet Review.
 - If a named input is absent, follow the missing-input policy rather than inventing facts.
 
 ## Reference Materials
