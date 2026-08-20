@@ -1,9 +1,9 @@
 # Alludium VC Inventory
 
-**Version**: 0.6.14
+**Version**: 0.6.15
 **Status**: Workspace-selectable simplified VC Deal Pipeline
 
-Version `0.6.14` adds exact migration recipes for the deployed historical `vc_deal_room` versions,
+Version `0.6.15` adds exact migration recipes for the deployed historical `vc_deal_room` versions,
 including the lifecycle states removed when Deal Pipeline was narrowed to intake through deal
 structuring. It carries forward the simplified Deal Manager's explicit read-only Affinity, Harmonic,
 and Exa integration parity without enabling all connected applications.
@@ -209,7 +209,7 @@ Review notes:
 
 Review notes:
 
-- `vc_deal_room` covers one investment opportunity from source capture through deal structuring and uses version `1.1.11`; its allowlisted navigation projection includes the confirmed Fund and Lead Partner for bounded personal attention summaries.
+- `vc_deal_room` covers one investment opportunity from source capture through deal structuring and uses version `1.1.12`; its allowlisted navigation projection includes the confirmed Fund and Lead Partner for bounded personal attention summaries.
 - `vc_investment_management` is user-facing as Deal Execution, covers formal diligence, contracts, closing, completion, and portfolio handoff after Deal Pipeline deal structuring, and keeps version `0.1.6`.
 - `vc_sourcing_line` version `0.2.4` owns one measurable, active-Fund-specific source/screen/cadence experiment and its receipts, with `fund_id` available to the allowlisted navigation projection, Fund-keyed candidate scoring retained on each provenance relationship, and guarded task-owned project updates after reviewed configuration or runs.
 - `vc_origination_candidate` version `0.2.3` owns one company's durable pre-Deal evidence, decisions, outreach context, and multi-line provenance without collapsing Fund-relative scores into Candidate-wide fields; guided creation starts the distinct initial screen and never reruns registration.
