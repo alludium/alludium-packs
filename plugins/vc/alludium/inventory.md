@@ -216,7 +216,7 @@ Review notes:
 
 Review notes:
 
-- `vc_deal_room` covers one investment opportunity from source capture through deal structuring and uses version `1.1.12`; its allowlisted navigation projection includes the confirmed Fund, while personal attention is derived from immutable project creation ownership.
+- `vc_deal_room` covers one investment opportunity from source capture through deal structuring and uses version `1.1.13`; its allowlisted navigation projection includes the confirmed Fund, while personal attention is derived from immutable project creation ownership.
 - `vc_investment_management` is user-facing as Deal Execution, covers formal diligence, contracts, closing, completion, and portfolio handoff after Deal Pipeline deal structuring, and uses version `0.1.7` without a Lead Partner field.
 - `vc_sourcing_line` version `0.2.4` owns one measurable, active-Fund-specific source/screen/cadence experiment and its receipts, with `fund_id` available to the allowlisted navigation projection, Fund-keyed candidate scoring retained on each provenance relationship, and guarded task-owned project updates after reviewed configuration or runs.
 - `vc_origination_candidate` version `0.2.3` owns one company's durable pre-Deal evidence, decisions, outreach context, and multi-line provenance without collapsing Fund-relative scores into Candidate-wide fields; guided creation starts the distinct initial screen and never reruns registration.

@@ -270,7 +270,7 @@ These remain because they are mapped, required, or compact status/count fields r
 
 ### `capture-investment-management-handoff`
 
-- Template id: `vc.capture_investment_management_handoff`; version: `0.1.2`; family: `investment_management_setup`; stage: `formal_diligence`.
+- Template id: `vc.capture_investment_management_handoff`; version: `0.1.4`; family: `investment_management_setup`; stage: `formal_diligence`.
 - Inputs (4): `company_name`, `handoff_source_artifact_ids`, `ic_decision_record_artifact_id`, `term_sheet_review_artifact_id`.
 - Outputs (3): `projectCreation`, `handoff_summary`, `missing_information`.
 
