@@ -4,6 +4,10 @@ Public VC workflow plugin and pack seed for [Alludium](https://www.alludium.ai).
 
 Alludium VC packages reusable venture capital workflows for sourcing, screening, diligence, investment committee preparation, closing, and portfolio onboarding. It is the first bundle inside the broader `alludium-packs` catalog, not a standalone VC-only repository.
 
+Version `0.6.19` lets the workspace Pipeline Manager resolve bounded, Pack-declared creation-field
+options such as active Funds through the generic Platform operation before creating a Deal. Returned
+option values remain tool-only and a Fund must be explicitly confirmed before creation.
+
 Version `0.6.18` removes the Lead Partner concept from VC Deal contracts and makes immutable Deal
 creation ownership the sole personal-attention predicate. The simplified VC Deal Pipeline Manager
 uses the existing creator-backed Platform filter and no longer exposes Lead Partner assignment,
@@ -57,7 +61,7 @@ accessible Candidate projection before creation, promotion validates the selecte
 `vc.funds`, and Sourcing Line navigation projects its allowlisted `fund_id`.
 
 This release carries forward the canonical, hash-pinned finance and operations ontology component
-fixtures first published in `0.5.49`. Their catalog and package provenance are re-pinned to `v0.6.18`
+fixtures first published in `0.5.49`. Their catalog and package provenance are re-pinned to `v0.6.19`
 while their component versions, semantic hashes, dependency closure, lifecycle, compatibility,
 bounded provider slices, and stage-purpose bindings remain unchanged.
 
@@ -79,7 +83,7 @@ The current draft pack surface contains:
 - Alludium workspace variable declarations in `alludium/workspace-variables.yaml`
 - a pack-aware Alludium manifest in `alludium/manifest.yaml`
 
-The VC task-definition templates advertise five project types: `vc_deal_room`, `vc_deal_pipeline`, `vc_investment_management`, `vc_sourcing_line`, and `vc_origination_candidate`. Workspace configuration selects exactly one Deal Pipeline type. The `v0.6.18` surface requires paired Platform ingest, task-routing, and bounded chat-operation support before it can be used as the runtime source of truth.
+The VC task-definition templates advertise five project types: `vc_deal_room`, `vc_deal_pipeline`, `vc_investment_management`, `vc_sourcing_line`, and `vc_origination_candidate`. Workspace configuration selects exactly one Deal Pipeline type. The `v0.6.19` surface requires paired Platform ingest, task-routing, and bounded chat-operation support before it can be used as the runtime source of truth.
 
 Task-template workspace eligibility is controlled by catalog-level `verticalKeys`. Individual template `definitionJson.vertical` values remain legacy workflow metadata, so the `v0.2.2` compatibility fix is intentionally made in `alludium/task-definition-templates/catalog.v1.json`.
 

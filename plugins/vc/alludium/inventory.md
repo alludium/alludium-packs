@@ -1,7 +1,11 @@
 # Alludium VC Inventory
 
-**Version**: 0.6.18
+**Version**: 0.6.19
 **Status**: Workspace-selectable simplified VC Deal Pipeline with capability-routed Affinity read boundary
+
+Version `0.6.19` lets the workspace Pipeline Manager resolve bounded, Pack-declared creation-field
+options such as active Funds through the generic Platform operation before creating a Deal. Returned
+option values remain tool-only and a Fund must be explicitly confirmed before creation.
 
 Version `0.6.18` removes the Lead Partner concept from VC Deal contracts and makes immutable Deal
 creation ownership the sole personal-attention predicate. Deal navigation uses the existing
