@@ -82,7 +82,7 @@
     "postCreate": {"triggerInitialStateTasks": false}
   },
   "initialVersion": {
-    "version": "1.0.4",
+    "version": "1.0.5",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -97,7 +97,31 @@
         "vc.document.deal_pipeline_decision_record_template",
         "vc.document.deal_pipeline_term_sheet_review_policy",
         "vc.document.deal_pipeline_term_sheet_review_template"
-      ]
+      ],
+      "presentation": {
+        "title": "VC Deal Pipeline documents",
+        "description": "Configure the methodology, guidance, policies, and output templates used by the workspace-selected VC Deal Pipeline.",
+        "groups": [
+          {"key":"shared_guidance","label":"Shared guidance","description":"Cross-cutting evidence, citation, and template-use guidance.","sortOrder":10},
+          {"key":"screening","label":"Screening","description":"Criteria and report format for the first investment screen.","sortOrder":20},
+          {"key":"evaluation","label":"Evaluation","description":"Methodology and living report format for deeper evaluation.","sortOrder":30},
+          {"key":"decision","label":"Decision","description":"IC preparation, memo, and confirmed decision-record formats.","sortOrder":40},
+          {"key":"term_sheet","label":"Term Sheet","description":"Review policy and output format for supplied term sheets.","sortOrder":50}
+        ],
+        "documents": [
+          {"documentId":"vc.document.evidence_citation_style_guide","roleKey":"shared_evidence_citation_guidance","groupKey":"shared_guidance","displayName":"Evidence and citation guidance","description":"Citation, assumption, source-authority, and claim-hygiene guidance shared across Deal documents.","kind":"guidance","sortOrder":10},
+          {"documentId":"vc.document.template_use_guidance","roleKey":"shared_template_use_guidance","groupKey":"shared_guidance","displayName":"Template use guidance","description":"Guidance for adapting Deal templates to available evidence without producing generic filler.","kind":"guidance","sortOrder":20},
+          {"documentId":"vc.document.deal_pipeline_screening_criteria","roleKey":"screening_criteria","groupKey":"screening","displayName":"Screening criteria","description":"Replaceable methodology for an evidence-led first assessment of a new investment opportunity.","kind":"methodology","sortOrder":10},
+          {"documentId":"vc.document.deal_pipeline_screening_report_template","roleKey":"screening_report_template","groupKey":"screening","displayName":"Screening Report template","description":"Output structure for a compact, evidence-backed first assessment and next-step recommendation.","kind":"output_template","sortOrder":20},
+          {"documentId":"vc.document.deal_pipeline_evaluation_criteria","roleKey":"evaluation_criteria","groupKey":"evaluation","displayName":"Evaluation criteria","description":"Replaceable methodology for deeper company, market, product, traction, team, and financing evaluation.","kind":"methodology","sortOrder":10},
+          {"documentId":"vc.document.deal_pipeline_evaluation_report_template","roleKey":"evaluation_report_template","groupKey":"evaluation","displayName":"Evaluation Report template","description":"Output structure for the living evaluation report and its evidence-backed findings.","kind":"output_template","sortOrder":20},
+          {"documentId":"vc.document.deal_pipeline_ic_criteria","roleKey":"decision_ic_criteria","groupKey":"decision","displayName":"IC criteria and guidance","description":"Replaceable methodology for assembling decision-relevant evidence and uncertainty for investment committee review.","kind":"methodology","sortOrder":10},
+          {"documentId":"vc.document.deal_pipeline_ic_memo_template","roleKey":"decision_ic_memo_template","groupKey":"decision","displayName":"IC Memo template","description":"Output structure for the living investment committee memo.","kind":"output_template","sortOrder":20},
+          {"documentId":"vc.document.deal_pipeline_decision_record_template","roleKey":"decision_record_template","groupKey":"decision","displayName":"Decision Record template","description":"Output structure for recording each distinct, explicitly confirmed investment decision.","kind":"output_template","sortOrder":30},
+          {"documentId":"vc.document.deal_pipeline_term_sheet_review_policy","roleKey":"term_sheet_review_policy","groupKey":"term_sheet","displayName":"Term Sheet Review policy","description":"Policy boundaries and review method for supplied current and previous term sheets.","kind":"policy","sortOrder":10},
+          {"documentId":"vc.document.deal_pipeline_term_sheet_review_template","roleKey":"term_sheet_review_template","groupKey":"term_sheet","displayName":"Term Sheet Review template","description":"Output structure for the living commercial term-sheet review.","kind":"output_template","sortOrder":20}
+        ]
+      }
     },
     "fieldsSchema": [
       {"id":"field-company-name","key":"company_name","label":"Company Name","kind":"text","required":true,"placeholder":"Acme AI"},

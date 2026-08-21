@@ -1,13 +1,9 @@
 # Alludium VC Inventory
 
-**Version**: 0.6.18
-**Status**: Workspace-selectable simplified VC Deal Pipeline with capability-routed Affinity read boundary
+**Version**: 0.6.19
+**Status**: Native document customization and creator-owned Deal attention
 
-Version `0.6.18` removes the Lead Partner concept from VC Deal contracts and makes immutable Deal
-creation ownership the sole personal-attention predicate. Deal navigation uses the existing
-creator-backed Platform filter, with no Lead Partner assignment, navigation, or handoff contract.
-It carries forward the corrected historical `vc_deal_room` lifecycle recipes published in `0.6.16`,
-which are required for convergence of older deployed project versions.
+Version `0.6.19` carries forward the `v0.6.18` Deal ownership and historical migration corrections, and adds complete presentation metadata for every simplified Deal Pipeline document. Stable roles and investment-native groups let the paired Platform settings surface present each replaceable methodology, policy, guidance document, and output template without changing document identity. Project type version `1.0.5` is the next version after `1.0.4` published in `v0.6.18`.
 
 Version `0.6.17` gives the Affinity read-preview task an explicit eight-tool read allow-list so task
 capability routing and runtime expansion cannot silently treat the whole Affinity application as required.
@@ -223,7 +219,8 @@ Review notes:
 - `vc_investment_management` is user-facing as Deal Execution, covers formal diligence, contracts, closing, completion, and portfolio handoff after Deal Pipeline deal structuring, and uses version `0.1.7` without a Lead Partner field.
 - `vc_sourcing_line` version `0.2.4` owns one measurable, active-Fund-specific source/screen/cadence experiment and its receipts, with `fund_id` available to the allowlisted navigation projection, Fund-keyed candidate scoring retained on each provenance relationship, and guarded task-owned project updates after reviewed configuration or runs.
 - `vc_origination_candidate` version `0.2.3` owns one company's durable pre-Deal evidence, decisions, outreach context, and multi-line provenance without collapsing Fund-relative scores into Candidate-wide fields; guided creation starts the distinct initial screen and never reruns registration.
-- `vc_deal_pipeline` version `1.0.4` is a workspace-selectable simplified pipeline with Screening, Evaluation, Decision, and Term Sheet statuses; four manually reviewed durable document mappings that omit `lifecycleStage`; and Passed, Promoted to Investment Execution, and Archived outcomes. Its allowlisted navigation projection includes the confirmed Fund, while personal attention is derived from immutable project creation ownership. A workspace uses it when its authoritative `vc.deals.projectTypeKey` binding selects it; both Deal definitions may remain installed.
+- `vc_deal_pipeline` version `1.0.5` is a workspace-selectable simplified pipeline with Screening, Evaluation, Decision, and Term Sheet statuses; four manually reviewed durable document mappings that omit `lifecycleStage`; complete grouped document-presentation metadata; and Passed, Promoted to Investment Execution, and Archived outcomes. Its allowlisted navigation projection includes the confirmed Fund, while personal attention is derived from immutable project creation ownership. A workspace uses it when its authoritative `vc.deals.projectTypeKey` binding selects it; both Deal definitions may remain installed.
+
 - Generated project blueprints live in `project-blueprints/` and show each project type's setup/general tasks plus lifecycle-stage task mappings, recommended agents, and task-referenced skills. Platform-owned setup tasks are labeled with their canonical platform task IDs.
 - The definitions include project fields, instruction templates, lifecycle states, lifecycle transitions, command-view metadata, project-manager identity overlays, selection-only `projectTaskMappings`, pack-owned `projectSetup` metadata, project-type document references, and separate `projectCreation` metadata for one-project launchers.
 - Deal Pipeline setup declares source, variables, schedules, and invite steps plus post-approval platform actions. Sourcing Line setup configures one Fund-specific experiment and leaves its single orchestrator schedule disabled until approval. Candidate work is event-driven and has no recurring schedule.
