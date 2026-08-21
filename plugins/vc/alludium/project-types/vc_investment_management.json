@@ -89,7 +89,6 @@
     ],
     "recommendedFieldKeys": [
       "fund_id",
-      "lead_partner",
       "ic_decision_record_artifact_id",
       "term_sheet_review_artifact_id",
       "confidentiality_level"
@@ -109,7 +108,7 @@
     }
   },
   "initialVersion": {
-    "version": "0.1.6",
+    "version": "0.1.7",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -276,14 +275,6 @@
         "kind": "member",
         "required": false,
         "description": "Team member who owns the source relationship."
-      },
-      {
-        "id": "field-lead-partner",
-        "key": "lead_partner",
-        "label": "Lead Partner",
-        "kind": "member",
-        "required": false,
-        "description": "Investment lead for this opportunity."
       },
       {
         "id": "field-referrer",

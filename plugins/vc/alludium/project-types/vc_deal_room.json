@@ -212,7 +212,6 @@
       "company_logo_url",
       "deal_source",
       "fund_id",
-      "lead_partner",
       "founder_names",
       "founder_profiles",
       "pitch_deck_artifact_id",
@@ -268,7 +267,7 @@
     }
   ],
   "initialVersion": {
-    "version": "1.1.13",
+    "version": "1.1.14",
     "migrationDefinitions": {
       "1.0.0": {
         "lifecycleStateMappings": [
@@ -637,14 +636,6 @@
         "kind": "text",
         "required": false,
         "description": "Optional URL template for source records from the same system."
-      },
-      {
-        "id": "field-lead-partner",
-        "key": "lead_partner",
-        "label": "Lead Partner",
-        "kind": "member",
-        "required": false,
-        "description": "Investment lead for this opportunity."
       },
       {
         "id": "field-referrer",
@@ -1589,8 +1580,7 @@
       "activityHealthLabel": "Teams aligned",
       "activityHealthValue": "On track",
       "navigationFieldKeys": [
-        "fund_id",
-        "lead_partner"
+        "fund_id"
       ],
       "stageGroups": [
         {

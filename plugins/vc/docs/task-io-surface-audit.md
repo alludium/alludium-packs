@@ -121,7 +121,7 @@ These remain because they are mapped, required, or compact status/count fields r
 | `apify-setup` | `0.1.8` | 1 | 4 | - | `setup_summary`, `accepted_connection_scope`, `child_task_plan`, `sync_policy` | - | Current surface is tight. |
 | `apify-sync-read` | `0.1.4` | 1 | 2 | - | `apify_results_preview`, `source_registry_mapping` | - | Current surface is tight. |
 | `audit-linkedin-query-spend` | `0.1.9` | 1 | 2 | `linkedin_spend_audit_artifact_id`, `paid_source_spend_status` | - | - | Current surface is tight. |
-| `capture-investment-management-handoff` | `0.1.2` | 5 | 3 | `projectCreation` | `handoff_summary`, `missing_information` | - | Current no-artifact surface is compact; revisit only with UX evidence. |
+| `capture-investment-management-handoff` | `0.1.4` | 4 | 3 | `projectCreation` | `handoff_summary`, `missing_information` | - | Current no-artifact surface is compact; revisit only with UX evidence. |
 | `capture-opportunity-intake` | `1.0.20` | 11 | 5 | `opportunity_intake_artifact_id` | `intake_readiness_status`, `missing_information`, `hydrated_field_map`, `source_index` | - | Current readiness surface is tight. |
 | `check-affinity-relationship-context` | `0.1.3` | 1 | 3 | `relationship_context_artifact_id` | `known_candidate_count`, `relationship_report` | - | Current surface is tight. |
 | `companies-house-discovery` | `0.1.4` | 1 | 2 | - | `companies_house_discovery_report`, `source_scope_questions` | - | Current surface is tight. |
@@ -270,8 +270,8 @@ These remain because they are mapped, required, or compact status/count fields r
 
 ### `capture-investment-management-handoff`
 
-- Template id: `vc.capture_investment_management_handoff`; version: `0.1.2`; family: `investment_management_setup`; stage: `formal_diligence`.
-- Inputs (5): `company_name`, `lead_partner`, `handoff_source_artifact_ids`, `ic_decision_record_artifact_id`, `term_sheet_review_artifact_id`.
+- Template id: `vc.capture_investment_management_handoff`; version: `0.1.4`; family: `investment_management_setup`; stage: `formal_diligence`.
+- Inputs (4): `company_name`, `handoff_source_artifact_ids`, `ic_decision_record_artifact_id`, `term_sheet_review_artifact_id`.
 - Outputs (3): `projectCreation`, `handoff_summary`, `missing_information`.
 
 ### `capture-opportunity-intake`

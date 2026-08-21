@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.capture_investment_management_handoff
-version: 0.1.3
+version: 0.1.4
 title: Capture Deal Execution Handoff
 category: Venture Capital
 visibility: workspace
@@ -37,7 +37,7 @@ definition:
         note: Handoff from deal structuring into formal diligence, contracts, and closing.
     instructions:
       executionInstructions: >-
-        Capture the reviewed handoff from Deal Pipeline deal structuring into Deal Execution. Require the source Deal's confirmed `fund_id`, verify that it exactly matches one active record in `vc.funds`, and carry that exact value into `projectCreation.fieldValues.fund_id`. Never substitute, infer, or blend a Fund during handoff. Confirm company identity, lead owner, IC or partner-review decision context, current term-sheet status, diligence source materials, legal/finance workstream readiness, and missing evidence. Cite material claims, separate assumptions from evidence, and do not create projects, send messages, mutate CRM records, move stages, or start legal/finance work without explicit human approval. When this task is used as a guided project creation task, complete with structured output `projectCreation.fieldValues.company_name` and `projectCreation.fieldValues.fund_id`, then include any confidently collected declared creation fields. Do not create the project; the platform finalizer owns deterministic project creation after task completion. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `style_guide` governs citations and claim language, and `operating_guidance` constrains process and approval boundaries.
+        Capture the reviewed handoff from Deal Pipeline deal structuring into Deal Execution. Require the source Deal's confirmed `fund_id`, verify that it exactly matches one active record in `vc.funds`, and carry that exact value into `projectCreation.fieldValues.fund_id`. Never substitute, infer, or blend a Fund during handoff. Confirm company identity, IC or partner-review decision context, current term-sheet status, diligence source materials, legal/finance workstream readiness, and missing evidence. Cite material claims, separate assumptions from evidence, and do not create projects, send messages, mutate CRM records, move stages, or start legal/finance work without explicit human approval. When this task is used as a guided project creation task, complete with structured output `projectCreation.fieldValues.company_name` and `projectCreation.fieldValues.fund_id`, then include any confidently collected declared creation fields. Do not create the project; the platform finalizer owns deterministic project creation after task completion. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `style_guide` governs citations and claim language, and `operating_guidance` constrains process and approval boundaries.
       missingInputPolicy: Ask for company_name, a confirmed active fund_id, and at least one reviewed handoff source such as an IC decision, term-sheet review, deal-terms artifact, partner review, or counsel note. If fund_id is missing, unknown, or inactive, return Fund selection to the Deal Manager instead of choosing a Fund.
       externalActionPolicy: Draft only unless a human explicitly approves project creation, external communications, CRM writes, Drive changes, legal/counsel actions, capital calls, or stage transitions.
       completionCriteria:
@@ -59,35 +59,29 @@ fields:
       required: true
       position: 0
       config: {}
-    - key: lead_partner
-      name: Lead Partner
-      fieldType: string
-      required: false
-      position: 1
-      config: {}
     - key: fund_id
       name: Confirmed Fund ID
       fieldType: string
       required: true
-      position: 2
+      position: 1
       config: {}
     - key: handoff_source_artifact_ids
       name: Handoff Source Artifact IDs
       fieldType: string
       required: false
-      position: 3
+      position: 2
       config: {}
     - key: ic_decision_record_artifact_id
       name: IC Decision Record
       fieldType: file
       required: true
-      position: 4
+      position: 3
       config: {}
     - key: term_sheet_review_artifact_id
       name: Term Sheet Review
       fieldType: file
       required: true
-      position: 5
+      position: 4
       config: {}
   output:
     - key: projectCreation
