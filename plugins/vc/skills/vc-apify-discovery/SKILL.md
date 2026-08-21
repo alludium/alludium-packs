@@ -45,6 +45,23 @@ Return:
 - `cost_controls`: run budget, result limit, and retry policy questions
 - `scope_questions`: user choices needed before sync read
 
+## X Source Routing
+
+Route X founder, product, and audience scopes to `vc-apify-x-founder-discovery`.
+
+That skill documents supported Xquik Actor candidates and their bounded inputs.
+
+Before recommending either Actor:
+
+- Reload its current Apify input schema.
+- Read its current Apify pricing.
+- Resolve its current build ID and build number.
+- Require whole-run and per-target limits.
+- Require `callOptions.maxTotalChargeUsd` on the Actor call.
+- Require explicit workspace and user approval before Actor selection or execution.
+
+Do not substitute similarly named Actors without a separate approval.
+
 ## Boundaries
 
 - Do not start actor runs unless a later read-preview task explicitly approves a sample run.
