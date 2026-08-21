@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.affinity_sync_read
-version: 0.1.7
+version: 0.1.8
 title: Preview Affinity Pipeline Import
 category: Venture Capital
 visibility: workspace
@@ -96,6 +96,15 @@ runtime:
     - applicationExternalId: affinity-mcp-server
       applicationName: Affinity CRM
       connectionScope: USER_CONFIGURED
+      tools:
+      - affinity_get_list_entries
+      - affinity_list_opportunities
+      - affinity_get_opportunity
+      - affinity_search_companies
+      - affinity_get_company
+      - affinity_search_persons
+      - affinity_get_person
+      - affinity_list_company_notes
   executionProfile:
     agentStartsImmediately: true
     preferredAgentType: vc_integration_operator

@@ -1,7 +1,10 @@
 # Alludium VC Inventory
 
-**Version**: 0.6.16
-**Status**: Workspace-selectable simplified VC Deal Pipeline
+**Version**: 0.6.17
+**Status**: Capability-routed Affinity read boundary
+
+Version `0.6.17` gives the Affinity read-preview task an explicit eight-tool read allow-list so task
+capability routing and runtime expansion cannot silently treat the whole Affinity application as required.
 
 Version `0.6.16` corrects the `vc_deal_room@1.0.0` migration recipe using the lifecycle groups in
 the immutable `v0.3.0` and `v0.3.2` Pack definitions, while preserving exact recipes for the other
@@ -25,7 +28,7 @@ Deal Pipeline, including source-artifact linking, duplicate clarification, idemp
 readback, and a Pipeline Manager-attributed Deal Manager handoff.
 
 Version `0.6.8` makes Integration Operator inherit workspace-connected applications and declares the
-Affinity read-preview task's required connection without hard-coding individual Affinity tools.
+Affinity read-preview task's required connection.
 
 Version `0.6.7` lets Verify Opportunity Intake return confirmed company identity to the Deal Pipeline,
 keeps its readiness report in the standalone HTML contract, and performs one bounded wait for supplied
