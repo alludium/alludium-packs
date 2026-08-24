@@ -5592,6 +5592,110 @@ def validate_vc_deal_pipeline_contract() -> None:
     if len(document_id_list) != len(document_ids):
         fail("vc_deal_pipeline document library must not declare duplicate document IDs")
 
+    presentation = document_library.get("presentation") or {}
+    if presentation.get("title") != "VC Deal Pipeline documents":
+        fail("vc_deal_pipeline document presentation must have its stable title")
+    if not isinstance(presentation.get("description"), str) or not presentation["description"].strip():
+        fail("vc_deal_pipeline document presentation must explain the customizable library")
+
+    expected_presentation_groups = {
+        "shared_guidance": ("Shared guidance", 10),
+        "screening": ("Screening", 20),
+        "evaluation": ("Evaluation", 30),
+        "decision": ("Decision", 40),
+        "term_sheet": ("Term Sheet", 50),
+    }
+    presentation_groups = presentation.get("groups") or []
+    groups_by_key = {
+        group.get("key"): group
+        for group in presentation_groups
+        if isinstance(group, dict)
+    }
+    if len(groups_by_key) != len(presentation_groups):
+        fail("vc_deal_pipeline document presentation group keys must be present and unique")
+    if set(groups_by_key) != set(expected_presentation_groups):
+        fail("vc_deal_pipeline document presentation must use the stable investment-native groups")
+    for group_key, (label, sort_order) in expected_presentation_groups.items():
+        group = groups_by_key[group_key]
+        if group.get("label") != label or group.get("sortOrder") != sort_order:
+            fail(f"vc_deal_pipeline document presentation group {group_key} has unstable display metadata")
+        if not isinstance(group.get("description"), str) or not group["description"].strip():
+            fail(f"vc_deal_pipeline document presentation group {group_key} needs a description")
+
+    expected_presentation_documents = {
+        "vc.document.evidence_citation_style_guide": (
+            "shared_evidence_citation_guidance", "shared_guidance", "Evidence and citation guidance", "guidance", 10,
+        ),
+        "vc.document.template_use_guidance": (
+            "shared_template_use_guidance", "shared_guidance", "Template use guidance", "guidance", 20,
+        ),
+        "vc.document.deal_pipeline_screening_criteria": (
+            "screening_criteria", "screening", "Screening criteria", "methodology", 10,
+        ),
+        "vc.document.deal_pipeline_screening_report_template": (
+            "screening_report_template", "screening", "Screening Report template", "output_template", 20,
+        ),
+        "vc.document.deal_pipeline_evaluation_criteria": (
+            "evaluation_criteria", "evaluation", "Evaluation criteria", "methodology", 10,
+        ),
+        "vc.document.deal_pipeline_evaluation_report_template": (
+            "evaluation_report_template", "evaluation", "Evaluation Report template", "output_template", 20,
+        ),
+        "vc.document.deal_pipeline_ic_criteria": (
+            "decision_ic_criteria", "decision", "IC criteria and guidance", "methodology", 10,
+        ),
+        "vc.document.deal_pipeline_ic_memo_template": (
+            "decision_ic_memo_template", "decision", "IC Memo template", "output_template", 20,
+        ),
+        "vc.document.deal_pipeline_decision_record_template": (
+            "decision_record_template", "decision", "Decision Record template", "output_template", 30,
+        ),
+        "vc.document.deal_pipeline_term_sheet_review_policy": (
+            "term_sheet_review_policy", "term_sheet", "Term Sheet Review policy", "policy", 10,
+        ),
+        "vc.document.deal_pipeline_term_sheet_review_template": (
+            "term_sheet_review_template", "term_sheet", "Term Sheet Review template", "output_template", 20,
+        ),
+    }
+    allowed_presentation_kinds = {"methodology", "policy", "guidance", "output_template"}
+    presentation_documents = presentation.get("documents") or []
+    documents_by_id = {
+        document.get("documentId"): document
+        for document in presentation_documents
+        if isinstance(document, dict)
+    }
+    if len(documents_by_id) != len(presentation_documents):
+        fail("vc_deal_pipeline document presentation IDs must be present and unique")
+    if set(documents_by_id) != document_ids:
+        fail("vc_deal_pipeline document presentation must describe every and only declared document ID")
+    role_keys = [document.get("roleKey") for document in presentation_documents]
+    if any(not isinstance(role_key, str) or not role_key for role_key in role_keys):
+        fail("vc_deal_pipeline document presentation role keys must be non-empty strings")
+    if len(set(role_keys)) != len(role_keys):
+        fail("vc_deal_pipeline document presentation role keys must be unique")
+    sort_orders_by_group: dict[str, set[int]] = {}
+    for document_id, expected in expected_presentation_documents.items():
+        document = documents_by_id.get(document_id) or {}
+        actual = (
+            document.get("roleKey"),
+            document.get("groupKey"),
+            document.get("displayName"),
+            document.get("kind"),
+            document.get("sortOrder"),
+        )
+        if actual != expected:
+            fail(f"vc_deal_pipeline document presentation metadata drifted for {document_id}")
+        if document.get("groupKey") not in groups_by_key:
+            fail(f"vc_deal_pipeline document presentation references an unknown group for {document_id}")
+        if document.get("kind") not in allowed_presentation_kinds:
+            fail(f"vc_deal_pipeline document presentation has an unsupported kind for {document_id}")
+        if not isinstance(document.get("description"), str) or not document["description"].strip():
+            fail(f"vc_deal_pipeline document presentation needs a description for {document_id}")
+        group_sort_orders = sort_orders_by_group.setdefault(document["groupKey"], set())
+        if document["sortOrder"] in group_sort_orders:
+            fail(f"vc_deal_pipeline document presentation has duplicate sort order in {document['groupKey']}")
+        group_sort_orders.add(document["sortOrder"])
+
     current_decision_field = next(
         (
             field
