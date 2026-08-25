@@ -348,6 +348,13 @@ DEAL_WORKBOOK_CAPABILITY_VERSION = "1.0.0"
 DEAL_WORKBOOK_METHOD_NAME = "financial_workbook_evaluation"
 DEAL_WORKBOOK_METHOD_VERSION = "1.0.0"
 DEAL_WORKBOOK_OUTPUT_SCHEMA_VERSION = "deal-workbook-evaluation-output-v1"
+DEAL_WORKBOOK_OUTPUT_SCHEMA_REFERENCE = "@craft-ai/types/deal-workbook-compute#DealWorkbookEvaluationOutputSchema"
+DEAL_WORKBOOK_OUTPUT_SCHEMA_SOURCE_REPOSITORY = "alludium/craft-ai-agents"
+DEAL_WORKBOOK_OUTPUT_SCHEMA_SOURCE_COMMIT = "fa26aaf8e0d50e5f82c5c02473193b5f5e1787df"
+DEAL_WORKBOOK_OUTPUT_SCHEMA_SOURCE_PATH = (
+    "packages/types/src/deal-workbook-compute/index.ts#DealWorkbookEvaluationOutputSchema"
+)
+DEAL_WORKBOOK_OUTPUT_SCHEMA_SOURCE_SHA256 = "99a85ddc7cd6de801a0055ccd51c8aa4033e397e661c513b3a33ddb23e56f7bd"
 DEAL_WORKBOOK_CAPABILITY_CHECKS = [
     "ownership-dilution",
     "post-money-reconciliation",
@@ -1320,7 +1327,11 @@ def _validate_financial_workbook_capability(capability: Any, *, path: Path) -> N
     output_contract = _require_capability_mapping(
         capability.get("outputContract"), context=f"{context}.outputContract"
     )
-    _require_exact_keys(output_contract, {"schemaVersion", "reference"}, context=f"{context}.outputContract")
+    _require_exact_keys(
+        output_contract,
+        {"schemaVersion", "reference", "source"},
+        context=f"{context}.outputContract",
+    )
     _require_capability_string(
         output_contract.get("schemaVersion"),
         context=f"{context}.outputContract.schemaVersion",
@@ -1329,8 +1340,27 @@ def _validate_financial_workbook_capability(capability: Any, *, path: Path) -> N
     _require_capability_string(
         output_contract.get("reference"),
         context=f"{context}.outputContract.reference",
-        expected="@craft-ai/types/deal-workbook-compute#DealWorkbookEvaluationOutputSchema",
+        expected=DEAL_WORKBOOK_OUTPUT_SCHEMA_REFERENCE,
     )
+    output_source = _require_capability_mapping(
+        output_contract.get("source"), context=f"{context}.outputContract.source"
+    )
+    _require_exact_keys(
+        output_source,
+        {"repository", "commit", "path", "sha256"},
+        context=f"{context}.outputContract.source",
+    )
+    for key, expected in {
+        "repository": DEAL_WORKBOOK_OUTPUT_SCHEMA_SOURCE_REPOSITORY,
+        "commit": DEAL_WORKBOOK_OUTPUT_SCHEMA_SOURCE_COMMIT,
+        "path": DEAL_WORKBOOK_OUTPUT_SCHEMA_SOURCE_PATH,
+        "sha256": DEAL_WORKBOOK_OUTPUT_SCHEMA_SOURCE_SHA256,
+    }.items():
+        _require_capability_string(
+            output_source.get(key),
+            context=f"{context}.outputContract.source.{key}",
+            expected=expected,
+        )
 
     approval = _require_capability_mapping(capability.get("approval"), context=f"{context}.approval")
     _require_exact_keys(approval, {"required", "posture"}, context=f"{context}.approval")

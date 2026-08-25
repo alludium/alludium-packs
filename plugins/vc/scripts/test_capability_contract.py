@@ -104,6 +104,16 @@ class CapabilityContractRegressionTests(unittest.TestCase):
             ("output bound", ("limits", "outputBytesScope"), "artifact-only"),
             ("output schema", ("outputContract", "schemaVersion"), "deal-workbook-evaluation-output-v2"),
             ("output reference", ("outputContract", "reference"), "unrelated-schema"),
+            (
+                "output source commit",
+                ("outputContract", "source", "commit"),
+                "0000000000000000000000000000000000000000",
+            ),
+            (
+                "output source hash",
+                ("outputContract", "source", "sha256"),
+                "0" * 64,
+            ),
         )
         for description, path, value in mutations:
             with self.subTest(description=description), tempfile.TemporaryDirectory() as temporary_root:
