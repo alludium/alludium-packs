@@ -40,6 +40,10 @@ PUBLIC_READINESS_PATTERNS = [
         r"craft-ai-agents",
     ]
 ]
+PUBLIC_READINESS_ALLOWED_SCHEMA_SOURCE_PATH = Path(
+    "plugins/vc/alludium/capabilities/vc.financial_workbook_evaluation.yaml"
+)
+PUBLIC_READINESS_ALLOWED_SCHEMA_SOURCE = "alludium/craft-ai-agents"
 EXPECTED_PROMPT_VARIABLE_BINDINGS = {
     "dealProjectTypeKey": {
         "source": "system",
@@ -8458,6 +8462,10 @@ def validate_no_public_readiness_leakage() -> None:
         if path.suffix.lower() in {".png", ".jpg", ".jpeg", ".gif", ".svg"}:
             continue
         body = path.read_text(encoding="utf-8", errors="ignore")
+        if path.relative_to(REPO_ROOT) == PUBLIC_READINESS_ALLOWED_SCHEMA_SOURCE_PATH:
+            # This is the one approved cross-repository source identity required by the
+            # governed workbook output contract, not a public-readiness product claim.
+            body = body.replace(PUBLIC_READINESS_ALLOWED_SCHEMA_SOURCE, "")
         for label, pattern in PUBLIC_READINESS_PATTERNS:
             if pattern.search(body):
                 fail(f"Public-readiness leak ({label}) found in {path.relative_to(REPO_ROOT)}")
