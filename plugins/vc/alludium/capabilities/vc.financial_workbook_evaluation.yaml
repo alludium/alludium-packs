@@ -40,6 +40,7 @@ limits:
   profileId: LP-001
   sandboxTtlSeconds: 1800
   operationTimeoutSeconds: 180
+  maxActiveRunsPerWorkspace: 1
   vCpu: 1
   memoryMiB: 512
   maxOutputBytes: 262144
