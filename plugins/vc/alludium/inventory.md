@@ -1,9 +1,9 @@
 # Alludium VC Inventory
 
-**Version**: 0.6.22
+**Version**: 0.6.23
 **Status**: Fund-aware Deal creation with a locked Deal Analyst task executor
 
-Version `0.6.22` advances `vc_deal_pipeline` to project type version `1.0.6` and declares a
+Version `0.6.23` advances `vc_deal_pipeline` to project type version `1.0.6` and declares a
 project-default locked executor. Platform routes newly created Deal tasks to the configured Deal
 Analyst and keeps the human owner reassignable without exposing an agent picker.
 
@@ -13,6 +13,11 @@ Unassigned waiver. A named Fund resolves only to an exact returned selectable `f
 inactive, and ambiguous requests present valid choices plus Unassigned without silent substitution.
 When no active Funds are configured, Pipeline Manager explains the limitation but creates the Deal
 Unassigned. The released `vc_deal_room` route remains unchanged.
+
+Version `0.6.23` also declares `vc.financial_workbook_evaluation` at method version `1.0.0`.
+The declaration freezes the single exact `.xlsx` input envelope, deterministic checks, LP-001
+limits, explicit approval, output boundary, and KMC/Platform authority split. It is not an
+execution or enablement claim; the paired Platform route remains separately gated.
 
 Version `0.6.20` adds complete presentation metadata for every simplified Deal Pipeline document.
 Stable roles and investment-native groups let the paired Platform settings surface present each

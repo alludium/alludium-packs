@@ -15,6 +15,10 @@ the generic Platform creation-field option operation, persists only the exact se
 never substitutes an invalid, inactive, or ambiguous Fund, and still allows intentional Unassigned
 creation when no active Funds are configured. The existing `vc_deal_room` route is unchanged.
 
+Version `0.6.23` carries the release-pinned, default-off VC Deal capability declaration for governed
+financial workbook evaluation. It is a declaration only until the paired Platform ingest and
+execution route is released; it does not expose a generic sandbox or enable Deal files.
+
 Version `0.6.20` adds complete presentation metadata for the simplified Deal Pipeline document library.
 The paired Platform settings surface can use stable roles and investment-native groups to present
 replaceable methodology, policy, guidance, and output templates without changing their document IDs.

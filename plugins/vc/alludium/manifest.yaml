@@ -342,6 +342,13 @@ surfaces:
     ids:
     - vc.finance-screening
     - vc.operations-incident
+  capabilities:
+    path: alludium/capabilities
+    status: requires-platform-support
+    requiresCapability: named-pack-capability-ingest
+    minimumPlatformVersion: 0.2.1
+    ids:
+    - vc.financial_workbook_evaluation
 boundaries:
   publicSafe: true
   secretsAllowed: false
