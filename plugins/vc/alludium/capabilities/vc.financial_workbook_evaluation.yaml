@@ -45,12 +45,22 @@ limits:
   memoryMiB: 512
   maxOutputBytes: 262144
   maxAutomaticRetries: 1
+  outputBytesScope: combined-findings-plus-artifact
+  automaticRetry:
+    maxAttempts: 1
+    executionPhase: before-execution
+    failureClasses:
+    - transient-provider-failure
+    - transient-session-start-failure
 security:
   input: immutable-read-only
   egress: deny-by-default
   credentials: none
   output: schema-validated-bounded-json-or-csv
   genericSandboxVisibleToDealManager: false
+outputContract:
+  schemaVersion: deal-workbook-evaluation-output-v1
+  reference: "@craft-ai/types/deal-workbook-compute#DealWorkbookEvaluationOutputSchema"
 approval:
   required: true
   posture: explicit-human-approval
