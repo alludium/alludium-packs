@@ -1314,6 +1314,10 @@ def validate_fund_routing_contract() -> None:
         "pipelineManagerScenarios": {
             "unassigned-fund-review",
             "selected-fund-weekly-summary",
+            "fund-selection-before-creation",
+            "explicit-unassigned-fund-waiver",
+            "invalid-inactive-or-ambiguous-fund-request",
+            "zero-active-funds-allows-unassigned-creation",
             "direct-chat-to-deal",
             "direct-chat-to-existing-deal-room",
             "approved-custom-task-with-assignment",
@@ -1619,6 +1623,118 @@ def validate_fund_routing_contract() -> None:
         for scenario in management_fixture["pipelineManagerScenarios"]
         if isinstance(scenario, dict) and isinstance(scenario.get("id"), str)
     }
+
+    fund_selection_fixture = pipeline_scenarios_by_id["fund-selection-before-creation"]
+    fund_selection_lookup = fund_selection_fixture.get("creationFieldOptionLookup") or {}
+    fund_selection_request = fund_selection_fixture.get("creationRequest") or {}
+    fund_selection_expected = fund_selection_fixture.get("expected") or {}
+    selectable_fund_options = fund_selection_lookup.get("selectableOptions") or []
+    selected_fund_id = fund_selection_expected.get("selectedFundId")
+    selectable_fund_ids = {
+        option.get("value")
+        for option in selectable_fund_options
+        if isinstance(option, dict) and option.get("selectable") is True
+    }
+    if (
+        fund_selection_fixture.get("projectTypeKey") != "vc_deal_pipeline"
+        or fund_selection_lookup.get("toolName") != "project.listCreationFieldOptions"
+        or fund_selection_lookup.get("fieldKey") != "fund_id"
+        or len(selectable_fund_options) < 1
+        or not all(
+            isinstance(option, dict)
+            and isinstance(option.get("label"), str)
+            and option.get("label").strip()
+            and option.get("selectable") is True
+            for option in selectable_fund_options
+        )
+        or fund_selection_request.get("toolName") != "project.createFromChat"
+        or selected_fund_id not in selectable_fund_ids
+        or (fund_selection_request.get("fieldValues") or {}).get("fund_id")
+        != selected_fund_id
+        or fund_selection_expected.get("presentsActualSelectableFundNames") is not True
+        or fund_selection_expected.get("presentsCreateUnassignedOption") is not True
+        or fund_selection_expected.get("mayCreateBeforeFundDecision") is not False
+        or fund_selection_expected.get("requiresExplicitFundSelection") is not True
+        or fund_selection_expected.get("mayExecuteBoundedMutation") is not True
+    ):
+        fail(
+            "Fund-selection fixture must retrieve selectable Fund options, wait for an "
+            "explicit selection or waiver, and persist the exact returned fund_id"
+        )
+
+    explicit_waiver_fixture = pipeline_scenarios_by_id[
+        "explicit-unassigned-fund-waiver"
+    ]
+    explicit_waiver_request = explicit_waiver_fixture.get("creationRequest") or {}
+    explicit_waiver_values = explicit_waiver_request.get("fieldValues") or {}
+    explicit_waiver_expected = explicit_waiver_fixture.get("expected") or {}
+    if (
+        explicit_waiver_fixture.get("projectTypeKey") != "vc_deal_pipeline"
+        or explicit_waiver_request.get("toolName") != "project.createFromChat"
+        or "fund_id" in explicit_waiver_values
+        or explicit_waiver_request.get("handoffFundState") != "intentionally_unassigned"
+        or explicit_waiver_expected.get("explicitUnassignedWaiver") is not True
+        or explicit_waiver_expected.get("mayExecuteBoundedMutation") is not True
+        or explicit_waiver_expected.get("maySilentlySubstituteFund") is not False
+        or explicit_waiver_expected.get("persistsFundId") is not False
+    ):
+        fail(
+            "Explicit-unassigned fixture must allow intentional unassigned creation without "
+            "a fund_id or silent substitution"
+        )
+
+    invalid_fund_fixture = pipeline_scenarios_by_id[
+        "invalid-inactive-or-ambiguous-fund-request"
+    ]
+    invalid_fund_lookup = invalid_fund_fixture.get("creationFieldOptionLookup") or {}
+    invalid_fund_expected = invalid_fund_fixture.get("expected") or {}
+    invalid_selectable_options = invalid_fund_lookup.get("selectableOptions") or []
+    if (
+        invalid_fund_fixture.get("projectTypeKey") != "vc_deal_pipeline"
+        or invalid_fund_lookup.get("toolName") != "project.listCreationFieldOptions"
+        or invalid_fund_lookup.get("fieldKey") != "fund_id"
+        or not invalid_fund_fixture.get("requestedFundName")
+        or not invalid_selectable_options
+        or "creationRequest" in invalid_fund_fixture
+        or invalid_fund_expected.get("invalidInactiveOrAmbiguousFund") is not True
+        or invalid_fund_expected.get("presentsActualSelectableFundNames") is not True
+        or invalid_fund_expected.get("presentsCreateUnassignedOption") is not True
+        or invalid_fund_expected.get("askOneFocusedQuestion") is not True
+        or invalid_fund_expected.get("mayExecuteBoundedMutation") is not False
+        or invalid_fund_expected.get("maySilentlySubstituteFund") is not False
+    ):
+        fail(
+            "Invalid, inactive, or ambiguous Fund fixture must present selectable choices and "
+            "Unassigned without creating or substituting a Fund"
+        )
+
+    zero_active_funds_fixture = pipeline_scenarios_by_id[
+        "zero-active-funds-allows-unassigned-creation"
+    ]
+    zero_active_funds_lookup = zero_active_funds_fixture.get("creationFieldOptionLookup") or {}
+    zero_active_funds_request = zero_active_funds_fixture.get("creationRequest") or {}
+    zero_active_funds_values = zero_active_funds_request.get("fieldValues") or {}
+    zero_active_funds_expected = zero_active_funds_fixture.get("expected") or {}
+    if (
+        zero_active_funds_fixture.get("projectTypeKey") != "vc_deal_pipeline"
+        or zero_active_funds_lookup.get("toolName") != "project.listCreationFieldOptions"
+        or zero_active_funds_lookup.get("fieldKey") != "fund_id"
+        or zero_active_funds_lookup.get("selectableOptions") != []
+        or zero_active_funds_request.get("toolName") != "project.createFromChat"
+        or "fund_id" in zero_active_funds_values
+        or zero_active_funds_request.get("handoffFundState")
+        != "no_active_funds_configured"
+        or zero_active_funds_expected.get("explainsNoActiveFundsConfigured") is not True
+        or zero_active_funds_expected.get("explainsFundRelativeWorkUnavailable") is not True
+        or zero_active_funds_expected.get("mayExecuteBoundedMutation") is not True
+        or zero_active_funds_expected.get("persistsFundId") is not False
+        or zero_active_funds_expected.get("describesDealCreationAsBlocked") is not False
+    ):
+        fail(
+            "Zero-active-Funds fixture must explain the limitation but allow intentional "
+            "Unassigned Deal creation"
+        )
+
     for scenario_id in [
         "missing-required-field-clarification",
         "duplicate-deal-ambiguity",
@@ -1935,6 +2051,7 @@ def validate_fund_routing_contract() -> None:
     required_pipeline_tools = {
         "project.listNavigation",
         "project.getAgentContext",
+        "project.listCreationFieldOptions",
         "project.listMembers",
         "project.createFromChat",
         "project.applyPortfolioOperations",
@@ -2055,6 +2172,17 @@ def validate_fund_routing_contract() -> None:
         "Never require the user to choose or understand an internal task type",
         "task-management.getTaskDetail",
         "persisted result, an explicit question, or a review gate",
+        "Preserve the released `vc_deal_room` creation route and fields",
+        "Fund consideration is required whenever active Fund options exist, but Fund assignment remains optional",
+        "The direct named-Fund request is the confirmation",
+        "exact stable value as `fieldValues.fund_id`",
+        "follow its cursor as needed to retrieve the current selectable options",
+        "Do not call `project.createFromChat` until the user selects exactly one returned Fund or explicitly chooses Create unassigned",
+        "Fund was intentionally waived",
+        "no active Funds are configured and Fund-relative work is unavailable",
+        "Deal creation is not blocked by absent Fund configuration",
+        "If a named Fund is invalid, inactive, or ambiguous, do not create or silently substitute it",
+        "Retrieve the current selectable options without a narrow name query",
     ]:
         if required_phrase not in pipeline_prompt:
             fail(f"Pipeline Manager prompt is missing workspace contract: {required_phrase}")

@@ -1,7 +1,14 @@
 # Alludium VC Inventory
 
-**Version**: 0.6.20
-**Status**: Native document customization, creation-field options, and creator-owned Deal attention
+**Version**: 0.6.21
+**Status**: Fund-aware Deal creation, native document customization, and creator-owned Deal attention
+
+Version `0.6.21` requires Pipeline Manager to retrieve active Fund creation options before an
+unnamed `vc_deal_pipeline` Deal is created, then wait for an exact Fund selection or an explicit
+Unassigned waiver. A named Fund resolves only to an exact returned selectable `fund_id`; invalid,
+inactive, and ambiguous requests present valid choices plus Unassigned without silent substitution.
+When no active Funds are configured, Pipeline Manager explains the limitation but creates the Deal
+Unassigned. The released `vc_deal_room` route remains unchanged.
 
 Version `0.6.20` adds complete presentation metadata for every simplified Deal Pipeline document.
 Stable roles and investment-native groups let the paired Platform settings surface present each
