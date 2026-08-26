@@ -111,12 +111,92 @@ pipelineManagerScenarios:
       includeUnassignedDealsSeparately: true
       eagerlyReadEveryDeal: false
 
+  - id: fund-selection-before-creation
+    projectTypeKey: vc_deal_pipeline
+    initialUserInstruction: Create a Deal for Example Labs from this conversation.
+    creationFieldOptionLookup:
+      toolName: project.listCreationFieldOptions
+      fieldKey: fund_id
+      selectableOptions:
+        - label: Europe Seed Fund
+          value: europe-seed
+          selectable: true
+        - label: Climate Growth Fund
+          value: climate-growth
+          selectable: true
+    followUpUserInstruction: Use Europe Seed Fund.
+    creationRequest:
+      toolName: project.createFromChat
+      fieldValues:
+        fund_id: europe-seed
+    expected:
+      presentsActualSelectableFundNames: true
+      presentsCreateUnassignedOption: true
+      mayCreateBeforeFundDecision: false
+      requiresExplicitFundSelection: true
+      selectedFundId: europe-seed
+      mayExecuteBoundedMutation: true
+
+  - id: explicit-unassigned-fund-waiver
+    projectTypeKey: vc_deal_pipeline
+    userInstruction: Create a Deal for Example Labs and leave it unassigned.
+    creationRequest:
+      toolName: project.createFromChat
+      fieldValues: {}
+      handoffFundState: intentionally_unassigned
+    expected:
+      explicitUnassignedWaiver: true
+      mayExecuteBoundedMutation: true
+      maySilentlySubstituteFund: false
+      persistsFundId: false
+
+  - id: invalid-inactive-or-ambiguous-fund-request
+    projectTypeKey: vc_deal_pipeline
+    userInstruction: Create a Deal for Example Labs using Legacy Opportunity Fund.
+    requestedFundName: Legacy Opportunity Fund
+    creationFieldOptionLookup:
+      toolName: project.listCreationFieldOptions
+      fieldKey: fund_id
+      query: Legacy Opportunity Fund
+      selectableOptions:
+        - label: Europe Seed Fund
+          value: europe-seed
+          selectable: true
+        - label: Climate Growth Fund
+          value: climate-growth
+          selectable: true
+    expected:
+      invalidInactiveOrAmbiguousFund: true
+      presentsActualSelectableFundNames: true
+      presentsCreateUnassignedOption: true
+      askOneFocusedQuestion: true
+      mayExecuteBoundedMutation: false
+      maySilentlySubstituteFund: false
+
+  - id: zero-active-funds-allows-unassigned-creation
+    projectTypeKey: vc_deal_pipeline
+    userInstruction: Create a Deal for Example Labs from this conversation.
+    creationFieldOptionLookup:
+      toolName: project.listCreationFieldOptions
+      fieldKey: fund_id
+      selectableOptions: []
+    creationRequest:
+      toolName: project.createFromChat
+      fieldValues: {}
+      handoffFundState: no_active_funds_configured
+    expected:
+      explainsNoActiveFundsConfigured: true
+      explainsFundRelativeWorkUnavailable: true
+      mayExecuteBoundedMutation: true
+      persistsFundId: false
+      describesDealCreationAsBlocked: false
+
   - id: direct-chat-to-deal
     toolName: project.createFromChat
     sourceChatId: 2d5c7f18-6f0a-4f5d-9b75-6bf6d871b4c2
     idempotencyKey: pipeline-manager:example-labs:create:2026-08-14
     projectTypeKey: vc_deal_pipeline
-    userInstruction: Create a Deal for Example Labs from this conversation and use the attached deck.
+    userInstruction: Create a Deal for Example Labs from this conversation, use the attached deck, and leave it unassigned.
     resolvedCompany:
       name: Example Labs
       domain: example.invalid
@@ -128,9 +208,8 @@ pipelineManagerScenarios:
       - source-note.md
     handoff:
       whyCreated: The user asked Pipeline Manager to add Example Labs to the Deal Pipeline.
-      sourceSummary: Example Labs is raising a Seed round; source-note.md is the primary source.
-      unresolvedQuestions:
-        - Confirm the round target from source evidence.
+      sourceSummary: Example Labs is raising a Seed round; source-note.md is the primary source and Fund assignment was intentionally waived.
+      unresolvedQuestions: []
     toolOnlyValues:
       sourceChatId: 2d5c7f18-6f0a-4f5d-9b75-6bf6d871b4c2
       projectId: 7f56a2d1-8c43-4b91-a6e0-2d93f4c5b718
