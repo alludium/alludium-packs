@@ -82,7 +82,7 @@
     "postCreate": {"triggerInitialStateTasks": false}
   },
   "initialVersion": {
-    "version": "1.0.5",
+    "version": "1.0.6",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -232,6 +232,7 @@
     },
     "taskRouting": {
       "defaultAgentType": "vc_deal_analyst",
+      "executorAssignmentMode": "project_default_locked",
       "requireAgentExecutor": true,
       "defaultHumanOwner": "current_user",
       "requireHumanOwner": true

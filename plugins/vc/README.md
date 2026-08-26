@@ -4,6 +4,11 @@ Public VC workflow plugin and pack seed for [Alludium](https://www.alludium.ai).
 
 Alludium VC packages reusable venture capital workflows for sourcing, screening, diligence, investment committee preparation, closing, and portfolio onboarding. It is the first bundle inside the broader `alludium-packs` catalog, not a standalone VC-only repository.
 
+Version `0.6.22` advances the simplified Deal Pipeline project type to `1.0.6` and declares its
+Deal Analyst as the project-default locked task executor. Platform owns the generic routing policy:
+humans can still reassign the task owner, while agent selection is not exposed or accepted for this
+project type.
+
 Version `0.6.21` requires Pipeline Manager to resolve a selected active Fund or an explicit
 Unassigned waiver before creating a `vc_deal_pipeline` Deal when active Fund options exist. It uses
 the generic Platform creation-field option operation, persists only the exact selected `fund_id`,
@@ -96,7 +101,7 @@ The current draft pack surface contains:
 
 The VC task-definition templates advertise five project types: `vc_deal_room`, `vc_deal_pipeline`,
 `vc_investment_management`, `vc_sourcing_line`, and `vc_origination_candidate`. Workspace configuration
-selects exactly one Deal Pipeline type. The `v0.6.21` surface requires paired Platform ingest,
+selects exactly one Deal Pipeline type. The `v0.6.22` surface requires paired Platform ingest,
 task-routing, bounded chat-operation, and native document-presentation support before it can be used as
 the runtime source of truth.
 
