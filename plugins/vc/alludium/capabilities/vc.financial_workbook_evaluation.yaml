@@ -63,9 +63,9 @@ outputContract:
   reference: "@craft-ai/types/deal-workbook-compute#DealWorkbookEvaluationOutputSchema"
   source:
     repository: alludium/craft-ai-agents
-    commit: fa26aaf8e0d50e5f82c5c02473193b5f5e1787df
+    commit: f451695b0e2000bf273e3f183f7e23b6122464ff
     path: packages/types/src/deal-workbook-compute/index.ts#DealWorkbookEvaluationOutputSchema
-    sha256: 99a85ddc7cd6de801a0055ccd51c8aa4033e397e661c513b3a33ddb23e56f7bd
+    sha256: 7898b77735f4a4349ce5a1d97e4e196135adb9a5fc40e91ef86eb3d0e2eaf5a5
 approval:
   required: true
   posture: explicit-human-approval
