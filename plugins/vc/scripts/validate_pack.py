@@ -5481,6 +5481,13 @@ def validate_vc_deal_pipeline_contract() -> None:
         fail("vc_deal_pipeline must start in screening; Intake is source ingestion, not a stage")
     if (project_creation.get("postCreate") or {}).get("triggerInitialStateTasks") is not False:
         fail("vc_deal_pipeline must not create tasks when a project is created")
+    task_routing = initial_version.get("taskRouting") or {}
+    if task_routing.get("defaultAgentType") != "vc_deal_analyst":
+        fail("vc_deal_pipeline must route tasks to vc_deal_analyst")
+    if task_routing.get("executorAssignmentMode") != "project_default_locked":
+        fail("vc_deal_pipeline must lock task execution to its routed Deal Analyst")
+    if task_routing.get("requireAgentExecutor") is not True:
+        fail("vc_deal_pipeline must require its locked Deal Analyst executor")
 
     project_fields = {
         field.get("key")
@@ -5972,6 +5979,7 @@ def validate_vc_deal_pipeline_contract() -> None:
         fail("vc_deal_pipeline must bind the dedicated Deal Manager")
     expected_task_routing = {
         "defaultAgentType": "vc_deal_analyst",
+        "executorAssignmentMode": "project_default_locked",
         "requireAgentExecutor": True,
         "defaultHumanOwner": "current_user",
         "requireHumanOwner": True,
