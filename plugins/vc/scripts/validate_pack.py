@@ -40,6 +40,10 @@ PUBLIC_READINESS_PATTERNS = [
         r"craft-ai-agents",
     ]
 ]
+PUBLIC_READINESS_ALLOWED_SCHEMA_SOURCE_PATH = Path(
+    "plugins/vc/alludium/capabilities/vc.financial_workbook_evaluation.yaml"
+)
+PUBLIC_READINESS_ALLOWED_SCHEMA_SOURCE = "alludium/craft-ai-agents"
 EXPECTED_PROMPT_VARIABLE_BINDINGS = {
     "dealProjectTypeKey": {
         "source": "system",
@@ -343,6 +347,48 @@ ONTOLOGY_COMPONENT_LIFECYCLES = {"active", "deprecated", "retired"}
 ONTOLOGY_COMPONENT_STAGES = ("ingestion", "learning", "query", "evaluation")
 ONTOLOGY_COMPONENT_SURFACE_STATUS = "released-ontology-component-packages"
 EXPECTED_VC_TASK_TEMPLATE_VERTICAL_KEYS = ["venture_capital", "vc"]
+DEAL_WORKBOOK_CAPABILITY_ID = "vc.financial_workbook_evaluation"
+DEAL_WORKBOOK_CAPABILITY_VERSION = "1.0.0"
+DEAL_WORKBOOK_METHOD_NAME = "financial_workbook_evaluation"
+DEAL_WORKBOOK_METHOD_VERSION = "1.0.0"
+DEAL_WORKBOOK_OUTPUT_SCHEMA_VERSION = "deal-workbook-evaluation-output-v1"
+DEAL_WORKBOOK_OUTPUT_SCHEMA_REFERENCE = "@craft-ai/types/deal-workbook-compute#DealWorkbookEvaluationOutputSchema"
+DEAL_WORKBOOK_OUTPUT_SCHEMA_SOURCE_REPOSITORY = "alludium/craft-ai-agents"
+DEAL_WORKBOOK_OUTPUT_SCHEMA_SOURCE_COMMIT = "f451695b0e2000bf273e3f183f7e23b6122464ff"
+DEAL_WORKBOOK_OUTPUT_SCHEMA_SOURCE_PATH = (
+    "packages/types/src/deal-workbook-compute/index.ts#DealWorkbookEvaluationOutputSchema"
+)
+DEAL_WORKBOOK_OUTPUT_SCHEMA_SOURCE_SHA256 = "7898b77735f4a4349ce5a1d97e4e196135adb9a5fc40e91ef86eb3d0e2eaf5a5"
+DEAL_WORKBOOK_CAPABILITY_CHECKS = [
+    "ownership-dilution",
+    "post-money-reconciliation",
+    "runway",
+    "revenue-gross-profit",
+    "stale-summary-contradiction",
+]
+DEAL_WORKBOOK_CAPABILITY_SURFACE_KEYS = {
+    "path",
+    "status",
+    "requiresCapability",
+    "minimumPlatformVersion",
+    "ids",
+}
+DEAL_WORKBOOK_CAPABILITY_KEYS = {
+    "apiVersion",
+    "kind",
+    "id",
+    "version",
+    "title",
+    "description",
+    "method",
+    "input",
+    "checks",
+    "limits",
+    "security",
+    "outputContract",
+    "approval",
+    "evidence",
+}
 PROJECT_TYPE_FIELD_KINDS = {"date", "enum", "member", "number", "text"}
 PROJECT_TASK_MAPPING_SOURCES = {"constant", "project.field", "project.id", "project.state"}
 PROJECT_TASK_MAPPING_TARGETS = {"project.field", "project.state"}
@@ -1082,6 +1128,316 @@ def resolve_manifest_surface_path(
         fail(f"surfaces.{surface_key}.path must reference an existing directory: {surface_path}")
 
     return resolved
+
+
+def _resolve_capability_surface_path(surface_path: Any) -> Path:
+    if not isinstance(surface_path, str) or not surface_path:
+        fail("surfaces.capabilities.path must be declared")
+    relative_path = Path(surface_path)
+    if relative_path.is_absolute() or ".." in relative_path.parts:
+        fail("surfaces.capabilities.path must be a safe pack-relative path")
+
+    candidate = ROOT / relative_path
+    current = ROOT
+    for part in relative_path.parts:
+        current = current / part
+        if current.is_symlink():
+            fail("surfaces.capabilities.path must not use symlinks")
+
+    resolved = candidate.resolve()
+    try:
+        resolved.relative_to(ROOT.resolve())
+    except ValueError:
+        fail("surfaces.capabilities.path must resolve inside the pack root")
+    if not resolved.is_dir():
+        fail(f"surfaces.capabilities.path must reference an existing directory: {surface_path}")
+    return resolved
+
+
+def _require_capability_mapping(value: Any, *, context: str) -> dict[str, Any]:
+    if not isinstance(value, dict):
+        fail(f"{context} must be an object")
+    return value
+
+
+def _require_capability_string(value: Any, *, context: str, expected: str | None = None) -> str:
+    if not isinstance(value, str) or not value.strip():
+        fail(f"{context} must be a non-empty string")
+    if expected is not None and value != expected:
+        fail(f"{context} must be {expected}")
+    return value
+
+
+def _require_capability_integer(value: Any, *, context: str, expected: int | None = None) -> int:
+    if not isinstance(value, int) or isinstance(value, bool):
+        fail(f"{context} must be an integer")
+    if expected is not None and value != expected:
+        fail(f"{context} must be {expected}")
+    return value
+
+
+def _require_capability_boolean(value: Any, *, context: str, expected: bool | None = None) -> bool:
+    if not isinstance(value, bool):
+        fail(f"{context} must be a boolean")
+    if expected is not None and value != expected:
+        fail(f"{context} must be {str(expected).lower()}")
+    return value
+
+
+def _validate_financial_workbook_capability(capability: Any, *, path: Path) -> None:
+    context = str(path.relative_to(ROOT))
+    capability = _require_capability_mapping(capability, context=context)
+    _require_exact_keys(capability, DEAL_WORKBOOK_CAPABILITY_KEYS, context=context)
+    _require_capability_string(capability.get("apiVersion"), context=f"{context}.apiVersion", expected="alludium/v1alpha1")
+    _require_capability_string(capability.get("kind"), context=f"{context}.kind", expected="pack-capability")
+    _require_capability_string(capability.get("id"), context=f"{context}.id", expected=DEAL_WORKBOOK_CAPABILITY_ID)
+    _require_capability_string(
+        capability.get("version"), context=f"{context}.version", expected=DEAL_WORKBOOK_CAPABILITY_VERSION
+    )
+    _require_capability_string(capability.get("title"), context=f"{context}.title")
+    _require_capability_string(capability.get("description"), context=f"{context}.description")
+
+    method = _require_capability_mapping(capability.get("method"), context=f"{context}.method")
+    _require_exact_keys(method, {"name", "version"}, context=f"{context}.method")
+    _require_capability_string(method.get("name"), context=f"{context}.method.name", expected=DEAL_WORKBOOK_METHOD_NAME)
+    _require_capability_string(
+        method.get("version"), context=f"{context}.method.version", expected=DEAL_WORKBOOK_METHOD_VERSION
+    )
+
+    input_contract = _require_capability_mapping(capability.get("input"), context=f"{context}.input")
+    _require_exact_keys(
+        input_contract,
+        {
+            "cardinality",
+            "sourceKind",
+            "format",
+            "mimeType",
+            "encrypted",
+            "macros",
+            "maxSizeBytes",
+            "maxWorksheets",
+            "maxNonEmptyCells",
+            "maxFormulaCells",
+            "rejects",
+        },
+        context=f"{context}.input",
+    )
+    for key, expected in {
+        "cardinality": "one",
+        "sourceKind": "exact-source-revision",
+        "format": "xlsx",
+        "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    }.items():
+        _require_capability_string(input_contract.get(key), context=f"{context}.input.{key}", expected=expected)
+    _require_capability_boolean(input_contract.get("encrypted"), context=f"{context}.input.encrypted", expected=False)
+    _require_capability_boolean(input_contract.get("macros"), context=f"{context}.input.macros", expected=False)
+    for key, expected in {
+        "maxSizeBytes": 25 * 1024 * 1024,
+        "maxWorksheets": 12,
+        "maxNonEmptyCells": 50_000,
+        "maxFormulaCells": 10_000,
+    }.items():
+        _require_capability_integer(input_contract.get(key), context=f"{context}.input.{key}", expected=expected)
+    rejects = input_contract.get("rejects")
+    if rejects != [
+        "xls",
+        "xlsm",
+        "xlsb",
+        "csv",
+        "multi-file-batch",
+        "password-encryption",
+        "external-links",
+        "data-connections",
+    ]:
+        fail(f"{context}.input.rejects must declare the frozen rejection set")
+
+    checks = capability.get("checks")
+    if checks != DEAL_WORKBOOK_CAPABILITY_CHECKS:
+        fail(f"{context}.checks must declare the frozen check IDs")
+
+    limits = _require_capability_mapping(capability.get("limits"), context=f"{context}.limits")
+    _require_exact_keys(
+        limits,
+        {
+            "profileId",
+            "sandboxTtlSeconds",
+            "operationTimeoutSeconds",
+            "maxActiveRunsPerWorkspace",
+            "vCpu",
+            "memoryMiB",
+            "maxOutputBytes",
+            "maxAutomaticRetries",
+            "outputBytesScope",
+            "automaticRetry",
+        },
+        context=f"{context}.limits",
+    )
+    for key, expected in {
+        "profileId": "LP-001",
+        "outputBytesScope": "combined-findings-plus-artifact",
+    }.items():
+        _require_capability_string(limits.get(key), context=f"{context}.limits.{key}", expected=expected)
+    for key, expected in {
+        "sandboxTtlSeconds": 1_800,
+        "operationTimeoutSeconds": 180,
+        "maxActiveRunsPerWorkspace": 1,
+        "vCpu": 1,
+        "memoryMiB": 512,
+        "maxOutputBytes": 262_144,
+        "maxAutomaticRetries": 1,
+    }.items():
+        _require_capability_integer(limits.get(key), context=f"{context}.limits.{key}", expected=expected)
+    automatic_retry = _require_capability_mapping(
+        limits.get("automaticRetry"), context=f"{context}.limits.automaticRetry"
+    )
+    _require_exact_keys(
+        automatic_retry,
+        {"maxAttempts", "executionPhase", "failureClasses"},
+        context=f"{context}.limits.automaticRetry",
+    )
+    _require_capability_integer(
+        automatic_retry.get("maxAttempts"), context=f"{context}.limits.automaticRetry.maxAttempts", expected=1
+    )
+    _require_capability_string(
+        automatic_retry.get("executionPhase"),
+        context=f"{context}.limits.automaticRetry.executionPhase",
+        expected="before-execution",
+    )
+    if automatic_retry.get("failureClasses") != [
+        "transient-provider-failure",
+        "transient-session-start-failure",
+    ]:
+        fail(f"{context}.limits.automaticRetry.failureClasses must declare the frozen retry eligibility")
+
+    security = _require_capability_mapping(capability.get("security"), context=f"{context}.security")
+    _require_exact_keys(
+        security,
+        {"input", "egress", "credentials", "output", "genericSandboxVisibleToDealManager"},
+        context=f"{context}.security",
+    )
+    for key, expected in {
+        "input": "immutable-read-only",
+        "egress": "deny-by-default",
+        "credentials": "none",
+        "output": "schema-validated-bounded-json-or-csv",
+    }.items():
+        _require_capability_string(security.get(key), context=f"{context}.security.{key}", expected=expected)
+    _require_capability_boolean(
+        security.get("genericSandboxVisibleToDealManager"),
+        context=f"{context}.security.genericSandboxVisibleToDealManager",
+        expected=False,
+    )
+
+    output_contract = _require_capability_mapping(
+        capability.get("outputContract"), context=f"{context}.outputContract"
+    )
+    _require_exact_keys(
+        output_contract,
+        {"schemaVersion", "reference", "source"},
+        context=f"{context}.outputContract",
+    )
+    _require_capability_string(
+        output_contract.get("schemaVersion"),
+        context=f"{context}.outputContract.schemaVersion",
+        expected=DEAL_WORKBOOK_OUTPUT_SCHEMA_VERSION,
+    )
+    _require_capability_string(
+        output_contract.get("reference"),
+        context=f"{context}.outputContract.reference",
+        expected=DEAL_WORKBOOK_OUTPUT_SCHEMA_REFERENCE,
+    )
+    output_source = _require_capability_mapping(
+        output_contract.get("source"), context=f"{context}.outputContract.source"
+    )
+    _require_exact_keys(
+        output_source,
+        {"repository", "commit", "path", "sha256"},
+        context=f"{context}.outputContract.source",
+    )
+    for key, expected in {
+        "repository": DEAL_WORKBOOK_OUTPUT_SCHEMA_SOURCE_REPOSITORY,
+        "commit": DEAL_WORKBOOK_OUTPUT_SCHEMA_SOURCE_COMMIT,
+        "path": DEAL_WORKBOOK_OUTPUT_SCHEMA_SOURCE_PATH,
+        "sha256": DEAL_WORKBOOK_OUTPUT_SCHEMA_SOURCE_SHA256,
+    }.items():
+        _require_capability_string(
+            output_source.get(key),
+            context=f"{context}.outputContract.source.{key}",
+            expected=expected,
+        )
+
+    approval = _require_capability_mapping(capability.get("approval"), context=f"{context}.approval")
+    _require_exact_keys(approval, {"required", "posture"}, context=f"{context}.approval")
+    _require_capability_boolean(approval.get("required"), context=f"{context}.approval.required", expected=True)
+    _require_capability_string(
+        approval.get("posture"), context=f"{context}.approval.posture", expected="explicit-human-approval"
+    )
+
+    evidence = _require_capability_mapping(capability.get("evidence"), context=f"{context}.evidence")
+    _require_exact_keys(
+        evidence,
+        {"sourceAuthority", "executionAuthority", "terminalReceipt", "outputContent"},
+        context=f"{context}.evidence",
+    )
+    for key, expected in {
+        "sourceAuthority": "kmc",
+        "executionAuthority": "platform",
+        "terminalReceipt": "trusted-platform-receipt",
+        "outputContent": "untrusted-data",
+    }.items():
+        _require_capability_string(evidence.get(key), context=f"{context}.evidence.{key}", expected=expected)
+
+
+def validate_capabilities(manifest: dict[str, Any]) -> set[str]:
+    surface = manifest.get("surfaces", {}).get("capabilities")
+    if not isinstance(surface, dict):
+        fail("Manifest must declare surfaces.capabilities")
+    _require_exact_keys(surface, DEAL_WORKBOOK_CAPABILITY_SURFACE_KEYS, context="surfaces.capabilities")
+    if surface.get("status") != "requires-platform-support":
+        fail("surfaces.capabilities.status must be requires-platform-support")
+    if surface.get("requiresCapability") != "named-pack-capability-ingest":
+        fail("surfaces.capabilities.requiresCapability must be named-pack-capability-ingest")
+    if surface.get("minimumPlatformVersion") != "0.2.1":
+        fail("surfaces.capabilities.minimumPlatformVersion must be 0.2.1")
+    capability_ids = surface.get("ids")
+    if not isinstance(capability_ids, list) or not all(isinstance(item, str) for item in capability_ids):
+        fail("surfaces.capabilities.ids must be a list of strings")
+    if len(capability_ids) != len(set(capability_ids)):
+        fail("Duplicate capability IDs in alludium/manifest.yaml")
+    if set(capability_ids) != {DEAL_WORKBOOK_CAPABILITY_ID}:
+        fail("surfaces.capabilities.ids must declare the frozen Deal workbook capability")
+    for capability_id in capability_ids:
+        if re.fullmatch(r"[a-z0-9._-]+", capability_id) is None:
+            fail(f"Capability ID is not a safe filename stem: {capability_id}")
+
+    capability_root = _resolve_capability_surface_path(surface.get("path"))
+    entries = list(capability_root.rglob("*"))
+    symlinks = sorted(path.relative_to(capability_root).as_posix() for path in entries if path.is_symlink())
+    if symlinks:
+        fail(f"surfaces.capabilities must not contain symlink entries: {symlinks}")
+    files = {
+        path.relative_to(capability_root).as_posix()
+        for path in entries
+        if path.is_file()
+    }
+    expected_files = {f"{capability_id}.yaml" for capability_id in capability_ids}
+    if files != expected_files:
+        fail(
+            "surfaces.capabilities files must exactly match manifest IDs; "
+            f"missing={sorted(expected_files - files)}, unreferenced={sorted(files - expected_files)}"
+        )
+    if any(path.is_dir() for path in entries):
+        unexpected_directories = sorted(
+            path.relative_to(capability_root).as_posix() for path in entries if path.is_dir()
+        )
+        if unexpected_directories:
+            fail(f"surfaces.capabilities must not contain unreferenced directories: {unexpected_directories}")
+
+    for capability_id in capability_ids:
+        capability_path = capability_root / f"{capability_id}.yaml"
+        capability = read_yaml(capability_path)
+        _validate_financial_workbook_capability(capability, path=capability_path)
+    return set(capability_ids)
 
 
 def validate_workspace_variables(manifest: dict[str, Any], project_type_ids: set[str]) -> set[str]:
@@ -8106,6 +8462,10 @@ def validate_no_public_readiness_leakage() -> None:
         if path.suffix.lower() in {".png", ".jpg", ".jpeg", ".gif", ".svg"}:
             continue
         body = path.read_text(encoding="utf-8", errors="ignore")
+        if path.relative_to(REPO_ROOT) == PUBLIC_READINESS_ALLOWED_SCHEMA_SOURCE_PATH:
+            # This is the one approved cross-repository source identity required by the
+            # governed workbook output contract, not a public-readiness product claim.
+            body = body.replace(PUBLIC_READINESS_ALLOWED_SCHEMA_SOURCE, "")
         for label, pattern in PUBLIC_READINESS_PATTERNS:
             if pattern.search(body):
                 fail(f"Public-readiness leak ({label}) found in {path.relative_to(REPO_ROOT)}")
@@ -8126,6 +8486,7 @@ def main() -> None:
     if not isinstance(pack_version, str) or not pack_version:
         fail("Manifest must declare pack.version")
     validate_plugin_manifest_versions(pack_version, plugin_paths)
+    capability_ids = validate_capabilities(manifest)
 
     skill_ids = validate_skills(manifest)
     validate_templates(manifest, skill_ids)
@@ -8177,6 +8538,7 @@ def main() -> None:
         f"{len(manifest['surfaces']['taskDefinitionTemplates']['ids'])} task definition templates, "
         f"{len(project_type_ids)} project types, "
         f"{len(manifest['surfaces']['documents']['ids'])} documents, "
+        f"{len(capability_ids)} capabilities, "
         f"{len(ontology_package_ids)} ontology component packages"
     )
 

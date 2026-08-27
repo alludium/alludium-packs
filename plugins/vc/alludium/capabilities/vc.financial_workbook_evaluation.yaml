@@ -1,0 +1,76 @@
+apiVersion: alludium/v1alpha1
+kind: pack-capability
+id: vc.financial_workbook_evaluation
+version: 1.0.0
+title: Financial Workbook Evaluation
+description: >-
+  Deterministically recalculates one exact, authorized Deal workbook revision and returns
+  formula-backed findings, contradiction evidence, a bounded inspectable artifact, and a
+  trusted Platform receipt after explicit human approval.
+method:
+  name: financial_workbook_evaluation
+  version: 1.0.0
+input:
+  cardinality: one
+  sourceKind: exact-source-revision
+  format: xlsx
+  mimeType: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+  encrypted: false
+  macros: false
+  maxSizeBytes: 26214400
+  maxWorksheets: 12
+  maxNonEmptyCells: 50000
+  maxFormulaCells: 10000
+  rejects:
+  - xls
+  - xlsm
+  - xlsb
+  - csv
+  - multi-file-batch
+  - password-encryption
+  - external-links
+  - data-connections
+checks:
+  - ownership-dilution
+  - post-money-reconciliation
+  - runway
+  - revenue-gross-profit
+  - stale-summary-contradiction
+limits:
+  profileId: LP-001
+  sandboxTtlSeconds: 1800
+  operationTimeoutSeconds: 180
+  maxActiveRunsPerWorkspace: 1
+  vCpu: 1
+  memoryMiB: 512
+  maxOutputBytes: 262144
+  maxAutomaticRetries: 1
+  outputBytesScope: combined-findings-plus-artifact
+  automaticRetry:
+    maxAttempts: 1
+    executionPhase: before-execution
+    failureClasses:
+    - transient-provider-failure
+    - transient-session-start-failure
+security:
+  input: immutable-read-only
+  egress: deny-by-default
+  credentials: none
+  output: schema-validated-bounded-json-or-csv
+  genericSandboxVisibleToDealManager: false
+outputContract:
+  schemaVersion: deal-workbook-evaluation-output-v1
+  reference: "@craft-ai/types/deal-workbook-compute#DealWorkbookEvaluationOutputSchema"
+  source:
+    repository: alludium/craft-ai-agents
+    commit: f451695b0e2000bf273e3f183f7e23b6122464ff
+    path: packages/types/src/deal-workbook-compute/index.ts#DealWorkbookEvaluationOutputSchema
+    sha256: 7898b77735f4a4349ce5a1d97e4e196135adb9a5fc40e91ef86eb3d0e2eaf5a5
+approval:
+  required: true
+  posture: explicit-human-approval
+evidence:
+  sourceAuthority: kmc
+  executionAuthority: platform
+  terminalReceipt: trusted-platform-receipt
+  outputContent: untrusted-data

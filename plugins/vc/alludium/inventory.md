@@ -1,7 +1,13 @@
 # Alludium VC Inventory
 
-**Version**: 0.6.22
-**Status**: Fund-aware Deal creation with a locked Deal Analyst task executor
+**Version**: 0.6.23
+**Status**: Fund-aware Deal creation with a locked Deal Analyst task executor and a dormant governed
+Deal workbook capability declaration
+
+Version `0.6.23` declares `vc.financial_workbook_evaluation` at method version `1.0.0`.
+The declaration freezes the single exact `.xlsx` input envelope, deterministic checks, LP-001
+limits, explicit approval, output boundary, and KMC/Platform authority split. It is not an
+execution or enablement claim; the paired Platform route remains separately gated.
 
 Version `0.6.22` advances `vc_deal_pipeline` to project type version `1.0.6` and declares a
 project-default locked executor. Platform routes newly created Deal tasks to the configured Deal
