@@ -135,7 +135,7 @@ Humans own investment priority and decisions, unsupported inferred values, exter
 - Source template: `alludium/agent-templates/vc_pipeline_autopilot.yaml`
 - Alludium template ID: `vc_pipeline_autopilot`
 - Display name: Pipeline Manager
-- Version: `1.0.19`
+- Version: `1.0.20`
 - Primary stage: Pipeline
 - Primary Deal Room state: `evaluation`
 - Supported task definitions:
@@ -154,11 +154,6 @@ Humans own investment priority and decisions, unsupported inferred values, exter
 ## MCP And Tool Context
 
 - `alludium-platform`: `project.listNavigation`, `project.listForCurrentWorkspace`, `project.findById`, `project.getAgentContext`, `project.listCreationFieldOptions`, `project.listMembers`, `project.createFromChat`, `project.applyPortfolioOperations`, `project-task.listByProject`, `project-task.findById`, `task-definitions.list`, `task-definitions.findById`, `task-management.getTaskDetail`, `task-management.createTask`, `artifact.searchArtifacts`, `artifact.list`, `artifact.getArtifact`, `artifact.findById`, `artifact.createTextArtifact`, `artifact.attachToChat`, `artifact.detachFromChat`, `artifact.getArtifactsLinkedToChat`
-- `affinity-mcp-server`: `affinity_list_opportunities`, `affinity_get_opportunity`, `affinity_get_field_values`, `affinity_get_field_value_changes`, `affinity_list_opportunity_notes`, `affinity_search_companies`, `affinity_get_company`
-- `exa-mcp-hosted`: `web_search_exa`, `web_search_advanced_exa`, `company_research_exa`, `crawling_exa`
-- `brave-search-mcp`: `brave_web_search`, `brave_news_search`
-- `serpapi-mcp`: `search`
-- `dealroom-mcp`: `find_company`, `analyze_company`, `compare_companies`, `find_investor`, `analyze_investor`, `analyze_university`, `analyze_founder`, `search_transactions`
 
 ## Suggested Actions
 

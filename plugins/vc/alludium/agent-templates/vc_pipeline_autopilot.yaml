@@ -1,4 +1,4 @@
-version: "1.0.19"
+version: "1.0.20"
 type: "template"
 platform_managed: false
 id: "vc_pipeline_autopilot"
@@ -188,6 +188,19 @@ prompt:
         Use workspace-specific criteria when available. Otherwise assess whether current evidence supports advance, hold, regress, or archive-review and cite the evidence behind the recommendation.
       render: "textarea"
 
+capabilityProfile:
+  baseline: STANDARD_PACK_AGENT
+  bundles:
+    - TASK_FOLLOW_UP
+    - TASK_HANDOFF
+    - FILE_AUTHORING
+    - PLATFORM_TOOL_REPOSITORY
+    - WEB_SEARCH
+
+capabilityAccess:
+  tools:
+    policy: ALL_CONNECTED_APPS
+
 mcpServers:
   alludium-platform:
     tools:
@@ -213,43 +226,6 @@ mcpServers:
       - name: artifact.attachToChat
       - name: artifact.detachFromChat
       - name: artifact.getArtifactsLinkedToChat
-  affinity-mcp-server:
-    tools:
-      - name: affinity_list_opportunities
-      - name: affinity_get_opportunity
-      - name: affinity_get_field_values
-      - name: affinity_get_field_value_changes
-      - name: affinity_list_opportunity_notes
-      - name: affinity_search_companies
-      - name: affinity_get_company
-  exa-mcp-hosted:
-    connectionScope: SHARED
-    tools:
-      - name: web_search_exa
-      - name: web_search_advanced_exa
-      - name: company_research_exa
-      - name: crawling_exa
-  brave-search-mcp:
-    connectionScope: SHARED
-    tools:
-      - name: brave_web_search
-      - name: brave_news_search
-  serpapi-mcp:
-    connectionScope: SHARED
-    tools:
-      - name: search
-  dealroom-mcp:
-    connectionScope: USER_CONFIGURED
-    tools:
-      - name: find_company
-      - name: analyze_company
-      - name: compare_companies
-      - name: find_investor
-      - name: analyze_investor
-      - name: analyze_university
-      - name: analyze_founder
-      - name: search_transactions
-
 actions:
   - Title: "Create Deal"
     Message: "Create a Deal from this conversation, carry its source links and files into the Deal, ask one focused question only if required identity, duplicate intent, or a material value is unresolved, and return one short readback with the Platform action."

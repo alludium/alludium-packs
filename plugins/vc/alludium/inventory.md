@@ -4,7 +4,7 @@
 **Status**: Principal Deal agents use deferred discovery across user-connected applications while
 shared Exa research and the dormant governed Deal workbook declaration remain available
 
-Version `0.6.24` gives Deal Manager, simplified Deal Pipeline Manager, and Deal Analyst broad
+Version `0.6.24` gives Deal Manager, simplified Deal Pipeline Manager, workspace Pipeline Manager, and Deal Analyst broad
 user-connected application discovery through the Platform tool repository. Vendor-specific
 Affinity, Harmonic, and Exa tool-name allowlists are removed from those templates; shared public
 web research remains declared through `WEB_SEARCH`. Broad tool schemas are expected to remain

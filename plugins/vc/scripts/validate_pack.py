@@ -115,6 +115,7 @@ CONNECTED_APP_DISCOVERY_AGENT_IDS = {
     "vc_deal_manager",
     "vc_deal_pipeline_manager",
     "vc_deal_analyst",
+    "vc_pipeline_autopilot",
 }
 CONNECTED_APP_DISCOVERY_REQUIRED_BUNDLES = {
     "PLATFORM_TOOL_REPOSITORY",

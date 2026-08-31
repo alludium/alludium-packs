@@ -4,7 +4,7 @@ Public VC workflow plugin and pack seed for [Alludium](https://www.alludium.ai).
 
 Alludium VC packages reusable venture capital workflows for sourcing, screening, diligence, investment committee preparation, closing, and portfolio onboarding. It is the first bundle inside the broader `alludium-packs` catalog, not a standalone VC-only repository.
 
-Version `0.6.24` moves Deal Manager, simplified Deal Pipeline Manager, and Deal Analyst from
+Version `0.6.24` moves Deal Manager, simplified Deal Pipeline Manager, workspace Pipeline Manager, and Deal Analyst from
 vendor-specific Affinity, Harmonic, and Exa tool-name allowlists to deferred discovery across the
 acting user's connected applications. Platform keeps broad schemas out of the initial model prompt,
 re-authorizes activated tools at execution time, and retains shared Exa web research through the
