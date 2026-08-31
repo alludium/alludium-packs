@@ -1,4 +1,4 @@
-version: "1.0.1"
+version: "1.0.2"
 type: "template"
 platform_managed: false
 id: "vc_deal_manager"
@@ -26,6 +26,16 @@ metadata:
     - founder-materials-request
     - investment-screening-framework
     - citation-enforcement
+
+capabilityProfile:
+  baseline: STANDARD_PACK_AGENT
+  bundles:
+    - PLATFORM_TOOL_REPOSITORY
+    - WEB_SEARCH
+
+capabilityAccess:
+  tools:
+    policy: ALL_CONNECTED_APPS
 
 skills:
   - externalId: "company-research-and-enrichment"
@@ -137,24 +147,6 @@ mcpServers:
       - name: artifact.getArtifactsLinkedToChat
       - name: artifact.getArtifactsForChatContext
       - name: artifact.readSourceRange
-  harmonic-mcp-oauth:
-    tools:
-      - name: get_companies
-      - name: typeahead_search
-      - name: search_companies_natural_language
-      - name: get_people
-  affinity-mcp-server:
-    tools:
-      - name: affinity_search_companies
-      - name: affinity_get_company
-      - name: affinity_list_company_notes
-  exa-mcp-hosted:
-    connectionScope: SHARED
-    tools:
-      - name: web_search_exa
-      - name: company_research_exa
-      - name: people_search_exa
-
 actions:
   - Title: "Route Fund"
     Message: "Review the configured Funds, suggest the best-supported match, and ask me to confirm before saving fund_id."

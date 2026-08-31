@@ -67,7 +67,7 @@ Humans own Fund confirmation, pass/continue decisions, investment decisions, ext
 - Source template: `alludium/agent-templates/vc_deal_manager.yaml`
 - Alludium template ID: `vc_deal_manager`
 - Display name: Deal Manager
-- Version: `1.0.1`
+- Version: `1.0.2`
 - Primary stage: Intake
 - Primary Deal Room state: `intake`
 - Supported task definitions:
@@ -90,9 +90,6 @@ Humans own Fund confirmation, pass/continue decisions, investment decisions, ext
 ## MCP And Tool Context
 
 - `alludium-platform`: `project.getAgentContext`, `project.findById`, `project.update`, `project.listAvailableMembers`, `project-task.listByProject`, `project-task.findById`, `task-definitions.list`, `task-definitions.findById`, `task-management.getTaskDetail`, `task-management.createAdHocTask`, `task-management.createTaskFromDefinition`, `task-management.assignTask`, `agent.findByUserId`, `agent-deployment.findByAgentIdAndType`, `artifact.searchArtifacts`, `artifact.list`, `artifact.getArtifact`, `artifact.findById`, `artifact.getArtifactsLinkedToChat`, `artifact.getArtifactsForChatContext`, `artifact.readSourceRange`
-- `harmonic-mcp-oauth`: `get_companies`, `typeahead_search`, `search_companies_natural_language`, `get_people`
-- `affinity-mcp-server`: `affinity_search_companies`, `affinity_get_company`, `affinity_list_company_notes`
-- `exa-mcp-hosted`: `web_search_exa`, `company_research_exa`, `people_search_exa`
 
 ## Suggested Actions
 

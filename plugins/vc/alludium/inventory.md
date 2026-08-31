@@ -1,8 +1,15 @@
 # Alludium VC Inventory
 
-**Version**: 0.6.23
-**Status**: Fund-aware Deal creation with a locked Deal Analyst task executor and a dormant governed
-Deal workbook capability declaration
+**Version**: 0.6.24
+**Status**: Principal Deal agents use deferred discovery across user-connected applications while
+shared Exa research and the dormant governed Deal workbook declaration remain available
+
+Version `0.6.24` gives Deal Manager, simplified Deal Pipeline Manager, and Deal Analyst broad
+user-connected application discovery through the Platform tool repository. Vendor-specific
+Affinity, Harmonic, and Exa tool-name allowlists are removed from those templates; shared public
+web research remains declared through `WEB_SEARCH`. Broad tool schemas are expected to remain
+deferred until activation. Generic external-effect classification and approval remain a Platform
+follow-up, so pilot operators must control the enabled application inventory.
 
 Version `0.6.23` declares `vc.financial_workbook_evaluation` at method version `1.0.0`.
 The declaration freezes the single exact `.xlsx` input envelope, deterministic checks, LP-001

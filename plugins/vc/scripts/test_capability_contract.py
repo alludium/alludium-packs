@@ -48,6 +48,40 @@ class CapabilityContractRegressionTests(unittest.TestCase):
         VALIDATOR.ROOT = pack_root.resolve()
         VALIDATOR.validate_capabilities(self._manifest(pack_root))
 
+    def _connected_app_template(self) -> dict[str, Any]:
+        return {
+            "capabilityProfile": {
+                "baseline": "STANDARD_PACK_AGENT",
+                "bundles": ["PLATFORM_TOOL_REPOSITORY", "WEB_SEARCH"],
+            },
+            "capabilityAccess": {"tools": {"policy": "ALL_CONNECTED_APPS"}},
+            "mcpServers": {
+                "alludium-platform": {"tools": [{"name": "project.getAgentContext"}]}
+            },
+        }
+
+    def test_accepts_brokered_connected_app_discovery_template(self) -> None:
+        VALIDATOR.validate_connected_app_discovery_template(
+            "vc_deal_manager",
+            self._connected_app_template(),
+        )
+
+    def test_rejects_connected_app_discovery_without_broker_bundle(self) -> None:
+        template = self._connected_app_template()
+        template["capabilityProfile"]["bundles"] = ["WEB_SEARCH"]
+
+        with self.assertRaises(SystemExit):
+            VALIDATOR.validate_connected_app_discovery_template("vc_deal_manager", template)
+
+    def test_rejects_connected_app_discovery_with_vendor_tool_allowlist(self) -> None:
+        template = self._connected_app_template()
+        template["mcpServers"]["affinity-mcp-server"] = {
+            "tools": [{"name": "affinity_search_companies"}]
+        }
+
+        with self.assertRaises(SystemExit):
+            VALIDATOR.validate_connected_app_discovery_template("vc_deal_manager", template)
+
     def test_rejects_unsafe_surface_path(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_root:
             pack_root = self._copy_pack(temporary_root)

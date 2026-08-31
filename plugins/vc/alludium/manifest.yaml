@@ -2,7 +2,7 @@ schemaVersion: '0.1'
 pack:
   id: vc
   name: Alludium VC
-  version: 0.6.23
+  version: 0.6.24
   description: >
     Public VC workflow plugin and pack seed for Alludium, published as the
     first bundle in the broader Alludium packs catalog. This release contains
@@ -11,7 +11,9 @@ pack:
     workspace variable declarations, application recommendation metadata,
     project-manager identity overlays, single-entry integration setup task
     recommendations, pack-native project methodology documents, and
-    per-project creation metadata for VC project instances. It also publishes
+    per-project creation metadata for VC project instances. The three principal
+    Deal agents use deferred discovery over user-connected applications rather
+    than vendor-specific tool-name allowlists. It also publishes
     the first release-pinned ontology component packages for KMC composition.
     The release contains both Deal Pipeline type definitions, but each workspace
     activates exactly one of vc_deal_room or vc_deal_pipeline, never both.

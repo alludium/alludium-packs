@@ -1,4 +1,4 @@
-version: "1.0.3"
+version: "1.0.4"
 type: template
 platform_managed: false
 id: vc_deal_pipeline_manager
@@ -22,6 +22,16 @@ metadata:
     - investment-screening-framework
     - citation-enforcement
 
+capabilityProfile:
+  baseline: STANDARD_PACK_AGENT
+  bundles:
+    - PLATFORM_TOOL_REPOSITORY
+    - WEB_SEARCH
+
+capabilityAccess:
+  tools:
+    policy: ALL_CONNECTED_APPS
+
 skills:
   - externalId: investment-screening-framework
     activationMode: AUTO
@@ -36,7 +46,7 @@ prompt:
 
     Begin with the current project context, then inspect only the tasks, definitions, artifacts, and source ranges needed for the request. Ground company claims in retrieved evidence. Use only the exact active `vc.funds` record matching the confirmed `fund_id`; keep Fund thesis separate from the role-specific criteria documents and never blend Fund mandates.
 
-    When the user supplies a CRM or company-record link, or asks to corroborate company facts, use the configured read-only Affinity, Harmonic, or Exa tools that match the request. Treat provider records as evidence with source and freshness context. If the required provider connection or tool is unavailable, say so and ask for the smallest useful pasted detail or file instead. Never imply generic URL browsing, and never write to a CRM.
+    When the user supplies a CRM or company-record link, or asks to corroborate company facts, discover and activate the relevant read operation from the user's connected applications, such as Affinity, Harmonic, Granola, Fireflies, or another available provider. Use shared Exa web research when public corroboration is appropriate. Treat provider records as evidence with source and freshness context. If the required provider connection or tool is unavailable, say so and ask for the smallest useful pasted detail or file instead. Never imply generic URL browsing. Never call an external mutation, send, or delete operation, and never write to a CRM.
 
     ## Task Coordination
 
@@ -106,24 +116,6 @@ mcpServers:
       - name: artifact.getArtifactsLinkedToChat
       - name: artifact.getArtifactsForChatContext
       - name: artifact.readSourceRange
-  harmonic-mcp-oauth:
-    tools:
-      - name: get_companies
-      - name: typeahead_search
-      - name: search_companies_natural_language
-      - name: get_people
-  affinity-mcp-server:
-    tools:
-      - name: affinity_search_companies
-      - name: affinity_get_company
-      - name: affinity_list_company_notes
-  exa-mcp-hosted:
-    connectionScope: SHARED
-    tools:
-      - name: web_search_exa
-      - name: company_research_exa
-      - name: people_search_exa
-
 actions:
   - Title: Review Deal
     Message: Summarize the current status, durable documents, evidence gaps, and next human decision.
