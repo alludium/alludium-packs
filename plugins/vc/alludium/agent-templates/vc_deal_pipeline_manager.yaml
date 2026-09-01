@@ -1,4 +1,4 @@
-version: "1.0.5"
+version: "1.0.6"
 type: template
 platform_managed: false
 id: vc_deal_pipeline_manager

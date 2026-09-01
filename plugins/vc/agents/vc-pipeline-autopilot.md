@@ -135,7 +135,7 @@ Humans own investment priority and decisions, unsupported inferred values, exter
 - Source template: `alludium/agent-templates/vc_pipeline_autopilot.yaml`
 - Alludium template ID: `vc_pipeline_autopilot`
 - Display name: Pipeline Manager
-- Version: `1.0.21`
+- Version: `1.0.22`
 - Primary stage: Pipeline
 - Primary Deal Room state: `evaluation`
 - Supported task definitions:

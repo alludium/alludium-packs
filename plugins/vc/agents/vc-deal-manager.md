@@ -67,7 +67,7 @@ Humans own Fund confirmation, pass/continue decisions, investment decisions, ext
 - Source template: `alludium/agent-templates/vc_deal_manager.yaml`
 - Alludium template ID: `vc_deal_manager`
 - Display name: Deal Manager
-- Version: `1.0.3`
+- Version: `1.0.4`
 - Primary stage: Intake
 - Primary Deal Room state: `intake`
 - Supported task definitions:
