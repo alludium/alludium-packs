@@ -117,9 +117,42 @@ CONNECTED_APP_DISCOVERY_AGENT_IDS = {
     "vc_deal_analyst",
     "vc_pipeline_autopilot",
 }
-CONNECTED_APP_DISCOVERY_REQUIRED_BUNDLES = {
-    "PLATFORM_TOOL_REPOSITORY",
-    "WEB_SEARCH",
+CONNECTED_APP_DISCOVERY_EXPECTED_BUNDLES = {
+    "vc_deal_manager": {
+        "PLATFORM_TOOL_REPOSITORY",
+        "PROJECT_CONTEXT_READ",
+        "PROJECT_WORKSPACE_UPDATE",
+        "TASK_FOLLOW_UP",
+        "FILE_CONTEXT_READ",
+        "AGENT_ROUTING",
+        "WEB_SEARCH",
+    },
+    "vc_deal_pipeline_manager": {
+        "PLATFORM_TOOL_REPOSITORY",
+        "PROJECT_CONTEXT_READ",
+        "PROJECT_WORKSPACE_UPDATE",
+        "PROJECT_TASK_COORDINATION",
+        "FILE_AUTHORING",
+        "FILE_FULL_REWRITE",
+        "WEB_SEARCH",
+    },
+    "vc_deal_analyst": {
+        "PLATFORM_TOOL_REPOSITORY",
+        "PROJECT_CONTEXT_READ",
+        "PROJECT_MANAGER_HANDOFF",
+        "FILE_AUTHORING",
+        "FILE_FULL_REWRITE",
+        "WEB_SEARCH",
+    },
+    "vc_pipeline_autopilot": {
+        "PLATFORM_TOOL_REPOSITORY",
+        "PROJECT_CONTEXT_READ",
+        "PROJECT_PORTFOLIO_READ",
+        "PROJECT_PORTFOLIO_OPERATIONS",
+        "PROJECT_TASK_COORDINATION",
+        "FILE_AUTHORING",
+        "WEB_SEARCH",
+    },
 }
 CONNECTED_APP_DISCOVERY_RETIRED_SERVER_ALLOWLISTS = {
     "affinity-mcp-server",
@@ -992,17 +1025,17 @@ def validate_connected_app_discovery_template(
         return
 
     capability_profile = template.get("capabilityProfile") or {}
-    if capability_profile.get("baseline") != "STANDARD_PACK_AGENT":
+    if capability_profile.get("baseline") != "NONE":
         fail(
-            f"Agent template {template_id} connected-app discovery must retain "
-            "the STANDARD_PACK_AGENT baseline"
+            f"Agent template {template_id} connected-app discovery must use "
+            "the NONE baseline and compose its Platform authority from named bundles"
         )
     declared_bundles = set(capability_profile.get("bundles") or [])
-    missing_bundles = sorted(CONNECTED_APP_DISCOVERY_REQUIRED_BUNDLES - declared_bundles)
-    if missing_bundles:
+    expected_bundles = CONNECTED_APP_DISCOVERY_EXPECTED_BUNDLES[template_id]
+    if declared_bundles != expected_bundles:
         fail(
-            f"Agent template {template_id} connected-app discovery is missing "
-            f"capability bundles {missing_bundles}"
+            f"Agent template {template_id} must declare exactly the bounded capability "
+            f"bundles {sorted(expected_bundles)}; found {sorted(declared_bundles)}"
         )
     tool_policy = (((template.get("capabilityAccess") or {}).get("tools") or {}).get("policy"))
     if tool_policy != "ALL_CONNECTED_APPS":
@@ -1020,11 +1053,10 @@ def validate_connected_app_discovery_template(
             "WEB_SEARCH instead of vendor tool-name allowlists: "
             f"{retired_server_allowlists}"
         )
-    platform_tools = ((mcp_servers.get("alludium-platform") or {}).get("tools") or [])
-    if not platform_tools:
+    if "alludium-platform" in mcp_servers:
         fail(
-            f"Agent template {template_id} must preserve its explicit Platform "
-            "capability declarations"
+            f"Agent template {template_id} must derive Platform tool authority from "
+            "capability bundles instead of an mcpServers.alludium-platform tool list"
         )
 
 
@@ -2398,30 +2430,6 @@ def validate_fund_routing_contract() -> None:
     deal_manager = read_yaml(
         ROOT / "alludium" / "agent-templates" / "vc_deal_manager.yaml"
     )
-    declared_platform_tools = {
-        tool.get("name")
-        for tool in ((deal_manager.get("mcpServers") or {}).get("alludium-platform") or {}).get(
-            "tools",
-            [],
-        )
-        if isinstance(tool, dict)
-    }
-    required_manager_tools = {
-        "project.getAgentContext",
-        "project.listAvailableMembers",
-        "project.update",
-        "project-task.listByProject",
-        "task-definitions.list",
-        "task-definitions.findById",
-        "task-management.createAdHocTask",
-        "task-management.createTaskFromDefinition",
-        "task-management.assignTask",
-        "artifact.getArtifactsForChatContext",
-    }
-    missing_manager_tools = sorted(required_manager_tools - declared_platform_tools)
-    if missing_manager_tools:
-        fail(f"Deal Manager is missing supported context/update tools: {missing_manager_tools}")
-
     deal_manager_prompt = (deal_manager.get("prompt") or {}).get("template") or ""
     deal_manager_variable_keys = {
         variable.get("key")
@@ -2457,77 +2465,6 @@ def validate_fund_routing_contract() -> None:
     }
     if "funds" in pipeline_variable_keys or "{{#each funds}}" in pipeline_prompt:
         fail("Pipeline Manager must not eagerly render the full vc.funds collection")
-    pipeline_platform_tools = {
-        tool.get("name")
-        for tool in ((pipeline_manager.get("mcpServers") or {}).get("alludium-platform") or {}).get(
-            "tools",
-            [],
-        )
-        if isinstance(tool, dict)
-    }
-    required_pipeline_tools = {
-        "project.listNavigation",
-        "project.getAgentContext",
-        "project.listCreationFieldOptions",
-        "project.listMembers",
-        "project.createFromChat",
-        "project.applyPortfolioOperations",
-        "project-task.listByProject",
-        "task-definitions.list",
-        "task-definitions.findById",
-        "task-management.createTask",
-        "task-management.getTaskDetail",
-    }
-    missing_pipeline_tools = sorted(required_pipeline_tools - pipeline_platform_tools)
-    if missing_pipeline_tools:
-        fail(f"Pipeline Manager is missing workspace/task tools: {missing_pipeline_tools}")
-    forbidden_pipeline_task_tools = {
-        "project.listAvailableMembers",
-        "task-management.createAdHocTask",
-        "task-management.createTaskFromDefinition",
-        "task-management.assignTask",
-        "agent.findByUserId",
-        "agent-deployment.findByAgentIdAndType",
-    }
-    unexpected_pipeline_task_tools = sorted(
-        forbidden_pipeline_task_tools & pipeline_platform_tools
-    )
-    if unexpected_pipeline_task_tools:
-        fail(
-            "Pipeline Manager must use bounded task creation and current project members, "
-            f"not legacy task/assignment discovery tools: {unexpected_pipeline_task_tools}"
-        )
-    bounded_portfolio_mutations = {
-        "project.createFromChat",
-        "project.applyPortfolioOperations",
-    }
-    forbidden_generic_project_mutations = {
-        "project.create",
-        "project.createReviewedFromChat",
-        "project.update",
-        "project.updateState",
-        "project.updateStatus",
-    }
-    known_portfolio_mutation_tools = (
-        bounded_portfolio_mutations | forbidden_generic_project_mutations
-    )
-    exposed_portfolio_mutation_tools = (
-        known_portfolio_mutation_tools & pipeline_platform_tools
-    )
-    if exposed_portfolio_mutation_tools != bounded_portfolio_mutations:
-        fail(
-            "Pipeline Manager portfolio mutation allowlist must be exactly "
-            f"{sorted(bounded_portfolio_mutations)}; found "
-            f"{sorted(exposed_portfolio_mutation_tools)}"
-        )
-    exposed_generic_project_mutations = sorted(
-        forbidden_generic_project_mutations & pipeline_platform_tools
-    )
-    if exposed_generic_project_mutations:
-        fail(
-            "Pipeline Manager must use bounded Deal operations instead of generic project "
-            f"mutations: {exposed_generic_project_mutations}"
-        )
     for required_phrase in [
         "native Alludium",
         "Unassigned",
@@ -6411,36 +6348,6 @@ def validate_vc_deal_pipeline_contract() -> None:
 
     manager = read_yaml(ROOT / "alludium" / "agent-templates" / "vc_deal_pipeline_manager.yaml")
     manager_prompt = (manager.get("prompt") or {}).get("template") or ""
-    manager_tools = {
-        tool.get("name")
-        for tool in ((manager.get("mcpServers") or {}).get("alludium-platform") or {}).get("tools", [])
-        if isinstance(tool, dict)
-    }
-    required_manager_tools = {
-        "project.listMembers",
-        "project-task.listByProject",
-        "task-definitions.list",
-        "task-definitions.findById",
-        "task-management.createTask",
-        "task-management.getTaskDetail",
-    }
-    missing_manager_tools = sorted(required_manager_tools - manager_tools)
-    if missing_manager_tools:
-        fail(f"vc_deal_pipeline Deal Manager is missing custom-task tools: {missing_manager_tools}")
-    forbidden_manager_task_tools = {
-        "project.listAvailableMembers",
-        "task-management.createAdHocTask",
-        "task-management.createTaskFromDefinition",
-        "task-management.assignTask",
-        "agent.findByUserId",
-        "agent-deployment.findByAgentIdAndType",
-    }
-    unexpected_manager_task_tools = sorted(forbidden_manager_task_tools & manager_tools)
-    if unexpected_manager_task_tools:
-        fail(
-            "vc_deal_pipeline Deal Manager must use bounded task creation and current Deal members, "
-            f"not legacy task/assignment discovery tools: {unexpected_manager_task_tools}"
-        )
     for phrase in [
         "Use `task-management.createTask` for every task",
         "otherwise omit it and create the specific bounded task",
@@ -6475,19 +6382,6 @@ def validate_vc_deal_pipeline_contract() -> None:
 
     analyst = read_yaml(ROOT / "alludium" / "agent-templates" / "vc_deal_analyst.yaml")
     analyst_prompt = (analyst.get("prompt") or {}).get("template") or ""
-    analyst_tools = {
-        tool.get("name")
-        for tool in ((analyst.get("mcpServers") or {}).get("alludium-platform") or {}).get("tools", [])
-        if isinstance(tool, dict)
-    }
-    forbidden_analyst_tools = {
-        "task-management.createTask",
-        "task-management.createAdHocTask",
-        "task-management.createTaskFromDefinition",
-        "task-management.assignTask",
-    }
-    if analyst_tools & forbidden_analyst_tools:
-        fail("vc_deal_pipeline Deal Analyst must recommend custom work to Deal Manager, not create tasks")
     for phrase in [
         "use `project.sendManagerMessage` with purpose `task_recommendation`",
         "objective, evidence scope, expected output or review question, and completion boundary",
@@ -6496,9 +6390,6 @@ def validate_vc_deal_pipeline_contract() -> None:
     ]:
         if phrase not in analyst_prompt:
             fail(f"vc_deal_pipeline Deal Analyst prompt is missing custom-task routing: {phrase}")
-    if "project.sendManagerMessage" not in analyst_tools:
-        fail("vc_deal_pipeline Deal Analyst must have the bounded Deal Manager handoff tool")
-
     relationships = (initial_version.get("extensions") or {}).get("projectRelationships") or []
     if relationships != [{
         "typeKey": "vc.deal_pipeline_promoted_to_investment_execution",

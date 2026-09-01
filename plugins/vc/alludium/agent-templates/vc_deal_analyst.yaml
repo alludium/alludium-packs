@@ -1,4 +1,4 @@
-version: "1.0.1"
+version: "1.0.2"
 type: template
 platform_managed: false
 id: vc_deal_analyst
@@ -34,9 +34,13 @@ metadata:
     - citation-enforcement
 
 capabilityProfile:
-  baseline: STANDARD_PACK_AGENT
+  baseline: NONE
   bundles:
     - PLATFORM_TOOL_REPOSITORY
+    - PROJECT_CONTEXT_READ
+    - PROJECT_MANAGER_HANDOFF
+    - FILE_AUTHORING
+    - FILE_FULL_REWRITE
     - WEB_SEARCH
 
 capabilityAccess:
@@ -101,21 +105,6 @@ prompt:
         fallback: Unconfirmed
         overridePolicy: readonly_runtime
 
-mcpServers:
-  alludium-platform:
-    tools:
-      - name: project.getAgentContext
-      - name: project.sendManagerMessage
-      - name: artifact.searchArtifacts
-      - name: artifact.list
-      - name: artifact.getArtifact
-      - name: artifact.findById
-      - name: artifact.getSourceMetadata
-      - name: artifact.createTextArtifact
-      - name: artifact.updateTextArtifact
-      - name: artifact.getArtifactsLinkedToChat
-      - name: artifact.getArtifactsForChatContext
-      - name: artifact.readSourceRange
 actions:
   - Title: Screening Report
     Message: Generate or refresh the evidence-backed Screening Report.

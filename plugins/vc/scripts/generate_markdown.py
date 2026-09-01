@@ -22,6 +22,12 @@ BLUEPRINT_OUTPUT_ROOT = PACK_ROOT / "project-blueprints"
 MANIFEST_PATH = PACK_ROOT / "alludium" / "manifest.yaml"
 DOCUMENT_CATALOG_PATH = PACK_ROOT / "alludium" / "documents" / "catalog.v1.json"
 SKILL_ROOT = PACK_ROOT / "skills"
+CAPABILITY_BOUNDED_CONNECTED_APP_AGENT_IDS = {
+    "vc_deal_manager",
+    "vc_deal_pipeline_manager",
+    "vc_deal_analyst",
+    "vc_pipeline_autopilot",
+}
 
 PLATFORM_TASK_DEFINITIONS: dict[str, dict[str, str]] = {
     "project-source-choice": {
@@ -324,6 +330,24 @@ def integration_refs_inline(
             for server_name in agent_mcp_servers:
                 add_ref(server_name)
 
+        capability_profile = (
+            agent_template.get("capabilityProfile")
+            if isinstance(agent_template, dict)
+            else None
+        )
+        agent_tool_policy = (
+            (((agent_template.get("capabilityAccess") or {}).get("tools") or {}).get("policy"))
+            if isinstance(agent_template, dict)
+            else None
+        )
+        if (
+            agent_id in CAPABILITY_BOUNDED_CONNECTED_APP_AGENT_IDS
+            and agent_tool_policy == "ALL_CONNECTED_APPS"
+            and isinstance(capability_profile, dict)
+            and string_list(capability_profile.get("bundles"))
+        ):
+            add_ref("alludium-platform")
+
     return "<br>".join(f"`{markdown_escape(ref)}`" for ref in refs) if refs else "None declared"
 
 
@@ -487,21 +511,40 @@ def skill_lines_with_activation(template: dict[str, Any]) -> str:
 
 def mcp_lines(template: dict[str, Any]) -> str:
     servers = template.get("mcpServers")
-    if not isinstance(servers, dict):
-        return "- None declared\n"
     lines: list[str] = []
-    for server_name, server in servers.items():
-        tools: list[str] = []
-        if isinstance(server, dict) and isinstance(server.get("tools"), list):
-            for tool in server["tools"]:
-                if isinstance(tool, dict) and isinstance(tool.get("name"), str):
-                    tools.append(tool["name"])
-        tool_text = ", ".join(f"`{tool}`" for tool in tools)
-        lines.append(f"- `{server_name}`")
-        if tool_text:
-            lines[-1] += f": {tool_text}"
-        lines[-1] += "\n"
-    return "".join(lines)
+    if isinstance(servers, dict):
+        for server_name, server in servers.items():
+            tools: list[str] = []
+            if isinstance(server, dict) and isinstance(server.get("tools"), list):
+                for tool in server["tools"]:
+                    if isinstance(tool, dict) and isinstance(tool.get("name"), str):
+                        tools.append(tool["name"])
+            tool_text = ", ".join(f"`{tool}`" for tool in tools)
+            lines.append(f"- `{server_name}`")
+            if tool_text:
+                lines[-1] += f": {tool_text}"
+            lines[-1] += "\n"
+
+    tool_policy = (((template.get("capabilityAccess") or {}).get("tools") or {}).get("policy"))
+    if (
+        template.get("id") in CAPABILITY_BOUNDED_CONNECTED_APP_AGENT_IDS
+        and tool_policy == "ALL_CONNECTED_APPS"
+    ):
+        capability_profile = template.get("capabilityProfile")
+        bundles = (
+            string_list(capability_profile.get("bundles"))
+            if isinstance(capability_profile, dict)
+            else []
+        )
+        if bundles:
+            lines.append(
+                "- `alludium-platform` capability bundles: "
+                + ", ".join(f"`{bundle}`" for bundle in bundles)
+                + "\n"
+            )
+        lines.append("- User-connected applications are discoverable at runtime.\n")
+
+    return "".join(lines) if lines else "- None declared\n"
 
 
 def model_alias(llm: Any) -> str | None:

@@ -135,7 +135,7 @@ Humans own investment priority and decisions, unsupported inferred values, exter
 - Source template: `alludium/agent-templates/vc_pipeline_autopilot.yaml`
 - Alludium template ID: `vc_pipeline_autopilot`
 - Display name: Pipeline Manager
-- Version: `1.0.20`
+- Version: `1.0.21`
 - Primary stage: Pipeline
 - Primary Deal Room state: `evaluation`
 - Supported task definitions:
@@ -153,7 +153,8 @@ Humans own investment priority and decisions, unsupported inferred values, exter
 
 ## MCP And Tool Context
 
-- `alludium-platform`: `project.listNavigation`, `project.listForCurrentWorkspace`, `project.findById`, `project.getAgentContext`, `project.listCreationFieldOptions`, `project.listMembers`, `project.createFromChat`, `project.applyPortfolioOperations`, `project-task.listByProject`, `project-task.findById`, `task-definitions.list`, `task-definitions.findById`, `task-management.getTaskDetail`, `task-management.createTask`, `artifact.searchArtifacts`, `artifact.list`, `artifact.getArtifact`, `artifact.findById`, `artifact.createTextArtifact`, `artifact.attachToChat`, `artifact.detachFromChat`, `artifact.getArtifactsLinkedToChat`
+- `alludium-platform` capability bundles: `PLATFORM_TOOL_REPOSITORY`, `PROJECT_CONTEXT_READ`, `PROJECT_PORTFOLIO_READ`, `PROJECT_PORTFOLIO_OPERATIONS`, `PROJECT_TASK_COORDINATION`, `FILE_AUTHORING`, `WEB_SEARCH`
+- User-connected applications are discoverable at runtime.
 
 ## Suggested Actions
 

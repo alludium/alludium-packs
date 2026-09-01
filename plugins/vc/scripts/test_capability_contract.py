@@ -51,13 +51,12 @@ class CapabilityContractRegressionTests(unittest.TestCase):
     def _connected_app_template(self) -> dict[str, Any]:
         return {
             "capabilityProfile": {
-                "baseline": "STANDARD_PACK_AGENT",
-                "bundles": ["PLATFORM_TOOL_REPOSITORY", "WEB_SEARCH"],
+                "baseline": "NONE",
+                "bundles": sorted(
+                    VALIDATOR.CONNECTED_APP_DISCOVERY_EXPECTED_BUNDLES["vc_deal_manager"]
+                ),
             },
             "capabilityAccess": {"tools": {"policy": "ALL_CONNECTED_APPS"}},
-            "mcpServers": {
-                "alludium-platform": {"tools": [{"name": "project.getAgentContext"}]}
-            },
         }
 
     def test_accepts_brokered_connected_app_discovery_template(self) -> None:
@@ -68,15 +67,24 @@ class CapabilityContractRegressionTests(unittest.TestCase):
 
     def test_rejects_connected_app_discovery_without_broker_bundle(self) -> None:
         template = self._connected_app_template()
-        template["capabilityProfile"]["bundles"] = ["WEB_SEARCH"]
+        template["capabilityProfile"]["bundles"].remove("PLATFORM_TOOL_REPOSITORY")
 
         with self.assertRaises(SystemExit):
             VALIDATOR.validate_connected_app_discovery_template("vc_deal_manager", template)
 
     def test_rejects_connected_app_discovery_with_vendor_tool_allowlist(self) -> None:
         template = self._connected_app_template()
-        template["mcpServers"]["affinity-mcp-server"] = {
+        template["mcpServers"] = {"affinity-mcp-server": {
             "tools": [{"name": "affinity_search_companies"}]
+        }}
+
+        with self.assertRaises(SystemExit):
+            VALIDATOR.validate_connected_app_discovery_template("vc_deal_manager", template)
+
+    def test_rejects_connected_app_discovery_with_platform_tool_allowlist(self) -> None:
+        template = self._connected_app_template()
+        template["mcpServers"] = {
+            "alludium-platform": {"tools": [{"name": "project.getAgentContext"}]}
         }
 
         with self.assertRaises(SystemExit):

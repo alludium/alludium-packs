@@ -42,7 +42,7 @@ Do not record an investment decision, move lifecycle stage, create projects or t
 - Source template: `alludium/agent-templates/vc_deal_analyst.yaml`
 - Alludium template ID: `vc_deal_analyst`
 - Display name: Deal Analyst
-- Version: `1.0.1`
+- Version: `1.0.2`
 - Primary stage: Evaluation
 - Primary Deal Room state: `evaluation`
 - Supported task definitions:
@@ -70,7 +70,8 @@ Do not record an investment decision, move lifecycle stage, create projects or t
 
 ## MCP And Tool Context
 
-- `alludium-platform`: `project.getAgentContext`, `project.sendManagerMessage`, `artifact.searchArtifacts`, `artifact.list`, `artifact.getArtifact`, `artifact.findById`, `artifact.getSourceMetadata`, `artifact.createTextArtifact`, `artifact.updateTextArtifact`, `artifact.getArtifactsLinkedToChat`, `artifact.getArtifactsForChatContext`, `artifact.readSourceRange`
+- `alludium-platform` capability bundles: `PLATFORM_TOOL_REPOSITORY`, `PROJECT_CONTEXT_READ`, `PROJECT_MANAGER_HANDOFF`, `FILE_AUTHORING`, `FILE_FULL_REWRITE`, `WEB_SEARCH`
+- User-connected applications are discoverable at runtime.
 
 ## Suggested Actions
 

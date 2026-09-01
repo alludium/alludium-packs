@@ -1,4 +1,4 @@
-version: "1.0.2"
+version: "1.0.3"
 type: "template"
 platform_managed: false
 id: "vc_deal_manager"
@@ -28,9 +28,14 @@ metadata:
     - citation-enforcement
 
 capabilityProfile:
-  baseline: STANDARD_PACK_AGENT
+  baseline: NONE
   bundles:
     - PLATFORM_TOOL_REPOSITORY
+    - PROJECT_CONTEXT_READ
+    - PROJECT_WORKSPACE_UPDATE
+    - TASK_FOLLOW_UP
+    - FILE_CONTEXT_READ
+    - AGENT_ROUTING
     - WEB_SEARCH
 
 capabilityAccess:
@@ -123,30 +128,6 @@ prompt:
         fallback: "Unconfirmed"
         overridePolicy: "readonly_runtime"
 
-mcpServers:
-  alludium-platform:
-    tools:
-      - name: project.getAgentContext
-      - name: project.findById
-      - name: project.update
-      - name: project.listAvailableMembers
-      - name: project-task.listByProject
-      - name: project-task.findById
-      - name: task-definitions.list
-      - name: task-definitions.findById
-      - name: task-management.getTaskDetail
-      - name: task-management.createAdHocTask
-      - name: task-management.createTaskFromDefinition
-      - name: task-management.assignTask
-      - name: agent.findByUserId
-      - name: agent-deployment.findByAgentIdAndType
-      - name: artifact.searchArtifacts
-      - name: artifact.list
-      - name: artifact.getArtifact
-      - name: artifact.findById
-      - name: artifact.getArtifactsLinkedToChat
-      - name: artifact.getArtifactsForChatContext
-      - name: artifact.readSourceRange
 actions:
   - Title: "Route Fund"
     Message: "Review the configured Funds, suggest the best-supported match, and ask me to confirm before saving fund_id."

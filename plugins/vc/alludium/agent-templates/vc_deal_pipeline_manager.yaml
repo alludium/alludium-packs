@@ -1,4 +1,4 @@
-version: "1.0.4"
+version: "1.0.5"
 type: template
 platform_managed: false
 id: vc_deal_pipeline_manager
@@ -23,9 +23,14 @@ metadata:
     - citation-enforcement
 
 capabilityProfile:
-  baseline: STANDARD_PACK_AGENT
+  baseline: NONE
   bundles:
     - PLATFORM_TOOL_REPOSITORY
+    - PROJECT_CONTEXT_READ
+    - PROJECT_WORKSPACE_UPDATE
+    - PROJECT_TASK_COORDINATION
+    - FILE_AUTHORING
+    - FILE_FULL_REWRITE
     - WEB_SEARCH
 
 capabilityAccess:
@@ -93,29 +98,6 @@ prompt:
         fallback: Unconfirmed
         overridePolicy: readonly_runtime
 
-mcpServers:
-  alludium-platform:
-    tools:
-      - name: project.getAgentContext
-      - name: project.findById
-      - name: project.update
-      - name: project.listMembers
-      - name: project-task.listByProject
-      - name: project-task.findById
-      - name: task-definitions.list
-      - name: task-definitions.findById
-      - name: task-management.getTaskDetail
-      - name: task-management.createTask
-      - name: artifact.searchArtifacts
-      - name: artifact.list
-      - name: artifact.getArtifact
-      - name: artifact.findById
-      - name: artifact.getSourceMetadata
-      - name: artifact.createTextArtifact
-      - name: artifact.updateTextArtifact
-      - name: artifact.getArtifactsLinkedToChat
-      - name: artifact.getArtifactsForChatContext
-      - name: artifact.readSourceRange
 actions:
   - Title: Review Deal
     Message: Summarize the current status, durable documents, evidence gaps, and next human decision.

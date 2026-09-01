@@ -1,4 +1,4 @@
-version: "1.0.20"
+version: "1.0.21"
 type: "template"
 platform_managed: false
 id: "vc_pipeline_autopilot"
@@ -189,43 +189,20 @@ prompt:
       render: "textarea"
 
 capabilityProfile:
-  baseline: STANDARD_PACK_AGENT
+  baseline: NONE
   bundles:
-    - TASK_FOLLOW_UP
-    - TASK_HANDOFF
-    - FILE_AUTHORING
     - PLATFORM_TOOL_REPOSITORY
+    - PROJECT_CONTEXT_READ
+    - PROJECT_PORTFOLIO_READ
+    - PROJECT_PORTFOLIO_OPERATIONS
+    - PROJECT_TASK_COORDINATION
+    - FILE_AUTHORING
     - WEB_SEARCH
 
 capabilityAccess:
   tools:
     policy: ALL_CONNECTED_APPS
 
-mcpServers:
-  alludium-platform:
-    tools:
-      - name: project.listNavigation
-      - name: project.listForCurrentWorkspace
-      - name: project.findById
-      - name: project.getAgentContext
-      - name: project.listCreationFieldOptions
-      - name: project.listMembers
-      - name: project.createFromChat
-      - name: project.applyPortfolioOperations
-      - name: project-task.listByProject
-      - name: project-task.findById
-      - name: task-definitions.list
-      - name: task-definitions.findById
-      - name: task-management.getTaskDetail
-      - name: task-management.createTask
-      - name: artifact.searchArtifacts
-      - name: artifact.list
-      - name: artifact.getArtifact
-      - name: artifact.findById
-      - name: artifact.createTextArtifact
-      - name: artifact.attachToChat
-      - name: artifact.detachFromChat
-      - name: artifact.getArtifactsLinkedToChat
 actions:
   - Title: "Create Deal"
     Message: "Create a Deal from this conversation, carry its source links and files into the Deal, ask one focused question only if required identity, duplicate intent, or a material value is unresolved, and return one short readback with the Platform action."
