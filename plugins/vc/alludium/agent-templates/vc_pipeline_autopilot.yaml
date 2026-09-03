@@ -1,4 +1,4 @@
-version: "1.0.19"
+version: "1.0.20"
 type: "template"
 platform_managed: false
 id: "vc_pipeline_autopilot"
@@ -34,6 +34,11 @@ skills:
     activationMode: "AUTO"
   - externalId: "citation-enforcement"
     activationMode: "ALWAYS"
+
+capabilityAccess:
+  tools:
+    policy: ALL_CONNECTED_APPS
+    connectedApplicationExecutionMode: READ_ONLY
 
 prompt:
   template: |

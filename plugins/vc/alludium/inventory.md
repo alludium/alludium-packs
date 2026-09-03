@@ -1,8 +1,13 @@
 # Alludium VC Inventory
 
-**Version**: 0.6.24
-**Status**: Fund-aware Deal creation with a locked Deal Analyst task executor and a dormant governed
-Deal workbook capability declaration
+**Version**: 0.6.25
+**Status**: Fund-aware Deal creation with read-only connected applications for the principal VC
+agents, a locked Deal Analyst task executor, and a dormant governed Deal workbook capability
+declaration
+
+Version `0.6.25` configures Deal Manager, Pipeline Manager, and Deal Analyst for
+`ALL_CONNECTED_APPS` discovery with `READ_ONLY` connected-application execution. It carries forward
+the Fund-fit and governed-workbook contracts released in `0.6.24`.
 
 Version `0.6.24` keeps Fund-fit scoring bounded to populated fields on the exact selected active
 `vc.funds` record. Missing Fund mandate values remain unconfirmed, externally researched firm-level
