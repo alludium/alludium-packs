@@ -88,6 +88,22 @@ facts such as litigation, regulatory status, adverse media, market size,
 competitor positioning, or third-party customer evidence may still be led by
 external sources.
 
+## Fund Mandate Source Boundary
+
+When the invoking workflow supplies a selected Fund and canonical `vc.funds`
+records, require the selected Fund id to exactly match an active record. Treat
+only populated fields on that matched record as configured Fund mandate truth.
+
+A missing configured Fund field is unconfirmed configuration, not an evidence
+gap that research may fill. Public web, firm-level, third-party, CRM, and
+company evidence may be retained as separately labelled context, but must never
+be presented as configured Fund data or used as a Fund-fit criterion. If the
+matched Fund has neither a configured minimum nor maximum check size, report
+configured Fund check size as `Unconfirmed` and score cheque-size fit `N/A`.
+Do not describe the company's raise as compatible or incompatible with a public
+estimate. If no active Fund is confirmed, make no Fund-relative assessment and
+return Fund selection as unresolved to the invoking workflow.
+
 ## Thesis Fit Pre-Check
 
 If the firm's investment thesis is available, do a fast fit check before full evaluation:
@@ -155,6 +171,8 @@ Does the investment fit the fund strategy?
 - Stage, cheque size, and ownership expectations.
 - Can the fund provide what this company needs?
 - Can the fund reasonably reach its target ownership at exit, factoring in follow-on capital and dilution?
+- Apply only populated mandate values from the confirmed selected Fund. Keep
+  missing values unconfirmed and public firm-level estimates non-scoring.
 
 ### 6. Value Creation
 
