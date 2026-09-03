@@ -43,6 +43,18 @@ funds:
     geographies:
       - Global
     thesis: Historical mandate retained for reference only.
+  - id: northbridge-seed
+    name: Northbridge Seed Fund
+    status: actively_investing
+    stage: Seed
+    sectors:
+      - B2B software
+    geographies:
+      - Europe
+    thesis: Back capital-efficient B2B software companies solving expensive operational workflows.
+    exclusions:
+      - Consumer-only products
+    scoringFramework: Evidence-weighted seed screening
 
 scenarios:
   - id: no-configured-funds
@@ -97,6 +109,18 @@ scenarios:
     projectFundId: legacy-opportunity
     expectedState: correction_required
     mayMakeFundFitClaim: false
+  - id: confirmed-fund-with-unconfigured-check-size
+    configuredFundIds:
+      - northbridge-seed
+    projectFundId: northbridge-seed
+    publicFirmCheckSizeEstimate:
+      minimum: 250000
+      maximum: 1500000
+      currency: EUR
+    expectedState: confirmed_with_unconfigured_check_size
+    expectedConfiguredCheckSize: Unconfirmed
+    expectedChequeSizeScore: N/A
+    mayUsePublicEstimateAsFundFitCriterion: false
   - id: deal-execution-handoff
     configuredFundIds:
       - europe-seed

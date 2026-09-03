@@ -1057,6 +1057,46 @@ def validate_templates(manifest: dict[str, Any], skill_ids: set[str]) -> None:
                     f"Agent template {template_id} prompt.template must interpolate {required_key}"
                 )
 
+        if template_id == "vc_first_look_analyst":
+            required_fund_fields = {
+                "id",
+                "name",
+                "status",
+                "stage",
+                "sectors",
+                "geographies",
+                "thesis",
+                "minimumCheckSize",
+                "maximumCheckSize",
+                "currency",
+                "exclusions",
+                "scoringFramework",
+            }
+            missing_fund_fields = sorted(
+                field
+                for field in required_fund_fields
+                if "{{" + field + "}}" not in (prompt_template or "")
+            )
+            if missing_fund_fields:
+                fail(
+                    "Agent template vc_first_look_analyst must render canonical Fund "
+                    f"fields: {missing_fund_fields}"
+                )
+            prompt_contract = (prompt_template or "").lower()
+            for required_phrase in [
+                "only populated fields",
+                "missing fund field is unconfirmed configuration",
+                "never use them as fund-fit criteria",
+                "configured fund check size as unconfirmed",
+                "score cheque-size fit n/a",
+                "create no scorecard",
+            ]:
+                if required_phrase not in prompt_contract:
+                    fail(
+                        "Agent template vc_first_look_analyst must preserve Fund mandate "
+                        f"source boundary phrase: {required_phrase!r}"
+                    )
+
         mcp_servers = template.get("mcpServers") or {}
         for server_id, required_tools in REQUIRED_AGENT_TOOLS.get(template_id, {}).items():
             server = mcp_servers.get(server_id) if isinstance(mcp_servers, dict) else None
@@ -1632,6 +1672,7 @@ def validate_fund_routing_contract() -> None:
         "valid-confirmed-fund",
         "unknown-confirmed-fund",
         "inactive-confirmed-fund",
+        "confirmed-fund-with-unconfigured-check-size",
         "deal-execution-handoff",
     }
     scenarios_by_id = {
@@ -1650,6 +1691,24 @@ def validate_fund_routing_contract() -> None:
     handed_off_id = (((handoff.get("expectedProjectCreation") or {}).get("fieldValues") or {}).get("fund_id"))
     if handed_off_id != handoff.get("projectFundId"):
         fail("Deal Execution handoff fixture must preserve fund_id exactly")
+
+    unconfigured_check_size = scenarios_by_id[
+        "confirmed-fund-with-unconfigured-check-size"
+    ]
+    selected_fund = fund_by_id.get(unconfigured_check_size.get("projectFundId"))
+    if not isinstance(selected_fund, dict):
+        fail("Unconfigured check-size fixture must select a configured Fund")
+    if any(
+        field in selected_fund
+        for field in ["minimumCheckSize", "maximumCheckSize", "currency"]
+    ):
+        fail("Unconfigured check-size fixture Fund must omit all configured check-size fields")
+    if unconfigured_check_size.get("expectedConfiguredCheckSize") != "Unconfirmed":
+        fail("Unconfigured check-size fixture must expect configured check size Unconfirmed")
+    if unconfigured_check_size.get("expectedChequeSizeScore") != "N/A":
+        fail("Unconfigured check-size fixture must expect cheque-size score N/A")
+    if unconfigured_check_size.get("mayUsePublicEstimateAsFundFitCriterion") is not False:
+        fail("Public check-size estimates must not be usable as Fund-fit criteria")
 
     management_fixture_path = (
         ROOT / "alludium" / "fixtures" / "deal-pipeline-management.yaml"
@@ -8471,6 +8530,54 @@ def validate_no_public_readiness_leakage() -> None:
                 fail(f"Public-readiness leak ({label}) found in {path.relative_to(REPO_ROOT)}")
 
 
+def validate_investment_fit_source_boundary() -> None:
+    task_path = (
+        ROOT
+        / "alludium"
+        / "task-definition-templates"
+        / "vc-workflows"
+        / "run-investment-fit-screen.yaml"
+    )
+    task = read_yaml(task_path)
+    instructions = (
+        (((task.get("definition") or {}).get("definitionJson") or {}).get("instructions") or {})
+        .get("executionInstructions", "")
+        .lower()
+    )
+    task_phrases = [
+        "only populated fields",
+        "missing fund field is unconfirmed configuration",
+        "never use them as fund-fit criteria",
+        "configured fund check size as unconfirmed",
+        "score cheque-size fit n/a",
+        "create no scorecard",
+    ]
+    for phrase in task_phrases:
+        if phrase not in instructions:
+            fail(
+                "Run Investment Fit Screen must preserve Fund mandate source boundary "
+                f"phrase: {phrase!r}"
+            )
+
+    skill_path = ROOT / "skills" / "investment-screening-framework" / "SKILL.md"
+    skill_text = skill_path.read_text(encoding="utf-8").lower()
+    skill_phrases = [
+        "## fund mandate source boundary",
+        "only populated fields",
+        "unconfirmed configuration",
+        "used as a fund-fit criterion",
+        "configured fund check size as `unconfirmed`",
+        "score cheque-size fit `n/a`",
+        "make no fund-relative assessment",
+    ]
+    for phrase in skill_phrases:
+        if phrase not in skill_text:
+            fail(
+                "Investment screening framework must preserve Fund mandate source "
+                f"boundary phrase: {phrase!r}"
+            )
+
+
 def main() -> None:
     plugin_paths = plugin_manifest_paths()
     for path in plugin_paths:
@@ -8504,6 +8611,7 @@ def main() -> None:
         document_ids,
         document_types_by_id,
     )
+    validate_investment_fit_source_boundary()
     validate_project_task_mapping_contracts()
     validate_vc_deal_pipeline_contract()
     validate_origination_no_hub_contract(manifest)

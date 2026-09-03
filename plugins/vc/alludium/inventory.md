@@ -1,8 +1,12 @@
 # Alludium VC Inventory
 
-**Version**: 0.6.23
+**Version**: 0.6.24
 **Status**: Fund-aware Deal creation with a locked Deal Analyst task executor and a dormant governed
 Deal workbook capability declaration
+
+Version `0.6.24` keeps Fund-fit scoring bounded to populated fields on the exact selected active
+`vc.funds` record. Missing Fund mandate values remain unconfirmed, externally researched firm-level
+values remain non-scoring context, and Deals without a confirmed Fund produce no Fund-relative scorecard.
 
 Version `0.6.23` declares `vc.financial_workbook_evaluation` at method version `1.0.0`.
 The declaration freezes the single exact `.xlsx` input envelope, deterministic checks, LP-001
