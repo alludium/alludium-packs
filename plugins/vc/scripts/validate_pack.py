@@ -987,6 +987,20 @@ def validate_templates(manifest: dict[str, Any], skill_ids: set[str]) -> None:
             fail(f"Agent template file/id mismatch for {template_id}")
         if not isinstance(template.get("platform_managed"), bool):
             fail(f"Agent template {template_id} must explicitly declare platform_managed")
+        if template_id in {
+            "vc_deal_manager",
+            "vc_pipeline_autopilot",
+            "vc_deal_analyst",
+        }:
+            tool_access = (template.get("capabilityAccess") or {}).get("tools") or {}
+            if tool_access != {
+                "policy": "ALL_CONNECTED_APPS",
+                "connectedApplicationExecutionMode": "READ_ONLY",
+            }:
+                fail(
+                    f"Agent template {template_id} must discover every connected app "
+                    "while restricting connected-application execution to READ_ONLY"
+                )
         color = template.get("color")
         if color is not None and (
             not isinstance(color, str) or color not in AGENT_AVATAR_COLORS

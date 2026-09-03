@@ -1,4 +1,4 @@
-version: "1.0.1"
+version: "1.0.2"
 type: "template"
 platform_managed: false
 id: "vc_deal_manager"
@@ -40,6 +40,11 @@ skills:
     activationMode: "AUTO"
   - externalId: "citation-enforcement"
     activationMode: "ALWAYS"
+
+capabilityAccess:
+  tools:
+    policy: ALL_CONNECTED_APPS
+    connectedApplicationExecutionMode: READ_ONLY
 
 prompt:
   template: |
