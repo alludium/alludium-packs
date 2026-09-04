@@ -1718,6 +1718,12 @@ def validate_fund_routing_contract() -> None:
         fail(f"{management_fixture_path.relative_to(ROOT)} must be an object")
     required_management_scenarios = {
         "dealManagerScenarios": {
+            "direct-screening-request-without-task-phrase",
+            "direct-screening-refresh-without-task-phrase",
+            "ambiguous-deck-request",
+            "screening-request-missing-confirmed-fund",
+            "direct-request-existing-screening-task",
+            "agent-origin-screening-request-is-not-human-approval",
             "compact-context-with-confirmed-fund",
             "predefined-task-match",
             "approved-custom-financial-verification",
@@ -6475,7 +6481,7 @@ def validate_vc_deal_pipeline_contract() -> None:
         "Use `task-management.createTask` for every task",
         "otherwise omit it and create the specific bounded task",
         "small reusable catalog is intentional and must never be used as a reason to refuse useful Deal work",
-        "A direct, unambiguous user instruction to create a task approves only that exact task",
+        "A direct, unambiguous human instruction to perform work approves creating and starting the task needed for that exact work",
         "agent-origin metadata never confers human approval",
         "ask the user for approval before creating the proposed task",
         "Task creation and assignment are one atomic action",

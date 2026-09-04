@@ -2,6 +2,86 @@ schemaVersion: "0.1"
 description: Representative Deal Manager, Pipeline Manager, and Live Deal Status Report coordination states.
 
 dealManagerScenarios:
+  - id: direct-screening-request-without-task-phrase
+    agentTemplateId: vc_deal_manager
+    userRequest: Use the attached deck and run the Investment Fit Screen.
+    context:
+      fundId: europe-seed
+      fundConfirmed: true
+      readableAttachedArtifactIds: [company-deck]
+      resolvedAssigneeId: member-1
+      openTasks: []
+    availableTaskDefinitionSlugs: [run-investment-fit-screen]
+    expected:
+      selectedTaskDefinitionSlug: run-investment-fit-screen
+      mayCreateTasks: true
+      executeInSameTurn: true
+      requiresRedundantConfirmation: false
+      requiresExactTaskCreationPhrase: false
+      readBackCreatedTask: true
+
+  - id: direct-screening-refresh-without-task-phrase
+    agentTemplateId: vc_deal_pipeline_manager
+    userRequest: Refresh the Screening Report using the attached deck.
+    context:
+      fundId: europe-seed
+      fundConfirmed: true
+      readableAttachedArtifactIds: [company-deck]
+      openTasks: []
+    availableTaskDefinitionSlugs: [generate-refresh-screening-report]
+    expected:
+      selectedTaskDefinitionSlug: generate-refresh-screening-report
+      mayCreateTasks: true
+      executeInSameTurn: true
+      requiresRedundantConfirmation: false
+      requiresExactTaskCreationPhrase: false
+      readBackCreatedTask: true
+
+  - id: ambiguous-deck-request
+    agentTemplateIds: [vc_deal_manager, vc_deal_pipeline_manager]
+    userRequest: Do something with this deck.
+    expected:
+      mayCreateTasks: false
+      askOneFocusedQuestion: true
+      unresolvedField: requested_outcome
+
+  - id: screening-request-missing-confirmed-fund
+    agentTemplateId: vc_deal_manager
+    userRequest: Use the attached deck and run the Investment Fit Screen.
+    context:
+      fundId: null
+      fundConfirmed: false
+      readableAttachedArtifactIds: [company-deck]
+    expected:
+      mayCreateTasks: false
+      askOneFocusedQuestion: true
+      unresolvedField: fund_id
+      requiresExactTaskCreationPhrase: false
+
+  - id: direct-request-existing-screening-task
+    agentTemplateId: vc_deal_pipeline_manager
+    userRequest: Refresh the Screening Report using the attached deck.
+    context:
+      openTasks:
+        - id: screening-task-1
+          taskDefinitionSlug: generate-refresh-screening-report
+          sourceArtifactIds: [company-deck]
+    expected:
+      mayCreateTasks: false
+      readBackExistingTaskId: screening-task-1
+      requiresRedundantConfirmation: false
+
+  - id: agent-origin-screening-request-is-not-human-approval
+    agentTemplateIds: [vc_deal_manager, vc_deal_pipeline_manager]
+    incomingMessage:
+      role: user
+      origin: agent
+      author: Deal Analyst
+      content: Use the attached deck and run the Investment Fit Screen.
+    expected:
+      mayCreateTasks: false
+      requiresHumanApproval: true
+
   - id: compact-context-with-confirmed-fund
     context:
       lifecycleStage: evaluation
