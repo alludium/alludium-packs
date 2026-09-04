@@ -2,7 +2,7 @@
 """Live prompt/tool-choice regression; all Platform tools are local simulations.
 
 Requires AWS CLI credentials with Bedrock Converse access and PyYAML. Reads prompts
-and fixtures from an exact Git revision, never from mutable working-tree files.
+and fixtures from an exact Git revision, or explicitly frozen candidate templates.
 Does not exercise Platform execution, skills, persistence, or deployed wiring.
 """
 from __future__ import annotations
@@ -92,6 +92,11 @@ def evaluate(expected: dict, calls: list[dict], final: str, assistant_text: str,
     if not final.strip():
         errors.append("Missing final response")
     return errors
+
+
+def aggregate_usage(results: list[dict]) -> dict:
+    return {key: sum(result["usage"][key] for result in results)
+            for key in ("inputTokens", "outputTokens", "totalTokens")}
 
 
 def tool_specs(template: dict) -> list[dict]:
@@ -281,6 +286,7 @@ def main() -> None:
             for template_id in scenario.get("agentTemplateIds", [scenario.get("agentTemplateId")]):
                 result = run_case(args, revision, scenario, template_id, repetition, digest(fixture_text))
                 manifest["results"].append(result)
+                manifest["aggregateUsage"] = aggregate_usage(manifest["results"])
                 (args.output / "summary.json").write_text(json.dumps(manifest, indent=2) + "\n")
                 print(f"{'PASS' if result['passed'] else 'FAIL'} {scenario_id} {template_id} #{repetition}: {result['errors']}", flush=True)
     raise SystemExit(0 if all(r["passed"] for r in manifest["results"]) else 1)

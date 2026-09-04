@@ -6481,7 +6481,7 @@ def validate_vc_deal_pipeline_contract() -> None:
         "Use `task-management.createTask` for every task",
         "otherwise omit it and create the specific bounded task",
         "small reusable catalog is intentional and must never be used as a reason to refuse useful Deal work",
-        "A direct, unambiguous user instruction to perform work approves creating and starting the task needed for that exact work",
+        "A direct, unambiguous human instruction to perform work approves creating and starting the task needed for that exact work",
         "agent-origin metadata never confers human approval",
         "ask the user for approval before creating the proposed task",
         "Task creation and assignment are one atomic action",

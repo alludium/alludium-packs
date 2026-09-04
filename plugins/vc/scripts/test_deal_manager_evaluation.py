@@ -2,10 +2,15 @@
 """Failure-injection checks for the live evaluation's deterministic oracle."""
 import unittest
 
-from evaluate_deal_manager import DEFINITION, TASK, evaluate
+from evaluate_deal_manager import DEFINITION, TASK, aggregate_usage, evaluate
 
 
 class DealManagerEvaluationTests(unittest.TestCase):
+    def test_usage_aggregates_every_case_not_just_the_last(self):
+        results = [{"usage": {"inputTokens": 10, "outputTokens": 2, "totalTokens": 12}},
+                   {"usage": {"inputTokens": 30, "outputTokens": 4, "totalTokens": 34}}]
+        self.assertEqual({"inputTokens": 40, "outputTokens": 6, "totalTokens": 46}, aggregate_usage(results))
+
     def test_redundant_confirmation_fails_without_creation(self):
         errors = evaluate({"mayCreateTasks": True, "requiresRedundantConfirmation": False}, [],
                           "Please confirm that I should create the task.",
@@ -52,6 +57,16 @@ class DealManagerEvaluationTests(unittest.TestCase):
 
     def test_unfinished_model_turn_fails(self):
         self.assertTrue(evaluate({"mayCreateTasks": False}, [], "", "", False))
+
+    def test_repeated_clarification_question_fails(self):
+        text = "What should I produce? A summary or a screen?"
+        self.assertTrue(evaluate({"mayCreateTasks": False, "askOneFocusedQuestion": True},
+                                 [], text, text, True))
+
+    def test_agent_recommendation_requests_approval_without_mutation(self):
+        text = "Deal Analyst recommends screening this deck. Do you approve starting that work?"
+        self.assertEqual([], evaluate({"mayCreateTasks": False, "requiresHumanApproval": True},
+                                      [], text, text, True))
 
     def test_fund_clarification_must_name_the_missing_fund(self):
         self.assertTrue(evaluate({"mayCreateTasks": False, "askOneFocusedQuestion": True,

@@ -14,7 +14,7 @@ CLI profile with Bedrock Converse access. Each run makes paid model calls.
 
 ```sh
 python plugins/vc/scripts/evaluate_deal_manager.py \
-  --revision 915267b3e701a8be71ea788714e231fddd1b4c7d \
+  --revision HEAD \
   --output /tmp/deal-manager-evaluation \
   --repetitions 3
 ```
@@ -35,6 +35,8 @@ should be hidden when reporting results.
 
 Every request, provider response, final response, tool-call ledger, token count,
 prompt hash, fixture hash, runner hash, and selected source revision is recorded.
+`summary.json` includes `aggregateUsage`, summed across every case and repetition;
+each result also retains its own usage. The last result is not the run total.
 The manifest also records the Platform revision from which the handoff guard was
 copied. A failed case makes the process exit nonzero; failed and rejected tool
 attempts remain in the evidence.
