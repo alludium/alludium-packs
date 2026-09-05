@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.score_sourcing_candidate
-version: 0.1.15
+version: 0.1.16
 title: Score Sourcing Candidate
 category: Venture Capital
 visibility: workspace
@@ -53,12 +53,16 @@ definition:
         more than 20 employees when reliable LinkedIn company data is present, unless the matched Fund''s populated stage,
         thesis, or scoring framework explicitly allows that later stage or company size. Run the second-pass verdict only for Meet/Watch
         rows with fresh LinkedIn company data so paid scraping and model cost stay bounded. After producing the scoring artifact,
-        read the relationship again and call `project-relationship.updateMetadata` once. Because that operation replaces
-        metadata, copy every existing key and every existing `scoring_by_fund` entry unchanged, then set only
+        read the relationship again and retain its exact metadata as `expectedMetadata` for `project-relationship.updateMetadata`.
+        Because that operation replaces metadata, copy every existing key and every existing `scoring_by_fund` entry unchanged, then set only
         `scoring_by_fund[fund_id]` to an object containing `schema_version: vc.sourcing_line_candidate_scoring.v1`, the exact
         Candidate, line, relationship and Fund IDs, `scoring_artifact_id`, `candidate_score`, `review_verdict`,
         `thesis_fit_summary`, `scored_at`, and the current task ID. Never write these Fund-relative values to Candidate-wide
-        project fields. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by
+        project fields. Supply the unchanged prior snapshot in `expectedMetadata` and the revised object in `metadata`.
+        If the update returns409 conflict, reread and revalidate the relationship and current line Fund, then reapply only
+        this Fund result to the latest metadata and retry once with that new snapshot. If it conflicts again, keep
+        the task incomplete and ask for review; never perform an unconditional overwrite or discard other Fund scores.
+        Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by
         usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must
         be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and
         `operating_guidance` or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce
