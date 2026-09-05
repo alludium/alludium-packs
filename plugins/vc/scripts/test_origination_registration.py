@@ -19,5 +19,16 @@ class RegistrationContractTests(unittest.TestCase):
         self.assertIn("`collection: portfolio`", instructions)
         self.assertIn('"key":"candidate_key"', instructions)
 
+class ScoringConcurrencyContractTests(unittest.TestCase):
+    def test_scoring_uses_prior_metadata_and_bounded_conflict_recovery(self):
+        task = yaml.safe_load((ROOT / "alludium/task-definition-templates/vc-workflows/score-sourcing-candidate.yaml").read_text())
+        instructions = task["definition"]["definitionJson"]["instructions"]["executionInstructions"]
+        self.assertIn("`expectedMetadata`", instructions)
+        self.assertIn("unchanged prior snapshot", instructions)
+        self.assertIn("returns409 conflict", instructions)
+        self.assertIn("retry once", instructions)
+        self.assertIn("never perform an unconditional overwrite", instructions)
+        self.assertIn("every existing `scoring_by_fund` entry unchanged", instructions)
+
 if __name__ == "__main__":
     unittest.main()
