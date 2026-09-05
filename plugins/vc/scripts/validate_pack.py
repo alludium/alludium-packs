@@ -6821,7 +6821,7 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
         ),
         "vc_origination_candidate": (
             "vc.origination_candidate_promoted_to_deal",
-            ["vc_deal_room"],
+            ["vc_deal_pipeline", "vc_deal_room"],
         ),
     }
     expected_managers = {
