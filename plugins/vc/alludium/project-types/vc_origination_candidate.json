@@ -58,7 +58,7 @@
     "postCreate": {"triggerInitialStateTasks": true}
   },
   "initialVersion": {
-    "version": "0.2.3",
+    "version": "0.2.4",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -162,7 +162,7 @@
           "label": "Promoted to Deal Pipeline",
           "inverseLabel": "Promoted from Origination Candidate",
           "description": "Links the candidate and its complete multi-line provenance to a reviewed Deal Pipeline project.",
-          "targetProjectTypeKeys": ["vc_deal_room"]
+          "targetProjectTypeKeys": ["vc_deal_pipeline", "vc_deal_room"]
         }
       ]
     },
