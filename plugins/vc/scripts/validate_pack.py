@@ -1097,6 +1097,15 @@ def validate_templates(manifest: dict[str, Any], skill_ids: set[str]) -> None:
                         f"source boundary phrase: {required_phrase!r}"
                     )
 
+        if template_id in {
+            "vc_origination_manager",
+            "vc_origination_candidate_manager",
+            "vc_sourcing_line_manager",
+            "vc_origination_scout",
+            "vc_sourcing_operator",
+        }:
+            validate_origination_connected_app_access(template_id, template)
+
         mcp_servers = template.get("mcpServers") or {}
         for server_id, required_tools in REQUIRED_AGENT_TOOLS.get(template_id, {}).items():
             server = mcp_servers.get(server_id) if isinstance(mcp_servers, dict) else None
@@ -1118,6 +1127,14 @@ def validate_templates(manifest: dict[str, Any], skill_ids: set[str]) -> None:
                 fail(f"Template {template_id} has a skill entry without externalId")
             if external_id not in skill_ids:
                 fail(f"Template {template_id} references missing skill {external_id}")
+
+
+def validate_origination_connected_app_access(template_id: str, template: dict[str, Any]) -> None:
+    tools = (template.get("capabilityAccess") or {}).get("tools") or {}
+    if tools.get("policy") != "ALL_CONNECTED_APPS":
+        fail(f"Origination agent {template_id} must discover ALL_CONNECTED_APPS")
+    if tools.get("connectedApplicationExecutionMode") != "READ_ONLY":
+        fail(f"Origination agent {template_id} must use READ_ONLY connected application execution")
 
 
 def require_string_list(value: Any, context: str) -> list[str]:

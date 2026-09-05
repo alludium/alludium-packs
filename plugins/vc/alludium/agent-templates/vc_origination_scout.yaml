@@ -1,4 +1,4 @@
-version: "1.0.6"
+version: "1.0.7"
 type: "template"
 platform_managed: false
 id: "vc_origination_scout"
@@ -33,6 +33,11 @@ skills:
     activationMode: "AUTO"
   - externalId: "citation-enforcement"
     activationMode: "ALWAYS"
+
+capabilityAccess:
+  tools:
+    policy: ALL_CONNECTED_APPS
+    connectedApplicationExecutionMode: READ_ONLY
 
 prompt:
   template: |

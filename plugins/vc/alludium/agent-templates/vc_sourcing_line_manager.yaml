@@ -1,4 +1,4 @@
-version: "1.0.2"
+version: "1.0.3"
 type: "template"
 platform_managed: false
 id: "vc_sourcing_line_manager"
@@ -41,6 +41,7 @@ capabilityProfile:
 capabilityAccess:
   tools:
     policy: ALL_CONNECTED_APPS
+    connectedApplicationExecutionMode: READ_ONLY
 
 skills:
   - externalId: "origination-pipeline-orchestration"
