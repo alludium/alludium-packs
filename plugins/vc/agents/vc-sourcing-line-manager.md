@@ -69,7 +69,7 @@ Humans own Fund changes, source activation, schedules, spend, external sends, CR
 - Source template: `alludium/agent-templates/vc_sourcing_line_manager.yaml`
 - Alludium template ID: `vc_sourcing_line_manager`
 - Display name: Sourcing Line Manager
-- Version: `1.0.2`
+- Version: `1.0.3`
 - Primary stage: Sourcing Line
 - Supported task definitions:
   - `create-sourcing-line`

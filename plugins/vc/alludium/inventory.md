@@ -1,8 +1,13 @@
 # Alludium VC Inventory
 
-**Version**: 0.6.25
+**Version**: 0.6.26
 **Status**: Fund-aware Deal creation with a locked Deal Analyst task executor and a dormant governed
 Deal workbook capability declaration
+
+Version `0.6.26` makes all five Origination agents discover the acting user's connected
+applications through `ALL_CONNECTED_APPS`, with read-only external execution. Existing
+Platform capability profiles and internal tool declarations remain in force. Connecting
+an application does not grant another user's credentials or permit external writes.
 
 Version `0.6.25` makes clear user requests sufficient authorization for Deal Manager to create
 and start the matching task without redundant confirmation or prescribed wording. Ambiguous requests,

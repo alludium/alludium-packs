@@ -63,7 +63,7 @@ Humans own source activation, schedules, spend, external sends, CRM writes, Fund
 - Source template: `alludium/agent-templates/vc_origination_manager.yaml`
 - Alludium template ID: `vc_origination_manager`
 - Display name: Origination Manager
-- Version: `1.1.1`
+- Version: `1.1.2`
 - Primary stage: Origination Operations
 - Supported task definitions:
   - `create-sourcing-line`

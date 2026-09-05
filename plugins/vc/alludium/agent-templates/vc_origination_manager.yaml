@@ -1,4 +1,4 @@
-version: "1.1.1"
+version: "1.1.2"
 type: "template"
 platform_managed: false
 id: "vc_origination_manager"
@@ -47,6 +47,7 @@ capabilityProfile:
 capabilityAccess:
   tools:
     policy: ALL_CONNECTED_APPS
+    connectedApplicationExecutionMode: READ_ONLY
 
 skills:
   - externalId: "origination-pipeline-orchestration"
