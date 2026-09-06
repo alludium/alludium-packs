@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.run_vc_sourcing_pipeline
-version: 0.1.18
+version: 0.1.19
 title: Run VC Sourcing Pipeline
 category: Venture Capital
 visibility: workspace
@@ -74,11 +74,8 @@ definition:
         by default or explicit override only. Resolve each enabled child definition with `task-definitions.list` and `task-definitions.findById`, then call
         `task-management.createTaskFromDefinition` with the current sourcing-run task as `parentTaskId`, the exact Sourcing Line
         as `projectId`, and only the reviewed inputs for that source/action boundary. Do not claim a child exists until the platform
-        supplies the returned task ID, and do not create disabled children. After the run reaches a terminal receipt and the user approves completion,
-        call `project.update` for the exact Sourcing Line with typed field values for `last_run_status`, `new_candidates_last_run`,
-        `last_run_at`, `latest_run_receipt_artifact_id`, `latest_candidate_batch_artifact_id`, and `latest_source_state_artifact_id`.
-        Use only terminal output values and platform-returned artifact IDs. Do not mutate on missing inputs, rejected approval, or before child tasks finish.
-        Re-read the exact line through `project.getAgentContext` and report persisted run state only after the read matches. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage:
+        supplies the returned task ID, and do not create disabled children. For run-derived Candidate registration, carry this exact sourcing-run task ID as `sourcing_run_task_id` in the reviewed inputs passed to the supported guided Register launcher; do not substitute a source child task ID or create an untracked registration task. Manual registrations without an originating run omit this optional input and remain outside per-run counts.
+        Save the platform-returned receipt, candidate batch, and source-state artifact IDs in this exact run task''s output. Do not call `project.update` to write `last_run_status`, `new_candidates_last_run`, `last_run_at`, or latest-run artifact summary fields on the Line. Platform reporting derives lifecycle and proposed/created/reused/rejected/failed outcomes from attributed task and finalization records, and artifact links from this run''s output. A candidate in a batch or a `projectCreation` proposal is not a created Candidate. Treat the compatibility `new_candidates_count` output as proposed new candidates only; never present it as a committed creation count. Missing finalization evidence means unknown, not success. Complete only after child work and the required human review; save source outcome limitations honestly without declaring the task lifecycle yourself. Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage:
         `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be
         completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance`
         or `policy` constrains process and approval boundaries. For refs with `outputFieldKey`, produce that output from the
@@ -123,7 +120,7 @@ fields:
     position: 0
     config: {}
   - key: new_candidates_count
-    name: New Candidates Count
+    name: Proposed New Candidates Count
     fieldType: number
     required: false
     position: 1
