@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.promote_candidate_to_deal_pipeline
-version: 0.1.14
+version: 0.1.15
 title: Promote Candidate to Deal Pipeline
 category: Venture Capital
 visibility: workspace
@@ -46,7 +46,10 @@ definition:
         relationship context, outreach state, conflicts, and open questions. Preserve the Candidate project and its complete
         multi-line provenance after promotion. Emit `dealCreationProposal.createRequest` with the selected Fund and an incoming
         `vc.origination_candidate_promoted_to_deal` relationship from `origination_candidate_project_id`. Do not create or
-        update the Deal Pipeline unless the platform action is explicitly approved.
+        update the Deal Pipeline unless the platform action is explicitly approved. The human promotion action resolves the
+        workspace-bound Deal Pipeline version and initial state. Omit guessed project type UUIDs and lifecycle state; never
+        propose the obsolete intake state. Use relationship direction incoming, not inbound. Successful package review
+        does not itself create a Deal; the reviewer must use Review and create Deal after completing this task.
         Use `definitionJson.documentRefs` as the durable document reference contract. Apply each reference by usage: `output_template`
         sets the output skeleton, `methodology` supplies scoring or analysis logic, `checklist` must be completed with status,
         evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains

@@ -99,7 +99,7 @@
     "postCreate": {"triggerInitialStateTasks": true}
   },
   "initialVersion": {
-    "version": "0.2.4",
+    "version": "0.2.5",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -190,7 +190,7 @@
       {"from": "draft", "to": "ready"}, {"from": "draft", "to": "paused"},
       {"from": "paused", "to": "ready"}, {"from": "ready", "to": "active"},
       {"from": "active", "to": "degraded"}, {"from": "degraded", "to": "active"},
-      {"from": "active", "to": "paused"}, {"from": "paused", "to": "active"},
+      {"from": "degraded", "to": "paused"}, {"from": "active", "to": "paused"}, {"from": "paused", "to": "active"},
       {"from": "paused", "to": "retired"}, {"from": "retired", "to": "archived"}
     ],
     "commandView": {
