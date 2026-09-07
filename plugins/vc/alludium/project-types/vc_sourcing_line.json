@@ -99,7 +99,7 @@
     "postCreate": {"triggerInitialStateTasks": true}
   },
   "initialVersion": {
-    "version": "0.2.5",
+    "version": "0.2.6",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -108,6 +108,7 @@
         "vc.document.source_registry_template",
         "vc.document.sourcing_line_template_catalog",
         "vc.document.candidate_batch_template",
+        "vc.document.dedupe_novelty_policy",
         "vc.document.source_health_review_checklist",
         "vc.document.paid_source_spend_audit_checklist",
         "vc.document.sourcing_digest_template",

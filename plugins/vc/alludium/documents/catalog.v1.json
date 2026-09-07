@@ -889,6 +889,7 @@
       "documentType": "policy",
       "path": "origination/dedupe-novelty-policy.html",
       "supportedProjectTypes": [
+        "vc_sourcing_line",
         "vc_origination_candidate"
       ],
       "relatedTaskDefinitionSlugs": [

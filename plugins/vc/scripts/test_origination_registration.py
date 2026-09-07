@@ -1,4 +1,5 @@
 """Keep guided registration instructions consistent with the output contract."""
+import json
 import unittest
 from pathlib import Path
 import yaml
@@ -6,6 +7,23 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 
 class RegistrationContractTests(unittest.TestCase):
+    def test_dedupe_policy_is_available_before_candidate_creation(self):
+        document_id = "vc.document.dedupe_novelty_policy"
+        line = json.loads(
+            (ROOT / "alludium/project-types/vc_sourcing_line.json").read_text()
+        )
+        catalog = json.loads(
+            (ROOT / "alludium/documents/catalog.v1.json").read_text()
+        )
+        policy = next(
+            document for document in catalog["documents"] if document["id"] == document_id
+        )
+
+        self.assertIn(
+            document_id, line["initialVersion"]["documentLibrary"]["documentIds"]
+        )
+        self.assertIn("vc_sourcing_line", policy["supportedProjectTypes"])
+
     def test_proposal_shape_and_identity_checks_match_the_native_contract(self):
         task = yaml.safe_load((ROOT / "alludium/task-definition-templates/vc-workflows/register-origination-candidate.yaml").read_text())
         output = next(field for field in task["fields"]["output"] if field["key"] == "projectCreation")
