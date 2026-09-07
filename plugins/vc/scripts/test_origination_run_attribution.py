@@ -11,6 +11,10 @@ def load_task(name):
     return yaml.safe_load((ROOT / "alludium/task-definition-templates/vc-workflows" / name).read_text())
 
 
+def load_agent(name):
+    return yaml.safe_load((ROOT / "alludium/agent-templates" / name).read_text())
+
+
 class OriginationRunAttributionTests(unittest.TestCase):
     def test_manual_registration_does_not_require_a_run(self):
         task = load_task("register-origination-candidate.yaml")
@@ -49,6 +53,11 @@ class OriginationRunAttributionTests(unittest.TestCase):
         self.assertIn("same task as this link task's `parentTaskId`", link_instructions)
         self.assertIn("`run-vc-sourcing-pipeline` task for this Sourcing Line", link_instructions)
         self.assertIn("standalone/manual link omits `sourcing_run_task_id`", link_instructions)
+
+        operator = load_agent("vc_sourcing_operator.yaml")
+        platform_server = operator["mcpServers"]["alludium-platform"]
+        tool_names = {tool["name"] for tool in platform_server["tools"]}
+        self.assertIn("task-management.getTaskDetail", tool_names)
 
     def test_proposals_and_legacy_line_fields_are_not_committed_outcomes(self):
         task = load_task("run-vc-sourcing-pipeline.yaml")
