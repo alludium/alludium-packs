@@ -12,6 +12,29 @@ class RegistrationContractTests(unittest.TestCase):
         instructions = task["definition"]["definitionJson"]["instructions"]["executionInstructions"]
         self.assertIn("fieldValues.company_name", output["config"]["requiredPaths"])
         self.assertIn("relationships", output["config"]["requiredPaths"])
+        schema = output["config"]["schema"]
+        self.assertEqual(schema["type"], "object")
+        self.assertEqual(set(schema["required"]), {"fieldValues", "relationships"})
+        field_values = schema["properties"]["fieldValues"]
+        self.assertEqual(
+            set(field_values["required"]),
+            {"company_name", "candidate_key", "source_evidence_summary"},
+        )
+        for field_key in field_values["required"]:
+            self.assertEqual(field_values["properties"][field_key]["type"], "string")
+        relationships = schema["properties"]["relationships"]
+        self.assertEqual(
+            relationships["items"]["properties"]["direction"]["enum"],
+            ["incoming", "outgoing"],
+        )
+        self.assertNotIn("inbound", relationships["items"]["properties"]["direction"]["enum"])
+        self.assertEqual(
+            relationships["contains"]["properties"]["direction"]["const"], "incoming"
+        )
+        self.assertEqual(
+            relationships["contains"]["properties"]["relationshipTypeKey"]["const"],
+            "vc.sourcing_line_originated_candidate",
+        )
         self.assertIn("`fieldValues` at its root", instructions)
         self.assertNotIn("emit `projectCreation.createRequest`", instructions)
         self.assertIn("text fields must be strings", instructions)
