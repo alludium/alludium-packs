@@ -60,7 +60,7 @@ Humans own investment outcomes, lifecycle moves, external sends, CRM writes, leg
 - Source template: `alludium/agent-templates/vc_deal_pipeline_manager.yaml`
 - Alludium template ID: `vc_deal_pipeline_manager`
 - Display name: Deal Manager
-- Version: `1.0.5`
+- Version: `1.0.6`
 - Primary stage: Screening
 - Primary Deal Room state: `screening`
 - Supported task definitions:
@@ -77,10 +77,9 @@ Humans own investment outcomes, lifecycle moves, external sends, CRM writes, leg
 
 ## MCP And Tool Context
 
-- `alludium-platform`: `project.getAgentContext`, `project.findById`, `project.update`, `project.listMembers`, `project-task.listByProject`, `project-task.findById`, `task-definitions.list`, `task-definitions.findById`, `task-management.getTaskDetail`, `task-management.createTask`, `artifact.searchArtifacts`, `artifact.list`, `artifact.getArtifact`, `artifact.findById`, `artifact.getSourceMetadata`, `artifact.createTextArtifact`, `artifact.updateTextArtifact`, `artifact.getArtifactsLinkedToChat`, `artifact.getArtifactsForChatContext`, `artifact.readSourceRange`
-- `harmonic-mcp-oauth`: `get_companies`, `typeahead_search`, `search_companies_natural_language`, `get_people`
-- `affinity-mcp-server`: `affinity_search_companies`, `affinity_get_company`, `affinity_list_company_notes`
-- `exa-mcp-hosted`: `web_search_exa`, `company_research_exa`, `people_search_exa`
+- Platform capability bundles: `PLATFORM_TOOL_REPOSITORY`, `PROJECT_CONTEXT_READ`, `PROJECT_WORKSPACE_UPDATE`, `PROJECT_TASK_COORDINATION`, `FILE_AUTHORING`, `FILE_FULL_REWRITE`, `WEB_SEARCH`
+- Tool discovery: `ALL_CONNECTED_APPS`
+- Connected-application execution: `READ_ONLY`
 
 ## Suggested Actions
 

@@ -20,8 +20,8 @@ Project-type setup and configuration tasks used before normal project execution.
 
 | Task | Agent | Skills | Documents | Integrations |
 | --- | --- | --- | --- | --- |
-| [Register Origination Candidate](../tasks/register-origination-candidate.md) | [Candidate Manager](../agents/vc-origination-candidate-manager.md) | [VC Sourcing Dedupe & Novelty Check](../skills/vc-sourcing-dedupe-and-novelty-check/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | [Candidate Batch Template](../alludium/documents/origination/candidate-batch-template.html) (operating_guidance)<br>[Dedupe And Novelty Policy](../alludium/documents/origination/dedupe-novelty-policy.html) (policy) | `alludium-platform`<br>`affinity-mcp-server`<br>`harmonic-mcp-oauth`<br>`exa-mcp-hosted` |
-| [VC Pack Variable Discovery](../tasks/vc-pack-variable-discovery.md) | [Candidate Manager](../agents/vc-origination-candidate-manager.md) | None declared | None declared | `alludium-platform`<br>`affinity-mcp-server`<br>`harmonic-mcp-oauth`<br>`exa-mcp-hosted` |
+| [Register Origination Candidate](../tasks/register-origination-candidate.md) | [Candidate Manager](../agents/vc-origination-candidate-manager.md) | [VC Sourcing Dedupe & Novelty Check](../skills/vc-sourcing-dedupe-and-novelty-check/SKILL.md)<br>[Citation Enforcement](../skills/citation-enforcement/SKILL.md) | [Candidate Batch Template](../alludium/documents/origination/candidate-batch-template.html) (operating_guidance)<br>[Dedupe And Novelty Policy](../alludium/documents/origination/dedupe-novelty-policy.html) (policy) | `Authorized connected apps via discovery`<br>`alludium-platform`<br>`affinity-mcp-server`<br>`harmonic-mcp-oauth`<br>`exa-mcp-hosted` |
+| [VC Pack Variable Discovery](../tasks/vc-pack-variable-discovery.md) | [Candidate Manager](../agents/vc-origination-candidate-manager.md) | None declared | None declared | `Authorized connected apps via discovery`<br>`alludium-platform`<br>`affinity-mcp-server`<br>`harmonic-mcp-oauth`<br>`exa-mcp-hosted` |
 
 ## Identified
 

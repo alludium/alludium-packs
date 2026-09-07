@@ -1,10 +1,10 @@
 # Alludium VC Inventory
 
-**Version**: 0.6.25
+**Version**: 0.6.26
 **Status**: Fund-aware Deal creation with a locked Deal Analyst task executor and a dormant governed
 Deal workbook capability declaration
 
-Version `0.6.25` makes clear user requests sufficient authorization for Deal Manager to create
+Version `0.6.26` makes clear user requests sufficient authorization for Deal Manager to create
 and start the matching task without redundant confirmation or prescribed wording. Ambiguous requests,
 missing prerequisites, and agent-proposed work retain their existing clarification and approval boundaries.
 
