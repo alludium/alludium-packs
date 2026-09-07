@@ -30,6 +30,26 @@ class OriginationRunAttributionTests(unittest.TestCase):
         self.assertIn("supported guided Register launcher", instructions)
         self.assertIn("do not substitute a source child task ID", instructions)
 
+    def test_existing_candidate_link_preserves_the_exact_parent_run(self):
+        run_task = load_task("run-vc-sourcing-pipeline.yaml")
+        run_instructions = run_task["definition"]["definitionJson"]["instructions"][
+            "executionInstructions"
+        ]
+        self.assertIn("predefined `link-existing-origination-candidate` task", run_instructions)
+        self.assertIn("same ID as `sourcing_run_task_id`", run_instructions)
+        self.assertIn("do not launch guided Candidate creation", run_instructions)
+
+        link_task = load_task("link-existing-origination-candidate.yaml")
+        inputs = {field["key"]: field for field in link_task["fields"]["input"]}
+        self.assertFalse(inputs["sourcing_run_task_id"]["required"])
+        self.assertEqual(inputs["sourcing_run_task_id"]["fieldType"], "string")
+        link_instructions = link_task["definition"]["definitionJson"]["instructions"][
+            "executionInstructions"
+        ]
+        self.assertIn("same task as this link task's `parentTaskId`", link_instructions)
+        self.assertIn("`run-vc-sourcing-pipeline` task for this Sourcing Line", link_instructions)
+        self.assertIn("standalone/manual link omits `sourcing_run_task_id`", link_instructions)
+
     def test_proposals_and_legacy_line_fields_are_not_committed_outcomes(self):
         task = load_task("run-vc-sourcing-pipeline.yaml")
         instructions = task["definition"]["definitionJson"]["instructions"]["executionInstructions"]
