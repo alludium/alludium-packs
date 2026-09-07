@@ -74,7 +74,7 @@ Do not contact founders, create Deals, write to CRM/source systems, enable recur
 - Source template: `alludium/agent-templates/vc_sourcing_operator.yaml`
 - Alludium template ID: `vc_sourcing_operator`
 - Display name: Sourcing Operator
-- Version: `1.1.6`
+- Version: `1.1.7`
 - Primary stage: Origination Operations
 - Primary Deal Room state: `intake`
 - Supported task definitions:

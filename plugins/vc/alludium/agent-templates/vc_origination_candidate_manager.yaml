@@ -1,4 +1,4 @@
-version: "1.0.3"
+version: "1.0.4"
 type: "template"
 platform_managed: false
 id: "vc_origination_candidate_manager"
@@ -41,6 +41,7 @@ capabilityProfile:
 capabilityAccess:
   tools:
     policy: ALL_CONNECTED_APPS
+    connectedApplicationExecutionMode: READ_ONLY
 
 skills:
   - externalId: "company-research-and-enrichment"
