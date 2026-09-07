@@ -22,3 +22,31 @@ Validation: full Pack validation passed (100 task templates), generated Markdown
 (123 files), release contract passed against the exact stacked base, and all 39 Python contract
 tests passed. The new test is included in CI. Live paired/native/hosted validation remains pending;
 these instructions require Platform #4073 and must not be presented as already deployed.
+
+## 7 September — refresh after Pack #94 merged
+
+Rebased onto main `380fc7ee1f49cbca67db8be117cf0d149cff6141`, which merged #94
+and advances the Pack to 0.6.27. Resolved the README conflict by preserving the
+0.6.26 Origination and 0.6.27 Deal Pipeline discovery history and adding a separate
+0.6.28 run-attribution entry. Advanced both plugin manifests, Pack manifest,
+inventory, ontology release provenance and derived package hashes to proposed
+0.6.28. Component content, semantic versions and component hashes are unchanged.
+
+Compared the incoming agent templates, generated agents/blueprints, generator and
+connected-app tests directly with main: identical. Compared both Origination task
+YAML files and their run-attribution regressions with previous head `e74458d`: identical.
+The workflow and validator retain both incoming discovery checks and run-attribution checks.
+No additional product-contract repair was required by this rebase.
+
+Validation: full Pack validator passed (100 tasks); generated Markdown check passed
+(123 files); release contract passed against main 0.6.27; all 43 Python contract tests
+passed in 153.015 seconds; diff check passed. Accumulated author review against
+main `380fc7e` passed for the Pack declaration/generated-contract scope, with no
+remaining P1/P2 in that scope. These checks do not establish runtime acceptance.
+
+Compatibility: inherited Pack #94 requires the role bundles in merged Platform
+#4076 (`b3b082580144b95d216c858699a443562a9f7e6c`). The older local #4072 foundation
+must be refreshed before ingesting the new Pack. Platform #4073 must update its
+exact commit/archive/version and rerun the paired checks; its owner is coordinating
+that separately. Draft and browser/native/hosted gates remain open. No tag,
+deployment, workspace ingest or release publication was performed.
