@@ -319,6 +319,12 @@ def integration_refs_inline(
 
     if isinstance(agent_id, str):
         agent_template = agent_templates.get(agent_id, {})
+        if isinstance(agent_template, dict) and agent_template.get("capabilityProfile"):
+            access = agent_template.get("capabilityAccess") or {}
+            if (access.get("tools") or {}).get("policy") == "ALL_CONNECTED_APPS":
+                add_ref("Authorized connected apps via discovery")
+            if "WEB_SEARCH" in (agent_template["capabilityProfile"].get("bundles") or []):
+                add_ref("Shared web research")
         agent_mcp_servers = agent_template.get("mcpServers") if isinstance(agent_template, dict) else None
         if isinstance(agent_mcp_servers, dict):
             for server_name in agent_mcp_servers:
@@ -486,10 +492,20 @@ def skill_lines_with_activation(template: dict[str, Any]) -> str:
 
 
 def mcp_lines(template: dict[str, Any]) -> str:
+    profile = template.get("capabilityProfile") or {}
+    access = template.get("capabilityAccess") or {}
+    policy = access.get("tools") or {} if isinstance(access, dict) else {}
+    capability_lines: list[str] = []
+    if isinstance(profile, dict) and profile.get("bundles"):
+        capability_lines.append("- Platform capability bundles: " + ", ".join(f"`{bundle}`" for bundle in profile["bundles"]) + "\n")
+    if capability_lines and isinstance(policy, dict) and policy.get("policy"):
+        capability_lines.append(f"- Tool discovery: `{policy['policy']}`\n")
+    if capability_lines and isinstance(policy, dict) and policy.get("connectedApplicationExecutionMode"):
+        capability_lines.append(f"- Connected-application execution: `{policy['connectedApplicationExecutionMode']}`\n")
     servers = template.get("mcpServers")
     if not isinstance(servers, dict):
-        return "- None declared\n"
-    lines: list[str] = []
+        return "".join(capability_lines) or "- None declared\n"
+    lines: list[str] = capability_lines
     for server_name, server in servers.items():
         tools: list[str] = []
         if isinstance(server, dict) and isinstance(server.get("tools"), list):

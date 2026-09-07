@@ -20,9 +20,9 @@ Project-type setup and configuration tasks used before normal project execution.
 
 | Task | Agent | Skills | Documents | Integrations |
 | --- | --- | --- | --- | --- |
-| [Configure Sourcing Line](../tasks/configure-sourcing-line.md) | [Sourcing Line Manager](../agents/vc-sourcing-line-manager.md) | [Origination Pipeline Orchestration](../skills/origination-pipeline-orchestration/SKILL.md)<br>[VC Source Registry & State Management](../skills/vc-source-registry-and-state-management/SKILL.md) | [Source Registry Template](../alludium/documents/origination/source-registry-template.html) (operating_guidance)<br>[Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.html) (methodology) | `alludium-platform` |
-| [Create Sourcing Line](../tasks/create-sourcing-line.md) | [Sourcing Line Manager](../agents/vc-sourcing-line-manager.md) | [Origination Pipeline Orchestration](../skills/origination-pipeline-orchestration/SKILL.md) | None declared | `alludium-platform` |
-| [VC Pack Variable Discovery](../tasks/vc-pack-variable-discovery.md) | [Sourcing Line Manager](../agents/vc-sourcing-line-manager.md) | None declared | None declared | `alludium-platform` |
+| [Configure Sourcing Line](../tasks/configure-sourcing-line.md) | [Sourcing Line Manager](../agents/vc-sourcing-line-manager.md) | [Origination Pipeline Orchestration](../skills/origination-pipeline-orchestration/SKILL.md)<br>[VC Source Registry & State Management](../skills/vc-source-registry-and-state-management/SKILL.md) | [Source Registry Template](../alludium/documents/origination/source-registry-template.html) (operating_guidance)<br>[Origination Source Strategy Guide](../alludium/documents/origination/origination-source-strategy-guide.html) (methodology) | `Authorized connected apps via discovery`<br>`alludium-platform` |
+| [Create Sourcing Line](../tasks/create-sourcing-line.md) | [Sourcing Line Manager](../agents/vc-sourcing-line-manager.md) | [Origination Pipeline Orchestration](../skills/origination-pipeline-orchestration/SKILL.md) | None declared | `Authorized connected apps via discovery`<br>`alludium-platform` |
+| [VC Pack Variable Discovery](../tasks/vc-pack-variable-discovery.md) | [Sourcing Line Manager](../agents/vc-sourcing-line-manager.md) | None declared | None declared | `Authorized connected apps via discovery`<br>`alludium-platform` |
 
 ## Integration Support
 

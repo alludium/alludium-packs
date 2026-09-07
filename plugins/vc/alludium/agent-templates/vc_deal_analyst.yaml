@@ -1,4 +1,4 @@
-version: "1.0.0"
+version: "1.0.2"
 type: template
 platform_managed: false
 id: vc_deal_analyst
@@ -32,6 +32,22 @@ metadata:
     - deal-terms-analysis
     - term-sheet-negotiation-brief
     - citation-enforcement
+
+capabilityProfile:
+  baseline: NONE
+  bundles:
+    - PLATFORM_TOOL_REPOSITORY
+    - PROJECT_CONTEXT_READ
+    - TASK_OUTPUT_SAVE
+    - PROJECT_MANAGER_HANDOFF
+    - FILE_AUTHORING
+    - FILE_FULL_REWRITE
+    - WEB_SEARCH
+
+capabilityAccess:
+  tools:
+    policy: ALL_CONNECTED_APPS
+    connectedApplicationExecutionMode: READ_ONLY
 
 skills:
   - externalId: generate-or-refresh-living-report
@@ -90,40 +106,6 @@ prompt:
         path: fund_id
         fallback: Unconfirmed
         overridePolicy: readonly_runtime
-
-mcpServers:
-  alludium-platform:
-    tools:
-      - name: project.getAgentContext
-      - name: project.sendManagerMessage
-      - name: artifact.searchArtifacts
-      - name: artifact.list
-      - name: artifact.getArtifact
-      - name: artifact.findById
-      - name: artifact.getSourceMetadata
-      - name: artifact.createTextArtifact
-      - name: artifact.updateTextArtifact
-      - name: artifact.getArtifactsLinkedToChat
-      - name: artifact.getArtifactsForChatContext
-      - name: artifact.readSourceRange
-  harmonic-mcp-oauth:
-    tools:
-      - name: get_companies
-      - name: typeahead_search
-      - name: search_companies_natural_language
-      - name: get_people
-  affinity-mcp-server:
-    tools:
-      - name: affinity_search_companies
-      - name: affinity_get_company
-      - name: affinity_list_company_notes
-  exa-mcp-hosted:
-    connectionScope: SHARED
-    tools:
-      - name: web_search_exa
-      - name: web_search_advanced_exa
-      - name: company_research_exa
-      - name: people_search_exa
 
 actions:
   - Title: Screening Report
