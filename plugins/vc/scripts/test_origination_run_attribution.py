@@ -1,4 +1,5 @@
 """Prevent Pack instructions from weakening the Platform run-attribution contract."""
+import json
 import unittest
 from pathlib import Path
 
@@ -72,6 +73,21 @@ class OriginationRunAttributionTests(unittest.TestCase):
         for key in ("run_receipt_artifact_id", "candidate_batch_artifact_id", "source_state_artifact_id"):
             self.assertTrue(outputs[key]["required"])
             self.assertEqual(outputs[key]["fieldType"], "file")
+
+        line = json.loads(
+            (ROOT / "alludium/project-types/vc_sourcing_line.json").read_text()
+        )
+        command_view = line["initialVersion"]["commandView"]
+        displayed_field_keys = {
+            field["fieldKey"]
+            for surface in ("summaryFields", "badgeFields")
+            for field in command_view[surface]
+        }
+        self.assertTrue(
+            displayed_field_keys.isdisjoint(
+                {"last_run_at", "last_run_status", "new_candidates_last_run"}
+            )
+        )
 
 
 if __name__ == "__main__":

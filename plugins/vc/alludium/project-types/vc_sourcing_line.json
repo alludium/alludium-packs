@@ -99,7 +99,7 @@
     "postCreate": {"triggerInitialStateTasks": true}
   },
   "initialVersion": {
-    "version": "0.2.6",
+    "version": "0.2.7",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -220,14 +220,11 @@
       "fallbackAgents": [],
       "outputSlots": [],
       "summaryFields": [
-        {"key": "fund", "label": "Fund", "fieldKey": "fund_id", "format": "text"},
-        {"key": "last_run", "label": "Last run", "fieldKey": "last_run_at", "format": "text"},
-        {"key": "new_candidates", "label": "New candidates", "fieldKey": "new_candidates_last_run", "format": "text"}
+        {"key": "fund", "label": "Fund", "fieldKey": "fund_id", "format": "text"}
       ],
       "primarySummaryField": {"key": "fund", "label": "Fund", "fieldKey": "fund_id", "format": "text"},
       "badgeFields": [
-        {"key": "source_health", "label": "Source health", "fieldKey": "source_health_status", "format": "text"},
-        {"key": "last_run_status", "label": "Last run status", "fieldKey": "last_run_status", "format": "text"}
+        {"key": "source_health", "label": "Source health", "fieldKey": "source_health_status", "format": "text"}
       ]
     },
     "extensions": {
