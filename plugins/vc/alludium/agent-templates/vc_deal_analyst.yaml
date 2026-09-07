@@ -1,4 +1,4 @@
-version: "1.0.1"
+version: "1.0.2"
 type: template
 platform_managed: false
 id: vc_deal_analyst
@@ -38,6 +38,7 @@ capabilityProfile:
   bundles:
     - PLATFORM_TOOL_REPOSITORY
     - PROJECT_CONTEXT_READ
+    - TASK_OUTPUT_SAVE
     - PROJECT_MANAGER_HANDOFF
     - FILE_AUTHORING
     - FILE_FULL_REWRITE
