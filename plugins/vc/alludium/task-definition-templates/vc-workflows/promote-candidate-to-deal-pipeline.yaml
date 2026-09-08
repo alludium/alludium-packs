@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.promote_candidate_to_deal_pipeline
-version: 0.1.15
+version: 0.1.16
 title: Promote Candidate to Deal Pipeline
 category: Venture Capital
 visibility: workspace
@@ -45,7 +45,9 @@ definition:
         identity, founder evidence, every contributing Sourcing Line, all source receipts, enrichment/verdict/screen summaries,
         relationship context, outreach state, conflicts, and open questions. Preserve the Candidate project and its complete
         multi-line provenance after promotion. Emit `dealCreationProposal.createRequest` with the selected Fund and an incoming
-        `vc.origination_candidate_promoted_to_deal` relationship from `origination_candidate_project_id`. Do not create or
+        `vc.origination_candidate_promoted_to_deal` relationship from `origination_candidate_project_id`. Put the Candidate ID
+        only in that relationship''s `relatedProjectId` and metadata; never add `origination_candidate_project_id` to
+        `createRequest.fieldValues`, because it is task input and provenance rather than a Deal Pipeline field. Do not create or
         update the Deal Pipeline unless the platform action is explicitly approved. The human promotion action resolves the
         workspace-bound Deal Pipeline version and initial state. Omit guessed project type UUIDs and lifecycle state; never
         propose the obsolete intake state. Use relationship direction incoming, not inbound. Successful package review
@@ -109,3 +111,14 @@ fields:
       - createRequest.relationships[].relatedProjectId
       - createRequest.relationships[].relationshipTypeKey
       - createRequest.relationships[].metadata
+      schema:
+        type: object
+        properties:
+          createRequest:
+            type: object
+            properties:
+              fieldValues:
+                type: object
+                not:
+                  required:
+                  - origination_candidate_project_id

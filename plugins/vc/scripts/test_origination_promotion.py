@@ -14,5 +14,17 @@ class PromotionContractTests(unittest.TestCase):
         self.assertIn("Omit guessed project type UUIDs and lifecycle state", instructions)
         self.assertIn("Review and create Deal", instructions)
 
+    def test_candidate_identity_stays_in_relationship_not_deal_fields(self):
+        task = yaml.safe_load((ROOT / "alludium/task-definition-templates/vc-workflows/promote-candidate-to-deal-pipeline.yaml").read_text())
+        instructions = task["definition"]["definitionJson"]["instructions"]["executionInstructions"]
+        proposal = next(field for field in task["fields"]["output"] if field["key"] == "dealCreationProposal")
+        field_values_schema = proposal["config"]["schema"]["properties"]["createRequest"]["properties"]["fieldValues"]
+
+        self.assertIn("never add `origination_candidate_project_id` to `createRequest.fieldValues`", instructions)
+        self.assertEqual(
+            field_values_schema["not"]["required"],
+            ["origination_candidate_project_id"],
+        )
+
 if __name__ == "__main__":
     unittest.main()
