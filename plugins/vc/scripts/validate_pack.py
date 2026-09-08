@@ -7334,6 +7334,7 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
     proposal_paths = set((proposal.get("config") or {}).get("requiredPaths") or [])
     required_proposal_paths = {
         "createRequest.fieldValues",
+        "createRequest.fieldValues.company_name",
         "createRequest.fieldValues.fund_id",
         "createRequest.relationships",
         "createRequest.relationships[].direction",

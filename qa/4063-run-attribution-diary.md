@@ -50,3 +50,24 @@ must be refreshed before ingesting the new Pack. Platform #4073 must update its
 exact commit/archive/version and rerun the paired checks; its owner is coordinating
 that separately. Draft and browser/native/hosted gates remain open. No tag,
 deployment, workspace ingest or release publication was performed.
+
+## 8 September — native promotion company-name repair
+
+Fresh native execution on Platform `d7b7fff9ce1d445d025c1d82479a3eeb765f1e98`
+with Pack `bd761f2803b70dd6a794d94a446b93893142b061` repaired the previous unsupported
+Candidate-ID field but produced only `fieldValues.fund_id`. Platform correctly rejected review
+with `Promotion requires a company name.` Reopening the same task and explicitly adding the
+Candidate's canonical `company_name` produced one Deal, one canonical promotion relationship and
+one promotion audit record; browser replay and API replay both reused that Deal. This is recovered
+success, not fresh first-attempt acceptance.
+
+The promotion template now requires the Candidate's canonical non-empty
+`createRequest.fieldValues.company_name` in its instructions, missing-input policy, completion
+criteria, required paths and JSON schema. The existing prohibition on
+`fieldValues.origination_candidate_project_id` remains intact. The task template advances from
+`0.1.16` to `0.1.17`; Pack version remains the unreleased proposed `0.6.28`.
+
+Validation: all 47 Python contract tests passed, including the new company-name schema regression;
+full Pack validation passed, generated Markdown is current across 123 files, the release contract
+passed against main 0.6.27, and `git diff --check` passed. A fresh first-attempt native run on the
+new exact Pack head remains required after the paired Platform fixture is repinned.

@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.promote_candidate_to_deal_pipeline
-version: 0.1.16
+version: 0.1.17
 title: Promote Candidate to Deal Pipeline
 category: Venture Capital
 visibility: workspace
@@ -44,9 +44,10 @@ definition:
         line currently has the same Fund. Prepare a Deal Pipeline creation package with the explicitly selected Fund, company
         identity, founder evidence, every contributing Sourcing Line, all source receipts, enrichment/verdict/screen summaries,
         relationship context, outreach state, conflicts, and open questions. Preserve the Candidate project and its complete
-        multi-line provenance after promotion. Emit `dealCreationProposal.createRequest` with the selected Fund and an incoming
-        `vc.origination_candidate_promoted_to_deal` relationship from `origination_candidate_project_id`. Put the Candidate ID
-        only in that relationship''s `relatedProjectId` and metadata; never add `origination_candidate_project_id` to
+        multi-line provenance after promotion. Copy the Candidate''s canonical company name into the non-empty
+        `dealCreationProposal.createRequest.fieldValues.company_name`; do not rely on a proposal-level name fallback. Emit
+        `dealCreationProposal.createRequest` with the selected Fund and an incoming `vc.origination_candidate_promoted_to_deal`
+        relationship from `origination_candidate_project_id`. Put the Candidate ID only in that relationship''s `relatedProjectId` and metadata; never add `origination_candidate_project_id` to
         `createRequest.fieldValues`, because it is task input and provenance rather than a Deal Pipeline field. Do not create or
         update the Deal Pipeline unless the platform action is explicitly approved. The human promotion action resolves the
         workspace-bound Deal Pipeline version and initial state. Omit guessed project type UUIDs and lifecycle state; never
@@ -57,7 +58,7 @@ definition:
         evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains
         process and approval boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document
         and preserve the document ID alongside the output artifact.'
-      missingInputPolicy: Ask for the approved candidate, an explicit active `fund_id`, target Deal Pipeline policy, promotion
+      missingInputPolicy: Ask for the approved candidate, its canonical non-empty `company_name`, an explicit active `fund_id`, target Deal Pipeline policy, promotion
         threshold evidence, owner, every contributing Sourcing Line and source receipt, and required source artifacts. If
         `fund_id` is missing, unknown, or inactive, keep promotion incomplete rather than inheriting a Fund from line provenance.
       externalActionPolicy: Promotion package by default. Deal Pipeline creation/update, CRM changes, document creation, and
@@ -67,7 +68,8 @@ definition:
       - Promotion package includes the explicitly selected active fund_id, every Sourcing Line and source receipt, candidate
         evidence, recommended initial Deal Pipeline state, required tasks, owner, and unresolved risks.
       - Human approval boundary for project creation/update is explicit.
-      - Deal creation request includes `createRequest.fieldValues.fund_id` and the incoming candidate-to-Deal relationship.
+      - Deal creation request includes non-empty `createRequest.fieldValues.company_name`, `createRequest.fieldValues.fund_id`,
+        and the incoming candidate-to-Deal relationship.
 fields:
   input:
   - key: origination_candidate_project_id
@@ -105,6 +107,7 @@ fields:
       contractRef: dealCreationProposal.createRequest.v1
       requiredPaths:
       - createRequest.fieldValues
+      - createRequest.fieldValues.company_name
       - createRequest.fieldValues.fund_id
       - createRequest.relationships
       - createRequest.relationships[].direction
@@ -113,12 +116,22 @@ fields:
       - createRequest.relationships[].metadata
       schema:
         type: object
+        required:
+        - createRequest
         properties:
           createRequest:
             type: object
+            required:
+            - fieldValues
             properties:
               fieldValues:
                 type: object
+                required:
+                - company_name
+                properties:
+                  company_name:
+                    type: string
+                    minLength: 1
                 not:
                   required:
                   - origination_candidate_project_id
