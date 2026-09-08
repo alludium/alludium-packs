@@ -71,3 +71,16 @@ Validation: all 47 Python contract tests passed, including the new company-name 
 full Pack validation passed, generated Markdown is current across 123 files, the release contract
 passed against main 0.6.27, and `git diff --check` passed. A fresh first-attempt native run on the
 new exact Pack head remains required after the paired Platform fixture is repinned.
+
+## 8 September — generated machine-path preservation
+
+Review found that Markdown generation humanized the terminal `company_name` token inside the exact
+dotted contract path `dealCreationProposal.createRequest.fieldValues.company_name`. The generator
+now leaves snake-case tokens directly following `.` unchanged while retaining the existing prose
+humanization elsewhere. Both affected task Markdown files were regenerated, and the promotion
+contract test asserts the exact generated dotted path and rejects the corrupted form.
+
+Pack version remains the unreleased proposed `0.6.28`; the promotion task remains `0.1.17`.
+All 47 Python contract tests passed in 145.530 seconds, full Pack validation passed (100 task
+templates), generated Markdown is current across 123 files, the release contract passed against
+main 0.6.27, and `git diff --check` passed. No tag, release, publish, ingest or deployment occurred.

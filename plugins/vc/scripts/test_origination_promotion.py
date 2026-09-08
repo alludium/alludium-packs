@@ -28,6 +28,7 @@ class PromotionContractTests(unittest.TestCase):
 
     def test_promotion_requires_canonical_non_empty_company_name(self):
         task = yaml.safe_load((ROOT / "alludium/task-definition-templates/vc-workflows/promote-candidate-to-deal-pipeline.yaml").read_text())
+        generated_task = (ROOT / "tasks/promote-candidate-to-deal-pipeline.md").read_text()
         instructions = task["definition"]["definitionJson"]["instructions"]
         proposal = next(field for field in task["fields"]["output"] if field["key"] == "dealCreationProposal")
         proposal_config = proposal["config"]
@@ -46,6 +47,14 @@ class PromotionContractTests(unittest.TestCase):
         )
         self.assertIn("canonical company name", instructions["executionInstructions"])
         self.assertIn("canonical non-empty `company_name`", instructions["missingInputPolicy"])
+        self.assertIn(
+            "`dealCreationProposal.createRequest.fieldValues.company_name`",
+            generated_task,
+        )
+        self.assertNotIn(
+            "`dealCreationProposal.createRequest.fieldValues.company name`",
+            generated_task,
+        )
 
 if __name__ == "__main__":
     unittest.main()
