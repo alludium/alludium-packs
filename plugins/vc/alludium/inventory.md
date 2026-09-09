@@ -4,7 +4,7 @@
 **Status**: Fund-aware Deal creation with a locked Deal Analyst task executor and a dormant governed
 Deal workbook capability declaration
 
-Version `0.6.26` makes all five Origination agents discover the acting user's connected
+This release carries forward discovery by all five Origination agents of the acting user's connected
 applications through `ALL_CONNECTED_APPS`, with read-only external execution. Existing
 Platform capability profiles and internal tool declarations remain in force. Connecting
 an application does not grant another user's credentials or permit external writes.
@@ -260,7 +260,7 @@ Review notes:
 
 - `vc_deal_room` covers one investment opportunity from source capture through deal structuring and uses version `1.1.14`; its allowlisted navigation projection includes the confirmed Fund, while personal attention is derived from immutable project creation ownership.
 - `vc_investment_management` is user-facing as Deal Execution, covers formal diligence, contracts, closing, completion, and portfolio handoff after Deal Pipeline deal structuring, and uses version `0.1.7` without a Lead Partner field.
-- `vc_sourcing_line` version `0.2.5` owns one measurable, active-Fund-specific source/screen/cadence experiment and its receipts, with `fund_id` available to the allowlisted navigation projection, Fund-keyed candidate scoring retained on each provenance relationship, and guarded task-owned project updates after reviewed configuration or runs.
+- `vc_sourcing_line` version `0.2.7` owns one measurable, active-Fund-specific source/screen/cadence experiment and its receipts, with `fund_id` available to the allowlisted navigation projection, Fund-keyed candidate scoring retained on each provenance relationship, and guarded task-owned project updates after reviewed configuration or runs.
 - `vc_origination_candidate` version `0.2.4` owns one company's durable pre-Deal evidence, decisions, outreach context, and multi-line provenance without collapsing Fund-relative scores into Candidate-wide fields; guided creation starts the distinct initial screen and never reruns registration.
 - `vc_deal_pipeline` version `1.0.6` is a workspace-selectable simplified pipeline with Screening, Evaluation, Decision, and Term Sheet statuses; four manually reviewed durable document mappings that omit `lifecycleStage`; complete grouped document-presentation metadata; and Passed, Promoted to Investment Execution, and Archived outcomes. New task execution uses the configured Deal Analyst, while the human owner remains reassignable. Its allowlisted navigation projection includes the confirmed Fund, while personal attention is derived from immutable project creation ownership. A workspace uses it when its authoritative `vc.deals.projectTypeKey` binding selects it; both Deal definitions may remain installed.
 

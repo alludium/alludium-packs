@@ -1,4 +1,4 @@
-version: 1.1.7
+version: 1.1.8
 type: template
 platform_managed: false
 id: vc_sourcing_operator
@@ -185,6 +185,7 @@ mcpServers:
     - name: task-definitions.list
     - name: task-definitions.findById
     - name: task-management.createTaskFromDefinition
+    - name: task-management.getTaskDetail
   affinity-mcp-server:
     tools:
     - name: affinity_search_companies

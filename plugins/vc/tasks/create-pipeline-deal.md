@@ -48,7 +48,7 @@ Do not send messages, write CRM records, create projects, create tasks, or move 
 ## Completion Criteria
 
 - The company identity is explicit and source context is preserved.
-- The output contains projectCreation.fieldValues.company name.
+- The output contains projectCreation.fieldValues.company_name.
 - Any supplied Fund is an exact active configured Fund id.
 
 ## Human Review

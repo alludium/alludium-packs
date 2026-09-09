@@ -74,7 +74,7 @@ Do not contact founders, create Deals, write to CRM/source systems, enable recur
 - Source template: `alludium/agent-templates/vc_sourcing_operator.yaml`
 - Alludium template ID: `vc_sourcing_operator`
 - Display name: Sourcing Operator
-- Version: `1.1.7`
+- Version: `1.1.8`
 - Primary stage: Origination Operations
 - Primary Deal Room state: `intake`
 - Supported task definitions:
@@ -137,7 +137,7 @@ Do not contact founders, create Deals, write to CRM/source systems, enable recur
 
 ## MCP And Tool Context
 
-- `alludium-platform`: `project.getAgentContext`, `project.findById`, `project.listForCurrentWorkspace`, `project.update`, `project-relationship.findById`, `project-relationship.list`, `project-relationship.create`, `project-relationship.updateMetadata`, `task-definitions.list`, `task-definitions.findById`, `task-management.createTaskFromDefinition`
+- `alludium-platform`: `project.getAgentContext`, `project.findById`, `project.listForCurrentWorkspace`, `project.update`, `project-relationship.findById`, `project-relationship.list`, `project-relationship.create`, `project-relationship.updateMetadata`, `task-definitions.list`, `task-definitions.findById`, `task-management.createTaskFromDefinition`, `task-management.getTaskDetail`
 - `affinity-mcp-server`: `affinity_search_companies`, `affinity_get_company`, `affinity_list_company_notes`, `affinity_search_persons`, `affinity_get_person`, `affinity_get_relationship_strengths`, `affinity_list_person_notes`
 
 ## Suggested Actions
