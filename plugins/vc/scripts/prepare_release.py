@@ -12,6 +12,7 @@ from pathlib import Path
 import yaml
 
 import generate_markdown
+from release_identity import release_identity
 
 PACK_ROOT = Path(__file__).resolve().parents[1]
 SEMVER = re.compile(r"(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)")
@@ -42,21 +43,36 @@ def metadata_outputs(pack_root: Path, version: str | None = None) -> dict[Path, 
     manifest_path = pack_root / "alludium/manifest.yaml"
     manifest_text = manifest_path.read_text()
     manifest = yaml.safe_load(manifest_text)
+    if not isinstance(manifest, dict) or not isinstance(manifest.get("pack"), dict):
+        raise ValueError("Manifest must contain a pack object")
     pack = manifest["pack"]
-    current = pack["version"]
+    current = pack.get("version")
+    if not isinstance(current, str) or not SEMVER.fullmatch(current):
+        raise ValueError("Current manifest version must be strict X.Y.Z")
     version = version if version is not None else current
     if not isinstance(version, str) or not SEMVER.fullmatch(version):
         raise ValueError("Pack version must be strict X.Y.Z (no v prefix or prerelease)")
     outputs: dict[Path, bytes] = {}
+    plugin_paths = [pack_root / folder / "plugin.json" for folder in (".claude-plugin", ".codex-plugin")]
+    plugins = {path: read_json(path) for path in plugin_paths}
+    # Both input paths use the same local baseline. Remote/main monotonicity is
+    # still the responsibility of validate_release_contract.py before pushing.
+    baselines = [current, *(plugin.get("version") for plugin in plugins.values())]
+    target = tuple(map(int, version.split(".")))
+    for baseline in baselines:
+        if isinstance(baseline, str) and SEMVER.fullmatch(baseline):
+            if target < tuple(map(int, baseline.split("."))):
+                raise ValueError(f"Pack version cannot move backwards from {baseline} to {version}")
     if version != current:
-        if not isinstance(current, str) or not SEMVER.fullmatch(current):
-            raise ValueError("Current manifest version must be strict X.Y.Z")
-        if tuple(map(int, version.split("."))) < tuple(map(int, current.split("."))):
-            raise ValueError("Pack version cannot move backwards")
         # Patch only the pack.version scalar; preserve YAML formatting and comments.
         document = yaml.compose(manifest_text)
-        pack_node = next(value for key, value in document.value if key.value == "pack")
-        version_node = next(value for key, value in pack_node.value if key.value == "version")
+        pack_nodes = [value for key, value in document.value if key.value == "pack"]
+        if len(pack_nodes) != 1 or not isinstance(pack_nodes[0], yaml.MappingNode):
+            raise ValueError("Manifest must contain exactly one explicit pack mapping")
+        version_nodes = [value for key, value in pack_nodes[0].value if key.value == "version"]
+        if len(version_nodes) != 1 or not isinstance(version_nodes[0], yaml.ScalarNode):
+            raise ValueError("Manifest must contain exactly one explicit pack.version scalar")
+        version_node = version_nodes[0]
         manifest_text = (
             manifest_text[:version_node.start_mark.index]
             + version
@@ -64,13 +80,11 @@ def metadata_outputs(pack_root: Path, version: str | None = None) -> dict[Path, 
         )
     outputs[manifest_path] = manifest_text.encode()
 
-    for folder in (".claude-plugin", ".codex-plugin"):
-        path = pack_root / folder / "plugin.json"
-        plugin = read_json(path)
+    for path, plugin in plugins.items():
         plugin["version"] = version
         outputs[path] = json_bytes(plugin, canonical=False)
 
-    # Current version is a dedicated label, never a rewrite of historical prose.
+    # Only current-release metadata is derived; historical prose is authored.
     for relative in ("README.md", "alludium/inventory.md"):
         path = pack_root / relative
         body = path.read_text()
@@ -86,14 +100,17 @@ def metadata_outputs(pack_root: Path, version: str | None = None) -> dict[Path, 
             if not separator or not title.startswith("# "):
                 raise ValueError(f"Expected Markdown title: {path}")
             body = title + "\n\n" + label + "\n" + rest
+        if relative == "README.md":
+            for pattern in (
+                r"(Their catalog and package provenance are re-pinned to `)v[^`]+(`)",
+                r"(The current `)v[^`]+(` pack surface includes)",
+            ):
+                body, count = re.subn(pattern, lambda match: match[1] + f"v{version}" + match[2], body)
+                if count != 1:
+                    raise ValueError("README must contain exactly one of each current-release provenance/surface statement")
         outputs[path] = body.encode()
 
-    release = {
-        "packId": pack["id"],
-        "packVersion": version,
-        "repository": pack["repository"],
-        "tag": f"v{version}",
-    }
+    release = release_identity({**pack, "version": version})
     root = pack_root / "alludium/ontology-components"
     catalog_path = root / "catalog.v1.json"
     catalog = read_json(catalog_path)
@@ -142,7 +159,10 @@ def main() -> None:
         if args.check:
             for path in changed:
                 print(f"Stale release metadata: {path.relative_to(PACK_ROOT)}", file=sys.stderr)
-            generate_markdown.check_outputs(markdown)
+            try:
+                generate_markdown.check_outputs(markdown)
+            except SystemExit as error:
+                raise ValueError("Run python3 plugins/vc/scripts/prepare_release.py to refresh metadata and Markdown") from error
             if changed:
                 raise ValueError("Run python3 plugins/vc/scripts/prepare_release.py")
             print("Release metadata and generated Markdown are up to date")

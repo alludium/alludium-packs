@@ -26,14 +26,20 @@ class PrepareReleaseTests(unittest.TestCase):
         return outputs
 
     def test_bump_preserves_history_and_authored_components_and_is_idempotent(self):
-        historical_readme = (self.pack / "README.md").read_text().split("Version `", 1)[1]
+        readme = (self.pack / "README.md").read_text()
+        historical_readme = readme.split("Version `", 1)[1].split("This release carries forward", 1)[0]
+        inline_history = readme.split("Historical release notes:", 1)[1]
         component_root = self.pack / "alludium/ontology-components/components"
         originals = {path: path.read_bytes() for path in component_root.glob("*.json")}
         for folder in ("agent-templates", "task-definition-templates", "project-types"):
             originals.update({p: p.read_bytes() for p in (self.pack / "alludium" / folder).rglob("*") if p.is_file()})
         outputs = self.apply("99.0.0")
         self.assertEqual(outputs, prepare.metadata_outputs(self.pack))
-        self.assertEqual(historical_readme, (self.pack / "README.md").read_text().split("Version `", 1)[1])
+        generated_readme = (self.pack / "README.md").read_text()
+        self.assertEqual(historical_readme, generated_readme.split("Version `", 1)[1].split("This release carries forward", 1)[0])
+        self.assertEqual(inline_history, generated_readme.split("Historical release notes:", 1)[1])
+        self.assertIn("provenance are re-pinned to `v99.0.0`", generated_readme)
+        self.assertIn("The current `v99.0.0` pack surface includes", generated_readme)
         for path, body in originals.items():
             self.assertEqual(path.read_bytes(), body)
         catalog_path = self.pack / "alludium/ontology-components/catalog.v1.json"
@@ -120,6 +126,55 @@ class PrepareReleaseTests(unittest.TestCase):
         path.write_text(text)
         outputs = prepare.metadata_outputs(self.pack, "99.0.0")
         self.assertEqual(outputs[path].decode(), text.replace(f"'{current}' # release version", "99.0.0 # release version", 1))
+
+    def test_manual_manifest_downgrade_is_rejected_before_writes(self):
+        path = self.pack / "alludium/manifest.yaml"
+        text = path.read_text()
+        current = prepare.yaml.safe_load(text)["pack"]["version"]
+        path.write_text(text.replace(f"  version: {current}", "  version: 0.1.0", 1))
+        before = {p: p.read_bytes() for p in self.pack.rglob("*") if p.is_file()}
+        with self.assertRaisesRegex(ValueError, "cannot move backwards"):
+            prepare.metadata_outputs(self.pack)
+        self.assertEqual(before, {p: p.read_bytes() for p in before})
+
+    def test_combined_drift_points_to_complete_remediation(self):
+        self.apply()
+        plugin_path = self.pack / ".codex-plugin/plugin.json"
+        plugin = json.loads(plugin_path.read_bytes())
+        plugin["version"] = "0.0.0"
+        plugin_path.write_bytes(prepare.json_bytes(plugin))
+        markdown = next((self.pack / "agents").glob("*.md"))
+        markdown.write_text("stale\n")
+        before = {p: p.read_bytes() for p in (plugin_path, markdown)}
+        result = subprocess.run([sys.executable, str(self.pack / "scripts/prepare_release.py"), "--check"], capture_output=True)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn(b"Stale release metadata", result.stderr)
+        self.assertIn(b"Stale generated file", result.stderr)
+        self.assertIn(b"Run python3 plugins/vc/scripts/prepare_release.py", result.stderr.splitlines()[-1])
+        self.assertEqual(before, {p: p.read_bytes() for p in before})
+
+    def test_current_prose_drift_is_detected_even_with_correct_version_label(self):
+        self.apply("99.0.0")
+        path = self.pack / "README.md"
+        path.write_text(path.read_text().replace("The current `v99.0.0`", "The current `v0.6.27`"))
+        before = path.read_bytes()
+        result = subprocess.run([sys.executable, str(self.pack / "scripts/prepare_release.py"), "--check"], capture_output=True)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn(b"Stale release metadata: README.md", result.stderr)
+        self.assertEqual(path.read_bytes(), before)
+
+    def test_release_identity_schema(self):
+        self.assertEqual(prepare.release_identity({"id": "vc", "version": "1.2.3", "repository": "https://example.com/packs"}), {
+            "packId": "vc", "packVersion": "1.2.3", "repository": "https://example.com/packs", "tag": "v1.2.3",
+        })
+
+    def test_inherited_version_has_clean_cli_error(self):
+        path = self.pack / "alludium/manifest.yaml"
+        path.write_text("defaults: &defaults\n  version: 0.6.28\npack:\n  <<: *defaults\n  id: vc\n")
+        result = subprocess.run([sys.executable, str(self.pack / "scripts/prepare_release.py"), "--version", "99.0.0"], capture_output=True)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn(b"ERROR: Manifest must contain exactly one explicit pack.version scalar", result.stderr)
+        self.assertNotIn(b"Traceback", result.stderr)
 
 
 if __name__ == "__main__":

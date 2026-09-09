@@ -31,5 +31,4 @@ jobs:
       - run: python plugins/vc/scripts/test_origination_promotion.py
       - run: python plugins/vc/scripts/test_origination_lifecycle.py
       - run: python plugins/vc/scripts/validate_pack.py
-      - run: python plugins/vc/scripts/generate_markdown.py --check
       - run: python plugins/vc/scripts/validate_release_contract.py
