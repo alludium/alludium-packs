@@ -59,19 +59,58 @@ Within a pack:
 - `alludium/workspace-variables.yaml` declares public-safe workspace variables without workspace-specific values.
 - `scripts/validate_pack.py` validates the pack before publishing.
 
-## Validation
+## Preparing a VC release
+
+Edit the Pack content, then declare the next release version once:
+
+```bash
+python3 plugins/vc/scripts/prepare_release.py --version 0.6.29
+```
+
+Choose the next unused version; the example is not a reserved release. The command
+sets `pack.version` in `plugins/vc/alludium/manifest.yaml` and derives plugin
+versions, current-version labels and the README's current-release provenance and
+surface statements, ontology release provenance and dependent hashes, and generated agent/task/blueprint
+Markdown. Alternatively, edit `pack.version` directly and run the command without
+`--version`. Repeated runs produce the same files. Review and commit the generated
+changes with the authored changes.
+
+Both input paths reject versions below the current manifest or generated plugin
+versions. This is a local safeguard; the release-contract validator remains the
+authority for monotonicity against `origin/main` and remote tags.
+
+Historical release notes remain authored text. Task, agent, project-type and
+ontology component/package versions remain independent contracts: bump them when
+required by the content change, including their explicit references. The command
+does not choose those versions, publish a tag, or update the platform repository.
+
+CI checks freshness without writing:
+
+```bash
+python3 plugins/vc/scripts/prepare_release.py --check
+```
+
+Generation is not release validation. Run all validation below before pushing;
+the release-contract validator still rejects reused release versions and changed
+task definitions without a template version bump.
+
+## Validation commands
 
 Run:
 
 ```bash
 python3 -m pip install -r plugins/vc/requirements.txt
 python3 plugins/vc/scripts/validate_pack.py
-python3 plugins/vc/scripts/generate_markdown.py --check
+python3 plugins/vc/scripts/prepare_release.py --check
 ```
 
 The validator checks plugin manifests, skill frontmatter, manifest inventory, agent-template references, task-template references, project-type references, VC task artifact file-field contracts, workspace variables, application recommendations, generated Markdown freshness, and obvious secret-bearing values.
 
 For same-repository pull requests, GitHub also runs a generated-Markdown sync workflow. If agent-template or task-definition YAML changes but the generated Markdown was not committed, the workflow regenerates `plugins/vc/agents/` and `plugins/vc/tasks/`, pushes those files back to the PR branch, and dispatches validation for the updated branch. The validation workflow remains the freshness check and still fails if generated Markdown is stale.
+
+That helper only repairs agent/task Markdown. Release metadata and blueprint
+changes are prepared locally with `prepare_release.py` and committed by the author;
+CI checks them but does not choose versions or push metadata fixes.
 
 Branch protection should require `Validate`, not the generated-Markdown sync helper. The helper pushes with `GITHUB_TOKEN`, so its bot push does not trigger `pull_request` workflows on the generated SHA; it explicitly dispatches `Validate` instead.
 

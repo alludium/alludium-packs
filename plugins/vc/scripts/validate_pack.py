@@ -13,6 +13,8 @@ from typing import Any
 
 import yaml
 
+from release_identity import release_identity
+
 
 THIS_FILE = Path(__file__).resolve()
 ROOT = THIS_FILE.parents[1]
@@ -8111,13 +8113,10 @@ def validate_ontology_components(manifest: dict[str, Any]) -> set[str]:
         fail(f"Ontology component catalog must target {ONTOLOGY_COMPONENT_CONTRACT}")
     _reject_unpinned_ontology_values(catalog, context="Ontology component catalog")
 
-    pack_version = manifest.get("pack", {}).get("version")
-    expected_release = {
-        "packId": manifest.get("pack", {}).get("id"),
-        "packVersion": pack_version,
-        "repository": manifest.get("pack", {}).get("repository"),
-        "tag": f"v{pack_version}",
-    }
+    try:
+        expected_release = release_identity(manifest.get("pack", {}))
+    except ValueError as error:
+        fail(str(error))
     if catalog.get("release") != expected_release:
         fail("Ontology component catalog release provenance must match the exact pack release")
 
