@@ -59,7 +59,38 @@ Within a pack:
 - `alludium/workspace-variables.yaml` declares public-safe workspace variables without workspace-specific values.
 - `scripts/validate_pack.py` validates the pack before publishing.
 
-## Validation
+## Preparing a VC release
+
+Edit the Pack content, then declare the next release version once:
+
+```bash
+python3 plugins/vc/scripts/prepare_release.py --version 0.6.29
+```
+
+Choose the next unused version; the example is not a reserved release. The command
+sets `pack.version` in `plugins/vc/alludium/manifest.yaml` and derives plugin
+versions, current-version labels in the Pack README and inventory, ontology
+release provenance and dependent hashes, and generated agent/task/blueprint
+Markdown. Alternatively, edit `pack.version` directly and run the command without
+`--version`. Repeated runs produce the same files. Review and commit the generated
+changes with the authored changes.
+
+Historical release notes remain authored text. Task, agent, project-type and
+ontology component/package versions remain independent contracts: bump them when
+required by the content change, including their explicit references. The command
+does not choose those versions, publish a tag, or update the platform repository.
+
+CI checks freshness without writing:
+
+```bash
+python3 plugins/vc/scripts/prepare_release.py --check
+```
+
+Generation is not release validation. Run all validation below before pushing;
+the release-contract validator still rejects reused release versions and changed
+task definitions without a template version bump.
+
+## Validation commands
 
 Run:
 
