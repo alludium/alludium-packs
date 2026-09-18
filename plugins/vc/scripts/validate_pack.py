@@ -7287,9 +7287,10 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
         "returned task ID",
         "task's exact project",
         "persisted `fund_id`",
-        "project.update",
-        "last_run_status",
-        "latest_run_receipt_artifact_id",
+        "sourcing_run_task_id",
+        "supported guided Register launcher",
+        "attributed task and finalization records",
+        "Do not call `project.update` to write",
         "project.getAgentContext",
     ]:
         if required_phrase not in run_instructions:
@@ -7335,6 +7336,7 @@ def validate_origination_no_hub_contract(manifest: dict[str, Any]) -> None:
     proposal_paths = set((proposal.get("config") or {}).get("requiredPaths") or [])
     required_proposal_paths = {
         "createRequest.fieldValues",
+        "createRequest.fieldValues.company_name",
         "createRequest.fieldValues.fund_id",
         "createRequest.relationships",
         "createRequest.relationships[].direction",

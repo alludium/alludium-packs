@@ -28,6 +28,7 @@ jobs:
       - run: python plugins/vc/scripts/test_deal_manager_evaluation.py
       - run: python plugins/vc/scripts/test_origination_connected_apps.py
       - run: python plugins/vc/scripts/test_origination_registration.py
+      - run: python plugins/vc/scripts/test_origination_run_attribution.py
       - run: python plugins/vc/scripts/test_origination_promotion.py
       - run: python plugins/vc/scripts/test_origination_lifecycle.py
       - run: python plugins/vc/scripts/validate_pack.py

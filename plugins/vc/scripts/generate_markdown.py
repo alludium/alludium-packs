@@ -185,7 +185,7 @@ OUTPUT_FIELDS_ATTACHMENT_RE = re.compile(
 PROJECT_CREATION_FIELD_RE = re.compile(r"`projectCreation\.fieldValues\.([a-z0-9_]+)`")
 SNAKE_FIELD_REF_RE = re.compile(r"`([a-z][a-z0-9_]+)`")
 UNQUOTED_FIELD_REF_RE = re.compile(
-    r"\b([a-z][a-z0-9_]*(?:_artifact_ids?|_name|_notes|_url|_urls|_registry|_policy))\b"
+    r"(?<!\.)\b([a-z][a-z0-9_]*(?:_artifact_ids?|_name|_notes|_url|_urls|_registry|_policy))\b"
 )
 
 
