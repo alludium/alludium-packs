@@ -15,10 +15,20 @@ markers, not as PR validation aids.
 
 ## Validation
 
+For VC updates, edit the authored Pack content and declare the next unused release
+version once with `python3 plugins/vc/scripts/prepare_release.py --version X.Y.Z`.
+Alternatively, edit `pack.version` in the manifest and run the command without
+`--version`. Commit the generated metadata and Markdown with the content change;
+do not hand-edit repeated release versions or hashes. Independent template and
+component versions and historical release notes remain authored contracts.
+
 Before pushing pack changes, run the VC validation commands from the repository root:
 
 ```bash
 python3 plugins/vc/scripts/validate_pack.py
-python3 plugins/vc/scripts/generate_markdown.py --check
+python3 plugins/vc/scripts/prepare_release.py --check
 python3 plugins/vc/scripts/validate_release_contract.py
 ```
+
+The preparation check includes generated agent/task/blueprint Markdown freshness.
+Preparation is local only; publication and platform adoption are separate steps.

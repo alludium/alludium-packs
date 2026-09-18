@@ -35,6 +35,20 @@ class OriginationRunAttributionTests(unittest.TestCase):
         self.assertIn("supported guided Register launcher", instructions)
         self.assertIn("do not substitute a source child task ID", instructions)
 
+    def test_sourcing_operator_can_discover_and_open_the_guided_launcher(self):
+        operator = load_agent("vc_sourcing_operator.yaml")
+        tools = {tool["name"] for tool in operator["mcpServers"]["alludium-platform"]["tools"]}
+        self.assertTrue({"task-management.listInboxStarterTasks",
+                         "task-management.openInboxStarterTask"}.issubset(tools))
+        task = load_task("run-vc-sourcing-pipeline.yaml")
+        instructions = task["definition"]["definitionJson"]["instructions"]["executionInstructions"]
+        for contract in ("task-management.listInboxStarterTasks", "task-management.openInboxStarterTask",
+                         "`projectTypeKey` is `vc_origination_candidate`",
+                         "`definitionSlug` is `register-origination-candidate`",
+                         "`id` as `starterId`", "UUID `attemptId` retained unchanged",
+                         "Stop and report the missing launcher"):
+            self.assertIn(contract, instructions)
+
     def test_existing_candidate_link_preserves_the_exact_parent_run(self):
         run_task = load_task("run-vc-sourcing-pipeline.yaml")
         run_instructions = run_task["definition"]["definitionJson"]["instructions"][
