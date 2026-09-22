@@ -6,7 +6,7 @@ Public VC workflow plugin and pack seed for [Alludium](https://www.alludium.ai).
 
 Alludium VC packages reusable venture capital workflows for sourcing, screening, diligence, investment committee preparation, closing, and portfolio onboarding. It is the first bundle inside the broader `alludium-packs` catalog, not a standalone VC-only repository.
 
-Version `0.6.29` adds the People and Organisations readiness skill to the Pack-owned
+Version `0.6.30` adds the People and Organisations readiness skill to the Pack-owned
 Deal Manager. It keeps identity discovery read-only until the human authorizes an exact
 action, separates identity records from Deal facts, and preserves provenance and replay
 boundaries for supported identity operations.
@@ -147,7 +147,7 @@ External pack task-definition templates must not declare `systemUseOnly`. System
 
 | Surface                   | Path                                  | Notes                                                                                    |
 | ------------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------- |
-| Skills                    | `skills/`                             | 70 public workflow, integration-management, and origination skills used by the VC pack   |
+| Skills                    | `skills/`                             | 71 public workflow, integration-management, and origination skills used by the VC pack   |
 | Generated agents          | `agents/`                             | 18 agent Markdown compatibility artifacts generated from Alludium runtime YAML          |
 | Generated tasks           | `tasks/`                              | 100 task prompt Markdown files generated from task-definition YAML                       |
 | Project blueprints        | `project-blueprints/`                 | 5 generated project-stage/task/agent/skill blueprints                                    |

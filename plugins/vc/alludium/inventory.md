@@ -4,7 +4,7 @@
 **Status**: Fund-aware Deal creation with a locked Deal Analyst task executor and a dormant governed
 Deal workbook capability declaration
 
-Version `0.6.29` adds the People and Organisations readiness skill to the Pack-owned Deal
+Version `0.6.30` adds the People and Organisations readiness skill to the Pack-owned Deal
 Manager. It keeps identity discovery read-only until the human authorizes an exact action,
 separates identity records from Deal facts, and preserves provenance and replay boundaries
 for supported identity operations.
@@ -127,6 +127,7 @@ These skills are included because the current `vc_*` Alludium agent templates re
 - `meeting-prep-and-summary`
 - `pipeline-health-and-crm-hygiene`
 - `pitch-deck-explainer`
+- `people-organisations-agent-readiness`
 - `portfolio-onboarding-and-100-day-plan`
 - `red-flags-scanner`
 - `team-and-hiring-assessment`
