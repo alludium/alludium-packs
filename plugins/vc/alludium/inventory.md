@@ -1,10 +1,19 @@
 # Alludium VC Inventory
 
-**Version**: 0.6.29
+**Version**: 0.6.30
 **Status**: Fund-aware Deal creation with a locked Deal Analyst task executor and a dormant governed
 Deal workbook capability declaration
 
-This release carries forward discovery by all five Origination agents of the acting user's connected
+Version `0.6.30` adds the People and Organisations readiness skill to the Pack-owned Deal
+Manager. It keeps identity discovery read-only until the human authorizes an exact action,
+separates identity records from Deal facts, and preserves provenance and replay boundaries
+for supported identity operations.
+
+Version `0.6.29` preserves optional sourcing-run attribution for Candidate registration and derives
+run outcomes from committed Platform results. Manual registration remains supported without an
+invented run. Requires the paired Platform #4073 contract.
+
+Version `0.6.29` carries forward discovery by all five Origination agents of the acting user's connected
 applications through `ALL_CONNECTED_APPS`, with read-only external execution. Existing
 Platform capability profiles and internal tool declarations remain in force. Connecting
 an application does not grant another user's credentials or permit external writes.
@@ -122,6 +131,7 @@ These skills are included because the current `vc_*` Alludium agent templates re
 - `meeting-prep-and-summary`
 - `pipeline-health-and-crm-hygiene`
 - `pitch-deck-explainer`
+- `people-organisations-agent-readiness`
 - `portfolio-onboarding-and-100-day-plan`
 - `red-flags-scanner`
 - `team-and-hiring-assessment`
