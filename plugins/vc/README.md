@@ -4,6 +4,8 @@ Public VC workflow plugin and pack seed for [Alludium](https://www.alludium.ai).
 
 Alludium VC packages reusable venture capital workflows for sourcing, screening, diligence, investment committee preparation, closing, and portfolio onboarding. It is the first bundle inside the broader `alludium-packs` catalog, not a standalone VC-only repository.
 
+Version `0.6.28` adds plain-language Deal Manager guidance for diligence gaps and next actions.
+
 Version `0.6.27` enables provider-neutral connected-application discovery for Deal Manager,
 Deal Pipeline Manager, workspace Pipeline Manager, and Deal Analyst. Internal operations remain
 bounded by named role capabilities and current runtime scope. Connected applications use the
