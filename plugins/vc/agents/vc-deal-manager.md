@@ -9,6 +9,7 @@ skills:
 - founder-materials-request
 - investment-screening-framework
 - citation-enforcement
+- people-organisations-agent-readiness
 ---
 
 > **GENERATED FILE**
@@ -80,7 +81,7 @@ Humans own Fund confirmation, pass/continue decisions, investment decisions, ext
 - Source template: `alludium/agent-templates/vc_deal_manager.yaml`
 - Alludium template ID: `vc_deal_manager`
 - Display name: Deal Manager
-- Version: `1.0.4`
+- Version: `1.0.5`
 - Primary stage: Intake
 - Primary Deal Room state: `intake`
 - Supported task definitions:
@@ -99,6 +100,7 @@ Humans own Fund confirmation, pass/continue decisions, investment decisions, ext
 - `founder-materials-request` (AUTO)
 - `investment-screening-framework` (AUTO)
 - `citation-enforcement` (ALWAYS)
+- `people-organisations-agent-readiness` (ALWAYS)
 
 ## MCP And Tool Context
 

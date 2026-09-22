@@ -1,4 +1,4 @@
-version: "1.0.4"
+version: "1.0.5"
 type: "template"
 platform_managed: false
 id: "vc_deal_manager"
@@ -26,6 +26,7 @@ metadata:
     - founder-materials-request
     - investment-screening-framework
     - citation-enforcement
+    - people-organisations-agent-readiness
 
 capabilityProfile:
   baseline: NONE
@@ -55,6 +56,8 @@ skills:
   - externalId: "investment-screening-framework"
     activationMode: "AUTO"
   - externalId: "citation-enforcement"
+    activationMode: "ALWAYS"
+  - externalId: "people-organisations-agent-readiness"
     activationMode: "ALWAYS"
 
 prompt:

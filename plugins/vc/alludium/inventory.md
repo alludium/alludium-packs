@@ -1,8 +1,13 @@
 # Alludium VC Inventory
 
-**Version**: 0.6.28
+**Version**: 0.6.29
 **Status**: Fund-aware Deal creation with a locked Deal Analyst task executor and a dormant governed
 Deal workbook capability declaration
+
+Version `0.6.29` adds the People and Organisations readiness skill to the Pack-owned Deal
+Manager. It keeps identity discovery read-only until the human authorizes an exact action,
+separates identity records from Deal facts, and preserves provenance and replay boundaries
+for supported identity operations.
 
 Version `0.6.26` makes all five Origination agents discover the acting user's connected
 applications through `ALL_CONNECTED_APPS`, with read-only external execution. Existing
