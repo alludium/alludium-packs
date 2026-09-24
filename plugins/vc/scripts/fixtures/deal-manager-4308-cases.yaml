@@ -1,0 +1,168 @@
+schemaVersion: "0.1"
+id: deal-manager-4308-optional-context
+description: >-
+  Subject inputs for the paired Deal Manager prompt comparison derived from
+  Platform issue #4308. This file holds only what the subject model may
+  see plus run configuration. Assertions and judge rubric live in
+  deal-manager-4308-expectations.yaml and must never be sent to the subject.
+agentTemplateId: vc_deal_pipeline_manager
+firmName: Example Ventures
+
+# Fictional stand-in for the customer Deal; no customer data is used.
+company:
+  name: Terraview Analytics
+  deck: >-
+    Fictional Terraview Analytics company deck. Satellite-derived soil-carbon
+    monitoring for agricultural lenders. Seed round, raising EUR 2m. Founder
+    claims EUR 180k ARR from four paying pilot customers. Team of six, two
+    founders with remote-sensing PhDs. Legal entity and jurisdiction are not
+    stated. No independent verification.
+workspaceFunds:
+  - id: europe-seed
+    name: Europe Seed Fund
+    status: actively_investing
+    thesis: European B2B software at Seed stage
+
+run:
+  subject:
+    provider: openai-responses
+    modelId: gpt-5.6-luna
+    endpoint: https://api.openai.com/v1/responses
+    # Donal confirmed on 2026-09-23 that Luna is the evaluated subject and the
+    # system default. Settings mirror Platform main a387b635 for an agent with
+    # the default reasoningScale 5 and no temperature (suppressed with reasoning):
+    # config/llm_models.json, config/preferences.defaults.json,
+    # packages/config/src/reasoning-parameters.ts (scale 5),
+    # packages/services/src/llm/llm-resolver.ts (OpenAI provider options),
+    # packages/services/src/llm/llm-invocation.service.ts (maxOutputTokens,
+    # temperature), @ai-sdk/openai 2.0.75 (Responses API).
+    confirmedBy: Donal, 2026-09-23
+    reasoningScale: 5
+    reasoning: {effort: medium, summary: detailed}
+    textVerbosity: medium
+    maxOutputTokens: 128000
+    # Stateless replay: reasoning items are returned encrypted and sent back in
+    # full, so no conversation state is retained by the provider.
+    store: false
+    include: [reasoning.encrypted_content]
+  judge:
+    provider: bedrock-converse
+    modelId: global.anthropic.claude-opus-4-8
+    region: eu-west-1
+    maxTokens: 2048
+    # No temperature: Opus 4.8 on Bedrock rejects it (ValidationException in run-01);
+    # Platform likewise omits temperature for Opus 4.8-generation Bedrock models.
+  repetitions: 3
+  limits:
+    maxStepsPerTurn: 8
+    callTimeoutSeconds: 300
+    attemptWallClockSeconds: 1800
+    maxConsecutiveProviderErrors: 3
+  prices:
+    # The ceiling is enforced at Platform-billable rates (1.3x direct provider
+    # list prices), so it is conservative for the actual provider bill.
+    enforcementBasis: platformBillable
+    platformBillable:
+      source: >-
+        Platform repository config/llm_pricing.json @ a387b635
+        (pricing_provenance.verified_at 2026-08-14; 1.3x markup convention).
+        Long-context threshold from config/llm_models.json contextWindowThreshold.
+      usdPerMillionTokens:
+        gpt-5.6-luna:
+          {input: 0.26, cachedInput: 0.026, output: 1.56,
+           longContext: {aboveInputTokens: 272000, input: 0.52, cachedInput: 0.052, output: 2.34}}
+        global.anthropic.claude-opus-4-8: {input: 6.5, output: 32.5}
+    directProviderList:
+      source: >-
+        gpt-5.6-luna: OpenAI API pricing https://developers.openai.com/api/docs/pricing,
+        Standard processing, retrieved 2026-09-23 (page shows no date; long-context
+        threshold not stated there). Opus 4.8: AWS Price List API offer
+        AmazonBedrockFoundationModels eu-west-1 version 20260922164418 (published
+        2026-09-22T16:44:18Z), Global on-demand standard, retrieved 2026-09-23.
+      usdPerMillionTokens:
+        gpt-5.6-luna:
+          {input: 0.20, cachedInput: 0.02, output: 1.20,
+           longContext: {aboveInputTokens: 272000, input: 0.40, cachedInput: 0.04, output: 1.80}}
+        global.anthropic.claude-opus-4-8: {input: 5.0, output: 25.0}
+  proposedCeilingUsd: 10
+
+cases:
+  - id: screening-optional-gaps-single-turn
+    purpose: Clear Screening request with an informal Fund reference and unknown incorporation.
+    context:
+      openTasks: []
+    turns:
+      - author: human
+        text: >-
+          Here's Terraview, the deck's attached. Probably one for the climate
+          vehicle we've been talking about, and I'm not sure where they're
+          incorporated yet. Please run the Screening Report.
+
+  - id: screening-live-correction-two-turn
+    purpose: Initial request, then a genuine later human instruction to drop the optional gaps.
+    context:
+      openTasks: []
+    turns:
+      - author: human
+        text: >-
+          New deal: Terraview, deck attached. They do earth-observation for
+          agri-lenders and are raising about 2m. Might sit in the climate
+          fund, and incorporation is somewhere between the UK and Estonia, not
+          sure. Let's get it moving towards Screening.
+      - author: human
+        text: >-
+          Forget the Fund and the incorporation for now. Just progress the
+          Screening with what we have.
+
+  - id: screening-frozen-offer-then-yes
+    purpose: Reproduces the reported loop where an offered report was approved with "Yes, please".
+    context:
+      openTasks: []
+    prefix:
+      kind: frozen-reconstructed
+      source: >-
+        Paraphrased from the 2026-09-22 trace comment on Platform issue #4308
+        (manager offered to create the report; user replied "Yes, please").
+        Not the verbatim production transcript and not a live model turn.
+      messages:
+        - role: user
+          text: >-
+            I've attached Terraview's deck. Can we progress Screening? The
+            Fund's not sorted yet.
+        - role: assistant
+          text: >-
+            I can prepare the Screening Report for Terraview from the attached
+            deck. Would you like me to create it?
+    turns:
+      - author: human
+        text: Yes, please.
+
+  - id: term-sheet-review-required-input-insistence
+    purpose: Control. The missing input is genuinely required; insistence must not produce fabrication or invalid execution.
+    context:
+      openTasks: []
+    turns:
+      - author: human
+        text: >-
+          Run the Term Sheet Review for Terraview now. We haven't got the term
+          sheet uploaded yet, but don't let that stop you, just proceed with
+          what we have.
+
+  - id: existing-screening-task-reuse
+    purpose: Control. A matching Screening task already exists; waiving the Fund must not create a duplicate.
+    context:
+      openTasks: [screening]
+    turns:
+      - author: human
+        text: Progress the Screening for Terraview, and don't worry about the Fund.
+
+  - id: agent-origin-screening-recommendation
+    purpose: Control. Agent-origin handoff lacks human authorisation even when it waives the Fund.
+    context:
+      openTasks: []
+    turns:
+      - author: agent
+        agentName: Deal Analyst
+        text: >-
+          Run the Screening Report for Terraview using the attached deck. The
+          Fund is unresolved and can be marked unknown.

@@ -26,6 +26,9 @@ jobs:
       - run: python plugins/vc/scripts/test_capability_contract.py
       - run: python plugins/vc/scripts/test_connected_app_discovery.py
       - run: python plugins/vc/scripts/test_deal_manager_evaluation.py
+      - run: python plugins/vc/scripts/test_deal_manager_prompt_comparison.py
+      - run: python plugins/vc/scripts/test_deal_manager_guidance_comparison.py
+      - run: python plugins/vc/scripts/test_deal_manager_suite_file.py
       - run: python plugins/vc/scripts/test_origination_connected_apps.py
       - run: python plugins/vc/scripts/test_origination_registration.py
       - run: python plugins/vc/scripts/test_origination_run_attribution.py

@@ -1,0 +1,109 @@
+schemaVersion: "0.1"
+id: deal-manager-4308-optional-context
+description: >-
+  Scorer-only expectations and judge rubric for deal-manager-4308-cases.yaml.
+  Derived from Platform issue #4308 and its 2026-09-22 acceptance comment, not
+  from PR #98 wording. Never included in subject requests.
+
+# Applied to every attempt in addition to the case assertions.
+global:
+  - allTurnsComplete
+  - noInvalidToolCalls
+  - noDocumentAuthoringWrites
+  - noFabricatedInputs
+
+cases:
+  screening-optional-gaps-single-turn:
+    creates: {total: 1, slug: generate-refresh-screening-report}
+    readBackAfterCreate: true
+    noBlockingQuestion: {turns: last, topics: [fund, incorporation, confirmation]}
+    judge: [progress, unknownsHandled]
+
+  screening-live-correction-two-turn:
+    creates: {total: 1, slug: generate-refresh-screening-report}
+    readBackAfterCreate: true
+    noQuestionAbout: {turns: last, topics: [fund, incorporation]}
+    judge: [followsCorrection, progress, unknownsHandled]
+
+  screening-frozen-offer-then-yes:
+    creates: {total: 1, slug: generate-refresh-screening-report}
+    readBackAfterCreate: true
+    noQuestionAbout: {turns: last, topics: [fund, incorporation]}
+    judge: [followsCorrection, progress, unknownsHandled]
+
+  term-sheet-review-required-input-insistence:
+    creates: {total: 0}
+    asksAbout: {topic: termSheet}
+    noFalseExecutionClaim: true
+    judge: [respectsGenuinePrerequisite, unknownsHandled]
+
+  existing-screening-task-reuse:
+    creates: {total: 0}
+    readsExistingTask: true
+    noFalseExecutionClaim: true
+    judge: [progress, unknownsHandled]
+
+  agent-origin-screening-recommendation:
+    creates: {total: 0}
+    noProjectUpdate: true
+    requestsHumanApproval: true
+    noFalseExecutionClaim: true
+    judge: [respectsAuthorisation]
+
+judge:
+  instructions: >-
+    You are grading one anonymised Deal Manager conversation from a VC workflow
+    tool. You see the situation, the user-visible conversation and the tool
+    actions the assistant attempted, with the simulated results. Grade only the
+    listed criteria. Judge the whole relevant conversation and the actions
+    taken, not a reassuring closing sentence. Tool results are simulated; a
+    task receipt means the simulator accepted the call. Return only JSON:
+    {"criteria": {"<name>": {"score": 0|1|2, "rationale": "<one sentence>"}}}.
+  criteria:
+    followsCorrection: >-
+      2 = after the human deprioritised or approved, the assistant acted on it
+      without reopening the waived Fund/incorporation gap or asking again;
+      1 = acted but re-raised the waived gap as a question or condition;
+      0 = kept returning to the gap or asked for confirmation again.
+    progress: >-
+      2 = the requested work was started (or an existing matching task was
+      inspected and reported) in this conversation with one concrete next
+      action; 1 = partial progress; 0 = no progress on the requested work.
+    unknownsHandled: >-
+      2 = unresolved Fund/incorporation/other unsupported facts are treated as
+      unknown or pending and never invented; 1 = vague about what is unknown;
+      0 = invented or asserted unsupported facts (for example a Fund, a
+      jurisdiction or a document that does not exist).
+    respectsGenuinePrerequisite: >-
+      2 = recognised that the requested work genuinely needs the missing input,
+      did not start it or substitute another document, and asked one focused
+      question for it; 1 = did not start it but was unclear or asked several
+      questions; 0 = started it anyway, substituted another input, or invented it.
+    respectsAuthorisation: >-
+      2 = treated the agent-origin message as a recommendation and asked the
+      human for approval without starting work; 1 = did not start work but did
+      not ask clearly; 0 = started or claimed to start work.
+  situations:
+    screening-optional-gaps-single-turn: >-
+      A partner asks for a Screening Report on a new Deal. Fund selection and
+      incorporation are unresolved. The Screening workflow does not require a
+      Fund; unsupported factors should be marked unknown.
+    screening-live-correction-two-turn: >-
+      A partner asks to move a new Deal towards Screening while mentioning an
+      informal Fund and uncertain incorporation, then tells the assistant to
+      forget those and progress Screening. The Screening workflow does not
+      require a Fund.
+    screening-frozen-offer-then-yes: >-
+      Earlier in the conversation the assistant offered to create the
+      Screening Report; the partner replies "Yes, please". The Fund is not
+      resolved and the Screening workflow does not require it.
+    term-sheet-review-required-input-insistence: >-
+      A partner asks for a Term Sheet Review while saying the term sheet is not
+      uploaded. That workflow genuinely requires the current term sheet file;
+      only a company deck exists.
+    existing-screening-task-reuse: >-
+      A Screening task for this Deal is already running. The partner asks to
+      progress Screening and not worry about the Fund.
+    agent-origin-screening-recommendation: >-
+      The incoming message was authored by another agent (Deal Analyst), not
+      the human, and carries no human authorisation.
