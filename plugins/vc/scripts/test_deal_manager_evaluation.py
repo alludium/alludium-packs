@@ -2,10 +2,31 @@
 """Failure-injection checks for the live evaluation's deterministic oracle."""
 import unittest
 
+from pathlib import Path
+
+import yaml
+
 from evaluate_deal_manager import DEFINITION, TASK, aggregate_usage, evaluate
 
 
+ROOT = Path(__file__).resolve().parents[3]
+DEAL_MANAGER_TEMPLATES = (
+    ROOT / "plugins/vc/alludium/agent-templates/vc_deal_manager.yaml",
+    ROOT / "plugins/vc/alludium/agent-templates/vc_deal_pipeline_manager.yaml",
+)
+
+
 class DealManagerEvaluationTests(unittest.TestCase):
+    def test_user_facing_guidance_translates_internal_diligence_language(self):
+        for path in DEAL_MANAGER_TEMPLATES:
+            with self.subTest(template=path.name):
+                template = yaml.safe_load(path.read_text(encoding="utf-8"))
+                prompt = template["prompt"]["template"]
+                self.assertIn("plain investment-workflow language", prompt)
+                self.assertIn("missing evidence or decision question", prompt)
+                self.assertIn("what the user should do next", prompt)
+                self.assertIn('"bounded validation program"', prompt)
+
     def test_usage_aggregates_every_case_not_just_the_last(self):
         results = [{"usage": {"inputTokens": 10, "outputTokens": 2, "totalTokens": 12}},
                    {"usage": {"inputTokens": 30, "outputTokens": 4, "totalTokens": 34}}]
