@@ -37,6 +37,23 @@ dealManagerScenarios:
       requiresExactTaskCreationPhrase: false
       readBackCreatedTask: true
 
+  - id: screening-request-proceeds-after-explicit-fund-waiver
+    agentTemplateId: vc_deal_pipeline_manager
+    userRequest: The Fund is still unresolved, but I explicitly waive that nonessential gap for this workflow. You offered to create the Screening Report; yes, please do that now from the attached deck and do not ask about Fund again.
+    context:
+      fundId: null
+      fundConfirmed: false
+      readableAttachedArtifactIds: [company-deck]
+      openTasks: []
+    availableTaskDefinitionSlugs: [generate-refresh-screening-report]
+    expected:
+      selectedTaskDefinitionSlug: generate-refresh-screening-report
+      mayCreateTasks: true
+      executeInSameTurn: true
+      requiresRedundantConfirmation: false
+      requiresExactTaskCreationPhrase: false
+      readBackCreatedTask: true
+
   - id: ambiguous-deck-request
     agentTemplateIds: [vc_deal_manager, vc_deal_pipeline_manager]
     userRequest: Do something with this deck.
