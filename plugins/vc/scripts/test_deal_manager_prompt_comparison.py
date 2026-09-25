@@ -638,6 +638,33 @@ class SpendAccountingTests(unittest.TestCase):
             compare.main(argv)
         return stop.exception.code
 
+    def test_invalid_provider_json_finalizes_run_and_retains_exposure(self):
+        for provider in ("openai", "bedrock"):
+            with self.subTest(provider=provider):
+                self.out = Path(self.tmp.name) / provider
+                response = mock.MagicMock()
+                response.__enter__.return_value.read.return_value = b"not json"
+                completed = mock.Mock(returncode=0, stdout="not json", stderr="")
+                subject = Policy()
+                dispatch = compare.default_invoke
+
+                def invoke(request, path, settings):
+                    if provider == "bedrock" and "model" in request:
+                        return subject(request, path, settings)
+                    return dispatch(request, path, settings)
+
+                with mock.patch.object(compare.urllib.request, "urlopen", return_value=response) as http, \
+                        mock.patch.object(compare.subprocess, "run", return_value=completed) as aws:
+                    self.assertEqual(compare.EXIT_INCOMPLETE, self.run_main(invoke, "--judge"))
+                submissions = http.call_count if provider == "openai" else sum(
+                    call.args[0][0] == "aws" for call in aws.call_args_list)
+                self.assertEqual(1, submissions)
+                summary = json.loads((self.out / "summary.json").read_text())
+                self.assertEqual("incomplete", summary["executionStatus"])
+                self.assertEqual(1, summary["spend"]["unreconciledCalls"])
+                self.assertGreater(summary["spend"]["unreconciledExposureUsd"], 0)
+                self.assertIn("Execution: incomplete", (self.out / "report.md").read_text())
+
     def test_behavioural_failures_alone_exit_zero(self):
         self.assertEqual(0, self.run_main(Policy(fund_first=True)))
         summary = json.loads((self.out / "summary.json").read_text())

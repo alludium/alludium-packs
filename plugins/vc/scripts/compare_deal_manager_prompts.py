@@ -567,7 +567,10 @@ def bedrock_invoke(request: dict, request_path: Path, settings: dict) -> dict:
     if result.returncode:
         message = result.stderr.strip() or f"aws exited {result.returncode}"
         raise ProviderError(message, systematic=bool(SYSTEMATIC_AWS.search(message)))
-    return json.loads(result.stdout)
+    try:
+        return json.loads(result.stdout)
+    except (json.JSONDecodeError, UnicodeDecodeError) as error:
+        raise ProviderError("Provider returned an invalid JSON body", systematic=True) from error
 
 
 def openai_invoke(request: dict, request_path: Path, settings: dict) -> dict:
@@ -586,6 +589,8 @@ def openai_invoke(request: dict, request_path: Path, settings: dict) -> dict:
                             systematic=400 <= error.code < 500 and error.code not in TRANSIENT_HTTP) from error
     except (urllib.error.URLError, TimeoutError, OSError) as error:
         raise ProviderError(f"{type(error).__name__}: {error}") from error
+    except (json.JSONDecodeError, UnicodeDecodeError) as error:
+        raise ProviderError("Provider returned an invalid JSON body", systematic=True) from error
 
 
 def default_invoke(request: dict, request_path: Path, settings: dict) -> dict:
