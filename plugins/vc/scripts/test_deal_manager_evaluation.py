@@ -1,11 +1,29 @@
 #!/usr/bin/env python3
-"""Failure-injection checks for the live evaluation's deterministic oracle."""
+"""Failure-injection and prompt-contract checks for Deal Manager evaluation."""
+from pathlib import Path
 import unittest
+
+import yaml
 
 from evaluate_deal_manager import DEFINITION, TASK, aggregate_usage, evaluate
 
 
 class DealManagerEvaluationTests(unittest.TestCase):
+    def test_pipeline_manager_prompt_preserves_waivers_and_handles_empty_fund_searches(self):
+        template_path = Path(__file__).parents[1] / "alludium" / "agent-templates" / "vc_deal_pipeline_manager.yaml"
+        prompt = yaml.safe_load(template_path.read_text())[
+            "prompt"
+        ]["template"]
+        for phrase in (
+            "An explicit user waiver of a nonessential gap remains in force for the current authorized workflow",
+            "Yes, please",
+            "do not treat a zero-result filtered Fund lookup as evidence that no Fund exists",
+            "repeat the bounded lookup without a query",
+            "company, market, traction, and team",
+            "one concrete next action",
+        ):
+            self.assertIn(phrase, prompt)
+
     def test_usage_aggregates_every_case_not_just_the_last(self):
         results = [{"usage": {"inputTokens": 10, "outputTokens": 2, "totalTokens": 12}},
                    {"usage": {"inputTokens": 30, "outputTokens": 4, "totalTokens": 34}}]
