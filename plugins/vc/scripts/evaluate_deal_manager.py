@@ -19,6 +19,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[3]
 PACK = "plugins/vc/alludium"
+TOOL_CONTRACT = Path(__file__).resolve().parent / "fixtures" / "deal-manager-tool-contract.json"
 SCENARIOS = (
     "direct-screening-request-without-task-phrase",
     "direct-screening-refresh-without-task-phrase",
@@ -100,31 +101,47 @@ def aggregate_usage(results: list[dict]) -> dict:
             for key in ("inputTokens", "outputTokens", "totalTokens")}
 
 
+def contract_tool_names() -> list[str]:
+    """Platform tools granted by the manager's capability bundles, frozen with provenance."""
+    return [tool["name"] for tool in json.loads(TOOL_CONTRACT.read_text())["tools"]]
+
+
 def tool_specs(template: dict) -> list[dict]:
+    # Manager templates declare capability bundles rather than mcpServers since 1976704.
+    if "mcpServers" in template:
+        names = [item["name"] for server in template["mcpServers"].values() for item in server["tools"]]
+    else:
+        contract = json.loads(TOOL_CONTRACT.read_text())
+        if template.get("capabilityProfile", {}).get("bundles") != contract["capabilityBundles"]:
+            raise ValueError(f"{template['id']} capability bundles do not match the frozen tool contract")
+        names = contract_tool_names()
+    return tool_specs_from_names(names)
+
+
+def tool_specs_from_names(names: list[str]) -> list[dict]:
     tools = []
-    for server in template["mcpServers"].values():
-        for item in server["tools"]:
-            name = item["name"].replace(".", "_")
-            props = {key: {"type": "string"} for key in (
-                "id", "projectId", "taskId", "taskDefinitionId", "artifactId", "userId", "agentId",
-                "title", "instruction", "humanAssigneeId", "currentAssigneeUserId",
-                "currentAssigneeAgentDeploymentId", "agentDeploymentId", "assigneeType", "assigneeUserId",
-                "assigneeAgentDeploymentId", "reason", "type", "query", "status", "priority", "idempotencyKey",
-            )}
-            props.update({key: {"type": "object"} for key in ("input", "context", "contextData", "metadata")})
-            required = ["title", "instruction"] if name in CREATES else []
-            if name == "task-management_createTask":
-                required += ["projectId"]
-            if name == "task-management_createTaskFromDefinition":
-                required += ["taskDefinitionId"]
-            if name == "task-management_getTaskDetail":
-                required = ["taskId"]
-            description = item["name"]
-            if name in CREATES:
-                description += ": create and start a project task; supply taskDefinitionId for a typed workflow. Returns a task receipt."
-            tools.append({"toolSpec": {"name": name, "description": description, "inputSchema": {"json": {
-                "type": "object", "properties": props, "required": required, "additionalProperties": True,
-            }}}})
+    for platform_name in names:
+        name = platform_name.replace(".", "_")
+        props = {key: {"type": "string"} for key in (
+            "id", "projectId", "taskId", "taskDefinitionId", "artifactId", "userId", "agentId",
+            "title", "instruction", "humanAssigneeId", "currentAssigneeUserId",
+            "currentAssigneeAgentDeploymentId", "agentDeploymentId", "assigneeType", "assigneeUserId",
+            "assigneeAgentDeploymentId", "reason", "type", "query", "status", "priority", "idempotencyKey",
+        )}
+        props.update({key: {"type": "object"} for key in ("input", "context", "contextData", "metadata")})
+        required = ["title", "instruction"] if name in CREATES else []
+        if name == "task-management_createTask":
+            required += ["projectId"]
+        if name == "task-management_createTaskFromDefinition":
+            required += ["taskDefinitionId"]
+        if name == "task-management_getTaskDetail":
+            required = ["taskId"]
+        description = platform_name
+        if name in CREATES:
+            description += ": create and start a project task; supply taskDefinitionId for a typed workflow. Returns a task receipt."
+        tools.append({"toolSpec": {"name": name, "description": description, "inputSchema": {"json": {
+            "type": "object", "properties": props, "required": required, "additionalProperties": True,
+        }}}})
     return tools
 
 

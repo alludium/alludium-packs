@@ -1,0 +1,167 @@
+{
+  "description": "Frozen legacy Deal Manager (vc_deal_manager, Deal Room) platform-tool contract for prompt comparisons. Derived from Platform capability bundle allow-lists; schemas are evaluation approximations. Not interchangeable with the Deal Pipeline manager contract.",
+  "source": {
+    "repository": "Alludium Platform",
+    "commit": "c45e37e43502e8a7bfd73d76beb733ac86bc2080",
+    "path": "config/capability-profiles/platform-defaults.yaml",
+    "blob": "74f09d8d39e73412dc0c2658a1238922d9d611ae",
+    "retrievedAt": "2026-09-23"
+  },
+  "capabilityBundles": [
+    "PLATFORM_TOOL_REPOSITORY",
+    "PROJECT_CONTEXT_READ",
+    "PROJECT_WORKSPACE_UPDATE",
+    "TASK_FOLLOW_UP",
+    "FILE_CONTEXT_READ",
+    "AGENT_ROUTING",
+    "WEB_SEARCH"
+  ],
+  "excluded": {
+    "PLATFORM_TOOL_REPOSITORY": "Broker discovery tools (tool.search, tool.read) omitted: every allowed tool is exposed directly.",
+    "WEB_SEARCH": "Provider-native search; no platform tool is declared.",
+    "connectedApplications": "ALL_CONNECTED_APPS READ_ONLY tools (for example Gmail) are not simulated."
+  },
+  "tools": [
+    {
+      "name": "project.getAgentContext",
+      "bundle": "PROJECT_CONTEXT_READ"
+    },
+    {
+      "name": "project.findById",
+      "bundle": "PROJECT_CONTEXT_READ"
+    },
+    {
+      "name": "project.listMembers",
+      "bundle": "PROJECT_CONTEXT_READ"
+    },
+    {
+      "name": "project-task.listByProject",
+      "bundle": "PROJECT_CONTEXT_READ"
+    },
+    {
+      "name": "project-task.findById",
+      "bundle": "PROJECT_CONTEXT_READ"
+    },
+    {
+      "name": "task-definitions.list",
+      "bundle": "PROJECT_CONTEXT_READ"
+    },
+    {
+      "name": "task-definitions.findById",
+      "bundle": "PROJECT_CONTEXT_READ"
+    },
+    {
+      "name": "project.update",
+      "bundle": "PROJECT_WORKSPACE_UPDATE"
+    },
+    {
+      "name": "task-management.listTasks",
+      "bundle": "TASK_FOLLOW_UP"
+    },
+    {
+      "name": "task-management.getTaskDetail",
+      "bundle": "TASK_FOLLOW_UP"
+    },
+    {
+      "name": "task-management.createAdHocTask",
+      "bundle": "TASK_FOLLOW_UP"
+    },
+    {
+      "name": "task-management.createTaskFromDefinition",
+      "bundle": "TASK_FOLLOW_UP"
+    },
+    {
+      "name": "task-management.askTaskQuestions",
+      "bundle": "TASK_FOLLOW_UP"
+    },
+    {
+      "name": "task-management.askTaskQuestion",
+      "bundle": "TASK_FOLLOW_UP"
+    },
+    {
+      "name": "task-management.submitTaskQuestionAnswer",
+      "bundle": "TASK_FOLLOW_UP"
+    },
+    {
+      "name": "task-management.assignTask",
+      "bundle": "TASK_FOLLOW_UP"
+    },
+    {
+      "name": "task-management.updateWorkflowState",
+      "bundle": "TASK_FOLLOW_UP"
+    },
+    {
+      "name": "task-management.saveTaskOutput",
+      "bundle": "TASK_FOLLOW_UP"
+    },
+    {
+      "name": "task-management.completeTask",
+      "bundle": "TASK_FOLLOW_UP",
+      "requiresApproval": true
+    },
+    {
+      "name": "artifact.searchArtifacts",
+      "bundle": "FILE_CONTEXT_READ"
+    },
+    {
+      "name": "artifact.list",
+      "bundle": "FILE_CONTEXT_READ"
+    },
+    {
+      "name": "artifact.getArtifact",
+      "bundle": "FILE_CONTEXT_READ"
+    },
+    {
+      "name": "artifact.findById",
+      "bundle": "FILE_CONTEXT_READ"
+    },
+    {
+      "name": "artifact.getSourceMetadata",
+      "bundle": "FILE_CONTEXT_READ"
+    },
+    {
+      "name": "artifact.readSourceRange",
+      "bundle": "FILE_CONTEXT_READ"
+    },
+    {
+      "name": "artifact.getTextStructure",
+      "bundle": "FILE_CONTEXT_READ"
+    },
+    {
+      "name": "project.getTemplateMetadata",
+      "bundle": "FILE_CONTEXT_READ"
+    },
+    {
+      "name": "project.readTemplateRange",
+      "bundle": "FILE_CONTEXT_READ"
+    },
+    {
+      "name": "artifact.getArtifactsLinkedToChat",
+      "bundle": "FILE_CONTEXT_READ"
+    },
+    {
+      "name": "artifact.getArtifactsForChatContext",
+      "bundle": "FILE_CONTEXT_READ"
+    },
+    {
+      "name": "agent.findAvailableForCurrentUser",
+      "bundle": "AGENT_ROUTING"
+    },
+    {
+      "name": "agent.findById",
+      "bundle": "AGENT_ROUTING"
+    },
+    {
+      "name": "agent.findByUserId",
+      "bundle": "AGENT_ROUTING"
+    },
+    {
+      "name": "agent.findByUserIdAndType",
+      "bundle": "AGENT_ROUTING"
+    },
+    {
+      "name": "agent-deployment.findByAgentIdAndType",
+      "bundle": "AGENT_ROUTING"
+    }
+  ]
+}
