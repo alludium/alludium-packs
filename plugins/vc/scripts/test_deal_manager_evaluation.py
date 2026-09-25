@@ -8,7 +8,24 @@ import yaml
 from evaluate_deal_manager import DEFINITION, TASK, aggregate_usage, evaluate
 
 
+ROOT = Path(__file__).resolve().parents[3]
+DEAL_MANAGER_TEMPLATES = (
+    ROOT / "plugins/vc/alludium/agent-templates/vc_deal_manager.yaml",
+    ROOT / "plugins/vc/alludium/agent-templates/vc_deal_pipeline_manager.yaml",
+)
+
+
 class DealManagerEvaluationTests(unittest.TestCase):
+    def test_user_facing_guidance_translates_internal_diligence_language(self):
+        for path in DEAL_MANAGER_TEMPLATES:
+            with self.subTest(template=path.name):
+                template = yaml.safe_load(path.read_text(encoding="utf-8"))
+                prompt = template["prompt"]["template"]
+                self.assertIn("plain investment-workflow language", prompt)
+                self.assertIn("missing evidence or decision question", prompt)
+                self.assertIn("what the user should do next", prompt)
+                self.assertIn('"bounded validation program"', prompt)
+
     def test_pipeline_manager_prompt_preserves_waivers_and_handles_empty_fund_searches(self):
         template_path = Path(__file__).parents[1] / "alludium" / "agent-templates" / "vc_deal_pipeline_manager.yaml"
         prompt = yaml.safe_load(template_path.read_text())[
