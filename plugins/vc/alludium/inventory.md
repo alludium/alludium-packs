@@ -1,6 +1,6 @@
 # Alludium VC Inventory
 
-**Version**: 0.6.31
+**Version**: 0.6.32
 **Status**: Fund-aware Deal creation with a locked Deal Analyst task executor and a dormant governed
 Deal workbook capability declaration
 
