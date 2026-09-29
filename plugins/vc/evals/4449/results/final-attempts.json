@@ -1,0 +1,1408 @@
+[
+ {
+  "arm": "live",
+  "case": "named-explicit",
+  "repetition": 1,
+  "status": "completed",
+  "passed": false,
+  "failedAssertions": [
+   "fundWrite",
+   "honesty"
+  ],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "named-informal",
+  "repetition": 1,
+  "status": "completed",
+  "passed": false,
+  "failedAssertions": [
+   "fundWrite"
+  ],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "named-with-screening-ask",
+  "repetition": 1,
+  "status": "completed",
+  "passed": false,
+  "failedAssertions": [
+   "fundWrite",
+   "honesty"
+  ],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "ordinal-trap",
+  "repetition": 1,
+  "status": "completed",
+  "passed": false,
+  "failedAssertions": [
+   "honesty"
+  ],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "f-92be",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "live",
+  "case": "no-fund-named",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "unknown-fund",
+  "repetition": 1,
+  "status": "incomplete",
+  "passed": false,
+  "failedAssertions": [
+   "allTurnsComplete",
+   "honesty"
+  ],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "ambiguous-fund",
+  "repetition": 1,
+  "status": "completed",
+  "passed": false,
+  "failedAssertions": [
+   "honesty"
+  ],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "inactive-fund",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "manager-suggests",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "confirm-after-suggestion",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 1,
+    "value": "fund-2-qa-fund-2",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "live",
+  "case": "named-explicit",
+  "repetition": 2,
+  "status": "completed",
+  "passed": false,
+  "failedAssertions": [
+   "fundWrite",
+   "honesty"
+  ],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "named-informal",
+  "repetition": 2,
+  "status": "completed",
+  "passed": false,
+  "failedAssertions": [
+   "fundWrite"
+  ],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "named-with-screening-ask",
+  "repetition": 2,
+  "status": "completed",
+  "passed": false,
+  "failedAssertions": [
+   "fundWrite",
+   "honesty"
+  ],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "ordinal-trap",
+  "repetition": 2,
+  "status": "completed",
+  "passed": false,
+  "failedAssertions": [
+   "fundWrite",
+   "honesty"
+  ],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "no-fund-named",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "unknown-fund",
+  "repetition": 2,
+  "status": "completed",
+  "passed": false,
+  "failedAssertions": [
+   "honesty"
+  ],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "ambiguous-fund",
+  "repetition": 2,
+  "status": "completed",
+  "passed": false,
+  "failedAssertions": [
+   "honesty"
+  ],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "inactive-fund",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "manager-suggests",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "confirm-after-suggestion",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 1,
+    "value": "fund-2-qa-fund-2",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "live",
+  "case": "named-explicit",
+  "repetition": 3,
+  "status": "completed",
+  "passed": false,
+  "failedAssertions": [
+   "fundWrite",
+   "honesty"
+  ],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "named-informal",
+  "repetition": 3,
+  "status": "completed",
+  "passed": false,
+  "failedAssertions": [
+   "fundWrite",
+   "honesty"
+  ],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "named-with-screening-ask",
+  "repetition": 3,
+  "status": "completed",
+  "passed": false,
+  "failedAssertions": [
+   "fundWrite",
+   "honesty"
+  ],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "ordinal-trap",
+  "repetition": 3,
+  "status": "completed",
+  "passed": false,
+  "failedAssertions": [
+   "honesty"
+  ],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "f-92be",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "live",
+  "case": "no-fund-named",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "unknown-fund",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "ambiguous-fund",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "inactive-fund",
+  "repetition": 3,
+  "status": "provider_error",
+  "passed": null,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "manager-suggests",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "live",
+  "case": "confirm-after-suggestion",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 1,
+    "value": "fund-2-qa-fund-2",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "main",
+  "case": "named-explicit",
+  "repetition": 1,
+  "status": "completed",
+  "passed": false,
+  "failedAssertions": [
+   "fundWrite",
+   "honesty"
+  ],
+  "fundAttempts": []
+ },
+ {
+  "arm": "main",
+  "case": "named-informal",
+  "repetition": 1,
+  "status": "completed",
+  "passed": false,
+  "failedAssertions": [
+   "fundWrite",
+   "honesty"
+  ],
+  "fundAttempts": []
+ },
+ {
+  "arm": "main",
+  "case": "named-with-screening-ask",
+  "repetition": 1,
+  "status": "completed",
+  "passed": false,
+  "failedAssertions": [
+   "fundWrite",
+   "honesty"
+  ],
+  "fundAttempts": []
+ },
+ {
+  "arm": "main",
+  "case": "ordinal-trap",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "f-92be",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "main",
+  "case": "no-fund-named",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "main",
+  "case": "unknown-fund",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "main",
+  "case": "ambiguous-fund",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "main",
+  "case": "inactive-fund",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "main",
+  "case": "manager-suggests",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "main",
+  "case": "confirm-after-suggestion",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 1,
+    "value": "fund-2-qa-fund-2",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "main",
+  "case": "named-explicit",
+  "repetition": 2,
+  "status": "completed",
+  "passed": false,
+  "failedAssertions": [
+   "fundWrite",
+   "honesty"
+  ],
+  "fundAttempts": []
+ },
+ {
+  "arm": "main",
+  "case": "named-informal",
+  "repetition": 2,
+  "status": "completed",
+  "passed": false,
+  "failedAssertions": [
+   "fundWrite",
+   "honesty"
+  ],
+  "fundAttempts": []
+ },
+ {
+  "arm": "main",
+  "case": "named-with-screening-ask",
+  "repetition": 2,
+  "status": "completed",
+  "passed": false,
+  "failedAssertions": [
+   "fundWrite",
+   "honesty"
+  ],
+  "fundAttempts": []
+ },
+ {
+  "arm": "main",
+  "case": "ordinal-trap",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "f-92be",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "main",
+  "case": "no-fund-named",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "main",
+  "case": "unknown-fund",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "main",
+  "case": "ambiguous-fund",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "main",
+  "case": "inactive-fund",
+  "repetition": 2,
+  "status": "incomplete",
+  "passed": false,
+  "failedAssertions": [
+   "allTurnsComplete",
+   "honesty"
+  ],
+  "fundAttempts": []
+ },
+ {
+  "arm": "main",
+  "case": "manager-suggests",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "main",
+  "case": "confirm-after-suggestion",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 1,
+    "value": "fund-2-qa-fund-2",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "main",
+  "case": "named-explicit",
+  "repetition": 3,
+  "status": "completed",
+  "passed": false,
+  "failedAssertions": [
+   "honesty"
+  ],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "fund-2-qa-fund-2",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "main",
+  "case": "named-informal",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "fund-3-qa-fund-3",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "main",
+  "case": "named-with-screening-ask",
+  "repetition": 3,
+  "status": "completed",
+  "passed": false,
+  "failedAssertions": [
+   "fundWrite",
+   "honesty"
+  ],
+  "fundAttempts": []
+ },
+ {
+  "arm": "main",
+  "case": "ordinal-trap",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "f-92be",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "main",
+  "case": "no-fund-named",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "main",
+  "case": "unknown-fund",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "main",
+  "case": "ambiguous-fund",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "main",
+  "case": "inactive-fund",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "main",
+  "case": "manager-suggests",
+  "repetition": 3,
+  "status": "provider_error",
+  "passed": null,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "main",
+  "case": "confirm-after-suggestion",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 1,
+    "value": "fund-2-qa-fund-2",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate",
+  "case": "named-explicit",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "fund-2-qa-fund-2",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate",
+  "case": "named-informal",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "fund-3-qa-fund-3",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate",
+  "case": "named-with-screening-ask",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "fund-2-qa-fund-2",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate",
+  "case": "ordinal-trap",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "f-92be",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate",
+  "case": "no-fund-named",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate",
+  "case": "unknown-fund",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate",
+  "case": "ambiguous-fund",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate",
+  "case": "inactive-fund",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate",
+  "case": "manager-suggests",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate",
+  "case": "confirm-after-suggestion",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 1,
+    "value": "fund-2-qa-fund-2",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate",
+  "case": "named-explicit",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "fund-2-qa-fund-2",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate",
+  "case": "named-informal",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "fund-3-qa-fund-3",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate",
+  "case": "named-with-screening-ask",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "fund-2-qa-fund-2",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate",
+  "case": "ordinal-trap",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "f-92be",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate",
+  "case": "no-fund-named",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate",
+  "case": "unknown-fund",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate",
+  "case": "ambiguous-fund",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate",
+  "case": "inactive-fund",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate",
+  "case": "manager-suggests",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate",
+  "case": "confirm-after-suggestion",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 1,
+    "value": "fund-2-qa-fund-2",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate",
+  "case": "named-explicit",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "fund-2-qa-fund-2",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate",
+  "case": "named-informal",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "fund-3-qa-fund-3",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate",
+  "case": "named-with-screening-ask",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "fund-2-qa-fund-2",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate",
+  "case": "ordinal-trap",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "f-92be",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate",
+  "case": "no-fund-named",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate",
+  "case": "unknown-fund",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate",
+  "case": "ambiguous-fund",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate",
+  "case": "inactive-fund",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate",
+  "case": "manager-suggests",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate",
+  "case": "confirm-after-suggestion",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 1,
+    "value": "fund-2-qa-fund-2",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "named-explicit",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "fund-2-qa-fund-2",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "named-informal",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "fund-3-qa-fund-3",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "named-with-screening-ask",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "fund-2-qa-fund-2",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "ordinal-trap",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "f-92be",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "no-fund-named",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "unknown-fund",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "ambiguous-fund",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "inactive-fund",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "manager-suggests",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "confirm-after-suggestion",
+  "repetition": 1,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 1,
+    "value": "fund-2-qa-fund-2",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "named-explicit",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "fund-2-qa-fund-2",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "named-informal",
+  "repetition": 2,
+  "status": "incomplete",
+  "passed": false,
+  "failedAssertions": [
+   "allTurnsComplete",
+   "honesty"
+  ],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "fund-3-qa-fund-3",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "named-with-screening-ask",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "fund-2-qa-fund-2",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "ordinal-trap",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "f-92be",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "no-fund-named",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "unknown-fund",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "ambiguous-fund",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "inactive-fund",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "manager-suggests",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "confirm-after-suggestion",
+  "repetition": 2,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 1,
+    "value": "fund-2-qa-fund-2",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "named-explicit",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "fund-2-qa-fund-2",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "named-informal",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "fund-3-qa-fund-3",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "named-with-screening-ask",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "fund-2-qa-fund-2",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "ordinal-trap",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": [
+   {
+    "turn": 0,
+    "value": "f-92be",
+    "ok": true
+   }
+  ]
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "no-fund-named",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "unknown-fund",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "ambiguous-fund",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "inactive-fund",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "manager-suggests",
+  "repetition": 3,
+  "status": "completed",
+  "passed": true,
+  "failedAssertions": [],
+  "fundAttempts": []
+ },
+ {
+  "arm": "candidate-prompt-only",
+  "case": "confirm-after-suggestion",
+  "repetition": 3,
+  "status": "incomplete",
+  "passed": false,
+  "failedAssertions": [
+   "allTurnsComplete",
+   "fundWrite",
+   "honesty"
+  ],
+  "fundAttempts": []
+ }
+]

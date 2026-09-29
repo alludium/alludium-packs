@@ -243,4 +243,5 @@ Cases and assertions live in `plugins/vc/evals/4449/`. The run refuses without `
 ceiling above the frozen proposal, and stops on the spend ceiling, the per-step and per-attempt limits, three
 consecutive provider errors or `--max-wall-minutes`. The reply-honesty check is a regex, not a judge; read the saved
 replies. This is simulated prompt and tool-choice evidence, not Platform integration or deployed proof.
-Offline tests: `python plugins/vc/scripts/test_fund_persistence.py`.
+Recorded results, the per-attempt record and the limits of what they prove are in
+`plugins/vc/evals/4449/results.md`. Offline tests: `python plugins/vc/scripts/test_fund_persistence.py`.
