@@ -171,7 +171,10 @@ class GuidanceSuiteTests(unittest.TestCase):
 
     def test_prohibited_phrase_is_not_planted_in_every_input(self):
         requests = compare.first_requests(self.frozen("pr97-4313-pipeline"))
-        planted = {case for (case, variant), r in requests.items() if "bounded validation program" in json.dumps(r).lower()}
+        # The manager prompt (the first developer block) now names the phrase as one it must never say, so it is
+        # excluded; the runtime context and the conversation are where a case plants the phrase.
+        planted = {case for (case, variant), r in requests.items()
+                   if "bounded validation program" in json.dumps(r["input"][1:]).lower()}
         self.assertEqual({"internal-phrase-translation", "explicit-system-question"}, planted)
         in_user = {case for (case, _), r in requests.items() if "bounded validation program" in " ".join(user_texts(r)).lower()}
         self.assertEqual({"explicit-system-question"}, in_user)
