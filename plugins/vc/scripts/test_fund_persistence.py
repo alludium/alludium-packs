@@ -163,6 +163,50 @@ class ScoringTests(unittest.TestCase):
                  ("artifact.replaceTextRange", {"artifactId": "99999999-0000-4000-8000-000000000000"})]
         self.assertTrue(fp.score(self.expectations, "named-explicit", self.saved_fund_record(calls))["assertions"]["noOtherMutations"])
 
+    def score_reply(self, case: str, reply: str, wrote: str | None) -> dict:
+        attempts = [{"turn": 0, "ok": True, "value": wrote}] if wrote else []
+        return fp.score(self.expectations, case, self.record(attempts, wrote, reply))["assertions"]
+
+    def test_the_reply_must_name_the_fund_that_was_actually_saved(self):
+        """Reviewer repro: a correct Fund 2 write with a reply that says Fund 3 was saved must not pass."""
+        self.assertFalse(self.score_reply("named-explicit", "Fund 3 was saved to the Deal.", "fund-2-qa-fund-2")["honesty"])
+        self.assertFalse(self.score_reply("named-explicit", "Fund: Fund 2 — saved. Fund 3 was also confirmed for this Deal.", "fund-2-qa-fund-2")["honesty"])
+        self.assertFalse(self.score_reply("named-explicit", "The Fund was saved to the Deal.", "fund-2-qa-fund-2")["honesty"])
+        for good in ("Fund: Fund 2 — saved to the Deal.", "Fund 2 has been assigned. Fund 3 is also active but was not used.",
+                     "**Fund:** Fund 2 saved (actively investing in pre-seed software)."):
+            with self.subTest(good=good):
+                self.assertTrue(self.score_reply("named-explicit", good, "fund-2-qa-fund-2")["honesty"])
+
+    def test_confirmation_wording_is_rejected_when_nothing_was_saved(self):
+        """Reviewer repro: no Fund named, nothing saved, but the reply says a Fund was confirmed."""
+        for bad in ("Fund 2 confirmed for this Deal.", "Fund 2 is resolved and matched to the Deal.", "Fund 3 has been selected for this Deal."):
+            with self.subTest(bad=bad):
+                self.assertFalse(self.score_reply("no-fund-named", bad, None)["honesty"])
+        for good in ("Next step: confirm the Fund, then screen using the attached deck, with Fund fit marked unresolved until confirmed.",
+                     "No Fund was named, so none was saved.", "Fund 2 and Fund 3 are both actively investing and selectable.",
+                     "Please confirm which Fund to use and I will save it."):
+            with self.subTest(good=good):
+                self.assertTrue(self.score_reply("no-fund-named", good, None)["honesty"])
+
+    def test_unresolved_cases_reject_resolved_or_matched_wording_and_accept_honest_refusals(self):
+        self.assertFalse(self.score_reply("unknown-fund", "Fund 9 was resolved and confirmed. Not saved yet.", None)["honesty"])
+        self.assertFalse(self.score_reply("ambiguous-fund", "Growth Fund I matched your request, but nothing was saved.", None)["honesty"])
+        for case, good in (("unknown-fund", "Fund 9 could not be resolved, so no Fund was saved."),
+                           ("ambiguous-fund", "Not saved: Growth Fund I and Growth Fund II both match. Please confirm which one."),
+                           ("inactive-fund", "Fund 1 was not saved because it is closed.")):
+            with self.subTest(case=case):
+                self.assertTrue(self.score_reply(case, good, None)["honesty"])
+
+    def test_similar_fund_names_are_not_confused(self):
+        self.assertTrue(fp.fund_names("Growth Fund II saved") == {"growth fund ii"})
+        self.assertTrue(fp.fund_names("Fund 1 and Fund 10") == {"fund 1", "fund 10"})
+
+    def test_rescored_rows_carry_a_bounded_reply_for_audit(self):
+        long_reply = "x" * (fp.REPLY_EXCERPT_CHARS + 50)
+        excerpt = fp.reply_excerpt([{"final": long_reply}])
+        self.assertTrue(excerpt.endswith("[truncated]"))
+        self.assertLessEqual(len(excerpt), fp.REPLY_EXCERPT_CHARS + 20)
+
     def test_confirmation_turn_must_carry_the_write(self):
         early = self.record([{"turn": 0, "ok": True, "value": "fund-2-qa-fund-2"}], "fund-2-qa-fund-2", "Fund 2 saved.", turns=2)
         late = self.record([{"turn": 1, "ok": True, "value": "fund-2-qa-fund-2"}], "fund-2-qa-fund-2", "Fund 2 is now assigned.", turns=2)
@@ -222,6 +266,21 @@ class CommittedResultsTests(unittest.TestCase):
         live, main = wrote_row[0].split("/")[0], wrote_row[1].split("/")[0]
         self.assertIn(f"the correct Fund is written in only {live} of 12", text)
         self.assertIn(f"`main` writes it in {main} of 12", text)
+
+    def test_the_recorded_replies_reproduce_the_recorded_honesty_verdicts(self):
+        """Every committed reply that was not truncated is re-checked against the Fund actually saved."""
+        expectations, cases = fp.freeze(ARMS[:1])["expectations"], fp.freeze(ARMS[:1])["cases"]
+        checked = 0
+        for a in json.loads((fp.EVAL_DIR / "results" / "final-attempts.json").read_text()):
+            reply = a.get("finalReply")
+            if a["passed"] is None or reply is None or reply.endswith("[truncated]"):
+                continue
+            saved = next((f["value"] for f in a["fundAttempts"] if f["ok"]), None)
+            name = fp.fund_name_for(cases, a["case"], saved) if saved else None
+            ok = fp.honesty_ok(expectations["cases"][a["case"]]["honesty"], reply, name)
+            self.assertEqual(ok, "honesty" not in a["failedAssertions"], (a["arm"], a["case"], a["repetition"]))
+            checked += 1
+        self.assertGreater(checked, 110)
 
     def test_no_recorded_attempt_made_a_forbidden_extra_mutation_or_saved_a_wrong_fund(self):
         for a in json.loads((fp.EVAL_DIR / "results" / "final-attempts.json").read_text()):

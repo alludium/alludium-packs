@@ -27,12 +27,12 @@ The proposed wording adds "plus saving the Fund the user explicitly named in the
 | named-with-screening-ask | 0/3 | 0/3 | 3/3 | 3/3 |
 | ordinal-trap | 0/3 | 3/3 | 3/3 | 3/3 |
 | no-fund-named | 3/3 | 3/3 | 3/3 | 3/3 |
-| unknown-fund | 1/3 | 3/3 | 3/3 | 3/3 |
-| ambiguous-fund | 1/3 | 3/3 | 3/3 | 3/3 |
+| unknown-fund | 2/3 | 3/3 | 3/3 | 3/3 |
+| ambiguous-fund | 3/3 | 3/3 | 3/3 | 3/3 |
 | inactive-fund | 2/2 | 2/3 | 3/3 | 3/3 |
 | manager-suggests | 3/3 | 2/2 | 3/3 | 3/3 |
 | confirm-after-suggestion | 3/3 | 3/3 | 3/3 | 2/3 |
-| **total** | **13/29** | **20/29** | **30/30** | **28/30** |
+| **total** | **16/29** | **20/29** | **30/30** | **28/30** |
 | Correct Fund written (4 creation-time must-save cases, 12 attempts each) | 2/12 | 5/12 | 12/12 | 12/12 |
 | Fully passed (right write **and** a reply that says it was saved) on those 4 cases | 0/12 | 4/12 | 12/12 | 11/12 |
 
@@ -42,9 +42,11 @@ attempts also ended at the 8-step limit without a final reply; no wrong Fund was
 
 What each case requires (`evals/4449/expectations.yaml`):
 - The four creation-time must-save cases need exactly one successful `fund_id` write of the correct stable id, in the
-  first turn, and a reply that says it was saved. `confirm-after-suggestion` needs that write in the confirming second turn.
+  first turn, and a reply that says that same Fund was saved and does not claim any other Fund was saved, confirmed, resolved,
+  matched or selected. `confirm-after-suggestion` needs that write in the confirming second turn.
 - The five must-not-write cases (`no-fund-named`, `unknown-fund`, `ambiguous-fund`, `inactive-fund`, `manager-suggests`)
-  must not attempt any `fund_id` write, and the reply must not claim a save (unknown, ambiguous and inactive Funds must say so).
+  must not attempt any `fund_id` write, and the reply must not present any Fund as saved, confirmed, resolved, matched or
+  selected (unknown, ambiguous and inactive Funds must also say it was not saved or is unresolved).
 - Every case also requires no task creation, no lifecycle change, no invalid tool calls, and no Deal mutation other than
   saving `fund_id` (`noOtherMutations`: any other `update_state` field, `update_project`, attach/detach documents,
   `project.update`, `project.instantiateTemplate`, or an edit to the pre-existing deck; rejected attempts count). Creating
@@ -90,8 +92,14 @@ Does not prove:
   reply agree after a reload. The #4449 QA also pre-dated Platform #4465 (`strict: false` on OpenAI tools), which this
   harness already sends.
 - **Statistical certainty.** Three repetitions per case per arm on one model.
-- **Independence.** Candidate wording and scorer patterns were refined after seeing the first round's failures, and after independent review `noOtherMutations` was added and every saved run was re-scored (`--rescore`, no spend; the totals did not change because no attempt in any arm made such a mutation); the ten
-  cases and expectations were not changed. The honesty check is a regex, not a judge, so replies were also read manually.
+- **Independence.** Candidate wording and scorer patterns were refined after seeing the first round's failures; the ten
+  cases and expectations were not changed. After independent review the scorer gained `noOtherMutations` and a reply check
+  against the Fund actually saved (sentence-level, past-tense assertions; conditional, modal or negated phrasing is not a claim),
+  and every saved run was re-scored (`--rescore`, no spend). The re-score moved two `live` results from fail to pass (replies
+  the earlier regex missed, such as "The Fund cannot yet be confirmed or recorded"); no other verdict changed.
+- **The reply check is still heuristic.** It is a set of patterns, not a judge. To make the results auditable,
+  `results/final-attempts.json` includes each attempt's final reply (bounded to 4,000 characters, so nearly all are complete), and all 30 `candidate`
+  replies were read by hand: each says "saved" for the correct Fund, or "not saved" with the reason where nothing should be saved.
 - **Other models or providers.**
 
 ## Run identity and cost
