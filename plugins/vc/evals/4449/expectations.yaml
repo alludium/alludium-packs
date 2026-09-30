@@ -5,7 +5,7 @@ description: >-
   recorded 2026-09-29 (Donal): a Fund explicitly named by the human in their own request, resolving
   to exactly one active Fund, is confirmation and must be written; suggestions, ambiguous, unknown,
   inactive or absent Funds must not be written, and the reply must say honestly whether it was saved.
-global: [allTurnsComplete, noInvalidToolCalls, noTaskCreated, noLifecycleChange]
+global: [allTurnsComplete, noInvalidToolCalls, noTaskCreated, noLifecycleChange, noOtherMutations]
 # fundWrite: {value, turn}  exactly one successful fund_id write of `value`, in that human turn index,
 #                           and no other fund_id write attempt anywhere.
 # fundWrite: none           no fund_id write attempt at all.

@@ -121,6 +121,48 @@ class ScoringTests(unittest.TestCase):
         confirmed_only = self.record([{"turn": 0, "ok": True, "value": "fund-2-qa-fund-2"}], "fund-2-qa-fund-2", "Fund 2 confirmed.")
         self.assertFalse(fp.score(self.expectations, "named-explicit", confirmed_only)["assertions"]["honesty"])
 
+    def turn_with_calls(self, calls: list[dict]) -> dict:
+        return {"index": 0, "complete": True, "final": "Fund: Fund 2 (saved to the Deal).",
+                "calls": [{"name": n, "input": i, "error": None} for n, i in calls]}
+
+    def saved_fund_record(self, calls: list[dict]) -> dict:
+        rec = self.record([{"turn": 0, "ok": True, "value": "fund-2-qa-fund-2"}], "fund-2-qa-fund-2", "Fund: Fund 2 (saved to the Deal).")
+        rec["turns"] = [self.turn_with_calls(calls)]
+        return rec
+
+    FUND_WRITE = ("project_data", {"action": "update_state", "data": {"fieldValues": [{"fieldKey": "fund_id", "value": "fund-2-qa-fund-2"}]}})
+
+    def test_a_correct_fund_write_plus_a_company_rename_is_rejected(self):
+        rename = ("project_data", {"action": "update_state", "data": {"fieldValues": [
+            {"fieldKey": "fund_id", "value": "fund-2-qa-fund-2"}, {"fieldKey": "company_name", "value": "Wrong company"}]}})
+        result = fp.score(self.expectations, "named-explicit", self.saved_fund_record([rename]))
+        self.assertFalse(result["assertions"]["noOtherMutations"])
+        self.assertFalse(result["passed"])
+        self.assertTrue(result["assertions"]["fundWrite"])
+
+    def test_the_fund_write_and_the_requested_evidence_artifact_are_the_only_allowed_writes(self):
+        calls = [self.FUND_WRITE, ("artifact.createTextArtifact", {"title": "evidence"}), ("project_data", {"action": "read"}),
+                 ("project_data", {"action": "list_field_options", "data": {"fieldOptions": {"fieldKey": "fund_id"}}})]
+        self.assertTrue(fp.score(self.expectations, "named-explicit", self.saved_fund_record(calls))["passed"])
+
+    def test_other_project_and_document_mutations_are_rejected_even_when_the_call_failed(self):
+        for name, args in [("project_data", {"action": "update_project", "data": {"project": {"name": "X"}}}),
+                           ("project_data", {"action": "attach_documents", "data": {"artifactIds": ["a"]}}),
+                           ("project_data", {"action": "update_state", "data": {"fieldValues": [{"fieldKey": "company_name", "value": "X"}]}}),
+                           ("project.update", {"projectId": "p"}), ("project.instantiateTemplate", {"projectId": "p"}),
+                           ("artifact.updateTextArtifact", {"artifactId": fp.DECK}),
+                           ("artifact.replaceTextRange", {"artifactId": fp.DECK})]:
+            with self.subTest(name=name, action=args.get("action")):
+                rec = self.saved_fund_record([self.FUND_WRITE, (name, args)])
+                rec["turns"][0]["calls"][-1]["error"] = "Tool outside the simulated coordination scope"
+                self.assertFalse(fp.score(self.expectations, "named-explicit", rec)["assertions"]["noOtherMutations"])
+
+    def test_editing_the_evidence_artifact_the_kickoff_asked_for_is_not_a_deal_mutation(self):
+        calls = [self.FUND_WRITE, ("artifact.createTextArtifact", {"title": "evidence"}),
+                 ("artifact.updateTextArtifact", {"artifactId": "99999999-0000-4000-8000-000000000000"}),
+                 ("artifact.replaceTextRange", {"artifactId": "99999999-0000-4000-8000-000000000000"})]
+        self.assertTrue(fp.score(self.expectations, "named-explicit", self.saved_fund_record(calls))["assertions"]["noOtherMutations"])
+
     def test_confirmation_turn_must_carry_the_write(self):
         early = self.record([{"turn": 0, "ok": True, "value": "fund-2-qa-fund-2"}], "fund-2-qa-fund-2", "Fund 2 saved.", turns=2)
         late = self.record([{"turn": 1, "ok": True, "value": "fund-2-qa-fund-2"}], "fund-2-qa-fund-2", "Fund 2 is now assigned.", turns=2)
@@ -134,6 +176,60 @@ class ScoringTests(unittest.TestCase):
         self.assertFalse(result["noTaskCreated"])
         self.assertFalse(result["noLifecycleChange"])
         self.assertFalse(result["noInvalidToolCalls"])
+
+
+class RescoreTests(unittest.TestCase):
+    def test_saved_attempts_are_rescored_with_the_current_scorer_and_originals_are_untouched(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp) / "attempts" / "001-named-explicit--a--r1"
+            folder.mkdir(parents=True)
+            record = {"arm": "a", "case": "named-explicit", "repetition": 1, "status": "completed",
+                      "turns": [{"index": 0, "complete": True, "final": "Fund: Fund 2 (saved to the Deal).", "calls": [
+                          {"name": "project_data", "error": None, "input": {"action": "update_state", "data": {"fieldValues": [
+                              {"fieldKey": "fund_id", "value": "fund-2-qa-fund-2"}, {"fieldKey": "company_name", "value": "Wrong company"}]}}}]}],
+                      "fundAttempts": [{"turn": 0, "ok": True, "value": "fund-2-qa-fund-2"}], "finalFundId": "fund-2-qa-fund-2",
+                      "tasksCreated": [], "stateRequests": [], "deterministic": {"passed": True}}
+            (folder / "attempt.json").write_text(json.dumps(record))
+            before = (folder / "attempt.json").read_text()
+            result = fp.rescore(Path(tmp))
+            self.assertEqual(result["totals"], {"a": {"passed": 0, "scored": 1}})
+            self.assertEqual(result["attempts"][0]["failedAssertions"], ["noOtherMutations"])
+            self.assertEqual((folder / "attempt.json").read_text(), before)
+
+
+class CommittedResultsTests(unittest.TestCase):
+    """The prose in results.md must agree with the committed per-attempt evidence it summarises."""
+
+    MUST_SAVE = {"named-explicit": "fund-2-qa-fund-2", "named-informal": "fund-3-qa-fund-3",
+                 "named-with-screening-ask": "fund-2-qa-fund-2", "ordinal-trap": "f-92be"}
+    ARMS = ["live", "main", "candidate", "candidate-prompt-only"]
+
+    def test_headline_numbers_match_the_committed_attempt_records(self):
+        attempts = json.loads((fp.EVAL_DIR / "results" / "final-attempts.json").read_text())
+        text = (fp.EVAL_DIR / "results.md").read_text()
+        wrote_row, full_row, total_row = [], [], []
+        for arm in self.ARMS:
+            rows = [a for a in attempts if a["arm"] == arm]
+            must = [a for a in rows if a["case"] in self.MUST_SAVE]
+            wrote = sum(1 for a in must if any(f["ok"] and f["value"] == self.MUST_SAVE[a["case"]] for f in a["fundAttempts"]))
+            scored = [a for a in rows if a["passed"] is not None]
+            wrote_row.append(f"{wrote}/{len(must)}")
+            full_row.append(f"{sum(1 for a in must if a['passed'])}/{len(must)}")
+            total_row.append(f"**{sum(1 for a in scored if a['passed'])}/{len(scored)}**")
+        self.assertIn("| " + " | ".join(wrote_row) + " |", text)
+        self.assertIn("| " + " | ".join(full_row) + " |", text)
+        self.assertIn("| " + " | ".join(total_row) + " |", text)
+        live, main = wrote_row[0].split("/")[0], wrote_row[1].split("/")[0]
+        self.assertIn(f"the correct Fund is written in only {live} of 12", text)
+        self.assertIn(f"`main` writes it in {main} of 12", text)
+
+    def test_no_recorded_attempt_made_a_forbidden_extra_mutation_or_saved_a_wrong_fund(self):
+        for a in json.loads((fp.EVAL_DIR / "results" / "final-attempts.json").read_text()):
+            self.assertEqual(a["otherMutations"], [], a)
+            expected = self.MUST_SAVE.get(a["case"])
+            for f in a["fundAttempts"]:
+                if f["ok"] and expected is not None:
+                    self.assertEqual(f["value"], expected, a)
 
 
 class FreezeTests(unittest.TestCase):

@@ -33,30 +33,39 @@ The proposed wording adds "plus saving the Fund the user explicitly named in the
 | manager-suggests | 3/3 | 2/2 | 3/3 | 3/3 |
 | confirm-after-suggestion | 3/3 | 3/3 | 3/3 | 2/3 |
 | **total** | **13/29** | **20/29** | **30/30** | **28/30** |
-| Named Fund written correctly (4 must-save cases) | 2/12 | 5/12 | 12/12 | 12/12 |
+| Correct Fund written (4 creation-time must-save cases, 12 attempts each) | 2/12 | 5/12 | 12/12 | 12/12 |
+| Fully passed (right write **and** a reply that says it was saved) on those 4 cases | 0/12 | 4/12 | 12/12 | 11/12 |
 
 Cells are passed/scored attempts. `live` and `main` score 29 rather than 30 because one attempt in each hit a
 provider error (unscored) and one more ended without a final reply (scored as a failure). Two `candidate-prompt-only`
 attempts also ended at the 8-step limit without a final reply; no wrong Fund was saved in any attempt of any arm.
 
-What each case requires (`evals/4449/expectations.yaml`): the four must-save cases need exactly one successful
-`fund_id` write of the correct stable id, in the right turn, with a reply that says it was saved. The other six must
-not attempt any `fund_id` write, and the reply must not claim a save (unknown, ambiguous and inactive Funds must say
-so). Every case also requires no task creation, no lifecycle change and no invalid tool calls.
+What each case requires (`evals/4449/expectations.yaml`):
+- The four creation-time must-save cases need exactly one successful `fund_id` write of the correct stable id, in the
+  first turn, and a reply that says it was saved. `confirm-after-suggestion` needs that write in the confirming second turn.
+- The five must-not-write cases (`no-fund-named`, `unknown-fund`, `ambiguous-fund`, `inactive-fund`, `manager-suggests`)
+  must not attempt any `fund_id` write, and the reply must not claim a save (unknown, ambiguous and inactive Funds must say so).
+- Every case also requires no task creation, no lifecycle change, no invalid tool calls, and no Deal mutation other than
+  saving `fund_id` (`noOtherMutations`: any other `update_state` field, `update_project`, attach/detach documents,
+  `project.update`, `project.instantiateTemplate`, or an edit to the pre-existing deck; rejected attempts count). Creating
+  and editing the evidence artifact the kickoff asks for is allowed.
 
 ## What works and what does not
 
-- **The defect reproduces.** On the live prompt the named Fund is written in 0 of 12 must-save attempts, matching the Dev
-  QA (0 of 3 Deals). The manager resolves the Fund but does not save it, because the kickoff turn is recommendation-only.
-  On `main` it is 1 of 12.
-- **The change fixes it.** `candidate` writes the correct Fund in 12 of 12 and refuses correctly in all six must-not-write
-  cases, including the #4290 ordinal trap (it never picks a Fund by list position) and the ambiguous, unknown and inactive
-  cases, with honest "saved" or "not saved (reason)" replies.
-- **The prompt does most of the work.** `candidate-prompt-only` also writes 12 of 12; its two lost points are runs that hit
-  the step limit. The guard wording adds a small reliability margin (30/30 vs 28/30), which is not statistically
-  meaningful at this sample size. It is included so the two instructions do not contradict each other.
+- **The defect reproduces.** On the live prompt the correct Fund is written in only 2 of 12 creation-time must-save
+  attempts, and none of the 12 fully pass: both writes were in the ordinal trap and neither reply said it was saved.
+  That matches the Dev QA (0 of 3 Deals saved). Otherwise the manager resolves the Fund but does not save it, because the
+  kickoff turn is recommendation-only. `main` writes it in 5 of 12 and fully passes 4 of 12; the one write that failed was
+  a reply that did not say it was saved. Neither prompt is reliable.
+- **The change fixes it.** `candidate` writes the correct Fund in 12 of 12, all fully passing, and refuses correctly in all
+  five must-not-write cases, including the #4290 ordinal trap (it never picks a Fund by list position) and the ambiguous,
+  unknown and inactive cases, with honest "saved" or "not saved (reason)" replies.
+- **The prompt does most of the work.** `candidate-prompt-only` also writes 12 of 12 and fully passes 11 of 12; its lost
+  point was a run that hit the step limit without a final reply. Across all cases it scores 28/30 to the candidate's 30/30.
+  That difference is not statistically meaningful at this sample size. The guard wording is included so the two
+  instructions do not contradict each other.
 - **Unchanged flows still work.** `confirm-after-suggestion` (Deal B: the manager suggests, the human confirms, then it
-  saves) passes for every arm that completed, so the change does not break the path that worked before.
+  saves) passes in every arm except one `candidate-prompt-only` attempt that hit the step limit, so the change does not break the path that worked before.
 - **What did not work first time** (kept so reviewers can see the iteration):
   - First candidate round, 27/30: two misses were the model sending a flat `data.fieldKey` instead of
     `data.fieldOptions.fieldKey`, then wrongly reporting the Fund lookup as unavailable. Template 1.0.8 now shows the exact
@@ -81,7 +90,7 @@ Does not prove:
   reply agree after a reload. The #4449 QA also pre-dated Platform #4465 (`strict: false` on OpenAI tools), which this
   harness already sends.
 - **Statistical certainty.** Three repetitions per case per arm on one model.
-- **Independence.** Candidate wording and scorer patterns were refined after seeing the first round's failures; the ten
+- **Independence.** Candidate wording and scorer patterns were refined after seeing the first round's failures, and after independent review `noOtherMutations` was added and every saved run was re-scored (`--rescore`, no spend; the totals did not change because no attempt in any arm made such a mutation); the ten
   cases and expectations were not changed. The honesty check is a regex, not a judge, so replies were also read manually.
 - **Other models or providers.**
 
