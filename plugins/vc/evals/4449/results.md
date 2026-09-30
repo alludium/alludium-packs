@@ -94,7 +94,7 @@ Does not prove:
 - **Statistical certainty.** Three repetitions per case per arm on one model.
 - **Independence.** Candidate wording and scorer patterns were refined after seeing the first round's failures; the ten
   cases and expectations were not changed. After independent review the scorer gained `noOtherMutations` and a reply check
-  against the Fund actually saved (sentence-level, past-tense assertions; conditional, modal or negated phrasing is not a claim),
+  against the Fund actually saved (past-tense assertions, each verb judged in its own clause so a negated first claim cannot hide a second one; conditional, modal or negated phrasing is not a claim),
   and every saved run was re-scored (`--rescore`, no spend). The re-score moved two `live` results from fail to pass (replies
   the earlier regex missed, such as "The Fund cannot yet be confirmed or recorded"); no other verdict changed.
 - **The reply check is still heuristic.** It is a set of patterns, not a judge. To make the results auditable,
