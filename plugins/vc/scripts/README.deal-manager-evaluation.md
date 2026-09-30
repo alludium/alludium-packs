@@ -218,3 +218,32 @@ For a case where the agent must ask for a missing input, use
 question-only rule so frozen historical verdicts reproduce.
 
 Offline tests: `python plugins/vc/scripts/test_deal_manager_suite_file.py`.
+
+## Fund persistence at Deal creation (`compare_fund_persistence.py`, issue #4449)
+
+A sibling of the paired comparison for one behaviour: when a human names a Fund in the Deal-creation
+request, does the Deal Pipeline Manager save it to `fund_id`, refuse ambiguous, unknown, inactive, unnamed or
+self-suggested Funds, and say honestly whether it saved? It reuses this runner's spend ledger, durable
+evidence and Luna settings and adds a simulated `project_data` tool (`list_field_options`, `update_state`) whose schema is
+copied from Platform (`evals/4449/project-data-tool.json`). The first turn is the server-authored creation
+kickoff, sent with Platform's kickoff authority guard, because that guard is what makes the manager
+recommendation-only.
+
+```sh
+# No-spend preflight (default)
+python plugins/vc/scripts/compare_fund_persistence.py --arm live=v0.6.29 --arm main=origin/main
+
+# Paid run: every arm is a git revision or file:PATH, optionally +guard=KEY to pick the kickoff guard wording
+python plugins/vc/scripts/compare_fund_persistence.py \
+  --arm live=v0.6.29 --arm main=origin/main --arm candidate=file:PATH+guard=proposed \
+  --execute --output /tmp/fund-persistence --max-spend-usd 2 --max-wall-minutes 45
+```
+
+Cases and assertions live in `plugins/vc/evals/4449/`. The run refuses without `OPENAI_API_KEY`, refuses a
+ceiling above the frozen proposal, and stops on the spend ceiling, the per-step and per-attempt limits, three
+consecutive provider errors or `--max-wall-minutes`. The reply-honesty check is a regex, not a judge; read the saved
+replies. This is simulated prompt and tool-choice evidence, not Platform integration or deployed proof.
+`--rescore DIR` re-scores a finished run's saved attempts with the current scorer at no spend. Beyond the write itself the
+scorer rejects any Deal mutation other than saving `fund_id` (`noOtherMutations`). Recorded results, the per-attempt record
+and the limits of what they prove are in `plugins/vc/evals/4449/results.md`; a test keeps its headline numbers in step with
+the committed records. Offline tests: `python plugins/vc/scripts/test_fund_persistence.py`.
