@@ -32,6 +32,7 @@ class ScreeningLanguageTests(unittest.TestCase):
             "[S2] is a provider-searchable PDF whose relevant content states…",
             "No prior Screening Report or evidence-basis manifest was available for comparison.",
             "Evidence-basis manifest included.",
+            "Structured output: Saved to screening_report_artifact_id",
         ]
         for example in examples:
             with self.subTest(example=example):
@@ -50,6 +51,9 @@ class ScreeningLanguageTests(unittest.TestCase):
         text = instructions["executionInstructions"]
         self.assertIn("exact active `vc.funds` record matching `fund_id`", text)
         self.assertIn("every visible report section and the task completion summary", text)
+        self.assertIn("The final completion response must contain only:", text)
+        self.assertIn("Saving the required structured task output is still mandatory", text)
+        self.assertEqual(check_language("", " ".join(instructions["completionCriteria"])), [])
         self.assertIn("first report", text)
         self.assertIn("readable prior report with no usable source baseline", text)
         self.assertIn("hidden, preserving its schema and provenance fields", text)
