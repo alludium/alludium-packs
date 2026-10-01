@@ -11,9 +11,14 @@ import argparse
 from html.parser import HTMLParser
 from pathlib import Path
 import re
+import yaml
+
+TASK_SCHEMA = Path(__file__).resolve().parents[1] / "alludium/task-definition-templates/vc-workflows/generate-refresh-screening-report.yaml"
+TASK_FIELDS = yaml.safe_load(TASK_SCHEMA.read_text())["fields"]
+RUNTIME_FIELD_NAMES = {field["key"] for direction in ("input", "output") for field in TASK_FIELDS[direction]}
 
 FORBIDDEN = {
-    "runtime field name": re.compile(r"\b(?:fund_id|focus_artifact_ids|screening_report_artifact_id)\b", re.I),
+    "runtime field name": re.compile(r"\b(?:" + "|".join(re.escape(key) for key in sorted(RUNTIME_FIELD_NAMES)) + r")\b", re.I),
     "internal evidence manifest terminology": re.compile(r"\bevidence[\s‐‑–—-]+basis[\s‐‑–—-]+manifest\b", re.I),
     "provider search terminology": re.compile(r"\bprovider[\s‐‑–—-]+searchable\b", re.I),
 }

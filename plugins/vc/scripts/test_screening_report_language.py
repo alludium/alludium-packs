@@ -39,6 +39,16 @@ class ScreeningLanguageTests(unittest.TestCase):
                 self.assertTrue(check_language(f"<p>{example}</p>", "Report created."))
                 self.assertTrue(check_language("<p>Report</p>", example))
 
+    def test_all_declared_fields_are_rejected_only_in_visible_content(self):
+        task = yaml.safe_load((ROOT / "alludium/task-definition-templates/vc-workflows/generate-refresh-screening-report.yaml").read_text())
+        keys = {field["key"] for direction in ("input", "output") for field in task["fields"][direction]}
+        self.assertIn("existing_screening_report_artifact_id", keys)
+        for key in keys:
+            with self.subTest(key=key):
+                self.assertTrue(check_language(f"<p>Missing {key}</p>", "Report ready."))
+                self.assertTrue(check_language("<p>Report ready.</p>", f"Missing `{key}`"))
+                self.assertEqual(check_language(f'<section hidden>{key}</section><a href="/source?{key}=123">Source</a>', "Report ready."), [])
+
     def test_inline_formatting_entities_and_hidden_content(self):
         self.assertTrue(check_language("<p>fund_<span>id</span></p>", ""))
         self.assertTrue(check_language("<p>provider&#45;searchable</p>", ""))
