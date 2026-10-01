@@ -45,6 +45,17 @@ class ScreeningLanguageTests(unittest.TestCase):
         self.assertTrue(check_language('<img alt="provider-searchable pitch deck">', ""))
         self.assertEqual(check_language('<head><title>fund_id</title></head><!-- evidence-basis manifest --><div style="display: none"><p>fund_id</p></div><br><p>Pitch deck</p>', "Report created."), [])
 
+    def test_generated_file_reference_does_not_require_a_fabricated_link(self):
+        summary = "Cedar Harbor needs further validation.\n\n- Confirm customer references.\n\nOpen the generated Screening Report file."
+        self.assertEqual(check_language("<p>Fund fit is not assessed.</p>", summary), [])
+        task = yaml.safe_load((ROOT / "alludium/task-definition-templates/vc-workflows/generate-refresh-screening-report.yaml").read_text())
+        instructions = task["definition"]["definitionJson"]["instructions"]
+        text = instructions["executionInstructions"]
+        self.assertIn("only when a tool returned a supported URL for that exact report", text)
+        self.assertIn("Otherwise say \"Open the generated Screening Report file\"", text)
+        self.assertIn("Never invent a URL, route, or URI scheme", text)
+        self.assertNotIn("and a Screening Report link", " ".join(instructions["completionCriteria"]))
+
     def test_screening_contract_preserves_routing_and_hidden_manifest(self):
         task = yaml.safe_load((ROOT / "alludium/task-definition-templates/vc-workflows/generate-refresh-screening-report.yaml").read_text())
         instructions = task["definition"]["definitionJson"]["instructions"]
