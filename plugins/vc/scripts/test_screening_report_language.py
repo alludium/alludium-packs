@@ -55,6 +55,34 @@ class ScreeningLanguageTests(unittest.TestCase):
         self.assertTrue(check_language('<img alt="provider-searchable pitch deck">', ""))
         self.assertEqual(check_language('<head><title>fund_id</title></head><!-- evidence-basis manifest --><div style="display: none"><p>fund_id</p></div><br><p>Pitch deck</p>', "Report created."), [])
 
+    def test_adjacent_blocks_cells_and_breaks_preserve_word_boundaries(self):
+        layouts = [
+            "<p>Missing {term}</p><p>Confirm the Fund.</p>",
+            "<p>Missing</p><p>{term}</p><p>Unconfirmed</p>",
+            "<table><tr><td>{term}</td><td>Unconfirmed</td></tr></table>",
+            "<table><tr><th>Missing</th><th>{term}</th></tr></table>",
+            "<div>Missing</div><div>{term}</div><div>Unconfirmed</div>",
+            "<ul><li>Missing</li><li>{term}</li><li>Unconfirmed</li></ul>",
+            "<p>Missing<br>{term}<br/>Unconfirmed</p>",
+            "<h2>Missing</h2>{term}<hr>Unconfirmed",
+        ]
+        for term in ("fund_id", "evidence-basis manifest", "provider-searchable"):
+            for layout in layouts:
+                with self.subTest(term=term, layout=layout):
+                    findings = check_language(layout.format(term=term), "Report ready.")
+                    self.assertEqual(len(findings), 1)
+                    self.assertIn(term, findings[0])
+
+    def test_hidden_blocks_do_not_split_visible_inline_words(self):
+        html = '<div>fund_<section hidden><p>Internal provenance</p></section><span>id</span></div>'
+        self.assertTrue(check_language(html, ""))
+        for hidden in ('hidden', 'style="display: none"', 'style="visibility: hidden"'):
+            with self.subTest(hidden=hidden):
+                self.assertEqual(check_language(
+                    f'<section {hidden}><p>fund_id</p><table><tr><td>provider-searchable</td></tr></table></section><p>Report ready.</p>',
+                    "Report ready.",
+                ), [])
+
     def test_generated_file_reference_does_not_require_a_fabricated_link(self):
         summary = "Cedar Harbor needs further validation.\n\n- Confirm customer references.\n\nOpen the generated Screening Report file."
         self.assertEqual(check_language("<p>Fund fit is not assessed.</p>", summary), [])

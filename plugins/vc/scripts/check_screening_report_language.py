@@ -24,6 +24,14 @@ FORBIDDEN = {
 }
 VOID_TAGS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
 INERT_TAGS = {"head", "script", "style", "template"}
+# Preserve rendered text boundaries without splitting words across inline formatting.
+TEXT_BOUNDARY_TAGS = {
+    "address", "article", "aside", "blockquote", "br", "caption", "dd", "details",
+    "dialog", "div", "dl", "dt", "fieldset", "figcaption", "figure", "footer",
+    "form", "h1", "h2", "h3", "h4", "h5", "h6", "header", "hgroup", "hr",
+    "legend", "li", "main", "menu", "nav", "ol", "p", "pre", "section",
+    "summary", "table", "tbody", "td", "tfoot", "th", "thead", "tr", "ul",
+}
 
 
 class ReportText(HTMLParser):
@@ -38,6 +46,8 @@ class ReportText(HTMLParser):
             re.search(r"(?:^|;)\s*(?:display\s*:\s*none|visibility\s*:\s*hidden)\b", attrs.get("style") or "", re.I)
         )
         if not hidden:
+            if tag in TEXT_BOUNDARY_TAGS:
+                self.parts.append("\n")
             self.parts.extend(value for key, value in attributes if key in {"alt", "title"} and value)
         if tag not in VOID_TAGS:
             self.stack.append((tag, hidden))
@@ -50,6 +60,8 @@ class ReportText(HTMLParser):
     def handle_endtag(self, tag: str) -> None:
         for index in range(len(self.stack) - 1, -1, -1):
             if self.stack[index][0] == tag:
+                if tag in TEXT_BOUNDARY_TAGS and not self.stack[index][1]:
+                    self.parts.append("\n")
                 del self.stack[index:]
                 break
 
