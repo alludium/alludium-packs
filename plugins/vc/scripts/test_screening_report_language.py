@@ -94,6 +94,29 @@ class ScreeningLanguageTests(unittest.TestCase):
         self.assertIn("Never invent a URL, route, or URI scheme", text)
         self.assertNotIn("and a Screening Report link", " ".join(instructions["completionCriteria"]))
 
+    def test_normal_deal_manager_completion_rejects_artifact_bookkeeping(self):
+        # The 8 October Dev task had no definition binding. Its summary passed
+        # the original terminology check despite exposing this internal section.
+        summary = (
+            "Prepared and saved the Screening Report.\n\n"
+            "- **Artifact ID:** `9a74eadb-45f5-439e-af7e-90ddc308e93e`\n"
+            "- **Recommendation:** Watch / Hold\n"
+            "- **Next evidence needed:** customer references."
+        )
+        self.assertTrue(check_language("<p>No Fund fit assessed.</p>", summary))
+
+    def test_summary_bookkeeping_sections_do_not_ban_report_source_provenance(self):
+        report = '<h2>Source index</h2><p>Artifact ID: source-123; SHA-256: abc</p>'
+        for label in ("Artifact ID", "artifact-ID", "Artifact IDs", "Structured output", "Saved field", "Validation checklist", "Bookkeeping"):
+            for section in (f"- **{label}:** source-123", f"## {label}\nsource-123", f"{label}: source-123"):
+                with self.subTest(section=section):
+                    self.assertTrue(check_language(report, section))
+        self.assertEqual(check_language(
+            report,
+            "Watch pending customer validation.\n\n- Confirm customer references.\n\n"
+            "[Screening Report](/artifacts/report-123)",
+        ), [])
+
     def test_screening_contract_preserves_routing_and_hidden_manifest(self):
         task = yaml.safe_load((ROOT / "alludium/task-definition-templates/vc-workflows/generate-refresh-screening-report.yaml").read_text())
         instructions = task["definition"]["definitionJson"]["instructions"]
