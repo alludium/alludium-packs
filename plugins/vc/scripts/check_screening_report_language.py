@@ -21,6 +21,7 @@ FORBIDDEN = {
     "runtime field name": re.compile(r"\b(?:" + "|".join(re.escape(key) for key in sorted(RUNTIME_FIELD_NAMES)) + r")\b", re.I),
     "internal evidence manifest terminology": re.compile(r"\bevidence[\s‐‑–—-]+basis[\s‐‑–—-]+manifest\b", re.I),
     "provider search terminology": re.compile(r"\bprovider[\s‐‑–—-]+searchable\b", re.I),
+    "runtime Fund status or storage scope": re.compile(r"\b(?:closed_to_new_investments|actively_investing|PROJECT_SHARED|TASK_RUN)\b", re.I),
 }
 # Report source indexes may legitimately expose provenance identifiers. These
 # section labels are forbidden only in the reader-facing completion summary.

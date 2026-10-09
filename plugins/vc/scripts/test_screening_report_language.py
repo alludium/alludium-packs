@@ -49,6 +49,19 @@ class ScreeningLanguageTests(unittest.TestCase):
                 self.assertTrue(check_language("<p>Report ready.</p>", f"Missing `{key}`"))
                 self.assertEqual(check_language(f'<section hidden>{key}</section><a href="/source?{key}=123">Source</a>', "Report ready."), [])
 
+    def test_runtime_fund_status_and_storage_scope_stay_out_of_visible_prose(self):
+        # The 9 October local inactive-Fund run exposed the persisted status,
+        # while the active-Fund report printed its source's storage scope.
+        for value in ("closed_to_new_investments", "actively_investing", "PROJECT_SHARED", "TASK_RUN"):
+            with self.subTest(value=value):
+                self.assertTrue(check_language(f"<p>The current Fund record is {value}.</p>", "Report ready."))
+                self.assertTrue(check_language("<p>Report ready.</p>", f"Current status: {value}"))
+                self.assertEqual(check_language(f'<section hidden>{value}</section><a href="/source?status={value}">Source</a>', "Report ready."), [])
+        self.assertEqual(check_language(
+            "<p>The previously selected Fund is closed to new investments. No active Fund has been confirmed for this Deal, so Fund fit is not assessed.</p>",
+            "Further company diligence is needed; confirm an active Fund. Open the generated Screening Report file.",
+        ), [])
+
     def test_inline_formatting_entities_and_hidden_content(self):
         self.assertTrue(check_language("<p>fund_<span>id</span></p>", ""))
         self.assertTrue(check_language("<p>provider&#45;searchable</p>", ""))
