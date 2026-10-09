@@ -21,6 +21,18 @@ FORBIDDEN = {
     "runtime field name": re.compile(r"\b(?:" + "|".join(re.escape(key) for key in sorted(RUNTIME_FIELD_NAMES)) + r")\b", re.I),
     "internal evidence manifest terminology": re.compile(r"\bevidence[\s‐‑–—-]+basis[\s‐‑–—-]+manifest\b", re.I),
     "provider search terminology": re.compile(r"\bprovider[\s‐‑–—-]+searchable\b", re.I),
+    "runtime Fund status or storage scope": re.compile(r"\b(?:closed_to_new_investments|actively_investing|PROJECT_SHARED|TASK_RUN)\b", re.I),
+}
+# Report source indexes may legitimately expose provenance identifiers. These
+# section labels are forbidden only in the reader-facing completion summary.
+SUMMARY_FORBIDDEN = {
+    "internal completion bookkeeping section": re.compile(
+        r"^[ \t]*(?:(?:[-*+]|\d+[.)]|\#{1,6})[ \t]+)?(?:\*\*|__)?"
+        r"(?:artifact[ \t‐‑–—-]+ids?|structured[ \t‐‑–—-]+output|"
+        r"saved[ \t‐‑–—-]+field|validation[ \t‐‑–—-]+checklist|bookkeeping)"
+        r"(?:\*\*|__)?[ \t]*(?::|$)",
+        re.I | re.M,
+    ),
 }
 VOID_TAGS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
 INERT_TAGS = {"head", "script", "style", "template"}
@@ -73,12 +85,18 @@ class ReportText(HTMLParser):
 def check_language(html: str, summary: str) -> list[str]:
     parser = ReportText()
     parser.feed(html)
-    return [
+    findings = [
         f"{surface}: {label} ({match.group(0)})"
         for surface, text in (("report", "".join(parser.parts)), ("summary", summary))
         for label, pattern in FORBIDDEN.items()
         for match in pattern.finditer(text)
     ]
+    findings.extend(
+        f"summary: {label} ({match.group(0).strip()})"
+        for label, pattern in SUMMARY_FORBIDDEN.items()
+        for match in pattern.finditer(summary)
+    )
+    return findings
 
 
 def main() -> int:

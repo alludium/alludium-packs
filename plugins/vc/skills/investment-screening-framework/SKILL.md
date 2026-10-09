@@ -106,7 +106,13 @@ return Fund selection as unresolved to the invoking workflow.
 
 ## Thesis Fit Pre-Check
 
-If the firm's investment thesis is available, do a fast fit check before full evaluation:
+Run this pre-check only when the selected Fund exactly matches a currently active
+canonical Fund record. Available thesis text alone does not satisfy that condition.
+A missing, unknown, or inactive Fund skips this pre-check entirely; it is not a
+thesis mismatch and contributes no negative score or Pass reason. Continue the
+company-only screen and leave Fund fit unassessed.
+
+For a confirmed active Fund, do a fast fit check before full evaluation:
 
 - Is the company outside fund geography, stage, or sector focus?
 - Is there a hard mismatch that makes full scoring low-value?
@@ -117,7 +123,7 @@ running the full framework.
 ## Core Method
 
 1. Confirm minimum input exists.
-2. Run thesis fit pre-check if thesis context is available.
+2. Resolve the current selected Fund status. Run the thesis fit pre-check only for a confirmed active Fund; otherwise skip Fund-relative scoring and continue company screening.
 3. Gather evidence from founder materials, call notes, company website, existing research
    artifacts, and external sources via tools.
 4. For each factor in the framework:
@@ -166,7 +172,10 @@ What is the proposed business model?
 
 ### 5. Funding Requirement
 
-Does the investment fit the fund strategy?
+First assess the company's financing needs from its evidence. Assess fit to a
+Fund strategy only when the selected Fund is confirmed active. Otherwise mark
+Fund-relative funding requirement, cheque size, ownership and return fit N/A;
+do not use historical mandate values even if a prior report includes them.
 
 - Stage, cheque size, and ownership expectations.
 - Can the fund provide what this company needs?
@@ -255,6 +264,14 @@ one or two major factors need validation before confidence is warranted.
 pattern is already too strong relative to upside.
 
 The recommendation must follow from the evidence pattern, not from gut feel.
+An inactive or unresolved Fund is an administrative selection gap, not adverse
+company evidence or a hard thesis mismatch. It must not justify Pass or reduce
+company scores. Unknown company facts remain unknown, not demonstrated weakness.
+When the evidence is too limited to choose Proceed or Pass, recommend further
+validation (Watch / Hold in the Deal Pipeline report) and name the missing facts.
+A company-only Pass remains possible when independent company evidence supports it.
+On refresh, recompute Fund eligibility from its current record; discard prior
+Fund-fit conclusions when that Fund is no longer active.
 
 ## Output Shape
 

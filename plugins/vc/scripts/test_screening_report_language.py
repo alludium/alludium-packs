@@ -49,6 +49,19 @@ class ScreeningLanguageTests(unittest.TestCase):
                 self.assertTrue(check_language("<p>Report ready.</p>", f"Missing `{key}`"))
                 self.assertEqual(check_language(f'<section hidden>{key}</section><a href="/source?{key}=123">Source</a>', "Report ready."), [])
 
+    def test_runtime_fund_status_and_storage_scope_stay_out_of_visible_prose(self):
+        # The 9 October local inactive-Fund run exposed the persisted status,
+        # while the active-Fund report printed its source's storage scope.
+        for value in ("closed_to_new_investments", "actively_investing", "PROJECT_SHARED", "TASK_RUN"):
+            with self.subTest(value=value):
+                self.assertTrue(check_language(f"<p>The current Fund record is {value}.</p>", "Report ready."))
+                self.assertTrue(check_language("<p>Report ready.</p>", f"Current status: {value}"))
+                self.assertEqual(check_language(f'<section hidden>{value}</section><a href="/source?status={value}">Source</a>', "Report ready."), [])
+        self.assertEqual(check_language(
+            "<p>The previously selected Fund is closed to new investments. No active Fund has been confirmed for this Deal, so Fund fit is not assessed.</p>",
+            "Further company diligence is needed; confirm an active Fund. Open the generated Screening Report file.",
+        ), [])
+
     def test_inline_formatting_entities_and_hidden_content(self):
         self.assertTrue(check_language("<p>fund_<span>id</span></p>", ""))
         self.assertTrue(check_language("<p>provider&#45;searchable</p>", ""))
@@ -93,6 +106,29 @@ class ScreeningLanguageTests(unittest.TestCase):
         self.assertIn("Otherwise say \"Open the generated Screening Report file\"", text)
         self.assertIn("Never invent a URL, route, or URI scheme", text)
         self.assertNotIn("and a Screening Report link", " ".join(instructions["completionCriteria"]))
+
+    def test_normal_deal_manager_completion_rejects_artifact_bookkeeping(self):
+        # The 8 October Dev task had no definition binding. Its summary passed
+        # the original terminology check despite exposing this internal section.
+        summary = (
+            "Prepared and saved the Screening Report.\n\n"
+            "- **Artifact ID:** `9a74eadb-45f5-439e-af7e-90ddc308e93e`\n"
+            "- **Recommendation:** Watch / Hold\n"
+            "- **Next evidence needed:** customer references."
+        )
+        self.assertTrue(check_language("<p>No Fund fit assessed.</p>", summary))
+
+    def test_summary_bookkeeping_sections_do_not_ban_report_source_provenance(self):
+        report = '<h2>Source index</h2><p>Artifact ID: source-123; SHA-256: abc</p>'
+        for label in ("Artifact ID", "artifact-ID", "Artifact IDs", "Structured output", "Saved field", "Validation checklist", "Bookkeeping"):
+            for section in (f"- **{label}:** source-123", f"## {label}\nsource-123", f"{label}: source-123"):
+                with self.subTest(section=section):
+                    self.assertTrue(check_language(report, section))
+        self.assertEqual(check_language(
+            report,
+            "Watch pending customer validation.\n\n- Confirm customer references.\n\n"
+            "[Screening Report](/artifacts/report-123)",
+        ), [])
 
     def test_screening_contract_preserves_routing_and_hidden_manifest(self):
         task = yaml.safe_load((ROOT / "alludium/task-definition-templates/vc-workflows/generate-refresh-screening-report.yaml").read_text())
