@@ -22,6 +22,15 @@ Alternatively, edit `pack.version` in the manifest and run the command without
 do not hand-edit repeated release versions or hashes. Independent template and
 component versions and historical release notes remain authored contracts.
 
+Before preparing a PR, inspect whether the change alters agent prompts, task instructions,
+skills, tool contracts, capability bundles, or model settings. For such changes, invoke the
+shared `agent-evals:behaviour-change-eval` skill's PR checkpoint when available. Offer eval
+preparation once per change, honour an existing decline or deferral, and record its disposition
+in the PR description. If the plugin is unavailable, record disposition `not-checked` with
+reason `plugin unavailable` and continue. This is an optional evidence checkpoint, not a PR or release gate;
+it does not grant authority for paid calls. Follow the shared skill for supported runners and
+coverage limits rather than copying its workflow here.
+
 Before pushing pack changes, run the VC validation commands from the repository root:
 
 ```bash

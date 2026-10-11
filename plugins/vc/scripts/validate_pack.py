@@ -1803,6 +1803,7 @@ def validate_fund_routing_contract() -> None:
         "dealManagerScenarios": {
             "direct-screening-request-without-task-phrase",
             "direct-screening-refresh-without-task-phrase",
+            "screening-request-proceeds-after-explicit-fund-waiver",
             "ambiguous-deck-request",
             "screening-request-missing-confirmed-fund",
             "direct-request-existing-screening-task",

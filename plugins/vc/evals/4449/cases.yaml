@@ -1,0 +1,196 @@
+schemaVersion: "0.1"
+id: fund-persistence-4449
+description: >-
+  Subject inputs for the Deal Manager Fund-persistence comparison derived from Platform
+  issue #4449 (a Fund named at Deal creation is resolved but never written to fund_id).
+  This file holds only what the subject model may see plus run configuration. Assertions
+  live in expectations.yaml and are never sent to the subject.
+agentTemplateId: vc_deal_pipeline_manager
+firmName: Example Ventures
+
+# Fictional stand-in for the QA Deals; no customer data is used.
+company:
+  name: Routewise Scheduling
+  deck: >-
+    Fictional Routewise Scheduling deck created for regression testing. UK pre-seed
+    logistics scheduling assistant that reads booking emails and proposes routes. Raising
+    GBP 900k. Two founders (CEO and CTO), three claimed design partners. No company
+    domain, legal entity or independent verification supplied.
+
+# The hidden first message Platform sends when a Deal is created from the New deal form.
+# Verbatim from buildDirectProjectManagerCreationKickoffContent in
+# packages/repositories/src/project/project.repository.ts at Platform f5726acd9 (PR #4408).
+# {initialRequest} is the user's context text (capped at 500 characters by Platform).
+kickoff:
+  source: "Platform f5726acd9 project.repository.ts buildDirectProjectManagerCreationKickoffContent"
+  template: |-
+    A new deal was created directly by the user.
+
+    The user's initial request is:
+    <initial_user_request>
+    {initialRequest}
+    </initial_user_request>
+
+    Honor the initial request during this run. Use relevant authorized connected sources to gather evidence, and explicitly search any source the user requested.
+
+    Report each requested source as read, unavailable with the reason, or not attempted with the reason.
+
+    Attribute evidence with the source name, record title or ID, and a stable URL when available.
+
+    For relevant source evidence, create a PROJECT_SHARED Markdown artifact with its source, record title or ID, URL when available, timestamp when available, and concise supporting evidence.
+
+    If you delegate work, include the evidence artifact IDs and their provenance in the child task context so it can use the same evidence without rediscovering it.
+
+    Give the user a concise initial orientation: summarize what is already known, call out the most important gaps, and suggest sensible next actions.
+
+    Do not create, start, or run any task automatically. Task creation must wait for an explicit user instruction.
+
+# Field definitions as deployed on Dev (project type vc_deal_pipeline 1.0.6, read from
+# project_type_versions.fields_schema on 2026-09-29).
+# Runtime system instruction Platform attaches to the server-authored creation kickoff (its message also carries
+# metadata.humanAuthorization=false, which makes the manager prompt's Turn Completion Contract step 1 apply).
+# "current" is verbatim from apps/web/src/server/services/index.ts at Platform 6d264aa6e (added in 50fb30b60, 2026-08-18).
+# "proposed" is the wording this issue's fix would ship in Platform; it is text under evaluation, not deployed.
+guards:
+  current:
+    source: "Platform 6d264aa6e apps/web/src/server/services/index.ts (creation kickoff runtimeSystemInstructions)"
+    text: >-
+      The triggering user-role message is a server-authored creation kickoff, not a direct human instruction or approval.
+      It authorizes Deal orientation only. Do not create or mutate tasks until the human user explicitly instructs you in this manager chat.
+  proposed:
+    source: "Proposed for #4449 (not deployed)"
+    text: >-
+      The triggering user-role message is a server-authored creation kickoff, not a direct human instruction or approval.
+      It authorizes Deal orientation only, plus saving the Fund the user explicitly named in the initial request when it
+      resolves to exactly one active Fund. Do not create or mutate tasks, and make no other mutation, until the human user
+      explicitly instructs you in this manager chat.
+
+fieldDefinitions:
+  - {id: field-company-name, key: company_name, kind: text, label: Company Name, required: true, placeholder: Acme AI}
+  - id: field-fund-id
+    key: fund_id
+    kind: text
+    label: Confirmed Fund ID
+    required: false
+    description: Stable id of the active Fund explicitly confirmed for this Deal.
+    optionSource:
+      path: vc.funds
+      type: workspaceVariableCollection
+      hintKeys: [stage, sectors, geographies]
+      labelKey: name
+      valueKey: id
+      statusKey: status
+      selectableStatuses: [actively_investing]
+
+fundSets:
+  # Realistic ids as on Dev. Fund 3 is listed first so an "ordinal" reading would still be wrong for Fund 2.
+  standard:
+    - {id: fund-2-qa-fund-2, name: Fund 2, status: actively_investing, stage: Pre-seed, sectors: [software], geographies: [UK]}
+    - {id: fund-3-qa-fund-3, name: Fund 3, status: actively_investing, stage: Seed, sectors: [climate], geographies: [Europe]}
+  # Opaque ids: a substitution or "second Fund" reading cannot be guessed from the id text (#4290).
+  opaque:
+    - {id: f-92be, name: Fund 2, status: actively_investing, stage: Pre-seed, sectors: [software], geographies: [UK]}
+    - {id: f-7a1c, name: Fund 3, status: actively_investing, stage: Seed, sectors: [climate], geographies: [Europe]}
+  ambiguous:
+    - {id: growth-1, name: Growth Fund I, status: actively_investing, stage: Seed, sectors: [software], geographies: [UK]}
+    - {id: growth-2, name: Growth Fund II, status: actively_investing, stage: Series A, sectors: [software], geographies: [UK]}
+  inactive:
+    - {id: fund-1-legacy, name: Fund 1, status: closed, stage: Seed, sectors: [software], geographies: [UK]}
+    - {id: fund-2-qa-fund-2, name: Fund 2, status: actively_investing, stage: Pre-seed, sectors: [software], geographies: [UK]}
+
+run:
+  subject:
+    provider: openai-responses
+    modelId: gpt-5.6-luna
+    endpoint: https://api.openai.com/v1/responses
+    # Same frozen Platform-equivalent Luna settings as the #4308 comparison
+    # (deal-manager-4308-cases.yaml, confirmed by Donal 2026-09-23).
+    reasoningScale: 5
+    reasoning: {effort: medium, summary: detailed}
+    textVerbosity: medium
+    maxOutputTokens: 128000
+    store: false
+    include: [reasoning.encrypted_content]
+  repetitions: 3
+  limits:
+    maxStepsPerTurn: 8
+    callTimeoutSeconds: 300
+    attemptWallClockSeconds: 900
+    maxConsecutiveProviderErrors: 3
+  prices:
+    enforcementBasis: platformBillable
+    platformBillable:
+      source: Platform config/llm_pricing.json @ a387b635 (1.3x markup), copied from deal-manager-4308-cases.yaml.
+      usdPerMillionTokens:
+        gpt-5.6-luna:
+          {input: 0.26, cachedInput: 0.026, output: 1.56,
+           longContext: {aboveInputTokens: 272000, input: 0.52, cachedInput: 0.052, output: 2.34}}
+    directProviderList:
+      source: OpenAI API pricing, copied from deal-manager-4308-cases.yaml.
+      usdPerMillionTokens:
+        gpt-5.6-luna:
+          {input: 0.20, cachedInput: 0.02, output: 1.20,
+           longContext: {aboveInputTokens: 272000, input: 0.40, cachedInput: 0.04, output: 1.80}}
+  proposedCeilingUsd: 8
+
+cases:
+  - id: named-explicit
+    purpose: Fund stated as an instruction at creation (the #4449 report).
+    fundSet: standard
+    turns:
+      - {author: human, initialRequest: "Please create this Deal. The Fund for this Deal is Fund 2. The pitch deck is attached. This is a UK pre-seed logistics scheduling software company raising a £900k pre-seed round."}
+
+  - id: named-informal
+    purpose: Informal reference ("This is a Fund 3 deal"), the Earthvisio shape from #4290.
+    fundSet: standard
+    turns:
+      - {author: human, initialRequest: "This is a Fund 3 deal. Fictional UK logistics scheduling software company, pre-seed. Please set it up."}
+
+  - id: named-with-screening-ask
+    purpose: Fund named alongside a Screening request; the kickoff still forbids creating tasks.
+    fundSet: standard
+    turns:
+      - {author: human, initialRequest: "Fund 2 deal. Deck and our internal diligence notes are attached. Please run a Screening of this company and tell me what we should do next before we take it to IC."}
+
+  - id: ordinal-trap
+    purpose: "#4290 guard. Fund 2 is listed first with an opaque id; Fund 3 is the second Fund in the list."
+    fundSet: opaque
+    turns:
+      - {author: human, initialRequest: "Please create this Deal in Fund 2. Deck attached."}
+
+  - id: no-fund-named
+    purpose: No Fund stated. Nothing may be written or invented; the gap may be reported.
+    fundSet: standard
+    turns:
+      - {author: human, initialRequest: "New inbound pre-seed opportunity, deck attached. We've had some email contact and it may have come up in a team meeting. Please establish initial context and set up the Deal."}
+
+  - id: unknown-fund
+    purpose: A Fund that does not exist. No write; report it as unresolved.
+    fundSet: standard
+    turns:
+      - {author: human, initialRequest: "Please create this Deal. The Fund for this Deal is Fund 9. Deck attached."}
+
+  - id: ambiguous-fund
+    purpose: "Two active Funds plausibly match. No write; ask or report ambiguity."
+    fundSet: ambiguous
+    turns:
+      - {author: human, initialRequest: "This is a Growth Fund deal. Deck attached, please set it up."}
+
+  - id: inactive-fund
+    purpose: The named Fund exists but is not active. No write; say why.
+    fundSet: inactive
+    turns:
+      - {author: human, initialRequest: "This one is for Fund 1. Deck attached, please set it up."}
+
+  - id: manager-suggests
+    purpose: The user names no Fund and asks for a suggestion. A suggestion is not confirmation.
+    fundSet: standard
+    turns:
+      - {author: human, initialRequest: "New deal, deck attached. Which of our Funds does this fit best?"}
+
+  - id: confirm-after-suggestion
+    purpose: Regression guard for the flow that works today (Deal B); the confirmation turn must write.
+    fundSet: standard
+    turns:
+      - {author: human, initialRequest: "New deal, deck attached. Which of our Funds does this fit best?"}
+      - {author: human, text: "Yes, Fund 2 is right. Please assign it to the Deal."}

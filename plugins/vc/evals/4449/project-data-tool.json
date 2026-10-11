@@ -1,0 +1,224 @@
+{
+  "source": {
+    "file": "packages/services/src/tool/synthetic-runtime-tools.ts",
+    "platformRevision": "6d264aa6ed578446b131b45a42e1cc16a31f1905",
+    "note": "Description and the action/data properties used by the manager are verbatim. Omitted: historyEvent, fieldDefinitions paging, task actions and task/taskId/taskUpdates/artifactIds payloads (not exercised by this eval). Dev-observed call shapes: data.fieldOptions {fieldKey, query, limit}; data.fieldValues [{fieldKey, value}]."
+  },
+  "toolSpec": {
+    "name": "project_data",
+    "description": "Read current project data, discover bounded static or dynamic field options, read the project's selected option record or bounded slices of long field values and history events, or update this project chat. For an explicit authoritative VC Deal rename, send { action: \"update_project\", data: { project: { name: \"<new name>\" } } }; update_project requires a non-empty data.project object. For typed company identity confirmation or discovery, send { action: \"update_state\", data: { fieldValues: [{ fieldKey: \"company_name\", value: \"Acme\" }] } }. Use update_state for typed field updates and/or lifecycle transitions; data.fieldValues, data.state, and data.transitionReason are independent and can be combined. Use only field keys defined in the project's typed context.",
+    "inputSchema": {
+      "json": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "read",
+              "list_field_options",
+              "list_field_definitions",
+              "read_field_option",
+              "read_field_value",
+              "read_history_event",
+              "read_project_description",
+              "read_project_instructions",
+              "update_project",
+              "update_state",
+              "attach_documents",
+              "detach_documents"
+            ],
+            "description": "Project action to perform for the current project chat."
+          },
+          "data": {
+            "type": "object",
+            "description": "Optional action-specific payload. Required fields depend on action; update_project requires a non-empty data.project object. update_state accepts fieldValues, state, and transitionReason independently or in combination.",
+            "properties": {
+              "state": {
+                "type": "string",
+                "description": "Optional updated project lifecycle state for update_state; may be combined with fieldValues and transitionReason."
+              },
+              "transitionReason": {
+                "type": "string",
+                "description": "Optional reason for an update_state lifecycle transition; may be combined with state and fieldValues."
+              },
+              "fieldValues": {
+                "type": "array",
+                "description": "Project typed field updates for update_state. For company identity confirmation or discovery, use [{ fieldKey: \"company_name\", value: \"Acme\" }]. Use fieldDefinitions from project_data read context. The server infers kind from fieldKey.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "fieldKey": {
+                      "type": "string"
+                    },
+                    "kind": {
+                      "type": "string",
+                      "enum": [
+                        "text",
+                        "number",
+                        "date",
+                        "enum",
+                        "member",
+                        "string"
+                      ],
+                      "description": "Optional compatibility hint; omit it and let the server infer the canonical kind."
+                    },
+                    "value": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "fieldKey",
+                    "value"
+                  ]
+                }
+              },
+              "project": {
+                "type": "object",
+                "description": "Project metadata payload for update_project. For an explicit authoritative VC Deal rename, send { name: \"<new name>\" }; the server atomically synchronizes the Deal company identity.",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200,
+                    "description": "Project name. Required for an explicit authoritative VC Deal rename."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Updated project description."
+                  },
+                  "instructions": {
+                    "type": "string",
+                    "description": "Updated free-form project instructions when directly editable."
+                  },
+                  "contextData": {
+                    "type": "object",
+                    "description": "Project context data patch. Do not combine with a VC Deal rename.",
+                    "additionalProperties": true
+                  }
+                },
+                "additionalProperties": false
+              },
+              "fieldOptions": {
+                "type": "object",
+                "description": "Bounded query for selectable records declared by one project field option source.",
+                "properties": {
+                  "fieldKey": {
+                    "type": "string",
+                    "description": "Exact project field key whose option source should be queried."
+                  },
+                  "query": {
+                    "type": "string",
+                    "description": "Optional match against option ID, label, or bounded hint."
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 25,
+                    "description": "Maximum options to return; defaults to 10."
+                  },
+                  "cursor": {
+                    "type": "string",
+                    "description": "Opaque cursor returned by the previous options page."
+                  }
+                },
+                "required": [
+                  "fieldKey"
+                ],
+                "additionalProperties": false
+              },
+              "fieldOptionRecord": {
+                "type": "object",
+                "description": "Read the record currently selected by one project field. The selected ID is resolved from persisted project data and cannot be supplied by the caller.",
+                "properties": {
+                  "fieldKey": {
+                    "type": "string",
+                    "description": "Exact project field key whose selected option record should be read."
+                  }
+                },
+                "required": [
+                  "fieldKey"
+                ],
+                "additionalProperties": false
+              },
+              "fieldValue": {
+                "type": "object",
+                "description": "Read a bounded slice of one persisted project field value when the project context marks its preview as valueTruncated.",
+                "properties": {
+                  "fieldKey": {
+                    "type": "string",
+                    "description": "Exact project field key whose value should be read."
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Character offset for the bounded slice; defaults to 0."
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2048,
+                    "description": "Maximum characters to return; defaults to 1024."
+                  }
+                },
+                "required": [
+                  "fieldKey"
+                ],
+                "additionalProperties": false
+              },
+              "projectDescription": {
+                "type": "object",
+                "description": "Read a bounded slice of the complete project description when the context marks its preview as truncated.",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Character offset for the bounded slice; defaults to 0."
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2048,
+                    "description": "Maximum characters to return; defaults to 1024."
+                  }
+                },
+                "additionalProperties": false
+              },
+              "projectInstructions": {
+                "type": "object",
+                "description": "Read a bounded slice of the complete project operating instructions when the context marks its preview as truncated.",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Character offset for the bounded slice; defaults to 0."
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2048,
+                    "description": "Maximum characters to return; defaults to 1024."
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "action"
+        ]
+      }
+    }
+  }
+}

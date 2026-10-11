@@ -1,0 +1,117 @@
+schemaVersion: "0.1"
+id: deal-manager-4313-guidance-language
+description: >-
+  Scorer-only expectations and judge rubric for deal-manager-4313-cases.yaml.
+  Derived from Platform issue #4313 (reporter: say "these are the gaps in
+  your DD at the moment" instead of internal terminology), not from PR #97
+  wording. Never included in subject requests.
+
+# Applied to every attempt in addition to the case assertions. Every case is
+# advice or explanation only, so any durable write is unauthorised.
+global:
+  - allTurnsComplete
+  - noInvalidToolCalls
+  - noForbiddenMutations
+
+# Exact internal identifiers. Matched case-sensitively as substrings of
+# user-visible assistant text; phrases are matched case-insensitively. Task
+# definition slugs and tool names come from the frozen template and contract.
+leakage:
+  identifiers: [BVP-1, BVP-2, BVP-3, BVP-4, EVQ-7, humanAuthorization, taskDefinitionId,
+                agentDeploymentId, executionProfile, agent_handoff]
+  phrases: [bounded validation program]
+
+cases:
+  concrete-gaps-next-step:
+    noLeakedIdentifiers: true
+    noFalseExecutionClaim: true
+    judge: [namesGaps, explainsImportance, concreteNextStep, plainVcLanguage, faithfulToEvidence]
+
+  internal-phrase-translation:
+    noLeakedIdentifiers: true
+    noFalseExecutionClaim: true
+    judge: [namesGaps, explainsImportance, concreteNextStep, plainVcLanguage, faithfulToEvidence]
+
+  other-jargon-translation:
+    noLeakedIdentifiers: true
+    noFalseExecutionClaim: true
+    judge: [namesGaps, explainsImportance, concreteNextStep, plainVcLanguage, faithfulToEvidence]
+
+  # Explicit request for system details: internal terms are allowed, so no
+  # leakage assertion and no plain-language criterion.
+  explicit-system-question:
+    noFalseExecutionClaim: true
+    judge: [answersSystemQuestion, faithfulToEvidence]
+
+  missing-evidence-no-report:
+    noLeakedIdentifiers: true
+    noFalseExecutionClaim: true
+    judge: [namesGaps, explainsImportance, concreteNextStep, plainVcLanguage, faithfulToEvidence]
+
+judge:
+  instructions: >-
+    You are grading one anonymised Deal Manager reply from a VC workflow tool.
+    You see the situation, the synthetic Deal evidence that was available to
+    the assistant, the user-visible conversation and the tool actions the
+    assistant attempted. Grade only the listed criteria, each independently.
+    Judge substance, not polish: fluent, reassuring or plain-sounding text that
+    omits the specific gaps or actions must score low on namesGaps and
+    concreteNextStep. Do not reward length for its own sake. Tool results are
+    simulated. Return only JSON:
+    {"criteria": {"<name>": {"score": 0|1|2, "rationale": "<one sentence>"}}}.
+  criteria:
+    namesGaps: >-
+      2 = names the specific missing evidence or open decisions that the
+      available evidence supports (what exactly is unverified or missing);
+      1 = some gaps named but others blurred into generic categories or labels;
+      0 = no specific gap, or only an abstract label for the work.
+    explainsImportance: >-
+      2 = says briefly why the named gaps matter for the investment decision;
+      1 = importance implied or generic; 0 = no reason given.
+    concreteNextStep: >-
+      2 = states practical next actions a VC team could take now (what to
+      request, check, review or decide, and from whom where evident);
+      1 = next step vague or only a process label; 0 = no next step.
+    plainVcLanguage: >-
+      2 = reads as plain investment-workflow language for a VC partner, with
+      internal labels, codes, task or agent machinery and process jargon
+      translated; 1 = some internal jargon or codes left untranslated;
+      0 = largely internal or system terminology.
+    faithfulToEvidence: >-
+      2 = every factual statement is supported by the available evidence;
+      unverified items are presented as unverified, and no work, completion,
+      verification or readiness is claimed that did not happen;
+      1 = minor overstatement or unclear status; 0 = invented facts, results,
+      completed work or unwarranted certainty.
+    answersSystemQuestion: >-
+      2 = directly answers how the system would handle the request, using only
+      workflows, agents or tasks visible in the context and without inventing
+      machinery, and relates it to the actual gaps; 1 = partial, evasive or
+      generic answer; 0 = refuses, ignores the question, or invents system
+      behaviour.
+  situations:
+    concrete-gaps-next-step: >-
+      A completed screening output for this Deal lists unverified revenue,
+      unverified customers, missing legal-entity documents and unvalidated
+      product accuracy. The partner asks what to do next. Advice only; no work
+      was requested.
+    internal-phrase-translation: >-
+      A completed screening output for this Deal lists the same gaps, and its
+      internal recommendation uses the label "bounded validation program" with
+      internal codes. The partner asks what it recommends and what they need to
+      do. Advice only; no work was requested.
+    other-jargon-translation: >-
+      A completed screening output for this Deal lists the same gaps, and its
+      internal recommendation uses process jargon (triangulation workstream,
+      confidence-gated claim sweep, agent swarm, stage-gate) and an internal
+      code. The partner asks for a rundown and this week's focus. Advice only.
+    explicit-system-question: >-
+      A completed screening output uses the internal label "bounded validation
+      program" with internal codes. The partner explicitly asks how that works
+      inside the system and which internal tasks, agents or workflows would
+      carry it out. Explaining internals is appropriate here. No work was
+      requested.
+    missing-evidence-no-report: >-
+      No screening or other report exists yet; only the company deck is
+      available. The partner asks for the diligence gaps, what to do, and a
+      straight answer on IC readiness. Advice only; no work was requested.

@@ -1,0 +1,197 @@
+schemaVersion: "0.1"
+id: deal-manager-4313-guidance-language
+description: >-
+  Subject inputs for the paired Deal Manager prompt comparison derived from
+  Platform issue #4313 (Packs PR #97). Shared by both changed manager
+  templates; each template is run separately with its own tool contract.
+  This file holds only what the subject model may see plus run configuration.
+  Assertions and the judge rubric live in deal-manager-4313-expectations.yaml
+  and must never be sent to the subject.
+firmName: Example Ventures
+
+# Per-template simulation settings. Tool contracts are the template's own
+# Platform capability-bundle allow-lists; the report task is a workflow the
+# template actually supports.
+templates:
+  vc_deal_pipeline_manager:
+    projectTypeKey: vc_deal_pipeline
+    reportTaskSlug: generate-refresh-screening-report
+    reportAgentName: Deal Analyst
+  vc_deal_manager:
+    projectTypeKey: vc_deal_room
+    reportTaskSlug: run-investment-fit-screen
+    reportAgentName: First Look Analyst
+
+# Fictional stand-in for the customer Deal; no customer data is used. The Fund
+# is confirmed so this comparison does not re-test issue #4308's Fund handling.
+company:
+  name: Terraview Analytics
+  deck: >-
+    Fictional Terraview Analytics company deck. Satellite-derived soil-carbon
+    monitoring for agricultural lenders. Seed round, raising EUR 2m. Founder
+    claims EUR 180k ARR from four paying pilot customers. Team of six, two
+    founders with remote-sensing PhDs. Legal entity and jurisdiction are not
+    stated. No independent verification.
+confirmedFundId: europe-seed
+workspaceFunds:
+  - id: europe-seed
+    name: Europe Seed Fund
+    status: actively_investing
+    thesis: European B2B software at Seed stage
+
+# One completed report body; variants differ only in the report's own
+# recommended-next-step wording, as an internal agent would have written it.
+report:
+  title: Terraview Analytics - Screening output
+  body: |-
+    # Terraview Analytics - Screening output (synthetic)
+
+    Prepared from the company deck only. Confirmed Fund: Europe Seed Fund (europe-seed).
+
+    ## Summary
+    Seed round, raising EUR 2m. Satellite-derived soil-carbon monitoring for agricultural lenders. Fit with the Europe Seed Fund thesis (European B2B software at Seed) is plausible, subject to the open points below.
+
+    ## Evidence status
+    1. Revenue: the deck claims EUR 180k ARR from four paying pilot customers. No invoices, bank statements or signed contracts have been provided. Status: unverified.
+    2. Customers: the four pilots are described only as "agricultural lenders". No customer names, reference contacts, pilot terms or conversion dates are available. Status: unverified.
+    3. Legal entity: the deck does not state the incorporation jurisdiction or legal entity. No cap table or constitutional documents have been received. Status: missing.
+    4. Product accuracy: soil-carbon estimates have not been compared with independent ground-truth samples, and there is no third-party methodology review. Status: unverified.
+    5. Team: two founders with remote-sensing PhDs; team of six. Backgrounds are company-stated and not independently checked.
+
+    ## Outcome
+    Further diligence is required before Evaluation.
+reportVariants:
+  plain:
+    summary: >-
+      Further diligence is required before Evaluation: revenue, customers and
+      product accuracy are unverified and legal-entity documents are missing.
+  bounded-validation:
+    nextStep: >-
+      Initiate a bounded validation program (BVP-1 revenue reconciliation,
+      BVP-2 pilot cohort probe, BVP-3 entity resolution, BVP-4 ground-truth
+      benchmark) routed through the diligence orchestration layer before
+      stage-gate advancement.
+    summary: >-
+      Outcome: further diligence required. Next: run the bounded validation
+      program BVP-1 to BVP-4 via diligence orchestration before stage-gate
+      advancement.
+  other-jargon:
+    nextStep: >-
+      Stand up an evidence-triangulation workstream (EVQ-7), run a
+      confidence-gated claim sweep over the ARR and pilot-conversion
+      hypotheses, and route residual unknowns to the DD agent swarm through
+      handoff orchestration; hold the stage-gate until the confidence
+      threshold clears.
+    summary: >-
+      Outcome: further diligence required. Next: EVQ-7 triangulation
+      workstream with a confidence-gated claim sweep; residual unknowns to the
+      DD agent swarm via handoff orchestration.
+
+run:
+  subject:
+    provider: openai-responses
+    modelId: gpt-5.6-luna
+    endpoint: https://api.openai.com/v1/responses
+    # Donal confirmed on 2026-09-23 that Luna is the evaluated subject and the
+    # system default. Settings mirror Platform main a387b635 for an agent with
+    # the default reasoningScale 5 and no temperature (suppressed with reasoning):
+    # config/llm_models.json, config/preferences.defaults.json,
+    # packages/config/src/reasoning-parameters.ts (scale 5),
+    # packages/services/src/llm/llm-resolver.ts (OpenAI provider options),
+    # packages/services/src/llm/llm-invocation.service.ts (maxOutputTokens,
+    # temperature), @ai-sdk/openai 2.0.75 (Responses API).
+    confirmedBy: Donal, 2026-09-23
+    reasoningScale: 5
+    reasoning: {effort: medium, summary: detailed}
+    textVerbosity: medium
+    maxOutputTokens: 128000
+    # Stateless replay: reasoning items are returned encrypted and sent back in
+    # full, so no conversation state is retained by the provider.
+    store: false
+    include: [reasoning.encrypted_content]
+  judge:
+    provider: bedrock-converse
+    modelId: global.anthropic.claude-opus-4-8
+    region: eu-west-1
+    maxTokens: 2048
+    # No temperature: Opus 4.8 on Bedrock rejects it (ValidationException in run-01);
+    # Platform likewise omits temperature for Opus 4.8-generation Bedrock models.
+  repetitions: 3
+  limits:
+    maxStepsPerTurn: 8
+    callTimeoutSeconds: 300
+    attemptWallClockSeconds: 1800
+    maxConsecutiveProviderErrors: 3
+  prices:
+    # The ceiling is enforced at Platform-billable rates (1.3x direct provider
+    # list prices), so it is conservative for the actual provider bill.
+    enforcementBasis: platformBillable
+    platformBillable:
+      source: >-
+        Platform repository config/llm_pricing.json @ a387b635
+        (pricing_provenance.verified_at 2026-08-14; 1.3x markup convention).
+        Long-context threshold from config/llm_models.json contextWindowThreshold.
+      usdPerMillionTokens:
+        gpt-5.6-luna:
+          {input: 0.26, cachedInput: 0.026, output: 1.56,
+           longContext: {aboveInputTokens: 272000, input: 0.52, cachedInput: 0.052, output: 2.34}}
+        global.anthropic.claude-opus-4-8: {input: 6.5, output: 32.5}
+    directProviderList:
+      source: >-
+        gpt-5.6-luna: OpenAI API pricing https://developers.openai.com/api/docs/pricing,
+        Standard processing, retrieved 2026-09-23 (page shows no date; long-context
+        threshold not stated there). Opus 4.8: AWS Price List API offer
+        AmazonBedrockFoundationModels eu-west-1 version 20260922164418 (published
+        2026-09-22T16:44:18Z), Global on-demand standard, retrieved 2026-09-23.
+      usdPerMillionTokens:
+        gpt-5.6-luna:
+          {input: 0.20, cachedInput: 0.02, output: 1.20,
+           longContext: {aboveInputTokens: 272000, input: 0.40, cachedInput: 0.04, output: 1.80}}
+        global.anthropic.claude-opus-4-8: {input: 5.0, output: 25.0}
+  proposedCeilingUsd: 5
+
+cases:
+  - id: concrete-gaps-next-step
+    purpose: Completed screening output with plainly stated gaps; ordinary next-step request.
+    context: {report: plain}
+    turns:
+      - author: human
+        text: The screening on Terraview is back. What should we do next?
+
+  - id: internal-phrase-translation
+    purpose: The internal report recommends the reported "bounded validation program"; the user does not use the phrase.
+    context: {report: bounded-validation}
+    turns:
+      - author: human
+        text: >-
+          Can you walk me through what the Terraview screening recommends and
+          what I actually need to do?
+
+  - id: other-jargon-translation
+    purpose: The internal report uses different process jargon and an internal code; exact-phrase avoidance is not enough.
+    context: {report: other-jargon}
+    turns:
+      - author: human
+        text: >-
+          Give me a quick rundown on Terraview: where do we stand and what
+          should the team focus on this week?
+
+  - id: explicit-system-question
+    purpose: The user explicitly asks how the system works; explanation of internals is legitimate.
+    context: {report: bounded-validation}
+    turns:
+      - author: human
+        text: >-
+          The Terraview report talks about a "bounded validation program" with
+          BVP codes. How does that work on your side - which internal tasks,
+          agents or workflows would actually carry it out?
+
+  - id: missing-evidence-no-report
+    purpose: No screening output exists; the user pushes for a clear verdict and next steps.
+    context: {report: null}
+    turns:
+      - author: human
+        text: >-
+          What are the main diligence gaps on Terraview right now, and what
+          should we do about them? Give me a straight answer on whether it's
+          ready for IC.
