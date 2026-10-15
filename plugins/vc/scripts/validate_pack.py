@@ -430,7 +430,24 @@ DEAL_WORKBOOK_CAPABILITY_KEYS = {
     "evidence",
 }
 PROJECT_TYPE_FIELD_KINDS = {"date", "enum", "member", "number", "text"}
-PROJECT_TASK_MAPPING_SOURCES = {"constant", "project.field", "project.id", "project.state"}
+PROJECT_TASK_MAPPING_SOURCES = {
+    "constant",
+    "project.field",
+    "project.id",
+    "project.investmentSubject",
+    "project.state",
+}
+# Platform resolves these from the Deal's confirmed investment-subject Organisation (#4614).
+INVESTMENT_SUBJECT_MAPPING_SOURCE = "project.investmentSubject"
+INVESTMENT_SUBJECT_SOURCE_PATHS = {
+    "organisation.id",
+    "organisation.displayName",
+    "organisation.websiteUrl",
+    "organisation.logoUrl",
+    "organisation.domains",
+}
+INVESTMENT_SUBJECT_PROJECT_TYPES = {"vc_deal_pipeline"}
+LEGACY_DEAL_COMPANY_FIELD_KEYS = {"company_name", "company_domain", "company_logo_url"}
 PROJECT_TASK_MAPPING_TARGETS = {"project.field", "project.state"}
 PROJECT_TASK_ACTIVATION_MODES = {"manual", "manual_review", "auto_start"}
 PROJECT_SCOPES = {"project_instance", "project_management"}
@@ -1825,6 +1842,8 @@ def validate_fund_routing_contract() -> None:
             "zero-active-funds-allows-unassigned-creation",
             "direct-chat-to-deal",
             "direct-chat-to-existing-deal-room",
+            "existing-organisation-reuse-requires-acknowledgement",
+            "unconfirmed-company-refusal-is-not-success",
             "approved-custom-task-with-assignment",
             "missing-required-field-clarification",
             "duplicate-deal-ambiguity",
@@ -2239,6 +2258,58 @@ def validate_fund_routing_contract() -> None:
             "Zero-active-Funds fixture must explain the limitation but allow intentional "
             "Unassigned Deal creation"
         )
+
+    # Every Pipeline chat creation names one confirmed Organisation and no legacy company field.
+    for scenario in pipeline_scenarios_by_id.values():
+        creation_request = scenario.get("creationRequest") or {}
+        if (
+            scenario.get("projectTypeKey") != "vc_deal_pipeline"
+            or creation_request.get("toolName") != "project.createFromChat"
+        ):
+            continue
+        identity_link = creation_request.get("identityLink") or {}
+        if (
+            identity_link.get("recordType") != "organisation"
+            or identity_link.get("roleKey") != "deal_company"
+            or identity_link.get("mode") not in {"create", "reuse"}
+            or (identity_link.get("mode") == "create" and not identity_link.get("displayName"))
+            or (identity_link.get("mode") == "reuse" and not identity_link.get("recordId"))
+        ):
+            fail(f"Pipeline creation fixture {scenario.get('id')} must supply one confirmed Organisation identityLink")
+        legacy_keys = LEGACY_DEAL_COMPANY_FIELD_KEYS.intersection(creation_request.get("fieldValues") or {})
+        if legacy_keys:
+            fail(f"Pipeline creation fixture {scenario.get('id')} must not send legacy company fields {sorted(legacy_keys)}")
+
+    reuse_fixture = pipeline_scenarios_by_id["existing-organisation-reuse-requires-acknowledgement"]
+    reuse_lookup = reuse_fixture.get("existingDealLookup") or {}
+    reuse_request = reuse_fixture.get("creationRequest") or {}
+    reuse_link = reuse_request.get("identityLink") or {}
+    reuse_ack = reuse_request.get("existingDealAcknowledgement") or {}
+    reuse_expected = reuse_fixture.get("expected") or {}
+    selected_organisation_id = (reuse_fixture.get("organisationLookup") or {}).get("selectedOrganisationId")
+    if (
+        reuse_link.get("mode") != "reuse"
+        or reuse_link.get("recordId") != selected_organisation_id
+        or (reuse_fixture.get("organisationLookup") or {}).get("selectedByUser") is not True
+        or reuse_lookup.get("toolName") != "project.listInvestmentSubjectDeals"
+        or reuse_lookup.get("organisationId") != selected_organisation_id
+        or not reuse_lookup.get("accessibleDeals")
+        or reuse_ack.get("organisationId") != selected_organisation_id
+        or reuse_ack.get("matchFingerprint") != reuse_lookup.get("matchFingerprint")
+        or reuse_expected.get("mayCreateBeforeExistingDealConfirmation") is not False
+        or reuse_expected.get("treatsMatchingNameAsReuse") is not False
+        or reuse_expected.get("sendsLegacyCompanyFields") is not False
+    ):
+        fail(
+            "Organisation reuse fixture must reuse only the user-selected Organisation ID and acknowledge "
+            "its accessible Deals with the returned fingerprint after confirmation"
+        )
+    refusal_expected = (pipeline_scenarios_by_id["unconfirmed-company-refusal-is-not-success"].get("expected") or {})
+    if (
+        refusal_expected.get("reportsDealCreated") is not False
+        or refusal_expected.get("retriesWithLegacyCompanyField") is not False
+    ):
+        fail("Unconfirmed-company refusal fixture must not report success or retry with a legacy company field")
 
     for scenario_id in [
         "missing-required-field-clarification",
@@ -5765,6 +5836,18 @@ def validate_project_task_mapping_contracts() -> None:
                             f"Project type {project_type_id} mapping {mapping_id}.inputMappings.{task_field} "
                             f"sourcePath references unknown project field {source_path}"
                         )
+                    if source == INVESTMENT_SUBJECT_MAPPING_SOURCE:
+                        if project_type_id not in INVESTMENT_SUBJECT_PROJECT_TYPES:
+                            fail(
+                                f"Project type {project_type_id} mapping {mapping_id}.inputMappings.{task_field} "
+                                f"source {INVESTMENT_SUBJECT_MAPPING_SOURCE} is supported only on "
+                                f"{sorted(INVESTMENT_SUBJECT_PROJECT_TYPES)}"
+                            )
+                        if source_path not in INVESTMENT_SUBJECT_SOURCE_PATHS:
+                            fail(
+                                f"Project type {project_type_id} mapping {mapping_id}.inputMappings.{task_field} "
+                                f"sourcePath must be one of {sorted(INVESTMENT_SUBJECT_SOURCE_PATHS)}"
+                            )
                     if source == "constant" and "constantValue" not in entry:
                         fail(
                             f"Project type {project_type_id} mapping {mapping_id}.inputMappings.{task_field} "
@@ -5999,18 +6082,21 @@ def validate_vc_deal_pipeline_contract() -> None:
     }
     expected_input_mappings = {
         "generate-refresh-screening-report": {
-            "company_name": "company_name",
+            "company_name": "organisation.displayName",
+            "organisation_id": "organisation.id",
             "fund_id": "fund_id",
             "existing_screening_report_artifact_id": "screening_report_artifact_id",
         },
         "generate-refresh-evaluation-report": {
-            "company_name": "company_name",
+            "company_name": "organisation.displayName",
+            "organisation_id": "organisation.id",
             "fund_id": "fund_id",
             "screening_report_artifact_id": "screening_report_artifact_id",
             "existing_evaluation_report_artifact_id": "evaluation_report_artifact_id",
         },
         "prepare-refresh-ic-memo": {
-            "company_name": "company_name",
+            "company_name": "organisation.displayName",
+            "organisation_id": "organisation.id",
             "fund_id": "fund_id",
             "evaluation_report_artifact_id": "evaluation_report_artifact_id",
             "decision_record_artifact_ids": "decision_record_artifact_ids",
@@ -6018,7 +6104,8 @@ def validate_vc_deal_pipeline_contract() -> None:
             "existing_ic_memo_artifact_id": "ic_memo_artifact_id",
         },
         "review-refresh-term-sheet": {
-            "company_name": "company_name",
+            "company_name": "organisation.displayName",
+            "organisation_id": "organisation.id",
             "current_term_sheet_artifact_id": "current_term_sheet_artifact_id",
             "previous_term_sheet_artifact_id": "previous_term_sheet_artifact_id",
             "evaluation_report_artifact_id": "evaluation_report_artifact_id",
@@ -6026,6 +6113,8 @@ def validate_vc_deal_pipeline_contract() -> None:
             "existing_term_sheet_review_artifact_id": "term_sheet_review_artifact_id",
         },
     }
+    # company_name stays the task input key so saved pre-cutover input remains compatible.
+    expected_subject_inputs = {"company_name": True, "organisation_id": False}
     task_contracts = load_task_template_contracts()
     mappings = initial_version.get("projectTaskMappings") or []
     mappings_by_slug = {mapping.get("taskDefinitionSlug"): mapping for mapping in mappings}
@@ -6042,6 +6131,9 @@ def validate_vc_deal_pipeline_contract() -> None:
             fail(f"vc_deal_pipeline durable task {slug} must support only vc_deal_pipeline")
         if output_field not in contract["fields"]["output"] or existing_input not in contract["fields"]["input"]:
             fail(f"vc_deal_pipeline durable task {slug} must expose stable refresh input/output fields")
+        organisation_field = contract["fields"]["input"].get("organisation_id")
+        if organisation_field is None or organisation_field.get("required") is not False:
+            fail(f"vc_deal_pipeline durable task {slug} must expose optional organisation_id")
         focus_field = contract["fields"]["input"].get("focus_artifact_ids")
         if focus_field is None or focus_field.get("required") is not False:
             fail(f"vc_deal_pipeline durable task {slug} must expose optional additive focus_artifact_ids")
@@ -6091,12 +6183,27 @@ def validate_vc_deal_pipeline_contract() -> None:
         for entry in input_mapping_entries:
             task_field = entry.get("taskField")
             project_field = entry.get("sourcePath")
-            if entry.get("source") != "project.field":
-                fail(f"vc_deal_pipeline mapping for {slug} inputs must come from project fields")
             if task_field not in contract["fields"]["input"]:
                 fail(f"vc_deal_pipeline mapping for {slug} references unknown task input {task_field}")
+            if task_field in expected_subject_inputs:
+                # Company identity comes only from the confirmed Organisation, never a legacy Deal field.
+                if entry.get("source") != INVESTMENT_SUBJECT_MAPPING_SOURCE:
+                    fail(
+                        f"vc_deal_pipeline mapping for {slug} must take {task_field} from the confirmed "
+                        "investment-subject Organisation"
+                    )
+                if entry.get("requiredForActivation") is not expected_subject_inputs[task_field]:
+                    fail(
+                        f"vc_deal_pipeline mapping for {slug} must set {task_field} requiredForActivation "
+                        f"to {expected_subject_inputs[task_field]}"
+                    )
+                continue
+            if entry.get("source") != "project.field":
+                fail(f"vc_deal_pipeline mapping for {slug} inputs must come from project fields")
             if project_field not in project_fields:
                 fail(f"vc_deal_pipeline mapping for {slug} references unknown project field {project_field}")
+            if project_field in LEGACY_DEAL_COMPANY_FIELD_KEYS:
+                fail(f"vc_deal_pipeline mapping for {slug} must not read legacy company field {project_field}")
         if mapped_inputs.get(existing_input) != output_field:
             fail(f"vc_deal_pipeline mapping for {slug} must map its report field to {existing_input}")
 
@@ -6318,6 +6425,26 @@ def validate_vc_deal_pipeline_contract() -> None:
 
     pipeline_manager = read_yaml(ROOT / "alludium" / "agent-templates" / "vc_pipeline_autopilot.yaml")
     pipeline_manager_prompt = (pipeline_manager.get("prompt") or {}).get("template") or ""
+    for phrase in [
+        "every new Deal records its company as one confirmed Organisation",
+        "a matching name is never a reuse",
+        "call `project.listInvestmentSubjectDeals`",
+        "only after the user confirms",
+        "Never send `company_name`, `company_domain`, or `company_logo_url` in `fieldValues` for this type",
+        "do not retry with a legacy company field",
+    ]:
+        if phrase not in pipeline_manager_prompt:
+            fail(f"VC Pipeline Manager is missing confirmed-Organisation creation rule: {phrase}")
+    deal_pipeline_manager_prompt = (
+        read_yaml(ROOT / "alludium" / "agent-templates" / "vc_deal_pipeline_manager.yaml").get("prompt") or {}
+    ).get("template") or ""
+    for phrase in [
+        "This Deal's company is its confirmed Organisation",
+        "never ask the user to re-enter a company name",
+        "do not work around it by writing a company name into Deal fields",
+    ]:
+        if phrase not in deal_pipeline_manager_prompt:
+            fail(f"VC Deal Manager is missing confirmed-Organisation rule: {phrase}")
     pipeline_manager_variables = {
         variable.get("key"): variable
         for variable in ((pipeline_manager.get("prompt") or {}).get("variables") or [])
@@ -6383,8 +6510,31 @@ def validate_vc_deal_pipeline_contract() -> None:
     required_creation_paths = set(
         ((creation_output or {}).get("config") or {}).get("requiredPaths") or []
     )
-    if "fieldValues.company_name" not in required_creation_paths:
-        fail("vc_deal_pipeline guided creation must still produce company_name before finalization")
+    if not {"name", "identityLink"}.issubset(required_creation_paths):
+        fail("vc_deal_pipeline guided creation must produce a Deal title and a confirmed Organisation identityLink")
+    if any(path.startswith("fieldValues.") and path.split(".", 1)[1] in LEGACY_DEAL_COMPANY_FIELD_KEYS for path in required_creation_paths):
+        fail("vc_deal_pipeline guided creation must not require legacy company fields")
+    creation_instructions = (
+        ((read_yaml(ROOT / "alludium" / "task-definition-templates" / "vc-workflows" / "create-pipeline-deal.yaml")
+          .get("definition") or {}).get("definitionJson") or {}).get("instructions") or {}
+    ).get("executionInstructions", "")
+    for phrase in [
+        "`projectCreation.identityLink`",
+        "a matching name is never a reuse",
+        "`project.listInvestmentSubjectDeals`",
+        "do not invent a domain, website, or logo",
+        "Never put `company_name`, `company_domain`, or `company_logo_url` in `projectCreation.fieldValues`",
+    ]:
+        if phrase not in creation_instructions:
+            fail(f"vc_deal_pipeline guided creation is missing confirmed-Organisation rule: {phrase}")
+    creation_profile = project_type.get("projectCreation") or {}
+    for list_name in PROJECT_CREATION_FIELD_LISTS:
+        legacy_keys = LEGACY_DEAL_COMPANY_FIELD_KEYS.intersection(creation_profile.get(list_name) or [])
+        if legacy_keys:
+            fail(f"vc_deal_pipeline projectCreation.{list_name} must not include legacy company fields {sorted(legacy_keys)}")
+    for field in initial_version.get("fieldsSchema") or []:
+        if field.get("key") in LEGACY_DEAL_COMPANY_FIELD_KEYS and field.get("required") is not False:
+            fail(f"vc_deal_pipeline legacy company field {field.get('key')} must not be required")
     if any("decision" in slug and "create-pipeline-deal" != slug for slug in supported_task_slugs):
         fail("Decision Record must not be a Pack-owned mapped task")
 

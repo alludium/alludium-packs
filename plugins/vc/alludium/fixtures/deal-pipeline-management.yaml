@@ -226,6 +226,11 @@ pipelineManagerScenarios:
       toolName: project.createFromChat
       fieldValues:
         fund_id: europe-seed
+      identityLink:
+        mode: create
+        recordType: organisation
+        displayName: Example Labs
+        roleKey: deal_company
     expected:
       presentsActualSelectableFundNames: true
       presentsCreateUnassignedOption: true
@@ -240,6 +245,11 @@ pipelineManagerScenarios:
     creationRequest:
       toolName: project.createFromChat
       fieldValues: {}
+      identityLink:
+        mode: create
+        recordType: organisation
+        displayName: Example Labs
+        roleKey: deal_company
       handoffFundState: intentionally_unassigned
     expected:
       explicitUnassignedWaiver: true
@@ -280,6 +290,11 @@ pipelineManagerScenarios:
     creationRequest:
       toolName: project.createFromChat
       fieldValues: {}
+      identityLink:
+        mode: create
+        recordType: organisation
+        displayName: Example Labs
+        roleKey: deal_company
       handoffFundState: no_active_funds_configured
     expected:
       explainsNoActiveFundsConfigured: true
@@ -447,6 +462,49 @@ pipelineManagerScenarios:
       readBackToolName: task-management.getTaskDetail
       requiresPersistedOutputOrQuestion: true
       visibleReceiptUsesHumanReadableValuesOnly: true
+
+  - id: existing-organisation-reuse-requires-acknowledgement
+    projectTypeKey: vc_deal_pipeline
+    userInstruction: Create a separate Deal for Example Labs' Series A and leave it unassigned.
+    organisationLookup:
+      selectedOrganisationId: 5d2a8c41-7b36-4e19-9f02-3c8d6e1a4b57
+      selectedByUser: true
+    existingDealLookup:
+      toolName: project.listInvestmentSubjectDeals
+      organisationId: 5d2a8c41-7b36-4e19-9f02-3c8d6e1a4b57
+      accessibleDeals:
+        - name: Example Labs (Seed)
+      matchFingerprint: 3f9c2b7a1e5d4c8b9a0f6e2d1c7b5a4938271605f4e3d2c1b0a9f8e7d6c5b4a3
+    followUpUserInstruction: Yes, create a separate Deal.
+    creationRequest:
+      toolName: project.createFromChat
+      fieldValues: {}
+      identityLink:
+        mode: reuse
+        recordType: organisation
+        recordId: 5d2a8c41-7b36-4e19-9f02-3c8d6e1a4b57
+        roleKey: deal_company
+      existingDealAcknowledgement:
+        organisationId: 5d2a8c41-7b36-4e19-9f02-3c8d6e1a4b57
+        matchFingerprint: 3f9c2b7a1e5d4c8b9a0f6e2d1c7b5a4938271605f4e3d2c1b0a9f8e7d6c5b4a3
+    expected:
+      namesAccessibleExistingDeals: true
+      askOneFocusedQuestion: true
+      mayCreateBeforeExistingDealConfirmation: false
+      treatsMatchingNameAsReuse: false
+      sendsLegacyCompanyFields: false
+      mayExecuteBoundedMutation: true
+
+  - id: unconfirmed-company-refusal-is-not-success
+    projectTypeKey: vc_deal_pipeline
+    userInstruction: Create a Deal for Example Labs and leave it unassigned.
+    serverResult:
+      outcome: refused_before_write
+      cause: company_not_confirmed
+    expected:
+      reportsDealCreated: false
+      retriesWithLegacyCompanyField: false
+      askOneFocusedQuestion: true
 
   - id: missing-required-field-clarification
     sourceChatId: chat-2

@@ -90,6 +90,8 @@ Use `project.createFromChat` only to create a Deal of the workspace-bound Deal P
 
 For creation, resolve a useful company identity and material investment context from the conversation, named source links, and attached artifacts. Carry useful, durable source provenance in the Deal data and handoff without pasting a raw transcript into Deal fields or prompts. If a required company identity or other required value remains unresolved, ask for it. If `project.createFromChat` returns `requires_clarification`, link the compact duplicate candidates and ask whether to use the existing Deal or create a separate Deal; submit `duplicateResolution` only after the user explicitly confirms the complete current candidate set.
 
+For a workspace bound to `vc_deal_pipeline`, every new Deal records its company as one confirmed Organisation. Supply `identityLink` with `recordType: organisation` and `roleKey: deal_company`. Reuse an existing Organisation (`mode: reuse`, `recordId`) only with the exact Organisation ID that a Platform identity lookup returned and the user selected; a matching name is never a reuse. Before reusing an Organisation, call `project.listInvestmentSubjectDeals`. If it returns accessible Deals, name them and ask whether to create a separate Deal; send `existingDealAcknowledgement` with the returned `organisationId` and `matchFingerprint` only after the user confirms. Otherwise create a minimal Organisation (`mode: create`, `displayName`) from the company name alone, without inventing a domain, website, or logo. If you cannot look up existing Organisations, say in the readback that a new Organisation record was created. Default the Deal name to the Organisation's name unless the user gave a different title. Never send `company_name`, `company_domain`, or `company_logo_url` in `fieldValues` for this type. If the server refuses creation because the company is not confirmed or the acknowledgement is stale, do not retry with a legacy company field; ask the one focused question needed, and never report the Deal as created.
+
 Preserve the released `vc_deal_room` creation route and fields. For a workspace bound to `vc_deal_pipeline`, Fund consideration is required whenever active Fund options exist, but Fund assignment remains optional:
 - If the initial creation request names a Fund, call `project.listCreationFieldOptions` with `fieldKey: "fund_id"` and a bounded query for that name. Resolve it to exactly one returned option marked `selectable`, then include that option's exact stable value as `fieldValues.fund_id` in `project.createFromChat`. The direct named-Fund request is the confirmation; do not ask again after exact resolution.
 - If the request names no Fund and does not explicitly ask to create the Deal unassigned, call `project.listCreationFieldOptions` with `fieldKey: "fund_id"` and follow its cursor as needed to retrieve the current selectable options. When one or more selectable options are returned, present their actual human-readable names and the explicit option “Create unassigned.” Do not call `project.createFromChat` until the user selects exactly one returned Fund or explicitly chooses Create unassigned.
@@ -135,7 +137,7 @@ Humans own investment priority and decisions, unsupported inferred values, exter
 - Source template: `alludium/agent-templates/vc_pipeline_autopilot.yaml`
 - Alludium template ID: `vc_pipeline_autopilot`
 - Display name: Pipeline Manager
-- Version: `1.0.20`
+- Version: `1.0.21`
 - Primary stage: Pipeline
 - Primary Deal Room state: `evaluation`
 - Supported task definitions:

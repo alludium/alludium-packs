@@ -27,12 +27,12 @@ Generate or refresh the living evidence-backed Evaluation Report for one Deal at
 
 ## What To Do
 
-Apply `generate-or-refresh-living-report` to discover the current project-linked evidence corpus, include the mapped Screening Report and any additive focus artifacts, compare the prior evidence basis when refreshing, and preserve the report lifecycle. Use `definitionJson.documentRefs` as the durable criteria, template, style, and operating-guidance contract. Maintain the Evaluation Report as the living record of evidence, change, open questions, risk, and next work. Apply the source-neutral Evaluation Criteria by decision-useful domain; do not mechanically reproduce a source checklist. Keep Fund thesis as a separate exact-match frame, render from the Evaluation Report Template, and return the resulting artifact ID as evaluation report artifact. Do not record an investment decision or move stage.
+Apply `generate-or-refresh-living-report` to discover the current project-linked evidence corpus, include the mapped Screening Report and any additive focus artifacts, compare the prior evidence basis when refreshing, and preserve the report lifecycle. Use `definitionJson.documentRefs` as the durable criteria, template, style, and operating-guidance contract. Maintain the Evaluation Report as the living record of evidence, change, open questions, risk, and next work. Apply the source-neutral Evaluation Criteria by decision-useful domain; do not mechanically reproduce a source checklist. Keep Fund thesis as a separate exact-match frame, render from the Evaluation Report Template, and return the resulting artifact ID as evaluation report artifact. Do not record an investment decision or move stage. The company under review is the Deal's confirmed Organisation. company name carries that Organisation's name as the Platform supplied it to this task, and organisation id, when present, identifies it for tool calls only. Do not ask the user to re-enter or confirm a company name, and do not take the company name from the Deal title, which is the opportunity's own name and may differ.
 
 ## Available Context
 
 - Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
-- Especially look for: Company Name, Confirmed Fund ID, Focus Artifact IDs, Screening Report, Existing Evaluation Report.
+- Especially look for: Company Name, Confirmed Fund ID, Focus Artifact IDs, Screening Report, Existing Evaluation Report, Confirmed Organisation ID.
 - If a named input is absent, follow the missing-input policy rather than inventing facts.
 
 ## Reference Materials

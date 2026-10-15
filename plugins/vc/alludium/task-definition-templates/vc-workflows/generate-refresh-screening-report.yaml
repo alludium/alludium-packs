@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.generate_refresh_screening_report
-version: 1.0.3
+version: 1.0.4
 title: Generate or Refresh Screening Report
 category: Venture Capital
 visibility: workspace
@@ -31,7 +31,8 @@ definition:
         Write every visible report section and the task completion summary in investor-facing language. Do not expose runtime field names such as `fund_id`, `focus_artifact_ids`, or `screening_report_artifact_id`, or internal terms such as "evidence-basis manifest" and "provider-searchable". These names remain valid in tool inputs, structured output keys, and hidden provenance only; preserve source citations, links, artifact IDs and hashes where the source index requires them. Do not copy task completion criteria or template authoring guidance into the report or summary.
         For a missing, unknown, or inactive Fund, continue company screening and say "No active Fund has been confirmed for this Deal, so Fund fit is not assessed." Record confirmation of an active Fund as a next step without blocking company screening, requesting another approval, or naming a storage field. For a confirmed active Fund, name that Fund and assess only its mandate; do not print the field name. Describe evidence by its reader-facing source title, for example "the pitch deck (searchable)" only if searchability was observed; otherwise describe its actual availability without inventing access or content.
         Keep the evidence-basis manifest required by the living-report skill hidden, preserving its schema and provenance fields while refreshing the source entries as required by that skill. In "Changes since previous report", distinguish a first report ("This is the first Screening Report; there is no earlier report to compare.") from a readable prior report with no usable source baseline ("The previous report's source history is unavailable, so changes in the supporting evidence cannot be determined."). Do not invent source changes or mention the manifest in visible prose. Before saving or completing, check the visible report and completion summary for leaked field names and internal evidence-processing terminology. The final completion response must contain only: one sentence stating the screening conclusion; up to three material gaps or next steps; and a reference to the generated Screening Report file. Include an inline link labelled "Screening Report" only when a tool returned a supported URL for that exact report. Otherwise say "Open the generated Screening Report file" and rely on the generated-file attachment. Never invent a URL, route, or URI scheme such as `artifact://`. Omit empty gaps. Never append a structured-output, saved-field, artifact-ID, validation-checklist, or bookkeeping section. Saving the required structured task output is still mandatory, but do not narrate that write or name its key. This format applies to the completion summary as well as the final chat response.
-      missingInputPolicy: Use available evidence and mark unsupported factors unknown; ask only when company identity or readable source material is absent.
+        The company under review is the Deal's confirmed Organisation. `company_name` carries that Organisation's name as the Platform supplied it to this task, and `organisation_id`, when present, identifies it for tool calls only. Do not ask the user to re-enter or confirm a company name, and do not take the company name from the Deal title, which is the opportunity's own name and may differ.
+      missingInputPolicy: Use available evidence and mark unsupported factors unknown; ask only when readable source material is absent. Company identity comes from the Deal's confirmed Organisation.
       externalActionPolicy: Do not send messages, mutate CRM, create tasks or projects, move stage, or record an investment decision.
       completionCriteria:
         - All material screening dimensions are addressed without filler and material claims are cited.
@@ -43,10 +44,11 @@ definition:
       - Review the analyst recommendation and make any pass or continue decision separately.
 fields:
   input:
-    - {key: company_name, name: Company Name, fieldType: string, required: true, position: 0, config: {}}
+    - {key: company_name, name: Company Name, fieldType: string, required: true, position: 0, config: {description: "Name of the Deal's confirmed Organisation."}}
     - {key: fund_id, name: Confirmed Fund ID, fieldType: string, required: false, position: 1, config: {}}
     - {key: focus_artifact_ids, name: Focus Artifact IDs, fieldType: string, required: false, position: 2, config: {description: "Optional sources to emphasize in addition to all readable project-linked evidence."}}
     - {key: existing_screening_report_artifact_id, name: Existing Screening Report, fieldType: file, required: false, position: 3, config: {}}
+    - {key: organisation_id, name: Confirmed Organisation ID, fieldType: string, required: false, position: 4, config: {description: "Confirmed investment-subject Organisation, for tool calls only."}}
   output:
     - key: screening_report_artifact_id
       name: Screening Report

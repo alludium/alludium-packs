@@ -71,8 +71,8 @@
     "launcherLabel": "Create VC Deal Pipeline",
     "starterId": "create-pipeline-deal",
     "aliases": ["vc deal pipeline", "simplified deal pipeline", "investment opportunity"],
-    "requiredFieldKeys": ["company_name"],
-    "recommendedFieldKeys": ["company_domain", "fund_id", "deal_source", "pitch_deck_artifact_id", "confidentiality_level"],
+    "requiredFieldKeys": [],
+    "recommendedFieldKeys": ["fund_id", "deal_source", "pitch_deck_artifact_id", "confidentiality_level"],
     "advancedFieldKeys": ["source_object_url", "source_thread_url", "source_thread_artifact_id", "founder_materials_artifact_ids", "meeting_record_artifact_ids"],
     "defaultState": "screening",
     "guidedTask": {
@@ -82,7 +82,7 @@
     "postCreate": {"triggerInitialStateTasks": false}
   },
   "initialVersion": {
-    "version": "1.0.6",
+    "version": "1.0.7",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -124,7 +124,7 @@
       }
     },
     "fieldsSchema": [
-      {"id":"field-company-name","key":"company_name","label":"Company Name","kind":"text","required":true,"placeholder":"Acme AI"},
+      {"id":"field-company-name","key":"company_name","label":"Company Name","kind":"text","required":false,"placeholder":"Acme AI","description":"Legacy company name kept as history. The Deal's confirmed Organisation is its company identity."},
       {"id":"field-company-domain","key":"company_domain","label":"Company Domain","kind":"text","required":false},
       {"id":"field-company-logo-url","key":"company_logo_url","label":"Company Logo URL","kind":"text","required":false},
       {"id":"field-fund-id","key":"fund_id","label":"Confirmed Fund ID","kind":"text","required":false,"description":"Stable id of the active Fund explicitly confirmed for this Deal.","optionSource":{"type":"workspaceVariableCollection","path":"vc.funds","valueKey":"id","labelKey":"name","statusKey":"status","selectableStatuses":["actively_investing"],"hintKeys":["stage","sectors","geographies"]}},
@@ -161,7 +161,8 @@
       {
         "id":"map-generate-refresh-screening-report","taskDefinitionTemplateId":"vc.generate_refresh_screening_report","taskDefinitionSlug":"generate-refresh-screening-report","projectScope":"project_instance",
         "inputMappings":[
-          {"taskField":"company_name","source":"project.field","sourcePath":"company_name","requiredForActivation":true},
+          {"taskField":"company_name","source":"project.investmentSubject","sourcePath":"organisation.displayName","requiredForActivation":true},
+          {"taskField":"organisation_id","source":"project.investmentSubject","sourcePath":"organisation.id","requiredForActivation":false},
           {"taskField":"fund_id","source":"project.field","sourcePath":"fund_id","requiredForActivation":false},
           {"taskField":"existing_screening_report_artifact_id","source":"project.field","sourcePath":"screening_report_artifact_id","requiredForActivation":false}
         ],
@@ -171,7 +172,8 @@
       {
         "id":"map-generate-refresh-evaluation-report","taskDefinitionTemplateId":"vc.generate_refresh_evaluation_report","taskDefinitionSlug":"generate-refresh-evaluation-report","projectScope":"project_instance",
         "inputMappings":[
-          {"taskField":"company_name","source":"project.field","sourcePath":"company_name","requiredForActivation":true},
+          {"taskField":"company_name","source":"project.investmentSubject","sourcePath":"organisation.displayName","requiredForActivation":true},
+          {"taskField":"organisation_id","source":"project.investmentSubject","sourcePath":"organisation.id","requiredForActivation":false},
           {"taskField":"fund_id","source":"project.field","sourcePath":"fund_id","requiredForActivation":false},
           {"taskField":"screening_report_artifact_id","source":"project.field","sourcePath":"screening_report_artifact_id","requiredForActivation":false},
           {"taskField":"existing_evaluation_report_artifact_id","source":"project.field","sourcePath":"evaluation_report_artifact_id","requiredForActivation":false}
@@ -182,7 +184,8 @@
       {
         "id":"map-prepare-refresh-ic-memo","taskDefinitionTemplateId":"vc.prepare_refresh_ic_memo","taskDefinitionSlug":"prepare-refresh-ic-memo","projectScope":"project_instance",
         "inputMappings":[
-          {"taskField":"company_name","source":"project.field","sourcePath":"company_name","requiredForActivation":true},
+          {"taskField":"company_name","source":"project.investmentSubject","sourcePath":"organisation.displayName","requiredForActivation":true},
+          {"taskField":"organisation_id","source":"project.investmentSubject","sourcePath":"organisation.id","requiredForActivation":false},
           {"taskField":"fund_id","source":"project.field","sourcePath":"fund_id","requiredForActivation":false},
           {"taskField":"evaluation_report_artifact_id","source":"project.field","sourcePath":"evaluation_report_artifact_id","requiredForActivation":false},
           {"taskField":"decision_record_artifact_ids","source":"project.field","sourcePath":"decision_record_artifact_ids","requiredForActivation":false},
@@ -195,7 +198,8 @@
       {
         "id":"map-review-refresh-term-sheet","taskDefinitionTemplateId":"vc.review_refresh_term_sheet","taskDefinitionSlug":"review-refresh-term-sheet","projectScope":"project_instance",
         "inputMappings":[
-          {"taskField":"company_name","source":"project.field","sourcePath":"company_name","requiredForActivation":true},
+          {"taskField":"company_name","source":"project.investmentSubject","sourcePath":"organisation.displayName","requiredForActivation":true},
+          {"taskField":"organisation_id","source":"project.investmentSubject","sourcePath":"organisation.id","requiredForActivation":false},
           {"taskField":"current_term_sheet_artifact_id","source":"project.field","sourcePath":"current_term_sheet_artifact_id","requiredForActivation":true},
           {"taskField":"previous_term_sheet_artifact_id","source":"project.field","sourcePath":"previous_term_sheet_artifact_id","requiredForActivation":false},
           {"taskField":"evaluation_report_artifact_id","source":"project.field","sourcePath":"evaluation_report_artifact_id","requiredForActivation":false},

@@ -22,12 +22,12 @@ Prepare or refresh the deliberative IC Memo for one Deal at any active stage wit
 
 ## What To Do
 
-Apply `generate-or-refresh-living-report` to discover the current project-linked evidence corpus, include the mapped Evaluation Report, prior Decision Records, Term Sheet Review and any additive focus artifacts, compare the prior evidence basis when refreshing, and preserve the report lifecycle. Use `definitionJson.documentRefs` as the durable criteria, template, style, and operating-guidance contract. Prepare a decision-ready IC Memo that states the decision ask, recommendation, core thesis, evidence, risks, sensitivities, dissent, unresolved questions, and changes since the prior IC round. Render from the IC Memo Template and return the resulting artifact ID as ic memo artifact. The memo is deliberative and must not state or persist the human outcome.
+Apply `generate-or-refresh-living-report` to discover the current project-linked evidence corpus, include the mapped Evaluation Report, prior Decision Records, Term Sheet Review and any additive focus artifacts, compare the prior evidence basis when refreshing, and preserve the report lifecycle. Use `definitionJson.documentRefs` as the durable criteria, template, style, and operating-guidance contract. Prepare a decision-ready IC Memo that states the decision ask, recommendation, core thesis, evidence, risks, sensitivities, dissent, unresolved questions, and changes since the prior IC round. Render from the IC Memo Template and return the resulting artifact ID as ic memo artifact. The memo is deliberative and must not state or persist the human outcome. The company under review is the Deal's confirmed Organisation. company name carries that Organisation's name as the Platform supplied it to this task, and organisation id, when present, identifies it for tool calls only. Do not ask the user to re-enter or confirm a company name, and do not take the company name from the Deal title, which is the opportunity's own name and may differ.
 
 ## Available Context
 
 - Use any supplied task context, attached files, source links, meeting notes, CRM/source records, and prior artifacts.
-- Especially look for: Company Name, Confirmed Fund ID, Focus Artifact IDs, Evaluation Report, Prior Decision Record IDs, Term Sheet Review, Existing IC Memo.
+- Especially look for: Company Name, Confirmed Fund ID, Focus Artifact IDs, Evaluation Report, Prior Decision Record IDs, Term Sheet Review, Existing IC Memo, Confirmed Organisation ID.
 - If a named input is absent, follow the missing-input policy rather than inventing facts.
 
 ## Reference Materials
