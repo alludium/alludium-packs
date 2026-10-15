@@ -6441,6 +6441,7 @@ def validate_vc_deal_pipeline_contract() -> None:
     for phrase in [
         "This Deal's company is its confirmed Organisation",
         "never ask the user to re-enter a company name",
+        "do not decide that yourself: create the requested task and let the Platform check",
         "do not work around it by writing a company name into Deal fields",
     ]:
         if phrase not in deal_pipeline_manager_prompt:
