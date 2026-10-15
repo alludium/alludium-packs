@@ -6525,6 +6525,9 @@ def validate_vc_deal_pipeline_contract() -> None:
         "`project.listInvestmentSubjectDeals`",
         "do not invent a domain, website, or logo",
         "Never put `company_name`, `company_domain`, or `company_logo_url` in `projectCreation.fieldValues`",
+        # A task started on the pre-contract setup cannot finalize there; it must ask for a restart.
+        "If it is earlier than 1.0.7",
+        "start the Deal again from New deal",
     ]:
         if phrase not in creation_instructions:
             fail(f"vc_deal_pipeline guided creation is missing confirmed-Organisation rule: {phrase}")
