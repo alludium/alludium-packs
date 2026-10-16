@@ -146,7 +146,6 @@ CONNECTED_APP_AGENT_BUNDLES = {
     },
     'vc_deal_analyst': {
         'FILE_AUTHORING',
-        'IDENTITY_RECORD_MAINTENANCE',
         'FILE_FULL_REWRITE', 'TASK_OUTPUT_SAVE',
         'PLATFORM_TOOL_REPOSITORY',
         'PROJECT_CONTEXT_READ',
@@ -1032,6 +1031,42 @@ def validate_skills(manifest: dict[str, Any]) -> set[str]:
         fail(f"Skills present on disk but missing from manifest: {sorted(extra_dirs)}")
 
     return discovered
+
+
+# Report tasks run without a verifiable direct-human signal for identity work, so their
+# executors must hold no identity write grants and no identity maintenance skill (#4286).
+REPORT_TASK_SLUGS = (
+    "generate-refresh-screening-report",
+    "generate-refresh-evaluation-report",
+    "prepare-refresh-ic-memo",
+    "review-refresh-term-sheet",
+)
+IDENTITY_WRITE_BUNDLES = {"IDENTITY_RECORD_MAINTENANCE"}
+IDENTITY_WRITE_SKILLS = {"platform_identity_maintenance"}
+REPORT_EXECUTOR_IDENTITY_RULE = "Report tasks are read-only for identity records, whoever started the task."
+
+
+def validate_report_executors_identity_read_only() -> None:
+    workflows = ROOT / "alludium" / "task-definition-templates" / "vc-workflows"
+    executors = set()
+    for slug in REPORT_TASK_SLUGS:
+        definition = read_yaml(workflows / f"{slug}.yaml")
+        definition_json = (definition.get("definition") or {}).get("definitionJson") or {}
+        executor = definition_json.get("recommendedAgentTemplate")
+        if not executor:
+            fail(f"Report task {slug} must name its recommendedAgentTemplate")
+        executors.add(executor)
+    for executor in sorted(executors):
+        template = read_yaml(ROOT / "alludium" / "agent-templates" / f"{executor}.yaml")
+        bundles = set((template.get("capabilityProfile") or {}).get("bundles") or [])
+        skills = {skill.get("externalId") for skill in template.get("skills") or [] if isinstance(skill, dict)}
+        if bundles & IDENTITY_WRITE_BUNDLES:
+            fail(f"Report task executor {executor} must not hold identity write bundles {sorted(bundles & IDENTITY_WRITE_BUNDLES)}")
+        if skills & IDENTITY_WRITE_SKILLS:
+            fail(f"Report task executor {executor} must not be assigned identity maintenance skills {sorted(skills & IDENTITY_WRITE_SKILLS)}")
+        prompt = (template.get("prompt") or {}).get("template") or ""
+        if REPORT_EXECUTOR_IDENTITY_RULE not in prompt:
+            fail(f"Report task executor {executor} prompt must state the identity read-only rule")
 
 
 def validate_connected_app_agent(template_id: str, template: dict[str, Any]) -> None:
@@ -6632,6 +6667,7 @@ def validate_vc_deal_pipeline_contract() -> None:
     ]:
         if phrase not in analyst_prompt:
             fail(f"vc_deal_pipeline Deal Analyst prompt is missing custom-task routing: {phrase}")
+    validate_report_executors_identity_read_only()
 
     relationships = (initial_version.get("extensions") or {}).get("projectRelationships") or []
     if relationships != [{

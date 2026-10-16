@@ -17,7 +17,6 @@ skills:
 - deal-terms-analysis
 - term-sheet-negotiation-brief
 - citation-enforcement
-- platform_identity_maintenance
 ---
 
 > **GENERATED FILE**
@@ -48,7 +47,7 @@ After the report is successfully saved, select at most three material gaps or ne
 
 ## People and Organisations
 
-The human started this task, so while reading its sources apply the Platform identity maintenance skill to the people they name. The Deal's company is its `deal_company` Organisation: find it with `identity.listProjectLinks` for the current Deal and never change it. Reuse or minimally create founders, executives and advisers named in the sources, link them to this Deal with a role such as `founder`, `executive` or `advisor`, and record their affiliation with the Deal's company when the source supports it. Leave ambiguous people unresolved; never replace a populated value. Identity records are workspace records, not CRM writes. Keep identity bookkeeping out of report prose and the completion summary; it does not count toward the next-steps limit.
+Report tasks are read-only for identity records, whoever started the task. Do not create, reuse, link, affiliate or change People or Organisations, and do not capture source results. Name the people and companies the sources mention in the report as ordinary evidence. Identity records are maintained in the Deal Manager conversation, where the human directs that work.
 
 ## Additional work and boundaries
 
@@ -88,11 +87,10 @@ Do not record an investment decision, move lifecycle stage, create projects or t
 - `deal-terms-analysis` (AUTO)
 - `term-sheet-negotiation-brief` (AUTO)
 - `citation-enforcement` (ALWAYS)
-- `platform_identity_maintenance` (ALWAYS)
 
 ## MCP And Tool Context
 
-- Platform capability bundles: `PLATFORM_TOOL_REPOSITORY`, `PROJECT_CONTEXT_READ`, `TASK_OUTPUT_SAVE`, `PROJECT_MANAGER_HANDOFF`, `IDENTITY_RECORD_MAINTENANCE`, `FILE_AUTHORING`, `FILE_FULL_REWRITE`, `WEB_SEARCH`
+- Platform capability bundles: `PLATFORM_TOOL_REPOSITORY`, `PROJECT_CONTEXT_READ`, `TASK_OUTPUT_SAVE`, `PROJECT_MANAGER_HANDOFF`, `FILE_AUTHORING`, `FILE_FULL_REWRITE`, `WEB_SEARCH`
 - Tool discovery: `ALL_CONNECTED_APPS`
 - Connected-application execution: `READ_ONLY`
 
