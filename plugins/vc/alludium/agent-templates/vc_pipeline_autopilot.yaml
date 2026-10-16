@@ -1,4 +1,4 @@
-version: "1.0.21"
+version: "1.0.22"
 type: "template"
 platform_managed: false
 id: "vc_pipeline_autopilot"
@@ -30,6 +30,7 @@ capabilityProfile:
     - PROJECT_CONTEXT_READ
     - PROJECT_PORTFOLIO_READ
     - PROJECT_PORTFOLIO_OPERATIONS
+    - INVESTMENT_SUBJECT_LOOKUP
     - PROJECT_TASK_COORDINATION
     - FILE_AUTHORING
     - WEB_SEARCH

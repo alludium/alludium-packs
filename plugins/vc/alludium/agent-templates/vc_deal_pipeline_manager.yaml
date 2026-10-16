@@ -1,4 +1,4 @@
-version: "1.0.10"
+version: "1.0.11"
 type: template
 platform_managed: false
 id: vc_deal_pipeline_manager
@@ -29,6 +29,7 @@ capabilityProfile:
     - PROJECT_CONTEXT_READ
     - PROJECT_WORKSPACE_UPDATE
     - PROJECT_TASK_COORDINATION
+    - INVESTMENT_SUBJECT_LOOKUP
     - FILE_AUTHORING
     - FILE_FULL_REWRITE
     - WEB_SEARCH

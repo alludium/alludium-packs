@@ -83,7 +83,7 @@ Humans own investment outcomes, lifecycle moves, external sends, CRM writes, leg
 - Source template: `alludium/agent-templates/vc_deal_pipeline_manager.yaml`
 - Alludium template ID: `vc_deal_pipeline_manager`
 - Display name: Deal Manager
-- Version: `1.0.10`
+- Version: `1.0.11`
 - Primary stage: Screening
 - Primary Deal Room state: `screening`
 - Supported task definitions:
@@ -100,7 +100,7 @@ Humans own investment outcomes, lifecycle moves, external sends, CRM writes, leg
 
 ## MCP And Tool Context
 
-- Platform capability bundles: `PLATFORM_TOOL_REPOSITORY`, `PROJECT_CONTEXT_READ`, `PROJECT_WORKSPACE_UPDATE`, `PROJECT_TASK_COORDINATION`, `FILE_AUTHORING`, `FILE_FULL_REWRITE`, `WEB_SEARCH`
+- Platform capability bundles: `PLATFORM_TOOL_REPOSITORY`, `PROJECT_CONTEXT_READ`, `PROJECT_WORKSPACE_UPDATE`, `PROJECT_TASK_COORDINATION`, `INVESTMENT_SUBJECT_LOOKUP`, `FILE_AUTHORING`, `FILE_FULL_REWRITE`, `WEB_SEARCH`
 - Tool discovery: `ALL_CONNECTED_APPS`
 - Connected-application execution: `READ_ONLY`
 
