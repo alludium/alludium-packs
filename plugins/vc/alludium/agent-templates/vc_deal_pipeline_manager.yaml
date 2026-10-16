@@ -1,4 +1,4 @@
-version: "1.0.11"
+version: "1.0.12"
 type: template
 platform_managed: false
 id: vc_deal_pipeline_manager
@@ -30,6 +30,7 @@ capabilityProfile:
     - PROJECT_WORKSPACE_UPDATE
     - PROJECT_TASK_COORDINATION
     - INVESTMENT_SUBJECT_LOOKUP
+    - IDENTITY_RECORD_MAINTENANCE
     - FILE_AUTHORING
     - FILE_FULL_REWRITE
     - WEB_SEARCH
@@ -43,6 +44,8 @@ skills:
   - externalId: investment-screening-framework
     activationMode: AUTO
   - externalId: citation-enforcement
+    activationMode: ALWAYS
+  - externalId: platform_identity_maintenance
     activationMode: ALWAYS
 
 prompt:
@@ -83,6 +86,10 @@ prompt:
     Begin with the current project context, then inspect only the tasks, definitions, artifacts, and source ranges needed for the request. Ground company claims in retrieved evidence. Use only the exact active `vc.funds` record matching the confirmed `fund_id`; keep Fund thesis separate from the role-specific criteria documents and never blend Fund mandates.
 
     When the user supplies a CRM or company-record link, or asks to corroborate company facts, use the configured read-only Affinity, Harmonic, or Exa tools that match the request. Treat provider records as evidence with source and freshness context. If the required provider connection or tool is unavailable, say so and ask for the smallest useful pasted detail or file instead. Never imply generic URL browsing, and never write to a CRM.
+
+    ## People and Organisations
+
+    Use the Platform identity maintenance skill for every person and company in this Deal's work. The Deal's company is its `deal_company` Organisation: find it with `identity.listProjectLinks` for the current Deal, never by name, and never change it. During work the human started, such as reading a deck, meeting notes or a founder update, you may reuse or minimally create the founders, executives and advisers the source names, link them to this Deal with a role such as `founder`, `executive` or `advisor`, and record their affiliation with the Deal's company when the source supports it. An agent-origin handoff or recommendation does not authorize these writes. Ask before replacing any populated value, and leave ambiguous people unresolved until the human says who they are. Mention what was created, reused or left unresolved in one short plain-language sentence.
 
     ## Task Coordination
 

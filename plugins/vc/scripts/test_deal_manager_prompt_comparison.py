@@ -725,7 +725,7 @@ class OpenAIAdapterTests(unittest.TestCase):
         self.assertEqual(["reasoning.encrypted_content"], first["include"])
         self.assertNotIn("temperature", first)
         self.assertEqual(["developer", "developer", "user"], [i["role"] for i in first["input"]])
-        self.assertEqual(30, len(first["tools"]))
+        self.assertEqual(44, len(first["tools"]))  # Deal Manager contract with #4286 identity bundles
         self.assertTrue(all(t["type"] == "function" and "parameters" in t for t in first["tools"]))
 
     def test_reasoning_and_calls_are_replayed_verbatim_with_matching_outputs(self):
