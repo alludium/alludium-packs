@@ -436,7 +436,7 @@ DEAL_WORKBOOK_CAPABILITY_KEYS = {
     "approval",
     "evidence",
 }
-PROJECT_TYPE_FIELD_KINDS = {"date", "enum", "member", "number", "text"}
+PROJECT_TYPE_FIELD_KINDS = {"date", "enum", "member", "number", "text", "person", "organisation"}
 PROJECT_TASK_MAPPING_SOURCES = {
     "constant",
     "project.field",
@@ -3743,6 +3743,33 @@ def validate_project_type_field(project_type_id: str, field: Any) -> tuple[str, 
         )
     if not isinstance(field.get("required"), bool):
         fail(f"Project type {project_type_id} field {field_key} must declare required as a boolean")
+    if "settingsPolicy" in field and field["settingsPolicy"] not in ("managed", "excluded"):
+        fail(f"Project type {project_type_id} field {field_key} has invalid settingsPolicy")
+    relationship_keys = {"relationshipType", "cardinality", "roleOptions"}
+    if field_kind in {"person", "organisation"}:
+        expected = {
+            "introducer": ("person", "deal_introducer", "one"),
+            "other_investors": ("organisation", "round_investor", "many"),
+        }
+        actual = (field_kind, field.get("relationshipType"), field.get("cardinality"))
+        if project_type_id not in {"vc_deal_pipeline", "vc_deal_room"} or expected.get(field_key) != actual:
+            fail(f"Project type {project_type_id} field {field_key} has unsupported relationship metadata")
+        if field["required"] or "options" in field or "optionSource" in field:
+            fail(f"Relationship field {field_key} must be optional and use identity links, not scalar options")
+        if field_kind == "person":
+            if "roleOptions" in field:
+                fail(f"Introducer field {field_key} cannot declare investor roles")
+        else:
+            roles = field.get("roleOptions")
+            if not isinstance(roles, list) or len(roles) != 3 or not all(
+                isinstance(role, dict)
+                and isinstance(role.get("value"), str)
+                and isinstance(role.get("label"), str) and role["label"].strip()
+                for role in roles
+            ) or {role["value"] for role in roles} != {"lead_or_co_lead", "non_lead", "undetermined"}:
+                fail(f"Investor field {field_key} must declare each supported role exactly once")
+    elif relationship_keys & field.keys():
+        fail(f"Scalar field {field_key} cannot declare relationship metadata")
     if field_kind == "enum":
         options = field.get("options")
         if not isinstance(options, list) or not options:
@@ -3760,6 +3787,50 @@ def validate_project_type_field(project_type_id: str, field: Any) -> tuple[str, 
         if len(option_values) != len(set(option_values)):
             fail(f"Project type {project_type_id} enum field {field_key} has duplicate option values")
     return field_id, field_key
+
+
+def validate_project_field_layout(project_type_id: str, initial_version: dict[str, Any]) -> None:
+    """Check the Platform supplied-layout contract without imposing it on legacy Packs."""
+    fields = initial_version["fieldsSchema"]
+    extensions = initial_version.get("extensions") or {}
+    if "projectDataSections" not in extensions and not any("settingsPolicy" in field for field in fields):
+        return
+
+    def valid_key(value: Any) -> bool:
+        return isinstance(value, str) and 0 < len(value) <= 200 and value == value.strip()
+
+    if not valid_key(project_type_id) or len(fields) > 2000 or not all(valid_key(field["key"]) for field in fields):
+        fail(f"Project type {project_type_id} has invalid field layout keys or too many fields")
+    groups = extensions.get("projectDataSections", [])
+    if not isinstance(groups, list) or len(groups) > 200:
+        fail(f"Project type {project_type_id} must declare at most 200 field groups")
+    by_key = {field["key"]: field for field in fields}
+    group_keys: set[str] = set()
+    memberships: set[str] = set()
+    for group in groups:
+        if not isinstance(group, dict) or set(group) - {"key", "label", "settingsPolicy", "fieldKeys"}:
+            fail(f"Project type {project_type_id} has invalid field group metadata")
+        key = group.get("key")
+        if not valid_key(key) or key in group_keys:
+            fail(f"Project type {project_type_id} has invalid or duplicate group key")
+        group_keys.add(key)
+        label = group.get("label")
+        if not isinstance(label, str) or not 0 < len(label.strip()) <= 80:
+            fail(f"Project type {project_type_id} group {key} must have a label of 1–80 characters")
+        policy = group.get("settingsPolicy", "managed")
+        if policy not in ("managed", "excluded"):
+            fail(f"Project type {project_type_id} group {key} has invalid settingsPolicy")
+        keys = group.get("fieldKeys")
+        if not isinstance(keys, list) or len(keys) > 2000 or not all(valid_key(value) for value in keys):
+            fail(f"Project type {project_type_id} group {key} has invalid fieldKeys")
+        for field_key in keys:
+            if field_key not in by_key or field_key in memberships:
+                fail(f"Project type {project_type_id} group {key} references an unknown or already grouped field: {field_key}")
+            memberships.add(field_key)
+            if policy == "excluded" and by_key[field_key].get("settingsPolicy", "managed") != "excluded":
+                fail(f"Excluded group {key} cannot contain managed field {field_key}")
+    if any(field.get("settingsPolicy", "managed") == "managed" and field["key"] not in memberships for field in fields):
+        fail(f"Project type {project_type_id} must place every managed field in exactly one managed group")
 
 
 def validate_project_manager_overlay_text(
@@ -4777,6 +4848,7 @@ def validate_project_type_file(path: Path, expected_id: str) -> str:
         fail(f"Project type {expected_id} has duplicate field ids")
     if len(field_keys) != len(set(field_keys)):
         fail(f"Project type {expected_id} has duplicate field keys")
+    validate_project_field_layout(expected_id, initial_version)
 
     if not isinstance(initial_version.get("instructionTemplate"), str) or not initial_version.get(
         "instructionTemplate"
