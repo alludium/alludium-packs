@@ -126,6 +126,8 @@ CONNECTED_APP_AGENT_BUNDLES = {
     'vc_deal_pipeline_manager': {
         'FILE_AUTHORING',
         'FILE_FULL_REWRITE',
+        'IDENTITY_RECORD_MAINTENANCE',
+        'INVESTMENT_SUBJECT_LOOKUP',
         'PLATFORM_TOOL_REPOSITORY',
         'PROJECT_CONTEXT_READ',
         'PROJECT_TASK_COORDINATION',
@@ -134,6 +136,7 @@ CONNECTED_APP_AGENT_BUNDLES = {
     },
     'vc_pipeline_autopilot': {
         'FILE_AUTHORING',
+        'INVESTMENT_SUBJECT_LOOKUP',
         'PLATFORM_TOOL_REPOSITORY',
         'PROJECT_CONTEXT_READ',
         'PROJECT_PORTFOLIO_OPERATIONS',
@@ -150,6 +153,10 @@ CONNECTED_APP_AGENT_BUNDLES = {
         'WEB_SEARCH',
     },
 }
+
+# Platform-owned skills a template may assign by externalId. The Platform loads them from its
+# own config/skills, so the Pack must be installed on a Platform release that ships them.
+PLATFORM_SKILL_IDS = {"platform_identity_maintenance"}
 
 WORKSPACE_VARIABLE_VALUE_TYPES = {"string", "number", "boolean", "object", "array"}
 WORKSPACE_VARIABLE_RENDER_TYPES = {"text", "textarea", "select", "checkbox", "number"}
@@ -1026,6 +1033,42 @@ def validate_skills(manifest: dict[str, Any]) -> set[str]:
     return discovered
 
 
+# Report tasks run without a verifiable direct-human signal for identity work, so their
+# executors must hold no identity write grants and no identity maintenance skill (#4286).
+REPORT_TASK_SLUGS = (
+    "generate-refresh-screening-report",
+    "generate-refresh-evaluation-report",
+    "prepare-refresh-ic-memo",
+    "review-refresh-term-sheet",
+)
+IDENTITY_WRITE_BUNDLES = {"IDENTITY_RECORD_MAINTENANCE"}
+IDENTITY_WRITE_SKILLS = {"platform_identity_maintenance"}
+REPORT_EXECUTOR_IDENTITY_RULE = "Report tasks are read-only for identity records, whoever started the task."
+
+
+def validate_report_executors_identity_read_only() -> None:
+    workflows = ROOT / "alludium" / "task-definition-templates" / "vc-workflows"
+    executors = set()
+    for slug in REPORT_TASK_SLUGS:
+        definition = read_yaml(workflows / f"{slug}.yaml")
+        definition_json = (definition.get("definition") or {}).get("definitionJson") or {}
+        executor = definition_json.get("recommendedAgentTemplate")
+        if not executor:
+            fail(f"Report task {slug} must name its recommendedAgentTemplate")
+        executors.add(executor)
+    for executor in sorted(executors):
+        template = read_yaml(ROOT / "alludium" / "agent-templates" / f"{executor}.yaml")
+        bundles = set((template.get("capabilityProfile") or {}).get("bundles") or [])
+        skills = {skill.get("externalId") for skill in template.get("skills") or [] if isinstance(skill, dict)}
+        if bundles & IDENTITY_WRITE_BUNDLES:
+            fail(f"Report task executor {executor} must not hold identity write bundles {sorted(bundles & IDENTITY_WRITE_BUNDLES)}")
+        if skills & IDENTITY_WRITE_SKILLS:
+            fail(f"Report task executor {executor} must not be assigned identity maintenance skills {sorted(skills & IDENTITY_WRITE_SKILLS)}")
+        prompt = (template.get("prompt") or {}).get("template") or ""
+        if REPORT_EXECUTOR_IDENTITY_RULE not in prompt:
+            fail(f"Report task executor {executor} prompt must state the identity read-only rule")
+
+
 def validate_connected_app_agent(template_id: str, template: dict[str, Any]) -> None:
     required = CONNECTED_APP_AGENT_BUNDLES.get(template_id)
     if required is None:
@@ -1208,7 +1251,7 @@ def validate_templates(manifest: dict[str, Any], skill_ids: set[str]) -> None:
             external_id = skill.get("externalId") if isinstance(skill, dict) else None
             if not external_id:
                 fail(f"Template {template_id} has a skill entry without externalId")
-            if external_id not in skill_ids:
+            if external_id not in skill_ids and external_id not in PLATFORM_SKILL_IDS:
                 fail(f"Template {template_id} references missing skill {external_id}")
 
 
@@ -6447,7 +6490,9 @@ def validate_vc_deal_pipeline_contract() -> None:
         "every new Deal records its company as one confirmed Organisation",
         "a matching name is never a reuse",
         "call `project.listInvestmentSubjectDeals`",
-        "only after the user confirms",
+        "only after the user explicitly asks for a separate Deal",
+        "look the company up with `identity.lookupCandidates`",
+        "If the user chooses an existing Deal or cancels, create nothing",
         "Never send `company_name`, `company_domain`, or `company_logo_url` in `fieldValues` for this type",
         "do not retry with a legacy company field",
     ]:
@@ -6622,6 +6667,7 @@ def validate_vc_deal_pipeline_contract() -> None:
     ]:
         if phrase not in analyst_prompt:
             fail(f"vc_deal_pipeline Deal Analyst prompt is missing custom-task routing: {phrase}")
+    validate_report_executors_identity_read_only()
 
     relationships = (initial_version.get("extensions") or {}).get("projectRelationships") or []
     if relationships != [{

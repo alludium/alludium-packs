@@ -1,0 +1,146 @@
+{
+  "description": "Frozen Deal Manager platform-tool contract for prompt comparisons. Derived from Platform capability bundle allow-lists; schemas are evaluation approximations.",
+  "source": {
+    "repository": "Alludium Platform",
+    "commit": "24d2e4a37d7a5ee2bcd2bc6e11bfdc66933cb8d9",
+    "path": "config/capability-profiles/platform-defaults.yaml",
+    "blob": "74f09d8d39e73412dc0c2658a1238922d9d611ae",
+    "retrievedAt": "2026-09-23"
+  },
+  "capabilityBundles": [
+    "PLATFORM_TOOL_REPOSITORY",
+    "PROJECT_CONTEXT_READ",
+    "PROJECT_WORKSPACE_UPDATE",
+    "PROJECT_TASK_COORDINATION",
+    "FILE_AUTHORING",
+    "FILE_FULL_REWRITE",
+    "WEB_SEARCH"
+  ],
+  "excluded": {
+    "PLATFORM_TOOL_REPOSITORY": "Broker discovery tools (tool.search, tool.read) omitted: every allowed tool is exposed directly.",
+    "WEB_SEARCH": "Provider-native search; no platform tool is declared.",
+    "connectedApplications": "ALL_CONNECTED_APPS READ_ONLY tools (for example Gmail) are not simulated."
+  },
+  "tools": [
+    {
+      "name": "project.getAgentContext",
+      "bundle": "PROJECT_CONTEXT_READ"
+    },
+    {
+      "name": "project.findById",
+      "bundle": "PROJECT_CONTEXT_READ"
+    },
+    {
+      "name": "project.listMembers",
+      "bundle": "PROJECT_CONTEXT_READ"
+    },
+    {
+      "name": "project-task.listByProject",
+      "bundle": "PROJECT_CONTEXT_READ"
+    },
+    {
+      "name": "project-task.findById",
+      "bundle": "PROJECT_CONTEXT_READ"
+    },
+    {
+      "name": "task-definitions.list",
+      "bundle": "PROJECT_CONTEXT_READ"
+    },
+    {
+      "name": "task-definitions.findById",
+      "bundle": "PROJECT_CONTEXT_READ"
+    },
+    {
+      "name": "project.update",
+      "bundle": "PROJECT_WORKSPACE_UPDATE"
+    },
+    {
+      "name": "task-management.createTask",
+      "bundle": "PROJECT_TASK_COORDINATION"
+    },
+    {
+      "name": "task-management.getTaskDetail",
+      "bundle": "PROJECT_TASK_COORDINATION"
+    },
+    {
+      "name": "artifact.searchArtifacts",
+      "bundle": "FILE_AUTHORING"
+    },
+    {
+      "name": "artifact.list",
+      "bundle": "FILE_AUTHORING"
+    },
+    {
+      "name": "artifact.getArtifact",
+      "bundle": "FILE_AUTHORING"
+    },
+    {
+      "name": "artifact.findById",
+      "bundle": "FILE_AUTHORING"
+    },
+    {
+      "name": "artifact.getSourceMetadata",
+      "bundle": "FILE_AUTHORING"
+    },
+    {
+      "name": "artifact.readSourceRange",
+      "bundle": "FILE_AUTHORING"
+    },
+    {
+      "name": "artifact.getTextStructure",
+      "bundle": "FILE_AUTHORING"
+    },
+    {
+      "name": "project.getTemplateMetadata",
+      "bundle": "FILE_AUTHORING"
+    },
+    {
+      "name": "project.readTemplateRange",
+      "bundle": "FILE_AUTHORING"
+    },
+    {
+      "name": "project.instantiateTemplate",
+      "bundle": "FILE_AUTHORING"
+    },
+    {
+      "name": "artifact.getArtifactsLinkedToChat",
+      "bundle": "FILE_AUTHORING"
+    },
+    {
+      "name": "artifact.getArtifactsForChatContext",
+      "bundle": "FILE_AUTHORING"
+    },
+    {
+      "name": "artifact.createTextArtifact",
+      "bundle": "FILE_AUTHORING"
+    },
+    {
+      "name": "artifact.instantiateMarkdownTemplate",
+      "bundle": "FILE_AUTHORING"
+    },
+    {
+      "name": "artifact.attachToChat",
+      "bundle": "FILE_AUTHORING"
+    },
+    {
+      "name": "artifact.detachFromChat",
+      "bundle": "FILE_AUTHORING"
+    },
+    {
+      "name": "artifact.replaceTextRange",
+      "bundle": "FILE_AUTHORING"
+    },
+    {
+      "name": "artifact.insertTextBeforeLine",
+      "bundle": "FILE_AUTHORING"
+    },
+    {
+      "name": "artifact.insertTextAfterLine",
+      "bundle": "FILE_AUTHORING"
+    },
+    {
+      "name": "artifact.updateTextArtifact",
+      "bundle": "FILE_FULL_REWRITE"
+    }
+  ]
+}

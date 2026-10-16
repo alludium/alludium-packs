@@ -144,6 +144,16 @@ class ComparisonTests(unittest.TestCase):
     def frozen(self) -> dict:
         return compare.load_frozen(OLD, NEW)
 
+    def test_optional_context_simulator_answers_the_identity_reads_the_manager_may_call(self):
+        frozen = self.frozen()
+        case = frozen["cases"]["cases"][0]
+        simulator = compare.make_simulator(frozen, case)
+        params = {"projectId": compare.PROJECT, "id": compare.PROJECT, "organisationId": compare.PROJECT}
+        for name in compare.IDENTITY_EMPTY_READS:
+            with self.subTest(tool=name):
+                self.assertIn(name, frozen["toolNames"])
+                self.assertIsNone(simulator.handle(name, params)[1])
+
     def ledger(self, ceiling: float = 25, path: Path | None = None) -> compare.SpendLedger:
         return compare.SpendLedger(self.frozen()["cases"]["run"]["prices"], ceiling, path)
 
@@ -725,7 +735,7 @@ class OpenAIAdapterTests(unittest.TestCase):
         self.assertEqual(["reasoning.encrypted_content"], first["include"])
         self.assertNotIn("temperature", first)
         self.assertEqual(["developer", "developer", "user"], [i["role"] for i in first["input"]])
-        self.assertEqual(30, len(first["tools"]))
+        self.assertEqual(44, len(first["tools"]))  # Deal Manager contract with #4286 identity bundles
         self.assertTrue(all(t["type"] == "function" and "parameters" in t for t in first["tools"]))
 
     def test_reasoning_and_calls_are_replayed_verbatim_with_matching_outputs(self):

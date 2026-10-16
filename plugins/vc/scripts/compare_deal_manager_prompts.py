@@ -80,6 +80,10 @@ DEFAULT_SUITE = "pr98-4308"
 GUIDANCE_CASES = HERE / "fixtures" / "deal-manager-4313-cases.yaml"
 GUIDANCE_EXPECTATIONS = HERE / "fixtures" / "deal-manager-4313-expectations.yaml"
 LEGACY_TOOL_CONTRACT = HERE / "fixtures" / "deal-manager-legacy-tool-contract.json"
+# Frozen contracts for historical manager revisions. A suite replaying an older revision uses the
+# one whose bundles match that revision's capability profile; the current contract tracks the live
+# template. #4286 added the Pipeline Deal Manager's identity bundles.
+HISTORICAL_TOOL_CONTRACTS = (HERE / "fixtures" / "deal-manager-pre-4286-tool-contract.json",)
 LEGACY_TEMPLATE_PATH = f"{PACK}/agent-templates/vc_deal_manager.yaml"
 # Packs PR #97 (Platform issue #4313): base carries manager 1.0.4 / pipeline manager 1.0.6, head 1.0.5 / 1.0.7.
 PR97_OLD_REVISION = "e824c349685c9587e7ce5217a83ef6beaec02f2b"
@@ -99,7 +103,19 @@ GUIDANCE_WRITES = DOCUMENT_WRITES | {
     "project.update", "task-management.createTask", "task-management.createAdHocTask", "task-management.createTaskFromDefinition",
     "task-management.assignTask", "task-management.askTaskQuestions", "task-management.askTaskQuestion",
     "task-management.submitTaskQuestionAnswer", "task-management.updateWorkflowState", "task-management.saveTaskOutput",
-    "task-management.completeTask"}
+    "task-management.completeTask", "identity.createPerson", "identity.createOrganisation",
+    "identity.addAffiliation", "identity.addIdentifier", "identity.linkProject", "identity.captureSourceResult"}
+# Identity reads the #4286 Pipeline Deal Manager contract adds. The guidance Deal has no linked People.
+IDENTITY_EMPTY_READS = {
+    "identity.lookupCandidates": {"candidates": [], "hasMore": False},
+    "identity.findPerson": {"record": None},
+    "identity.findOrganisation": {"record": None},
+    "identity.listAffiliations": {"affiliations": []},
+    "identity.listIdentifiers": {"identifiers": []},
+    "identity.listProjectLinks": {"links": []},
+    "identity.findSourceCapture": {"capture": None},
+    "project.listInvestmentSubjectDeals": {"matches": [], "totalMatches": 0, "matchFingerprint": None},
+}
 AGENT_READS = {"agent.findAvailableForCurrentUser", "agent.findById", "agent.findByUserId", "agent.findByUserIdAndType",
                "agent-deployment.findByAgentIdAndType"}
 REPORT = "88888888-8888-4888-8888-888888888888"
@@ -280,7 +296,15 @@ def load_frozen(old_revision: str, new_revision: str, suite_id: str = DEFAULT_SU
         if parsed["old"].get(key) != parsed["new"].get(key):
             problems.append(f"Template {key} differs between variants; only the prompt may change")
     contract = json.loads(contract_text)
-    if contract["capabilityBundles"] != parsed["old"]["capabilityProfile"]["bundles"]:
+    old_bundles = (parsed["old"].get("capabilityProfile") or {}).get("bundles")
+    if contract["capabilityBundles"] != old_bundles:
+        for historical in HISTORICAL_TOOL_CONTRACTS:
+            historical_text = historical.read_text()
+            if json.loads(historical_text)["capabilityBundles"] == old_bundles:
+                files = {**files, "toolContract": historical}
+                contract_text, contract = historical_text, json.loads(historical_text)
+                break
+    if contract["capabilityBundles"] != old_bundles:
         problems.append("Frozen tool contract bundles do not match the manager capability profile")
     slugs = parsed["old"]["metadata"]["supportedTaskDefinitions"]
     definitions, definition_meta = {}, {}
@@ -432,6 +456,8 @@ class Simulator:
             return {"templates": []}, None, notes
         if platform_name in DOCUMENT_WRITES:
             return None, "Document authoring is outside the manager coordination scope in this simulation", notes
+        if platform_name in IDENTITY_EMPTY_READS:
+            return IDENTITY_EMPTY_READS[platform_name], None, notes
         return None, "Tool outside the simulated coordination scope", notes
 
     def missing_required_files(self, slug: str | None, task_input: dict) -> str | None:
@@ -542,6 +568,8 @@ class GuidanceSimulator:
             return {"templates": []}, None, notes
         if platform_name in AGENT_READS:
             return {"agents": [{"id": AGENT, "name": self.settings["reportAgentName"], "agentDeploymentId": DEPLOYMENT}]}, None, notes
+        if platform_name in IDENTITY_EMPTY_READS:
+            return IDENTITY_EMPTY_READS[platform_name], None, notes
         return None, "Tool outside the simulated coordination scope", notes
 
 
