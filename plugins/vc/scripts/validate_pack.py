@@ -2268,8 +2268,11 @@ def validate_fund_routing_contract() -> None:
         )
 
     # Every Pipeline chat creation names one confirmed Organisation and no legacy company field.
+    # Fixtures use either a nested creationRequest or a top-level project.createFromChat request.
     for scenario in pipeline_scenarios_by_id.values():
-        creation_request = scenario.get("creationRequest") or {}
+        creation_request = scenario.get("creationRequest") or (
+            scenario if scenario.get("toolName") == "project.createFromChat" else {}
+        )
         if (
             scenario.get("projectTypeKey") != "vc_deal_pipeline"
             or creation_request.get("toolName") != "project.createFromChat"
@@ -2287,6 +2290,21 @@ def validate_fund_routing_contract() -> None:
         legacy_keys = LEGACY_DEAL_COMPANY_FIELD_KEYS.intersection(creation_request.get("fieldValues") or {})
         if legacy_keys:
             fail(f"Pipeline creation fixture {scenario.get('id')} must not send legacy company fields {sorted(legacy_keys)}")
+        receipt = scenario.get("serverReceipt") or {}
+        receipt_link = receipt.get("investmentSubjectLink") or {}
+        if receipt.get("status") == "created" and (
+            not receipt_link.get("id")
+            or not receipt_link.get("organisationId")
+            or receipt_link.get("roleKey") != "deal_company"
+            or (
+                identity_link.get("mode") == "reuse"
+                and receipt_link.get("organisationId") != identity_link.get("recordId")
+            )
+        ):
+            fail(
+                f"Pipeline creation fixture {scenario.get('id')} must show a created receipt "
+                "backed by its deal_company investmentSubjectLink"
+            )
 
     reuse_fixture = pipeline_scenarios_by_id["existing-organisation-reuse-requires-acknowledgement"]
     reuse_lookup = reuse_fixture.get("existingDealLookup") or {}
@@ -6536,6 +6554,7 @@ def validate_vc_deal_pipeline_contract() -> None:
         "do not invent a domain, website, or logo",
         "Never put `company_name`, `company_domain`, or `company_logo_url` in `projectCreation.fieldValues`",
         # A task started on the pre-contract setup cannot finalize there; it must ask for a restart.
+        "First read `projectCreation.projectTypeVersion` in the Resolved Task Context",
         "If it is a 1.0.x version with x below 7",
         "start the Deal again from New deal",
     ]:

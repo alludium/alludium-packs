@@ -309,6 +309,11 @@ pipelineManagerScenarios:
     idempotencyKey: pipeline-manager:example-labs:create:2026-08-14
     projectTypeKey: vc_deal_pipeline
     userInstruction: Create a Deal for Example Labs from this conversation, use the attached deck, and leave it unassigned.
+    identityLink:
+      mode: create
+      recordType: organisation
+      displayName: Example Labs
+      roleKey: deal_company
     resolvedCompany:
       name: Example Labs
       domain: example.invalid
@@ -329,6 +334,8 @@ pipelineManagerScenarios:
       profileId: 4c8d1e73-2b90-4a65-9f31-7e5d6c4b3a21
       artifactId: 6a2f9c84-1d57-4b30-8e62-9c7d5a4b3f10
       messageId: 8b3e7d95-2c61-4a40-9f73-1d6e5c4b2a09
+      organisationId: 5e9a3c17-4d82-4b6f-a0c3-8f2e1d7b6c54
+      investmentSubjectLinkId: 2c7b5e91-6a34-4f08-b2d1-3e9f8a7c6d15
       operationId: create-example-labs-from-chat
       idempotencyKey: pipeline-manager:example-labs:create:2026-08-14
     serverReceipt:
@@ -337,6 +344,10 @@ pipelineManagerScenarios:
         id: 7f56a2d1-8c43-4b91-a6e0-2d93f4c5b718
         name: Example Labs
         projectTypeVersionId: 91b7d4e2-3a68-4f25-8c10-5d6e7f8a9b20
+      investmentSubjectLink:
+        id: 2c7b5e91-6a34-4f08-b2d1-3e9f8a7c6d15
+        organisationId: 5e9a3c17-4d82-4b6f-a0c3-8f2e1d7b6c54
+        roleKey: deal_company
       linkedArtifacts:
         - filename: source-note.md
       action:
