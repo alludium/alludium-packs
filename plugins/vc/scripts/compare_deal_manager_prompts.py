@@ -456,6 +456,8 @@ class Simulator:
             return {"templates": []}, None, notes
         if platform_name in DOCUMENT_WRITES:
             return None, "Document authoring is outside the manager coordination scope in this simulation", notes
+        if platform_name in IDENTITY_EMPTY_READS:
+            return IDENTITY_EMPTY_READS[platform_name], None, notes
         return None, "Tool outside the simulated coordination scope", notes
 
     def missing_required_files(self, slug: str | None, task_input: dict) -> str | None:

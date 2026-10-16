@@ -144,6 +144,16 @@ class ComparisonTests(unittest.TestCase):
     def frozen(self) -> dict:
         return compare.load_frozen(OLD, NEW)
 
+    def test_optional_context_simulator_answers_the_identity_reads_the_manager_may_call(self):
+        frozen = self.frozen()
+        case = frozen["cases"]["cases"][0]
+        simulator = compare.make_simulator(frozen, case)
+        params = {"projectId": compare.PROJECT, "id": compare.PROJECT, "organisationId": compare.PROJECT}
+        for name in compare.IDENTITY_EMPTY_READS:
+            with self.subTest(tool=name):
+                self.assertIn(name, frozen["toolNames"])
+                self.assertIsNone(simulator.handle(name, params)[1])
+
     def ledger(self, ceiling: float = 25, path: Path | None = None) -> compare.SpendLedger:
         return compare.SpendLedger(self.frozen()["cases"]["run"]["prices"], ceiling, path)
 
