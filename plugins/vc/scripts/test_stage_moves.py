@@ -329,7 +329,8 @@ class ExecutionTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             manifest = self.run_case(loop, Path(tmp))
             self.assertEqual(manifest["records"][0]["status"], "incomplete")
-            self.assertEqual(len(manifest["records"][0]["turns"][0]["calls"]), 8)
+            limit = frozen()["cases"]["run"]["limits"]["maxStepsPerTurn"]
+            self.assertEqual(len(manifest["records"][0]["turns"][0]["calls"]), limit)
 
     def test_the_spend_ceiling_halts_before_dispatch(self):
         with tempfile.TemporaryDirectory() as tmp:

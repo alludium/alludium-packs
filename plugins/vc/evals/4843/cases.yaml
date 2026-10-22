@@ -111,7 +111,7 @@ run:
     include: [reasoning.encrypted_content]
   repetitions: 3
   limits:
-    maxStepsPerTurn: 8
+    maxStepsPerTurn: 20
     callTimeoutSeconds: 300
     attemptWallClockSeconds: 900
     maxConsecutiveProviderErrors: 3
