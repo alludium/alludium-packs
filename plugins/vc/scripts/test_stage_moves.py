@@ -108,6 +108,24 @@ class SimulatorTests(unittest.TestCase):
         self.assertEqual((sim.moves[-1]["tool"], sim.moves[-1]["extraKeys"]), ("project.update", ["name"]))
 
 
+    def test_every_wrong_route_stage_change_is_recorded_and_refused(self):
+        attempts = [
+            ("project_data", {"action": "update_project", "data": {"state": "decision"}}),
+            ("project_data", {"action": "update_project", "data": {"project": {"state": "decision"}}}),
+            ("project.update", {"id": "p", "data": {"name": "x"}, "state": "decision"}),
+        ]
+        for name, args in attempts:
+            sim = self.sim("quoted-control")
+            _, error = sim.handle(name, args)
+            self.assertEqual(error, sm.WRONG_ROUTE_ERROR, args)
+            self.assertEqual(len(sim.moves), 1, args)
+            self.assertEqual(sim.state, "screening")
+
+    def test_a_non_object_payload_is_an_invalid_call_not_a_crash(self):
+        _, error = self.sim("reported-phrase").handle("project_data", {"action": "update_state", "data": "{}"})
+        self.assertIn(error, sm.INVALID_CALL_ERRORS)
+
+
 class ContextTests(unittest.TestCase):
     def test_stage_block_marks_only_the_current_state_and_matches_platform_wording(self):
         inputs = frozen()

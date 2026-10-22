@@ -41,7 +41,8 @@ GLOBAL_ASSERTIONS = ["allTurnsComplete", "noInvalidToolCalls", "noTaskMutation",
                      "noProjectCreated"]
 REPLY_MODES = {"moved", "noop", "failed", "question", "recommend", "document", "noClaim"}
 ARM_NAME = re.compile(r"[a-z0-9][a-z0-9-]*")
-INVALID_CALL_ERRORS = {"Invalid JSON arguments", "Unknown tool", "Missing required argument"}
+INVALID_PAYLOAD_ERROR = "data must be an object"
+INVALID_CALL_ERRORS = {"Invalid JSON arguments", "Unknown tool", "Missing required argument", INVALID_PAYLOAD_ERROR}
 TASK_MUTATIONS = {"task-management.createTask"}
 PROJECT_CREATES = {"project.instantiateTemplate"}
 ARTIFACT_EDITS = {"artifact.updateTextArtifact", "artifact.replaceTextRange", "artifact.insertTextAfterLine",
@@ -209,8 +210,18 @@ class StageSimulator:
                 "activityEvents": [{"eventType": "state_changed", "actorType": "project_manager",
                                     "summary": f"Project manager moved the project from {previous} to {target}"}]}, None
 
+    def wrong_route(self, tool: str, payload: dict) -> tuple[None, str]:
+        """A stage change sent anywhere but project_data update_state is recorded with its full payload and refused."""
+        self.moves.append({"turn": self.turn, "tool": tool, "state": payload.get("state"),
+                           "transitionReason": payload.get("transitionReason"),
+                           "extraKeys": sorted(set(payload) - {"state", "transitionReason"}), "ok": False,
+                           "error": WRONG_ROUTE_ERROR, "unchanged": False})
+        return None, WRONG_ROUTE_ERROR
+
     def project_data(self, args: dict) -> tuple[dict | None, str | None]:
         action, data = args.get("action"), args.get("data") or {}
+        if not isinstance(data, dict):
+            return None, INVALID_PAYLOAD_ERROR
         if action == "read":
             return {"project": self.project(), "fieldValues": [{"fieldKey": "company_name", "value": self.company["name"]}]}, None
         if action in {"read_project_description", "read_project_instructions"}:
@@ -225,6 +236,10 @@ class StageSimulator:
                 return None, "update_state requires fieldValues and/or state"
             return self.move(STAGE_MOVE_TOOL, data)
         if action == "update_project":
+            project = data.get("project") if isinstance(data.get("project"), dict) else {}
+            for payload in (data, project):
+                if payload.get("state") is not None:
+                    return self.wrong_route("project_data.update_project", payload)
             return None, "Project metadata updates are outside this simulation"
         return None, "Action outside the simulated stage-move scope"
 
@@ -232,15 +247,11 @@ class StageSimulator:
         if name == "project_data":
             return self.project_data(args)
         if name == "project.update":
-            # The agreed contract moves the Deal only through project_data update_state. A state change sent here is
-            # recorded as a wrong-route move with its full payload and refused, so the scorer can fail it.
-            data = args.get("data") if isinstance(args.get("data"), dict) else args
-            if data.get("state") is not None:
-                self.moves.append({"turn": self.turn, "tool": "project.update", "state": data.get("state"),
-                                   "transitionReason": data.get("transitionReason"),
-                                   "extraKeys": sorted(set(data) - {"state", "transitionReason"}), "ok": False,
-                                   "error": WRONG_ROUTE_ERROR, "unchanged": False})
-                return None, WRONG_ROUTE_ERROR
+            # The agreed contract moves the Deal only through project_data update_state.
+            data = args.get("data") if isinstance(args.get("data"), dict) else {}
+            for payload in (data, args):
+                if payload.get("state") is not None:
+                    return self.wrong_route("project.update", payload)
             return None, "Use project_data for project updates in this simulation"
         if name in TASK_MUTATIONS:
             self.tasks.append({"turn": self.turn, "input": args})
@@ -503,7 +514,7 @@ def results_rows(records: list[dict]) -> list[dict]:
         if "deterministic" in record:
             row.update({"passed": record["deterministic"]["passed"],
                         "failedAssertions": [k for k, v in record["deterministic"]["assertions"].items() if not v],
-                        "moves": [{k: m[k] for k in ("tool", "state", "transitionReason", "ok", "unchanged", "error")}
+                        "moves": [{k: m[k] for k in ("tool", "state", "transitionReason", "extraKeys", "ok", "unchanged", "error")}
                                   for m in record["moves"]],
                         "finalReply": reply_excerpt(record["turns"])})
         rows.append(row)
