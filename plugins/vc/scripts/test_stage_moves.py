@@ -105,7 +105,7 @@ class SimulatorTests(unittest.TestCase):
         self.assertEqual(len(sim.tasks), 1)
         self.assertEqual(error, sm.WRONG_ROUTE_ERROR)
         self.assertEqual(sim.state, "screening")
-        self.assertEqual((sim.moves[-1]["tool"], sim.moves[-1]["extraKeys"]), ("project.update", ["name"]))
+        self.assertEqual((sim.moves[-1]["tool"], sim.moves[-1]["extraKeys"]), ("project.update", ["data", "id"]))
 
 
     def test_every_wrong_route_stage_change_is_recorded_and_refused(self):
@@ -113,6 +113,13 @@ class SimulatorTests(unittest.TestCase):
             ("project_data", {"action": "update_project", "data": {"state": "decision"}}),
             ("project_data", {"action": "update_project", "data": {"project": {"state": "decision"}}}),
             ("project.update", {"id": "p", "data": {"name": "x"}, "state": "decision"}),
+            ("project.update", {"id": "p", "data": {"project": {"state": "evaluation"}}}),
+            ("project.update", {"id": "p", "project": {"state": "evaluation"}}),
+            ("project.update", {"id": "p", "data": "{\"state\": \"evaluation\"}"}),
+            ("project_data", {"action": "update_project", "state": "evaluation"}),
+            ("project_data", {"action": "update_state", "state": "evaluation"}),
+            ("project_data", {"action": "update_state", "data": {"state": "decision"}, "state": "evaluation"}),
+            ("project_data", {"action": "update_state", "data": {"state": "decision", "fieldValues": [{"fieldKey": "x", "value": 1}]}}),
         ]
         for name, args in attempts:
             sim = self.sim("quoted-control")
@@ -122,8 +129,17 @@ class SimulatorTests(unittest.TestCase):
             self.assertEqual(sim.state, "screening")
 
     def test_a_non_object_payload_is_an_invalid_call_not_a_crash(self):
-        _, error = self.sim("reported-phrase").handle("project_data", {"action": "update_state", "data": "{}"})
-        self.assertIn(error, sm.INVALID_CALL_ERRORS)
+        for data in ("{}", [], "", 0, False, None):
+            _, error = self.sim("reported-phrase").handle("project_data", {"action": "update_state", "data": data})
+            self.assertIn(error, sm.INVALID_CALL_ERRORS, data)
+
+    def test_reads_and_a_clean_update_state_are_not_wrong_routes(self):
+        sim = self.sim("reported-phrase")
+        sim.handle("project.findById", {"id": "p"})
+        sim.handle("project_data", {"action": "read"})
+        sim.handle("project_data", {"action": "update_state", "data": {"state": "decision"}})
+        self.assertEqual([m["tool"] for m in sim.moves], [sm.STAGE_MOVE_TOOL])
+        self.assertTrue(sim.moves[0]["ok"])
 
 
 class ContextTests(unittest.TestCase):

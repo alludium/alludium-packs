@@ -162,6 +162,27 @@ def plan_attempts(cases: list[dict], arms: list[str], repetitions: int) -> list[
 
 # ---------------------------------------------------------------- simulation
 
+PROJECT_READS = {"project.getAgentContext", "project.findById", "project.listMembers", "project.getTemplateMetadata",
+                 "project.readTemplateRange", "project.listInvestmentSubjectDeals"}
+
+
+def requested_states(value: object) -> list:
+    """Every non-null "state" value anywhere in a tool call's arguments, including JSON encoded inside strings."""
+    if isinstance(value, str):
+        text = value.strip()
+        if text[:1] in "{[":
+            try:
+                return requested_states(json.loads(text))
+            except json.JSONDecodeError:
+                return []
+        return []
+    if isinstance(value, list):
+        return [state for item in value for state in requested_states(item)]
+    if isinstance(value, dict):
+        found = [value["state"]] if value.get("state") is not None else []
+        return found + [state for key, item in value.items() if key != "state" for state in requested_states(item)]
+    return []
+
 class StageSimulator:
     """Synthetic Platform state for one attempt. Mirrors the paired Platform PR's update_state contract."""
 
@@ -210,48 +231,51 @@ class StageSimulator:
                 "activityEvents": [{"eventType": "state_changed", "actorType": "project_manager",
                                     "summary": f"Project manager moved the project from {previous} to {target}"}]}, None
 
-    def wrong_route(self, tool: str, payload: dict) -> tuple[None, str]:
-        """A stage change sent anywhere but project_data update_state is recorded with its full payload and refused."""
-        self.moves.append({"turn": self.turn, "tool": tool, "state": payload.get("state"),
-                           "transitionReason": payload.get("transitionReason"),
-                           "extraKeys": sorted(set(payload) - {"state", "transitionReason"}), "ok": False,
-                           "error": WRONG_ROUTE_ERROR, "unchanged": False})
+    def wrong_route(self, tool: str, args: dict, states: list) -> tuple[None, str]:
+        """A stage change sent anywhere but a clean project_data update_state is recorded with its call and refused."""
+        self.moves.append({"turn": self.turn, "tool": tool, "state": states[0], "transitionReason": None,
+                           "extraKeys": sorted(args), "ok": False, "error": WRONG_ROUTE_ERROR, "unchanged": False})
         return None, WRONG_ROUTE_ERROR
 
     def project_data(self, args: dict) -> tuple[dict | None, str | None]:
-        action, data = args.get("action"), args.get("data") or {}
+        action = args.get("action")
+        data = args.get("data", {})
         if not isinstance(data, dict):
             return None, INVALID_PAYLOAD_ERROR
+        states = requested_states(args)
+        if action == "update_state":
+            if data.get("fieldValues"):
+                self.field_writes.append({"turn": self.turn, "fieldValues": data["fieldValues"]})
+                return self.wrong_route(STAGE_MOVE_TOOL, args, states) if states else \
+                    (None, "Typed field writes are outside this simulation")
+            clean = set(args) <= {"action", "data"} and len(states) == 1 and data.get("state") is not None
+            if clean:
+                return self.move(STAGE_MOVE_TOOL, data)
+            if states:
+                return self.wrong_route(STAGE_MOVE_TOOL, args, states)
+            return None, "update_state requires fieldValues and/or state"
+        if states:
+            return self.wrong_route(f"project_data.{action}", args, states)
         if action == "read":
             return {"project": self.project(), "fieldValues": [{"fieldKey": "company_name", "value": self.company["name"]}]}, None
         if action in {"read_project_description", "read_project_instructions"}:
             return {"text": ""}, None
         if action == "list_field_definitions":
             return {"fieldDefinitions": []}, None
-        if action == "update_state":
-            if data.get("fieldValues"):
-                self.field_writes.append({"turn": self.turn, "fieldValues": data["fieldValues"]})
-                return None, "Typed field writes are outside this simulation"
-            if data.get("state") is None:
-                return None, "update_state requires fieldValues and/or state"
-            return self.move(STAGE_MOVE_TOOL, data)
         if action == "update_project":
-            project = data.get("project") if isinstance(data.get("project"), dict) else {}
-            for payload in (data, project):
-                if payload.get("state") is not None:
-                    return self.wrong_route("project_data.update_project", payload)
             return None, "Project metadata updates are outside this simulation"
         return None, "Action outside the simulated stage-move scope"
 
     def handle(self, name: str, args: dict) -> tuple[dict | None, str | None]:
         if name == "project_data":
             return self.project_data(args)
+        # The agreed contract moves the Deal only through project_data update_state. Any other project tool call that
+        # names a state, in whatever shape or nesting, is recorded as a wrong-route move and refused.
+        if name.startswith("project.") and name not in PROJECT_READS:
+            states = requested_states(args)
+            if states:
+                return self.wrong_route(name, args, states)
         if name == "project.update":
-            # The agreed contract moves the Deal only through project_data update_state.
-            data = args.get("data") if isinstance(args.get("data"), dict) else {}
-            for payload in (data, args):
-                if payload.get("state") is not None:
-                    return self.wrong_route("project.update", payload)
             return None, "Use project_data for project updates in this simulation"
         if name in TASK_MUTATIONS:
             self.tasks.append({"turn": self.turn, "input": args})
