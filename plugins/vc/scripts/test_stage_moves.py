@@ -107,6 +107,19 @@ class SimulatorTests(unittest.TestCase):
         self.assertEqual(sim.state, "screening")
         self.assertEqual((sim.moves[-1]["tool"], sim.moves[-1]["extraKeys"]), ("project.update", ["data", "id"]))
 
+    def test_task_is_accepted_only_where_the_case_allows_it(self):
+        inputs = frozen()
+        allowed = sm.StageSimulator(inputs["cases"], case(inputs, "memo-edit-control"), allow_task=True)
+        data, error = allowed.handle("task-management.createTask", {"title": "Edit IC memo"})
+        self.assertIsNone(error)
+        self.assertEqual(data["task"]["status"], "pending")
+        self.assertEqual(len(allowed.tasks), 1)
+        detail, error = allowed.handle("task-management.getTaskDetail", {"taskId": "sim-task-1"})
+        self.assertIsNone(error)
+        self.assertEqual(detail["task"]["id"], "sim-task-1")
+        _, error = self.sim("memo-edit-control").handle("task-management.createTask", {"title": "Edit IC memo"})
+        self.assertIsNotNone(error)
+
 
     def test_every_wrong_route_stage_change_is_recorded_and_refused(self):
         attempts = [
@@ -238,6 +251,16 @@ class ScoringTests(unittest.TestCase):
         result = self.score("reported-phrase", rec)
         self.assertFalse(result["assertions"]["noTaskMutation"])
         self.assertFalse(result["assertions"]["noDecisionRecord"])
+
+    def test_memo_edit_may_run_as_a_task_but_never_move(self):
+        tasks = [{"turn": 0}]
+        reply = "I've started a task to add the churn risk to the IC memo's Decision section."
+        result = self.score("memo-edit-control", record([], reply, tasks=tasks))
+        self.assertTrue(result["passed"], result)
+        self.assertNotIn("noTaskMutation", result["assertions"])
+        self.assertFalse(self.score("memo-edit-control", record([move("decision")], reply, tasks=tasks))["passed"])
+        self.assertFalse(self.score("reported-phrase", record([move("decision")], "Recurvia is now in Decision.",
+                                                              tasks=tasks))["passed"])
 
 
 class PreflightTests(unittest.TestCase):

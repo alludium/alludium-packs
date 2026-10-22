@@ -113,6 +113,8 @@ def freeze(arm_specs: list[str]) -> dict:
         if not case.get("turns") or not all(isinstance(t, str) and t.strip() for t in case["turns"]):
             problems.append(f"{case['id']}: turns must be non-empty strings")
         expect = expectations["cases"].get(case["id"], {})
+        if not isinstance(expect.get("allowTask", False), bool):
+            problems.append(f"{case['id']}: allowTask must be true or false")
         if expect.get("move") != "none" and expect.get("move") not in states:
             problems.append(f"{case['id']}: move must be 'none' or an installed state")
         if expect.get("reply") not in REPLY_MODES:
@@ -187,8 +189,8 @@ def requested_states(value: object) -> list:
 class StageSimulator:
     """Synthetic Platform state for one attempt. Mirrors the paired Platform PR's update_state contract."""
 
-    def __init__(self, cases: dict, case: dict):
-        self.cases, self.case = cases, case
+    def __init__(self, cases: dict, case: dict, allow_task: bool = False):
+        self.cases, self.case, self.allow_task = cases, case, allow_task
         self.states = cases["lifecycleStates"]
         self.backward = {(t["from"], t["to"]) for t in cases["backwardTransitions"]}
         self.state = case["currentState"]
@@ -282,6 +284,9 @@ class StageSimulator:
             return None, "Use project_data for project updates in this simulation"
         if name in TASK_MUTATIONS:
             self.tasks.append({"turn": self.turn, "input": args})
+            if self.allow_task:
+                # A memo edit may legitimately run as a Deal task; accept it so the agent can finish the turn.
+                return {"task": {"id": f"sim-task-{len(self.tasks)}", "status": "pending"}}, None
             return None, "Task creation is outside this simulation"
         if name in PROJECT_CREATES:
             self.projects_created.append({"turn": self.turn, "input": args})
@@ -290,6 +295,9 @@ class StageSimulator:
             return {"project": self.project()}, None
         if name in {"project-task.listByProject"}:
             return {"tasks": []}, None
+        if name == "task-management.getTaskDetail" and self.allow_task and self.tasks:
+            # Readback for a task this attempt was allowed to create.
+            return {"task": {"id": args.get("taskId") or f"sim-task-{len(self.tasks)}", "status": "pending"}}, None
         if name in base.ARTIFACT_LISTS:
             return {"artifacts": [self.memo] + self.created}, None
         if name in base.ARTIFACT_READS:
@@ -340,7 +348,8 @@ def run_attempt(frozen: dict, item: dict, output: Path, invoke, ledger, settings
     limits = frozen["cases"]["run"]["limits"]
     folder = output / item["folder"]
     folder.mkdir(parents=True, exist_ok=False)
-    simulator = StageSimulator(frozen["cases"], case)
+    allow_task = bool(frozen["expectations"]["cases"][item["case"]].get("allowTask"))
+    simulator = StageSimulator(frozen["cases"], case, allow_task=allow_task)
     tools = tool_specs_from_names([n for n in frozen["toolNames"] if n != "project_data"]) + [
         {"toolSpec": frozen["projectDataTool"]}]
     names = {name.replace(".", "_"): name for name in frozen["toolNames"]}
@@ -475,6 +484,8 @@ def score(expectations: dict, case_id: str, record: dict, cases: dict) -> dict:
         "noFieldWrites": not record["fieldWrites"],
         "noProjectCreated": not record["projectsCreated"],
     }
+    if expect.get("allowTask"):
+        del assertions["noTaskMutation"]
     target = expect["move"]
     if target == "none":
         assertions["noMove"] = not moves

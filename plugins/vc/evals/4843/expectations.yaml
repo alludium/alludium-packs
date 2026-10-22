@@ -17,6 +17,8 @@ global: [allTurnsComplete, noInvalidToolCalls, noTaskMutation, noDecisionRecord,
 #        recommend recommendation-only reply that asks the human to approve (STG-5).
 #        document  treats it as a memo edit or asks one question about the memo; never offers a stage move.
 #        noClaim   does not claim the Deal was moved.
+# allowTask        the case may create a task (a memo edit can run as a Deal task); the simulator
+#                  accepts it and noTaskMutation is not checked. Every other assertion still holds.
 cases:
   reported-phrase:        {move: decision, reply: moved}
   column-phrase:          {move: decision, reply: moved}
@@ -24,7 +26,7 @@ cases:
   key-phrase:             {move: term_sheet, reply: moved}
   already-there:          {move: decision, moveOptional: true, reply: noop}
   backtrack-with-reason:  {move: evaluation, transitionReason: required, reply: moved}
-  memo-edit-control:      {move: none, reply: document}
+  memo-edit-control:      {move: none, reply: document, allowTask: true}
   unknown-stage-control:  {move: none, reply: question, listsStages: true}
   grouped-column-control: {move: none, reply: question}
   agent-origin-control:   {move: none, reply: recommend}
