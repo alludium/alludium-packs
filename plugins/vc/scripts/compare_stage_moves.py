@@ -162,12 +162,13 @@ def plan_attempts(cases: list[dict], arms: list[str], repetitions: int) -> list[
 
 # ---------------------------------------------------------------- simulation
 
-PROJECT_READS = {"project.getAgentContext", "project.findById", "project.listMembers", "project.getTemplateMetadata",
-                 "project.readTemplateRange", "project.listInvestmentSubjectDeals"}
+def is_state_key(key: object) -> bool:
+    """"state", "State", "lifecycleState" or "lifecycle_state": any key naming a lifecycle state."""
+    return isinstance(key, str) and key.lower().replace("_", "").endswith("state")
 
 
 def requested_states(value: object) -> list:
-    """Every non-null "state" value anywhere in a tool call's arguments, including JSON encoded inside strings."""
+    """Every non-null state value anywhere in a tool call's arguments, including JSON encoded inside strings."""
     if isinstance(value, str):
         text = value.strip()
         if text[:1] in "{[":
@@ -179,8 +180,8 @@ def requested_states(value: object) -> list:
     if isinstance(value, list):
         return [state for item in value for state in requested_states(item)]
     if isinstance(value, dict):
-        found = [value["state"]] if value.get("state") is not None else []
-        return found + [state for key, item in value.items() if key != "state" for state in requested_states(item)]
+        found = [item for key, item in value.items() if is_state_key(key) and item is not None]
+        return found + [state for key, item in value.items() if not is_state_key(key) for state in requested_states(item)]
     return []
 
 class StageSimulator:
@@ -240,15 +241,18 @@ class StageSimulator:
     def project_data(self, args: dict) -> tuple[dict | None, str | None]:
         action = args.get("action")
         data = args.get("data", {})
-        if not isinstance(data, dict):
-            return None, INVALID_PAYLOAD_ERROR
         states = requested_states(args)
+        if not isinstance(data, dict):
+            if states:
+                self.wrong_route(STAGE_MOVE_TOOL if action == "update_state" else f"project_data.{action}", args, states)
+            return None, INVALID_PAYLOAD_ERROR
         if action == "update_state":
             if data.get("fieldValues"):
                 self.field_writes.append({"turn": self.turn, "fieldValues": data["fieldValues"]})
                 return self.wrong_route(STAGE_MOVE_TOOL, args, states) if states else \
                     (None, "Typed field writes are outside this simulation")
-            clean = set(args) <= {"action", "data"} and len(states) == 1 and data.get("state") is not None
+            clean = (set(args) <= {"action", "data"} and set(data) <= {"state", "transitionReason"} and len(states) == 1
+                     and data.get("state") is not None)
             if clean:
                 return self.move(STAGE_MOVE_TOOL, data)
             if states:
@@ -269,12 +273,11 @@ class StageSimulator:
     def handle(self, name: str, args: dict) -> tuple[dict | None, str | None]:
         if name == "project_data":
             return self.project_data(args)
-        # The agreed contract moves the Deal only through project_data update_state. Any other project tool call that
-        # names a state, in whatever shape or nesting, is recorded as a wrong-route move and refused.
-        if name.startswith("project.") and name not in PROJECT_READS:
-            states = requested_states(args)
-            if states:
-                return self.wrong_route(name, args, states)
+        # The agreed contract moves the Deal only through project_data update_state. No other tool in the frozen contract
+        # takes a state, so any other call that names one, in whatever shape or nesting, is a wrong-route move.
+        states = requested_states(args)
+        if states:
+            return self.wrong_route(name, args, states)
         if name == "project.update":
             return None, "Use project_data for project updates in this simulation"
         if name in TASK_MUTATIONS:
@@ -297,7 +300,7 @@ class StageSimulator:
             self.memo_edits.append({"turn": self.turn, "tool": name, "input": args})
             return {"ok": True}, None
         if name == "artifact.createTextArtifact":
-            artifact = {"id": str(uuid.uuid4()), "filename": args.get("filename") or args.get("title") or "note.md",
+            artifact = {"id": str(uuid.uuid4()), "filename": str(args.get("filename") or args.get("title") or "note.md"),
                         "kind": "shared_text", "readable": True, "content": args.get("content") or ""}
             self.created.append(artifact)
             return {"artifact": {"id": artifact["id"], "filename": artifact["filename"]}}, None

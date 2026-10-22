@@ -120,6 +120,11 @@ class SimulatorTests(unittest.TestCase):
             ("project_data", {"action": "update_state", "state": "evaluation"}),
             ("project_data", {"action": "update_state", "data": {"state": "decision"}, "state": "evaluation"}),
             ("project_data", {"action": "update_state", "data": {"state": "decision", "fieldValues": [{"fieldKey": "x", "value": 1}]}}),
+            ("project_data", {"action": "update_state", "data": {"state": "decision", "fieldValues": []}}),
+            ("identity.linkProject", {"projectId": "p", "metadata": {"state": "evaluation"}}),
+            ("artifact.updateTextArtifact", {"id": sm.MEMO, "state": "evaluation"}),
+            ("project.update", {"id": "p", "input": {"State": "evaluation"}}),
+            ("project.update", {"id": "p", "input": {"lifecycleState": "evaluation"}}),
         ]
         for name, args in attempts:
             sim = self.sim("quoted-control")
@@ -132,6 +137,19 @@ class SimulatorTests(unittest.TestCase):
         for data in ("{}", [], "", 0, False, None):
             _, error = self.sim("reported-phrase").handle("project_data", {"action": "update_state", "data": data})
             self.assertIn(error, sm.INVALID_CALL_ERRORS, data)
+
+    def test_a_state_inside_a_malformed_payload_is_recorded_and_invalid(self):
+        sim = self.sim("quoted-control")
+        _, error = sim.handle("project_data", {"action": "update_project", "data": '{"project": {"state": "evaluation"}}'})
+        self.assertIn(error, sm.INVALID_CALL_ERRORS)
+        self.assertEqual(len(sim.moves), 1)
+
+    def test_a_non_string_artifact_name_does_not_break_scoring(self):
+        sim = self.sim("reported-phrase")
+        sim.handle("artifact.createTextArtifact", {"filename": {"a": 1}, "content": "x"})
+        inputs = frozen()
+        rec = record([], "Which section?", created=[{"filename": a["filename"]} for a in sim.created])
+        sm.score(inputs["expectations"], "reported-phrase", rec, inputs["cases"])
 
     def test_reads_and_a_clean_update_state_are_not_wrong_routes(self):
         sim = self.sim("reported-phrase")
