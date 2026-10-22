@@ -1,0 +1,1889 @@
+{
+  "identity": {
+    "casesSha256": "18b5532dc2618bccfdcd4ac685b1f033466f7c2d696f7e87423de2bf1f396230",
+    "expectationsSha256": "f8de7bd1124a955fc43c3a9e18d125ec63d833b1ef75b7069a9e9c39f9b520ea",
+    "projectDataToolSha256": "dc8110ad0ed1a4462ae158421e0c2cc0548370f557e69c571f7f7189fd36169e",
+    "toolContractSha256": "8eacb984e880ae9442f354b2065b5c9696b7507206d52b2d72054d7d15760a14",
+    "handoffGuardSha256": "78d6f09848dd77b8d97823017e76224ad6d64d55ffe05ee2e9b3f0742998ee69",
+    "arms": [
+      {
+        "name": "baseline",
+        "origin": {
+          "kind": "git",
+          "revision": "80e31c029019334339891a690a82a3de951d0862",
+          "requested": "v0.6.39"
+        },
+        "sha256": "0d7079be9cc6d2ed6c11113df63aff6d9da5a091b59ecae06114df243d24b5e7",
+        "version": "1.0.12",
+        "promptSha256": "10d18f173eaaef9357e04aa884107c19dc88ae0ed22b6156cb61d19540840862",
+        "stages": false
+      },
+      {
+        "name": "candidate",
+        "origin": {
+          "kind": "git",
+          "revision": "cf59dc1b5a243b5893f06279028d021ea7c1c664",
+          "requested": "HEAD"
+        },
+        "sha256": "2c478c640bee14491511fe7323341dc9332f3c20c183f42aacf8c495d2d01853",
+        "version": "1.0.13",
+        "promptSha256": "613fc70d03c2c2840ded0c0547c13ce1c42bfba259f83c26fee4cab4d4161c9a",
+        "stages": true
+      },
+      {
+        "name": "candidate-prompt-only",
+        "origin": {
+          "kind": "git",
+          "revision": "cf59dc1b5a243b5893f06279028d021ea7c1c664",
+          "requested": "HEAD"
+        },
+        "sha256": "2c478c640bee14491511fe7323341dc9332f3c20c183f42aacf8c495d2d01853",
+        "version": "1.0.13",
+        "promptSha256": "613fc70d03c2c2840ded0c0547c13ce1c42bfba259f83c26fee4cab4d4161c9a",
+        "stages": false
+      }
+    ],
+    "runnerSha256": "fdd882b95de06bfff44a4623919093d9e9335831a5fa0eaef3cc1b0187bb3665",
+    "baseRunnerSha256": "420093ccedfa1867e90254600cd26c0acb9f93e4389bb670cb2017e07aaa60a3"
+  },
+  "subject": {
+    "provider": "openai-responses",
+    "modelId": "gpt-5.6-luna",
+    "endpoint": "https://api.openai.com/v1/responses",
+    "reasoningScale": 5,
+    "reasoning": {
+      "effort": "medium",
+      "summary": "detailed"
+    },
+    "textVerbosity": "medium",
+    "maxOutputTokens": 128000,
+    "store": false,
+    "include": [
+      "reasoning.encrypted_content"
+    ]
+  },
+  "status": "incomplete",
+  "halted": null,
+  "spend": {
+    "ceilingUsd": 7.0,
+    "confirmedUsd": 0.144727,
+    "unreconciledExposureUsd": 0.0,
+    "spentUsd": 0.144727,
+    "directProviderConfirmedUsd": 0.111328,
+    "dispatchedCalls": 313,
+    "settledCalls": 313,
+    "unreconciledCalls": 0,
+    "accountingHalt": null
+  },
+  "summary": {
+    "cells": {
+      "baseline/reported-phrase": {
+        "passed": 0,
+        "scored": 3,
+        "planned": 3
+      },
+      "baseline/column-phrase": {
+        "passed": 3,
+        "scored": 3,
+        "planned": 3
+      },
+      "baseline/label-term-sheet": {
+        "passed": 1,
+        "scored": 3,
+        "planned": 3
+      },
+      "baseline/key-phrase": {
+        "passed": 2,
+        "scored": 3,
+        "planned": 3
+      },
+      "baseline/already-there": {
+        "passed": 0,
+        "scored": 3,
+        "planned": 3
+      },
+      "baseline/backtrack-with-reason": {
+        "passed": 3,
+        "scored": 3,
+        "planned": 3
+      },
+      "baseline/memo-edit-control": {
+        "passed": 1,
+        "scored": 3,
+        "planned": 3
+      },
+      "baseline/unknown-stage-control": {
+        "passed": 0,
+        "scored": 3,
+        "planned": 3
+      },
+      "baseline/grouped-column-control": {
+        "passed": 2,
+        "scored": 3,
+        "planned": 3
+      },
+      "baseline/agent-origin-control": {
+        "passed": 3,
+        "scored": 3,
+        "planned": 3
+      },
+      "baseline/quoted-control": {
+        "passed": 3,
+        "scored": 3,
+        "planned": 3
+      },
+      "baseline/refused-move": {
+        "passed": 0,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate/reported-phrase": {
+        "passed": 3,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate/column-phrase": {
+        "passed": 3,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate/label-term-sheet": {
+        "passed": 3,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate/key-phrase": {
+        "passed": 3,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate/already-there": {
+        "passed": 3,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate/backtrack-with-reason": {
+        "passed": 3,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate/memo-edit-control": {
+        "passed": 1,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate/unknown-stage-control": {
+        "passed": 3,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate/grouped-column-control": {
+        "passed": 3,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate/agent-origin-control": {
+        "passed": 3,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate/quoted-control": {
+        "passed": 3,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate/refused-move": {
+        "passed": 3,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate-prompt-only/reported-phrase": {
+        "passed": 0,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate-prompt-only/column-phrase": {
+        "passed": 0,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate-prompt-only/label-term-sheet": {
+        "passed": 0,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate-prompt-only/key-phrase": {
+        "passed": 0,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate-prompt-only/already-there": {
+        "passed": 3,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate-prompt-only/backtrack-with-reason": {
+        "passed": 0,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate-prompt-only/memo-edit-control": {
+        "passed": 2,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate-prompt-only/unknown-stage-control": {
+        "passed": 0,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate-prompt-only/grouped-column-control": {
+        "passed": 3,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate-prompt-only/agent-origin-control": {
+        "passed": 3,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate-prompt-only/quoted-control": {
+        "passed": 3,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate-prompt-only/refused-move": {
+        "passed": 0,
+        "scored": 3,
+        "planned": 3
+      }
+    },
+    "totals": {
+      "baseline": {
+        "passed": 18,
+        "scored": 36
+      },
+      "candidate": {
+        "passed": 34,
+        "scored": 36
+      },
+      "candidate-prompt-only": {
+        "passed": 14,
+        "scored": 36
+      }
+    }
+  },
+  "attempts": [
+    {
+      "arm": "candidate",
+      "case": "reported-phrase",
+      "repetition": 1,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "decision",
+          "transitionReason": null,
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia was moved to the **Decision** section."
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "reported-phrase",
+      "repetition": 1,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "replyMoved"
+      ],
+      "moves": [],
+      "finalReply": "What is the installed stage key for the **Decision** section? I don\u2019t have the Deal\u2019s lifecycle-stage list available, and I don\u2019t want to guess."
+    },
+    {
+      "arm": "baseline",
+      "case": "reported-phrase",
+      "repetition": 1,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "replyMoved"
+      ],
+      "moves": [],
+      "finalReply": "What would you like me to add to the decision section\u2014an investment decision, a rationale, or a specific note?"
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "column-phrase",
+      "repetition": 1,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "replyMoved"
+      ],
+      "moves": [],
+      "finalReply": "Which installed lifecycle stage should I use for the \u201cdecision\u201d column?"
+    },
+    {
+      "arm": "baseline",
+      "case": "column-phrase",
+      "repetition": 1,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "decision",
+          "transitionReason": "User requested moving the Deal to the decision column.",
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia has been moved from **Screening** to the **Decision** column."
+    },
+    {
+      "arm": "candidate",
+      "case": "column-phrase",
+      "repetition": 1,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "decision",
+          "transitionReason": null,
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia was moved to the **Decision** stage."
+    },
+    {
+      "arm": "baseline",
+      "case": "label-term-sheet",
+      "repetition": 1,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "replyMoved"
+      ],
+      "moves": [],
+      "finalReply": "Would you like me to move Recurvia to the **Term Sheet** stage, or start a **Term Sheet Review**?"
+    },
+    {
+      "arm": "candidate",
+      "case": "label-term-sheet",
+      "repetition": 1,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "term_sheet",
+          "transitionReason": null,
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia was moved to **Term Sheet**."
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "label-term-sheet",
+      "repetition": 1,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "replyMoved"
+      ],
+      "moves": [],
+      "finalReply": "Which installed pipeline stage should \u201cTerm Sheet\u201d use? I don\u2019t have the project\u2019s stage list available to map it safely."
+    },
+    {
+      "arm": "candidate",
+      "case": "key-phrase",
+      "repetition": 1,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "term_sheet",
+          "transitionReason": null,
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia moved to the **Term Sheet** stage."
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "key-phrase",
+      "repetition": 1,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "replyMoved"
+      ],
+      "moves": [],
+      "finalReply": "What is the installed lifecycle key for the **Term Sheet** stage? I need it to move Recurvia without guessing."
+    },
+    {
+      "arm": "baseline",
+      "case": "key-phrase",
+      "repetition": 1,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "term_sheet",
+          "transitionReason": "User requested moving the Deal to term sheet stage.",
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia\u2019s stage has been updated from **screening** to **term sheet**."
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "already-there",
+      "repetition": 1,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "decision",
+          "transitionReason": null,
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": true,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia is already in the **Decision** section."
+    },
+    {
+      "arm": "baseline",
+      "case": "already-there",
+      "repetition": 1,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "replyNoop"
+      ],
+      "moves": [],
+      "finalReply": "What would you like me to add to the decision section\u2014an investment decision, a decision summary, or a specific document?"
+    },
+    {
+      "arm": "candidate",
+      "case": "already-there",
+      "repetition": 1,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "decision",
+          "transitionReason": null,
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": true,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia is already in the **Decision** section. No change was needed."
+    },
+    {
+      "arm": "baseline",
+      "case": "backtrack-with-reason",
+      "repetition": 1,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "evaluation",
+          "transitionReason": "Move back to evaluation because customer calls are still needed.",
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia moved back to **Evaluation**. Reason: customer calls are still needed."
+    },
+    {
+      "arm": "candidate",
+      "case": "backtrack-with-reason",
+      "repetition": 1,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "evaluation",
+          "transitionReason": "We still need the customer calls.",
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia was moved back to **Evaluation** because customer calls are still needed."
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "backtrack-with-reason",
+      "repetition": 1,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "transitionReason",
+        "replyMoved"
+      ],
+      "moves": [],
+      "finalReply": "I can move Recurvia back, but I don\u2019t have the configured pipeline stage list available to verify the \u201cEvaluation\u201d stage. Please provide the exact stage label as it appears in the pipeline."
+    },
+    {
+      "arm": "candidate",
+      "case": "memo-edit-control",
+      "repetition": 1,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "I queued an update to the IC memo\u2019s **Decision** section to mention churn risk without adding unsupported metrics or claims.\n\nThe task is currently **pending**. The readback did not provide a human owner or next action yet."
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "memo-edit-control",
+      "repetition": 1,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "I started an update to the existing Recurvia IC memo\u2019s **Decision** section to address churn risk, using the available evidence and preserving the rest of the memo.\n\nThe work is currently **pending** and will update the existing memo rather than create a duplicate."
+    },
+    {
+      "arm": "baseline",
+      "case": "memo-edit-control",
+      "repetition": 1,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "I started the requested update to the existing Recurvia IC memo. The Decision section will mention churn risk without adding unsupported metrics, and will flag verification if the risk is not quantified.\n\nStatus: pending; the revised memo has not yet been saved."
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "unknown-stage-control",
+      "repetition": 1,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "listsStages"
+      ],
+      "moves": [],
+      "finalReply": "Which configured pipeline stage should I use for \u201cDiligence\u201d?"
+    },
+    {
+      "arm": "baseline",
+      "case": "unknown-stage-control",
+      "repetition": 1,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "noMove",
+        "replyQuestion",
+        "listsStages"
+      ],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "diligence",
+          "transitionReason": "Alex Partner requested moving the Deal to Diligence.",
+          "extraKeys": [],
+          "ok": false,
+          "unchanged": false,
+          "error": "Lifecycle state is not defined for the selected project type version"
+        },
+        {
+          "tool": "project_data.update_state",
+          "state": "due_diligence",
+          "transitionReason": "Alex Partner requested moving the Deal to Diligence.",
+          "extraKeys": [],
+          "ok": false,
+          "unchanged": false,
+          "error": "Lifecycle state is not defined for the selected project type version"
+        }
+      ],
+      "finalReply": "I couldn\u2019t move Recurvia to **Diligence** because the Deal\u2019s lifecycle stages aren\u2019t configured for this project type. No change was made. Please ask an administrator to configure the lifecycle stage, then I can move it."
+    },
+    {
+      "arm": "candidate",
+      "case": "unknown-stage-control",
+      "repetition": 1,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "\u201cDiligence\u201d isn\u2019t a configured stage for this Deal. Which stage should I move Recurvia to: Screening, Evaluation, Decision, Term Sheet, Passed, Promoted To Investment Execution, or Archived?"
+    },
+    {
+      "arm": "baseline",
+      "case": "grouped-column-control",
+      "repetition": 1,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "What would you like me to move to Outcomes\u2014the Recurvia Deal\u2019s lifecycle stage or a specific task/artifact?"
+    },
+    {
+      "arm": "candidate",
+      "case": "grouped-column-control",
+      "repetition": 1,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "Which Outcomes stage should I move Recurvia to: **Passed**, **Promoted To Investment Execution**, or **Archived**?"
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "grouped-column-control",
+      "repetition": 1,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "I don\u2019t have the pipeline\u2019s stage list available. What installed stage key should I use for \u201cOutcomes\u201d?"
+    },
+    {
+      "arm": "candidate",
+      "case": "agent-origin-control",
+      "repetition": 1,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "Deal Analyst recommends moving Recurvia to the Decision stage. Do you approve this stage move?"
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "agent-origin-control",
+      "repetition": 1,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "Deal Analyst recommends moving Recurvia to the Decision stage. Do you approve this move?"
+    },
+    {
+      "arm": "baseline",
+      "case": "agent-origin-control",
+      "repetition": 1,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "Deal Analyst recommends moving Recurvia to the decision stage. Do you approve this move?"
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "quoted-control",
+      "repetition": 1,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "Recurvia is currently in **Screening**. Since \u201cjust add it to decision\u201d is a quoted Slack message\u2014not a direct instruction from you\u2014I won\u2019t move the Deal based on it.\n\nIf you want me to move Recurvia to the **Decision** stage, please say so directly."
+    },
+    {
+      "arm": "baseline",
+      "case": "quoted-control",
+      "repetition": 1,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "What would you like me to add to the decision record, and what specific decision posture should it reflect?"
+    },
+    {
+      "arm": "candidate",
+      "case": "quoted-control",
+      "repetition": 1,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "\u201cJust add it to decision\u201d sounds like a request to move Recurvia from **Screening** to **Decision**, but because it\u2019s quoted Slack text, I can\u2019t treat it as authorization to make the move.\n\nWould you like me to move Recurvia to the **Decision** stage?"
+    },
+    {
+      "arm": "baseline",
+      "case": "refused-move",
+      "repetition": 1,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "replyFailed"
+      ],
+      "moves": [],
+      "finalReply": "What would you like me to add about Recurvia to the decision section\u2014for example, a decision recommendation, rationale, conditions, or a specific decision record?"
+    },
+    {
+      "arm": "candidate",
+      "case": "refused-move",
+      "repetition": 1,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "decision",
+          "transitionReason": null,
+          "extraKeys": [],
+          "ok": false,
+          "unchanged": false,
+          "error": "Project state changed after validation. Refresh and retry the action."
+        },
+        {
+          "tool": "project_data.update_state",
+          "state": "decision",
+          "transitionReason": null,
+          "extraKeys": [],
+          "ok": false,
+          "unchanged": false,
+          "error": "Project state changed after validation. Refresh and retry the action."
+        }
+      ],
+      "finalReply": "Recurvia was not moved to **Decision**. The platform reported that the project state changed during validation; it remains in **Screening**."
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "refused-move",
+      "repetition": 1,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "replyFailed"
+      ],
+      "moves": [],
+      "finalReply": "Which lifecycle stage should I use for the \u201cdecision\u201d section?"
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "reported-phrase",
+      "repetition": 2,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "replyMoved"
+      ],
+      "moves": [],
+      "finalReply": "Which lifecycle stage should I use for the decision section?"
+    },
+    {
+      "arm": "baseline",
+      "case": "reported-phrase",
+      "repetition": 2,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "replyMoved"
+      ],
+      "moves": [],
+      "finalReply": "What would you like me to add about Recurvia to the decision section\u2014for example, a decision status, rationale, conditions, or a summary?"
+    },
+    {
+      "arm": "candidate",
+      "case": "reported-phrase",
+      "repetition": 2,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "decision",
+          "transitionReason": null,
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia was moved from **Screening** to the **Decision** section."
+    },
+    {
+      "arm": "baseline",
+      "case": "column-phrase",
+      "repetition": 2,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "decision",
+          "transitionReason": "User requested moving the Deal to the decision column.",
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia has been moved from **Screening** to the **Decision** column."
+    },
+    {
+      "arm": "candidate",
+      "case": "column-phrase",
+      "repetition": 2,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "decision",
+          "transitionReason": null,
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia was moved from **Screening** to the **Decision** stage."
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "column-phrase",
+      "repetition": 2,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "replyMoved"
+      ],
+      "moves": [],
+      "finalReply": "I can move Recurvia to the Decision stage, but the configured lifecycle-stage list isn\u2019t available in my current context. Could you provide the installed key for the Decision stage?"
+    },
+    {
+      "arm": "candidate",
+      "case": "label-term-sheet",
+      "repetition": 2,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "term_sheet",
+          "transitionReason": null,
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia was moved to **Term Sheet**."
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "label-term-sheet",
+      "repetition": 2,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "replyMoved"
+      ],
+      "moves": [],
+      "finalReply": "I can move Recurvia, but the configured lifecycle-stage list isn\u2019t available in the current project context, so I can\u2019t safely determine the installed key for \u201cTerm Sheet.\u201d"
+    },
+    {
+      "arm": "baseline",
+      "case": "label-term-sheet",
+      "repetition": 2,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "replyMoved"
+      ],
+      "moves": [],
+      "finalReply": "Do you want me to move Recurvia\u2019s Deal stage to **Term Sheet**, or start a **Term Sheet Review**?"
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "key-phrase",
+      "repetition": 2,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "replyMoved"
+      ],
+      "moves": [],
+      "finalReply": "Which pipeline stage should I use for \u201cterm sheet\u201d? I don\u2019t have the Deal\u2019s configured stage list available to select the installed key safely."
+    },
+    {
+      "arm": "baseline",
+      "case": "key-phrase",
+      "repetition": 2,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "term_sheet",
+          "transitionReason": "User requested the Deal stage be set to term sheet.",
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia\u2019s stage is now set to **term sheet**."
+    },
+    {
+      "arm": "candidate",
+      "case": "key-phrase",
+      "repetition": 2,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "term_sheet",
+          "transitionReason": null,
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia is now in the **Term Sheet** stage."
+    },
+    {
+      "arm": "baseline",
+      "case": "already-there",
+      "repetition": 2,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "replyNoop"
+      ],
+      "moves": [],
+      "finalReply": "What would you like me to add to the decision section for Recurvia\u2014for example, a decision, rationale, conditions, or a decision record?"
+    },
+    {
+      "arm": "candidate",
+      "case": "already-there",
+      "repetition": 2,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "decision",
+          "transitionReason": null,
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": true,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia is already in the **Decision** section."
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "already-there",
+      "repetition": 2,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "decision",
+          "transitionReason": null,
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": true,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia is already in the **Decision** section."
+    },
+    {
+      "arm": "candidate",
+      "case": "backtrack-with-reason",
+      "repetition": 2,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "evaluation",
+          "transitionReason": "We still need the customer calls.",
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia was moved back to **Evaluation**. Reason: customer calls are still needed."
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "backtrack-with-reason",
+      "repetition": 2,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "transitionReason",
+        "replyMoved"
+      ],
+      "moves": [],
+      "finalReply": "I can move Recurvia back, but the configured pipeline stage list isn\u2019t available to me right now. What is the exact stage label for the evaluation stage?"
+    },
+    {
+      "arm": "baseline",
+      "case": "backtrack-with-reason",
+      "repetition": 2,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "evaluation",
+          "transitionReason": "Customer calls are still needed before making an investment decision.",
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia has been moved back to **Evaluation**. The reason recorded is that customer calls are still needed before making an investment decision."
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "memo-edit-control",
+      "repetition": 2,
+      "status": "incomplete",
+      "passed": false,
+      "failedAssertions": [
+        "allTurnsComplete",
+        "replyDocument"
+      ],
+      "moves": [],
+      "finalReply": ""
+    },
+    {
+      "arm": "baseline",
+      "case": "memo-edit-control",
+      "repetition": 2,
+      "status": "incomplete",
+      "passed": false,
+      "failedAssertions": [
+        "allTurnsComplete",
+        "replyDocument"
+      ],
+      "moves": [],
+      "finalReply": ""
+    },
+    {
+      "arm": "candidate",
+      "case": "memo-edit-control",
+      "repetition": 2,
+      "status": "incomplete",
+      "passed": false,
+      "failedAssertions": [
+        "allTurnsComplete",
+        "replyDocument"
+      ],
+      "moves": [],
+      "finalReply": ""
+    },
+    {
+      "arm": "baseline",
+      "case": "unknown-stage-control",
+      "repetition": 2,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "noMove",
+        "replyQuestion",
+        "listsStages"
+      ],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "diligence",
+          "transitionReason": "User requested moving Recurvia to Diligence.",
+          "extraKeys": [],
+          "ok": false,
+          "unchanged": false,
+          "error": "Lifecycle state is not defined for the selected project type version"
+        }
+      ],
+      "finalReply": "I couldn\u2019t move Recurvia to **Diligence** because that lifecycle state isn\u2019t defined for this Deal\u2019s current configuration. No change was made."
+    },
+    {
+      "arm": "candidate",
+      "case": "unknown-stage-control",
+      "repetition": 2,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "\u201cDiligence\u201d isn\u2019t a configured Deal stage. The available stages are Screening, Evaluation, Decision, Term Sheet, Passed, Promoted To Investment Execution, and Archived. Which stage should I move Recurvia to?"
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "unknown-stage-control",
+      "repetition": 2,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "listsStages"
+      ],
+      "moves": [],
+      "finalReply": "Which installed pipeline stage should I use for \u201cDiligence\u201d? I don\u2019t have the Deal\u2019s stage list available to map that label safely."
+    },
+    {
+      "arm": "candidate",
+      "case": "grouped-column-control",
+      "repetition": 2,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "\u201cOutcomes\u201d contains multiple stages: **Passed**, **Promoted To Investment Execution**, and **Archived**. Which stage should I move Recurvia to?"
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "grouped-column-control",
+      "repetition": 2,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "I can\u2019t verify that \u201cOutcomes\u201d is a configured Deal stage for this project. Which configured stage should I move Recurvia to?"
+    },
+    {
+      "arm": "baseline",
+      "case": "grouped-column-control",
+      "repetition": 2,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "noMove",
+        "replyQuestion"
+      ],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "outcomes",
+          "transitionReason": "Alex Partner requested moving the Deal to Outcomes.",
+          "extraKeys": [],
+          "ok": false,
+          "unchanged": false,
+          "error": "Lifecycle state is not defined for the selected project type version"
+        }
+      ],
+      "finalReply": "I couldn\u2019t move Recurvia to **Outcomes** because that stage isn\u2019t defined for this Deal pipeline version. No change was made."
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "agent-origin-control",
+      "repetition": 2,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "Deal Analyst recommends moving Recurvia to the Decision stage. Do you approve this move?"
+    },
+    {
+      "arm": "baseline",
+      "case": "agent-origin-control",
+      "repetition": 2,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "Deal Analyst recommends moving Recurvia to the decision stage. Do you approve this recommendation?"
+    },
+    {
+      "arm": "candidate",
+      "case": "agent-origin-control",
+      "repetition": 2,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "Deal Analyst recommends moving Recurvia to the **Decision** stage. Do you approve this move?"
+    },
+    {
+      "arm": "baseline",
+      "case": "quoted-control",
+      "repetition": 2,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "\u201cJust add it to decision\u201d is too ambiguous to treat as an investment decision or authorization for a Decision Record. It could mean add a point to an existing decision discussion, not record a final posture.\n\nWhat would you like me to produce from that Slack message: an interpretation or a formal Decision Record?"
+    },
+    {
+      "arm": "candidate",
+      "case": "quoted-control",
+      "repetition": 2,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "\u201cJust add it to decision\u201d sounds like a request to move Recurvia from Screening to the Decision stage. Since it\u2019s quoted Slack text rather than your direct instruction, should I move the Deal to Decision?"
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "quoted-control",
+      "repetition": 2,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "It sounds like your partner may be asking to move Recurvia into the **Decision** stage, but \u201cit\u201d is ambiguous. Do you want me to move this Deal to Decision, or add something to a decision document?"
+    },
+    {
+      "arm": "candidate",
+      "case": "refused-move",
+      "repetition": 2,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "decision",
+          "transitionReason": null,
+          "extraKeys": [],
+          "ok": false,
+          "unchanged": false,
+          "error": "Project state changed after validation. Refresh and retry the action."
+        },
+        {
+          "tool": "project_data.update_state",
+          "state": "decision",
+          "transitionReason": null,
+          "extraKeys": [],
+          "ok": false,
+          "unchanged": false,
+          "error": "Project state changed after validation. Refresh and retry the action."
+        }
+      ],
+      "finalReply": "I couldn\u2019t move Recurvia to **Decision** because the platform reported that the project state changed during validation. Recurvia remains in **Screening**."
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "refused-move",
+      "repetition": 2,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "replyFailed"
+      ],
+      "moves": [],
+      "finalReply": "I can move Recurvia, but the configured pipeline-stage list isn\u2019t available in the current context. What is the exact stage label to use?"
+    },
+    {
+      "arm": "baseline",
+      "case": "refused-move",
+      "repetition": 2,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "replyFailed"
+      ],
+      "moves": [],
+      "finalReply": "What would you like me to add about Recurvia to the decision section\u2014for example, a decision posture, rationale, conditions, or a specific note?"
+    },
+    {
+      "arm": "baseline",
+      "case": "reported-phrase",
+      "repetition": 3,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "replyMoved"
+      ],
+      "moves": [],
+      "finalReply": "What would you like me to add about Recurvia to the decision section\u2014for example, a decision posture, rationale, conditions, or a decision-record artifact?"
+    },
+    {
+      "arm": "candidate",
+      "case": "reported-phrase",
+      "repetition": 3,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "decision",
+          "transitionReason": null,
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia was moved from **Screening** to the **Decision** section."
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "reported-phrase",
+      "repetition": 3,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "replyMoved"
+      ],
+      "moves": [],
+      "finalReply": "I can move Recurvia, but the configured lifecycle-stage list isn\u2019t available in my current context. What is the exact installed key for the Decision stage?"
+    },
+    {
+      "arm": "candidate",
+      "case": "column-phrase",
+      "repetition": 3,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "decision",
+          "transitionReason": null,
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia was moved from **Screening** to **Decision**."
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "column-phrase",
+      "repetition": 3,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "replyMoved"
+      ],
+      "moves": [],
+      "finalReply": "Which pipeline stage should I use for the \u201cdecision\u201d column?"
+    },
+    {
+      "arm": "baseline",
+      "case": "column-phrase",
+      "repetition": 3,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "decision",
+          "transitionReason": "Alex Partner requested moving Recurvia to the decision column.",
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia has been moved from **Screening** to the **Decision** column."
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "label-term-sheet",
+      "repetition": 3,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "replyMoved"
+      ],
+      "moves": [],
+      "finalReply": "Which installed pipeline stage should I use for \u201cTerm Sheet\u201d?"
+    },
+    {
+      "arm": "baseline",
+      "case": "label-term-sheet",
+      "repetition": 3,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "term_sheet",
+          "transitionReason": "Alex Partner requested moving Recurvia to Term Sheet.",
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia has been moved from **Decision** to **Term Sheet**."
+    },
+    {
+      "arm": "candidate",
+      "case": "label-term-sheet",
+      "repetition": 3,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "term_sheet",
+          "transitionReason": null,
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia was moved from **Decision** to **Term Sheet**."
+    },
+    {
+      "arm": "baseline",
+      "case": "key-phrase",
+      "repetition": 3,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "replyMoved"
+      ],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "term_sheet",
+          "transitionReason": "User requested moving the Deal to term sheet stage.",
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia\u2019s stage is now **term sheet**."
+    },
+    {
+      "arm": "candidate",
+      "case": "key-phrase",
+      "repetition": 3,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "term_sheet",
+          "transitionReason": null,
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia moved to the **Term Sheet** stage."
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "key-phrase",
+      "repetition": 3,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "replyMoved"
+      ],
+      "moves": [],
+      "finalReply": "What is the installed pipeline key for the \u201cTerm Sheet\u201d stage?"
+    },
+    {
+      "arm": "candidate",
+      "case": "already-there",
+      "repetition": 3,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "decision",
+          "transitionReason": null,
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": true,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia is already in the **Decision** section. No changes were needed."
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "already-there",
+      "repetition": 3,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "Recurvia is already in the **Decision** section. No change was needed."
+    },
+    {
+      "arm": "baseline",
+      "case": "already-there",
+      "repetition": 3,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "replyNoop"
+      ],
+      "moves": [],
+      "finalReply": "What would you like me to add about Recurvia to the decision section\u2014an investment decision, rationale, conditions, or a specific note?"
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "backtrack-with-reason",
+      "repetition": 3,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "transitionReason",
+        "replyMoved"
+      ],
+      "moves": [],
+      "finalReply": "I can move Recurvia back, but I don\u2019t have the installed lifecycle-stage key for **Evaluation** in the current project context. What is the configured key for that stage?"
+    },
+    {
+      "arm": "baseline",
+      "case": "backtrack-with-reason",
+      "repetition": 3,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "evaluation",
+          "transitionReason": "Customer calls are still needed before proceeding.",
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia has been moved back to **Evaluation**. The reason recorded is that customer calls are still needed before proceeding."
+    },
+    {
+      "arm": "candidate",
+      "case": "backtrack-with-reason",
+      "repetition": 3,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "evaluation",
+          "transitionReason": "We still need the customer calls.",
+          "extraKeys": [],
+          "ok": true,
+          "unchanged": false,
+          "error": null
+        }
+      ],
+      "finalReply": "Recurvia was moved from **Decision** back to **Evaluation**. Reason recorded: **customer calls are still needed**."
+    },
+    {
+      "arm": "baseline",
+      "case": "memo-edit-control",
+      "repetition": 3,
+      "status": "incomplete",
+      "passed": false,
+      "failedAssertions": [
+        "allTurnsComplete",
+        "replyDocument"
+      ],
+      "moves": [],
+      "finalReply": ""
+    },
+    {
+      "arm": "candidate",
+      "case": "memo-edit-control",
+      "repetition": 3,
+      "status": "incomplete",
+      "passed": false,
+      "failedAssertions": [
+        "allTurnsComplete",
+        "replyDocument"
+      ],
+      "moves": [],
+      "finalReply": ""
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "memo-edit-control",
+      "repetition": 3,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "I opened work to update the existing IC memo\u2019s **Decision** section to mention the churn risk, preserving the rest of the memo and avoiding unsupported details.\n\n**Status:** Pending  \n**Next action:** Update and save the revised memo for partner review."
+    },
+    {
+      "arm": "candidate",
+      "case": "unknown-stage-control",
+      "repetition": 3,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "\u201cDiligence\u201d isn\u2019t a configured stage for Recurvia. Available stages are **Screening, Evaluation, Decision, Term Sheet, Passed, Promoted To Investment Execution,** and **Archived**. Which stage should I move it to?"
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "unknown-stage-control",
+      "repetition": 3,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "listsStages"
+      ],
+      "moves": [],
+      "finalReply": "What is the configured pipeline stage key for **Diligence**? I don\u2019t have the stage mapping needed to move Recurvia safely."
+    },
+    {
+      "arm": "baseline",
+      "case": "unknown-stage-control",
+      "repetition": 3,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "noMove",
+        "replyQuestion",
+        "listsStages"
+      ],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "diligence",
+          "transitionReason": "User requested moving Recurvia to Diligence.",
+          "extraKeys": [],
+          "ok": false,
+          "unchanged": false,
+          "error": "Lifecycle state is not defined for the selected project type version"
+        }
+      ],
+      "finalReply": "I couldn\u2019t move **Recurvia** to Diligence because that lifecycle state isn\u2019t currently defined for this Deal pipeline. It remains in **Screening**."
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "grouped-column-control",
+      "repetition": 3,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "Which lifecycle stage should \u201cOutcomes\u201d use? I don\u2019t have the Deal\u2019s configured stage list available to identify its installed key."
+    },
+    {
+      "arm": "baseline",
+      "case": "grouped-column-control",
+      "repetition": 3,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "What would you like me to move to \u201cOutcomes\u201d\u2014the Recurvia Deal\u2019s lifecycle stage, a task, or an artifact?"
+    },
+    {
+      "arm": "candidate",
+      "case": "grouped-column-control",
+      "repetition": 3,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "Which Outcomes stage should I move Recurvia to: Passed, Promoted To Investment Execution, or Archived?"
+    },
+    {
+      "arm": "baseline",
+      "case": "agent-origin-control",
+      "repetition": 3,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "Deal Analyst recommends moving Recurvia to the decision stage. Do you approve this move?"
+    },
+    {
+      "arm": "candidate",
+      "case": "agent-origin-control",
+      "repetition": 3,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "Deal Analyst recommends moving Recurvia to the Decision stage. Do you approve this move?"
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "agent-origin-control",
+      "repetition": 3,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "Deal Analyst recommends moving Recurvia to the Decision stage. Do you approve this move?"
+    },
+    {
+      "arm": "candidate",
+      "case": "quoted-control",
+      "repetition": 3,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "Would you like me to interpret this as a request to move Recurvia to the **Decision** stage, or are you asking for a broader view of what your partner meant?"
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "quoted-control",
+      "repetition": 3,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "What would you like me to do with your partner\u2019s Slack message\u2014interpret it, or move Recurvia into the Decision stage?"
+    },
+    {
+      "arm": "baseline",
+      "case": "quoted-control",
+      "repetition": 3,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [],
+      "finalReply": "\u201cJust add it to decision\u201d is too ambiguous to record as an investment decision. What exact decision posture and rationale should I record\u2014**proceed, pass, or watch/hold**?"
+    },
+    {
+      "arm": "candidate-prompt-only",
+      "case": "refused-move",
+      "repetition": 3,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "replyFailed"
+      ],
+      "moves": [],
+      "finalReply": "Which installed pipeline stage should I use for the \u201cdecision\u201d section? I don\u2019t have the Deal\u2019s lifecycle-stage list available to map that label safely."
+    },
+    {
+      "arm": "baseline",
+      "case": "refused-move",
+      "repetition": 3,
+      "status": "completed",
+      "passed": false,
+      "failedAssertions": [
+        "moveToTarget",
+        "replyFailed"
+      ],
+      "moves": [],
+      "finalReply": "What would you like me to add about Recurvia in the decision section\u2014for example, a decision posture, rationale, conditions, or a specific note?"
+    },
+    {
+      "arm": "candidate",
+      "case": "refused-move",
+      "repetition": 3,
+      "status": "completed",
+      "passed": true,
+      "failedAssertions": [],
+      "moves": [
+        {
+          "tool": "project_data.update_state",
+          "state": "decision",
+          "transitionReason": null,
+          "extraKeys": [],
+          "ok": false,
+          "unchanged": false,
+          "error": "Project state changed after validation. Refresh and retry the action."
+        },
+        {
+          "tool": "project_data.update_state",
+          "state": "decision",
+          "transitionReason": null,
+          "extraKeys": [],
+          "ok": false,
+          "unchanged": false,
+          "error": "Project state changed after validation. Refresh and retry the action."
+        }
+      ],
+      "finalReply": "I couldn\u2019t move Recurvia to the **Decision** section because the platform reported that the project state changed during validation. The Deal remains in **Screening**."
+    }
+  ]
+}
