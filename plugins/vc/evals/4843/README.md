@@ -59,7 +59,7 @@ Recorded run on 2026-10-22, runner at `cf59dc1`, 3 repetitions per case and arm,
 
 Memo-edit rerun (runner at `d6b1e4e`, step limit raised from 8 to 20; Platform's default chat
 budget is 50): `memo-edit-control` passed 3/3 in every arm, completed, with no stage move ($0.052).
-Five replies say the memo edit task was started; four say the memo text did not change, because the
+Four replies say the memo edit task was started; five say the memo text did not change, because the
 simulator does not apply text edits and the agent reported the unchanged readback honestly.
 
 Saved records with every final reply: `runs/run2/` (the table above) and `runs/memo-rerun/`.
