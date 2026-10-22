@@ -49,6 +49,8 @@ ARTIFACT_EDITS = {"artifact.updateTextArtifact", "artifact.replaceTextRange", "a
 UNDEFINED_STATE_ERROR = "Lifecycle state is not defined for the selected project type version"
 BACKWARD_ERROR = "A backward lifecycle transition requires transitionReason"
 PROMOTION_ERROR = "Promotion to investment execution requires its promotion requirements"
+WRONG_ROUTE_ERROR = "Lifecycle moves use project_data update_state in this simulation"
+STAGE_MOVE_TOOL = "project_data.update_state"
 DEFAULT_MAX_WALL_MINUTES = 60
 MEMO = "55555555-5555-4555-8555-555555555555"
 
@@ -221,7 +223,7 @@ class StageSimulator:
                 return None, "Typed field writes are outside this simulation"
             if data.get("state") is None:
                 return None, "update_state requires fieldValues and/or state"
-            return self.move("project_data.update_state", data)
+            return self.move(STAGE_MOVE_TOOL, data)
         if action == "update_project":
             return None, "Project metadata updates are outside this simulation"
         return None, "Action outside the simulated stage-move scope"
@@ -230,9 +232,15 @@ class StageSimulator:
         if name == "project_data":
             return self.project_data(args)
         if name == "project.update":
+            # The agreed contract moves the Deal only through project_data update_state. A state change sent here is
+            # recorded as a wrong-route move with its full payload and refused, so the scorer can fail it.
             data = args.get("data") if isinstance(args.get("data"), dict) else args
             if data.get("state") is not None:
-                return self.move("project.update", {k: v for k, v in data.items() if k in {"state", "transitionReason"}})
+                self.moves.append({"turn": self.turn, "tool": "project.update", "state": data.get("state"),
+                                   "transitionReason": data.get("transitionReason"),
+                                   "extraKeys": sorted(set(data) - {"state", "transitionReason"}), "ok": False,
+                                   "error": WRONG_ROUTE_ERROR, "unchanged": False})
+                return None, WRONG_ROUTE_ERROR
             return None, "Use project_data for project updates in this simulation"
         if name in TASK_MUTATIONS:
             self.tasks.append({"turn": self.turn, "input": args})
@@ -433,7 +441,7 @@ def score(expectations: dict, case_id: str, record: dict, cases: dict) -> dict:
     if target == "none":
         assertions["noMove"] = not moves
     else:
-        tries = [m for m in moves if m["state"] == target and not m["extraKeys"]]
+        tries = [m for m in moves if m["tool"] == STAGE_MOVE_TOOL and m["state"] == target and not m["extraKeys"]]
         other = [m for m in moves if m not in tries]
         if expect.get("moveOptional"):
             assertions["moveToTarget"] = not other and len(tries) <= 1

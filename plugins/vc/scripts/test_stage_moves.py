@@ -100,10 +100,12 @@ class SimulatorTests(unittest.TestCase):
         sim = self.sim("reported-phrase")
         sim.project_data({"action": "update_state", "data": {"fieldValues": [{"fieldKey": "fund_id", "value": "x"}]}})
         sim.handle("task-management.createTask", {"title": "t"})
-        sim.handle("project.update", {"id": "p", "data": {"state": "decision"}})
+        _, error = sim.handle("project.update", {"id": "p", "data": {"state": "decision", "name": "x"}})
         self.assertEqual(len(sim.field_writes), 1)
         self.assertEqual(len(sim.tasks), 1)
-        self.assertEqual(sim.moves[-1]["tool"], "project.update")
+        self.assertEqual(error, sm.WRONG_ROUTE_ERROR)
+        self.assertEqual(sim.state, "screening")
+        self.assertEqual((sim.moves[-1]["tool"], sim.moves[-1]["extraKeys"]), ("project.update", ["name"]))
 
 
 class ContextTests(unittest.TestCase):
@@ -142,6 +144,12 @@ class ScoringTests(unittest.TestCase):
         asked = self.score("reported-phrase", record([], "Which decision section do you mean?"))
         self.assertFalse(asked["passed"])
         self.assertFalse(asked["assertions"]["moveToTarget"])
+
+    def test_a_move_through_the_wrong_tool_or_with_extra_keys_fails(self):
+        wrong = {**move("decision"), "tool": "project.update"}
+        self.assertFalse(self.score("reported-phrase", record([wrong], "Recurvia is now in Decision."))["passed"])
+        extra = {**move("decision"), "extraKeys": ["fieldValues"]}
+        self.assertFalse(self.score("reported-phrase", record([extra], "Recurvia is now in Decision."))["passed"])
 
     def test_a_planned_or_negated_move_is_not_a_claim(self):
         self.assertFalse(sm.claims_move("I will move it to Decision once you confirm."))
