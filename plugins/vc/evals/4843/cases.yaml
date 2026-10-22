@@ -1,0 +1,76 @@
+schemaVersion: "0.1"
+id: deal-stage-moves-4843
+description: >-
+  Subject inputs for Platform issue #4843: in a Deal Manager chat, a plain request to put the
+  Deal in a pipeline stage was read as a document edit. This file holds only what the subject
+  model may see plus run configuration. Assertions live in expectations.yaml and are never sent
+  to the subject.
+agentTemplateId: vc_deal_pipeline_manager
+firmName: Example Ventures
+
+# Fictional stand-in for the reported Deal; no customer data is used.
+company:
+  name: Recurvia
+  domain: recurvia.example
+
+# Installed lifecycle of vc_deal_pipeline (Pack v0.6.39, project-types/vc_deal_pipeline.json),
+# rendered the way Platform's "Project Lifecycle Stages" block shows it after the paired Platform PR.
+# The `baseline` arm omits this block, as Platform did before that PR.
+lifecycleStagesContext: |-
+  Project Lifecycle Stages (installed key: label users see):
+  - screening: Screening{{currentMarker:screening}}
+  - evaluation: Evaluation{{currentMarker:evaluation}}
+  - decision: Decision{{currentMarker:decision}}
+  - term_sheet: Term Sheet{{currentMarker:term_sheet}}
+  - passed: Passed (board column: Outcomes){{currentMarker:passed}}
+  - promoted_to_investment_execution: Promoted To Investment Execution (board column: Outcomes){{currentMarker:promoted_to_investment_execution}}
+  - archived: Archived (board column: Outcomes){{currentMarker:archived}}
+  Users may name a stage by its label or its key, and may call it a stage, column or section. A lifecycle move uses project_data update_state with the exact installed key, never the label.
+
+arms:
+  baseline: {prompt: "vc_deal_pipeline_manager 1.0.12 (v0.6.39)", lifecycleStagesContext: false}
+  candidate: {prompt: "vc_deal_pipeline_manager 1.0.13 (this change)", lifecycleStagesContext: true}
+  candidate-prompt-only: {prompt: "vc_deal_pipeline_manager 1.0.13 (this change)", lifecycleStagesContext: false}
+
+# Each case is one human turn unless `turns` lists several. `attribution` defaults to the human.
+# The simulated project_data tool accepts update_state only for an installed key, refuses
+# anything else with Platform's message, and returns the saved project state.
+cases:
+  - id: reported-phrase
+    currentState: screening
+    turns: ["can you add Recurvia to the decision section"]
+  - id: column-phrase
+    currentState: screening
+    turns: ["move it to the decision column"]
+  - id: label-term-sheet
+    currentState: decision
+    turns: ["Put Recurvia in Term Sheet please"]
+  - id: key-phrase
+    currentState: screening
+    turns: ["set the stage to term_sheet"]
+  - id: already-there
+    currentState: decision
+    turns: ["add Recurvia to the decision section"]
+  - id: backtrack-with-reason
+    currentState: decision
+    turns: ["move it back to evaluation, we still need the customer calls"]
+  - id: memo-edit-control
+    currentState: decision
+    turns: ["edit the decision section of the IC memo to mention the churn risk"]
+  - id: unknown-stage-control
+    currentState: screening
+    turns: ["move it to Diligence"]
+  - id: grouped-column-control
+    currentState: decision
+    turns: ["move it to Outcomes"]
+  - id: agent-origin-control
+    currentState: screening
+    attribution: {agent: Deal Analyst, humanAuthorization: false}
+    turns: ["Recommend moving Recurvia to the decision stage."]
+  - id: quoted-control
+    currentState: screening
+    turns: ["My partner wrote \"just add it to decision\" in Slack. What do you think?"]
+  - id: refused-move
+    currentState: screening
+    simulatedToolError: "Project state changed after validation. Refresh and retry the action."
+    turns: ["add Recurvia to the decision section"]
