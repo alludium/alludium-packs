@@ -16,6 +16,10 @@ company:
 # Installed lifecycle of vc_deal_pipeline (Pack v0.6.39, project-types/vc_deal_pipeline.json),
 # rendered the way Platform's "Project Lifecycle Stages" block shows it after the paired Platform PR.
 # The `baseline` arm omits this block, as Platform did before that PR.
+# Platform's "Project Lifecycle Stages" block for the installed vc_deal_pipeline lifecycle, verbatim
+# from the paired Platform PR (prompt.service.ts). {{currentMarker:<key>}} renders " [current]" for
+# the case's current state and "" otherwise. Arms without `+stages` omit the block, as Platform did
+# before that PR.
 lifecycleStagesContext: |-
   Project Lifecycle Stages (installed key: label users see):
   - screening: Screening{{currentMarker:screening}}
@@ -25,12 +29,30 @@ lifecycleStagesContext: |-
   - passed: Passed (board column: Outcomes){{currentMarker:passed}}
   - promoted_to_investment_execution: Promoted To Investment Execution (board column: Outcomes){{currentMarker:promoted_to_investment_execution}}
   - archived: Archived (board column: Outcomes){{currentMarker:archived}}
-  Users may name a stage by its label or its key, and may call it a stage, column or section. A lifecycle move uses project_data update_state with the exact installed key, never the label.
+  A lifecycle move uses project_data update_state with the exact installed key, never the label. [current] reflects the start of this turn; the update_state result is authoritative.
 
-arms:
-  baseline: {prompt: "vc_deal_pipeline_manager 1.0.12 (v0.6.39)", lifecycleStagesContext: false}
-  candidate: {prompt: "vc_deal_pipeline_manager 1.0.13 (this change)", lifecycleStagesContext: true}
-  candidate-prompt-only: {prompt: "vc_deal_pipeline_manager 1.0.13 (this change)", lifecycleStagesContext: false}
+# Installed lifecycle order (Pack v0.6.39 project-types/vc_deal_pipeline.json). A move to an earlier
+# stage needs transitionReason; promotion has its own requirements and is refused here.
+lifecycleStates: [screening, evaluation, decision, term_sheet, passed, promoted_to_investment_execution, archived]
+backwardTransitions:
+  - {from: evaluation, to: screening}
+  - {from: decision, to: evaluation}
+  - {from: term_sheet, to: decision}
+
+# A readable IC memo, so the memo-edit control can be handled as a document edit.
+icMemo:
+  filename: recurvia-ic-memo.md
+  content: |-
+    # Recurvia IC memo
+    ## Summary
+    Recurvia sells revenue-recovery software to mid-market SaaS companies.
+    ## Decision
+    Recommendation pending partner review.
+
+# Arms are chosen on the command line (see README.md). The recommended set:
+#   baseline=v0.6.39               template 1.0.12, no stage block (what users had)
+#   candidate=HEAD+stages          template 1.0.13 with the Platform stage block (this change)
+#   candidate-prompt-only=HEAD     template 1.0.13 without the stage block (Pack shipped before Platform)
 
 # Each case is one human turn unless `turns` lists several. `attribution` defaults to the human.
 # The simulated project_data tool accepts update_state only for an installed key, refuses
@@ -74,3 +96,37 @@ cases:
     currentState: screening
     simulatedToolError: "Project state changed after validation. Refresh and retry the action."
     turns: ["add Recurvia to the decision section"]
+
+run:
+  subject:
+    provider: openai-responses
+    modelId: gpt-5.6-luna
+    endpoint: https://api.openai.com/v1/responses
+    # Same frozen Platform-equivalent Luna settings as the #4449 and #4308 comparisons.
+    reasoningScale: 5
+    reasoning: {effort: medium, summary: detailed}
+    textVerbosity: medium
+    maxOutputTokens: 128000
+    store: false
+    include: [reasoning.encrypted_content]
+  repetitions: 3
+  limits:
+    maxStepsPerTurn: 8
+    callTimeoutSeconds: 300
+    attemptWallClockSeconds: 900
+    maxConsecutiveProviderErrors: 3
+  prices:
+    enforcementBasis: platformBillable
+    platformBillable:
+      source: Platform config/llm_pricing.json @ a387b635 (1.3x markup), copied from evals/4449/cases.yaml.
+      usdPerMillionTokens:
+        gpt-5.6-luna:
+          {input: 0.26, cachedInput: 0.026, output: 1.56,
+           longContext: {aboveInputTokens: 272000, input: 0.52, cachedInput: 0.052, output: 2.34}}
+    directProviderList:
+      source: OpenAI API pricing, copied from evals/4449/cases.yaml.
+      usdPerMillionTokens:
+        gpt-5.6-luna:
+          {input: 0.20, cachedInput: 0.02, output: 1.20,
+           longContext: {aboveInputTokens: 272000, input: 0.40, cachedInput: 0.04, output: 1.80}}
+  proposedCeilingUsd: 8

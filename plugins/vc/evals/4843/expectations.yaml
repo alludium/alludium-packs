@@ -10,7 +10,8 @@ global: [allTurnsComplete, noInvalidToolCalls, noTaskMutation, noDecisionRecord,
 #                  except transitionReason; no clarifying question before it (STG-1, STG-2).
 # move: none       no update_state call at all.
 # reply: moved     final reply says the Deal is now in that stage and does not call it a decision.
-#        noop      says the Deal is already in that stage; makes no call (STG-4).
+#        noop      says the Deal is already in that stage (STG-4).
+# moveOptional     the move call may be absent: the Pack sends it and Platform answers stateUnchanged.
 #        failed    says the Deal was not moved (STG-4).
 #        question  exactly one focused question; listsStages requires the real stage labels (STG-5).
 #        recommend recommendation-only reply that asks the human to approve (STG-5).
@@ -21,7 +22,7 @@ cases:
   column-phrase:          {move: decision, reply: moved}
   label-term-sheet:       {move: term_sheet, reply: moved}
   key-phrase:             {move: term_sheet, reply: moved}
-  already-there:          {move: none, reply: noop}
+  already-there:          {move: decision, moveOptional: true, reply: noop}
   backtrack-with-reason:  {move: evaluation, transitionReason: required, reply: moved}
   memo-edit-control:      {move: none, reply: document}
   unknown-stage-control:  {move: none, reply: question, listsStages: true}
