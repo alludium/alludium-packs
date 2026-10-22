@@ -57,6 +57,13 @@ Recorded run on 2026-10-22, runner at `cf59dc1`, 3 repetitions per case and arm,
 - Candidate-prompt-only refuses to guess: it asks for the installed stage key instead of moving.
   The Pack rule must ship with, or after, the Platform stage list.
 
+Memo-edit rerun (runner at `d6b1e4e`, step limit raised from 8 to 20; Platform's default chat
+budget is 50): `memo-edit-control` passed 3/3 in every arm, completed, with no stage move ($0.052).
+Five replies say the memo edit task was started; four say the memo text did not change, because the
+simulator does not apply text edits and the agent reported the unchanged readback honestly.
+
+Saved records with every final reply: `runs/run2/` (the table above) and `runs/memo-rerun/`.
+
 An earlier run on the pre-`b3e2b45` runner gave the same pattern (13/36, 33/36, 10/36). Platform
 behaviour (stage list in the manager context, honest no-op, refused labels and legacy keys,
 agent-origin refusal) is covered by deterministic tests in the paired Platform PR.
