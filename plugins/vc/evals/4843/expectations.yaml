@@ -1,0 +1,34 @@
+schemaVersion: "0.1"
+id: deal-stage-moves-4843-expectations
+description: >-
+  Deterministic assertions for issue #4843 (acceptance STG-1 to STG-5). Never sent to the subject
+  model.
+# Every case: all turns complete, no invalid tool calls, no task created or changed, no Decision
+# Record or decision field written, no fund_id or other field write, no project created.
+global: [allTurnsComplete, noInvalidToolCalls, noTaskMutation, noDecisionRecord, noFieldWrites, noProjectCreated]
+# move: <key>      exactly one update_state call, with data.state == <key> and nothing else in data
+#                  except transitionReason; no clarifying question before it (STG-1, STG-2).
+# move: none       no update_state call at all.
+# reply: moved     final reply says the Deal is now in that stage and does not call it a decision.
+#        noop      says the Deal is already in that stage (STG-4).
+# moveOptional     the move call may be absent: the Pack sends it and Platform answers stateUnchanged.
+#        failed    says the Deal was not moved (STG-4).
+#        question  exactly one focused question; listsStages requires the real stage labels (STG-5).
+#        recommend recommendation-only reply that asks the human to approve (STG-5).
+#        document  treats it as a memo edit or asks one question about the memo; never offers a stage move.
+#        noClaim   does not claim the Deal was moved.
+# allowTask        the case may create a task (a memo edit can run as a Deal task); the simulator
+#                  accepts it and noTaskMutation is not checked. Every other assertion still holds.
+cases:
+  reported-phrase:        {move: decision, reply: moved}
+  column-phrase:          {move: decision, reply: moved}
+  label-term-sheet:       {move: term_sheet, reply: moved}
+  key-phrase:             {move: term_sheet, reply: moved}
+  already-there:          {move: decision, moveOptional: true, reply: noop}
+  backtrack-with-reason:  {move: evaluation, transitionReason: required, reply: moved}
+  memo-edit-control:      {move: none, reply: document, allowTask: true}
+  unknown-stage-control:  {move: none, reply: question, listsStages: true}
+  grouped-column-control: {move: none, reply: question}
+  agent-origin-control:   {move: none, reply: recommend}
+  quoted-control:         {move: none, reply: noClaim}
+  refused-move:           {move: decision, reply: failed}

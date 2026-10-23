@@ -1,0 +1,2068 @@
+{
+  "startedAt": "2026-10-22T17:11:08.979742+00:00",
+  "status": "completed",
+  "identity": {
+    "casesSha256": "1fe9d8852546289a577ea438fac29ac32f79619470aa2db9eb67e0afa214fee4",
+    "expectationsSha256": "f8de7bd1124a955fc43c3a9e18d125ec63d833b1ef75b7069a9e9c39f9b520ea",
+    "projectDataToolSha256": "dc8110ad0ed1a4462ae158421e0c2cc0548370f557e69c571f7f7189fd36169e",
+    "toolContractSha256": "8eacb984e880ae9442f354b2065b5c9696b7507206d52b2d72054d7d15760a14",
+    "handoffGuardSha256": "78d6f09848dd77b8d97823017e76224ad6d64d55ffe05ee2e9b3f0742998ee69",
+    "arms": [
+      {
+        "name": "baseline",
+        "origin": {
+          "kind": "git",
+          "revision": "80e31c029019334339891a690a82a3de951d0862",
+          "requested": "v0.6.39"
+        },
+        "sha256": "0d7079be9cc6d2ed6c11113df63aff6d9da5a091b59ecae06114df243d24b5e7",
+        "version": "1.0.12",
+        "promptSha256": "10d18f173eaaef9357e04aa884107c19dc88ae0ed22b6156cb61d19540840862",
+        "stages": false
+      },
+      {
+        "name": "candidate",
+        "origin": {
+          "kind": "git",
+          "revision": "d6b1e4ecb3e598b94bf9643d4fab04704da465ed",
+          "requested": "HEAD"
+        },
+        "sha256": "2c478c640bee14491511fe7323341dc9332f3c20c183f42aacf8c495d2d01853",
+        "version": "1.0.13",
+        "promptSha256": "613fc70d03c2c2840ded0c0547c13ce1c42bfba259f83c26fee4cab4d4161c9a",
+        "stages": true
+      },
+      {
+        "name": "candidate-prompt-only",
+        "origin": {
+          "kind": "git",
+          "revision": "d6b1e4ecb3e598b94bf9643d4fab04704da465ed",
+          "requested": "HEAD"
+        },
+        "sha256": "2c478c640bee14491511fe7323341dc9332f3c20c183f42aacf8c495d2d01853",
+        "version": "1.0.13",
+        "promptSha256": "613fc70d03c2c2840ded0c0547c13ce1c42bfba259f83c26fee4cab4d4161c9a",
+        "stages": false
+      }
+    ],
+    "runnerSha256": "fdd882b95de06bfff44a4623919093d9e9335831a5fa0eaef3cc1b0187bb3665",
+    "baseRunnerSha256": "420093ccedfa1867e90254600cd26c0acb9f93e4389bb670cb2017e07aaa60a3"
+  },
+  "subject": {
+    "provider": "openai-responses",
+    "modelId": "gpt-5.6-luna",
+    "endpoint": "https://api.openai.com/v1/responses",
+    "reasoningScale": 5,
+    "reasoning": {
+      "effort": "medium",
+      "summary": "detailed"
+    },
+    "textVerbosity": "medium",
+    "maxOutputTokens": 128000,
+    "store": false,
+    "include": [
+      "reasoning.encrypted_content"
+    ]
+  },
+  "limits": {
+    "maxStepsPerTurn": 20,
+    "callTimeoutSeconds": 300,
+    "attemptWallClockSeconds": 900,
+    "maxConsecutiveProviderErrors": 3
+  },
+  "ceilingUsd": 1.0,
+  "pid": 70137,
+  "maxWallMinutes": 60.0,
+  "armNames": [
+    "baseline",
+    "candidate",
+    "candidate-prompt-only"
+  ],
+  "caseIds": [
+    "memo-edit-control"
+  ],
+  "scope": "prompt-tool-choice-with-simulated-platform-tools",
+  "records": [
+    {
+      "index": 1,
+      "case": "memo-edit-control",
+      "arm": "candidate",
+      "repetition": 1,
+      "folder": "attempts/001-memo-edit-control--candidate--r1",
+      "status": "completed",
+      "turns": [
+        {
+          "index": 0,
+          "userText": "edit the decision section of the IC memo to mention the churn risk",
+          "calls": [
+            {
+              "name": "project_data",
+              "input": {
+                "action": "read"
+              },
+              "error": null,
+              "step": 0,
+              "callId": "call_jCqQsI8YHPbdyoveBni5sKjH"
+            },
+            {
+              "name": "project-task.listByProject",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 1,
+              "callId": "call_SiDRO1MTeBD4DAFCwzmt8zBN"
+            },
+            {
+              "name": "artifact.list",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 1,
+              "callId": "call_Ts1Z2MCiq83Nels06y9ffj3Q"
+            },
+            {
+              "name": "task-definitions.list",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": "Tool outside the simulated coordination scope",
+              "step": 1,
+              "callId": "call_gwTIpf88CBHTZdcg140avWhy"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555"
+              },
+              "error": null,
+              "step": 2,
+              "callId": "call_NqosWW3a37sz9xYFXbufM6sm"
+            },
+            {
+              "name": "artifact.updateTextArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "content": "# Recurvia IC memo\n## Summary\nRecurvia sells revenue-recovery software to mid-market SaaS companies.\n## Decision\nRecommendation pending partner review; churn risk should be considered in the decision."
+              },
+              "error": null,
+              "step": 3,
+              "callId": "call_mPeg4BOY8VsyWFdcoZt64SVj"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555"
+              },
+              "error": null,
+              "step": 4,
+              "callId": "call_UOHKykDq8oJAQOaWV55kII5i"
+            },
+            {
+              "name": "artifact.replaceTextRange",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "start": 127,
+                "end": 163,
+                "replacement": "Recommendation pending partner review; churn risk should be considered in the decision."
+              },
+              "error": null,
+              "step": 5,
+              "callId": "call_j6nXQdDnNQojV172J3kewqSR"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555"
+              },
+              "error": null,
+              "step": 6,
+              "callId": "call_yE0VMeAbwj6VQy9SCv5cZltM"
+            },
+            {
+              "name": "artifact.updateTextArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "text": "# Recurvia IC memo\n## Summary\nRecurvia sells revenue-recovery software to mid-market SaaS companies.\n## Decision\nRecommendation pending partner review; churn risk should be considered in the decision."
+              },
+              "error": null,
+              "step": 7,
+              "callId": "call_YtlG2A6kk0vaIZAKYhVsYuF7"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555"
+              },
+              "error": null,
+              "step": 8,
+              "callId": "call_DtxH6RDSyZeata7CLRcWbgcc"
+            },
+            {
+              "name": "artifact.insertTextAfterLine",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "lineNumber": 5,
+                "text": "Churn risk should be considered in the decision."
+              },
+              "error": null,
+              "step": 9,
+              "callId": "call_6lrwbHA5SurtwU84TX6w09Uo"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555"
+              },
+              "error": null,
+              "step": 10,
+              "callId": "call_tmK2T2zlO1SqPGoO0EHqaLSP"
+            },
+            {
+              "name": "artifact.updateTextArtifact",
+              "input": {
+                "input": {
+                  "artifactId": "55555555-5555-4555-8555-555555555555",
+                  "content": "# Recurvia IC memo\n## Summary\nRecurvia sells revenue-recovery software to mid-market SaaS companies.\n## Decision\nRecommendation pending partner review; churn risk should be considered in the decision."
+                }
+              },
+              "error": null,
+              "step": 11,
+              "callId": "call_h4JZ3auDRtzmBPr9fsNSAiHQ"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555"
+              },
+              "error": null,
+              "step": 12,
+              "callId": "call_00yOFeNFs5xcdaJQawIJsDA5"
+            },
+            {
+              "name": "artifact.replaceTextRange",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "startLine": 5,
+                "startColumn": 1,
+                "endLine": 5,
+                "endColumn": 39,
+                "replacementText": "Recommendation pending partner review; churn risk should be considered in the decision."
+              },
+              "error": null,
+              "step": 13,
+              "callId": "call_U1CnoLhSsrXJb6OkFvEzz4MC"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555"
+              },
+              "error": null,
+              "step": 14,
+              "callId": "call_kWQgDlOMswHlUIsBKw944v5T"
+            },
+            {
+              "name": "artifact.replaceTextRange",
+              "input": {
+                "id": "55555555-5555-4555-8555-555555555555",
+                "oldText": "Recommendation pending partner review.",
+                "newText": "Recommendation pending partner review; churn risk should be considered in the decision."
+              },
+              "error": null,
+              "step": 15,
+              "callId": "call_YsB3dsVj2mrIwGckZxzYMRrq"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "id": "55555555-5555-4555-8555-555555555555"
+              },
+              "error": null,
+              "step": 16,
+              "callId": "call_ECBq4KttqtFe6X0Op4HRROql"
+            }
+          ],
+          "texts": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "I couldn\u2019t confirm the IC memo was updated\u2014the Decision section still reads \u201cRecommendation pending partner review.\u201d No change was made."
+          ],
+          "final": "I couldn\u2019t confirm the IC memo was updated\u2014the Decision section still reads \u201cRecommendation pending partner review.\u201d No change was made.",
+          "complete": true,
+          "stopReason": "completed"
+        }
+      ],
+      "usage": {
+        "inputTokens": 242182,
+        "cachedInputTokens": 239173,
+        "outputTokens": 1881,
+        "reasoningTokens": 881
+      },
+      "moves": [],
+      "finalState": "decision",
+      "fieldWrites": [],
+      "tasks": [],
+      "created": [],
+      "memoEdits": [
+        {
+          "turn": 0,
+          "tool": "artifact.updateTextArtifact",
+          "input": {
+            "artifactId": "55555555-5555-4555-8555-555555555555",
+            "content": "# Recurvia IC memo\n## Summary\nRecurvia sells revenue-recovery software to mid-market SaaS companies.\n## Decision\nRecommendation pending partner review; churn risk should be considered in the decision."
+          }
+        },
+        {
+          "turn": 0,
+          "tool": "artifact.replaceTextRange",
+          "input": {
+            "artifactId": "55555555-5555-4555-8555-555555555555",
+            "start": 127,
+            "end": 163,
+            "replacement": "Recommendation pending partner review; churn risk should be considered in the decision."
+          }
+        },
+        {
+          "turn": 0,
+          "tool": "artifact.updateTextArtifact",
+          "input": {
+            "artifactId": "55555555-5555-4555-8555-555555555555",
+            "text": "# Recurvia IC memo\n## Summary\nRecurvia sells revenue-recovery software to mid-market SaaS companies.\n## Decision\nRecommendation pending partner review; churn risk should be considered in the decision."
+          }
+        },
+        {
+          "turn": 0,
+          "tool": "artifact.insertTextAfterLine",
+          "input": {
+            "artifactId": "55555555-5555-4555-8555-555555555555",
+            "lineNumber": 5,
+            "text": "Churn risk should be considered in the decision."
+          }
+        },
+        {
+          "turn": 0,
+          "tool": "artifact.updateTextArtifact",
+          "input": {
+            "input": {
+              "artifactId": "55555555-5555-4555-8555-555555555555",
+              "content": "# Recurvia IC memo\n## Summary\nRecurvia sells revenue-recovery software to mid-market SaaS companies.\n## Decision\nRecommendation pending partner review; churn risk should be considered in the decision."
+            }
+          }
+        },
+        {
+          "turn": 0,
+          "tool": "artifact.replaceTextRange",
+          "input": {
+            "artifactId": "55555555-5555-4555-8555-555555555555",
+            "startLine": 5,
+            "startColumn": 1,
+            "endLine": 5,
+            "endColumn": 39,
+            "replacementText": "Recommendation pending partner review; churn risk should be considered in the decision."
+          }
+        },
+        {
+          "turn": 0,
+          "tool": "artifact.replaceTextRange",
+          "input": {
+            "id": "55555555-5555-4555-8555-555555555555",
+            "oldText": "Recommendation pending partner review.",
+            "newText": "Recommendation pending partner review; churn risk should be considered in the decision."
+          }
+        }
+      ],
+      "projectsCreated": [],
+      "elapsedSeconds": 74.276,
+      "deterministic": {
+        "passed": true,
+        "assertions": {
+          "allTurnsComplete": true,
+          "noInvalidToolCalls": true,
+          "noDecisionRecord": true,
+          "noFieldWrites": true,
+          "noProjectCreated": true,
+          "noMove": true,
+          "replyDocument": true
+        }
+      }
+    },
+    {
+      "index": 2,
+      "case": "memo-edit-control",
+      "arm": "candidate-prompt-only",
+      "repetition": 1,
+      "folder": "attempts/002-memo-edit-control--candidate-prompt-only--r1",
+      "status": "completed",
+      "turns": [
+        {
+          "index": 0,
+          "userText": "edit the decision section of the IC memo to mention the churn risk",
+          "calls": [
+            {
+              "name": "project_data",
+              "input": {
+                "action": "read"
+              },
+              "error": null,
+              "step": 0,
+              "callId": "call_4ZHwAkCGs8wpVzHOWL6dppuC"
+            },
+            {
+              "name": "project_data",
+              "input": {
+                "action": "list_field_definitions"
+              },
+              "error": null,
+              "step": 0,
+              "callId": "call_mLf7sCwGb80b4WAQTmHGUnrT"
+            },
+            {
+              "name": "artifact.list",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 0,
+              "callId": "call_CWVobPLuJfNgkhhKWW49RH4S"
+            },
+            {
+              "name": "project-task.listByProject",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 0,
+              "callId": "call_qHXMhIj3LcjcGDf10T8zGYa1"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555"
+              },
+              "error": null,
+              "step": 1,
+              "callId": "call_uXUlCsIW3AkXNA7GR2ZEAR9i"
+            },
+            {
+              "name": "artifact.replaceTextRange",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "input": {
+                  "oldText": "Recommendation pending partner review.",
+                  "newText": "Recommendation pending partner review. Churn risk should be specifically assessed before a final investment decision."
+                },
+                "reason": "Update the IC memo decision section to mention churn risk."
+              },
+              "error": null,
+              "step": 2,
+              "callId": "call_i681ygTmKSejk9OFB8ehdq2z"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555"
+              },
+              "error": null,
+              "step": 3,
+              "callId": "call_t3P3hnDlbtse6ZoZyXll2iHM"
+            },
+            {
+              "name": "artifact.updateTextArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "input": {
+                  "content": "# Recurvia IC memo\n## Summary\nRecurvia sells revenue-recovery software to mid-market SaaS companies.\n## Decision\nRecommendation pending partner review. Churn risk should be specifically assessed before a final investment decision."
+                },
+                "reason": "Update the IC memo decision section to mention churn risk."
+              },
+              "error": null,
+              "step": 4,
+              "callId": "call_V6Nan1SoafRx7eSCp1kxDk39"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555"
+              },
+              "error": null,
+              "step": 5,
+              "callId": "call_ucVLuMbgcWx0ytesyLC3VXDk"
+            },
+            {
+              "name": "artifact.getTextStructure",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555"
+              },
+              "error": null,
+              "step": 6,
+              "callId": "call_mWBvlNQ75ANbahj4texAYbhA"
+            },
+            {
+              "name": "artifact.getSourceMetadata",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555"
+              },
+              "error": null,
+              "step": 6,
+              "callId": "call_FyHGNtWPZdMM3H1biReAYO79"
+            },
+            {
+              "name": "artifact.replaceTextRange",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "oldText": "Recommendation pending partner review.",
+                "newText": "Recommendation pending partner review. Churn risk should be specifically assessed before a final investment decision.",
+                "reason": "Update the IC memo decision section to mention churn risk."
+              },
+              "error": null,
+              "step": 7,
+              "callId": "call_ZfTB21RDITGyxdCVbZekZtVX"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555"
+              },
+              "error": null,
+              "step": 8,
+              "callId": "call_jmVPzGXuUS6uUBhKMCEb9Y11"
+            },
+            {
+              "name": "artifact.updateTextArtifact",
+              "input": {
+                "id": "55555555-5555-4555-8555-555555555555",
+                "content": "# Recurvia IC memo\n## Summary\nRecurvia sells revenue-recovery software to mid-market SaaS companies.\n## Decision\nRecommendation pending partner review. Churn risk should be specifically assessed before a final investment decision.",
+                "reason": "Update the IC memo decision section to mention churn risk."
+              },
+              "error": null,
+              "step": 9,
+              "callId": "call_MbwZY8OhCr0Q7nzaAdt5aXjy"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "id": "55555555-5555-4555-8555-555555555555"
+              },
+              "error": null,
+              "step": 10,
+              "callId": "call_lRfPQnlL5E6pV7nIoIX02I4w"
+            }
+          ],
+          "texts": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "I couldn\u2019t complete the edit: the platform acknowledged the update, but the IC memo still reads:\n\n> Recommendation pending partner review.\n\nThe intended addition was: \u201cChurn risk should be specifically assessed before a final investment decision.\u201d"
+          ],
+          "final": "I couldn\u2019t complete the edit: the platform acknowledged the update, but the IC memo still reads:\n\n> Recommendation pending partner review.\n\nThe intended addition was: \u201cChurn risk should be specifically assessed before a final investment decision.\u201d",
+          "complete": true,
+          "stopReason": "completed"
+        }
+      ],
+      "usage": {
+        "inputTokens": 156341,
+        "cachedInputTokens": 154040,
+        "outputTokens": 1316,
+        "reasoningTokens": 491
+      },
+      "moves": [],
+      "finalState": "decision",
+      "fieldWrites": [],
+      "tasks": [],
+      "created": [],
+      "memoEdits": [
+        {
+          "turn": 0,
+          "tool": "artifact.replaceTextRange",
+          "input": {
+            "artifactId": "55555555-5555-4555-8555-555555555555",
+            "input": {
+              "oldText": "Recommendation pending partner review.",
+              "newText": "Recommendation pending partner review. Churn risk should be specifically assessed before a final investment decision."
+            },
+            "reason": "Update the IC memo decision section to mention churn risk."
+          }
+        },
+        {
+          "turn": 0,
+          "tool": "artifact.updateTextArtifact",
+          "input": {
+            "artifactId": "55555555-5555-4555-8555-555555555555",
+            "input": {
+              "content": "# Recurvia IC memo\n## Summary\nRecurvia sells revenue-recovery software to mid-market SaaS companies.\n## Decision\nRecommendation pending partner review. Churn risk should be specifically assessed before a final investment decision."
+            },
+            "reason": "Update the IC memo decision section to mention churn risk."
+          }
+        },
+        {
+          "turn": 0,
+          "tool": "artifact.replaceTextRange",
+          "input": {
+            "artifactId": "55555555-5555-4555-8555-555555555555",
+            "oldText": "Recommendation pending partner review.",
+            "newText": "Recommendation pending partner review. Churn risk should be specifically assessed before a final investment decision.",
+            "reason": "Update the IC memo decision section to mention churn risk."
+          }
+        },
+        {
+          "turn": 0,
+          "tool": "artifact.updateTextArtifact",
+          "input": {
+            "id": "55555555-5555-4555-8555-555555555555",
+            "content": "# Recurvia IC memo\n## Summary\nRecurvia sells revenue-recovery software to mid-market SaaS companies.\n## Decision\nRecommendation pending partner review. Churn risk should be specifically assessed before a final investment decision.",
+            "reason": "Update the IC memo decision section to mention churn risk."
+          }
+        }
+      ],
+      "projectsCreated": [],
+      "elapsedSeconds": 45.727,
+      "deterministic": {
+        "passed": true,
+        "assertions": {
+          "allTurnsComplete": true,
+          "noInvalidToolCalls": true,
+          "noDecisionRecord": true,
+          "noFieldWrites": true,
+          "noProjectCreated": true,
+          "noMove": true,
+          "replyDocument": true
+        }
+      }
+    },
+    {
+      "index": 3,
+      "case": "memo-edit-control",
+      "arm": "baseline",
+      "repetition": 1,
+      "folder": "attempts/003-memo-edit-control--baseline--r1",
+      "status": "completed",
+      "turns": [
+        {
+          "index": 0,
+          "userText": "edit the decision section of the IC memo to mention the churn risk",
+          "calls": [
+            {
+              "name": "project_data",
+              "input": {
+                "action": "read"
+              },
+              "error": null,
+              "step": 0,
+              "callId": "call_Jo7bpyjlFJnLZPq39kAJ5fiS"
+            },
+            {
+              "name": "artifact.list",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 0,
+              "callId": "call_tUjb6e4PUs6BDjPH9jvVJDqy"
+            },
+            {
+              "name": "project-task.listByProject",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 0,
+              "callId": "call_3IrWs1zBU6SZs5Tky3i6Kine"
+            },
+            {
+              "name": "task-definitions.list",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": "Tool outside the simulated coordination scope",
+              "step": 0,
+              "callId": "call_5rrRu4VcOnKl02js8WkQ2p9u"
+            },
+            {
+              "name": "task-management.createTask",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111",
+                "title": "Update IC memo decision section with churn risk",
+                "instruction": "Edit the existing IC memo artifact recurvia-ic-memo.md. Update only the ## Decision section to mention the company's churn risk, using the available evidence in the Deal. Preserve all other sections and wording. Save the revision to the existing IC memo artifact; do not create a parallel copy. Completion means the Decision section explicitly mentions churn risk and the updated memo is readable.",
+                "reason": "Human requested the IC memo decision section be edited to mention churn risk."
+              },
+              "error": null,
+              "step": 1,
+              "callId": "call_SXHF4TWxddHwtm6mwtr8rWDW"
+            },
+            {
+              "name": "task-management.getTaskDetail",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111",
+                "taskId": "sim-task-1"
+              },
+              "error": null,
+              "step": 2,
+              "callId": "call_pztOnwBQCDdExbbhbsMaTn3q"
+            }
+          ],
+          "texts": [
+            "",
+            "",
+            "",
+            "I\u2019ve started an update to the existing IC memo to add churn risk to its **Decision** section while preserving the rest of the memo. The work is currently **pending**; no human owner was returned yet."
+          ],
+          "final": "I\u2019ve started an update to the existing IC memo to add churn risk to its **Decision** section while preserving the rest of the memo. The work is currently **pending**; no human owner was returned yet.",
+          "complete": true,
+          "stopReason": "completed"
+        }
+      ],
+      "usage": {
+        "inputTokens": 46702,
+        "cachedInputTokens": 45839,
+        "outputTokens": 700,
+        "reasoningTokens": 324
+      },
+      "moves": [],
+      "finalState": "decision",
+      "fieldWrites": [],
+      "tasks": [
+        {
+          "turn": 0,
+          "input": {
+            "projectId": "11111111-1111-4111-8111-111111111111",
+            "title": "Update IC memo decision section with churn risk",
+            "instruction": "Edit the existing IC memo artifact recurvia-ic-memo.md. Update only the ## Decision section to mention the company's churn risk, using the available evidence in the Deal. Preserve all other sections and wording. Save the revision to the existing IC memo artifact; do not create a parallel copy. Completion means the Decision section explicitly mentions churn risk and the updated memo is readable.",
+            "reason": "Human requested the IC memo decision section be edited to mention churn risk."
+          }
+        }
+      ],
+      "created": [],
+      "memoEdits": [],
+      "projectsCreated": [],
+      "elapsedSeconds": 17.184,
+      "deterministic": {
+        "passed": true,
+        "assertions": {
+          "allTurnsComplete": true,
+          "noInvalidToolCalls": true,
+          "noDecisionRecord": true,
+          "noFieldWrites": true,
+          "noProjectCreated": true,
+          "noMove": true,
+          "replyDocument": true
+        }
+      }
+    },
+    {
+      "index": 4,
+      "case": "memo-edit-control",
+      "arm": "candidate-prompt-only",
+      "repetition": 2,
+      "folder": "attempts/004-memo-edit-control--candidate-prompt-only--r2",
+      "status": "completed",
+      "turns": [
+        {
+          "index": 0,
+          "userText": "edit the decision section of the IC memo to mention the churn risk",
+          "calls": [
+            {
+              "name": "project_data",
+              "input": {
+                "action": "read"
+              },
+              "error": null,
+              "step": 0,
+              "callId": "call_muG2W6UyGXeFQs6jJkzFSktr"
+            },
+            {
+              "name": "project-task.listByProject",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 1,
+              "callId": "call_mJ4TIDsMEYyFX3JPkpO9udMJ"
+            },
+            {
+              "name": "task-definitions.list",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": "Tool outside the simulated coordination scope",
+              "step": 1,
+              "callId": "call_GU73Bv23jSK5Gk0CasxyhqaV"
+            },
+            {
+              "name": "artifact.list",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 1,
+              "callId": "call_RcZVj6cMmbSvbk2DkKjhkLr2"
+            },
+            {
+              "name": "task-management.createTask",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111",
+                "title": "Update IC memo decision section with churn risk",
+                "instruction": "Edit the existing Recurvia IC memo's Decision section to mention churn risk. Preserve the memo's existing structure and wording outside that section unless needed for clarity. Ground the addition in currently available Deal evidence; if no quantified or sourced churn evidence is available, state the risk cautiously without inventing facts. Persist the revised content to the existing IC memo artifact. Completion boundary: the Decision section contains a clear, decision-relevant mention of churn risk and the updated memo is saved for partner review.",
+                "reason": "Direct human request to edit the IC memo"
+              },
+              "error": null,
+              "step": 2,
+              "callId": "call_hY8QvNCJQyJcA8lZakSjxg5T"
+            },
+            {
+              "name": "task-management.getTaskDetail",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111",
+                "taskId": "sim-task-1"
+              },
+              "error": null,
+              "step": 3,
+              "callId": "call_nGXfcgZMpyLbbDXoA0BmuM0r"
+            }
+          ],
+          "texts": [
+            "",
+            "",
+            "",
+            "",
+            "I\u2019ve started the update to the existing IC memo. The Decision section will mention churn risk cautiously, using only supported evidence and preserving the rest of the memo.\n\nThe work is currently open and pending completion."
+          ],
+          "final": "I\u2019ve started the update to the existing IC memo. The Decision section will mention churn risk cautiously, using only supported evidence and preserving the rest of the memo.\n\nThe work is currently open and pending completion.",
+          "complete": true,
+          "stopReason": "completed"
+        }
+      ],
+      "usage": {
+        "inputTokens": 61107,
+        "cachedInputTokens": 60206,
+        "outputTokens": 722,
+        "reasoningTokens": 325
+      },
+      "moves": [],
+      "finalState": "decision",
+      "fieldWrites": [],
+      "tasks": [
+        {
+          "turn": 0,
+          "input": {
+            "projectId": "11111111-1111-4111-8111-111111111111",
+            "title": "Update IC memo decision section with churn risk",
+            "instruction": "Edit the existing Recurvia IC memo's Decision section to mention churn risk. Preserve the memo's existing structure and wording outside that section unless needed for clarity. Ground the addition in currently available Deal evidence; if no quantified or sourced churn evidence is available, state the risk cautiously without inventing facts. Persist the revised content to the existing IC memo artifact. Completion boundary: the Decision section contains a clear, decision-relevant mention of churn risk and the updated memo is saved for partner review.",
+            "reason": "Direct human request to edit the IC memo"
+          }
+        }
+      ],
+      "created": [],
+      "memoEdits": [],
+      "projectsCreated": [],
+      "elapsedSeconds": 22.218,
+      "deterministic": {
+        "passed": true,
+        "assertions": {
+          "allTurnsComplete": true,
+          "noInvalidToolCalls": true,
+          "noDecisionRecord": true,
+          "noFieldWrites": true,
+          "noProjectCreated": true,
+          "noMove": true,
+          "replyDocument": true
+        }
+      }
+    },
+    {
+      "index": 5,
+      "case": "memo-edit-control",
+      "arm": "baseline",
+      "repetition": 2,
+      "folder": "attempts/005-memo-edit-control--baseline--r2",
+      "status": "completed",
+      "turns": [
+        {
+          "index": 0,
+          "userText": "edit the decision section of the IC memo to mention the churn risk",
+          "calls": [
+            {
+              "name": "project_data",
+              "input": {
+                "action": "read"
+              },
+              "error": null,
+              "step": 0,
+              "callId": "call_S7fkPBWTykWNtKUNUWbnOOtw"
+            },
+            {
+              "name": "project-task.listByProject",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 0,
+              "callId": "call_1h1bQXhjMq4sZRg5EWHq0Y2V"
+            },
+            {
+              "name": "task-definitions.list",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": "Tool outside the simulated coordination scope",
+              "step": 0,
+              "callId": "call_F3rNWHrsJftOVMzRuy0hiuot"
+            },
+            {
+              "name": "artifact.list",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 0,
+              "callId": "call_8NCwTFq8k0xxY78Hqqs3SKq3"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 1,
+              "callId": "call_d3IENuH3pZU2ycNvp3zDvzRS"
+            },
+            {
+              "name": "artifact.replaceTextRange",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111",
+                "input": {
+                  "startText": "## Decision\nRecommendation pending partner review.",
+                  "replacementText": "## Decision\nRecommendation pending partner review. Churn risk should be considered in partner review."
+                }
+              },
+              "error": null,
+              "step": 2,
+              "callId": "call_G3yV6suPqibBpw17oCpcBhWG"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 3,
+              "callId": "call_h68i5i7oCoUQSa1BolRYtLEr"
+            },
+            {
+              "name": "artifact.updateTextArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111",
+                "input": {
+                  "content": "# Recurvia IC memo\n## Summary\nRecurvia sells revenue-recovery software to mid-market SaaS companies.\n## Decision\nRecommendation pending partner review. Churn risk should be considered in partner review."
+                }
+              },
+              "error": null,
+              "step": 4,
+              "callId": "call_WLx7vFxG9qNvVfAdKvxRCS8P"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 5,
+              "callId": "call_jLWkND1ftz5Epvt8JFiUh6jy"
+            },
+            {
+              "name": "artifact.replaceTextRange",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111",
+                "input": {
+                  "oldText": "Recommendation pending partner review.",
+                  "newText": "Recommendation pending partner review. Churn risk should be considered in partner review."
+                }
+              },
+              "error": null,
+              "step": 6,
+              "callId": "call_V28uRqTJhCd8jQyNQZeWuHeK"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 7,
+              "callId": "call_a5rOONTyAS05MEwvCdLxKFTV"
+            },
+            {
+              "name": "artifact.replaceTextRange",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111",
+                "input": {
+                  "startLine": 4,
+                  "endLine": 4,
+                  "text": "Recommendation pending partner review. Churn risk should be considered in partner review."
+                }
+              },
+              "error": null,
+              "step": 8,
+              "callId": "call_cOqHRnNaMqXk6lqkIXlsd28r"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 9,
+              "callId": "call_ypZJObNIQLvwS3d0ZBQJSqoB"
+            },
+            {
+              "name": "artifact.getTextStructure",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 10,
+              "callId": "call_a6Jh5ORoC3LCgmwGXHLh6OR8"
+            },
+            {
+              "name": "artifact.replaceTextRange",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111",
+                "input": {
+                  "range": {
+                    "start": 93,
+                    "end": 127
+                  },
+                  "replacement": "Recommendation pending partner review. Churn risk should be considered in partner review."
+                }
+              },
+              "error": null,
+              "step": 11,
+              "callId": "call_burxctMybJzkE55WT5tgOOMv"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 12,
+              "callId": "call_tn5mQWoBHW9cLUCOuMuzuPRc"
+            },
+            {
+              "name": "artifact.updateTextArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111",
+                "content": "# Recurvia IC memo\n## Summary\nRecurvia sells revenue-recovery software to mid-market SaaS companies.\n## Decision\nRecommendation pending partner review. Churn risk should be considered in partner review."
+              },
+              "error": null,
+              "step": 13,
+              "callId": "call_V4jIgc4de2VyWaow7Wtnvutd"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 14,
+              "callId": "call_VaUpNmxNPdCNfNfjWDmt2OaJ"
+            },
+            {
+              "name": "artifact.insertTextAfterLine",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111",
+                "input": {
+                  "line": "Recommendation pending partner review.",
+                  "text": "Churn risk should be considered in partner review."
+                }
+              },
+              "error": null,
+              "step": 15,
+              "callId": "call_KNrMJCV6Dv9zaEirtjOC9DKu"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 16,
+              "callId": "call_bE8OEVuMGXVmMq2Too0Fdhfi"
+            }
+          ],
+          "texts": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "I couldn\u2019t confirm the edit persisted: the IC memo still shows:\n\n> Recommendation pending partner review.\n\nNo change was recorded."
+          ],
+          "final": "I couldn\u2019t confirm the edit persisted: the IC memo still shows:\n\n> Recommendation pending partner review.\n\nNo change was recorded.",
+          "complete": true,
+          "stopReason": "completed"
+        }
+      ],
+      "usage": {
+        "inputTokens": 232319,
+        "cachedInputTokens": 229121,
+        "outputTokens": 1909,
+        "reasoningTokens": 546
+      },
+      "moves": [],
+      "finalState": "decision",
+      "fieldWrites": [],
+      "tasks": [],
+      "created": [],
+      "memoEdits": [
+        {
+          "turn": 0,
+          "tool": "artifact.replaceTextRange",
+          "input": {
+            "artifactId": "55555555-5555-4555-8555-555555555555",
+            "projectId": "11111111-1111-4111-8111-111111111111",
+            "input": {
+              "startText": "## Decision\nRecommendation pending partner review.",
+              "replacementText": "## Decision\nRecommendation pending partner review. Churn risk should be considered in partner review."
+            }
+          }
+        },
+        {
+          "turn": 0,
+          "tool": "artifact.updateTextArtifact",
+          "input": {
+            "artifactId": "55555555-5555-4555-8555-555555555555",
+            "projectId": "11111111-1111-4111-8111-111111111111",
+            "input": {
+              "content": "# Recurvia IC memo\n## Summary\nRecurvia sells revenue-recovery software to mid-market SaaS companies.\n## Decision\nRecommendation pending partner review. Churn risk should be considered in partner review."
+            }
+          }
+        },
+        {
+          "turn": 0,
+          "tool": "artifact.replaceTextRange",
+          "input": {
+            "artifactId": "55555555-5555-4555-8555-555555555555",
+            "projectId": "11111111-1111-4111-8111-111111111111",
+            "input": {
+              "oldText": "Recommendation pending partner review.",
+              "newText": "Recommendation pending partner review. Churn risk should be considered in partner review."
+            }
+          }
+        },
+        {
+          "turn": 0,
+          "tool": "artifact.replaceTextRange",
+          "input": {
+            "artifactId": "55555555-5555-4555-8555-555555555555",
+            "projectId": "11111111-1111-4111-8111-111111111111",
+            "input": {
+              "startLine": 4,
+              "endLine": 4,
+              "text": "Recommendation pending partner review. Churn risk should be considered in partner review."
+            }
+          }
+        },
+        {
+          "turn": 0,
+          "tool": "artifact.replaceTextRange",
+          "input": {
+            "artifactId": "55555555-5555-4555-8555-555555555555",
+            "projectId": "11111111-1111-4111-8111-111111111111",
+            "input": {
+              "range": {
+                "start": 93,
+                "end": 127
+              },
+              "replacement": "Recommendation pending partner review. Churn risk should be considered in partner review."
+            }
+          }
+        },
+        {
+          "turn": 0,
+          "tool": "artifact.updateTextArtifact",
+          "input": {
+            "artifactId": "55555555-5555-4555-8555-555555555555",
+            "projectId": "11111111-1111-4111-8111-111111111111",
+            "content": "# Recurvia IC memo\n## Summary\nRecurvia sells revenue-recovery software to mid-market SaaS companies.\n## Decision\nRecommendation pending partner review. Churn risk should be considered in partner review."
+          }
+        },
+        {
+          "turn": 0,
+          "tool": "artifact.insertTextAfterLine",
+          "input": {
+            "artifactId": "55555555-5555-4555-8555-555555555555",
+            "projectId": "11111111-1111-4111-8111-111111111111",
+            "input": {
+              "line": "Recommendation pending partner review.",
+              "text": "Churn risk should be considered in partner review."
+            }
+          }
+        }
+      ],
+      "projectsCreated": [],
+      "elapsedSeconds": 66.275,
+      "deterministic": {
+        "passed": true,
+        "assertions": {
+          "allTurnsComplete": true,
+          "noInvalidToolCalls": true,
+          "noDecisionRecord": true,
+          "noFieldWrites": true,
+          "noProjectCreated": true,
+          "noMove": true,
+          "replyDocument": true
+        }
+      }
+    },
+    {
+      "index": 6,
+      "case": "memo-edit-control",
+      "arm": "candidate",
+      "repetition": 2,
+      "folder": "attempts/006-memo-edit-control--candidate--r2",
+      "status": "completed",
+      "turns": [
+        {
+          "index": 0,
+          "userText": "edit the decision section of the IC memo to mention the churn risk",
+          "calls": [
+            {
+              "name": "project_data",
+              "input": {
+                "action": "read"
+              },
+              "error": null,
+              "step": 0,
+              "callId": "call_FfMQLzZZLCCun1gk7ylPnTCN"
+            },
+            {
+              "name": "project-task.listByProject",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 1,
+              "callId": "call_jaepnTx3JndaSKYKbMXkCbtp"
+            },
+            {
+              "name": "task-definitions.list",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": "Tool outside the simulated coordination scope",
+              "step": 1,
+              "callId": "call_0XAO55Cfwjx5H0b8LGmCC47U"
+            },
+            {
+              "name": "artifact.list",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 1,
+              "callId": "call_k7yP0CUtVslTBu1u7leiWf1V"
+            },
+            {
+              "name": "task-management.createTask",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111",
+                "title": "Edit IC memo decision section to mention churn risk",
+                "instruction": "Update the existing Recurvia IC memo's Decision section to mention the churn risk, using the current memo and any project-linked evidence available. Preserve the memo's existing structure and other content. Complete when the Decision section contains a clear, evidence-grounded churn-risk statement; if the available evidence does not support a specific claim, state the risk cautiously and flag the need for verification in the memo.",
+                "context": {
+                  "artifactId": "55555555-5555-4555-8555-555555555555",
+                  "requestedChange": "Mention churn risk in the Decision section of the existing IC memo."
+                }
+              },
+              "error": null,
+              "step": 2,
+              "callId": "call_n1bHyfBJGERaCcn7NesCIR0W"
+            },
+            {
+              "name": "task-management.getTaskDetail",
+              "input": {
+                "taskId": "sim-task-1",
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 3,
+              "callId": "call_1BJjTUazhYYUPmb5njraqM2e"
+            }
+          ],
+          "texts": [
+            "",
+            "",
+            "",
+            "",
+            "I started work to edit Recurvia\u2019s existing IC memo. The Decision section will be updated to mention churn risk using available evidence, with any unsupported specifics flagged for verification.\n\n**Status:** Pending."
+          ],
+          "final": "I started work to edit Recurvia\u2019s existing IC memo. The Decision section will be updated to mention churn risk using available evidence, with any unsupported specifics flagged for verification.\n\n**Status:** Pending.",
+          "complete": true,
+          "stopReason": "completed"
+        }
+      ],
+      "usage": {
+        "inputTokens": 61528,
+        "cachedInputTokens": 60686,
+        "outputTokens": 687,
+        "reasoningTokens": 282
+      },
+      "moves": [],
+      "finalState": "decision",
+      "fieldWrites": [],
+      "tasks": [
+        {
+          "turn": 0,
+          "input": {
+            "projectId": "11111111-1111-4111-8111-111111111111",
+            "title": "Edit IC memo decision section to mention churn risk",
+            "instruction": "Update the existing Recurvia IC memo's Decision section to mention the churn risk, using the current memo and any project-linked evidence available. Preserve the memo's existing structure and other content. Complete when the Decision section contains a clear, evidence-grounded churn-risk statement; if the available evidence does not support a specific claim, state the risk cautiously and flag the need for verification in the memo.",
+            "context": {
+              "artifactId": "55555555-5555-4555-8555-555555555555",
+              "requestedChange": "Mention churn risk in the Decision section of the existing IC memo."
+            }
+          }
+        }
+      ],
+      "created": [],
+      "memoEdits": [],
+      "projectsCreated": [],
+      "elapsedSeconds": 18.167,
+      "deterministic": {
+        "passed": true,
+        "assertions": {
+          "allTurnsComplete": true,
+          "noInvalidToolCalls": true,
+          "noDecisionRecord": true,
+          "noFieldWrites": true,
+          "noProjectCreated": true,
+          "noMove": true,
+          "replyDocument": true
+        }
+      }
+    },
+    {
+      "index": 7,
+      "case": "memo-edit-control",
+      "arm": "baseline",
+      "repetition": 3,
+      "folder": "attempts/007-memo-edit-control--baseline--r3",
+      "status": "completed",
+      "turns": [
+        {
+          "index": 0,
+          "userText": "edit the decision section of the IC memo to mention the churn risk",
+          "calls": [
+            {
+              "name": "project_data",
+              "input": {
+                "action": "read"
+              },
+              "error": null,
+              "step": 0,
+              "callId": "call_GLL78341527GTzr7HyHhxNum"
+            },
+            {
+              "name": "artifact.list",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 1,
+              "callId": "call_nh5y5R1RQ9q0RtXvZB95f97o"
+            },
+            {
+              "name": "project-task.listByProject",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 1,
+              "callId": "call_tpYauxaYEwacktCVzkbUKdu8"
+            },
+            {
+              "name": "task-definitions.list",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": "Tool outside the simulated coordination scope",
+              "step": 1,
+              "callId": "call_szyJTEQihqH9aOAsmeRNeWIq"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 2,
+              "callId": "call_Jx6V8C30UoXDwRPnLJrKBLnE"
+            },
+            {
+              "name": "artifact.replaceTextRange",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111",
+                "input": {
+                  "oldText": "## Decision\nRecommendation pending partner review.",
+                  "newText": "## Decision\nRecommendation pending partner review. Churn risk should be explicitly assessed before a final decision, including retention trends, customer concentration, and evidence of recurring customer usage."
+                }
+              },
+              "error": null,
+              "step": 3,
+              "callId": "call_i4eEcwGbs9g8LzoNd8gp79j5"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 4,
+              "callId": "call_J76IY5tccoVHU8vEJp6ELfLS"
+            },
+            {
+              "name": "artifact.updateTextArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111",
+                "input": {
+                  "content": "# Recurvia IC memo\n## Summary\nRecurvia sells revenue-recovery software to mid-market SaaS companies.\n## Decision\nRecommendation pending partner review. Churn risk should be explicitly assessed before a final decision, including retention trends, customer concentration, and evidence of recurring customer usage."
+                }
+              },
+              "error": null,
+              "step": 5,
+              "callId": "call_7QhNgXpg7l39a5SkMLaH9NfB"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 6,
+              "callId": "call_xDk1iB0xpjhXvIAEiz8kVIap"
+            },
+            {
+              "name": "artifact.replaceTextRange",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111",
+                "input": {
+                  "startLine": 4,
+                  "endLine": 5,
+                  "replacement": "## Decision\nRecommendation pending partner review. Churn risk should be explicitly assessed before a final decision, including retention trends, customer concentration, and evidence of recurring customer usage."
+                }
+              },
+              "error": null,
+              "step": 7,
+              "callId": "call_kSbhwOLUg78Pdj0LsS2GHgC1"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 8,
+              "callId": "call_DZEzZcpkYnLOR0PbO26zzkTp"
+            },
+            {
+              "name": "artifact.updateTextArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111",
+                "content": "# Recurvia IC memo\n## Summary\nRecurvia sells revenue-recovery software to mid-market SaaS companies.\n## Decision\nRecommendation pending partner review. Churn risk should be explicitly assessed before a final decision, including retention trends, customer concentration, and evidence of recurring customer usage."
+              },
+              "error": null,
+              "step": 9,
+              "callId": "call_Q3xn4TDL91fmTgey6B0A8UmC"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 10,
+              "callId": "call_T5uVkQ2w24iNxPvjJalmZZAX"
+            },
+            {
+              "name": "artifact.getTextStructure",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 11,
+              "callId": "call_OpaWlvOpjCTjyp7Hr0ZDdDYW"
+            },
+            {
+              "name": "artifact.insertTextAfterLine",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111",
+                "input": {
+                  "line": 5,
+                  "text": "Churn risk should be explicitly assessed before a final decision, including retention trends, customer concentration, and evidence of recurring customer usage."
+                }
+              },
+              "error": null,
+              "step": 12,
+              "callId": "call_2ODY217GEXrUBRt64ny2kvhY"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 13,
+              "callId": "call_YOnebLi6NFalyib9XFa38C7f"
+            }
+          ],
+          "texts": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "I wasn\u2019t able to persist the edit: the memo still reads **\u201cRecommendation pending partner review.\u201d** The requested churn-risk language was not saved."
+          ],
+          "final": "I wasn\u2019t able to persist the edit: the memo still reads **\u201cRecommendation pending partner review.\u201d** The requested churn-risk language was not saved.",
+          "complete": true,
+          "stopReason": "completed"
+        }
+      ],
+      "usage": {
+        "inputTokens": 189291,
+        "cachedInputTokens": 186424,
+        "outputTokens": 1866,
+        "reasoningTokens": 705
+      },
+      "moves": [],
+      "finalState": "decision",
+      "fieldWrites": [],
+      "tasks": [],
+      "created": [],
+      "memoEdits": [
+        {
+          "turn": 0,
+          "tool": "artifact.replaceTextRange",
+          "input": {
+            "artifactId": "55555555-5555-4555-8555-555555555555",
+            "projectId": "11111111-1111-4111-8111-111111111111",
+            "input": {
+              "oldText": "## Decision\nRecommendation pending partner review.",
+              "newText": "## Decision\nRecommendation pending partner review. Churn risk should be explicitly assessed before a final decision, including retention trends, customer concentration, and evidence of recurring customer usage."
+            }
+          }
+        },
+        {
+          "turn": 0,
+          "tool": "artifact.updateTextArtifact",
+          "input": {
+            "artifactId": "55555555-5555-4555-8555-555555555555",
+            "projectId": "11111111-1111-4111-8111-111111111111",
+            "input": {
+              "content": "# Recurvia IC memo\n## Summary\nRecurvia sells revenue-recovery software to mid-market SaaS companies.\n## Decision\nRecommendation pending partner review. Churn risk should be explicitly assessed before a final decision, including retention trends, customer concentration, and evidence of recurring customer usage."
+            }
+          }
+        },
+        {
+          "turn": 0,
+          "tool": "artifact.replaceTextRange",
+          "input": {
+            "artifactId": "55555555-5555-4555-8555-555555555555",
+            "projectId": "11111111-1111-4111-8111-111111111111",
+            "input": {
+              "startLine": 4,
+              "endLine": 5,
+              "replacement": "## Decision\nRecommendation pending partner review. Churn risk should be explicitly assessed before a final decision, including retention trends, customer concentration, and evidence of recurring customer usage."
+            }
+          }
+        },
+        {
+          "turn": 0,
+          "tool": "artifact.updateTextArtifact",
+          "input": {
+            "artifactId": "55555555-5555-4555-8555-555555555555",
+            "projectId": "11111111-1111-4111-8111-111111111111",
+            "content": "# Recurvia IC memo\n## Summary\nRecurvia sells revenue-recovery software to mid-market SaaS companies.\n## Decision\nRecommendation pending partner review. Churn risk should be explicitly assessed before a final decision, including retention trends, customer concentration, and evidence of recurring customer usage."
+          }
+        },
+        {
+          "turn": 0,
+          "tool": "artifact.insertTextAfterLine",
+          "input": {
+            "artifactId": "55555555-5555-4555-8555-555555555555",
+            "projectId": "11111111-1111-4111-8111-111111111111",
+            "input": {
+              "line": 5,
+              "text": "Churn risk should be explicitly assessed before a final decision, including retention trends, customer concentration, and evidence of recurring customer usage."
+            }
+          }
+        }
+      ],
+      "projectsCreated": [],
+      "elapsedSeconds": 63.334,
+      "deterministic": {
+        "passed": true,
+        "assertions": {
+          "allTurnsComplete": true,
+          "noInvalidToolCalls": true,
+          "noDecisionRecord": true,
+          "noFieldWrites": true,
+          "noProjectCreated": true,
+          "noMove": true,
+          "replyDocument": true
+        }
+      }
+    },
+    {
+      "index": 8,
+      "case": "memo-edit-control",
+      "arm": "candidate",
+      "repetition": 3,
+      "folder": "attempts/008-memo-edit-control--candidate--r3",
+      "status": "completed",
+      "turns": [
+        {
+          "index": 0,
+          "userText": "edit the decision section of the IC memo to mention the churn risk",
+          "calls": [
+            {
+              "name": "project_data",
+              "input": {
+                "action": "read"
+              },
+              "error": null,
+              "step": 0,
+              "callId": "call_L0YJ2qeLDozEso2UH77W3mPE"
+            },
+            {
+              "name": "artifact.list",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 1,
+              "callId": "call_UzNFXlYDxiGMiylZC8JdXnWQ"
+            },
+            {
+              "name": "project-task.listByProject",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 1,
+              "callId": "call_YxUdImPqNo7QW6KSWkvtFT9y"
+            },
+            {
+              "name": "task-definitions.list",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": "Tool outside the simulated coordination scope",
+              "step": 1,
+              "callId": "call_uIDBFazIwdu0v7pe3ByxTCJg"
+            },
+            {
+              "name": "task-management.createTask",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111",
+                "title": "Update IC memo decision section with churn risk",
+                "instruction": "Edit the existing Recurvia IC memo artifact (recurvia-ic-memo.md), specifically the Decision section, to mention churn risk. Use only evidence available in the project and linked task/chat sources; do not invent churn metrics or conclusions. If the evidence does not quantify churn, describe it as an unresolved risk and state what churn evidence is still needed. Preserve the rest of the memo and update the existing artifact rather than creating a parallel copy. Completion boundary: the revised Decision section is saved to the existing IC memo artifact and the resulting wording is ready for partner review.",
+                "type": "document_edit"
+              },
+              "error": null,
+              "step": 2,
+              "callId": "call_JNGCf0LXrXymlotp6CEmGCHZ"
+            },
+            {
+              "name": "task-management.getTaskDetail",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111",
+                "taskId": "sim-task-1"
+              },
+              "error": null,
+              "step": 3,
+              "callId": "call_ADZoBLBc4EjQP0euvRA6K6Vq"
+            }
+          ],
+          "texts": [
+            "",
+            "",
+            "",
+            "",
+            "I started the requested edit to the IC memo\u2019s Decision section, using only available evidence and without inventing churn metrics. The work is currently pending, and the memo has not yet been updated."
+          ],
+          "final": "I started the requested edit to the IC memo\u2019s Decision section, using only available evidence and without inventing churn metrics. The work is currently pending, and the memo has not yet been updated.",
+          "complete": true,
+          "stopReason": "completed"
+        }
+      ],
+      "usage": {
+        "inputTokens": 61789,
+        "cachedInputTokens": 60819,
+        "outputTokens": 916,
+        "reasoningTokens": 509
+      },
+      "moves": [],
+      "finalState": "decision",
+      "fieldWrites": [],
+      "tasks": [
+        {
+          "turn": 0,
+          "input": {
+            "projectId": "11111111-1111-4111-8111-111111111111",
+            "title": "Update IC memo decision section with churn risk",
+            "instruction": "Edit the existing Recurvia IC memo artifact (recurvia-ic-memo.md), specifically the Decision section, to mention churn risk. Use only evidence available in the project and linked task/chat sources; do not invent churn metrics or conclusions. If the evidence does not quantify churn, describe it as an unresolved risk and state what churn evidence is still needed. Preserve the rest of the memo and update the existing artifact rather than creating a parallel copy. Completion boundary: the revised Decision section is saved to the existing IC memo artifact and the resulting wording is ready for partner review.",
+            "type": "document_edit"
+          }
+        }
+      ],
+      "created": [],
+      "memoEdits": [],
+      "projectsCreated": [],
+      "elapsedSeconds": 28.459,
+      "deterministic": {
+        "passed": true,
+        "assertions": {
+          "allTurnsComplete": true,
+          "noInvalidToolCalls": true,
+          "noDecisionRecord": true,
+          "noFieldWrites": true,
+          "noProjectCreated": true,
+          "noMove": true,
+          "replyDocument": true
+        }
+      }
+    },
+    {
+      "index": 9,
+      "case": "memo-edit-control",
+      "arm": "candidate-prompt-only",
+      "repetition": 3,
+      "folder": "attempts/009-memo-edit-control--candidate-prompt-only--r3",
+      "status": "completed",
+      "turns": [
+        {
+          "index": 0,
+          "userText": "edit the decision section of the IC memo to mention the churn risk",
+          "calls": [
+            {
+              "name": "project_data",
+              "input": {
+                "action": "read"
+              },
+              "error": null,
+              "step": 0,
+              "callId": "call_J3dzRt0w8luP3RU4zkznpbcL"
+            },
+            {
+              "name": "project-task.listByProject",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 1,
+              "callId": "call_0VsHQUgXPKk0HoVdO4Raan1e"
+            },
+            {
+              "name": "task-definitions.list",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": "Tool outside the simulated coordination scope",
+              "step": 1,
+              "callId": "call_MQw9KkAnyyaoaHWR3dDiYzRg"
+            },
+            {
+              "name": "artifact.list",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 1,
+              "callId": "call_TBIz7Lbu099e3Jqf4PGcQT7x"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555"
+              },
+              "error": null,
+              "step": 2,
+              "callId": "call_VQQknL1HdPKLvB2gr6bvEtCk"
+            },
+            {
+              "name": "artifact.getArtifactsForChatContext",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 2,
+              "callId": "call_FvEBdyu1U9aytkwj0DKAlG59"
+            },
+            {
+              "name": "artifact.getArtifactsLinkedToChat",
+              "input": {
+                "projectId": "11111111-1111-4111-8111-111111111111"
+              },
+              "error": null,
+              "step": 2,
+              "callId": "call_YFuucyOqDWINUPjam80tza8Y"
+            },
+            {
+              "name": "artifact.replaceTextRange",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "oldText": "## Decision\nRecommendation pending partner review.",
+                "newText": "## Decision\nRecommendation pending partner review. Churn risk should be explicitly assessed before a final decision, including its drivers, recent trend, and retention evidence."
+              },
+              "error": null,
+              "step": 3,
+              "callId": "call_p3MItTe1TPjjBmxAA4UJG2tE"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555"
+              },
+              "error": null,
+              "step": 4,
+              "callId": "call_ghEv8rMWhvKK5m3xQdsD8Yuy"
+            },
+            {
+              "name": "artifact.updateTextArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "input": {
+                  "content": "# Recurvia IC memo\n## Summary\nRecurvia sells revenue-recovery software to mid-market SaaS companies.\n## Decision\nRecommendation pending partner review. Churn risk should be explicitly assessed before a final decision, including its drivers, recent trend, and retention evidence."
+                }
+              },
+              "error": null,
+              "step": 5,
+              "callId": "call_AP1GfoFpbIqsLijU1Aq0GXZ1"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555"
+              },
+              "error": null,
+              "step": 6,
+              "callId": "call_arAGr5mq8P0TiWfoxj3CHkvg"
+            },
+            {
+              "name": "artifact.updateTextArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555",
+                "input": {
+                  "text": "# Recurvia IC memo\n## Summary\nRecurvia sells revenue-recovery software to mid-market SaaS companies.\n## Decision\nRecommendation pending partner review. Churn risk should be explicitly assessed before a final decision, including its drivers, recent trend, and retention evidence."
+                }
+              },
+              "error": null,
+              "step": 7,
+              "callId": "call_D9rB7LN7zsPEw21cCbJGnGcM"
+            },
+            {
+              "name": "artifact.getArtifact",
+              "input": {
+                "artifactId": "55555555-5555-4555-8555-555555555555"
+              },
+              "error": null,
+              "step": 8,
+              "callId": "call_wxDrrahvPXJi2EbAGK168ToT"
+            }
+          ],
+          "texts": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "I found the IC memo and attempted to update its Decision section to note that churn risk should be assessed before a final decision. However, the readback still shows the original text, so the edit was not durably saved."
+          ],
+          "final": "I found the IC memo and attempted to update its Decision section to note that churn risk should be assessed before a final decision. However, the readback still shows the original text, so the edit was not durably saved.",
+          "complete": true,
+          "stopReason": "completed"
+        }
+      ],
+      "usage": {
+        "inputTokens": 128675,
+        "cachedInputTokens": 126624,
+        "outputTokens": 1170,
+        "reasoningTokens": 452
+      },
+      "moves": [],
+      "finalState": "decision",
+      "fieldWrites": [],
+      "tasks": [],
+      "created": [],
+      "memoEdits": [
+        {
+          "turn": 0,
+          "tool": "artifact.replaceTextRange",
+          "input": {
+            "artifactId": "55555555-5555-4555-8555-555555555555",
+            "oldText": "## Decision\nRecommendation pending partner review.",
+            "newText": "## Decision\nRecommendation pending partner review. Churn risk should be explicitly assessed before a final decision, including its drivers, recent trend, and retention evidence."
+          }
+        },
+        {
+          "turn": 0,
+          "tool": "artifact.updateTextArtifact",
+          "input": {
+            "artifactId": "55555555-5555-4555-8555-555555555555",
+            "input": {
+              "content": "# Recurvia IC memo\n## Summary\nRecurvia sells revenue-recovery software to mid-market SaaS companies.\n## Decision\nRecommendation pending partner review. Churn risk should be explicitly assessed before a final decision, including its drivers, recent trend, and retention evidence."
+            }
+          }
+        },
+        {
+          "turn": 0,
+          "tool": "artifact.updateTextArtifact",
+          "input": {
+            "artifactId": "55555555-5555-4555-8555-555555555555",
+            "input": {
+              "text": "# Recurvia IC memo\n## Summary\nRecurvia sells revenue-recovery software to mid-market SaaS companies.\n## Decision\nRecommendation pending partner review. Churn risk should be explicitly assessed before a final decision, including its drivers, recent trend, and retention evidence."
+            }
+          }
+        }
+      ],
+      "projectsCreated": [],
+      "elapsedSeconds": 46.383,
+      "deterministic": {
+        "passed": true,
+        "assertions": {
+          "allTurnsComplete": true,
+          "noInvalidToolCalls": true,
+          "noDecisionRecord": true,
+          "noFieldWrites": true,
+          "noProjectCreated": true,
+          "noMove": true,
+          "replyDocument": true
+        }
+      }
+    }
+  ],
+  "finishedAt": "2026-10-22T17:17:31.017608+00:00",
+  "halted": null,
+  "spend": {
+    "ceilingUsd": 1.0,
+    "confirmedUsd": 0.052077,
+    "unreconciledExposureUsd": 0.0,
+    "spentUsd": 0.052077,
+    "directProviderConfirmedUsd": 0.040059,
+    "dispatchedCalls": 92,
+    "settledCalls": 92,
+    "unreconciledCalls": 0,
+    "accountingHalt": null
+  },
+  "summary": {
+    "cells": {
+      "baseline/memo-edit-control": {
+        "passed": 3,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate/memo-edit-control": {
+        "passed": 3,
+        "scored": 3,
+        "planned": 3
+      },
+      "candidate-prompt-only/memo-edit-control": {
+        "passed": 3,
+        "scored": 3,
+        "planned": 3
+      }
+    },
+    "totals": {
+      "baseline": {
+        "passed": 3,
+        "scored": 3
+      },
+      "candidate": {
+        "passed": 3,
+        "scored": 3
+      },
+      "candidate-prompt-only": {
+        "passed": 3,
+        "scored": 3
+      }
+    }
+  }
+}
