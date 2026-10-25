@@ -1,0 +1,41 @@
+{
+  "issue": 4968,
+  "packs_revision": "cd76e41fa4c5fe74692e3b4b29763eb24460eb7f",
+  "craft_revision": "6902348e5680f67798f521bd2c7fa309c233b5ec",
+  "catalog_arm": "N",
+  "guidance": [
+    "neutral",
+    "packs"
+  ],
+  "clients": {
+    "claude": "claude-haiku-4-5-20251001",
+    "codex": "gpt-6-luna"
+  },
+  "agents": {
+    "vc_pipeline_autopilot": [
+      "C01",
+      "C03"
+    ],
+    "vc_deal_pipeline_manager": [
+      "C02",
+      "T03"
+    ],
+    "vc_deal_analyst": [
+      "I01",
+      "I03"
+    ]
+  },
+  "variables": {
+    "firmName": "Fictional Evaluation Firm",
+    "dealProjectTypeKey": "vc_deal_pipeline",
+    "fundId": "fund-a"
+  },
+  "ceilings": {
+    "attempts": 24,
+    "seconds": 120,
+    "output_bytes": 2000000,
+    "tool_calls": 24
+  },
+  "repetitions": 1,
+  "proof": "Actual source prompt text transplanted as client task instructions with a common synthetic tool contract. Not native runtime or a candidate improvement evaluation."
+}
