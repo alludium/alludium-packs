@@ -9,7 +9,7 @@ description: >-
 global: [allTurnsComplete, noInvalidToolCalls, noAffinityWrites, noFieldWrites, noStageMove]
 
 # Applied to every import case (kind: import) on top of the case's own checks.
-importGlobal: [oneDocument, completedWithPointer, safeHtml, briefCitesNotes, briefSubstantive]
+importGlobal: [oneDocument, completedWithPointer, safeHtml, briefCitesNotes, briefSubstantive, notesAttributed]
 
 cases:
   rebrand-nine-notes:
@@ -105,7 +105,7 @@ cases:
 
   crm-not-connected:
     blocked: true
-    replyMentions: ["(?:not connected|no (?:\\w+ )?connection|unavailable|not available|isn't available|no access|cannot access|can't access)"]
+    replyMentions: ["(?:not connected|no (?:\\w+ )?connection|unavailable|not available|isn't available|no (?:\\w+ )?access|cannot access|can't access|not readable|could not be read|couldn't be read)"]
 
   screening-still-uses-living-report:
     # Met when the skill is ALWAYS-on in the arm or the analyst activates it within the step cap.

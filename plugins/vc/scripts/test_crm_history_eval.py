@@ -51,9 +51,10 @@ OVERVIEW_FILLER = ("The retrieved notes describe its product, early customers an
 def good_document(case_id: str, note_ids: list[int], status: str = "Complete import", refs: dict | None = None) -> str:
     """A document the skill asks for: dated, cited brief and every note's full text in the appendix."""
     notes = ch.case_notes(case(case_id))
+    holders = ch.note_holders(case(case_id))
     entries = "".join(
         f'<div class="source-note" id="{(refs or {}).get(n, f"N{i}")}"><h3>{(refs or {}).get(n, f"N{i}")}</h3>'
-        f'<p class="source-meta">Affinity · note {n}</p><pre class="source-text">{html.escape(ch.note_text(notes[n]))}'
+        f'<p class="source-meta">Affinity · record {holders[n]} · note {n}</p><pre class="source-text">{html.escape(ch.note_text(notes[n]))}'
         f'</pre></div>' for i, n in enumerate(note_ids, 1))
     return (f'<!doctype html><html><body><article><header><p class="metadata">CRM: Affinity · '
             f'<span class="badge">{status}</span></p></header><section><h2>Company overview</h2>'
@@ -328,6 +329,16 @@ class ScoringTests(unittest.TestCase):
         doc = good_document("fund-and-fields-unchanged", [9701, 9702]).replace("[N1]", '[<a href="#N1">N1</a>]')
         result = score(*first_import("fund-and-fields-unchanged", doc))
         self.assertTrue(result["passed"], failed(result))
+
+    def test_notes_name_the_record_they_came_from(self):
+        ids = list(range(9101, 9106))
+        doc = good_document("secondary-record-notes", ids)
+        result = score(*first_import("secondary-record-notes", doc))
+        self.assertTrue(result["passed"], failed(result))
+        # Same company, but the notes were read from 500102, not the empty 500101 record.
+        result = score(*first_import("secondary-record-notes", doc.replace("record 500102", "record 500101")))
+        self.assertIn("notesAttributed", failed(result))
+        self.assertEqual(result["info"]["notesMisattributed"], ids)
 
     def test_the_brief_must_be_filled_in(self):
         doc = good_document("fund-and-fields-unchanged", [9701, 9702])

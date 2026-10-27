@@ -116,7 +116,9 @@ Illustrative example with invented facts:
 One entry per retrieved note, with:
 
 - a document-local reference (`N1`, `N2`, …) used as the entry's anchor;
-- the CRM provider, the company or opportunity record ID, and the note ID;
+- the CRM provider, the note ID, and the ID of the record the note was retrieved from: the
+  company or opportunity ID passed to the notes read that returned it. Never attribute a note to
+  another matching record, even one of the same company;
 - author and date, when returned;
 - the source link, only when the CRM returned one; never invent a note URL;
 - the **full retrieved note text**, copied word for word.
@@ -159,7 +161,8 @@ created above it could never be refreshed.
    if the Deal now has a CRM history document set, if another CRM history import task for this
    Deal is still open, or if the Deal's documents already include a CRM history document. Report
    that another import is running or has already saved a CRM history document, and suggest a
-   refresh once it has finished. Do not create a second one.
+   refresh once it has finished. Do not create a second one. This is a blocked result: nothing
+   was imported or refreshed, so do not save task output or say that the history was imported.
 3. Create the document with `project.instantiateTemplate`, using the template's document
    reference, the observed template revision and hash, a filename such as
    `<Company> CRM history and context`, and the complete filled content. Keep the returned artifact
@@ -210,7 +213,8 @@ run rather than assuming them; the steps below match the Affinity connector's re
   is true, pass the returned page token (`nextPageToken`, or `next_page_token`) back as `pageToken`.
 - **Company record:** `affinity_get_company` with `companyId`. Add `fieldTypes: ["enriched"]`
   when profile context (description, location, funding) is useful.
-- **Company notes:** `affinity_list_company_notes` with `companyId` and `limit: 100`. While
+- **Company notes:** `affinity_list_company_notes` with `companyId` and `limit: 100`. Every note
+  it returns belongs to that `companyId`; record that ID with the note. While
   `hasMore` is true, call again with `cursor` set to the returned `nextCursor`. Each note has
   `id`, `content.html`, `creator` (first and last name), `createdAt` and `type`; `interaction`
   notes come from meetings or emails and belong in the history too.

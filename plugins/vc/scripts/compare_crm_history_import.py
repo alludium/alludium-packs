@@ -50,7 +50,8 @@ POINTER = "crm_history_artifact_id"
 WORKTREE = "WORKTREE"
 
 GLOBAL_ASSERTIONS = ["allTurnsComplete", "noInvalidToolCalls", "noAffinityWrites", "noFieldWrites", "noStageMove"]
-IMPORT_GLOBAL_ASSERTIONS = ["oneDocument", "completedWithPointer", "safeHtml", "briefCitesNotes", "briefSubstantive"]
+IMPORT_GLOBAL_ASSERTIONS = ["oneDocument", "completedWithPointer", "safeHtml", "briefCitesNotes", "briefSubstantive",
+                            "notesAttributed"]
 CASE_KEYS = {"notesRetained", "notesAbsent", "importStatus", "documentMentions", "documentForbidden", "documentKeeps",
              "replyMentions", "refresh", "stableRefs", "blocked", "createsCrmTask", "passesProvider",
              "noManagerDocument", "readsDocument", "createsTask", "livingReportActive"}
@@ -1155,6 +1156,26 @@ def case_notes(case: dict) -> dict[int, str]:
     return notes
 
 
+def note_holders(case: dict) -> dict[int, int]:
+    """Note ID → the company or opportunity record the notes read returns it from."""
+    affinity = case.get("affinity") or {}
+    holders = {}
+    for holder in affinity.get("companies", []) + affinity.get("opportunities", []):
+        for note in generated_notes(holder["generatedNotes"]) if holder.get("generatedNotes") else flatten_notes(holder.get("notes", [])):
+            holders[note["id"]] = holder["id"]
+    return holders
+
+
+def appendix_entry(appendix: str, note_id: int) -> str:
+    """The appendix entry (from one N anchor to the next) that names the note ID; the whole appendix without anchors."""
+    starts = [m.start() for m in re.finditer(r"id=\"N\d+\"", appendix)]
+    bounds = list(zip(starts, starts[1:] + [len(appendix)])) or [(0, len(appendix))]
+    for start, end in bounds:
+        if re.search(rf"\b{note_id}\b", appendix[start:end]):
+            return appendix[start:end]
+    return ""
+
+
 def visible_text(document: str) -> str:
     return " ".join(html.unescape(re.sub(r"<[^>]+>", " ", document)).split())
 
@@ -1261,6 +1282,11 @@ def score(frozen: dict, record: dict, documents: dict[str, str]) -> dict:
                        or not all(link in appendix_text for link in note_links(notes[n]))]
             assertions["notesRetained"] = bool(document) and not missing
             info["notesMissing"] = missing
+            # Each retained note names the record it was read from, not another matching record.
+            holders = note_holders(case)
+            misattributed = [n for n in retained if not re.search(rf"\b{holders[n]}\b", appendix_entry(appendix, n))]
+            assertions["notesAttributed"] = bool(document) and not misattributed
+            info["notesMisattributed"] = misattributed
             if expect.get("notesAbsent"):
                 assertions["notesAbsent"] = not any(contains_note(document, notes[n]) for n in expect["notesAbsent"])
             if expect.get("importStatus"):
