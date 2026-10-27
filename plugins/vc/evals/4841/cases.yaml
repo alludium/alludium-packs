@@ -8,7 +8,7 @@ description: >-
   invented; no customer data is used.
 firmName: Example Ventures
 
-# Import cases run the Deal Analyst on the Import or Refresh CRM History task when the arm ships that
+# Skill-control cases run the Deal Analyst on another task for a few steps only. Import cases run the Deal Analyst on the Import or Refresh CRM History task when the arm ships that
 # task, and otherwise send the user's request to the Deal Manager (what users had). Routing cases
 # always run the Deal Manager.
 importRequest: Import all information and notes from Affinity for this company.
@@ -196,6 +196,75 @@ cases:
           generatedNotes: {firstId: 10001, count: 60, author: Tom Becker, startDate: "2024-01-08", stepDays: 6, repeat: 18,
                            text: "Vastmere meeting {n}: reviewed maintenance marketplace metrics, supplier onboarding and buyer retention in detail. "}
     pageSize: 20
+
+  - id: company-not-found
+    kind: import
+    deal: {name: Zentrava, organisation: {name: Zentrava, domain: zentrava.example}}
+    affinity: {companies: []}
+
+  - id: refresh-document-missing
+    kind: import
+    deal:
+      name: Sablewing
+      organisation: {name: Sablewing, domain: sablewing.example}
+      existingDocument: true
+      existingDocumentMissing: true
+    affinity:
+      companies:
+        - id: 500801
+          name: Sablewing
+          domain: sablewing.example
+          domains: [sablewing.example]
+          description: Battery health analytics for e-bike fleets.
+          notes:
+            - - {id: 9801, author: Sam Ortiz, date: "2025-04-01T10:00:00Z", html: "<p>Intro from Northgate Capital. Battery analytics for e-bike fleets.</p>"}
+              - {id: 9802, author: Sam Ortiz, date: "2025-05-15T10:00:00Z", html: "<p>Six fleet operators on paid plans.</p>"}
+
+  - id: refresh-stale-revision
+    kind: import
+    deal:
+      name: Sablewing
+      organisation: {name: Sablewing, domain: sablewing.example}
+      existingDocument: true
+      editedBeforeFirstUpdate: true
+    affinity:
+      companies:
+        - id: 500801
+          name: Sablewing
+          domain: sablewing.example
+          domains: [sablewing.example]
+          description: Battery health analytics for e-bike fleets.
+          notes:
+            - - {id: 9801, author: Sam Ortiz, date: "2025-04-01T10:00:00Z", html: "<p>Intro from Northgate Capital. Battery analytics for e-bike fleets.</p>"}
+              - {id: 9802, author: Sam Ortiz, date: "2025-05-15T10:00:00Z", html: "<p>Six fleet operators on paid plans.</p>"}
+              - {id: 9803, author: Ana Lee, date: "2025-07-09T10:00:00Z", html: "<p>Raising €2.5m seed; we were asked to lead.</p>"}
+    existingDocumentNotes: [9801, 9802]
+
+  - id: over-size-refresh
+    kind: import
+    deal:
+      name: Brackwell
+      organisation: {name: Brackwell, domain: brackwell.example}
+      existingDocument: true
+    affinity:
+      companies:
+        - id: 501101
+          name: Brackwell
+          domain: brackwell.example
+          domains: [brackwell.example]
+          description: Freight audit software for shippers.
+          generatedNotes: {firstId: 11001, count: 60, author: Ana Lee, startDate: "2024-02-05", stepDays: 6, repeat: 18,
+                           text: "Brackwell call {n}: reviewed freight audit volumes, carrier disputes and shipper renewals in detail. "}
+    pageSize: 20
+    existingDocumentNotes: [11001, 11002, 11003]
+
+  # Control: the analyst's other tasks must still take up the living-report method now that it is AUTO.
+  - id: screening-still-uses-living-report
+    kind: skill-control
+    taskSlug: generate-refresh-screening-report
+    maxSteps: 4
+    deal: {name: Corvane seed, organisation: {name: Corvane, domain: corvane.example}}
+    affinity: {companies: []}
 
   - id: route-import-request
     kind: routing

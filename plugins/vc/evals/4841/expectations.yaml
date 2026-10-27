@@ -70,6 +70,29 @@ cases:
     blocked: true
     replyMentions: ["(?:100 ?KB|size limit|document limit|too large|does not fit|doesn't fit|exceeds)"]
 
+  company-not-found:
+    blocked: true
+    replyMentions: ["(?:not find|couldn't find|could not find|no matching|not found|no (?:\\w+ )?records?)"]
+
+  refresh-document-missing:
+    blocked: true
+    replyMentions: ["(?:not found|could not be (?:read|found|opened)|couldn't be (?:read|found|opened)|deleted|unavailable|missing|no longer)"]
+
+  refresh-stale-revision:
+    refresh: true
+    notesRetained: [9801, 9802, 9803]
+    importStatus: complete
+    stableRefs: {9801: N1, 9802: N2, 9803: N3}
+
+  over-size-refresh:
+    blocked: true
+    refresh: true
+    replyMentions: ["(?:100 ?KB|size limit|document limit|too large|does not fit|doesn't fit|exceeds)"]
+
+  screening-still-uses-living-report:
+    # Met when the skill is ALWAYS-on in the arm or the analyst activates it within the step cap.
+    livingReportActive: true
+
   route-import-request:
     createsCrmTask: true
     passesProvider: affinity

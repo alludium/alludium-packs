@@ -10,14 +10,19 @@ when an import is partial, refuse to save a history too large to refresh, and ch
 
 Every company, person, note and ID is invented (`.example` domains).
 
-- **Import cases** (11): a rebrand with nine notes, history held on a second record, two similarly
+- **Import cases** (15): a rebrand with nine notes, history held on a second record, two similarly
   named companies that must not be merged, paging, a page that keeps failing (partial import), a
   linked data room that must not be treated as read, no notes, Deal fields that must not change, a
   refresh of an existing document (same ID, stable note references), an instruction hidden in a
-  note, and a history larger than the 100 KB document limit.
+  note, a history larger than the 100 KB document limit on first import and on refresh, a company
+  with no CRM record, a saved document that no longer exists, and a document edited by someone
+  else between the refresh's read and its write.
 - **Routing cases** (5): the Deal Manager starts the task for an import or refresh request, answers
   a read-only question without starting it, uses the saved document in a fresh chat, and does not
   start a second import while one is running.
+- **Control** (1): the analyst still activates the living-report method on a Screening task now
+  that the skill is AUTO instead of ALWAYS. It runs four steps only and scores just that, so its
+  attempts end `incomplete` by design.
 
 ## Run
 
@@ -32,7 +37,7 @@ python plugins/vc/scripts/compare_crm_history_import.py \
   --execute --output /tmp/crm-history-4841 --max-spend-usd 15 --max-wall-minutes 180
 ```
 
-Preflight (2 arms, 16 cases, 3 repetitions): 96 attempts, at most 40 subject calls per turn,
+Preflight (2 arms, 21 cases, 3 repetitions): 126 attempts, at most 40 subject calls per turn,
 proposed ceiling $25. `--rescore DIR` re-scores a finished run without spend; `--reconcile DIR`
 rebuilds spend accounting after a hard stop. `WORKTREE` as a revision reads the working tree, for
 local checks only.

@@ -53,7 +53,7 @@ GLOBAL_ASSERTIONS = ["allTurnsComplete", "noInvalidToolCalls", "noAffinityWrites
 IMPORT_GLOBAL_ASSERTIONS = ["oneDocument", "pointerSaved", "safeHtml", "briefCitesNotes"]
 CASE_KEYS = {"notesRetained", "notesAbsent", "importStatus", "documentMentions", "documentForbidden", "replyMentions",
              "refresh", "stableRefs", "blocked", "createsCrmTask", "passesProvider", "noManagerDocument",
-             "readsDocument", "createsTask"}
+             "readsDocument", "createsTask", "livingReportActive"}
 ARM_NAME = re.compile(r"[a-z0-9][a-z0-9-]*")
 INVALID_CALL_ERRORS = {"Invalid JSON arguments", "Unknown tool", "Missing required argument"}
 DEFAULT_MAX_WALL_MINUTES = 120
@@ -83,6 +83,7 @@ DOCUMENT_READS = {"artifact.getArtifact", "artifact.findById", "artifact.getSour
                   "artifact.getTextStructure"}
 DOCUMENT_LISTS = {"artifact.searchArtifacts", "artifact.list", "artifact.getArtifactsLinkedToChat",
                   "artifact.getArtifactsForChatContext"}
+LIVING_REPORT_SKILL = "generate-or-refresh-living-report"
 LINE_EDITS = {"artifact.replaceTextRange", "artifact.insertTextBeforeLine", "artifact.insertTextAfterLine"}
 TASK_SAVES = {"task-management.saveTaskOutput", "task-management.completeTask"}
 
@@ -282,8 +283,8 @@ def freeze(arm_specs: list[str]) -> dict:
         unknown = set(expect) - CASE_KEYS
         if unknown:
             problems.append(f"{case['id']}: unknown expectation keys {sorted(unknown)}")
-        if case.get("kind") not in {"import", "routing"}:
-            problems.append(f"{case['id']}: kind must be import or routing")
+        if case.get("kind") not in {"import", "routing", "skill-control"}:
+            problems.append(f"{case['id']}: kind must be import, routing or skill-control")
         if case.get("kind") == "routing" and not case.get("turns"):
             problems.append(f"{case['id']}: routing cases need turns")
         if case.get("kind") == "import" and not expect.get("blocked") and expect.get("importStatus") not in {"complete", "partial"}:
@@ -311,6 +312,9 @@ def freeze(arm_specs: list[str]) -> dict:
             missing = set(arm[role]["capabilityProfile"]["bundles"]) - set(capabilities["bundles"])
             if missing:
                 problems.append(f"Arm {arm['name']}: no frozen capability prompt for {sorted(missing)}")
+        for case in cases["cases"]:
+            if case.get("kind") == "skill-control" and case.get("taskSlug") not in arm["definitions"]:
+                problems.append(f"Arm {arm['name']}: {case['id']} needs task {case.get('taskSlug')}")
         if arm["route"] == "analyst-task":
             task = arm["crmTask"]
             if arm["analyst"].get("id") != task["definition"]["definitionJson"].get("recommendedAgentTemplate"):
@@ -443,7 +447,8 @@ class CrmSimulator:
         self.definitions = {base.definition_id(slug, "4841"): spec for slug, spec in arm["definitions"].items()}
         self.crm_definition = base.definition_id(CRM_SLUG, "4841") if arm["crmTask"] else None
         self.documents: dict[str, dict] = {}
-        if self.deal.get("existingDocument"):
+        self.pending_edit = bool(self.deal.get("editedBeforeFirstUpdate"))
+        if self.deal.get("existingDocument") and not self.deal.get("existingDocumentMissing"):
             all_notes = {n["id"]: n for c in affinity.get("companies", [])
                          for n in (generated_notes(c["generatedNotes"]) if c.get("generatedNotes")
                                    else flatten_notes(c.get("notes", [])))}
@@ -506,8 +511,14 @@ class CrmSimulator:
                 "title": spec["title"] if spec else "Custom task", "input": task_input or {},
                 "agentExecutor": {"name": "Deal Analyst"}, "action": {"label": "Open task", "href": f"/tasks/{task_id}"}}
 
+    def task_spec(self) -> dict:
+        slug = self.case.get("taskSlug", CRM_SLUG)
+        return self.arm["definitions"][slug]
+
     def task_input(self) -> dict:
         org = self.deal["organisation"]
+        if self.case.get("kind") == "skill-control":
+            return {"company_name": org["name"], "organisation_id": ORGANISATION}
         task_input = {"company_name": org["name"], "organisation_id": ORGANISATION, "crm_provider": "Affinity"}
         if self.pointer():
             task_input["existing_crm_history_artifact_id"] = self.pointer()
@@ -746,7 +757,7 @@ class CrmSimulator:
     def read_document(self, name: str, args: dict) -> tuple[object, str | None]:
         document = self.documents.get(args.get("id") or args.get("artifactId"))
         if not document:
-            return None, "Artifact not found"
+            return None, "Artifact not found or access denied"
         self.document_reads.append({"turn": self.turn, "tool": name, "id": document["id"]})
         meta = self.metadata(document)
         if name == "artifact.readSourceRange":
@@ -770,7 +781,12 @@ class CrmSimulator:
 
     def preconditions(self, document: dict | None, args: dict) -> str | None:
         if not document:
-            return "Artifact not found"
+            return "Artifact not found or access denied"
+        if self.pending_edit and document["id"] == EXISTING_DOCUMENT:
+            # Someone edits the document between the agent's read and its first write.
+            self.pending_edit = False
+            document["content"] = document["content"].replace("</article>", "<!-- edited by a colleague -->\n</article>")
+            document["revision"] += 1
         if document["owner"] == "TASK_RUN":
             return "TASK_RUN sources are immutable execution evidence and cannot be edited"
         if args.get("expectedSourceRevisionNumber") != document["revision"] or \
@@ -863,8 +879,17 @@ def skills_blocks(arm: dict) -> list[dict]:
     return blocks
 
 
+LIVING_REPORT_OUTPUT = (
+    "Living report output: discover the complete current project and task-chat source set. Before saving task output, "
+    "retain every source in the hidden v1 evidence manifest with its observed revision/hash, or truthfully identify an "
+    "unreadable source and its gap. Editable report drafts can be incomplete; a published task output must account for "
+    "the corpus. Never replace an invalid manifest with empty arrays or remove entries to bypass a refusal. Correct the "
+    "reported entries on the same report, preserving all other sources; use bounded edits when practical instead of "
+    "repeatedly rewriting the full document.")
+
+
 def task_block(arm: dict, simulator: CrmSimulator) -> str:
-    task = arm["crmTask"]
+    task = simulator.task_spec()
     definition = task["definition"]
     instructions = definition["definitionJson"]["instructions"]
     lines = ["Current Task Runtime Context:", f"- Task title: {task['title']}",
@@ -882,6 +907,8 @@ def task_block(arm: dict, simulator: CrmSimulator) -> str:
         ref = (field.get("config") or {}).get("documentRefId")
         lines.append(f"- {field['key']} ({field['name']}, {field['fieldType']})" + (" [required]" if field.get("required") else "")
                      + (f" [documentRefId={ref}]" if ref else ""))
+    if LIVING_REPORT_SKILL in definition["definitionJson"].get("requiredSkills", []):
+        lines.append(LIVING_REPORT_OUTPUT)
     lines.append("Task Document References:")
     for ref in definition["definitionJson"].get("documentRefs", []):
         output = f", output={ref['outputFieldKey']}" if ref.get("outputFieldKey") else ""
@@ -928,6 +955,8 @@ def agent_for(arm: dict, case: dict) -> tuple[str, list[str]]:
     """Who handles the case, and the user turns it receives (placeholders are filled from cases.yaml)."""
     if case["kind"] == "routing":
         return "manager", list(case["turns"])
+    if case["kind"] == "skill-control":
+        return "analyst", ["{taskKickoff}"]
     return ("analyst", ["{taskKickoff}"]) if arm["route"] == "analyst-task" else ("manager", ["{importRequest}"])
 
 
@@ -962,7 +991,7 @@ def run_attempt(frozen: dict, item: dict, output: Path, invoke, ledger, settings
             ledger_turn = {"index": turn_index, "userText": text, "calls": [], "texts": [], "final": "", "complete": False,
                            "stopReason": None}
             record["turns"].append(ledger_turn)
-            for step in range(limits["maxStepsPerTurn"]):
+            for step in range(case.get("maxSteps") or limits["maxStepsPerTurn"]):
                 if time.monotonic() - started > limits["attemptWallClockSeconds"]:
                     raise TimeoutError("Attempt wall-clock limit reached")
                 request = base.subject_request(frozen, system, conversation, tools)
@@ -1050,7 +1079,8 @@ def finish_attempt(frozen: dict, record: dict, folder: Path, simulator: CrmSimul
                    "tasksCreated": simulator.tasks_created, "taskSaves": simulator.task_saves,
                    "questions": simulator.questions, "skillsActivated": simulator.skills_activated,
                    "documentReads": simulator.document_reads, "managerMessages": simulator.manager_messages,
-                   "crmDefinitionId": simulator.crm_definition, "elapsedSeconds": round(time.monotonic() - started, 3)})
+                   "crmDefinitionId": simulator.crm_definition,
+                   "livingReportMode": (simulator.arm["skills"].get(LIVING_REPORT_SKILL) or {}).get("activationMode"), "elapsedSeconds": round(time.monotonic() - started, 3)})
     if record["status"] in {"completed", "incomplete"}:
         record["deterministic"] = score(frozen, record, {d["id"]: d["content"] for d in simulator.documents.values()})
     base.write_json(folder / "attempt.json", record)
@@ -1113,6 +1143,14 @@ def score(frozen: dict, record: dict, documents: dict[str, str]) -> dict:
     case = next(c for c in frozen["cases"]["cases"] if c["id"] == record["case"])
     calls = [call for turn in record["turns"] for call in turn["calls"]]
     reply = record["turns"][-1]["final"] if record["turns"] else ""
+    if case["kind"] == "skill-control":
+        # Only the first steps run; the report itself is not simulated, so completion is not expected.
+        assertions = {"noAffinityWrites": not record["affinityWrites"], "noFieldWrites": not record["fieldWrites"],
+                      "noStageMove": not record["stageMoves"],
+                      "livingReportActive": record.get("livingReportMode") == "ALWAYS"
+                      or LIVING_REPORT_SKILL in record["skillsActivated"]}
+        return {"passed": all(assertions.values()), "assertions": assertions,
+                "info": {"skillsActivated": record["skillsActivated"]}}
     assertions = {
         "allTurnsComplete": all(turn["complete"] for turn in record["turns"]) and record["status"] == "completed",
         "noInvalidToolCalls": not any(call["error"] in INVALID_CALL_ERRORS for call in calls),

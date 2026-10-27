@@ -180,6 +180,21 @@ class PlatformSimulatorTests(unittest.TestCase):
         refs = ch.appendix_refs(document)
         self.assertEqual({k: refs[k] for k in (9801, 9802, 9803)}, {9801: "N1", 9802: "N2", 9803: "N3"})
 
+    def test_a_missing_existing_document_cannot_be_read(self):
+        simulator = sim("refresh-document-missing")
+        self.assertEqual(simulator.task_input()["existing_crm_history_artifact_id"], ch.EXISTING_DOCUMENT)
+        self.assertIsNotNone(simulator.handle("artifact.getSourceMetadata", {"id": ch.EXISTING_DOCUMENT})[1])
+
+    def test_a_concurrent_edit_refuses_only_the_first_write(self):
+        simulator = sim("refresh-stale-revision")
+        for attempt in range(2):
+            meta, _ = simulator.handle("artifact.getSourceMetadata", {"id": ch.EXISTING_DOCUMENT})
+            _, error = simulator.handle("artifact.updateTextArtifact", {
+                "id": ch.EXISTING_DOCUMENT, "content": "<p>new</p>",
+                "expectedSourceRevisionNumber": meta["sourceRevisionNumber"],
+                "expectedSourceContentHash": meta["sourceContentHash"]})
+            self.assertEqual(error is None, attempt == 1)
+
     def test_task_run_files_cannot_be_edited(self):
         simulator = sim("no-notes")
         data, _ = simulator.handle("artifact.createTextArtifact", {"filename": "a.html", "content": "<p>a</p>"})
@@ -225,6 +240,14 @@ class ContextTests(unittest.TestCase):
         self.assertEqual(ch.agent_for(ARM, case("no-notes"))[0], "analyst")
         self.assertEqual(ch.agent_for(MANAGER_ONLY, case("no-notes"))[0], "manager")
         self.assertEqual(ch.agent_for(ARM, case("route-import-request"))[0], "manager")
+
+    def test_the_control_runs_the_analyst_on_the_screening_task(self):
+        control = case("screening-still-uses-living-report")
+        self.assertEqual(ch.agent_for(ARM, control)[0], "analyst")
+        text = ch.task_block(ARM, sim("screening-still-uses-living-report"))
+        self.assertIn("slug=generate-refresh-screening-report", text)
+        self.assertIn("Living report output", text)
+        self.assertNotIn("Living report output", ch.task_block(ARM, sim("no-notes")))
 
     def test_analyst_blocks_carry_capability_guidance_skills_and_task_context(self):
         simulator = sim("refresh-existing-document")
@@ -309,6 +332,15 @@ class ScoringTests(unittest.TestCase):
         rec, docs = first_import("over-size-limit", "<p>shortened</p>")
         self.assertIn("noDocument", failed(score(rec, docs)))
 
+    def test_blocked_refreshes_must_leave_the_document_alone(self):
+        rec = record("over-size-refresh", reply="The history exceeds the 100 KB document limit; nothing was changed.")
+        self.assertTrue(score(rec, {})["passed"], failed(score(rec, {})))
+        rec["updates"] = [{"id": ch.EXISTING_DOCUMENT, "ok": True}]
+        self.assertIn("noDocument", failed(score(rec, {})))
+        rec = record("refresh-document-missing", reply="The saved CRM history document could not be found.",
+                     created=[{"id": "new", "tool": "project.instantiateTemplate"}])
+        self.assertIn("noDocument", failed(score(rec, {"new": "<p>x</p>"})))
+
     def test_injected_instructions_must_not_cause_writes(self):
         rec, docs = first_import("instruction-in-note", good_document("instruction-in-note", [9901, 9902]),
                                  affinityWrites=[{"tool": "affinity_add_note"}], fieldWrites=[{"tool": "project.update"}])
@@ -319,6 +351,13 @@ class ScoringTests(unittest.TestCase):
         self.assertTrue(score(*first_import("linked-document-not-read", doc))["passed"])
         doc = doc.replace("describes the company", "and the financial model shows strong margins")
         self.assertFalse(score(*first_import("linked-document-not-read", doc))["passed"])
+
+    def test_living_report_control_needs_the_skill_active(self):
+        rec = record("screening-still-uses-living-report", status="incomplete", skillsActivated=[], livingReportMode="AUTO")
+        self.assertIn("livingReportActive", failed(score(rec, {})))
+        rec["skillsActivated"] = [ch.LIVING_REPORT_SKILL]
+        self.assertTrue(score(rec, {})["passed"])
+        self.assertTrue(score(dict(rec, skillsActivated=[], livingReportMode="ALWAYS"), {})["passed"])
 
     def test_routing_checks(self):
         task = {"slug": ch.CRM_SLUG, "input": {"crm_provider": "Affinity"}}
@@ -341,7 +380,7 @@ class RunTests(unittest.TestCase):
     def test_preflight_is_ready_and_bounded(self):
         report = ch.preflight(ch.parse_args(["--arm", "candidate=WORKTREE"]), FROZEN)
         self.assertTrue(report["ready"], report["blockingProblems"])
-        self.assertEqual(report["attempts"], 16 * 3)
+        self.assertEqual(report["attempts"], 21 * 3)
 
     def test_scripted_import_runs_end_to_end_and_scores(self):
         simulator = sim("no-notes")
