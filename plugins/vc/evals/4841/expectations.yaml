@@ -68,7 +68,7 @@ cases:
 
   over-size-limit:
     blocked: true
-    replyMentions: ["(?:100 ?KB|size limit|document limit|too large|does not fit|doesn't fit|exceeds)"]
+    replyMentions: ["(?:100 ?KB|size limit|document limit|too large|does not fit|doesn't fit|exceeds|(?:above|over) the [\\w' -]{0,30}\\d+ ?KB)"]
 
   company-not-found:
     blocked: true
@@ -87,7 +87,7 @@ cases:
   over-size-refresh:
     blocked: true
     refresh: true
-    replyMentions: ["(?:100 ?KB|size limit|document limit|too large|does not fit|doesn't fit|exceeds)"]
+    replyMentions: ["(?:100 ?KB|size limit|document limit|too large|does not fit|doesn't fit|exceeds|(?:above|over) the [\\w' -]{0,30}\\d+ ?KB)"]
 
   screening-still-uses-living-report:
     # Met when the skill is ALWAYS-on in the arm or the analyst activates it within the step cap.

@@ -60,12 +60,15 @@ ID or link is a starting point, not proof that it is the only relevant record.
    the company has no history: another matching record may hold it.
 3. Decide record by record whether it describes this company. Use the domain, known IDs, location,
    people and what the notes describe. A rebrand, an old trading name or an older enrichment
-   entry can explain differences between records of the same company. A similar name alone never
-   justifies combining two companies.
+   entry can explain differences between records of the same company. Records that share the
+   company's known domain are the same company, even when one has no notes or a slightly different
+   name, unless their notes describe a different business. A similar name alone never justifies
+   combining two companies.
 4. Use every record that is this company. Record the ones you set aside, with the reason, in
    Import coverage.
-5. If you cannot tell which record is the Deal's company, do not guess. Ask one focused question
-   that lists the candidates by name, domain and record ID, and save nothing until it is answered.
+5. If the evidence conflicts and you cannot tell which record is the Deal's company, do not guess.
+   Ask one focused question that lists the candidates by name, domain and record ID, and save
+   nothing until it is answered. Do not ask when the records clearly describe the same company.
 6. Also find the company's opportunity or deal records in the CRM, when the CRM exposes them, and
    read their notes too.
 
@@ -116,7 +119,9 @@ One entry per retrieved note, with:
 - the CRM provider, the company or opportunity record ID, and the note ID;
 - author and date, when returned;
 - the source link, only when the CRM returned one; never invent a note URL;
-- the **full retrieved note text**. Never shorten, summarise, excerpt or drop a note.
+- the **full retrieved note text**, copied word for word.
+  Never shorten, summarise, excerpt or drop a note. Never reword it or drop or add a single word.
+  Before saving, check each appendix entry against the note you retrieved.
 
 Number notes in date order, oldest first. On a refresh, keep each note's existing reference from
 the previous document (match by note ID) and give new notes the next free numbers, so citations
@@ -183,6 +188,7 @@ task output. A refresh returns the same artifact ID it was given.
   for a partial import.
 - If the company cannot be identified, the CRM is not connected, access fails entirely, or the
   document cannot be saved, report that specific blocker and do not claim the task succeeded.
+- When nothing was saved, do not point the reader to a document.
 - Use plain investor-facing language. Do not name internal field keys, tools or processing steps.
 
 ## Affinity

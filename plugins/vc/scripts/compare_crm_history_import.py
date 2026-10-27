@@ -186,7 +186,18 @@ WORD = re.compile(r"\w+")
 UNSAFE_HTML = re.compile(r"<script\b|<iframe\b|<form\b|<object\b|<embed\b|<link\b|@import\b|javascript:|"
                          r"\son[a-z]+\s*=|<img\b[^>]*\bsrc\s*=\s*['\"]?https?:", re.I)
 APPENDIX_HEADING = re.compile(r"<h2[^>]*>\s*Source appendix\s*</h2>", re.I)
+# Matched on visible text, so linked citations such as [<a href="#N1">N1</a>] count.
 CITATION = re.compile(r"\[\s*N\d+")
+# Identity reads the Deal Manager may call; every other identity.* call is a write and is refused.
+IDENTITY_READS = {
+    "identity.lookupCandidates": {"candidates": [], "hasMore": False},
+    "identity.findOrganisation": None,
+    "identity.findPerson": {"record": None},
+    "identity.listAffiliations": {"affiliations": []},
+    "identity.listIdentifiers": {"identifiers": []},
+    "identity.listProjectLinks": None,
+    "identity.findSourceCapture": {"capture": None},
+}
 BADGE = re.compile(r"<[^>]+class=\"[^\"]*\bbadge\b[^\"]*\"[^>]*>(.*?)</", re.I | re.S)
 
 
@@ -504,6 +515,15 @@ class CrmSimulator:
                 "fields": fields, "openTasks": [t for t in self.tasks if t["status"] in {"running", "pending"}],
                 "artifactIds": list(self.documents)}
 
+    def identity_read(self, name: str) -> dict:
+        org = self.deal["organisation"]
+        record = {"id": ORGANISATION, "displayName": org["name"], "domain": org.get("domain")}
+        if name == "identity.listProjectLinks":
+            return {"links": [{"projectId": PROJECT, "role": "deal_company", "organisation": record}]}
+        if name == "identity.findOrganisation":
+            return {"record": record}
+        return IDENTITY_READS[name]
+
     def task_record(self, task_id: str, slug: str | None, status: str, task_input: dict | None = None) -> dict:
         spec = self.arm["definitions"].get(slug) if slug else None
         return {"id": task_id, "taskId": task_id, "projectId": PROJECT, "status": status,
@@ -613,6 +633,8 @@ class CrmSimulator:
         if states:
             self.stage_moves.append({"turn": self.turn, "tool": name, "states": states})
             return None, "Lifecycle moves are outside this simulation"
+        if name in IDENTITY_READS:
+            return self.identity_read(name), None
         if name in {"project.update", "project_data"} or name.startswith("identity."):
             self.field_writes.append({"turn": self.turn, "tool": name, "input": args})
             return None, "Project and identity writes are outside this simulation"
@@ -1182,7 +1204,7 @@ def score(frozen: dict, record: dict, documents: dict[str, str]) -> dict:
             assertions["safeHtml"] = bool(document) and not UNSAFE_HTML.search(document)
             notes = case_notes(case)
             retained = expect.get("notesRetained", [])
-            assertions["briefCitesNotes"] = bool(document) and (not retained or bool(CITATION.search(brief_part(document))))
+            assertions["briefCitesNotes"] = bool(document) and (not retained or bool(CITATION.search(visible_text(brief_part(document)))))
             missing = [n for n in retained if not contains_note(document, notes[n])]
             assertions["notesRetained"] = bool(document) and not missing
             info["notesMissing"] = missing
@@ -1382,7 +1404,10 @@ def execute(args: argparse.Namespace, invoke=None) -> dict:
         signal.signal(signal.SIGTERM, previous)
     done = {r["folder"] for r in manifest["records"]}
     manifest["records"] += [{**i, "status": "not_run", "reason": halted} for i in report["attemptPlan"] if i["folder"] not in done]
-    incomplete = halted or any(r["status"] != "completed" for r in manifest["records"])
+    # The skill-control case stops at its step cap by design, so its "incomplete" attempts are expected.
+    capped = {c["id"] for c in frozen["cases"]["cases"] if c["kind"] == "skill-control"}
+    incomplete = halted or any(r["status"] != "completed" and not (r["case"] in capped and r["status"] == "incomplete")
+                               for r in manifest["records"])
     manifest.update({"finishedAt": datetime.now(timezone.utc).isoformat(), "status": "incomplete" if incomplete else "completed",
                      "halted": halted, "spend": ledger.totals(),
                      "summary": summarise(manifest["records"], report["armNames"], report["caseIds"])})

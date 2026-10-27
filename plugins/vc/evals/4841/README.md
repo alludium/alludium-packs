@@ -73,6 +73,23 @@ There is no judge; read the saved documents and replies too. Offline scorer and 
 
 ## Status
 
+**Run 1** (baseline `v0.6.40`, candidate `480dc53`, `gpt-5.6-luna`, medium reasoning, 3
+repetitions, $1.15 of a $15 ceiling, all 829 calls settled, not halted): baseline 4/63, candidate
+49/63. Reading the failures, 12 of the candidate's 14 were scorer mistakes, so the scorer was
+corrected before relying on the numbers:
+
+- the read-only `identity.listProjectLinks`, which the Deal Manager prompt tells it to call, was
+  counted as a Deal write (all 6 candidate and 57 baseline `noFieldWrites` failures); identity
+  reads now get simulated answers and only identity writes count;
+- citations written as links (`[<a href="#N1">N1</a>]`) were not recognised; citations are now
+  matched on the brief's visible text;
+- the size-limit reply pattern missed "above the platform's 90 KB pre-save threshold";
+- the step-capped control marked the whole run `incomplete`; its capped attempts are now expected.
+
+Run 1 also found two real candidate misses, fixed in the skill and task: one appendix note lost a
+word ("raise a €2m seed" became "raise €2m seed"), and with two records sharing the company's
+domain the analyst asked which to use instead of importing both. A blocked import also ended by
+pointing to a file that was never saved. Run 2 checks the corrected version and scorer.
+
 Disposition for the analyst task, skill, template and Deal Manager routing surface (VC Pack
-`v0.6.40`..candidate): `prepared-not-run`, waiting for spend approval. The no-spend preflight is
-ready and the offline tests pass.
+`v0.6.40`..candidate): `ran-with-evidence` for run 1; run 2 pending.

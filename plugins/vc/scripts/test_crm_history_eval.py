@@ -220,6 +220,15 @@ class PlatformSimulatorTests(unittest.TestCase):
         self.assertEqual(len(simulator.stage_moves), 1)
         self.assertEqual(simulator.tasks_created, [])
 
+    def test_identity_reads_are_answered_and_not_counted_as_writes(self):
+        simulator = sim("route-read-only-question", agent="manager")
+        links, error = simulator.handle("identity.listProjectLinks", {"projectId": ch.PROJECT})
+        self.assertIsNone(error)
+        self.assertEqual(links["links"][0]["organisation"]["id"], ch.ORGANISATION)
+        _, error = simulator.handle("identity.createOrganisation", {"displayName": "Corvane"})
+        self.assertIsNotNone(error)
+        self.assertEqual([w["tool"] for w in simulator.field_writes], ["identity.createOrganisation"])
+
     def test_manager_creates_the_crm_task_from_its_definition(self):
         simulator = sim("route-import-request", agent="manager")
         definitions, _ = simulator.handle("task-definitions.list", {})
@@ -275,6 +284,14 @@ class ScoringTests(unittest.TestCase):
         result = score(rec, docs)
         self.assertTrue(result["passed"], failed(result))
 
+    def test_linked_citations_count(self):
+        doc = good_document("no-notes", [])
+        self.assertIn("briefCitesNotes", failed(score(*first_import("fund-and-fields-unchanged",
+                                                                     doc.replace(" [N1]", "")))))
+        doc = good_document("fund-and-fields-unchanged", [9701, 9702]).replace("[N1]", '[<a href="#N1">N1</a>]')
+        result = score(*first_import("fund-and-fields-unchanged", doc))
+        self.assertTrue(result["passed"], failed(result))
+
     def test_a_shortened_or_missing_note_fails(self):
         doc = good_document("rebrand-nine-notes", list(range(9001, 9010)))
         doc = doc.replace("Reason for the larger round not given.", "")
@@ -328,6 +345,8 @@ class ScoringTests(unittest.TestCase):
 
     def test_oversize_must_save_nothing_and_name_the_limit(self):
         rec = record("over-size-limit", reply="Blocked: the full note history does not fit within the 100 KB document limit.")
+        self.assertTrue(score(rec, {})["passed"], failed(score(rec, {})))
+        rec = record("over-size-limit", reply="Not saved: estimated at 130 KB, above the platform's 90 KB pre-save threshold.")
         self.assertTrue(score(rec, {})["passed"], failed(score(rec, {})))
         rec, docs = first_import("over-size-limit", "<p>shortened</p>")
         self.assertIn("noDocument", failed(score(rec, docs)))
@@ -410,6 +429,15 @@ class RunTests(unittest.TestCase):
             self.assertEqual(saved.read_text(), content)
             rescored = ch.rescore(Path(tmp) / "run")
             self.assertEqual(rescored["totals"]["candidate"], {"passed": 1, "scored": 1})
+
+    def test_the_step_capped_control_does_not_mark_the_run_incomplete(self):
+        script = iter([response([call("activate_skill", {"skillId": ch.LIVING_REPORT_SKILL}, f"s{i}")]) for i in range(4)])
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = ch.execute(self.args(Path(tmp) / "run", ["screening-still-uses-living-report"]),
+                                  invoke=lambda *_: next(script))
+            self.assertEqual(manifest["records"][0]["status"], "incomplete")
+            self.assertTrue(manifest["records"][0]["deterministic"]["passed"])
+            self.assertEqual(manifest["status"], "completed")
 
 
 if __name__ == "__main__":
