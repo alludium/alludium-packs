@@ -397,6 +397,10 @@ class ScoringTests(unittest.TestCase):
         self.assertTrue(score(rec, {})["passed"], failed(score(rec, {})))
         rec = record("over-size-limit", reply="Not saved: estimated at 130 KB, above the platform\u2019s 90 KB pre-save threshold.")
         self.assertTrue(score(rec, {})["passed"], failed(score(rec, {})))
+        for reply in ["Not saved: the notes would exceed the document's safe size threshold.",
+                      "Not saved: preserving them would exceed the 90,000-byte pre-save limit."]:
+            rec = record("over-size-limit", reply=reply)
+            self.assertTrue(score(rec, {})["passed"], failed(score(rec, {})))
         rec, docs = first_import("over-size-limit", "<p>shortened</p>")
         self.assertIn("noDocument", failed(score(rec, docs)))
 

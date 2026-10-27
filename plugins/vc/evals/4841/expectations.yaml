@@ -49,7 +49,7 @@ cases:
   no-notes:
     notesRetained: []
     importStatus: complete
-    documentMentions: ["\\bno notes\\b"]
+    documentMentions: ["\\bno (?:\\w+ )?notes\\b"]
 
   fund-and-fields-unchanged:
     notesRetained: [9701, 9702]
@@ -68,7 +68,7 @@ cases:
 
   over-size-limit:
     blocked: true
-    replyMentions: ["(?:100 ?KB|size limit|document limit|too large|does not fit|doesn't fit|exceeds|(?:above|over) the [^.\\d]{0,30}\\d+ ?KB)"]
+    replyMentions: ["(?:100 ?KB|size limit|document limit|too large|does not fit|doesn't fit|exceed(?:s|ed)?|(?:above|over) the [^.\\d]{0,30}\\d+ ?KB|\\d[\\d,]* ?(?:-byte|bytes))"]
 
   company-not-found:
     blocked: true
@@ -89,7 +89,7 @@ cases:
   over-size-refresh:
     blocked: true
     refresh: true
-    replyMentions: ["(?:100 ?KB|size limit|document limit|too large|does not fit|doesn't fit|exceeds|(?:above|over) the [^.\\d]{0,30}\\d+ ?KB)"]
+    replyMentions: ["(?:100 ?KB|size limit|document limit|too large|does not fit|doesn't fit|exceed(?:s|ed)?|(?:above|over) the [^.\\d]{0,30}\\d+ ?KB|\\d[\\d,]* ?(?:-byte|bytes))"]
 
   other-import-running:
     blocked: true

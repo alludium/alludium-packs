@@ -96,7 +96,15 @@ corrected before relying on the numbers:
 Run 1 also found two real candidate misses, fixed in the skill and task: one appendix note lost a
 word ("raise a €2m seed" became "raise €2m seed"), and with two records sharing the company's
 domain the analyst asked which to use instead of importing both. A blocked import also ended by
-pointing to a file that was never saved. Run 2 (candidate `05ad94e`) checks those fixes.
+pointing to a file that was never saved.
+
+**Run 2** (baseline `v0.6.40`, candidate `05ad94e`, same settings, $1.39 of a $5 ceiling including
+$0.23 held for one timed-out call, not halted): baseline 10/63, candidate 59/62 (one attempt lost to
+a provider timeout). The three candidate failures were scorer misses ("would exceed", "90,000-byte",
+"No CRM notes"), since widened. Every one of the 186 notes the cases require was kept word for word,
+both records sharing a domain were imported without asking, and no blocked reply pointed to a file.
+Run 1 rescored with the corrected scorer: baseline 4/63, candidate 55/63, the remaining failures
+being the two real misses above and identity reads the old simulator recorded as writes.
 
 A cold review then tightened the method and the scorer: a first import re-reads the Deal's live
 state and stops if another import is running or has created its document; a refused refresh
@@ -107,4 +115,4 @@ the analyst is offered field tools; and the controls cover all four reports. Run
 final candidate.
 
 Disposition for the analyst task, skill, template and Deal Manager routing surface (VC Pack
-`v0.6.40`..candidate): `ran-with-evidence` for run 1; runs 2 and 3 pending.
+`v0.6.40`..candidate): `ran-with-evidence` for runs 1 and 2; run 3 pending.
