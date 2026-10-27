@@ -346,7 +346,7 @@ class ScoringTests(unittest.TestCase):
     def test_oversize_must_save_nothing_and_name_the_limit(self):
         rec = record("over-size-limit", reply="Blocked: the full note history does not fit within the 100 KB document limit.")
         self.assertTrue(score(rec, {})["passed"], failed(score(rec, {})))
-        rec = record("over-size-limit", reply="Not saved: estimated at 130 KB, above the platform's 90 KB pre-save threshold.")
+        rec = record("over-size-limit", reply="Not saved: estimated at 130 KB, above the platform\u2019s 90 KB pre-save threshold.")
         self.assertTrue(score(rec, {})["passed"], failed(score(rec, {})))
         rec, docs = first_import("over-size-limit", "<p>shortened</p>")
         self.assertIn("noDocument", failed(score(rec, docs)))
