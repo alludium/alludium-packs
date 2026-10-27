@@ -10,7 +10,7 @@ when an import is partial, refuse to save a history too large to refresh, and ch
 
 Every company, person, note and ID is invented (`.example` domains).
 
-- **Import cases** (20): a rebrand with nine notes, history held on a second record, the record
+- **Import cases** (21): a rebrand with nine notes, history held on a second record, the record
   with the history on the second page of search results, two similarly
   named companies that must not be merged, paging, a page that keeps failing (partial import), a
   linked data room that must not be treated as read, no notes, Deal fields that must not change, a
@@ -19,7 +19,7 @@ Every company, person, note and ID is invented (`.example` domains).
   with no CRM record, a saved document that no longer exists, a document a colleague edits between
   the refresh's read and its write (the edit must survive), a second import while another is still
   running and has created its document, a large history (about 55 KB of notes) that fits and must be
-  kept in full, a refreshed document that is still processing just after the save, and no CRM
+  kept in full on first import and on refresh, a refreshed document that is still processing just after the save, and no CRM
   connection.
 - **Routing cases** (5): the Deal Manager starts the task for an import or refresh request, answers
   a read-only question without starting it, uses the saved document in a fresh chat, and does not
@@ -42,7 +42,7 @@ python plugins/vc/scripts/compare_crm_history_import.py \
   --execute --output /tmp/crm-history-4841 --max-spend-usd 15 --max-wall-minutes 180
 ```
 
-Preflight (2 arms, 29 cases, 3 repetitions): 174 attempts, at most 40 subject calls per turn. `--rescore DIR` re-scores a finished run without spend; `--reconcile DIR`
+Preflight (2 arms, 30 cases, 3 repetitions): 180 attempts, at most 40 subject calls per turn. `--rescore DIR` re-scores a finished run without spend; `--reconcile DIR`
 rebuilds spend accounting after a hard stop. `WORKTREE` as a revision reads the working tree, for
 local checks only.
 

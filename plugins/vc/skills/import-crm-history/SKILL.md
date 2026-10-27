@@ -125,6 +125,12 @@ One entry per retrieved note, with:
   Never shorten, summarise, excerpt or drop a note. Never reword it or drop or add a single word.
   Before saving, check each appendix entry against the note you retrieved.
 
+**Every note gets its own entry with its full text, however many notes there are.** Never group
+several notes into one entry, and never replace a note's text with a summary, a range ("N3–N45")
+or a promise to add it later. On a first import, write at most ten appendix entries in any one tool
+call: with more than ten notes, follow the batch steps in section 7. Copy each note from the tool
+result exactly, including small words such as "a" and "the".
+
 Number notes in date order, oldest first. On a refresh, keep each note's existing reference from
 the previous document (match by note ID) and give new notes the next free numbers, so citations
 stay stable.
@@ -169,12 +175,14 @@ created above it could never be refreshed.
    reference, the template's revision number and content hash copied character for character from
    the metadata result, a filename such as `<Company> CRM history and context`, and the filled
    content. Keep the returned artifact ID.
-4. A long history need not go into one call. Create the document with the brief and the first
-   appendix entries, then add the remaining entries in order with `artifact.insertTextBeforeLine`
-   or `artifact.insertTextAfterLine`, about ten notes per call, each with the latest revision and
-   hash. Every note still gets its full text: the length of the writing is never a reason to drop
-   or shorten a note or to call the import partial. Apart from adding entries, do not rewrite or
-   shorten the document after creating it.
+4. With more than ten notes, write the appendix in batches. Create the document with the brief
+   and entries N1–N10. Then read the document's end (`artifact.getSourceMetadata` for the line
+   count and the latest revision and hash, then `artifact.readSourceRange`) and insert the next
+   ten complete entries just before the appendix's closing tag with
+   `artifact.insertTextBeforeLine`. Repeat until every note has its own entry. The number of notes
+   or the length of the writing is never a reason to drop, group or shorten a note, or to call the
+   import partial. Apart from adding entries, do not rewrite or shorten the document after
+   creating it.
 5. Before returning, read the saved appendix (`artifact.readSourceRange`) and check that every
    retrieved note ID has one entry with its full text. Add any missing entry.
 
