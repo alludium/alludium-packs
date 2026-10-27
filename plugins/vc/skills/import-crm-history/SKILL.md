@@ -140,12 +140,13 @@ created above it could never be refreshed.
 1. Before saving, estimate the size of the complete HTML, including brief, appendix and markup:
    count characters, counting each non-ASCII character as 3 bytes.
 2. If the estimate is above 90,000 bytes, do not save anything. On a refresh, leave the existing
-   document untouched. Report a platform blocker: the full note history does not fit within the
-   platform's 100 KB document limit, with your size estimate and the note count. Never shorten
-   notes, drop notes, split the history into a second document, or create a document that a
-   refresh could not update.
+   document untouched. Report a platform blocker: the full note history is too close to, or above,
+   the platform's 100 KB document limit to save safely, with your size estimate and the note
+   count. Never shorten notes, drop notes, split the history into a second document, or create a
+   document that a refresh could not update.
 3. After saving, read the document's source metadata. If the saved size is above 102,400 bytes,
-   say plainly that later refreshes will be blocked by the platform's document limit.
+   still return its artifact ID so that no second document is ever created, but report a platform
+   blocker instead of a successful import: later refreshes will be refused by the document limit.
 
 ## 7. Save the one document
 
@@ -153,9 +154,12 @@ created above it could never be refreshed.
 
 1. Read the CRM-history template with `project.readTemplateRange` and keep its source revision
    number and content hash.
-2. Just before creating, re-check the Deal's current CRM history document from project context.
-   If one now exists, stop: report that another import has already saved a CRM history document
-   and suggest a refresh. Do not create a second one.
+2. Just before creating, read the Deal's current state again with a tool call
+   (`project.getAgentContext`), not the context you started with. Stop without creating anything
+   if the Deal now has a CRM history document set, if another CRM history import task for this
+   Deal is still open, or if the Deal's documents already include a CRM history document. Report
+   that another import is running or has already saved a CRM history document, and suggest a
+   refresh once it has finished. Do not create a second one.
 3. Create the document with `project.instantiateTemplate`, using the template's document
    reference, the observed template revision and hash, a filename such as
    `<Company> CRM history and context`, and the complete filled content. Keep the returned artifact
@@ -165,18 +169,23 @@ created above it could never be refreshed.
 
 1. Read that exact document's source metadata (revision number and content hash) and its content.
    If it cannot be read, was deleted, or belongs to another Deal, stop and say why. Never create a
-   replacement.
+   replacement. If it was deleted, say that the Deal's link to the missing CRM history document
+   must be cleared before a new import can run.
 2. If the document is still processing, check its status once more. If it is still not ready,
    stop and say the refresh can be retried shortly.
 3. Compare the previous import with what the CRM returns now, by note ID and record ID, for
-   "Changes since the previous import". Notes that can no longer be retrieved stay in the
-   appendix, marked as no longer returned by the CRM.
+   "Changes since the previous import". Keep every previously imported note in the appendix. Mark
+   a note as no longer returned by the CRM only when every page and record was read this time; if
+   a page or record failed, mark its missing notes as not retrieved this time and the import as
+   partial.
 4. Prepare the complete replacement document and write it with **one** full-content update
    (`artifact.updateTextArtifact`), passing the observed revision number and content hash. Do not
    make many partial line edits.
-5. If the update is refused because the document changed in the meantime, read the current
-   revision once and retry the same full update once. If it is refused again, stop and report it.
-   Never fall back to creating a new document.
+5. If the update is refused because the document changed in the meantime, someone else may have
+   edited it. Read the current revision and content once, rebuild the replacement from that
+   current content so their changes are kept, and retry the full update once with the new
+   revision and hash. Never resubmit content prepared from the older revision. If it is refused
+   again, stop and report it. Never fall back to creating a new document.
 
 After either path, confirm the document is ready before returning its artifact ID through the
 task output. A refresh returns the same artifact ID it was given.
@@ -198,7 +207,7 @@ run rather than assuming them; the steps below match the Affinity connector's re
 
 - **Search:** `affinity_search_companies` with `term` set to the company name, then to the domain
   when known. Set `withOpportunities: true` to get each company's opportunity IDs. While `hasMore`
-  is true, pass the returned page token (`nextPageToken`) back as `pageToken`.
+  is true, pass the returned page token (`nextPageToken`, or `next_page_token`) back as `pageToken`.
 - **Company record:** `affinity_get_company` with `companyId`. Add `fieldTypes: ["enriched"]`
   when profile context (description, location, funding) is useful.
 - **Company notes:** `affinity_list_company_notes` with `companyId` and `limit: 100`. While

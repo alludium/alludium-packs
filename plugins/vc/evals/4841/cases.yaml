@@ -259,9 +259,68 @@ cases:
     existingDocumentNotes: [11001, 11002, 11003]
 
   # Control: the analyst's other tasks must still take up the living-report method now that it is AUTO.
+  - id: other-import-running
+    kind: import
+    # Another import of this Deal is still running and has already created its document, but has not
+    # completed, so the Deal's CRM history field is still empty.
+    deal: {name: Quillstone, organisation: {name: Quillstone, domain: quillstone.example}, openCrmTask: true,
+           otherImportDocument: true}
+    affinity:
+      companies:
+        - id: 502001
+          name: Quillstone
+          domain: quillstone.example
+          domains: [quillstone.example]
+          description: Contract analytics for insurance brokers.
+          notes:
+            - - {id: 12101, author: Ana Lee, date: "2025-05-06T10:00:00Z", html: "<p>Intro call. Contract analytics for insurance brokers; 4 broker pilots.</p>"}
+              - {id: 12102, author: Ana Lee, date: "2025-08-19T10:00:00Z", html: "<p>Two pilots converted to annual contracts.</p>"}
+
+  - id: large-history-fits
+    kind: import
+    # About 55 KB of note text: well under the limit once marked up, so it must be imported in full.
+    deal: {name: Halvorn, organisation: {name: Halvorn, domain: halvorn.example}}
+    affinity:
+      companies:
+        - id: 502101
+          name: Halvorn
+          domain: halvorn.example
+          domains: [halvorn.example]
+          description: Cold-chain monitoring for pharmacy distributors.
+          generatedNotes: {firstId: 12201, count: 45, author: Sam Ortiz, startDate: "2024-02-05", stepDays: 7, repeat: 9,
+                           text: "Halvorn check-in {n}: reviewed cold-chain sensor uptime, distributor rollout and the next pilot milestones with the founders. "}
+    pageSize: 20
+
+  - id: crm-not-connected
+    kind: import
+    affinityConnected: false
+    deal: {name: Corvane seed, organisation: {name: Corvane, domain: corvane.example}}
+    affinity: {companies: []}
+
   - id: screening-still-uses-living-report
     kind: skill-control
     taskSlug: generate-refresh-screening-report
+    maxSteps: 4
+    deal: {name: Corvane seed, organisation: {name: Corvane, domain: corvane.example}}
+    affinity: {companies: []}
+
+  - id: evaluation-still-uses-living-report
+    kind: skill-control
+    taskSlug: generate-refresh-evaluation-report
+    maxSteps: 4
+    deal: {name: Corvane seed, organisation: {name: Corvane, domain: corvane.example}}
+    affinity: {companies: []}
+
+  - id: ic-memo-still-uses-living-report
+    kind: skill-control
+    taskSlug: prepare-refresh-ic-memo
+    maxSteps: 4
+    deal: {name: Corvane seed, organisation: {name: Corvane, domain: corvane.example}}
+    affinity: {companies: []}
+
+  - id: term-sheet-still-uses-living-report
+    kind: skill-control
+    taskSlug: review-refresh-term-sheet
     maxSteps: 4
     deal: {name: Corvane seed, organisation: {name: Corvane, domain: corvane.example}}
     affinity: {companies: []}

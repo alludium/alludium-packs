@@ -9,7 +9,7 @@ description: >-
 global: [allTurnsComplete, noInvalidToolCalls, noAffinityWrites, noFieldWrites, noStageMove]
 
 # Applied to every import case (kind: import) on top of the case's own checks.
-importGlobal: [oneDocument, pointerSaved, safeHtml, briefCitesNotes]
+importGlobal: [oneDocument, completedWithPointer, safeHtml, briefCitesNotes]
 
 cases:
   rebrand-nine-notes:
@@ -82,6 +82,8 @@ cases:
     refresh: true
     notesRetained: [9801, 9802, 9803]
     importStatus: complete
+    # The colleague's edit made during the refresh survives the retry.
+    documentKeeps: ["Partner comment: ask for the 2025 churn figures."]
     stableRefs: {9801: N1, 9802: N2, 9803: N3}
 
   over-size-refresh:
@@ -89,8 +91,29 @@ cases:
     refresh: true
     replyMentions: ["(?:100 ?KB|size limit|document limit|too large|does not fit|doesn't fit|exceeds|(?:above|over) the [^.\\d]{0,30}\\d+ ?KB)"]
 
+  other-import-running:
+    blocked: true
+    replyMentions: ["(?:already|in progress|running|underway|existing)"]
+
+  large-history-fits:
+    notesRetained: [12201, 12202, 12203, 12204, 12205, 12206, 12207, 12208, 12209, 12210, 12211, 12212, 12213, 12214, 12215, 12216, 12217, 12218, 12219, 12220, 12221, 12222, 12223, 12224, 12225, 12226, 12227, 12228, 12229, 12230, 12231, 12232, 12233, 12234, 12235, 12236, 12237, 12238, 12239, 12240, 12241, 12242, 12243, 12244, 12245]
+    importStatus: complete
+
+  crm-not-connected:
+    blocked: true
+    replyMentions: ["(?:not connected|no (?:\\w+ )?connection|unavailable|not available|isn't available|no access|cannot access|can't access)"]
+
   screening-still-uses-living-report:
     # Met when the skill is ALWAYS-on in the arm or the analyst activates it within the step cap.
+    livingReportActive: true
+
+  evaluation-still-uses-living-report:
+    livingReportActive: true
+
+  ic-memo-still-uses-living-report:
+    livingReportActive: true
+
+  term-sheet-still-uses-living-report:
     livingReportActive: true
 
   route-import-request:

@@ -68,7 +68,7 @@ def record(case_id: str, reply: str = "Done.", **extra) -> dict:
 def first_import(case_id: str, document: str, **extra) -> tuple[dict, dict]:
     doc_id = "88888888-8888-4888-8888-000000000001"
     rec = record(case_id, created=[{"id": doc_id, "tool": "project.instantiateTemplate"}],
-                 taskSaves=[{"ok": True, "output": {ch.POINTER: doc_id}}], **extra)
+                 taskSaves=[{"ok": True, "tool": "task-management.completeTask", "output": {ch.POINTER: doc_id}}], **extra)
     return rec, {doc_id: document}
 
 
@@ -229,6 +229,29 @@ class PlatformSimulatorTests(unittest.TestCase):
         self.assertIsNotNone(error)
         self.assertEqual([w["tool"] for w in simulator.field_writes], ["identity.createOrganisation"])
 
+    def test_field_tools_are_offered_to_the_analyst_and_writes_refused(self):
+        simulator = sim("fund-and-fields-unchanged")
+        fields, error = simulator.handle("field-values.getFields", {"projectId": ch.PROJECT})
+        self.assertIsNone(error)
+        self.assertIn(ch.POINTER, fields["fields"])
+        _, error = simulator.handle("field-values.setField", {"projectId": ch.PROJECT, "fieldKey": "fund_id", "value": "x"})
+        self.assertIsNotNone(error)
+        self.assertEqual(len(simulator.field_writes), 1)
+        names = {t["toolSpec"]["name"] for t in ch.tool_specs(FROZEN, "analyst")}
+        self.assertIn("field-values_setField", names)
+
+    def test_a_disconnected_crm_offers_no_affinity_tools(self):
+        names = {t["toolSpec"]["name"] for t in ch.tool_specs(FROZEN, "analyst", case("crm-not-connected"))}
+        self.assertFalse(any(n.startswith("affinity_") for n in names))
+        self.assertIn("affinity_search_companies",
+                      {t["toolSpec"]["name"] for t in ch.tool_specs(FROZEN, "analyst", case("no-notes"))})
+
+    def test_another_running_import_and_its_document_are_visible(self):
+        context, _ = sim("other-import-running").handle("project.getAgentContext", {"projectId": ch.PROJECT})
+        self.assertEqual([t["slug"] for t in context["project"]["openTasks"]], [ch.CRM_SLUG])
+        self.assertEqual([d["id"] for d in context["project"]["documents"]], [ch.OTHER_IMPORT_DOCUMENT])
+        self.assertIsNone(context["project"]["fields"][ch.POINTER])
+
     def test_manager_creates_the_crm_task_from_its_definition(self):
         simulator = sim("route-import-request", agent="manager")
         definitions, _ = simulator.handle("task-definitions.list", {})
@@ -326,7 +349,33 @@ class ScoringTests(unittest.TestCase):
         self.assertIn("oneDocument", failed(score(rec, docs)))
         rec, docs = first_import("no-notes", good_document("no-notes", []))
         rec["taskSaves"] = []
-        self.assertIn("pointerSaved", failed(score(rec, docs)))
+        self.assertIn("completedWithPointer", failed(score(rec, docs)))
+        rec["taskSaves"] = [{"ok": True, "tool": "task-management.saveTaskOutput", "output": {ch.POINTER: rec["created"][0]["id"]}}]
+        self.assertIn("completedWithPointer", failed(score(rec, docs)))
+        rec, docs = first_import("no-notes", good_document("no-notes", []))
+        rec["created"][0]["tool"] = "artifact.createTextArtifact"
+        self.assertIn("oneDocument", failed(score(rec, docs)))
+
+    def test_notes_must_be_in_the_appendix_not_only_the_brief(self):
+        notes = ch.case_notes(case("fund-and-fields-unchanged"))
+        doc = good_document("fund-and-fields-unchanged", [9701]).replace(
+            "describes the company [N1].", f"says: {html.escape(ch.note_text(notes[9702]))} [N1].")
+        self.assertIn("notesRetained", failed(score(*first_import("fund-and-fields-unchanged", doc))))
+
+    def test_a_stale_refresh_must_keep_the_colleagues_edit(self):
+        doc = good_document("refresh-stale-revision", [9801, 9802, 9803])
+        rec = record("refresh-stale-revision", updates=[{"id": ch.EXISTING_DOCUMENT, "ok": True}],
+                     taskSaves=[{"ok": True, "tool": "task-management.completeTask", "output": {ch.POINTER: ch.EXISTING_DOCUMENT}}])
+        self.assertIn("documentKeeps:Partner comment: ask for the 2025 churn figures.",
+                      failed(score(rec, {ch.EXISTING_DOCUMENT: doc})))
+        kept = doc.replace("</article>", ch.COLLEAGUE_EDIT + "</article>")
+        self.assertTrue(score(rec, {ch.EXISTING_DOCUMENT: kept})["passed"], failed(score(rec, {ch.EXISTING_DOCUMENT: kept})))
+
+    def test_a_second_import_must_not_save_while_another_runs(self):
+        rec = record("other-import-running", reply="Another CRM history import is already running for this Deal.")
+        self.assertTrue(score(rec, {})["passed"], failed(score(rec, {})))
+        rec, docs = first_import("other-import-running", good_document("other-import-running", [12101, 12102]))
+        self.assertIn("noDocument", failed(score(rec, docs)))
 
     def test_unsafe_html_fails(self):
         doc = good_document("no-notes", []).replace("</article>", "<script>alert(1)</script></article>")
@@ -335,7 +384,7 @@ class ScoringTests(unittest.TestCase):
     def test_refresh_must_update_the_same_document_and_keep_refs(self):
         doc = good_document("refresh-existing-document", [9801, 9802, 9803, 9804])
         rec = record("refresh-existing-document", updates=[{"id": ch.EXISTING_DOCUMENT, "ok": True}],
-                     taskSaves=[{"ok": True, "output": {ch.POINTER: ch.EXISTING_DOCUMENT}}])
+                     taskSaves=[{"ok": True, "tool": "task-management.completeTask", "output": {ch.POINTER: ch.EXISTING_DOCUMENT}}])
         self.assertTrue(score(rec, {ch.EXISTING_DOCUMENT: doc})["passed"])
         renumbered = good_document("refresh-existing-document", [9801, 9802, 9803, 9804],
                                    refs={9804: "N1", 9801: "N2", 9802: "N3", 9803: "N4"})
@@ -399,7 +448,7 @@ class RunTests(unittest.TestCase):
     def test_preflight_is_ready_and_bounded(self):
         report = ch.preflight(ch.parse_args(["--arm", "candidate=WORKTREE"]), FROZEN)
         self.assertTrue(report["ready"], report["blockingProblems"])
-        self.assertEqual(report["attempts"], 21 * 3)
+        self.assertEqual(report["attempts"], len(FROZEN["cases"]["cases"]) * 3)
 
     def test_scripted_import_runs_end_to_end_and_scores(self):
         simulator = sim("no-notes")

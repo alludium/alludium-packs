@@ -56,4 +56,4 @@ Read the CRM only. Do not create, edit or annotate CRM records, send messages, c
 
 ## Human Review
 
-- Decide separately whether the imported history should inform a Screening Report, Evaluation Report or other work.
+- Decide whether to refresh an existing investment report now; the reports read the CRM history as evidence whenever they next run.

@@ -10,19 +10,22 @@ when an import is partial, refuse to save a history too large to refresh, and ch
 
 Every company, person, note and ID is invented (`.example` domains).
 
-- **Import cases** (15): a rebrand with nine notes, history held on a second record, two similarly
+- **Import cases** (18): a rebrand with nine notes, history held on a second record, two similarly
   named companies that must not be merged, paging, a page that keeps failing (partial import), a
   linked data room that must not be treated as read, no notes, Deal fields that must not change, a
   refresh of an existing document (same ID, stable note references), an instruction hidden in a
   note, a history larger than the 100 KB document limit on first import and on refresh, a company
-  with no CRM record, a saved document that no longer exists, and a document edited by someone
-  else between the refresh's read and its write.
+  with no CRM record, a saved document that no longer exists, a document a colleague edits between
+  the refresh's read and its write (the edit must survive), a second import while another is still
+  running and has created its document, a large history (about 55 KB of notes) that fits and must be
+  kept in full, and no CRM connection.
 - **Routing cases** (5): the Deal Manager starts the task for an import or refresh request, answers
   a read-only question without starting it, uses the saved document in a fresh chat, and does not
   start a second import while one is running.
-- **Control** (1): the analyst still activates the living-report method on a Screening task now
-  that the skill is AUTO instead of ALWAYS. It runs four steps only and scores just that, so its
-  attempts end `incomplete` by design.
+- **Controls** (4): the analyst still activates the living-report method on each of the four
+  investment-report tasks (Screening, Evaluation, IC Memo, Term Sheet Review) now that the skill is
+  AUTO instead of ALWAYS. They run four steps only and score just that; their capped attempts end
+  `incomplete` by design and do not mark the run incomplete.
 
 ## Run
 
@@ -37,8 +40,7 @@ python plugins/vc/scripts/compare_crm_history_import.py \
   --execute --output /tmp/crm-history-4841 --max-spend-usd 15 --max-wall-minutes 180
 ```
 
-Preflight (2 arms, 21 cases, 3 repetitions): 126 attempts, at most 40 subject calls per turn,
-proposed ceiling $25. `--rescore DIR` re-scores a finished run without spend; `--reconcile DIR`
+Preflight (2 arms, 27 cases, 3 repetitions): 162 attempts, at most 40 subject calls per turn. `--rescore DIR` re-scores a finished run without spend; `--reconcile DIR`
 rebuilds spend accounting after a hard stop. `WORKTREE` as a revision reads the working tree, for
 local checks only.
 
@@ -57,16 +59,21 @@ local checks only.
 
 Approximations: the task block is a trimmed copy of Platform's template; `task-management.completeTask`
 is offered directly (Platform hydrates it for tasks that complete without human confirmation); the
-manager's tool schemas are the generic contract schemas. This is prompt and tool-choice evidence,
+analyst gets its tools directly rather than through tool discovery; the manager's tool schemas are
+the generic contract schemas. Not covered: a document still processing (simulated documents are
+always ready), Affinity search paging, and a Deal with no Organisation (the task cannot start
+without one). This is prompt and tool-choice evidence,
 not Platform integration or deployed proof.
 
 ## Scoring
 
 Deterministic checks only, over the saved document, the recorded tool calls and the final reply:
-one document (or one updated document on refresh), task output pointing at it, safe static HTML,
-citations in the brief, every expected note's words present in order and unbroken, the wrong
-company's notes absent, the complete/partial label, stable references on refresh, mentions and
-forbidden present-tense or "the deck shows" claims, and no Affinity, field or stage writes.
+one template copy (or one updated document on refresh), the task completed with its output pointing
+at it, safe static HTML, citations in the brief, every expected note's words present in order and
+unbroken inside the source appendix, the wrong company's notes absent, a colleague's edit kept,
+the complete/partial label, stable references on refresh, mentions and forbidden present-tense or
+"the deck shows" claims, and no Affinity, field (including `field-values.setField`) or stage
+writes.
 Routing checks look at which task was created and its provider, document reads and the reply.
 There is no judge; read the saved documents and replies too. Offline scorer and simulator tests:
 `plugins/vc/scripts/test_crm_history_eval.py`.
@@ -89,7 +96,15 @@ corrected before relying on the numbers:
 Run 1 also found two real candidate misses, fixed in the skill and task: one appendix note lost a
 word ("raise a €2m seed" became "raise €2m seed"), and with two records sharing the company's
 domain the analyst asked which to use instead of importing both. A blocked import also ended by
-pointing to a file that was never saved. Run 2 checks the corrected version and scorer.
+pointing to a file that was never saved. Run 2 (candidate `05ad94e`) checks those fixes.
+
+A cold review then tightened the method and the scorer: a first import re-reads the Deal's live
+state and stops if another import is running or has created its document; a refused refresh
+rebuilds from the current content so a colleague's edit survives; a saved document over the limit
+is reported as a blocker; failed pages on refresh are not reported as deleted notes; the task must
+complete with its pointer; documents must be template copies; notes are checked in the appendix;
+the analyst is offered field tools; and the controls cover all four reports. Run 3 checks the
+final candidate.
 
 Disposition for the analyst task, skill, template and Deal Manager routing surface (VC Pack
-`v0.6.40`..candidate): `ran-with-evidence` for run 1; run 2 pending.
+`v0.6.40`..candidate): `ran-with-evidence` for run 1; runs 2 and 3 pending.

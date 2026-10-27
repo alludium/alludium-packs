@@ -42,7 +42,7 @@ definition:
         - No CRM write, Deal field change other than the document pointer, stage move or investment judgment occurred.
       humanConfirmationPolicy: never
     humanDecisionPoints:
-      - Decide separately whether the imported history should inform a Screening Report, Evaluation Report or other work.
+      - Decide whether to refresh an existing investment report now; the reports read the CRM history as evidence whenever they next run.
 fields:
   input:
     - {key: company_name, name: Company Name, fieldType: string, required: true, position: 0, config: {description: "Name of the Deal's confirmed Organisation."}}

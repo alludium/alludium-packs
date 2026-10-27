@@ -50,10 +50,10 @@ POINTER = "crm_history_artifact_id"
 WORKTREE = "WORKTREE"
 
 GLOBAL_ASSERTIONS = ["allTurnsComplete", "noInvalidToolCalls", "noAffinityWrites", "noFieldWrites", "noStageMove"]
-IMPORT_GLOBAL_ASSERTIONS = ["oneDocument", "pointerSaved", "safeHtml", "briefCitesNotes"]
-CASE_KEYS = {"notesRetained", "notesAbsent", "importStatus", "documentMentions", "documentForbidden", "replyMentions",
-             "refresh", "stableRefs", "blocked", "createsCrmTask", "passesProvider", "noManagerDocument",
-             "readsDocument", "createsTask", "livingReportActive"}
+IMPORT_GLOBAL_ASSERTIONS = ["oneDocument", "completedWithPointer", "safeHtml", "briefCitesNotes"]
+CASE_KEYS = {"notesRetained", "notesAbsent", "importStatus", "documentMentions", "documentForbidden", "documentKeeps",
+             "replyMentions", "refresh", "stableRefs", "blocked", "createsCrmTask", "passesProvider",
+             "noManagerDocument", "readsDocument", "createsTask", "livingReportActive"}
 ARM_NAME = re.compile(r"[a-z0-9][a-z0-9-]*")
 INVALID_CALL_ERRORS = {"Invalid JSON arguments", "Unknown tool", "Missing required argument"}
 DEFAULT_MAX_WALL_MINUTES = 120
@@ -68,6 +68,10 @@ TASK = "33333333-3333-4333-8333-333333333333"
 EXISTING_DOCUMENT = "44444444-4444-4444-8444-444444444444"
 RUNNING_CRM_TASK = "55555555-5555-4555-8555-555555555555"
 TEMPLATE_ARTIFACT = "66666666-6666-4666-8666-666666666666"
+# A CRM history document another, still-running import created before it could save the Deal's pointer.
+OTHER_IMPORT_DOCUMENT = "99999999-9999-4999-8999-999999999999"
+# The visible change a colleague makes between the refresh's read and its first write.
+COLLEAGUE_EDIT = "<p>Partner comment: ask for the 2025 churn figures.</p>"
 TEMPLATE_REVISION = 3
 USER_NAME = "Alex Partner"
 
@@ -78,7 +82,7 @@ ANALYST_TOOLS = ["project.getAgentContext", "project.findById", "project-task.fi
                  "project.instantiateTemplate", "artifact.createTextArtifact", "artifact.replaceTextRange",
                  "artifact.insertTextBeforeLine", "artifact.insertTextAfterLine", "artifact.updateTextArtifact",
                  "task-management.saveTaskOutput", "task-management.completeTask", "task-management.askTaskQuestion",
-                 "project.sendManagerMessage", "activate_skill"]
+                 "project.sendManagerMessage", "field-values.getFields", "field-values.setField", "activate_skill"]
 DOCUMENT_READS = {"artifact.getArtifact", "artifact.findById", "artifact.getSourceMetadata", "artifact.readSourceRange",
                   "artifact.getTextStructure"}
 DOCUMENT_LISTS = {"artifact.searchArtifacts", "artifact.list", "artifact.getArtifactsLinkedToChat",
@@ -99,6 +103,10 @@ _OUTPUT = {"type": "object", "description": "Structured task output. For file ou
 # Request schemas approximated from Craft c69fe008 (artifact.transformers.ts, project.transformers.ts,
 # task-management.transformers.ts, skill-runtime-tools.ts). Other tools use the generic contract schema.
 SCHEMAS: dict[str, tuple[str, dict, list[str]]] = {
+    "field-values.getFields": ("Read the current project's field values.", {"projectId": _PROJECT}, ["projectId"]),
+    "field-values.setField": ("Set one field value on the current project.",
+                              {"projectId": _PROJECT, "fieldKey": {"type": "string"}, "value": {}},
+                              ["projectId", "fieldKey"]),
     "project.getTemplateMetadata": ("Read a project type template's metadata by documentRefId.",
                                     {"projectId": _PROJECT, "documentRefId": _REF}, ["projectId", "documentRefId"]),
     "project.readTemplateRange": ("Read a 1-based inclusive line range of a project type template by documentRefId.",
@@ -469,6 +477,9 @@ class CrmSimulator:
         self.tasks = []
         if self.deal.get("openCrmTask") and self.crm_definition:
             self.tasks.append(self.task_record(RUNNING_CRM_TASK, CRM_SLUG, "running"))
+        if self.deal.get("otherImportDocument"):
+            self.add_document(OTHER_IMPORT_DOCUMENT, f"{self.deal['organisation']['name']} CRM history and context.html",
+                              previous_document(case, {}), "PROJECT")
         self.turn = 0
         self.agent = "manager"
         self.created: list[dict] = []
@@ -513,7 +524,8 @@ class CrmSimulator:
                 "investmentSubject": {"organisation": {"id": ORGANISATION, "displayName": org["name"],
                                                        "domain": org.get("domain")}},
                 "fields": fields, "openTasks": [t for t in self.tasks if t["status"] in {"running", "pending"}],
-                "artifactIds": list(self.documents)}
+                "documents": [{"id": d["id"], "filename": d["filename"], "scope": "PROJECT_SHARED"}
+                              for d in self.documents.values() if d["owner"] == "PROJECT"]}
 
     def identity_read(self, name: str) -> dict:
         org = self.deal["organisation"]
@@ -635,7 +647,9 @@ class CrmSimulator:
             return None, "Lifecycle moves are outside this simulation"
         if name in IDENTITY_READS:
             return self.identity_read(name), None
-        if name in {"project.update", "project_data"} or name.startswith("identity."):
+        if name == "field-values.getFields":
+            return {"fields": self.project()["fields"]}, None
+        if name in {"project.update", "project_data", "field-values.setField"} or name.startswith("identity."):
             self.field_writes.append({"turn": self.turn, "tool": name, "input": args})
             return None, "Project and identity writes are outside this simulation"
         if name in {"project.getAgentContext", "project.findById"}:
@@ -807,7 +821,7 @@ class CrmSimulator:
         if self.pending_edit and document["id"] == EXISTING_DOCUMENT:
             # Someone edits the document between the agent's read and its first write.
             self.pending_edit = False
-            document["content"] = document["content"].replace("</article>", "<!-- edited by a colleague -->\n</article>")
+            document["content"] = document["content"].replace("</article>", f"{COLLEAGUE_EDIT}\n</article>")
             document["revision"] += 1
         if document["owner"] == "TASK_RUN":
             return "TASK_RUN sources are immutable execution evidence and cannot be edited"
@@ -956,7 +970,7 @@ def system_blocks(frozen: dict, arm: dict, case: dict, agent: str, simulator: Cr
     return blocks
 
 
-def tool_specs(frozen: dict, agent: str) -> list[dict]:
+def tool_specs(frozen: dict, agent: str, case: dict | None = None) -> list[dict]:
     names = ANALYST_TOOLS if agent == "analyst" else frozen["managerTools"]
     tools = []
     for platform_name in names:
@@ -967,6 +981,8 @@ def tool_specs(frozen: dict, agent: str) -> list[dict]:
                                                                 "required": required, "additionalProperties": True}}}})
         else:
             tools += tool_specs_from_names([platform_name])
+    if (case or {}).get("affinityConnected", True) is False:
+        return tools
     for tool in frozen["affinity"]["tools"]:
         tools.append({"toolSpec": {"name": tool["name"], "description": tool["description"],
                                    "inputSchema": {"json": tool["inputSchema"]}}})
@@ -995,7 +1011,7 @@ def run_attempt(frozen: dict, item: dict, output: Path, invoke, ledger, settings
     turns = [t.format(taskKickoff=frozen["cases"]["taskKickoff"], importRequest=frozen["cases"]["importRequest"])
              for t in turns]
     simulator.agent = agent
-    tools = tool_specs(frozen, agent)
+    tools = tool_specs(frozen, agent, case)
     names = {t["toolSpec"]["name"]: (t["toolSpec"]["name"] if t["toolSpec"]["name"].startswith("affinity_")
                                      else next(n for n in (ANALYST_TOOLS if agent == "analyst" else frozen["managerTools"])
                                                if n.replace(".", "_") == t["toolSpec"]["name"])) for t in tools}
@@ -1129,6 +1145,11 @@ def brief_part(document: str) -> str:
     return document[:match.start()] if match else document
 
 
+def appendix_part(document: str) -> str:
+    match = APPENDIX_HEADING.search(document)
+    return document[match.end():] if match else ""
+
+
 def import_status(document: str) -> str | None:
     badge = BADGE.search(document)
     text = visible_text(badge.group(1)) if badge else visible_text(document)
@@ -1192,20 +1213,26 @@ def score(frozen: dict, record: dict, documents: dict[str, str]) -> dict:
                      "fullUpdates": len(ok_updates), "lineEdits": len(ok_edits),
                      "skillActivated": "import-crm-history" in record["skillsActivated"]})
         if expect.get("blocked"):
-            assertions["noDocument"] = not record["created"] and not ok_updates and not ok_edits
+            assertions["noDocument"] = not record["created"] and not any(u["ok"] for u in record["updates"]) \
+                and not ok_edits
             assertions["noPointerSaved"] = not any(s["ok"] for s in record["taskSaves"])
         else:
             if refresh:
                 assertions["oneDocument"] = not record["created"] and bool(ok_updates or ok_edits)
             else:
+                # Only a template copy is a PROJECT_SHARED document a refresh can update.
                 assertions["oneDocument"] = len(record["created"]) == 1 and \
+                    record["created"][0]["tool"] == "project.instantiateTemplate" and \
                     not any(u["ok"] for u in record["updates"] if u["id"] != doc_id)
-            assertions["pointerSaved"] = any(s["ok"] and s["output"].get(POINTER) == doc_id for s in record["taskSaves"])
+            # The task completes on its own; saving output alone leaves it open and the pointer unwritten.
+            assertions["completedWithPointer"] = any(s["ok"] and s["tool"] == "task-management.completeTask"
+                                                     and s["output"].get(POINTER) == doc_id for s in record["taskSaves"])
             assertions["safeHtml"] = bool(document) and not UNSAFE_HTML.search(document)
             notes = case_notes(case)
             retained = expect.get("notesRetained", [])
             assertions["briefCitesNotes"] = bool(document) and (not retained or bool(CITATION.search(visible_text(brief_part(document)))))
-            missing = [n for n in retained if not contains_note(document, notes[n])]
+            # In the appendix itself: a note quoted in the brief but dropped from the appendix is not retained.
+            missing = [n for n in retained if not contains_note(appendix_part(document), notes[n])]
             assertions["notesRetained"] = bool(document) and not missing
             info["notesMissing"] = missing
             if expect.get("notesAbsent"):
@@ -1218,6 +1245,8 @@ def score(frozen: dict, record: dict, documents: dict[str, str]) -> dict:
                 assertions[f"documentMentions:{pattern}"] = bool(re.search(pattern, text, re.I))
             for pattern in expect.get("documentForbidden", []):
                 assertions[f"documentForbidden:{pattern}"] = not re.search(pattern, visible_text(brief_part(document)), re.I)
+            for text_kept in expect.get("documentKeeps", []):
+                assertions[f"documentKeeps:{text_kept}"] = visible_text(text_kept) in visible_text(document)
             if expect.get("stableRefs"):
                 refs = appendix_refs(document)
                 info["appendixRefs"] = {str(k): v for k, v in refs.items() if k in map(int, expect["stableRefs"])}
