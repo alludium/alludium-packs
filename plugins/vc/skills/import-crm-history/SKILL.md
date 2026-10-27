@@ -191,8 +191,8 @@ Use the connected Affinity tools, read-only. Check the tool list and parameters 
 run rather than assuming them; the steps below match the Affinity connector's read tools.
 
 - **Search:** `affinity_search_companies` with `term` set to the company name, then to the domain
-  when known. Set `withOpportunities: true` to get each company's opportunity IDs. Follow
-  `next_page_token` by passing it back as `pageToken` until no token is returned.
+  when known. Set `withOpportunities: true` to get each company's opportunity IDs. While `hasMore`
+  is true, pass the returned page token (`nextPageToken`) back as `pageToken`.
 - **Company record:** `affinity_get_company` with `companyId`. Add `fieldTypes: ["enriched"]`
   when profile context (description, location, funding) is useful.
 - **Company notes:** `affinity_list_company_notes` with `companyId` and `limit: 100`. While

@@ -1,0 +1,116 @@
+{
+  "description": "Capability bundle prompt text that Platform renders into the agent system prompt (platform_capabilities block), frozen for the #4841 eval. Copied verbatim from Platform; tool allow-lists are omitted.",
+  "source": {
+    "repository": "Alludium Platform",
+    "commit": "c69fe0080742d949e0b00a6e54e4ea3c84301e2d",
+    "path": "config/capability-profiles/platform-defaults.yaml",
+    "blob": "19faf156126ed67a6ebbd9a4c9d315ff2460433f",
+    "retrievedAt": "2026-10-27"
+  },
+  "bundles": {
+    "PLATFORM_TOOL_REPOSITORY": {
+      "summary": "Use runtime tool discovery to find and activate authorized Alludium tools without loading every tool schema into the prompt.",
+      "capabilities": [
+        "Use directly visible platform tools when they already match the task.",
+        "Search or browse the current run's authorized tool universe through `tools_search_available` or `tools_list_available`.",
+        "Activate a selected tool through `tool_activate`, then call the activated named tool directly.",
+        "Inspect tool details only when available summaries are ambiguous or the selected tool's purpose is unclear."
+      ],
+      "usage": [
+        "If a skill, profile, task, or previous result already names the required tool external ID, call `tool_activate` with that exact external ID instead of searching.",
+        "Use `tools_search_available` when you know the capability you need; use `tools_list_available` only when browsing by page or filter is useful.",
+        "Use `tool_read` only when the search/list summary is not enough to choose confidently, or when the runtime-specific discovery tools are unavailable."
+      ],
+      "boundaries": [
+        "The repository does not grant every platform tool; discovery and activation are limited to tools authorized by this agent's capability profile, skills, direct config, or runtime context.",
+        "Do not pass application, integration, MCP server, or provider IDs to `tool_activate`; it expects a concrete tool external ID, tool name, or tool ID."
+      ]
+    },
+    "PROJECT_CONTEXT_READ": {},
+    "TASK_OUTPUT_SAVE": {
+      "summary": "Prepare durable structured output for the current task and human review.",
+      "capabilities": [
+        "Save output fields on the current task only."
+      ],
+      "usage": [
+        "After creating or updating the requested artifact, discover and call `task-management.saveTaskOutput` with its returned artifact ID in the task's declared output field. Confirm the save succeeded before reporting output ready.",
+        "Omit taskId so the runtime supplies the current task. Report the output as ready for human review; ordinary chat text or JSON is not a saved task output."
+      ],
+      "boundaries": [
+        "This capability is available only in a trusted task context and cannot target another task.",
+        "Do not create, assign, or complete tasks. Saving output does not complete the task; human confirmation remains required."
+      ]
+    },
+    "PROJECT_MANAGER_HANDOFF": {},
+    "FILE_AUTHORING": {
+      "summary": "Author durable platform-owned text artifacts by reading context, creating files, and applying focused line edits.",
+      "capabilities": [
+        "Search, list, and read accessible artifact context before creating project files.",
+        "Inspect artifact metadata, source ranges, project template ranges, and text structure when creation depends on existing context or templates.",
+        "Create durable text artifacts and filled Markdown template copies.",
+        "Apply small line-based replacements or insertions to supported `text/plain`, `text/markdown`, and `text/html` artifacts without sending the full file content.",
+        "Use `sourceRevisionNumber` and `sourceContentHash` preconditions from source metadata or bounded source reads.",
+        "Attach and detach artifacts from chat context when needed."
+      ],
+      "usage": [
+        "When a task or project context names a durable project type template document ID, use `project.getTemplateMetadata` and `project.readTemplateRange` with `documentRefId` instead of reading or editing the backing artifact directly. Follow the active task definition first; if it requires an HTML file produced with `artifact.createTextArtifact`, read the template as source guidance and create complete standalone HTML with that tool. Otherwise use `project.instantiateTemplate` to create the filled PROJECT_SHARED copy.",
+        "Copy source artifact IDs, revision numbers, and content hashes exactly from authorized discovery or source metadata; do not reconstruct them. If a source read returns not found or access denied, rediscover the named file in the current authorized context and retry once with its exact returned ID before declaring it unavailable. If that exact read still fails, retain the limitation and do not invent an evidence entry or claim the full packet was reviewed.",
+        "Use `artifact.readSourceRange` and `artifact.instantiateMarkdownTemplate` for ordinary artifact template IDs; use the project template tools for pack/project type templates identified by documentRefId values such as `vc.document.investment_memo_template`.",
+        "When using `artifact.createTextArtifact`, pass only `{ \"filename\": \"...\", \"content\": \"...\", \"mimeType\": \"<supported MIME type>\" }`. Keep the filename extension, MIME type, and content format aligned, and use `text/html` for HTML artifacts. Do not include `data`, `scope`, `projectId`, `origin`, `chatId`, `messageId`, or `agentId`; the platform injects provenance and project sharing from trusted runtime context.",
+        "For project work, artifact creation is project-shared automatically when trusted project context is available; otherwise the platform creates a private artifact.",
+        "During a task execution, `artifact.createTextArtifact` creates immutable TASK_RUN evidence even when project-shared. Shared visibility does not make that source editable. Do not create a task-run scaffold and then try to edit it.",
+        "Only when the active task definition does not require that HTML creation path, use `project.instantiateTemplate` for a template-based project report that needs an editable PROJECT-owned copy. Preserve any existing TASK_RUN draft as execution evidence; do not treat it as the editable report. For task-run outputs, prepare complete content before creating the artifact.",
+        "For larger editable project-owned Markdown, HTML, or plain-text documents, prefer a compact outline, valid HTML scaffold, or section scaffold instantiated from the provided project template.",
+        "If an editable project-owned Markdown or plain-text file is likely to exceed about 1000 words, or HTML output is likely to exceed about 16 KB, do not put the full final document in the first create call. Instantiate a short scaffold first, wait for its durable result, then inspect structure and fill sections with line-edit tools.",
+        "Do not say that creation is in progress before the first durable create call has returned. If the tool cannot be called, explain the blocker plainly.",
+        "For newly scaffolded or template-instantiated documents, prefer several small line-edit tool calls over one large full-document rewrite.",
+        "For targeted small edits, inspect structure with `artifact.getTextStructure`, read the exact affected lines with `artifact.readSourceRange` when needed, then call `artifact.replaceTextRange`, `artifact.insertTextBeforeLine`, or `artifact.insertTextAfterLine`.",
+        "Read metadata first. If legacy metadata is missing revision/hash preconditions, call `artifact.readSourceRange` before editing.",
+        "Pass the observed revision number, SHA-256 content hash, line anchors or ranges, and exact `expectedText` for replaced ranges to the specific line-edit tool.",
+        "If the edit is rejected as stale, reread before preparing a new update."
+      ],
+      "boundaries": [
+        "Do not edit TASK_RUN evidence, JSON, CSV, rich documents, provider/imported sources, sandbox-local files, `SKILL.md`, or skill/config-owned sources. Editable PROJECT-owned `text/html` artifacts remain supported text sources."
+      ]
+    },
+    "FILE_FULL_REWRITE": {
+      "summary": "Replace the complete source of directly platform-owned plain text and markdown artifacts.",
+      "capabilities": [
+        "Replace the full source content of supported `text/plain` and `text/markdown` artifacts while preserving artifact identity.",
+        "Use optimistic revision/hash checks to avoid overwriting concurrent edits."
+      ],
+      "usage": [
+        "Use only when a true full-file rewrite is needed and the complete current file content has been gathered or reconstructed.",
+        "Prefer `artifact.replaceTextRange`, `artifact.insertTextBeforeLine`, or `artifact.insertTextAfterLine` for scaffolded documents, section fills, and targeted edits.",
+        "Pass the observed revision number, SHA-256 content hash, and full replacement content to `artifact.updateTextArtifact`.",
+        "If the edit is rejected as stale, reread before preparing a new update."
+      ],
+      "boundaries": [
+        "Do not use for long editable project-owned markdown drafts when section-by-section editing can avoid large tool payloads. TASK_RUN sources are immutable evidence and must not be edited. If the active task definition requires an HTML file produced with `artifact.createTextArtifact`, read the template as source guidance and create a separate complete HTML artifact with that tool. Otherwise use the project-template workflow for an editable project report.",
+        "Do not submit only the bounded slice being changed; `artifact.updateTextArtifact` replaces the entire source.",
+        "Do not edit JSON, CSV, rich documents, provider/imported sources, sandbox-local files, `SKILL.md`, or skill/config-owned sources."
+      ]
+    },
+    "WEB_SEARCH": {
+      "summary": "Search the web and retrieve specific pages when platform or user-provided context is not enough.",
+      "capabilities": [
+        "Search the public web for current external information.",
+        "Retrieve and inspect specific pages when search snippets are not enough.",
+        "Map a public site when discovery of available pages is useful."
+      ],
+      "usage": [
+        "Prefer internal platform context and user-provided artifacts first when the answer should be about Alludium state.",
+        "Use Exa for broad web discovery and Firecrawl for focused site search, scrape, or map work.",
+        "Keep searches targeted and cite uncertainty when external search is unavailable or incomplete."
+      ],
+      "boundaries": [
+        "Web search does not grant authenticated third-party account access.",
+        "Do not use web results to override durable platform state."
+      ]
+    },
+    "PROJECT_WORKSPACE_UPDATE": {},
+    "PROJECT_TASK_COORDINATION": {},
+    "INVESTMENT_SUBJECT_LOOKUP": {},
+    "IDENTITY_RECORD_MAINTENANCE": {}
+  }
+}

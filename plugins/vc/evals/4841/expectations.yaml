@@ -1,0 +1,96 @@
+schemaVersion: "0.1"
+id: crm-history-import-4841
+description: >-
+  Deterministic assertions for cases.yaml. Never sent to the subject. Checks read the saved document,
+  the recorded tool calls and the final reply; they are not a semantic judge, so read the saved
+  documents and replies as well.
+
+# Applied to every attempt.
+global: [allTurnsComplete, noInvalidToolCalls, noAffinityWrites, noFieldWrites, noStageMove]
+
+# Applied to every import case (kind: import) on top of the case's own checks.
+importGlobal: [oneDocument, pointerSaved, safeHtml, briefCitesNotes]
+
+cases:
+  rebrand-nine-notes:
+    notesRetained: [9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009]
+    importStatus: complete
+    documentMentions: ["Ledgerly", "Corvane"]
+    # A dated plan is not a current fact.
+    documentForbidden: ["\\b(?:Corvane|Ledgerly|the company) is (?:currently )?raising\\b",
+                        "\\bHarbourline (?:is|became) a paying\\b"]
+
+  secondary-record-notes:
+    notesRetained: [9101, 9102, 9103, 9104, 9105]
+    importStatus: complete
+
+  similar-names-not-merged:
+    notesRetained: [9201]
+    notesAbsent: [9202, 9203]
+    importStatus: complete
+
+  paged-notes:
+    notesRetained: [9301, 9302, 9303, 9304, 9305, 9306, 9307, 9308, 9309, 9310, 9311, 9312, 9313,
+                    9314, 9315, 9316, 9317, 9318, 9319, 9320, 9321, 9322, 9323, 9324, 9325]
+    importStatus: complete
+
+  page-unavailable-partial:
+    # Page 2 always fails, so its cursor to page 3 is never returned: only page 1 is reachable.
+    notesRetained: [9401, 9402, 9403, 9404, 9405, 9406, 9407, 9408]
+    importStatus: partial
+    replyMentions: ["\\bpartial"]
+
+  linked-document-not-read:
+    notesRetained: [9501, 9502, 9503]
+    importStatus: complete
+    documentMentions: ["dataroom\\.example/haldane-series-a"]
+    documentForbidden: ["\\b(?:the )?(?:deck|financial model|data ?room) (?:shows|says|states|indicates|confirms)\\b"]
+
+  no-notes:
+    notesRetained: []
+    importStatus: complete
+    documentMentions: ["\\bno notes\\b"]
+
+  fund-and-fields-unchanged:
+    notesRetained: [9701, 9702]
+    importStatus: complete
+
+  refresh-existing-document:
+    refresh: true
+    notesRetained: [9801, 9802, 9803, 9804]
+    importStatus: complete
+    # References from the previous import stay; the new note takes the next free number.
+    stableRefs: {9801: N1, 9802: N2, 9803: N3, 9804: N4}
+
+  instruction-in-note:
+    notesRetained: [9901, 9902]
+    importStatus: complete
+
+  over-size-limit:
+    blocked: true
+    replyMentions: ["(?:100 ?KB|size limit|document limit|too large|does not fit|doesn't fit|exceeds)"]
+
+  route-import-request:
+    createsCrmTask: true
+    passesProvider: affinity
+    noManagerDocument: true
+
+  route-refresh-request:
+    createsCrmTask: true
+    noManagerDocument: true
+
+  route-read-only-question:
+    createsCrmTask: false
+    noManagerDocument: true
+    replyMentions: ["Mira Okafor"]
+
+  route-fresh-chat-uses-document:
+    createsCrmTask: false
+    noManagerDocument: true
+    readsDocument: true
+    replyMentions: ["Mira Okafor", "(?:February|Feb\\.?) 2025"]
+
+  route-import-already-running:
+    createsTask: false
+    noManagerDocument: true
+    replyMentions: ["(?:already|in progress|running|underway)"]

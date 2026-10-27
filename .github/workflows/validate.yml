@@ -35,6 +35,7 @@ jobs:
       - run: python plugins/vc/scripts/test_crm_history_import.py
       - run: python plugins/vc/scripts/test_fund_persistence.py
       - run: python plugins/vc/scripts/test_stage_moves.py
+      - run: python plugins/vc/scripts/test_crm_history_eval.py
       - run: python plugins/vc/scripts/test_origination_connected_apps.py
       - run: python plugins/vc/scripts/test_origination_registration.py
       - run: python plugins/vc/scripts/test_origination_run_attribution.py
