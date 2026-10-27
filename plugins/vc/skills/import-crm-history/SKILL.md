@@ -200,7 +200,8 @@ created above it could never be refreshed.
    "Changes since the previous import". Keep every previously imported note in the appendix. Mark
    a note as no longer returned by the CRM only when every page and record was read this time; if
    a page or record failed, mark its missing notes as not retrieved this time and the import as
-   partial.
+   partial. Keep anything a person added to the document that did not come from the CRM, such as
+   a partner's comment, word for word in its place.
 4. Prepare the complete replacement document, with every note in full however long it is, and
    write it with **one** full-content update
    (`artifact.updateTextArtifact`), passing the observed revision number and content hash. Do not
@@ -209,11 +210,13 @@ created above it could never be refreshed.
    existing appendix and every newly retrieved note, so it can only be about as long as the
    existing document or longer. If it is shorter, or any entry is missing, grouped or summarised,
    do not write it: a full update replaces the whole document, and a short one destroys the saved
-   history. If you cannot write the complete replacement, leave the existing document untouched
-   and report the refresh as blocked.
+   history. Finish it instead: every earlier note's full text is in the existing appendix and every
+   new note's text is in the CRM result, so copy both. Only if you truly cannot write the complete
+   replacement, leave the existing document untouched and report the refresh as blocked.
 5. If the update is refused because the document changed in the meantime, someone else may have
-   edited it. Read the current revision and content once, rebuild the replacement from that
-   current content so their changes are kept, and retry the full update once with the new
+   edited it. Read the current revision and content once, find what changed since your first
+   read (for example a comment someone added), and rebuild the replacement from that current
+   content with every such change kept word for word in its place, and retry the full update once with the new
    revision and hash. Never resubmit content prepared from the older revision. If it is refused
    again, stop and report it. Never fall back to creating a new document.
 
