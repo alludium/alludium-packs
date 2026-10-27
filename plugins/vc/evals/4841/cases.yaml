@@ -337,11 +337,16 @@ cases:
 
   - id: large-history-refresh
     kind: import
-    # The same large history on refresh: 40 notes already saved, 5 new. One full update must keep all 45.
+    # The same large history on refresh: 40 notes already saved (about 55 KB), 5 new. One full update must
+    # keep all 45. A short saved brief keeps the starting document at the size the agent itself writes.
     deal:
       name: Halvorn
       organisation: {name: Halvorn, domain: halvorn.example}
       existingDocument: true
+    existingDocumentBrief: >-
+      Halvorn makes cold-chain monitoring for pharmacy distributors. Weekly check-in notes from February 2024
+      to November 2024 cover sensor uptime, distributor rollout and pilot milestones [N1, N40]. Current
+      traction, revenue and financing are not recorded in the retrieved notes.
     affinity:
       companies:
         - id: 502101

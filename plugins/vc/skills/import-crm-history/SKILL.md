@@ -184,7 +184,9 @@ created above it could never be refreshed.
    import partial. Apart from adding entries, do not rewrite or shorten the document after
    creating it.
 5. Before returning, read the saved appendix (`artifact.readSourceRange`) and check that every
-   retrieved note ID has one entry with its full text. Add any missing entry.
+   retrieved note ID has one entry with its full text. Add any missing entry. Do not finish while a
+   retrieved note has no entry, and make the document's complete/partial label and your reply say
+   the same thing.
 
 **Refresh** (existing CRM history document supplied):
 
