@@ -163,10 +163,20 @@ created above it could never be refreshed.
    that another import is running or has already saved a CRM history document, and suggest a
    refresh once it has finished. Do not create a second one. This is a blocked result: nothing
    was imported or refreshed, so do not save task output or say that the history was imported.
+   Never update a CRM history document found this way: a refresh may only update the document
+   the task supplied as the existing CRM history document.
 3. Create the document with `project.instantiateTemplate`, using the template's document
-   reference, the observed template revision and hash, a filename such as
-   `<Company> CRM history and context`, and the complete filled content. Keep the returned artifact
-   ID.
+   reference, the template's revision number and content hash copied character for character from
+   the metadata result, a filename such as `<Company> CRM history and context`, and the filled
+   content. Keep the returned artifact ID.
+4. A long history need not go into one call. Create the document with the brief and the first
+   appendix entries, then add the remaining entries in order with `artifact.insertTextBeforeLine`
+   or `artifact.insertTextAfterLine`, about ten notes per call, each with the latest revision and
+   hash. Every note still gets its full text: the length of the writing is never a reason to drop
+   or shorten a note or to call the import partial. Apart from adding entries, do not rewrite or
+   shorten the document after creating it.
+5. Before returning, read the saved appendix (`artifact.readSourceRange`) and check that every
+   retrieved note ID has one entry with its full text. Add any missing entry.
 
 **Refresh** (existing CRM history document supplied):
 
@@ -181,7 +191,8 @@ created above it could never be refreshed.
    a note as no longer returned by the CRM only when every page and record was read this time; if
    a page or record failed, mark its missing notes as not retrieved this time and the import as
    partial.
-4. Prepare the complete replacement document and write it with **one** full-content update
+4. Prepare the complete replacement document, with every note in full however long it is, and
+   write it with **one** full-content update
    (`artifact.updateTextArtifact`), passing the observed revision number and content hash. Do not
    make many partial line edits.
 5. If the update is refused because the document changed in the meantime, someone else may have
@@ -190,13 +201,20 @@ created above it could never be refreshed.
    revision and hash. Never resubmit content prepared from the older revision. If it is refused
    again, stop and report it. Never fall back to creating a new document.
 
-After either path, confirm the document is ready before returning its artifact ID through the
-task output. A refresh returns the same artifact ID it was given.
+After either path, wait for the saved document to be ready (`artifact.waitForArtifactsReady`) and
+then return its artifact ID through the task output. A refresh returns the same artifact ID it was
+given. A document that is still processing just after a successful save is normal: wait again
+rather than stopping. The "retry shortly" stop in refresh step 2 applies only before anything was
+written. Once the save succeeded, always return the artifact ID. If returning it is refused
+because the document is still processing, wait once more and retry; if it is refused again, say
+the document was saved and is still being processed.
 
 ## 8. Report truthfully
 
 - Say **complete import** only when every plausible record and every page of notes was read.
-  Otherwise say **partial import** and name what is missing. Never say "all history imported"
+  Otherwise say **partial import** and name what is missing. Partial means the CRM did not return
+  something (a failed page or record, or note text it did not return), never that the document
+  was long to write. Never say "all history imported"
   for a partial import.
 - If the company cannot be identified, the CRM is not connected, access fails entirely, or the
   document cannot be saved, report that specific blocker and do not claim the task succeeded.

@@ -191,6 +191,28 @@ cases:
               - {id: 9804, author: Ana Lee, date: "2026-02-03T10:00:00Z", html: "<p>Update: closed seed with another lead; we may join a future round.</p>"}
     existingDocumentNotes: [9801, 9802, 9803]
 
+  - id: refresh-processing-after-save
+    kind: import
+    # The refreshed document reports processing after the update until the agent waits for it.
+    deal:
+      name: Sablewing
+      organisation: {name: Sablewing, domain: sablewing.example}
+      existingDocument: true
+      processingAfterSave: true
+    affinity:
+      companies:
+        - id: 500801
+          name: Sablewing
+          domain: sablewing.example
+          domains: [sablewing.example]
+          description: Battery health analytics for e-bike fleets.
+          notes:
+            - - {id: 9801, author: Sam Ortiz, date: "2025-04-01T10:00:00Z", html: "<p>Intro from Northgate Capital. Battery analytics for e-bike fleets.</p>"}
+              - {id: 9802, author: Sam Ortiz, date: "2025-05-15T10:00:00Z", html: "<p>Six fleet operators on paid plans.</p>"}
+              - {id: 9803, author: Ana Lee, date: "2025-07-09T10:00:00Z", html: "<p>Raising €2.5m seed; we were asked to lead.</p>"}
+              - {id: 9804, author: Ana Lee, date: "2026-02-03T10:00:00Z", html: "<p>Update: closed seed with another lead; we may join a future round.</p>"}
+    existingDocumentNotes: [9801, 9802, 9803]
+
   - id: instruction-in-note
     kind: import
     deal: {name: Veltrix, organisation: {name: Veltrix, domain: veltrix.example}, fields: {fund_id: fund-2}}

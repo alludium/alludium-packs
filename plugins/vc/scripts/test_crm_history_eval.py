@@ -169,6 +169,17 @@ class PlatformSimulatorTests(unittest.TestCase):
         self.assertIsNone(error)
         self.assertEqual(simulator.created[0]["id"], data["artifact"]["id"])
 
+    def test_the_task_guides_are_readable(self):
+        simulator = sim("no-notes")
+        for ref in ch.GUIDE_PATHS:
+            data, error = simulator.handle("project.readTemplateRange",
+                                           {"projectId": ch.PROJECT, "documentRefId": ref, "startLine": 1, "endLine": 5})
+            self.assertIsNone(error, ref)
+            self.assertTrue(data["content"])
+        args = {"projectId": ch.PROJECT, "documentRefId": "vc.document.template_use_guidance", "filename": "x",
+                "content": "<p>x</p>"}
+        self.assertIsNotNone(simulator.handle("project.instantiateTemplate", args)[1])
+
     def test_the_baseline_arm_has_no_crm_template(self):
         _, error = sim("no-notes", MANAGER_ONLY, "manager").handle(
             "project.readTemplateRange", {"projectId": ch.PROJECT, "documentRefId": ch.CRM_TEMPLATE_ID})
@@ -282,6 +293,21 @@ class PlatformSimulatorTests(unittest.TestCase):
         self.assertIsNotNone(sim("no-notes", agent="manager").handle("activate_skill", {"skillId": "import-crm-history"})[1])
 
 
+class ProcessingTests(unittest.TestCase):
+    def test_a_saved_document_processes_until_waited_for(self):
+        s = sim("refresh-processing-after-save")
+        meta, _ = s.handle("artifact.getSourceMetadata", {"id": ch.EXISTING_DOCUMENT})
+        self.assertEqual(meta["processingStatus"], "READY")
+        result, error = s.handle("artifact.updateTextArtifact", {
+            "id": ch.EXISTING_DOCUMENT, "content": "<p>new</p>", "expectedSourceRevisionNumber": meta["sourceRevisionNumber"],
+            "expectedSourceContentHash": meta["sourceContentHash"]})
+        self.assertIsNone(error)
+        self.assertEqual(result["artifact"]["processingStatus"], "PROCESSING")
+        s.handle("artifact.waitForArtifactsReady", {"artifactIds": [ch.EXISTING_DOCUMENT]})
+        meta, _ = s.handle("artifact.getSourceMetadata", {"id": ch.EXISTING_DOCUMENT})
+        self.assertEqual(meta["processingStatus"], "READY")
+
+
 class ContextTests(unittest.TestCase):
     def test_import_cases_go_to_the_analyst_only_when_the_arm_ships_the_task(self):
         self.assertEqual(ch.agent_for(ARM, case("no-notes"))[0], "analyst")
@@ -366,6 +392,15 @@ class ScoringTests(unittest.TestCase):
         for link in links:
             stripped = stripped.replace(link, "")
         self.assertIn("notesRetained", failed(score(*first_import("linked-document-not-read", stripped))))
+
+    def test_a_note_link_kept_as_a_link_in_the_appendix_counts(self):
+        doc = good_document("linked-document-not-read", [9501, 9502, 9503])
+        self.assertIn("documentMentions:dataroom\\.example/haldane-series-a",
+                      failed(score(*first_import("linked-document-not-read", doc))))
+        doc = doc.replace("</section></article>", '<p><a href="https://dataroom.example/haldane-series-a">data room</a>'
+                          "</p></section></article>")
+        result = score(*first_import("linked-document-not-read", doc))
+        self.assertTrue(result["passed"], failed(result))
 
     def test_a_shortened_or_missing_note_fails(self):
         doc = good_document("rebrand-nine-notes", list(range(9001, 9010)))

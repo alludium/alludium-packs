@@ -66,6 +66,11 @@ cases:
     # References from the previous import stay; the new note takes the next free number.
     stableRefs: {9801: N1, 9802: N2, 9803: N3, 9804: N4}
 
+  refresh-processing-after-save:
+    refresh: true
+    notesRetained: [9801, 9802, 9803, 9804]
+    importStatus: complete
+
   instruction-in-note:
     notesRetained: [9901, 9902]
     importStatus: complete

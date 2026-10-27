@@ -45,6 +45,9 @@ ANALYST_PATH = f"{PACK}/agent-templates/vc_deal_analyst.yaml"
 DEFINITIONS_DIR = f"{PACK}/task-definition-templates/vc-workflows"
 CRM_SLUG = "import-refresh-crm-history"
 CRM_TEMPLATE_PATH = f"{PACK}/documents/deal-pipeline/crm-history-template.html"
+# Shared guidance the task's documentRefs name; served read-only like the template.
+GUIDE_PATHS = {"vc.document.evidence_citation_style_guide": f"{PACK}/documents/shared/evidence-citation-style-guide.html",
+               "vc.document.template_use_guidance": f"{PACK}/documents/shared/template-use-guidance.html"}
 CRM_TEMPLATE_ID = "vc.document.deal_pipeline_crm_history_template"
 POINTER = "crm_history_artifact_id"
 WORKTREE = "WORKTREE"
@@ -277,13 +280,14 @@ def load_arm(name: str, source: str) -> dict:
                                                 "activationMode": assignment.get("activationMode", "AUTO"),
                                                 "body": body, "sha256": base.sha(text)}
     template = read(CRM_TEMPLATE_PATH)
+    guides = {ref: text for ref, path in GUIDE_PATHS.items() if (text := read(path)) is not None}
     crm_task = definitions.get(CRM_SLUG)
     snapshot = json.dumps({"manager": manager_raw, "analyst": analyst_raw, "definitions": sorted(definitions),
-                           "crmTask": crm_task, "template": template,
+                           "crmTask": crm_task, "template": template, "guides": guides,
                            "skills": {k: v["sha256"] for k, v in sorted(skills.items())}}, sort_keys=True)
     return {"name": name, "origin": origin, "manager": yaml.safe_load(manager_raw), "analyst": analyst,
             "managerRaw": manager_raw, "analystRaw": analyst_raw, "definitions": definitions, "crmTask": crm_task,
-            "template": template, "skills": skills, "sha256": base.sha(snapshot),
+            "template": template, "guides": guides, "skills": skills, "sha256": base.sha(snapshot),
             "route": "analyst-task" if crm_task and template else "manager-chat"}
 
 
@@ -480,6 +484,8 @@ class CrmSimulator:
         self.crm_definition = base.definition_id(CRM_SLUG, "4841") if arm["crmTask"] else None
         self.documents: dict[str, dict] = {}
         self.pending_edit = bool(self.deal.get("editedBeforeFirstUpdate"))
+        # Saved documents report PROCESSING until the agent waits for them, as Platform does after a write.
+        self.processing: set[str] = set()
         if self.deal.get("existingDocument") and not self.deal.get("existingDocumentMissing"):
             all_notes = {n["id"]: n for c in affinity.get("companies", [])
                          for n in (generated_notes(c["generatedNotes"]) if c.get("generatedNotes")
@@ -521,7 +527,8 @@ class CrmSimulator:
         return {"id": document["id"], "filename": document["filename"], "mimeType": document["mimeType"],
                 "sourceRevisionNumber": document["revision"], "sourceContentHash": sha256(document["content"]),
                 "sizeBytes": len(document["content"].encode()), "totalLineCount": len(document["content"].splitlines()),
-                "processingStatus": "READY", "projectId": PROJECT,
+                "processingStatus": "PROCESSING" if document["id"] in self.processing else "READY",
+                "projectId": PROJECT,
                 "scope": "TASK_RUN" if document["owner"] == "TASK_RUN" else "PROJECT_SHARED"}
 
     def pointer(self) -> str | None:
@@ -710,8 +717,10 @@ class CrmSimulator:
         if name in DOCUMENT_LISTS:
             return {"artifacts": [self.metadata(d) for d in self.documents.values()]}, None
         if name == "artifact.waitForArtifactsReady":
+            ids = args.get("artifactIds") or []
+            self.processing.difference_update(ids)
             return {"artifacts": [{"id": i, "processingStatus": "READY" if i in self.documents else "NOT_FOUND"}
-                                  for i in args.get("artifactIds") or []]}, None
+                                  for i in ids]}, None
         if name in DOCUMENT_READS:
             return self.read_document(name, args)
         if name == "artifact.updateTextArtifact":
@@ -764,14 +773,23 @@ class CrmSimulator:
                 "resources": []}, None
 
     def read_template(self, name: str, args: dict) -> tuple[object, str | None]:
-        if args.get("documentRefId") != CRM_TEMPLATE_ID or not self.template:
+        ref = args.get("documentRefId")
+        guides = (self.arm.get("guides") or {}) if self.template else {}
+        if ref == CRM_TEMPLATE_ID and self.template:
+            text, artifact, filename, title = self.template, TEMPLATE_ARTIFACT, "crm-history-template.html", \
+                "CRM history and context template"
+        elif ref in guides:
+            index = sorted(guides).index(ref) + 1
+            text, artifact, filename, title = guides[ref], f"77777777-7777-4777-8777-{index:012d}", \
+                GUIDE_PATHS[ref].rsplit("/", 1)[-1], ref
+        else:
             return None, "Project template not found for this project type"
-        lines = self.template.splitlines()
-        result = {"projectId": PROJECT, "documentRefId": CRM_TEMPLATE_ID, "artifactId": TEMPLATE_ARTIFACT,
-                  "filename": "crm-history-template.html", "mimeType": "text/html",
-                  "title": "CRM history and context template", "documentType": "template",
-                  "sourceRevisionNumber": TEMPLATE_REVISION, "sourceContentHash": sha256(self.template),
-                  "sizeBytes": len(self.template.encode()), "totalLineCount": len(lines)}
+        lines = text.splitlines()
+        result = {"projectId": PROJECT, "documentRefId": ref, "artifactId": artifact,
+                  "filename": filename, "mimeType": "text/html", "title": title,
+                  "documentType": "template" if ref == CRM_TEMPLATE_ID else "guidance",
+                  "sourceRevisionNumber": TEMPLATE_REVISION, "sourceContentHash": sha256(text),
+                  "sizeBytes": len(text.encode()), "totalLineCount": len(lines)}
         if name == "project.getTemplateMetadata":
             return result, None
         start, end = args.get("startLine") or 1, args.get("endLine") or args.get("startLine") or 1
@@ -798,6 +816,7 @@ class CrmSimulator:
         document = self.add_document(f"88888888-8888-4888-8888-{len(self.documents) + 1:012d}", str(args["filename"]),
                                      str(args["content"]), "PROJECT")
         self.record_created("project.instantiateTemplate", document)
+        self.saved(document)
         return {"artifact": self.metadata(document), "templateDocumentId": CRM_TEMPLATE_ID}, None
 
     def create_text(self, args: dict) -> tuple[object, str | None]:
@@ -861,7 +880,12 @@ class CrmSimulator:
         if record["error"]:
             return None, record["error"]
         document["content"], document["revision"], record["ok"] = content, document["revision"] + 1, True
+        self.saved(document)
         return {"artifact": self.metadata(document)}, None
+
+    def saved(self, document: dict) -> None:
+        if self.deal.get("processingAfterSave"):
+            self.processing.add(document["id"])
 
     def edit_document(self, name: str, args: dict) -> tuple[object, str | None]:
         document = self.documents.get(args.get("id"))
@@ -890,6 +914,7 @@ class CrmSimulator:
             record["error"] = f"Text artifact content must be {MAX_TEXT_ARTIFACT_BYTES} bytes or less"
             return None, record["error"]
         document["content"], document["revision"], record["ok"] = content, document["revision"] + 1, True
+        self.saved(document)
         return {"artifact": self.metadata(document)}, None
 
 
@@ -1292,9 +1317,10 @@ def score(frozen: dict, record: dict, documents: dict[str, str]) -> dict:
             if expect.get("importStatus"):
                 info["importStatus"] = import_status(document)
                 assertions[f"importStatus:{expect['importStatus']}"] = info["importStatus"] == expect["importStatus"]
-            # Facts the case needs belong in the brief, not only in the retained notes.
+            # Facts the case needs belong in the brief, not only in the retained notes. Links may sit
+            # with their note in the appendix, so links count anywhere in the document.
             brief = brief_part(document)
-            text = visible_text(brief) + " " + " ".join(re.findall(r"href=\"([^\"]+)\"", brief))
+            text = visible_text(brief) + " " + " ".join(re.findall(r"href=\"([^\"]+)\"", document))
             for pattern in expect.get("documentMentions", []):
                 assertions[f"documentMentions:{pattern}"] = bool(re.search(pattern, text, re.I))
             for pattern in expect.get("documentForbidden", []):
