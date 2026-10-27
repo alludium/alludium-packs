@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import html
 import json
+import os
 import sys
 import tempfile
 import unittest
@@ -306,6 +307,50 @@ class ProcessingTests(unittest.TestCase):
         s.handle("artifact.waitForArtifactsReady", {"artifactIds": [ch.EXISTING_DOCUMENT]})
         meta, _ = s.handle("artifact.getSourceMetadata", {"id": ch.EXISTING_DOCUMENT})
         self.assertEqual(meta["processingStatus"], "READY")
+
+
+class StreamingInvokeTests(unittest.TestCase):
+    class FakeStream:
+        def __init__(self, lines):
+            self.lines = [line.encode() for line in lines]
+
+        def __enter__(self):
+            return self.lines
+
+        def __exit__(self, *exc):
+            return False
+
+    def invoke(self, lines):
+        original, key = ch.urllib.request.urlopen, os.environ.get("OPENAI_API_KEY")
+        sent = {}
+
+        def fake(request, timeout):
+            sent["body"] = json.loads(request.data)
+            return self.FakeStream(lines)
+        ch.urllib.request.urlopen = fake
+        os.environ["OPENAI_API_KEY"] = "test-key"
+        try:
+            return ch.streaming_openai_invoke({"model": "m", "input": []}, None, {"endpoint": "https://x", "timeout": 60}), sent
+        finally:
+            ch.urllib.request.urlopen = original
+            if key is None:
+                os.environ.pop("OPENAI_API_KEY", None)
+            else:
+                os.environ["OPENAI_API_KEY"] = key
+
+    def test_returns_the_completed_response(self):
+        final = {"id": "r1", "status": "completed", "output": [], "usage": {"input_tokens": 1}}
+        result, sent = self.invoke(["event: response.created", 'data: {"type": "response.created"}', "",
+                                    'data: {"type": "response.output_text.delta", "delta": "x"}',
+                                    "data: " + json.dumps({"type": "response.completed", "response": final})])
+        self.assertEqual(result, final)
+        self.assertTrue(sent["body"]["stream"])
+
+    def test_failed_or_cut_streams_raise(self):
+        with self.assertRaises(ch.base.ProviderError):
+            self.invoke(['data: {"type": "response.failed", "response": {"status": "failed"}}'])
+        with self.assertRaises(ch.base.ProviderError):
+            self.invoke(['data: {"type": "response.created"}'])
 
 
 class ContextTests(unittest.TestCase):

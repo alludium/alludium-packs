@@ -32,7 +32,8 @@ Every company, person, note and ID is invented (`.example` domains).
 ## Run
 
 `plugins/vc/scripts/compare_crm_history_import.py` runs the cases on the Luna subject (OpenAI
-Responses API) with the same settings and spend ledger as the #4449 and #4843 comparisons. Without
+Responses API) with the same settings and spend ledger as the #4449 and #4843 comparisons. Subject calls are streamed, because a long document write takes over a minute to
+generate and a non-streamed call was cut off after about 60 seconds. Without
 `--execute` it is a no-spend preflight. A run makes paid calls and needs an `OPENAI_API_KEY`.
 
 ```sh

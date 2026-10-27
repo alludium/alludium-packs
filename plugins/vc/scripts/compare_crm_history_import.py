@@ -27,6 +27,9 @@ import time
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
+import urllib.error
+import urllib.request
+
 import yaml
 
 import compare_deal_manager_prompts as base
@@ -53,6 +56,9 @@ POINTER = "crm_history_artifact_id"
 WORKTREE = "WORKTREE"
 
 GLOBAL_ASSERTIONS = ["allTurnsComplete", "noInvalidToolCalls", "noAffinityWrites", "noFieldWrites", "noStageMove"]
+# Streamed subject calls: the final events carry the full response; a read waits at most this long.
+STREAM_FINAL_EVENTS = {"response.completed", "response.incomplete"}
+STREAM_READ_TIMEOUT_SECONDS = 120
 IMPORT_GLOBAL_ASSERTIONS = ["oneDocument", "completedWithPointer", "safeHtml", "briefCitesNotes", "briefSubstantive",
                             "notesAttributed"]
 CASE_KEYS = {"notesRetained", "notesAbsent", "importStatus", "documentMentions", "documentForbidden", "documentKeeps",
@@ -1448,9 +1454,45 @@ def preflight(args: argparse.Namespace, frozen: dict) -> dict:
             "blockingProblems": problems, "ready": not problems}
 
 
+def streaming_openai_invoke(request: dict, request_path: Path, settings: dict) -> dict:
+    """Subject route with a streamed response. A long document write can take over a minute to generate,
+    and a non-streamed request is cut off after about 60 idle seconds; streaming keeps the connection busy.
+    Same single submission, no retries; the final response object is what a non-streamed call returns.
+    callTimeoutSeconds bounds the whole call, not each read."""
+    key = os.environ.get("OPENAI_API_KEY")
+    if not key:
+        raise base.ProviderError("OPENAI_API_KEY is not set", systematic=True)
+    http = urllib.request.Request(settings["endpoint"], data=json.dumps({**request, "stream": True}).encode(),
+                                  method="POST", headers={"Authorization": f"Bearer {key}",
+                                                          "Content-Type": "application/json",
+                                                          "Accept": "text/event-stream"})
+    deadline = time.monotonic() + settings["timeout"]
+    try:
+        with urllib.request.urlopen(http, timeout=STREAM_READ_TIMEOUT_SECONDS) as response:
+            for raw in response:
+                if time.monotonic() > deadline:
+                    raise base.ProviderError(f"Call exceeded {settings['timeout']} seconds")
+                line = raw.decode().strip()
+                if not line.startswith("data:"):
+                    continue
+                event = json.loads(line[5:].strip())
+                if event.get("type") in STREAM_FINAL_EVENTS:
+                    return event["response"]
+                if event.get("type") in {"error", "response.failed"}:
+                    raise base.ProviderError(f"Stream error: {json.dumps(event)[:2000]}")
+    except urllib.error.HTTPError as error:
+        raise base.ProviderError(f"HTTP {error.code}: {error.read().decode(errors='replace')[:2000]}",
+                                 systematic=400 <= error.code < 500 and error.code not in base.TRANSIENT_HTTP) from error
+    except (urllib.error.URLError, TimeoutError, OSError) as error:
+        raise base.ProviderError(f"{type(error).__name__}: {error}") from error
+    except (json.JSONDecodeError, UnicodeDecodeError) as error:
+        raise base.ProviderError("Provider returned an invalid stream event", systematic=True) from error
+    raise base.ProviderError("Stream ended without a final response")
+
+
 def execute(args: argparse.Namespace, invoke=None) -> dict:
     real_provider = invoke is None
-    invoke = invoke or base.openai_invoke
+    invoke = invoke or streaming_openai_invoke
     frozen = freeze(args.arm)
     report = preflight(args, frozen)
     if not report["ready"]:
