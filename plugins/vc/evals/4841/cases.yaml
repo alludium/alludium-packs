@@ -54,6 +54,28 @@ cases:
               - {id: 9104, author: Ana Lee, date: "2025-08-14T10:00:00Z", html: "<p>Technical DD call: latency claims look plausible; no field data shared.</p>"}
               - {id: 9105, author: Ana Lee, date: "2025-09-03T10:00:00Z", html: "<p>Founders asked for intro to logistics LPs. Sent two intros.</p>"}
 
+  - id: search-second-page
+    kind: import
+    # The search returns one record per page; the record holding the history is on the second page.
+    deal: {name: Tarnwell, organisation: {name: Tarnwell, domain: tarnwell.example}}
+    searchPageSize: 1
+    affinity:
+      companies:
+        - id: 502201
+          name: Tarnwell
+          domain: tarnwell.example
+          domains: [tarnwell.example]
+          description: null
+          notes: []
+        - id: 502202
+          name: Tarnwell Labs
+          domain: tarnwell.example
+          domains: [tarnwell.example]
+          description: Grid-edge battery scheduling for small utilities.
+          notes:
+            - - {id: 12301, author: Tom Becker, date: "2025-03-12T10:00:00Z", html: "<p>Intro from a utility advisor. Battery scheduling for small utilities; 3 utilities in pilot.</p>"}
+              - {id: 12302, author: Tom Becker, date: "2025-06-30T10:00:00Z", html: "<p>Follow-up: one pilot signed a two-year contract.</p>"}
+
   - id: similar-names-not-merged
     kind: import
     deal: {name: Orchidea, organisation: {name: Orchidea, domain: orchidea.example}}

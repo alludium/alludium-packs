@@ -138,7 +138,7 @@ Text documents have a 100 KB platform limit (102,400 UTF-8 bytes) for every upda
 created above it could never be refreshed.
 
 1. Before saving, estimate the size of the complete HTML, including brief, appendix and markup:
-   count characters, counting each non-ASCII character as 3 bytes.
+   count characters, counting each non-ASCII character as 3 bytes and each emoji as 4.
 2. If the estimate is above 90,000 bytes, do not save anything. On a refresh, leave the existing
    document untouched. Report a platform blocker: the full note history is too close to, or above,
    the platform's 100 KB document limit to save safely, with your size estimate and the note

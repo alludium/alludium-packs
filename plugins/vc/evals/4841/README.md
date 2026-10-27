@@ -10,7 +10,8 @@ when an import is partial, refuse to save a history too large to refresh, and ch
 
 Every company, person, note and ID is invented (`.example` domains).
 
-- **Import cases** (18): a rebrand with nine notes, history held on a second record, two similarly
+- **Import cases** (19): a rebrand with nine notes, history held on a second record, the record
+  with the history on the second page of search results, two similarly
   named companies that must not be merged, paging, a page that keeps failing (partial import), a
   linked data room that must not be treated as read, no notes, Deal fields that must not change, a
   refresh of an existing document (same ID, stable note references), an instruction hidden in a
@@ -40,7 +41,7 @@ python plugins/vc/scripts/compare_crm_history_import.py \
   --execute --output /tmp/crm-history-4841 --max-spend-usd 15 --max-wall-minutes 180
 ```
 
-Preflight (2 arms, 27 cases, 3 repetitions): 162 attempts, at most 40 subject calls per turn. `--rescore DIR` re-scores a finished run without spend; `--reconcile DIR`
+Preflight (2 arms, 28 cases, 3 repetitions): 168 attempts, at most 40 subject calls per turn. `--rescore DIR` re-scores a finished run without spend; `--reconcile DIR`
 rebuilds spend accounting after a hard stop. `WORKTREE` as a revision reads the working tree, for
 local checks only.
 
@@ -48,7 +49,9 @@ local checks only.
 
 - **Affinity**: the connector's read and write tool definitions, copied verbatim from
   `@alludium/affinity-mcp-server` 1.0.4 (`affinity-tools.json`). Responses follow the connector's
-  JSON shapes, cursor paging and 25,000-character page shrinking. Writes get Platform's read-only
+  JSON shapes, cursor and search-token paging and 25,000-character page shrinking. Search results
+  follow the connector's implementation (`companies`, `nextPageToken`); its tool description still
+  says `organizations` and `next_page_token`, and the skill accepts either token name. Writes get Platform's read-only
   refusal and are recorded. Case `pageSize` caps a page so paging is exercised.
 - **Platform**: the agents' capability-bundle guidance as Platform renders it
   (`capability-prompts.json`, from Craft `c69fe008`), the skills catalog with ALWAYS skill bodies,
@@ -61,16 +64,18 @@ Approximations: the task block is a trimmed copy of Platform's template; `task-m
 is offered directly (Platform hydrates it for tasks that complete without human confirmation); the
 analyst gets its tools directly rather than through tool discovery; the manager's tool schemas are
 the generic contract schemas. Not covered: a document still processing (simulated documents are
-always ready), Affinity search paging, and a Deal with no Organisation (the task cannot start
-without one). This is prompt and tool-choice evidence,
+always ready) and a Deal with no Organisation (the task cannot start without one). Two first
+imports started at the same moment can both pass the pre-create check: the Pack re-checks live
+state, but only Platform can make that check atomic. This is prompt and tool-choice evidence,
 not Platform integration or deployed proof.
 
 ## Scoring
 
 Deterministic checks only, over the saved document, the recorded tool calls and the final reply:
 one template copy (or one updated document on refresh), the task completed with its output pointing
-at it, safe static HTML, citations in the brief, every expected note's words present in order and
-unbroken inside the source appendix, the wrong company's notes absent, a colleague's edit kept,
+at it, safe static HTML, a filled company overview with citations and no template instructions
+left, case facts present in the brief itself, every expected note's words present in order and
+unbroken inside the source appendix with its links kept, the wrong company's notes absent, a colleague's edit kept,
 the complete/partial label, stable references on refresh, mentions and forbidden present-tense or
 "the deck shows" claims, and no Affinity, field (including `field-values.setField`) or stage
 writes.

@@ -44,6 +44,10 @@ def response(items: list[dict]) -> dict:
                       "input_tokens_details": {"cached_tokens": 0}, "output_tokens_details": {"reasoning_tokens": 0}}}
 
 
+OVERVIEW_FILLER = ("The retrieved notes describe its product, early customers and our meetings with the founders; "
+                   "current traction is unconfirmed.")
+
+
 def good_document(case_id: str, note_ids: list[int], status: str = "Complete import", refs: dict | None = None) -> str:
     """A document the skill asks for: dated, cited brief and every note's full text in the appendix."""
     notes = ch.case_notes(case(case_id))
@@ -53,7 +57,7 @@ def good_document(case_id: str, note_ids: list[int], status: str = "Complete imp
         f'</pre></div>' for i, n in enumerate(note_ids, 1))
     return (f'<!doctype html><html><body><article><header><p class="metadata">CRM: Affinity · '
             f'<span class="badge">{status}</span></p></header><section><h2>Company overview</h2>'
-            f'<p>A 2025 note describes the company [N1].</p></section>'
+            f'<p>A 2025 note describes the company [N1]. {OVERVIEW_FILLER}</p></section>'
             f'<section id="source-appendix"><h2>Source appendix</h2>{entries}</section></article></body></html>')
 
 
@@ -92,6 +96,16 @@ class AffinitySimulatorTests(unittest.TestCase):
         self.assertEqual([c["id"] for c in json.loads(data)["companies"]], [500201, 500202])
         data, _ = sim("rebrand-nine-notes").handle("affinity_search_companies", {"term": "ledgerly.example"})
         self.assertEqual([c["id"] for c in json.loads(data)["companies"]], [500001])
+
+    def test_search_pages_by_token(self):
+        simulator = sim("search-second-page")
+        first = json.loads(simulator.handle("affinity_search_companies", {"term": "Tarnwell"})[0])
+        self.assertEqual([c["id"] for c in first["companies"]], [502201])
+        self.assertTrue(first["hasMore"])
+        second = json.loads(simulator.handle("affinity_search_companies",
+                                             {"term": "Tarnwell", "pageToken": first["nextPageToken"]})[0])
+        self.assertEqual([c["id"] for c in second["companies"]], [502202])
+        self.assertFalse(second["hasMore"])
 
     def test_notes_page_by_cursor_until_no_more(self):
         simulator = sim("paged-notes")
@@ -315,6 +329,33 @@ class ScoringTests(unittest.TestCase):
         result = score(*first_import("fund-and-fields-unchanged", doc))
         self.assertTrue(result["passed"], failed(result))
 
+    def test_the_brief_must_be_filled_in(self):
+        doc = good_document("fund-and-fields-unchanged", [9701, 9702])
+        self.assertIn("briefSubstantive", failed(score(*first_import("fund-and-fields-unchanged",
+                                                                      doc.replace(OVERVIEW_FILLER, "")))))
+        placeholder = doc.replace("</section>", "<p>As far as the retrieved records support it.</p></section>", 1)
+        self.assertTrue(score(*first_import("fund-and-fields-unchanged", placeholder))["passed"])
+        placeholder = doc.replace("</section>", "<p>as far as the retrieved records support it</p></section>", 1)
+        self.assertIn("briefSubstantive", failed(score(*first_import("fund-and-fields-unchanged", placeholder))))
+
+    def test_case_facts_must_be_in_the_brief(self):
+        ids = list(range(9001, 9010))
+        doc = good_document("rebrand-nine-notes", ids)
+        # Both names appear in the retained notes, but the brief never mentions them.
+        self.assertIn("documentMentions:Ledgerly", failed(score(*first_import("rebrand-nine-notes", doc))))
+
+    def test_a_note_link_must_stay_in_the_appendix(self):
+        doc = good_document("linked-document-not-read", [9501, 9502, 9503]).replace(
+            "</section>", "<p>Linked, not read: https://dataroom.example/haldane-series-a</p></section>", 1)
+        self.assertTrue(score(*first_import("linked-document-not-read", doc))["passed"])
+        notes = ch.case_notes(case("linked-document-not-read"))
+        links = set().union(*(ch.note_links(notes[n]) for n in (9501, 9502, 9503)))
+        self.assertTrue(links)
+        stripped = doc
+        for link in links:
+            stripped = stripped.replace(link, "")
+        self.assertIn("notesRetained", failed(score(*first_import("linked-document-not-read", stripped))))
+
     def test_a_shortened_or_missing_note_fails(self):
         doc = good_document("rebrand-nine-notes", list(range(9001, 9010)))
         doc = doc.replace("Reason for the larger round not given.", "")
@@ -419,7 +460,8 @@ class ScoringTests(unittest.TestCase):
         self.assertTrue({"noAffinityWrites", "noFieldWrites"} <= set(failed(score(rec, docs))))
 
     def test_linked_document_claims_fail(self):
-        doc = good_document("linked-document-not-read", [9501, 9502, 9503])
+        doc = good_document("linked-document-not-read", [9501, 9502, 9503]).replace(
+            "</section>", "<p>Linked, not read: https://dataroom.example/haldane-series-a</p></section>", 1)
         self.assertTrue(score(*first_import("linked-document-not-read", doc))["passed"])
         doc = doc.replace("describes the company", "and the financial model shows strong margins")
         self.assertFalse(score(*first_import("linked-document-not-read", doc))["passed"])

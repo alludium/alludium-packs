@@ -9,7 +9,7 @@ description: >-
 global: [allTurnsComplete, noInvalidToolCalls, noAffinityWrites, noFieldWrites, noStageMove]
 
 # Applied to every import case (kind: import) on top of the case's own checks.
-importGlobal: [oneDocument, completedWithPointer, safeHtml, briefCitesNotes]
+importGlobal: [oneDocument, completedWithPointer, safeHtml, briefCitesNotes, briefSubstantive]
 
 cases:
   rebrand-nine-notes:
@@ -22,6 +22,10 @@ cases:
 
   secondary-record-notes:
     notesRetained: [9101, 9102, 9103, 9104, 9105]
+    importStatus: complete
+
+  search-second-page:
+    notesRetained: [12301, 12302]
     importStatus: complete
 
   similar-names-not-merged:

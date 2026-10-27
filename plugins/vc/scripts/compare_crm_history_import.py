@@ -50,7 +50,7 @@ POINTER = "crm_history_artifact_id"
 WORKTREE = "WORKTREE"
 
 GLOBAL_ASSERTIONS = ["allTurnsComplete", "noInvalidToolCalls", "noAffinityWrites", "noFieldWrites", "noStageMove"]
-IMPORT_GLOBAL_ASSERTIONS = ["oneDocument", "completedWithPointer", "safeHtml", "briefCitesNotes"]
+IMPORT_GLOBAL_ASSERTIONS = ["oneDocument", "completedWithPointer", "safeHtml", "briefCitesNotes", "briefSubstantive"]
 CASE_KEYS = {"notesRetained", "notesAbsent", "importStatus", "documentMentions", "documentForbidden", "documentKeeps",
              "replyMentions", "refresh", "stableRefs", "blocked", "createsCrmTask", "passesProvider",
              "noManagerDocument", "readsDocument", "createsTask", "livingReportActive"}
@@ -206,6 +206,12 @@ IDENTITY_READS = {
     "identity.listProjectLinks": None,
     "identity.findSourceCapture": {"capture": None},
 }
+# Instruction text from the CRM-history template that a filled document must replace.
+TEMPLATE_PLACEHOLDERS = ["as far as the retrieved records support it", "A readable chronology of changes that matter",
+                         "Name what would resolve each one"]
+OVERVIEW = re.compile(r"<h2[^>]*>\s*Company overview\s*</h2>(.*?)(?=<h2|$)", re.I | re.S)
+MIN_OVERVIEW_WORDS = 20
+LINK = re.compile(r"https?://[^\s<>\"')]+|\b[\w-]+(?:\.[\w-]+)*\.example(?:/[^\s<>\"')]*)?", re.I)
 BADGE = re.compile(r"<[^>]+class=\"[^\"]*\bbadge\b[^\"]*\"[^>]*>(.*?)</", re.I | re.S)
 
 
@@ -383,6 +389,12 @@ def words(text: str) -> list[str]:
     """Comparable words: tags removed, entities decoded, URLs and domains dropped, lower case."""
     text = html.unescape(re.sub(r"<[^>]+>", " ", text))
     return [w.lower() for w in WORD.findall(URL.sub(" ", text))]
+
+
+def note_links(note_html: str) -> set[str]:
+    """Link destinations and linked domains in a note, which the appendix must keep as references."""
+    hrefs = re.findall(r"href=\"([^\"]+)\"", note_html)
+    return {link.rstrip(".,;") for link in [*hrefs, *LINK.findall(html.unescape(re.sub(r"<[^>]+>", " ", note_html)))]}
 
 
 def contains_note(document: str, note_html: str) -> bool:
@@ -571,8 +583,15 @@ class CrmSimulator:
             rows = [{"id": c["id"], "name": c["name"], "domain": c.get("domain"), "domains": c.get("domains", []),
                      "global": False, **({"opportunity_ids": c.get("opportunityIds", [])}
                                          if args.get("withOpportunities") else {})} for c in found]
-            return json.dumps({"companies": rows, "count": len(rows), "hasMore": False, "nextPageToken": None,
-                               "summary": f"Found {len(rows)} company/companies"}, indent=2), None
+            # The connector's implementation returns `companies` and `nextPageToken` (its tool description
+            # still says `organizations` and `next_page_token`).
+            size = self.case.get("searchPageSize", len(rows) or 1)
+            start = int(args.get("pageToken") or 0) if str(args.get("pageToken") or "0").isdigit() else 0
+            page, token = rows[start:start + size], str(start + size) if start + size < len(rows) else None
+            return json.dumps({"companies": page, "count": len(page), "hasMore": token is not None,
+                               "nextPageToken": token,
+                               "summary": f"Found {len(page)} company/companies"
+                                          + (" (more available with pageToken)" if token else "")}, indent=2), None
         if name == "affinity_get_company":
             company = self.companies.get(self.numeric(args.get("companyId")))
             if not company:
@@ -1231,8 +1250,15 @@ def score(frozen: dict, record: dict, documents: dict[str, str]) -> dict:
             notes = case_notes(case)
             retained = expect.get("notesRetained", [])
             assertions["briefCitesNotes"] = bool(document) and (not retained or bool(CITATION.search(visible_text(brief_part(document)))))
+            overview = OVERVIEW.search(brief_part(document))
+            assertions["briefSubstantive"] = bool(overview) and \
+                len(WORD.findall(visible_text(overview.group(1)))) >= MIN_OVERVIEW_WORDS and \
+                not any(placeholder in visible_text(document) for placeholder in TEMPLATE_PLACEHOLDERS)
             # In the appendix itself: a note quoted in the brief but dropped from the appendix is not retained.
-            missing = [n for n in retained if not contains_note(appendix_part(document), notes[n])]
+            appendix = appendix_part(document)
+            appendix_text = html.unescape(appendix)
+            missing = [n for n in retained if not contains_note(appendix, notes[n])
+                       or not all(link in appendix_text for link in note_links(notes[n]))]
             assertions["notesRetained"] = bool(document) and not missing
             info["notesMissing"] = missing
             if expect.get("notesAbsent"):
@@ -1240,7 +1266,9 @@ def score(frozen: dict, record: dict, documents: dict[str, str]) -> dict:
             if expect.get("importStatus"):
                 info["importStatus"] = import_status(document)
                 assertions[f"importStatus:{expect['importStatus']}"] = info["importStatus"] == expect["importStatus"]
-            text = visible_text(document) + " " + " ".join(re.findall(r"href=\"([^\"]+)\"", document))
+            # Facts the case needs belong in the brief, not only in the retained notes.
+            brief = brief_part(document)
+            text = visible_text(brief) + " " + " ".join(re.findall(r"href=\"([^\"]+)\"", brief))
             for pattern in expect.get("documentMentions", []):
                 assertions[f"documentMentions:{pattern}"] = bool(re.search(pattern, text, re.I))
             for pattern in expect.get("documentForbidden", []):
