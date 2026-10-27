@@ -205,6 +205,12 @@ created above it could never be refreshed.
    write it with **one** full-content update
    (`artifact.updateTextArtifact`), passing the observed revision number and content hash. Do not
    make many partial line edits.
+   **Before writing, check the replacement.** It must hold one full entry for every note in the
+   existing appendix and every newly retrieved note, so it can only be about as long as the
+   existing document or longer. If it is shorter, or any entry is missing, grouped or summarised,
+   do not write it: a full update replaces the whole document, and a short one destroys the saved
+   history. If you cannot write the complete replacement, leave the existing document untouched
+   and report the refresh as blocked.
 5. If the update is refused because the document changed in the meantime, someone else may have
    edited it. Read the current revision and content once, rebuild the replacement from that
    current content so their changes are kept, and retry the full update once with the new
