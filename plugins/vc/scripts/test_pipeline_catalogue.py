@@ -14,6 +14,8 @@ ROOT = Path(__file__).resolve().parents[1]
 PIPELINE = ROOT / "alludium/project-types/vc_deal_pipeline.json"
 APPROVED = ROOT / "scripts/fixtures/vc-deal-pipeline-approved-v5-catalogue.json"
 LEGACY_COMPANY = {"company_name", "company_domain", "company_logo_url"}
+# Added after the approved catalogue: the CRM history document pointer (#4841).
+CRM_HISTORY = "crm_history_artifact_id"
 
 
 class PipelineCatalogueTests(unittest.TestCase):
@@ -31,11 +33,32 @@ class PipelineCatalogueTests(unittest.TestCase):
     def test_matches_the_approved_catalogue_plus_legacy_compatibility(self) -> None:
         approved = json.loads(APPROVED.read_text())
         self.assertEqual(
-            [field for field in self.version["fieldsSchema"] if field["key"] not in LEGACY_COMPANY],
+            [
+                field
+                for field in self.version["fieldsSchema"]
+                if field["key"] not in LEGACY_COMPANY and field["key"] != CRM_HISTORY
+            ],
             approved["fieldsSchema"],
         )
-        self.assertEqual(self.groups, approved["extensions"]["projectDataSections"])
-        self.assertEqual(len(self.fields), 34)
+        groups = copy.deepcopy(self.groups)
+        for group in groups:
+            group["fieldKeys"] = [key for key in group["fieldKeys"] if key != CRM_HISTORY]
+        self.assertEqual(groups, approved["extensions"]["projectDataSections"])
+        self.assertEqual(len(self.fields), 35)
+        self.assertEqual(
+            self.fields[CRM_HISTORY],
+            {
+                "id": "field-crm-history-artifact-id",
+                "key": CRM_HISTORY,
+                "label": "CRM history and context",
+                "kind": "text",
+                "required": False,
+                "description": "Internal pointer to the current CRM history and context document for this Deal.",
+                "settingsPolicy": "excluded",
+            },
+        )
+        assessment = next(group for group in self.groups if group["key"] == "assessment_documents")
+        self.assertEqual(assessment["fieldKeys"][-1], CRM_HISTORY)
         for key in LEGACY_COMPANY:
             self.assertEqual(self.fields[key]["id"], "field-" + key.replace("_", "-"))
             self.assertEqual(self.fields[key]["kind"], "text")
