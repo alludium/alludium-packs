@@ -684,6 +684,7 @@ OPTIONAL_ARTIFACT_INPUTS = {
         "existing_term_sheet_review_artifact_id",
     },
     "prepare-meeting": {"pitch_deck_artifact_id"},
+    "prepare-pipeline-meeting": {"pitch_deck_artifact_id"},
     "run-commercial-evaluation": {"follow_up_evaluation_artifact_id"},
     "run-technical-evaluation": {"follow_up_evaluation_artifact_id"},
     "run-financial-evaluation": {"follow_up_evaluation_artifact_id"},
@@ -6143,7 +6144,69 @@ def validate_project_task_mapping_contracts() -> None:
             )
 
 
+PIPELINE_MEETING_TASKS = {
+    "prepare-pipeline-meeting": ("vc.prepare_pipeline_meeting", "meeting_brief_artifact_id", "vc.document.initial_call_brief_template"),
+    "summarize-pipeline-meeting": ("vc.summarize_pipeline_meeting", "meeting_summary_artifact_id", "vc.document.customer_insights_summary_template"),
+}
+
+
+def validate_pipeline_meeting_contract() -> None:
+    """Meetings use the locked Analyst and per-task outputs, not singleton Deal fields."""
+    version = read_json(ROOT / "alludium/project-types/vc_deal_pipeline.json")["initialVersion"]
+    mappings = {m["taskDefinitionSlug"]: m for m in version["projectTaskMappings"]}
+    analyst = read_yaml(ROOT / "alludium/agent-templates/vc_deal_analyst.yaml")
+    manager = read_yaml(ROOT / "alludium/agent-templates/vc_deal_pipeline_manager.yaml")
+    assigned_skills = {s["externalId"] for s in analyst.get("skills", [])}
+    if "meeting-prep-and-summary" not in assigned_skills:
+        fail("Pipeline meeting executor must have the meeting-prep-and-summary skill")
+    if "For every task, apply `generate-or-refresh-living-report`" in analyst["prompt"]["template"]:
+        fail("Pipeline meeting tasks must not inherit the living-report refresh lifecycle")
+    expected_inputs = [
+        {"taskField": "company_name", "source": "project.investmentSubject", "sourcePath": "organisation.displayName", "requiredForActivation": True},
+        {"taskField": "organisation_id", "source": "project.investmentSubject", "sourcePath": "organisation.id", "requiredForActivation": False},
+    ]
+    for slug, (template_id, output_key, document_id) in PIPELINE_MEETING_TASKS.items():
+        task = read_yaml(ROOT / "alludium/task-definition-templates/vc-workflows" / f"{slug}.yaml")
+        definition = task["definition"]["definitionJson"]
+        profile = task["runtime"]["executionProfile"]
+        mapping = mappings.get(slug) or {}
+        if task["id"] != template_id or mapping.get("taskDefinitionTemplateId") != template_id:
+            fail(f"Pipeline meeting {slug} must map its installed definition")
+        if definition.get("supportedProjectTypes") != ["vc_deal_pipeline"]:
+            fail(f"Pipeline meeting {slug} must not change legacy Room execution")
+        if definition.get("stageIndependent") is not True or definition.get("stage") is not None or "lifecycleStage" in mapping:
+            fail(f"Pipeline meeting {slug} must be stage-independent")
+        if any(value != "vc_deal_analyst" for value in [definition.get("recommendedAgentTemplate"), definition.get("plannedRecommendedAgentTemplate"), profile.get("preferredAgentType")]):
+            fail(f"Pipeline meeting {slug} must use the locked Deal Analyst")
+        if profile.get("requiresHumanConfirmationToComplete") is not True:
+            fail(f"Pipeline meeting {slug} must retain human completion review")
+        if mapping.get("inputMappings") != expected_inputs:
+            fail(f"Pipeline meeting {slug} must use confirmed Organisation inputs without a deck gate")
+        if mapping.get("outputMappings") != []:
+            fail(f"Pipeline meeting {slug} must preserve per-meeting outputs without overwriting Deal fields")
+        if mapping.get("activationPolicy") != {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": False, "requiresHumanApproval": True, "createTaskWhenLifecycleStageEntered": False}:
+            fail(f"Pipeline meeting {slug} must not start on stage entry")
+        inputs = {f["key"]: f for f in task["fields"]["input"]}
+        if {key for key, field in inputs.items() if field.get("required")} != {"company_name"}:
+            fail(f"Pipeline meeting {slug} must allow notes-only work with confirmed company identity")
+        if not {"meeting_record_artifact_ids", "meeting_notes", "organisation_id"}.issubset(inputs):
+            fail(f"Pipeline meeting {slug} must accept text or artifact sources")
+        if slug == "prepare-pipeline-meeting" and (inputs.get("pitch_deck_artifact_id") or {}).get("required") is not False:
+            fail("Pipeline meeting preparation must make the pitch deck optional")
+        outputs = task["fields"]["output"]
+        if len(outputs) != 1 or outputs[0].get("key") != output_key or outputs[0].get("required") is not True or outputs[0].get("fieldType") != "file":
+            fail(f"Pipeline meeting {slug} must require its saved file output")
+        if outputs[0].get("config", {}).get("documentRefId") != document_id:
+            fail(f"Pipeline meeting {slug} must use its declared output template")
+        if document_id not in version["documentLibrary"]["documentIds"] or {"documentId": document_id, "usage": "output_template", "outputFieldKey": output_key} not in definition["documentRefs"]:
+            fail(f"Pipeline meeting {slug} must expose its output template in the Deal library")
+        for agent in [analyst, manager]:
+            if slug not in agent["metadata"]["supportedTaskDefinitions"]:
+                fail(f"Pipeline meeting {slug} is missing from {agent['id']}'s task contract")
+
+
 def validate_vc_deal_pipeline_contract() -> None:
+    validate_pipeline_meeting_contract()
     project_type_id = "vc_deal_pipeline"
     project_type = read_json(ROOT / "alludium" / "project-types" / f"{project_type_id}.json")
     initial_version = project_type.get("initialVersion") or {}
@@ -6233,6 +6296,7 @@ def validate_vc_deal_pipeline_contract() -> None:
         "create exactly one project-shared",
         "update that exact artifact in place",
         "Never create a duplicate fallback",
+        "This lifecycle applies to living reports, not to a per-meeting brief or summary.",
     ]:
         if phrase not in living_report_skill:
             fail(f"Living-report skill is missing lifecycle rule: {phrase}")
@@ -6305,8 +6369,9 @@ def validate_vc_deal_pipeline_contract() -> None:
     task_contracts = load_task_template_contracts()
     mappings = initial_version.get("projectTaskMappings") or []
     mappings_by_slug = {mapping.get("taskDefinitionSlug"): mapping for mapping in mappings}
-    if set(mappings_by_slug) != set(expected_tasks) or len(mappings) != len(expected_tasks):
-        fail("vc_deal_pipeline must map exactly the four durable document tasks")
+    expected_slugs = set(expected_tasks) | set(PIPELINE_MEETING_TASKS)
+    if set(mappings_by_slug) != expected_slugs or len(mappings) != len(expected_slugs):
+        fail("vc_deal_pipeline must map the four living report tasks and two meeting tasks")
 
     for slug, (template_id, output_field, existing_input, criteria_id, template_document_id) in expected_tasks.items():
         contract = task_contracts.get(slug)
@@ -6414,6 +6479,8 @@ def validate_vc_deal_pipeline_contract() -> None:
                 fail(f"vc_deal_pipeline mapping for {slug} targets unknown project field {project_field}")
 
     expected_document_ids = {
+        "vc.document.initial_call_brief_template",
+        "vc.document.customer_insights_summary_template",
         "vc.document.evidence_citation_style_guide",
         "vc.document.template_use_guidance",
         "vc.document.deal_pipeline_screening_criteria",
@@ -6430,7 +6497,7 @@ def validate_vc_deal_pipeline_contract() -> None:
     document_id_list = document_library.get("documentIds") or []
     document_ids = set(document_id_list)
     if document_ids != expected_document_ids:
-        fail("vc_deal_pipeline document library must contain the nine stable role documents and shared guidance")
+        fail("vc_deal_pipeline document library must contain the report and meeting templates and shared guidance")
     if len(document_id_list) != len(document_ids):
         fail("vc_deal_pipeline document library must not declare duplicate document IDs")
 
@@ -6441,6 +6508,7 @@ def validate_vc_deal_pipeline_contract() -> None:
         fail("vc_deal_pipeline document presentation must explain the customizable library")
 
     expected_presentation_groups = {
+        "meetings": ("Meetings", 60),
         "shared_guidance": ("Shared guidance", 10),
         "screening": ("Screening", 20),
         "evaluation": ("Evaluation", 30),
@@ -6465,6 +6533,12 @@ def validate_vc_deal_pipeline_contract() -> None:
             fail(f"vc_deal_pipeline document presentation group {group_key} needs a description")
 
     expected_presentation_documents = {
+        "vc.document.initial_call_brief_template": (
+            "meeting_brief_template", "meetings", "Meeting Brief template", "output_template", 10,
+        ),
+        "vc.document.customer_insights_summary_template": (
+            "meeting_summary_template", "meetings", "Meeting Summary template", "output_template", 20,
+        ),
         "vc.document.evidence_citation_style_guide": (
             "shared_evidence_citation_guidance", "shared_guidance", "Evidence and citation guidance", "guidance", 10,
         ),
@@ -6684,8 +6758,8 @@ def validate_vc_deal_pipeline_contract() -> None:
         for slug, contract in task_contracts.items()
         if project_type_id in contract.get("supportedProjectTypes", [])
     }
-    if supported_task_slugs != {"create-pipeline-deal", *expected_tasks}:
-        fail("vc_deal_pipeline must expose only its guided creation task and four durable document tasks")
+    if supported_task_slugs != {"create-pipeline-deal", *expected_tasks, *PIPELINE_MEETING_TASKS}:
+        fail("vc_deal_pipeline must expose guided creation, four living reports and two meeting tasks")
     creation_contract = task_contracts.get("create-pipeline-deal") or {}
     creation_company_field = (creation_contract.get("fields") or {}).get("input", {}).get(
         "company_name"
