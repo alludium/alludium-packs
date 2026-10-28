@@ -93,7 +93,7 @@ class DealFieldGuidanceTests(unittest.TestCase):
     def test_rejects_a_project_update_field_write(self) -> None:
         self._assert_rejected(
             PIPELINE_MANAGER,
-            "After creation, use `field-values.setField`, one field at a time",
+            "Register the saved document with `project.registerDecisionRecord`",
             "After creation, use `project.update` to set the fields, one field at a time",
         )
 
