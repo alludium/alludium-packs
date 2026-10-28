@@ -97,6 +97,48 @@ class DealFieldGuidanceTests(unittest.TestCase):
             "After creation, use `project.update` to set the fields, one field at a time",
         )
 
+    def test_rejects_retry_guidance_that_only_preserves_ids(self) -> None:
+        self._assert_rejected(
+            PIPELINE_MANAGER,
+            "replay the entire original `project.registerDecisionRecord` payload unchanged",
+            "retry with the same artifactId and requestId",
+        )
+
+    def test_rejects_omitting_any_original_request_argument(self) -> None:
+        arguments = "projectId, artifactId, requestId, sourceRevisionNumber, sourceContentHash, expectedDefinitionRevision, all five expectedRevisions, currentDecision, decisionRationale, and decisionConditions"
+        for argument in (
+            "projectId", "artifactId", "requestId", "sourceRevisionNumber", "sourceContentHash",
+            "expectedDefinitionRevision", "all five expectedRevisions", "currentDecision",
+            "decisionRationale", "decisionConditions",
+        ):
+            with self.subTest(argument=argument):
+                self._assert_rejected(
+                    PIPELINE_MANAGER,
+                    arguments,
+                    arguments.replace(argument, "[omitted]"),
+                )
+
+    def test_rejects_refreshing_revisions_after_an_ambiguous_outcome(self) -> None:
+        self._assert_rejected(
+            PIPELINE_MANAGER,
+            "Do not substitute freshly read revisions or values, regenerate the requestId, or create another artifact while the outcome is unknown",
+            "Refresh the field revisions before retrying with the same requestId",
+        )
+
+    def test_rejects_treating_an_unknown_outcome_as_a_no_write_conflict(self) -> None:
+        self._assert_rejected(
+            PIPELINE_MANAGER,
+            "Only an explicit returned conflict outcome establishes that attempt changed no fields",
+            "A timeout establishes that attempt changed no fields",
+        )
+
+    def test_rejects_rebuilding_an_unavailable_original_request(self) -> None:
+        self._assert_rejected(
+            PIPELINE_MANAGER,
+            "if they are unavailable, inspect canonical state and report the unresolved outcome instead of constructing a different request",
+            "if they are unavailable, rebuild the request using the latest field revisions",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

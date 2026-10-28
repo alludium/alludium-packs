@@ -1112,6 +1112,19 @@ def validate_deal_field_maintenance_guidance() -> None:
         prompt = re.sub(r"[ \t]+", " ", (read_yaml(templates / f"{agent}.yaml").get("prompt") or {}).get("template") or "")
         if DEAL_FIELD_WRITE_TOOL not in prompt or DEAL_FIELD_ROUTE_RULE not in prompt:
             fail(f"Deal agent {agent} prompt must route field writes through {DEAL_FIELD_WRITE_TOOL} only")
+        if agent == "vc_deal_pipeline_manager":
+            for phrase in (
+                "Before the first registration attempt, read",
+                "Retain the complete original tool-call payload for recovery",
+                "After a timeout, lost response, or any other ambiguous outcome, replay the entire original `project.registerDecisionRecord` payload unchanged",
+                "projectId, artifactId, requestId, sourceRevisionNumber, sourceContentHash, expectedDefinitionRevision, all five expectedRevisions, currentDecision, decisionRationale, and decisionConditions",
+                "Do not substitute freshly read revisions or values, regenerate the requestId, or create another artifact while the outcome is unknown",
+                "if they are unavailable, inspect canonical state and report the unresolved outcome instead of constructing a different request",
+                "Only an explicit returned conflict outcome establishes that attempt changed no fields",
+                "retry registration of the existing artifact with fresh preconditions and a new requestId",
+            ):
+                if phrase not in prompt:
+                    fail(f"Decision Record retry guidance is missing: {phrase}")
         for pattern in UNSCOPED_CRM_WRITE_PATTERNS:
             if pattern.search(prompt):
                 fail(f"Deal agent {agent} must scope CRM write prohibitions to an external CRM: {pattern.pattern}")
