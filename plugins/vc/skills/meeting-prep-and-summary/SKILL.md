@@ -34,7 +34,7 @@ capability:
   routingHints:
     preferredSurface: skill
     notes:
-      - This skill can prepare and summarize; external follow-up, scheduling, or CRM updates require explicit approval and available tools.
+      - This skill can prepare and summarize; external follow-up, scheduling, or external CRM updates require explicit approval and available tools. Alludium Deal fields follow the Platform Record Field Maintenance skill.
 ---
 
 # Meeting Prep & Summary
@@ -287,6 +287,11 @@ After every meeting summary, identify updates for the Deal Snapshot:
 Present all Deal Snapshot updates as suggestions. Do not write directly to the
 Deal Snapshot without explicit approval.
 
+Alludium Deal fields are different: keep them current with the Platform Record
+Field Maintenance skill. Fill editable empty Deal fields that the meeting clearly
+supports with `field-values.setField`, and suggest, rather than make, changes to
+populated ones.
+
 ---
 
 ## Follow-Up Drafts
@@ -346,8 +351,8 @@ rather than proceeding without it.
   as a claim, not a fact.
 - Do not include internal firm assessments or conviction levels in external-facing
   follow-up drafts.
-- Do not write directly to CRM, Deal Snapshot, or task systems without explicit
-  approval. Present updates as suggestions.
+- Do not write directly to an external CRM, the Deal Snapshot, or task systems
+  without explicit approval. Present updates as suggestions.
 - Summaries include timestamps or quote context when the transcript provides them.
 - Tasks are created only for investment-team-owned actions. External actions are listed as requests.
 

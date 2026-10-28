@@ -1069,6 +1069,60 @@ def validate_report_executors_identity_read_only() -> None:
             fail(f"Report task executor {executor} prompt must state the identity read-only rule")
 
 
+# Agent field writes go through the dedicated field tools from the Platform Record Field
+# Maintenance skill; project_data and project.update refuse them (#4394, #4687).
+DEAL_PROJECT_TYPE_IDS = ("vc_deal_room", "vc_deal_pipeline")
+DEAL_FIELD_WRITE_TOOL = "`field-values.setField`"
+DEAL_FIELD_ROUTE_RULE = "Never write a field through `project_data` or `project.update`"
+LEGACY_FIELD_WRITE_PATTERNS = (
+    re.compile(r"update_state[^.\n]{0,160}fieldValues"),
+    re.compile(r"use `project\.update` to set"),
+)
+UNSCOPED_CRM_WRITE_PATTERNS = (
+    re.compile(r"mutate\s+CRM"),
+    re.compile(r"(?<!external )CRM(?:/deal-system)?\s+(?:writes?|updates?|fields)\b(?!\s+suggestion)"),
+)
+
+
+def validate_deal_field_maintenance_guidance() -> None:
+    templates = ROOT / "alludium" / "agent-templates"
+    workflows = ROOT / "alludium" / "task-definition-templates" / "vc-workflows"
+    agents: set[str] = set()
+    for project_type_id in DEAL_PROJECT_TYPE_IDS:
+        initial_version = (read_json(ROOT / "alludium" / "project-types" / f"{project_type_id}.json") or {}).get("initialVersion") or {}
+        manager = (initial_version.get("projectManager") or {}).get("agentTemplateKey")
+        if manager:
+            agents.add(manager)
+        for mapping in initial_version.get("projectTaskMappings") or []:
+            slug = mapping.get("taskDefinitionSlug")
+            definition = read_yaml(workflows / f"{slug}.yaml")
+            definition_json = (definition.get("definition") or {}).get("definitionJson") or {}
+            instructions = definition_json.get("instructions") or {}
+            text = " ".join(str(instructions.get(key) or "") for key in ("executionInstructions", "externalActionPolicy"))
+            text = " ".join([text, *(str(point) for point in definition_json.get("humanDecisionPoints") or [])])
+            text = re.sub(r"\s+", " ", text)
+            if DEAL_FIELD_WRITE_TOOL not in (instructions.get("executionInstructions") or ""):
+                fail(f"Deal task {slug} must point field fills at {DEAL_FIELD_WRITE_TOOL}")
+            for pattern in UNSCOPED_CRM_WRITE_PATTERNS:
+                if pattern.search(text):
+                    fail(f"Deal task {slug} must scope CRM write prohibitions to an external CRM: {pattern.pattern}")
+            if definition_json.get("recommendedAgentTemplate"):
+                agents.add(definition_json["recommendedAgentTemplate"])
+    for agent in sorted(agents):
+        prompt = re.sub(r"[ \t]+", " ", (read_yaml(templates / f"{agent}.yaml").get("prompt") or {}).get("template") or "")
+        if DEAL_FIELD_WRITE_TOOL not in prompt or DEAL_FIELD_ROUTE_RULE not in prompt:
+            fail(f"Deal agent {agent} prompt must route field writes through {DEAL_FIELD_WRITE_TOOL} only")
+        for pattern in UNSCOPED_CRM_WRITE_PATTERNS:
+            if pattern.search(prompt):
+                fail(f"Deal agent {agent} must scope CRM write prohibitions to an external CRM: {pattern.pattern}")
+    sources = [*templates.glob("*.yaml"), *workflows.glob("*.yaml"), *(ROOT / "skills").glob("*/SKILL.md")]
+    for path in sorted(sources):
+        text = path.read_text(encoding="utf-8")
+        for pattern in LEGACY_FIELD_WRITE_PATTERNS:
+            if pattern.search(text):
+                fail(f"{path.relative_to(ROOT)} teaches a refused agent field write: {pattern.pattern}")
+
+
 def validate_connected_app_agent(template_id: str, template: dict[str, Any]) -> None:
     required = CONNECTED_APP_AGENT_BUNDLES.get(template_id)
     if required is None:
@@ -6722,7 +6776,8 @@ def validate_vc_deal_pipeline_contract() -> None:
         "`artifact.createTextArtifact`",
         "never overwrite an earlier Decision Record",
         "append the new ID to `decision_record_artifact_ids` without removing or reordering prior IDs",
-        "read back both the artifact and project before reporting success",
+        "use `field-values.setField`, one field at a time",
+        "read back both the artifact and the fields before reporting success",
         "report the exact partial result and do not claim the decision was fully recorded",
     ]:
         if phrase not in manager_prompt:
@@ -6740,6 +6795,7 @@ def validate_vc_deal_pipeline_contract() -> None:
         if phrase not in analyst_prompt:
             fail(f"vc_deal_pipeline Deal Analyst prompt is missing custom-task routing: {phrase}")
     validate_report_executors_identity_read_only()
+    validate_deal_field_maintenance_guidance()
 
     relationships = (initial_version.get("extensions") or {}).get("projectRelationships") or []
     if relationships != [{

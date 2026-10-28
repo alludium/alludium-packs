@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.summarize_meeting_records
-version: 1.0.17
+version: 1.0.18
 title: Summarize Meeting Records
 category: Venture Capital
 visibility: workspace
@@ -44,7 +44,7 @@ definition:
         advisor, customer, expert, partner, IC, legal, or closing meetings represented by transcript artifacts, meeting-summary
         artifacts, recording exports, notes, or meeting-source links. Extract claims and gaps, capture action items, draft
         a CRM-neutral update, identify open questions, and recommend next actions or stage considerations without moving the
-        deal. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create
+        deal. Cite material claims, separate assumptions from evidence, and do not send messages, write external CRM records, create
         folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring
         frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default
         unless the workspace configuration explicitly selects it. Create or update a durable project file artifact named Meeting
@@ -53,10 +53,10 @@ definition:
         `methodology` supplies scoring or analysis logic, `checklist` must be completed with status, evidence, and owner,
         `style_guide` governs citations and claim language, and `operating_guidance` or `policy` constrains process and approval
         boundaries. For refs with `outputFieldKey`, produce that output from the referenced pack document and preserve the
-        document ID alongside the output artifact.'
+        document ID alongside the output artifact. Keep the Deal fields current with the Platform Record Field Maintenance skill: read them with `field-values.getFields`, use `field-values.setField` to fill editable empty Deal fields that the evidence in this task clearly supports, and suggest rather than make any change to a populated field. Leave the Fund, lifecycle stage and decision fields, and all People and Organisation records, to the human and the Deal Manager. In the completion summary, name each field you filled or suggest changing by its label.'
       missingInputPolicy: Require meeting_record_artifact_ids and company_name before producing the meeting summary. Use meeting_notes
         as optional supporting context when provided.
-      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation,
+      externalActionPolicy: Draft only unless a human explicitly approves the send, external CRM write, Drive change, project creation,
         child task creation, or stage transition.
       completionCriteria:
       - Required input gaps are resolved or listed as assumptions/open questions.
@@ -64,7 +64,7 @@ definition:
       - Next actions identify owner, dependency, and required human approval point.
     humanDecisionPoints:
     - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
-    - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+    - Approve external communications, external CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
     orchestration:
       parentTaskPolicy: none
       suggestedChildTasks: []

@@ -20,7 +20,7 @@ Generate a structured investment diligence question bank for one venture-capital
 
 ## What To Do
 
-Generate prioritized investment diligence questions with rationale, source gap, owner, and urgency. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a polished Word-ready document named Structured Diligence Question Bank as a standalone safe static HTML artifact using the Artifact Create Text Artifact tool (`artifact.createTextArtifact`), a `.html` filename, and `mimeType: "text/html"`; do not use the Project Instantiate Template tool, `project.instantiateTemplate`, or `project_instantiateTemplate`, and do not create a `.md`/`text/markdown` artifact for this rendered output; then attach it to the required output field diligence question bank artifact. Use `definitionJson.documentRefs` only as source guidance for rendered outputs. Read referenced templates, methodologies, checklists, style guides, operating guidance, and policies, but convert the referenced Markdown/template sections into semantic standalone HTML for `artifact.createTextArtifact`: keep the required first summary section from the task or template, preserve decision-critical section order, omit unsupported boilerplate, and resolve conflicts in favor of the shared HTML contract plus task-specific heading requirements. For refs with `outputFieldKey`, save the `artifact.createTextArtifact` result to that output field and preserve the document ID alongside the output artifact.
+Generate prioritized investment diligence questions with rationale, source gap, owner, and urgency. Cite material claims, separate assumptions from evidence, and do not send messages, write external CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use workspace-configured scoring frameworks, CRM providers, stage names, and deal-type metric packs; do not assume a specific fund, CRM, or SaaS default unless the workspace configuration explicitly selects it. Create or update a polished Word-ready document named Structured Diligence Question Bank as a standalone safe static HTML artifact using the Artifact Create Text Artifact tool (`artifact.createTextArtifact`), a `.html` filename, and `mimeType: "text/html"`; do not use the Project Instantiate Template tool, `project.instantiateTemplate`, or `project_instantiateTemplate`, and do not create a `.md`/`text/markdown` artifact for this rendered output; then attach it to the required output field diligence question bank artifact. Use `definitionJson.documentRefs` only as source guidance for rendered outputs. Read referenced templates, methodologies, checklists, style guides, operating guidance, and policies, but convert the referenced Markdown/template sections into semantic standalone HTML for `artifact.createTextArtifact`: keep the required first summary section from the task or template, preserve decision-critical section order, omit unsupported boilerplate, and resolve conflicts in favor of the shared HTML contract plus task-specific heading requirements. For refs with `outputFieldKey`, save the `artifact.createTextArtifact` result to that output field and preserve the document ID alongside the output artifact. Keep the Deal fields current with the Platform Record Field Maintenance skill: read them with `field-values.getFields`, use `field-values.setField` to fill editable empty Deal fields that the evidence in this task clearly supports, and suggest rather than make any change to a populated field. Leave the Fund, lifecycle stage and decision fields, and all People and Organisation records, to the human and the Deal Manager. In the completion summary, name each field you filled or suggest changing by its label.
 
 ## Available Context
 
@@ -52,7 +52,7 @@ Ask for missing required inputs before producing investment-stage recommendation
 
 ## Guardrails
 
-Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
+Draft only unless a human explicitly approves the send, external CRM write, Drive change, project creation, child task creation, or stage transition.
 
 ## Completion Criteria
 
@@ -63,7 +63,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Human Review
 
 - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
-- Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+- Approve external communications, external CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
 
 ## Workspace Methodology
 

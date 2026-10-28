@@ -20,7 +20,7 @@ Prepare Partner Review Pack for one venture-capital opportunity with evidence ca
 
 ## What To Do
 
-Prepare the Partner Review pack from the team review pack, evaluation-stage workstream outputs, the diligence question bank, available formal diligence outputs, key risks, proposed diligence scope, and decision ask. Cite material claims, separate assumptions from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use required evaluation input file artifacts commercial evaluation artifact, technical evaluation artifact, financial evaluation artifact, team evaluation artifact, and diligence question bank artifact as the decision-review source set. Use formal diligence artifacts commercial dd artifact, financial dd artifact, founder evaluation artifact, and technical dd artifact when present, but do not block evaluation-stage review on them. Use the required input file artifact team review pack artifact as the team review pack being escalated to partner review. Create or update a polished Word-ready document named Partner Review Pack as a standalone safe static HTML artifact using the Artifact Create Text Artifact tool (`artifact.createTextArtifact`), a `.html` filename, and `mimeType: "text/html"`; do not use the Project Instantiate Template tool, `project.instantiateTemplate`, or `project_instantiateTemplate`, and do not create a `.md`/`text/markdown` artifact for this rendered output; then attach it to the required output field partner review pack artifact.
+Prepare the Partner Review pack from the team review pack, evaluation-stage workstream outputs, the diligence question bank, available formal diligence outputs, key risks, proposed diligence scope, and decision ask. Cite material claims, separate assumptions from evidence, and do not send messages, write external CRM records, create folders/projects, create child tasks, or move stages without explicit human approval. Use required evaluation input file artifacts commercial evaluation artifact, technical evaluation artifact, financial evaluation artifact, team evaluation artifact, and diligence question bank artifact as the decision-review source set. Use formal diligence artifacts commercial dd artifact, financial dd artifact, founder evaluation artifact, and technical dd artifact when present, but do not block evaluation-stage review on them. Use the required input file artifact team review pack artifact as the team review pack being escalated to partner review. Create or update a polished Word-ready document named Partner Review Pack as a standalone safe static HTML artifact using the Artifact Create Text Artifact tool (`artifact.createTextArtifact`), a `.html` filename, and `mimeType: "text/html"`; do not use the Project Instantiate Template tool, `project.instantiateTemplate`, or `project_instantiateTemplate`, and do not create a `.md`/`text/markdown` artifact for this rendered output; then attach it to the required output field partner review pack artifact. Keep the Deal fields current with the Platform Record Field Maintenance skill: read them with `field-values.getFields`, use `field-values.setField` to fill editable empty Deal fields that the evidence in this task clearly supports, and suggest rather than make any change to a populated field. Leave the Fund, lifecycle stage and decision fields, and all People and Organisation records, to the human and the Deal Manager. In the completion summary, name each field you filled or suggest changing by its label.
 
 ## Available Context
 
@@ -48,7 +48,7 @@ Ask for missing required inputs before producing investment-stage recommendation
 
 ## Guardrails
 
-Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation, or stage transition.
+Draft only unless a human explicitly approves the send, external CRM write, Drive change, project creation, child task creation, or stage transition.
 
 ## Completion Criteria
 
@@ -59,7 +59,7 @@ Draft only unless a human explicitly approves the send, CRM write, Drive change,
 ## Human Review
 
 - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
-- Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+- Approve external communications, external CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
 
 ## Workspace Methodology
 
