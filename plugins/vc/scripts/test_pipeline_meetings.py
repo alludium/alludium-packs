@@ -50,6 +50,7 @@ class PipelineMeetingTests(unittest.TestCase):
         self.reject(PREP, lambda t: next(f for f in t["fields"]["input"] if f["key"] == "pitch_deck_artifact_id").update(required=True))
 
     def test_rejects_singleton_report_overwrite(self) -> None:
+        self.reject(PROJECT, lambda p: p["initialVersion"]["fieldsSchema"].append({"key": "meeting_summary_artifact_id"}))
         self.reject(PROJECT, lambda p: p["initialVersion"]["projectTaskMappings"][-1].update(outputMappings=[{"taskField": "meeting_summary_artifact_id", "target": "project.field", "targetPath": "screening_report_artifact_id"}]))
         self.reject(SUMMARY, lambda t: t["fields"]["output"][0].update(required=False))
 

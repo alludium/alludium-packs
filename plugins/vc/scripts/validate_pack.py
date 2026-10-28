@@ -6166,6 +6166,9 @@ def validate_pipeline_meeting_contract() -> None:
         {"taskField": "organisation_id", "source": "project.investmentSubject", "sourcePath": "organisation.id", "requiredForActivation": False},
     ]
     for slug, (template_id, output_key, document_id) in PIPELINE_MEETING_TASKS.items():
+        # Platform falls back to same-key project fields when outputMappings is empty.
+        if output_key in {field["key"] for field in version["fieldsSchema"]}:
+            fail(f"Pipeline meeting {slug} output must not collide with a Deal field")
         task = read_yaml(ROOT / "alludium/task-definition-templates/vc-workflows" / f"{slug}.yaml")
         definition = task["definition"]["definitionJson"]
         profile = task["runtime"]["executionProfile"]
