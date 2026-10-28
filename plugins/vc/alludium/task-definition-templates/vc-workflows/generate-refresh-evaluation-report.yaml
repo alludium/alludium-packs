@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.generate_refresh_evaluation_report
-version: 1.0.1
+version: 1.0.2
 title: Generate or Refresh Evaluation Report
 category: Venture Capital
 visibility: workspace
@@ -29,8 +29,9 @@ definition:
       executionInstructions: >-
         Apply `generate-or-refresh-living-report` to discover the current project-linked evidence corpus, include the mapped Screening Report and any additive `focus_artifact_ids`, compare the prior evidence basis when refreshing, and preserve the report lifecycle. Use `definitionJson.documentRefs` as the durable criteria, template, style, and operating-guidance contract. Maintain the Evaluation Report as the living record of evidence, change, open questions, risk, and next work. Apply the source-neutral Evaluation Criteria by decision-useful domain; do not mechanically reproduce a source checklist. Keep Fund thesis as a separate exact-match frame, render from the Evaluation Report Template, and return the resulting artifact ID as `evaluation_report_artifact_id`. Do not record an investment decision or move stage.
         The company under review is the Deal's confirmed Organisation. `company_name` carries that Organisation's name as the Platform supplied it to this task, and `organisation_id`, when present, identifies it for tool calls only. Do not ask the user to re-enter or confirm a company name, and do not take the company name from the Deal title, which is the opportunity's own name and may differ.
+        Keep the Deal fields current with the Platform Record Field Maintenance skill: read them with `field-values.getFields`, use `field-values.setField` to fill editable empty Deal fields that the evidence in this task clearly supports, and suggest rather than make any change to a populated field. Leave the Fund, lifecycle stage and decision fields, and all People and Organisation records, to the human and the Deal Manager. In the completion summary, name each field you filled or suggest changing by its label.
       missingInputPolicy: Use available evidence, preserve unknowns and conflicts, and ask only when no readable source exists.
-      externalActionPolicy: Do not send messages, mutate CRM, create tasks or projects, move stage, or record an investment decision.
+      externalActionPolicy: Do not send messages, write to an external CRM, create tasks or projects, move stage, or record an investment decision.
       completionCriteria:
         - The report covers all grouped evidence domains and records material change since the previous version.
         - Claims, unknowns, conflicts, risks, and next evidence are explicit.

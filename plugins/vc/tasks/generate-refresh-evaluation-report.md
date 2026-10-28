@@ -27,7 +27,7 @@ Generate or refresh the living evidence-backed Evaluation Report for one Deal at
 
 ## What To Do
 
-Apply `generate-or-refresh-living-report` to discover the current project-linked evidence corpus, include the mapped Screening Report and any additive focus artifacts, compare the prior evidence basis when refreshing, and preserve the report lifecycle. Use `definitionJson.documentRefs` as the durable criteria, template, style, and operating-guidance contract. Maintain the Evaluation Report as the living record of evidence, change, open questions, risk, and next work. Apply the source-neutral Evaluation Criteria by decision-useful domain; do not mechanically reproduce a source checklist. Keep Fund thesis as a separate exact-match frame, render from the Evaluation Report Template, and return the resulting artifact ID as evaluation report artifact. Do not record an investment decision or move stage. The company under review is the Deal's confirmed Organisation. company name carries that Organisation's name as the Platform supplied it to this task, and organisation id, when present, identifies it for tool calls only. Do not ask the user to re-enter or confirm a company name, and do not take the company name from the Deal title, which is the opportunity's own name and may differ.
+Apply `generate-or-refresh-living-report` to discover the current project-linked evidence corpus, include the mapped Screening Report and any additive focus artifacts, compare the prior evidence basis when refreshing, and preserve the report lifecycle. Use `definitionJson.documentRefs` as the durable criteria, template, style, and operating-guidance contract. Maintain the Evaluation Report as the living record of evidence, change, open questions, risk, and next work. Apply the source-neutral Evaluation Criteria by decision-useful domain; do not mechanically reproduce a source checklist. Keep Fund thesis as a separate exact-match frame, render from the Evaluation Report Template, and return the resulting artifact ID as evaluation report artifact. Do not record an investment decision or move stage. The company under review is the Deal's confirmed Organisation. company name carries that Organisation's name as the Platform supplied it to this task, and organisation id, when present, identifies it for tool calls only. Do not ask the user to re-enter or confirm a company name, and do not take the company name from the Deal title, which is the opportunity's own name and may differ. Keep the Deal fields current with the Platform Record Field Maintenance skill: read them with `field-values.getFields`, use `field-values.setField` to fill editable empty Deal fields that the evidence in this task clearly supports, and suggest rather than make any change to a populated field. Leave the Fund, lifecycle stage and decision fields, and all People and Organisation records, to the human and the Deal Manager. In the completion summary, name each field you filled or suggest changing by its label.
 
 ## Available Context
 
@@ -52,7 +52,7 @@ Use available evidence, preserve unknowns and conflicts, and ask only when no re
 
 ## Guardrails
 
-Do not send messages, mutate CRM, create tasks or projects, move stage, or record an investment decision.
+Do not send messages, write to an external CRM, create tasks or projects, move stage, or record an investment decision.
 
 ## Completion Criteria
 

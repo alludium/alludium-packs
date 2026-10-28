@@ -29,7 +29,7 @@ If existing live deal status report artifact is not supplied, this is the first 
 In both cases, save the created or updated artifact ID to the required output field live deal status report artifact. The output ID is the ID that must be supplied as existing live deal status report artifact on the next manual refresh. Keep detailed report content inside the HTML artifact rather than duplicating it in task output fields.
 Also save a compact JSON array to the required output field open questions. This is a machine-actionable index for reviewed follow-up, not a second copy of the report narrative. Each item must contain id, question, area, priority, `evidenceNeeded`, `suggestedOwnerRole`, status, and `sourceRefs`. Use only the configured vocabularies in the field schema. Keep the array to at most 50 decision-relevant items and keep each string concise.
 Derive questions only from evidence gaps, material conflicts, blocked work, or explicitly unresolved decisions supported by sources you actually read. `sourceRefs` may contain only real artifact IDs, task IDs, or supplied source anchors. Use a deterministic stable id derived from the normalized underlying question area and evidence need; never use an array index, timestamp, or random UUID. Preserve the same ID across refreshes when the underlying need is unchanged. When a previously reported question is demonstrably answered or superseded, retain it only when useful for the refresh delta and set the corresponding status rather than creating a near-duplicate. If there are no supported questions, save `[]`. Never invent generic questions to fill the output.
-`suggestedOwnerRole` is advisory only. Do not put a fabricated person ID, agent ID, or guessed name in it. This report must not create, assign, or update tasks. Deal Manager may later compare these stable questions with existing work and present a predefined or ad-hoc task proposal, but a human must approve model-generated task creation and assignment separately.
+`suggestedOwnerRole` is advisory only. Do not put a fabricated person ID, agent ID, or guessed name in it. This report must not create, assign, or update tasks. Deal Manager may later compare these stable questions with existing work and present a predefined or ad-hoc task proposal, but a human must approve model-generated task creation and assignment separately. Keep the Deal fields current with the Platform Record Field Maintenance skill: read them with `field-values.getFields`, use `field-values.setField` to fill editable empty Deal fields that the evidence in this task clearly supports, and suggest rather than make any change to a populated field. Leave the Fund, lifecycle stage and decision fields, and all People and Organisation records, to the human and the Deal Manager. In the completion summary, name each field you filled or suggest changing by its label.
 
 ## Available Context
 
@@ -55,7 +55,7 @@ Use the evidence currently available and mark unsupported sections or claims as 
 
 ## Guardrails
 
-Do not send messages, mutate CRM records, create folders or projects, create child tasks, move stages, or record an investment decision.
+Do not send messages, write external CRM records, create folders or projects, create child tasks, move stages, or record an investment decision.
 
 ## Completion Criteria
 
@@ -73,4 +73,4 @@ Do not send messages, mutate CRM records, create folders or projects, create chi
 
 - Confirm the report is an analytical synthesis and does not record a human investment decision.
 - Review any task proposal derived later from structured report questions before creation or assignment.
-- Approve any separate external communication, CRM write, stage movement, or investment decision outside this task.
+- Approve any separate external communication, external CRM write, stage movement, or investment decision outside this task.

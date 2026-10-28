@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.refresh_live_deal_status_report
-version: 1.0.2
+version: 1.0.3
 title: Refresh Live Deal Status Report
 category: Venture Capital
 visibility: workspace
@@ -56,8 +56,9 @@ definition:
         Derive questions only from evidence gaps, material conflicts, blocked work, or explicitly unresolved decisions supported by sources you actually read. `sourceRefs` may contain only real artifact IDs, task IDs, or supplied source anchors. Use a deterministic stable `id` derived from the normalized underlying question area and evidence need; never use an array index, timestamp, or random UUID. Preserve the same ID across refreshes when the underlying need is unchanged. When a previously reported question is demonstrably answered or superseded, retain it only when useful for the refresh delta and set the corresponding status rather than creating a near-duplicate. If there are no supported questions, save `[]`. Never invent generic questions to fill the output.
 
         `suggestedOwnerRole` is advisory only. Do not put a fabricated person ID, agent ID, or guessed name in it. This report must not create, assign, or update tasks. Deal Manager may later compare these stable questions with existing work and present a predefined or ad-hoc task proposal, but a human must approve model-generated task creation and assignment separately.
+        Keep the Deal fields current with the Platform Record Field Maintenance skill: read them with `field-values.getFields`, use `field-values.setField` to fill editable empty Deal fields that the evidence in this task clearly supports, and suggest rather than make any change to a populated field. Leave the Fund, lifecycle stage and decision fields, and all People and Organisation records, to the human and the Deal Manager. In the completion summary, name each field you filled or suggest changing by its label.
       missingInputPolicy: Use the evidence currently available and mark unsupported sections or claims as unknown. Ask only when no company identity or readable source material is available.
-      externalActionPolicy: Do not send messages, mutate CRM records, create folders or projects, create child tasks, move stages, or record an investment decision.
+      externalActionPolicy: Do not send messages, write external CRM records, create folders or projects, create child tasks, move stages, or record an investment decision.
       completionCriteria:
         - The report is a standalone HTML artifact with eleven CSS-only report tabs and no JavaScript.
         - Material claims are cited or clearly labelled as company claim, inference, assumption, or investor judgment.
@@ -71,7 +72,7 @@ definition:
     humanDecisionPoints:
       - Confirm the report is an analytical synthesis and does not record a human investment decision.
       - Review any task proposal derived later from structured report questions before creation or assignment.
-      - Approve any separate external communication, CRM write, stage movement, or investment decision outside this task.
+      - Approve any separate external communication, external CRM write, stage movement, or investment decision outside this task.
     orchestration:
       mode: manual_suggestion
       parentTaskPolicy: none
