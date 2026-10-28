@@ -6853,7 +6853,11 @@ def validate_vc_deal_pipeline_contract() -> None:
         "`artifact.createTextArtifact`",
         "never overwrite an earlier Decision Record",
         "append the new ID to `decision_record_artifact_ids` without removing or reordering prior IDs",
-        "use `field-values.setField`, one field at a time",
+        "Register the saved document with `project.registerDecisionRecord`",
+        "never create a duplicate because indexing failed or a response was lost",
+        "Latest means the most recently recorded confirmation",
+        "a correction requires a new human confirmation and a new record",
+        "never move latest backwards",
         "read back both the artifact and the fields before reporting success",
         "report the exact partial result and do not claim the decision was fully recorded",
     ]:
