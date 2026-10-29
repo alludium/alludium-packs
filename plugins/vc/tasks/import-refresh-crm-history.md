@@ -47,7 +47,8 @@ Read the CRM only. Do not create, edit or annotate CRM records, send messages, c
 
 ## Completion Criteria
 
-- The document contains a useful, cited company and relationship brief, not only an inventory of records and notes.
+- The CRM records used are this company's, matched by its known domain or name as the skill describes; when no record matches, the import is reported as blocked, never as complete and never with a near match.
+- The document contains a useful, cited company and relationship brief, not only an inventory of records and notes; note references cite only what notes say, and company-profile facts are labelled as such.
 - Every retrieved note appears in the source appendix with its full text, source metadata and a working reference from the brief.
 - Dated notes stay dated; past plans, pilots and rounds are not presented as current facts, and linked documents are not described as read.
 - Import coverage states which records and pages were read and marks any gap as a partial import.

@@ -7152,6 +7152,12 @@ def validate_crm_history_task_contract(
         "The one exception is this task's own earlier document",
         "purpose `attention_required`, `relatedTaskId` set to this task's ID",
         CRM_HISTORY_OPEN_IMPORT_ALLOWED,
+        # #4841 Dev run: an interaction filter hid the company's notes-only record, and a near match
+        # with another domain was imported as complete.
+        "Never set `withInteractionDates`",
+        "a record whose domain differs from the company's known domain",
+        "Never call this a complete import",
+        "Cite notes only for what notes say",
     ]:
         if phrase not in skill:
             fail(f"import-crm-history skill is missing rule: {phrase}")

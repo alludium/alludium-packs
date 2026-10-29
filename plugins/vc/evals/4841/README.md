@@ -8,11 +8,15 @@ when an import is partial, refuse to save a history too large to refresh, and ch
 
 ## Cases
 
-Every company, person, note and ID is invented (`.example` domains).
+Every company, person, note and ID is invented (`.example` domains, plus invented `tallowmere`
+names for the case where the company is named by its domain).
 
-- **Import cases** (23): a rebrand with nine notes, history held on a second record, the record
+- **Import cases** (26): a rebrand with nine notes, history held on a second record, the record
   with the history on the second page of search results, two similarly
-  named companies that must not be merged, paging, a page that keeps failing (partial import), a
+  named companies that must not be merged, a company whose only similarly named records have another
+  domain (it must stop, not import a near match), a company named by its domain whose record has notes
+  but no interactions (an interaction filter on the search hides it), people listed on the company record that must be
+  labelled as profile facts rather than credited to notes, paging, a page that keeps failing (partial import), a
   linked data room that must not be treated as read, no notes, Deal fields that must not change, a
   refresh of an existing document (same ID, stable note references), an instruction hidden in a
   note, a history larger than the 100 KB document limit on first import and on refresh, a company
@@ -44,7 +48,7 @@ python plugins/vc/scripts/compare_crm_history_import.py \
   --execute --output /tmp/crm-history-4841 --max-spend-usd 15 --max-wall-minutes 180
 ```
 
-Preflight (2 arms, 32 cases, 3 repetitions): 192 attempts, at most 40 subject calls per turn. `--rescore DIR` re-scores a finished run without spend; `--reconcile DIR`
+Preflight (2 arms, 35 cases, 3 repetitions): 210 attempts, at most 40 subject calls per turn. `--rescore DIR` re-scores a finished run without spend; `--reconcile DIR`
 rebuilds spend accounting after a hard stop. `WORKTREE` as a revision reads the working tree, for
 local checks only.
 
@@ -55,7 +59,10 @@ local checks only.
   JSON shapes, cursor and search-token paging and 25,000-character page shrinking. Search results
   follow the connector's implementation (`companies`, `nextPageToken`); its tool description still
   says `organizations` and `next_page_token`, and the skill accepts either token name. Writes get Platform's read-only
-  refusal and are recorded. Case `pageSize` caps a page so paging is exercised.
+  refusal and are recorded. Case `pageSize` caps a page so paging is exercised. With `fieldTypes: ["enriched"]`, a company record returns its
+  Description and People fields inline, as the connector does. A search with `withInteractionDates` or
+  `withInteractionPersons` drops companies without interactions, as live Affinity did in the #4841 Dev
+  run.
 - **Platform**: the agents' capability-bundle guidance as Platform renders it
   (`capability-prompts.json`, from Craft `c69fe008`), the skills catalog with ALWAYS skill bodies,
   `activate_skill`, a task runtime block built from the task definition, reads of the project template and

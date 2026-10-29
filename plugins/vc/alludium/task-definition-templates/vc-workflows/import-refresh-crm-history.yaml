@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.import_refresh_crm_history
-version: 1.0.5
+version: 1.0.6
 title: Import or Refresh CRM History
 category: Venture Capital
 visibility: workspace
@@ -34,7 +34,8 @@ definition:
       missingInputPolicy: Company identity comes from the Deal's confirmed Organisation. When no CRM provider is named, use the one connected CRM; if none or several are connected, ask which to use. Do not ask for a CRM record ID or link.
       externalActionPolicy: Read the CRM only. Do not create, edit or annotate CRM records, send messages, create tasks or projects, change Deal fields or stage, or record an investment decision.
       completionCriteria:
-        - The document contains a useful, cited company and relationship brief, not only an inventory of records and notes.
+        - The CRM records used are this company's, matched by its known domain or name as the skill describes; when no record matches, the import is reported as blocked, never as complete and never with a near match.
+        - The document contains a useful, cited company and relationship brief, not only an inventory of records and notes; note references cite only what notes say, and company-profile facts are labelled as such.
         - Every retrieved note appears in the source appendix with its full text, source metadata and a working reference from the brief.
         - Dated notes stay dated; past plans, pilots and rounds are not presented as current facts, and linked documents are not described as read.
         - Import coverage states which records and pages were read and marks any gap as a partial import.

@@ -101,7 +101,7 @@ class CrmHistoryImportContractTests(unittest.TestCase):
             ["crm_history_artifact_id"],
         )
         task = read_yaml(SOURCE_ROOT / TASK)
-        self.assertEqual(task["version"], "1.0.5")
+        self.assertEqual(task["version"], "1.0.6")
         self.assertFalse(task["runtime"]["executionProfile"]["requiresHumanConfirmationToComplete"])
 
     # Task definition ------------------------------------------------------------------------

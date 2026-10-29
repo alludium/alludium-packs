@@ -99,6 +99,33 @@ class AffinitySimulatorTests(unittest.TestCase):
         data, _ = sim("rebrand-nine-notes").handle("affinity_search_companies", {"term": "ledgerly.example"})
         self.assertEqual([c["id"] for c in json.loads(data)["companies"]], [500001])
 
+    def test_enriched_people_come_inline_on_the_company_record(self):
+        data, error = sim("profile-people-labelled").handle(
+            "affinity_get_company", {"companyId": "503301", "fieldTypes": ["enriched"]})
+        self.assertIsNone(error)
+        fields = {f["name"]: f for f in json.loads(data)["fields"]}
+        self.assertEqual(fields["People"]["value"]["type"], "person-multi")
+        self.assertEqual([p["lastName"] for p in fields["People"]["value"]["data"]], ["Voss", "Pell"])
+        plain, _ = sim("profile-people-labelled").handle("affinity_get_company", {"companyId": "503301"})
+        self.assertNotIn("fields", json.loads(plain))
+
+    def test_a_similar_name_with_another_domain_is_the_only_search_result(self):
+        simulator = sim("similar-name-other-domain")
+        data, _ = simulator.handle("affinity_search_companies", {"term": "Fernway"})
+        self.assertEqual([c["id"] for c in json.loads(data)["companies"]], [503201])
+        data, _ = simulator.handle("affinity_search_companies", {"term": "fernway.example"})
+        self.assertEqual(json.loads(data)["companies"], [])
+
+    def test_an_interaction_filter_hides_a_notes_only_record(self):
+        simulator = sim("domain-as-name-no-interactions")
+        data, _ = simulator.handle("affinity_search_companies", {"term": "tallowmere.ai"})
+        self.assertEqual([c["id"] for c in json.loads(data)["companies"]], [503403])
+        for flag in ("withInteractionDates", "withInteractionPersons"):
+            data, _ = simulator.handle("affinity_search_companies", {"term": "tallowmere.ai", flag: True})
+            self.assertEqual(json.loads(data)["companies"], [])
+            data, _ = simulator.handle("affinity_search_companies", {"term": "tallowmere", flag: True})
+            self.assertEqual([c["id"] for c in json.loads(data)["companies"]], [503401, 503402])
+
     def test_search_pages_by_token(self):
         simulator = sim("search-second-page")
         first = json.loads(simulator.handle("affinity_search_companies", {"term": "Tarnwell"})[0])
@@ -432,6 +459,25 @@ class ScoringTests(unittest.TestCase):
         self.assertTrue(score(*first_import("fund-and-fields-unchanged", placeholder))["passed"])
         placeholder = doc.replace("</section>", "<p>as far as the retrieved records support it</p></section>", 1)
         self.assertIn("briefSubstantive", failed(score(*first_import("fund-and-fields-unchanged", placeholder))))
+
+    def test_profile_people_must_not_be_credited_to_notes(self):
+        doc = good_document("profile-people-labelled", [12501, 12502])
+        self.assertTrue(score(*first_import("profile-people-labelled", doc))["passed"])
+        labelled = doc.replace("</section>", "<p>Affinity's company profile lists Hanna Voss and Jonas Pell.</p></section>", 1)
+        self.assertTrue(score(*first_import("profile-people-labelled", labelled))["passed"])
+        for claim in ("<p>The notes name Hanna Voss as a founder.</p>",
+                      "<p>The team includes Jonas Pell [N2].</p>"):
+            wrong = doc.replace("</section>", claim + "</section>", 1)
+            self.assertTrue([k for k in failed(score(*first_import("profile-people-labelled", wrong)))
+                             if k.startswith("documentForbidden:")], claim)
+
+    def test_importing_a_near_match_fails_the_blocked_case(self):
+        rec = record("similar-name-other-domain",
+                     reply="I could not confidently find Fernway in Affinity: the closest record, Fernway Studio "
+                           "(fernwaystudio.example), has another domain. Nothing was saved.")
+        self.assertTrue(score(rec, {})["passed"], failed(score(rec, {})))
+        doc = good_document("similar-name-other-domain", [12401])
+        self.assertIn("noDocument", failed(score(*first_import("similar-name-other-domain", doc))))
 
     def test_case_facts_must_be_in_the_brief(self):
         ids = list(range(9001, 9010))

@@ -596,6 +596,10 @@ class CrmSimulator:
             term = str(args.get("term") or "").strip().lower()
             found = [c for c in self.companies.values()
                      if not term or any(term in h.lower() for h in [c["name"], *c.get("domains", [])])]
+            if args.get("withInteractionDates") or args.get("withInteractionPersons"):
+                # Observed on live Affinity (#4841 Dev run): either flag drops companies with no
+                # interactions, so a record holding only notes disappears from the results.
+                found = [c for c in found if c.get("hasInteractions", True)]
             rows = [{"id": c["id"], "name": c["name"], "domain": c.get("domain"), "domains": c.get("domains", []),
                      "global": False, **({"opportunity_ids": c.get("opportunityIds", [])}
                                          if args.get("withOpportunities") else {})} for c in found]
@@ -614,9 +618,17 @@ class CrmSimulator:
                 return "Error: Not Found: The requested resource does not exist.", None
             result = {"id": company["id"], "name": company["name"], "domain": company.get("domain"),
                       "domains": company.get("domains", []), "isGlobal": False}
-            if "enriched" in (args.get("fieldTypes") or []) and company.get("description"):
-                result["fields"] = [{"id": "affinity-data-description", "type": "enriched", "name": "Description",
-                                     "value": {"type": "text", "data": company["description"]}}]
+            if "enriched" in (args.get("fieldTypes") or []):
+                fields = []
+                if company.get("description"):
+                    fields.append({"id": "affinity-data-description", "type": "enriched", "name": "Description",
+                                   "value": {"type": "text", "data": company["description"]}})
+                if company.get("people"):
+                    # The connector returns the enriched People field inline on the company record.
+                    fields.append({"id": "persons", "type": "enriched", "name": "People",
+                                   "value": {"type": "person-multi", "data": company["people"]}})
+                if fields:
+                    result["fields"] = fields
             return json.dumps(result, indent=2), None
         if name == "affinity_get_opportunity":
             opportunity = self.opportunities.get(self.numeric(args.get("opportunityId")))

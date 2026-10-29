@@ -87,6 +87,22 @@ cases:
     blocked: true
     replyMentions: ["(?:not find|couldn't find|could not find|no matching|not found|no (?:\\w+ )?records?)"]
 
+  similar-name-other-domain:
+    blocked: true
+    notesAbsent: [12401]
+    replyMentions: ["(?:not (?:be )?(?:confidently )?(?:find|found|identif|match)|(?:couldn't|could not|cannot|can't) (?:confidently )?(?:find|identify|match)|no (?:matching|confident)|no (?:\\w+ )?records? (?:for|matches|matching))"]
+
+  domain-as-name-no-interactions:
+    notesRetained: [12601]
+    importStatus: complete
+
+  profile-people-labelled:
+    notesRetained: [12501, 12502]
+    importStatus: complete
+    # People from the company record's enriched field are profile facts, not note claims.
+    documentForbidden: ["\\bnotes? (?:name|names|mention|mentions|list|lists|say|says|identify|identifies)\\b[^.]{0,60}\\b(?:Hanna Voss|Jonas Pell)\\b",
+                        "\\b(?:Hanna Voss|Jonas Pell)\\b[^.\\[]{0,60}\\[N\\d+\\]"]
+
   refresh-document-missing:
     blocked: true
     replyMentions: ["(?:not found|could not be (?:read|found|opened)|couldn't be (?:read|found|opened)|deleted|unavailable|missing|no longer)"]
