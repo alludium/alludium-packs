@@ -34,6 +34,7 @@ jobs:
       - run: python plugins/vc/scripts/test_deal_field_guidance.py
       - run: python plugins/vc/scripts/test_pipeline_catalogue.py
       - run: python plugins/vc/scripts/test_pipeline_meetings.py
+      - run: python plugins/vc/scripts/test_pipeline_refresh_and_suggestions.py
       - run: python plugins/vc/scripts/test_fund_persistence.py
       - run: python plugins/vc/scripts/test_stage_moves.py
       - run: python plugins/vc/scripts/test_origination_connected_apps.py

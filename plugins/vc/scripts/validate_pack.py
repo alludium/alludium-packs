@@ -1085,6 +1085,70 @@ UNSCOPED_CRM_WRITE_PATTERNS = (
 )
 
 
+# A refresh creates a new report because task-run report sources are immutable (#5056). Archived
+# Deals admit no new task work and have no reopen path (#4646, #5039). A populated-field suggestion
+# names both values and asks, so a user "yes" is an explicit request (#4394 rule 3).
+PIPELINE_FIELD_SUGGESTION_QUESTION = "Want me to update it?"
+PIPELINE_REFRESH_RULES = {
+    "vc_deal_analyst": (
+        "creates one new complete report",
+        "Never edit or overwrite an earlier report",
+    ),
+    "vc_deal_pipeline_manager": ("creates one new complete report",),
+}
+STALE_REFRESH_PHRASES = ("updated in place", "same logical artifact", "keep its identity")
+ARCHIVED_DEAL_RULES = (
+    "An archived Deal admits no new task work.",
+    "say plainly that the Deal is archived and new task work isn't allowed on it",
+    "Do not tell the human to reopen, restore or unarchive it.",
+    "create a new Deal for the correct Organisation, or do the work on an active Deal",
+)
+PIPELINE_SUGGESTION_TASKS = (
+    "generate-refresh-screening-report",
+    "generate-refresh-evaluation-report",
+    "prepare-refresh-ic-memo",
+    "review-refresh-term-sheet",
+    "prepare-pipeline-meeting",
+    "summarize-pipeline-meeting",
+)
+PIPELINE_SUGGESTION_TASK_RULE = (
+    "For a suggested change, give the current value and the value the evidence supports, "
+    "and ask whether to update it; a yes from the human is an explicit request to write it."
+)
+
+
+def validate_pipeline_refresh_and_suggestion_guidance() -> None:
+    templates = ROOT / "alludium" / "agent-templates"
+    workflows = ROOT / "alludium" / "task-definition-templates" / "vc-workflows"
+    prompts = {
+        agent: re.sub(r"\s+", " ", (read_yaml(templates / f"{agent}.yaml").get("prompt") or {}).get("template") or "")
+        for agent in PIPELINE_REFRESH_RULES
+    }
+    for agent, phrases in PIPELINE_REFRESH_RULES.items():
+        for phrase in phrases:
+            if phrase not in prompts[agent]:
+                fail(f"{agent} prompt must create a new report on refresh: {phrase}")
+        for phrase in STALE_REFRESH_PHRASES:
+            if phrase in prompts[agent]:
+                fail(f"{agent} prompt must not instruct an in-place report refresh: {phrase}")
+        if PIPELINE_FIELD_SUGGESTION_QUESTION not in prompts[agent]:
+            fail(f"{agent} prompt must ask before changing a populated field: {PIPELINE_FIELD_SUGGESTION_QUESTION}")
+    manager = prompts["vc_deal_pipeline_manager"]
+    for phrase in ARCHIVED_DEAL_RULES:
+        if phrase not in manager:
+            fail(f"Deal Manager archived-Deal guidance is missing: {phrase}")
+    for phrase in ("Deal, Person or Organisation field", "If the human replies yes, that is an explicit request"):
+        if phrase not in manager:
+            fail(f"Deal Manager field suggestion guidance is missing: {phrase}")
+    for slug in PIPELINE_SUGGESTION_TASKS:
+        definition_json = (read_yaml(workflows / f"{slug}.yaml").get("definition") or {}).get("definitionJson") or {}
+        instructions = re.sub(r"\s+", " ", (definition_json.get("instructions") or {}).get("executionInstructions") or "")
+        if PIPELINE_SUGGESTION_TASK_RULE not in instructions:
+            fail(f"Pipeline task {slug} must ask before changing a populated field")
+        if "generate-or-refresh-living-report" in instructions and "create one new complete report" not in instructions:
+            fail(f"Pipeline report task {slug} must create a new report on refresh")
+
+
 def validate_deal_field_maintenance_guidance() -> None:
     templates = ROOT / "alludium" / "agent-templates"
     workflows = ROOT / "alludium" / "task-definition-templates" / "vc-workflows"
@@ -1976,7 +2040,7 @@ def validate_fund_routing_contract() -> None:
         },
         "livingReportScenarios": {
             "first-generation-discovers-corpus",
-            "refresh-updates-in-place-and-classifies-corpus",
+            "refresh-creates-new-report-and-classifies-corpus",
         },
     }
     for section, required_ids in required_management_scenarios.items():
@@ -2021,7 +2085,7 @@ def validate_fund_routing_contract() -> None:
     refresh_report_fixture = next(
         scenario
         for scenario in management_fixture["livingReportScenarios"]
-        if scenario.get("id") == "refresh-updates-in-place-and-classifies-corpus"
+        if scenario.get("id") == "refresh-creates-new-report-and-classifies-corpus"
     )
     expected_refresh_report_contract = {
         "includedArtifactIds": [
@@ -2039,13 +2103,15 @@ def validate_fund_routing_contract() -> None:
             "removed": ["old-market-note"],
             "unchanged": ["founder-call"],
         },
-        "createdArtifactCount": 0,
-        "updatedArtifactId": "screening-report",
-        "updateUsesObservedRevisionAndHash": True,
-        "duplicateFallbackAllowed": False,
+        "createdArtifactCount": 1,
+        "updatedArtifactCount": 0,
+        "baselineArtifactId": "screening-report",
+        "baselineUsesObservedRevisionAndHash": True,
+        "existingReportEditAllowed": False,
+        "outputArtifactIsNewReport": True,
     }
     if (refresh_report_fixture.get("expected") or {}) != expected_refresh_report_contract:
-        fail("Refresh living-report fixture must update in place and classify corpus changes")
+        fail("Refresh living-report fixture must create one new report and classify corpus changes")
     custom_deal_task_fixture = next(
         scenario
         for scenario in management_fixture["dealManagerScenarios"]
@@ -6310,12 +6376,18 @@ def validate_vc_deal_pipeline_contract() -> None:
         "no longer linked and no longer specially identified",
         "Never infer removal from an authorization, provider, indexing, or transient read failure",
         "create exactly one project-shared",
-        "update that exact artifact in place",
-        "Never create a duplicate fallback",
+        "create exactly one new project-shared",
+        "Earlier reports are immutable task evidence",
+        "never call a text-artifact update tool on it",
+        "earlier versions of that same report",
         "This lifecycle applies to living reports, not to a per-meeting brief or summary.",
     ]:
         if phrase not in living_report_skill:
             fail(f"Living-report skill is missing lifecycle rule: {phrase}")
+    # Task-run report sources are immutable on the Platform (#5056), so a refresh creates a new report.
+    for stale_phrase in ["update that exact artifact in place", "Never create a duplicate fallback"]:
+        if stale_phrase in living_report_skill:
+            fail(f"Living-report skill must not instruct in-place refresh: {stale_phrase}")
 
     expected_tasks = {
         "generate-refresh-screening-report": (
@@ -6890,6 +6962,7 @@ def validate_vc_deal_pipeline_contract() -> None:
             fail(f"vc_deal_pipeline Deal Analyst prompt is missing custom-task routing: {phrase}")
     validate_report_executors_identity_read_only()
     validate_deal_field_maintenance_guidance()
+    validate_pipeline_refresh_and_suggestion_guidance()
 
     relationships = (initial_version.get("extensions") or {}).get("projectRelationships") or []
     if relationships != [{

@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.summarize_pipeline_meeting
-version: 1.0.0
+version: 1.0.1
 title: Summarize Meeting
 category: Venture Capital
 visibility: workspace
@@ -55,7 +55,7 @@ definition:
         empty Deal fields that the evidence in this task clearly supports, and suggest rather than make any change
         to a populated field. Leave the Fund, lifecycle stage and decision fields, and all People and Organisation
         records, to the human and the Deal Manager. In the completion summary, name each field you filled or suggest
-        changing by its label. Do not treat a meeting date as a metric''s as-of date unless the source explicitly
+        changing by its label. For a suggested change, give the current value and the value the evidence supports, and ask whether to update it; a yes from the human is an explicit request to write it. Do not treat a meeting date as a metric''s as-of date unless the source explicitly
         establishes that relationship.'
       missingInputPolicy: Require readable notes or a transcript for the intended meeting, supplied as files or
         text. Ask for the smallest missing source or meeting clarification; do not require a file ID when meeting_notes

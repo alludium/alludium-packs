@@ -686,7 +686,7 @@ livingReportScenarios:
       createsProjectSharedArtifact: true
       writesEvidenceBasisManifest: true
 
-  - id: refresh-updates-in-place-and-classifies-corpus
+  - id: refresh-creates-new-report-and-classifies-corpus
     existingReportArtifactId: screening-report
     existingReportObservedRevision: "4"
     existingReportContentHash: report-v4
@@ -715,7 +715,9 @@ livingReportScenarios:
         changed: [deck]
         removed: [old-market-note]
         unchanged: [founder-call]
-      createdArtifactCount: 0
-      updatedArtifactId: screening-report
-      updateUsesObservedRevisionAndHash: true
-      duplicateFallbackAllowed: false
+      createdArtifactCount: 1
+      updatedArtifactCount: 0
+      baselineArtifactId: screening-report
+      baselineUsesObservedRevisionAndHash: true
+      existingReportEditAllowed: false
+      outputArtifactIsNewReport: true

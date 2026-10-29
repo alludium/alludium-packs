@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_pipeline_meeting
-version: 1.0.0
+version: 1.0.1
 title: Prepare Meeting
 category: Venture Capital
 visibility: workspace
@@ -53,7 +53,7 @@ definition:
         fill editable empty Deal fields that the evidence in this task clearly supports, and suggest rather than
         make any change to a populated field. Leave the Fund, lifecycle stage and decision fields, and all People
         and Organisation records, to the human and the Deal Manager. In the completion summary, name each field
-        you filled or suggest changing by its label. Do not treat a meeting date as a metric''s as-of date unless
+        you filled or suggest changing by its label. For a suggested change, give the current value and the value the evidence supports, and ask whether to update it; a yes from the human is an explicit request to write it. Do not treat a meeting date as a metric''s as-of date unless
         the source explicitly establishes that relationship.'
       missingInputPolicy: Use the confirmed Organisation and available sources; ask only for an unclear meeting
         goal/type or absent readable evidence. A pitch deck is never required. Mark unavailable optional details
