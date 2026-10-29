@@ -7093,6 +7093,7 @@ def validate_crm_history_task_contract(
         "If no record matches, the import is **blocked**",
         "Never list or page through all CRM companies",
         "That pairing, not the record you had in mind, is each note's source record",
+        "Never run notes reads for several records in parallel",
         "A similar name alone never",
         "until the CRM reports no more",
         "mark the import **partial**",

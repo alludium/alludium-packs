@@ -24,6 +24,10 @@ cases:
     notesRetained: [9101, 9102, 9103, 9104, 9105]
     importStatus: complete
 
+  notes-on-first-record:
+    notesRetained: [9111, 9112, 9113]
+    importStatus: complete
+
   search-second-page:
     notesRetained: [12301, 12302]
     importStatus: complete

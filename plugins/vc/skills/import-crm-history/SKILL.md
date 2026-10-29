@@ -83,9 +83,12 @@ ID or link is a starting point, not proof that it is the only relevant record.
 - Read company notes and relevant opportunity notes page by page until the CRM reports no more
   pages. Never stop at the first page.
 - Count a note once, by its CRM note ID, even when it is attached to several records.
-- Right after each notes read, write down the record ID you passed to it and the note IDs it
-  returned. That pairing, not the record you had in mind, is each note's source record. A read
-  that returned no notes gives its record no notes.
+- Read one record's notes at a time. Never run notes reads for several records in parallel:
+  the results do not name their record, so they are easy to swap.
+- Right after each notes read, before the next call, write down the record ID you passed to it
+  and the note IDs it returned.
+  That pairing, not the record you had in mind, is each note's source record.
+  A read that returned no notes gives its record no notes.
 - If a page or record fails, retry it once. If it still fails, keep everything already retrieved,
   continue with the rest, and mark the import **partial**, naming what is missing.
 - If the CRM returns a note without its text (for example because it is too large for the
@@ -260,8 +263,9 @@ run rather than assuming them; the steps below match the Affinity connector's re
   is true, pass the returned page token (`nextPageToken`, or `next_page_token`) back as `pageToken`.
 - **Company record:** `affinity_get_company` with `companyId`. Add `fieldTypes: ["enriched"]`
   when profile context (description, location, funding) is useful.
-- **Company notes:** `affinity_list_company_notes` with `companyId` and `limit: 100`. Every note
-  it returns belongs to that `companyId`; record that ID with the note. While
+- **Company notes:** `affinity_list_company_notes` with `companyId` and `limit: 100`, one company
+  per step. The notes do not carry a company ID: every note a call returns belongs to the
+  `companyId` you passed to that call; record that ID with the note. While
   `hasMore` is true, call again with `cursor` set to the returned `nextCursor`. Each note has
   `id`, `content.html`, `creator` (first and last name), `createdAt` and `type`; `interaction`
   notes come from meetings or emails and belong in the history too.

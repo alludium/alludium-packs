@@ -54,6 +54,21 @@ cases:
               - {id: 9104, author: Ana Lee, date: "2025-08-14T10:00:00Z", html: "<p>Technical DD call: latency claims look plausible; no field data shared.</p>"}
               - {id: 9105, author: Ana Lee, date: "2025-09-03T10:00:00Z", html: "<p>Founders asked for intro to logistics LPs. Sent two intros.</p>"}
 
+  - id: notes-on-first-record
+    kind: import
+    deal: {name: Quellbright, organisation: {name: Quellbright, domain: quellbright.example}}
+    affinity:
+      companies:
+        - id: 500111
+          name: Lumora Systems
+          domain: quellbright.example
+          domains: [quellbright.example, lumora.example]
+          description: Formerly Lumora Systems; renamed Quellbright in 2025. Ward staffing software.
+          notes:
+            - - {id: 9111, author: Sam Ortiz, date: "2025-01-14T10:00:00Z", html: "<p>Intro from an NHS trust CIO. Lumora Systems does ward staffing software.</p>"}
+              - {id: 9112, author: Ana Lee, date: "2025-03-02T10:00:00Z", html: "<p>Lumora is renaming to Quellbright; same team and product.</p>"}
+              - {id: 9113, author: Sam Ortiz, date: "2025-04-18T10:00:00Z", html: "<p>Raising a £1.5m pre-seed, open to £1.7m.</p>"}
+        - {id: 500112, name: Quellbright, domain: quellbright.example, domains: [quellbright.example], description: null, notes: [[]]}
   - id: search-second-page
     kind: import
     # The search returns one record per page; the record holding the history is on the second page.
