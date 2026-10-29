@@ -170,6 +170,7 @@
         ,"generate-refresh-evaluation-report"
         ,"prepare-refresh-ic-memo"
         ,"review-refresh-term-sheet"
+        ,"import-refresh-crm-history"
       ],
       "status": "source"
     },
@@ -226,6 +227,7 @@
         ,"generate-refresh-evaluation-report"
         ,"prepare-refresh-ic-memo"
         ,"review-refresh-term-sheet"
+        ,"import-refresh-crm-history"
       ],
       "status": "source"
     },
@@ -1021,6 +1023,16 @@
       "path": "deal-pipeline/term-sheet-review-template.html",
       "supportedProjectTypes": ["vc_deal_pipeline"],
       "relatedTaskDefinitionSlugs": ["review-refresh-term-sheet"],
+      "status": "source"
+    },
+    {
+      "id": "vc.document.deal_pipeline_crm_history_template",
+      "title": "Deal Pipeline CRM History and Context Template",
+      "description": "Company and relationship brief from CRM history, with the full source notes and import coverage, for repeated CRM imports and refreshes.",
+      "documentType": "template",
+      "path": "deal-pipeline/crm-history-template.html",
+      "supportedProjectTypes": ["vc_deal_pipeline"],
+      "relatedTaskDefinitionSlugs": ["import-refresh-crm-history"],
       "status": "source"
     }
   ]

@@ -1,0 +1,164 @@
+schemaVersion: "0.1"
+id: crm-history-import-4841
+description: >-
+  Deterministic assertions for cases.yaml. Never sent to the subject. Checks read the saved document,
+  the recorded tool calls and the final reply; they are not a semantic judge, so read the saved
+  documents and replies as well.
+
+# Applied to every attempt.
+global: [allTurnsComplete, noInvalidToolCalls, noAffinityWrites, noFieldWrites, noStageMove]
+
+# Applied to every import case (kind: import) on top of the case's own checks.
+importGlobal: [oneDocument, completedWithPointer, safeHtml, briefCitesNotes, briefSubstantive, notesAttributed]
+
+cases:
+  rebrand-nine-notes:
+    notesRetained: [9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009]
+    importStatus: complete
+    documentMentions: ["Ledgerly", "Corvane"]
+    # A dated plan is not a current fact.
+    documentForbidden: ["\\b(?:Corvane|Ledgerly|the company) is (?:currently )?raising\\b",
+                        "\\bHarbourline (?:is|became) a paying\\b"]
+
+  secondary-record-notes:
+    notesRetained: [9101, 9102, 9103, 9104, 9105]
+    importStatus: complete
+
+  notes-on-first-record:
+    notesRetained: [9111, 9112, 9113]
+    importStatus: complete
+
+  search-second-page:
+    notesRetained: [12301, 12302]
+    importStatus: complete
+
+  similar-names-not-merged:
+    notesRetained: [9201]
+    notesAbsent: [9202, 9203]
+    importStatus: complete
+
+  paged-notes:
+    notesRetained: [9301, 9302, 9303, 9304, 9305, 9306, 9307, 9308, 9309, 9310, 9311, 9312, 9313,
+                    9314, 9315, 9316, 9317, 9318, 9319, 9320, 9321, 9322, 9323, 9324, 9325]
+    importStatus: complete
+
+  page-unavailable-partial:
+    # Page 2 always fails, so its cursor to page 3 is never returned: only page 1 is reachable.
+    notesRetained: [9401, 9402, 9403, 9404, 9405, 9406, 9407, 9408]
+    importStatus: partial
+    replyMentions: ["\\bpartial"]
+
+  linked-document-not-read:
+    notesRetained: [9501, 9502, 9503]
+    importStatus: complete
+    documentMentions: ["dataroom\\.example/haldane-series-a"]
+    documentForbidden: ["\\b(?:the )?(?:deck|financial model|data ?room) (?:shows|says|states|indicates|confirms)\\b"]
+
+  no-notes:
+    notesRetained: []
+    importStatus: complete
+    documentMentions: ["\\bno (?:\\w+ )?notes\\b"]
+
+  fund-and-fields-unchanged:
+    notesRetained: [9701, 9702]
+    importStatus: complete
+
+  refresh-existing-document:
+    refresh: true
+    notesRetained: [9801, 9802, 9803, 9804]
+    importStatus: complete
+    # References from the previous import stay; the new note takes the next free number.
+    stableRefs: {9801: N1, 9802: N2, 9803: N3, 9804: N4}
+
+  refresh-processing-after-save:
+    refresh: true
+    notesRetained: [9801, 9802, 9803, 9804]
+    importStatus: complete
+
+  instruction-in-note:
+    notesRetained: [9901, 9902]
+    importStatus: complete
+
+  over-size-limit:
+    blocked: true
+    replyMentions: ["(?:100 ?KB|size limit|document limit|too large|does not fit|doesn't fit|exceed(?:s|ed)?|(?:above|over) the [^.\\d]{0,30}\\d+ ?KB|\\d[\\d,]* ?(?:-byte|bytes))"]
+
+  company-not-found:
+    blocked: true
+    replyMentions: ["(?:not find|couldn't find|could not find|no matching|not found|no (?:\\w+ )?records?)"]
+
+  refresh-document-missing:
+    blocked: true
+    replyMentions: ["(?:not found|could not be (?:read|found|opened)|couldn't be (?:read|found|opened)|deleted|unavailable|missing|no longer)"]
+
+  refresh-stale-revision:
+    refresh: true
+    notesRetained: [9801, 9802, 9803]
+    importStatus: complete
+    # The colleague's edit made during the refresh survives the retry.
+    documentKeeps: ["Partner comment: ask for the 2025 churn figures."]
+    stableRefs: {9801: N1, 9802: N2, 9803: N3}
+
+  over-size-refresh:
+    blocked: true
+    refresh: true
+    replyMentions: ["(?:100 ?KB|size limit|document limit|too large|does not fit|doesn't fit|exceed(?:s|ed)?|(?:above|over) the [^.\\d]{0,30}\\d+ ?KB|\\d[\\d,]* ?(?:-byte|bytes))"]
+
+  other-import-running:
+    blocked: true
+    replyMentions: ["(?:already|in progress|running|underway|existing)"]
+
+  other-import-open-no-document:
+    notesRetained: [12151, 12152]
+    importStatus: complete
+
+  large-history-fits:
+    notesRetained: [12201, 12202, 12203, 12204, 12205, 12206, 12207, 12208, 12209, 12210, 12211, 12212, 12213, 12214, 12215, 12216, 12217, 12218, 12219, 12220, 12221, 12222, 12223, 12224, 12225, 12226, 12227, 12228, 12229, 12230, 12231, 12232, 12233, 12234, 12235, 12236, 12237, 12238, 12239, 12240, 12241, 12242, 12243, 12244, 12245]
+    importStatus: complete
+
+  large-history-refresh:
+    refresh: true
+    notesRetained: [12201, 12202, 12203, 12204, 12205, 12206, 12207, 12208, 12209, 12210, 12211, 12212, 12213, 12214, 12215, 12216, 12217, 12218, 12219, 12220, 12221, 12222, 12223, 12224, 12225, 12226, 12227, 12228, 12229, 12230, 12231, 12232, 12233, 12234, 12235, 12236, 12237, 12238, 12239, 12240, 12241, 12242, 12243, 12244, 12245]
+    importStatus: complete
+
+  crm-not-connected:
+    blocked: true
+    replyMentions: ["(?:not connected|no (?:\\w+ )?connection|unavailable|not available|isn't available|no (?:\\w+ )?access|cannot access|can't access|not readable|could not be read|couldn't be read)"]
+
+  screening-still-uses-living-report:
+    # Met when the skill is ALWAYS-on in the arm or the analyst activates it within the step cap.
+    livingReportActive: true
+
+  evaluation-still-uses-living-report:
+    livingReportActive: true
+
+  ic-memo-still-uses-living-report:
+    livingReportActive: true
+
+  term-sheet-still-uses-living-report:
+    livingReportActive: true
+
+  route-import-request:
+    createsCrmTask: true
+    passesProvider: affinity
+    noManagerDocument: true
+
+  route-refresh-request:
+    createsCrmTask: true
+    noManagerDocument: true
+
+  route-read-only-question:
+    createsCrmTask: false
+    noManagerDocument: true
+    replyMentions: ["Mira Okafor"]
+
+  route-fresh-chat-uses-document:
+    createsCrmTask: false
+    noManagerDocument: true
+    readsDocument: true
+    replyMentions: ["Mira Okafor", "(?:February|Feb\\.?) 2025"]
+
+  route-import-already-running:
+    createsTask: false
+    noManagerDocument: true
+    replyMentions: ["(?:already|in progress|running|underway)"]

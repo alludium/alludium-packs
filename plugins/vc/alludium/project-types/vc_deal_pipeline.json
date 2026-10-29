@@ -82,7 +82,7 @@
     "postCreate": {"triggerInitialStateTasks": false}
   },
   "initialVersion": {
-    "version": "1.0.9",
+    "version": "1.0.10",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -98,7 +98,8 @@
         "vc.document.deal_pipeline_term_sheet_review_policy",
         "vc.document.deal_pipeline_term_sheet_review_template",
         "vc.document.initial_call_brief_template",
-        "vc.document.customer_insights_summary_template"
+        "vc.document.customer_insights_summary_template",
+        "vc.document.deal_pipeline_crm_history_template"
       ],
       "presentation": {
         "title": "VC Deal Pipeline documents",
@@ -119,6 +120,7 @@
         "documents": [
           {"documentId":"vc.document.evidence_citation_style_guide","roleKey":"shared_evidence_citation_guidance","groupKey":"shared_guidance","displayName":"Evidence and citation guidance","description":"Citation, assumption, source-authority, and claim-hygiene guidance shared across Deal documents.","kind":"guidance","sortOrder":10},
           {"documentId":"vc.document.template_use_guidance","roleKey":"shared_template_use_guidance","groupKey":"shared_guidance","displayName":"Template use guidance","description":"Guidance for adapting Deal templates to available evidence without producing generic filler.","kind":"guidance","sortOrder":20},
+          {"documentId":"vc.document.deal_pipeline_crm_history_template","roleKey":"shared_crm_history_template","groupKey":"shared_guidance","displayName":"CRM history and context template","description":"Output structure for the company and relationship brief imported from CRM history, with the full source notes and import coverage.","kind":"output_template","sortOrder":30},
           {"documentId":"vc.document.deal_pipeline_screening_criteria","roleKey":"screening_criteria","groupKey":"screening","displayName":"Screening criteria","description":"Replaceable methodology for an evidence-led first assessment of a new investment opportunity.","kind":"methodology","sortOrder":10},
           {"documentId":"vc.document.deal_pipeline_screening_report_template","roleKey":"screening_report_template","groupKey":"screening","displayName":"Screening Report template","description":"Output structure for a compact, evidence-backed first assessment and next-step recommendation.","kind":"output_template","sortOrder":20},
           {"documentId":"vc.document.deal_pipeline_evaluation_criteria","roleKey":"evaluation_criteria","groupKey":"evaluation","displayName":"Evaluation criteria","description":"Replaceable methodology for deeper company, market, product, traction, team, and financing evaluation.","kind":"methodology","sortOrder":10},
@@ -344,6 +346,15 @@
         "kind": "text",
         "required": false,
         "description": "Internal pointer to the latest directly human-confirmed Decision Record. The V3 Assessment Documents group renders a permitted document link, never this raw ID or an independently editable decision field.",
+        "settingsPolicy": "excluded"
+      },
+      {
+        "id": "field-crm-history-artifact-id",
+        "key": "crm_history_artifact_id",
+        "label": "CRM history and context",
+        "kind": "text",
+        "required": false,
+        "description": "Internal pointer to the current CRM history and context document for this Deal.",
         "settingsPolicy": "excluded"
       },
       {
@@ -632,6 +643,16 @@
         "activationPolicy":{"mode":"manual_review","autoStartWhenRequiredInputsAvailable":false,"requiresHumanApproval":true,"createTaskWhenLifecycleStageEntered":false}
       },
       {
+        "id":"map-import-refresh-crm-history","taskDefinitionTemplateId":"vc.import_refresh_crm_history","taskDefinitionSlug":"import-refresh-crm-history","projectScope":"project_instance",
+        "inputMappings":[
+          {"taskField":"company_name","source":"project.investmentSubject","sourcePath":"organisation.displayName","requiredForActivation":true},
+          {"taskField":"organisation_id","source":"project.investmentSubject","sourcePath":"organisation.id","requiredForActivation":false},
+          {"taskField":"existing_crm_history_artifact_id","source":"project.field","sourcePath":"crm_history_artifact_id","requiredForActivation":false}
+        ],
+        "outputMappings":[{"taskField":"crm_history_artifact_id","target":"project.field","targetPath":"crm_history_artifact_id","requiredForCompletion":true}],
+        "activationPolicy":{"mode":"manual_review","autoStartWhenRequiredInputsAvailable":false,"requiresHumanApproval":true,"createTaskWhenLifecycleStageEntered":false}
+      },
+      {
         "id": "map-prepare-pipeline-meeting",
         "taskDefinitionTemplateId": "vc.prepare_pipeline_meeting",
         "taskDefinitionSlug": "prepare-pipeline-meeting",
@@ -696,7 +717,8 @@
             "screening_report_artifact_id",
             "evaluation_report_artifact_id",
             "ic_memo_artifact_id",
-            "latest_decision_record_artifact_id"
+            "latest_decision_record_artifact_id",
+            "crm_history_artifact_id"
           ]
         },
         {
@@ -761,6 +783,7 @@
           "coordinate screening, evaluation, IC memo, term-sheet review, meeting preparation and summary work",
           "turn other approved Deal work into specific bounded next steps",
           "keep durable living-document pointers current",
+          "start a CRM history import or refresh when the user asks, and use the saved CRM history document as Deal context",
           "preserve explicitly confirmed decisions as append-only artifacts and current projections"
         ],
         "boundaries": ["do not start work or move lifecycle state without explicit approval","do not infer or overwrite an investment decision","do not claim promotion until platform creation and relationship receipts are verified"]

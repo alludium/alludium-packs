@@ -1,0 +1,65 @@
+kind: task-definition-template
+apiVersion: alludium/v1alpha1
+id: vc.import_refresh_crm_history
+version: 1.0.5
+title: Import or Refresh CRM History
+category: Venture Capital
+visibility: workspace
+tags: [vc, crm, company-history, living-document]
+definition:
+  name: Import or Refresh CRM History
+  slug: import-refresh-crm-history
+  description: Import or refresh one Deal's CRM history into a sourced company brief with the full source notes attached.
+  allowSubtasks: false
+  definitionJson:
+    vertical: vc
+    stageIndependent: true
+    taskFamily: crm_history
+    documentRefs:
+      - {documentId: vc.document.deal_pipeline_crm_history_template, usage: output_template, outputFieldKey: crm_history_artifact_id}
+      - {documentId: vc.document.evidence_citation_style_guide, usage: style_guide}
+      - {documentId: vc.document.template_use_guidance, usage: operating_guidance}
+    requiredSkills: [import-crm-history]
+    plannedRecommendedAgentTemplate: vc_deal_analyst
+    recommendedAgentTemplate: vc_deal_analyst
+    supportedProjectTypes: [vc_deal_pipeline]
+    supportedProjectScopes: [project_instance]
+    instructions:
+      executionInstructions: >-
+        Activate and apply the `import-crm-history` skill. It owns the method: identifying the company's CRM records, reading every page of notes, preserving each retrieved note's full text, writing the company and relationship brief, checking the document size, and creating or refreshing the Deal's CRM history document. Use the CRM-history template named in `definitionJson.documentRefs` as the document structure, and the citation style guide for references.
+        The company is the Deal's confirmed Organisation. `company_name` carries that Organisation's name as the Platform supplied it, and `organisation_id`, when present, identifies it for tool calls only. Do not take the company name from the Deal title. `crm_provider` names the CRM to read; `crm_record_reference`, when present, is a known record ID or link to check first, never a reason to skip checking the other plausible records.
+        When `existing_crm_history_artifact_id` is empty, this is a first import: create the document from the template with `project.instantiateTemplate`, exactly once and with no other tool. When it is present, this is a refresh: read that exact document and replace its whole content in one update, keeping the same artifact ID. If that document cannot be read or updated, stop and say why. Do not create a second CRM history document: not to work around a size, revision or update failure, not when the Deal already has one, and not when this task already created one (continue that one). Another open import task alone is not a reason to stop; these checks are not a lock, so two imports that overlap can still each create one.
+        This task only imports and preserves CRM context. Do not apply the living-report method, review other project evidence, screen the company, assess Fund fit, make an investment recommendation, or start any report. Do not write to the CRM, change Deal fields, stage, decisions or identity records, or create tasks.
+        After the document is saved and ready, save the task output with `task-management.saveTaskOutput`, setting `crm_history_artifact_id` to that document's artifact ID, then finish by calling `task-management.completeTask` without a task ID. The task completes when this response finishes; if it is refused, report why. If the import is blocked, report the specific blocker, tell the Deal Manager with one `attention_required` message as the skill describes, and do not complete the task. The final response is investor-facing: one or two sentences on what the history shows, whether the import is complete or partial and why, at most three material gaps, and "Open the CRM history and context file" when a document was saved. When nothing was saved, name the blocker instead and do not point to a file. Do not name runtime field keys, tools, or internal processing in the response.
+      missingInputPolicy: Company identity comes from the Deal's confirmed Organisation. When no CRM provider is named, use the one connected CRM; if none or several are connected, ask which to use. Do not ask for a CRM record ID or link.
+      externalActionPolicy: Read the CRM only. Do not create, edit or annotate CRM records, send messages, create tasks or projects, change Deal fields or stage, or record an investment decision.
+      completionCriteria:
+        - The document contains a useful, cited company and relationship brief, not only an inventory of records and notes.
+        - Every retrieved note appears in the source appendix with its full text, source metadata and a working reference from the brief.
+        - Dated notes stay dated; past plans, pilots and rounds are not presented as current facts, and linked documents are not described as read.
+        - Import coverage states which records and pages were read and marks any gap as a partial import.
+        - A refresh updated the existing document in place and returned the same artifact ID; a first import created its document once, from the CRM-history template.
+        - No CRM write, Deal field change other than the document pointer, stage move or investment judgment occurred.
+      humanConfirmationPolicy: never
+    humanDecisionPoints:
+      - Decide whether to refresh an existing investment report now; the reports read the CRM history as evidence whenever they next run.
+fields:
+  input:
+    - {key: company_name, name: Company Name, fieldType: string, required: true, position: 0, config: {description: "Name of the Deal's confirmed Organisation."}}
+    - {key: organisation_id, name: Confirmed Organisation ID, fieldType: string, required: false, position: 1, config: {description: "Confirmed investment-subject Organisation, for tool calls only."}}
+    - {key: crm_provider, name: CRM Provider, fieldType: string, required: false, position: 2, config: {description: "Connected CRM to read, for example Affinity."}}
+    - {key: crm_record_reference, name: Known CRM Record, fieldType: string, required: false, position: 3, config: {description: "Optional known CRM record ID or link to check first."}}
+    - {key: existing_crm_history_artifact_id, name: Existing CRM History, fieldType: file, required: false, position: 4, config: {}}
+  output:
+    - key: crm_history_artifact_id
+      name: CRM history and context
+      fieldType: file
+      required: true
+      position: 0
+      config: {documentRefId: vc.document.deal_pipeline_crm_history_template}
+runtime:
+  defaultExecutionContext:
+    sourceMetadata: {templateFamily: vc-workflows, taskKind: crm_history_import}
+  requiredResources: {requiresTaskChat: true}
+  executionProfile: {agentStartsImmediately: true, requiresHumanConfirmationToComplete: false, preferredMode: guided_execution, preferredAgentType: vc_deal_analyst}
+ui: {renderer: generic, surfaceKey: null, frameRef: null}
