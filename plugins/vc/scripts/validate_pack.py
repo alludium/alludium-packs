@@ -7034,6 +7034,12 @@ def validate_crm_history_task_contract(
     ]:
         if phrase not in execution_instructions:
             fail(f"vc_deal_pipeline CRM history task {slug} instructions are missing: {phrase}")
+    if definition_json.get("activeInstancePolicy") != {
+        "scope": "project",
+        "maxActiveInstances": 1,
+        "onConflict": "return_existing",
+    }:
+        fail(f"vc_deal_pipeline CRM history task {slug} must keep one open import per Deal and return it")
     if instructions.get("humanConfirmationPolicy") != "never":
         fail(f"vc_deal_pipeline CRM history task {slug} must complete without human confirmation")
     execution_profile = (task_template.get("runtime") or {}).get("executionProfile") or {}
@@ -7124,6 +7130,9 @@ def validate_crm_history_task_contract(
         "**one** full-content update",
         "Never fall back to creating a new document",
         "Never call `affinity_add_note`",
+        "Do not read person records, person notes, lists, list entries or field definitions",
+        "Create the document once, only with `project.instantiateTemplate`",
+        "Never use a smaller limit",
     ]:
         if phrase not in skill:
             fail(f"import-crm-history skill is missing rule: {phrase}")
@@ -7158,6 +7167,7 @@ def validate_crm_history_task_contract(
         "Do not ask for a record ID or link",
         "stays a read-only answer and does not start an import",
         "Its contents are dated CRM history",
+        "start that open task again instead of creating another",
     ]:
         if phrase not in manager_prompt:
             fail(f"Deal Manager prompt is missing CRM history routing: {phrase}")

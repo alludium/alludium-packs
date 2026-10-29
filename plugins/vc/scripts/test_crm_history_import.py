@@ -101,7 +101,7 @@ class CrmHistoryImportContractTests(unittest.TestCase):
             ["crm_history_artifact_id"],
         )
         task = read_yaml(SOURCE_ROOT / TASK)
-        self.assertEqual(task["version"], "1.0.0")
+        self.assertEqual(task["version"], "1.0.1")
         self.assertFalse(task["runtime"]["executionProfile"]["requiresHumanConfirmationToComplete"])
 
     # Task definition ------------------------------------------------------------------------
@@ -119,6 +119,21 @@ class CrmHistoryImportContractTests(unittest.TestCase):
             )
 
         self._assert_rejected(self._edit_yaml(TASK, change))
+
+    def test_rejects_an_import_without_the_one_open_task_policy(self) -> None:
+        def change(task: dict[str, Any]) -> None:
+            del task["definition"]["definitionJson"]["activeInstancePolicy"]
+
+        self._assert_rejected(self._edit_yaml(TASK, change))
+
+    def test_rejects_a_manager_that_creates_another_import_after_a_block(self) -> None:
+        self._assert_rejected(
+            self._edit_text(
+                MANAGER,
+                "start that open task again instead of creating another",
+                "create a new task",
+            )
+        )
 
     def test_rejects_human_confirmation_to_complete(self) -> None:
         def change(task: dict[str, Any]) -> None:
@@ -236,6 +251,24 @@ class CrmHistoryImportContractTests(unittest.TestCase):
     def test_rejects_a_skill_without_the_note_source_pairing(self) -> None:
         self._assert_rejected(
             self._edit_text(SKILL, "That pairing, not the record you had in mind, is each note's source record", "")
+        )
+
+    def test_rejects_a_skill_that_reads_people_and_lists(self) -> None:
+        self._assert_rejected(
+            self._edit_text(
+                SKILL,
+                "Do not read person records, person notes, lists, list entries or field definitions",
+                "Also read person records and lists",
+            )
+        )
+
+    def test_rejects_a_skill_that_allows_another_create_tool(self) -> None:
+        self._assert_rejected(
+            self._edit_text(
+                SKILL,
+                "Create the document once, only with `project.instantiateTemplate`",
+                "Create the document with any available tool",
+            )
         )
 
     # Agents ---------------------------------------------------------------------------------

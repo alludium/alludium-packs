@@ -58,8 +58,9 @@ ID or link is a starting point, not proof that it is the only relevant record.
    first result: collect every plausible record across all returned search pages.
 2. Inspect each plausible record before concluding anything. A record with no notes does not mean
    the company has no history: another matching record may hold it.
-3. Decide record by record whether it describes this company. Use the domain, known IDs, location,
-   people and what the notes describe. A rebrand, an old trading name or an older enrichment
+3. Decide record by record whether it describes this company. Use what the search results and
+   company records show (domain, known IDs, location, people named on the record) and what the
+   notes describe. Do not open person records to decide. A rebrand, an old trading name or an older enrichment
    entry can explain differences between records of the same company. Records that share the
    company's known domain are the same company, even when one has no notes or a slightly different
    name, unless their notes describe a different business. A similar name alone never justifies
@@ -80,6 +81,9 @@ ID or link is a starting point, not proof that it is the only relevant record.
 
 ## 3. Read the full history
 
+- Read only the matching company records, their opportunity records and the notes of both.
+  Do not read person records, person notes, lists, list entries or field definitions: they are
+  outside this import, and extra reads can exhaust the run before the document is saved.
 - Read company notes and relevant opportunity notes page by page until the CRM reports no more
   pages. Never stop at the first page.
 - Count a note once, by its CRM note ID, even when it is attached to several records.
@@ -183,7 +187,9 @@ created above it could never be refreshed.
    was imported or refreshed, so do not save task output or say that the history was imported.
    Never update a CRM history document found this way: a refresh may only update the document
    the task supplied as the existing CRM history document.
-3. Create the document with `project.instantiateTemplate`, using the template's document
+3. Create the document once, only with `project.instantiateTemplate`. Never create it with
+   `artifact.createTextArtifact` or any other tool, and never create a second document after one
+   was created or saved as this task's output. Use the template's document
    reference, the template's revision number and content hash copied character for character from
    the metadata result, a filename such as `<Company> CRM history and context`, and the filled
    content. Keep the returned artifact ID.
@@ -264,7 +270,7 @@ run rather than assuming them; the steps below match the Affinity connector's re
 - **Company record:** `affinity_get_company` with `companyId`. Add `fieldTypes: ["enriched"]`
   when profile context (description, location, funding) is useful.
 - **Company notes:** `affinity_list_company_notes` with `companyId` and `limit: 100`, one company
-  per step. The notes do not carry a company ID: every note a call returns belongs to the
+  per step. Never use a smaller limit. The notes do not carry a company ID: every note a call returns belongs to the
   `companyId` you passed to that call; record that ID with the note. While
   `hasMore` is true, call again with `cursor` set to the returned `nextCursor`. Each note has
   `id`, `content.html`, `creator` (first and last name), `createdAt` and `type`; `interaction`
