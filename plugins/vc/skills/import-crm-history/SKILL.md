@@ -2,7 +2,7 @@
 id: import-crm-history
 name: Import CRM History
 description: >
-  Turn a company's CRM records and notes into one durable, sourced CRM history
+  Turn a company's CRM records and notes into a durable, sourced CRM history
   document for a Deal: a readable company and relationship brief at the front and
   the full text of every retrieved note in a source appendix. Use it to import or
   refresh CRM history; it reads the CRM only and never makes an investment judgment.
@@ -30,7 +30,7 @@ capability:
 
 # Import CRM History
 
-Produce one CRM history document per Deal that a partner can read in a few minutes and that keeps
+Produce a CRM history document for the Deal that a partner can read in a few minutes and that keeps
 every retrieved note intact. A list of records and note counts is not the result. The reader must
 come away knowing what the company does, what has happened between the firm and the company, and
 what is still unknown.
@@ -180,7 +180,7 @@ created above it could never be refreshed.
    create another document, and report a platform blocker instead of a successful import, with
    the saved size and the note count.
 
-## 7. Save the one document
+## 7. Save the document
 
 **First import** (no existing CRM history document supplied):
 
@@ -194,7 +194,8 @@ created above it could never be refreshed.
    second one. This is a blocked result: nothing was imported or refreshed, so do not save task
    output or say that the history was imported.
    Another open CRM history import task alone is not a reason to stop: with no CRM history
-   document on the Deal, continue and create it.
+   document on the Deal, continue and create it. These checks are not a lock, so two imports
+   that overlap can still each create one.
    Never update a CRM history document found this way: a refresh may only update the document
    the task supplied as the existing CRM history document.
    The one exception is this task's own earlier document: one named in this task's saved output,

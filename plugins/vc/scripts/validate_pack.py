@@ -6960,6 +6960,14 @@ CRM_HISTORY_OPEN_IMPORT_ALLOWED_PHRASES = (
     CRM_HISTORY_OPEN_IMPORT_ALLOWED,
     "Another open import task alone is not a reason to stop",
 )
+CRM_HISTORY_OVERLAP_LIMITATION = "these checks are not a lock, so two imports that overlap can still each create one"
+CRM_HISTORY_UNQUALIFIED_PROMISES = (
+    "one crm history document per deal",
+    "one crm history and context document per deal",
+    "never create a second crm history document for this deal",
+    "no second document is ever",
+    "no second crm history document is ever",
+)
 CRM_HISTORY_OPEN_IMPORT_STOP_PATTERNS = (
     re.compile(r"\b(?:another|other)\b[^.:;]{0,60}?\bimports?\b[^.:;]{0,60}?\b(?:open|running|in progress|underway)\b", re.I),
     re.compile(r"\b(?:another|other)\s+(?:open|running)\b[^.:;]{0,40}?\bimports?\b", re.I),
@@ -7198,6 +7206,22 @@ def validate_crm_history_task_contract(
     ]:
         if phrase not in manager_prompt:
             fail(f"Deal Manager prompt is missing CRM history routing: {phrase}")
+
+    # #4841 scope (John, comment 6505641852): overlapping imports can each create a document, so no
+    # CRM history instruction may promise one document per Deal without that limitation.
+    if CRM_HISTORY_OVERLAP_LIMITATION not in " ".join(analyst_prompt.split()):
+        fail("Deal Analyst prompt must state that overlapping CRM history imports can each create a document")
+    for label, text in [
+        ("import-crm-history skill", skill),
+        ("CRM history task definition", json.dumps(definition_json)),
+        ("CRM history task guide", (ROOT / "tasks" / "import-refresh-crm-history.md").read_text(encoding="utf-8")),
+        ("Deal Analyst prompt", analyst_prompt),
+        ("Deal Manager prompt", manager_prompt),
+    ]:
+        normalized = " ".join(text.split()).lower()
+        for promise in CRM_HISTORY_UNQUALIFIED_PROMISES:
+            if promise in normalized:
+                fail(f"{label} must not promise {promise!r}; overlapping imports can each create one (#4841 scope)")
 
 
 ORIGINATION_STAGE_LIFECYCLE_STAGES = {

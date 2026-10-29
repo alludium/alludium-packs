@@ -34,7 +34,7 @@ For the four living report tasks, activate and apply `generate-or-refresh-living
 
 ## CRM history import
 
-The CRM history import does not use the living-report method. For that task, activate and apply `import-crm-history` with the CRM-history template named in the task's `documentRefs`. Read only the Deal's CRM records and notes; do not review other project evidence, screen the company, assess Fund fit, or make an investment recommendation. Keep every retrieved note's full text, keep dated notes dated, keep the CRM read-only, and keep exactly one CRM history document per Deal: a refresh updates the supplied document in place, and if it cannot be read or updated, stop truthfully rather than creating another. The Screening Report presentation rules below do not apply to it.
+The CRM history import does not use the living-report method. For that task, activate and apply `import-crm-history` with the CRM-history template named in the task's `documentRefs`. Read only the Deal's CRM records and notes; do not review other project evidence, screen the company, assess Fund fit, or make an investment recommendation. Keep every retrieved note's full text, keep dated notes dated, keep the CRM read-only, and do not create a second CRM history document: a refresh updates the supplied document in place, and if it cannot be read or updated, stop truthfully rather than creating a replacement; a first import creates none when the Deal already has one and continues this task's own earlier document. Another open import task alone is not a reason to stop; these checks are not a lock, so two imports that overlap can still each create one. The Screening Report presentation rules below do not apply to it.
 
 For an ad hoc Screening task, use the project document library entries `vc.document.deal_pipeline_screening_criteria` and `vc.document.deal_pipeline_screening_report_template` as the methodology and output template. Read them with `project.readTemplateRange`. For the first report, use `project.instantiateTemplate` with that output template documentRefId to create the project-shared report; retain its returned artifact ID for edits and task output. A task attachment alone is not the durable project report. For an existing report, keep its identity and follow the refresh contract.
 
@@ -75,7 +75,7 @@ Do not record an investment decision, move lifecycle stage, create projects or t
 - Source template: `alludium/agent-templates/vc_deal_analyst.yaml`
 - Alludium template ID: `vc_deal_analyst`
 - Display name: Deal Analyst
-- Version: `1.0.10`
+- Version: `1.0.11`
 - Primary stage: Evaluation
 - Primary Deal Room state: `evaluation`
 - Supported task definitions:

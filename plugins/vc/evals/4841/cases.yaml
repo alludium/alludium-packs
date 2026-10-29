@@ -339,7 +339,7 @@ cases:
   - id: other-import-open-no-document
     kind: import
     # Another import task of this Deal is open but has saved no document. An open task alone is not a
-    # reason to stop (#4841 scope), so this import goes ahead and creates the one document.
+    # reason to stop (#4841 scope), so this import goes ahead and creates its document.
     deal: {name: Tessaline, organisation: {name: Tessaline, domain: tessaline.example}, openCrmTask: true}
     affinity:
       companies:

@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.import_refresh_crm_history
-version: 1.0.4
+version: 1.0.5
 title: Import or Refresh CRM History
 category: Venture Capital
 visibility: workspace
@@ -9,7 +9,7 @@ tags: [vc, crm, company-history, living-document]
 definition:
   name: Import or Refresh CRM History
   slug: import-refresh-crm-history
-  description: Import or refresh one Deal's CRM history into a single sourced company brief with the full source notes attached.
+  description: Import or refresh one Deal's CRM history into a sourced company brief with the full source notes attached.
   allowSubtasks: false
   definitionJson:
     vertical: vc
@@ -26,7 +26,7 @@ definition:
     supportedProjectScopes: [project_instance]
     instructions:
       executionInstructions: >-
-        Activate and apply the `import-crm-history` skill. It owns the method: identifying the company's CRM records, reading every page of notes, preserving each retrieved note's full text, writing the company and relationship brief, checking the document size, and creating or refreshing the one CRM history document. Use the CRM-history template named in `definitionJson.documentRefs` as the document structure, and the citation style guide for references.
+        Activate and apply the `import-crm-history` skill. It owns the method: identifying the company's CRM records, reading every page of notes, preserving each retrieved note's full text, writing the company and relationship brief, checking the document size, and creating or refreshing the Deal's CRM history document. Use the CRM-history template named in `definitionJson.documentRefs` as the document structure, and the citation style guide for references.
         The company is the Deal's confirmed Organisation. `company_name` carries that Organisation's name as the Platform supplied it, and `organisation_id`, when present, identifies it for tool calls only. Do not take the company name from the Deal title. `crm_provider` names the CRM to read; `crm_record_reference`, when present, is a known record ID or link to check first, never a reason to skip checking the other plausible records.
         When `existing_crm_history_artifact_id` is empty, this is a first import: create the document from the template with `project.instantiateTemplate`, exactly once and with no other tool. When it is present, this is a refresh: read that exact document and replace its whole content in one update, keeping the same artifact ID. If that document cannot be read or updated, stop and say why. Do not create a second CRM history document: not to work around a size, revision or update failure, not when the Deal already has one, and not when this task already created one (continue that one). Another open import task alone is not a reason to stop; these checks are not a lock, so two imports that overlap can still each create one.
         This task only imports and preserves CRM context. Do not apply the living-report method, review other project evidence, screen the company, assess Fund fit, make an investment recommendation, or start any report. Do not write to the CRM, change Deal fields, stage, decisions or identity records, or create tasks.
@@ -38,7 +38,7 @@ definition:
         - Every retrieved note appears in the source appendix with its full text, source metadata and a working reference from the brief.
         - Dated notes stay dated; past plans, pilots and rounds are not presented as current facts, and linked documents are not described as read.
         - Import coverage states which records and pages were read and marks any gap as a partial import.
-        - A refresh updated the existing document in place and returned the same artifact ID; a first import created exactly one document from the CRM-history template.
+        - A refresh updated the existing document in place and returned the same artifact ID; a first import created its document once, from the CRM-history template.
         - No CRM write, Deal field change other than the document pointer, stage move or investment judgment occurred.
       humanConfirmationPolicy: never
     humanDecisionPoints:

@@ -2,8 +2,8 @@
 
 Cases and expectations for the "Import or Refresh CRM History" task added in VC Pack `0.6.41`.
 The baseline arm (`v0.6.40`) is what users had: the Deal Manager reads Affinity in chat and
-answers, which produced the reported CRM inventory. The candidate should create one sourced CRM
-history document per Deal through the Deal Analyst task, keep every retrieved note in full, say
+answers, which produced the reported CRM inventory. The candidate should create a sourced CRM
+history document for the Deal through the Deal Analyst task and refresh that same document, keep every retrieved note in full, say
 when an import is partial, refuse to save a history too large to refresh, and change nothing else.
 
 ## Cases
