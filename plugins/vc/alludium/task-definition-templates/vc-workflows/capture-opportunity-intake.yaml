@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.capture_opportunity_intake
-version: 1.0.34
+version: 1.0.35
 title: Verify Opportunity Intake
 category: Venture Capital
 visibility: workspace
@@ -121,7 +121,7 @@ definition:
         document after the Executive Summary. Use `definitionJson.documentRefs` as the durable document reference contract.
         Apply each
         reference by usage: `style_guide` governs citations and claim language, and `operating_guidance` constrains process
-        and approval boundaries.'
+        and approval boundaries. Keep the Deal fields current with the Platform Record Field Maintenance skill: read them with `field-values.getFields`, use `field-values.setField` to fill editable empty Deal fields that the evidence in this task clearly supports, and suggest rather than make any change to a populated field. Leave the Fund, lifecycle stage and decision fields, and all People and Organisation records, to the human and the Deal Manager. In the completion summary, name each field you filled or suggest changing by its label.'
       outputFormatting: 'Keep the HTML artifact separate from structured task output fields. `opportunity_intake_artifact_id`
         must be omitted when no artifact is created and must contain only the returned artifact UUID when present.
         `company_name` must contain only the confirmed canonical company name and should be omitted when identity remains
@@ -150,7 +150,7 @@ definition:
         deck artifact ID as a credible source anchor until its contents have been inspected or a human explicitly approves a
         partial artifact with gaps.
       externalActionPolicy: Intake readiness only. Approved CRM/source reads are allowed within the supplied scope. Public-web
-        research, CRM writes, external sends, Drive changes, child task creation, project creation, and stage transitions are
+        research, external CRM writes, external sends, Drive changes, child task creation, project creation, and stage transitions are
         forbidden unless a human explicitly approves a separate workflow.
       completionCriteria:
       - Company identity is confirmed or the task is blocked with a specific clarification question.

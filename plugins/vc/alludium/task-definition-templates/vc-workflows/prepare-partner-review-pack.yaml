@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.prepare_partner_review_pack
-version: 1.0.21
+version: 1.0.22
 title: Prepare Partner Review Pack
 category: Venture Capital
 visibility: workspace
@@ -57,7 +57,7 @@ definition:
     instructions:
       executionInstructions: 'Prepare the Partner Review pack from the team review pack, evaluation-stage workstream outputs, the diligence question
         bank, available formal diligence outputs, key risks, proposed diligence scope, and decision ask. Cite material claims, separate assumptions
-        from evidence, and do not send messages, mutate CRM records, create folders/projects, create child tasks, or move stages without explicit
+        from evidence, and do not send messages, write external CRM records, create folders/projects, create child tasks, or move stages without explicit
         human approval. Use required evaluation input file artifacts `commercial_evaluation_artifact_id`, `technical_evaluation_artifact_id`,
         `financial_evaluation_artifact_id`, `team_evaluation_artifact_id`, and `diligence_question_bank_artifact_id` as the decision-review source
         set. Use formal diligence artifacts `commercial_dd_artifact_id`, `financial_dd_artifact_id`, `founder_evaluation_artifact_id`, and `technical_dd_artifact_id`
@@ -66,9 +66,9 @@ definition:
         contract. Apply each reference by usage: `output_template` sets the output skeleton, `methodology` supplies scoring or analysis logic,
         `checklist` must be completed with status, evidence, and owner, `style_guide` governs citations and claim language, and `operating_guidance`
         or `policy` constrains process and approval boundaries. Read referenced templates, methodologies, checklists, style guides, operating guidance, and policies, but convert the referenced Markdown/template sections into semantic standalone HTML for `artifact.createTextArtifact`: keep the required first summary section from the task or template, preserve decision-critical section order, omit unsupported boilerplate, and resolve conflicts in favor of the shared HTML contract plus task-specific heading requirements. For refs with `outputFieldKey`, produce that output from the referenced pack document
-        and preserve the document ID alongside the output artifact.'
+        and preserve the document ID alongside the output artifact. Keep the Deal fields current with the Platform Record Field Maintenance skill: read them with `field-values.getFields`, use `field-values.setField` to fill editable empty Deal fields that the evidence in this task clearly supports, and suggest rather than make any change to a populated field. Leave the Fund, lifecycle stage and decision fields, and all People and Organisation records, to the human and the Deal Manager. In the completion summary, name each field you filled or suggest changing by its label.'
       missingInputPolicy: Ask for missing required inputs before producing investment-stage recommendations.
-      externalActionPolicy: Draft only unless a human explicitly approves the send, CRM write, Drive change, project creation, child task creation,
+      externalActionPolicy: Draft only unless a human explicitly approves the send, external CRM write, Drive change, project creation, child task creation,
         or stage transition.
       completionCriteria:
       - Required input gaps are resolved or listed as assumptions/open questions.
@@ -76,7 +76,7 @@ definition:
       - Next actions identify owner, dependency, and required human approval point.
     humanDecisionPoints:
     - Approve investment-stage movement, pass/follow-up recommendations, and final task completion.
-    - Approve external communications, CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
+    - Approve external communications, external CRM writes, Drive/project creation, legal/counsel actions, and founder-facing requests.
     orchestration:
       parentTaskPolicy: none
       suggestedChildTasks: []

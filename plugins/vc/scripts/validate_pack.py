@@ -686,6 +686,7 @@ OPTIONAL_ARTIFACT_INPUTS = {
     },
     "import-refresh-crm-history": {"existing_crm_history_artifact_id"},
     "prepare-meeting": {"pitch_deck_artifact_id"},
+    "prepare-pipeline-meeting": {"pitch_deck_artifact_id"},
     "run-commercial-evaluation": {"follow_up_evaluation_artifact_id"},
     "run-technical-evaluation": {"follow_up_evaluation_artifact_id"},
     "run-financial-evaluation": {"follow_up_evaluation_artifact_id"},
@@ -1069,6 +1070,63 @@ def validate_report_executors_identity_read_only() -> None:
         prompt = (template.get("prompt") or {}).get("template") or ""
         if REPORT_EXECUTOR_IDENTITY_RULE not in prompt:
             fail(f"Report task executor {executor} prompt must state the identity read-only rule")
+
+
+# Agent field writes go through the dedicated field tools from the Platform Record Field
+# Maintenance skill; project_data and project.update refuse them (#4394, #4687).
+DEAL_PROJECT_TYPE_IDS = ("vc_deal_room", "vc_deal_pipeline")
+DEAL_FIELD_WRITE_TOOL = "`field-values.setField`"
+DEAL_FIELD_ROUTE_RULE = "Never write a field through `project_data` or `project.update`"
+LEGACY_FIELD_WRITE_PATTERNS = (
+    re.compile(r"update_state[^.\n]{0,160}fieldValues"),
+    re.compile(r"use `project\.update` to set"),
+)
+UNSCOPED_CRM_WRITE_PATTERNS = (
+    re.compile(r"mutate\s+CRM"),
+    re.compile(r"(?<!external )CRM(?:/deal-system)?\s+(?:writes?|updates?|fields)\b(?!\s+suggestion)"),
+)
+
+
+def validate_deal_field_maintenance_guidance() -> None:
+    templates = ROOT / "alludium" / "agent-templates"
+    workflows = ROOT / "alludium" / "task-definition-templates" / "vc-workflows"
+    agents: set[str] = set()
+    for project_type_id in DEAL_PROJECT_TYPE_IDS:
+        initial_version = (read_json(ROOT / "alludium" / "project-types" / f"{project_type_id}.json") or {}).get("initialVersion") or {}
+        manager = (initial_version.get("projectManager") or {}).get("agentTemplateKey")
+        if manager:
+            agents.add(manager)
+        for mapping in initial_version.get("projectTaskMappings") or []:
+            slug = mapping.get("taskDefinitionSlug")
+            definition = read_yaml(workflows / f"{slug}.yaml")
+            definition_json = (definition.get("definition") or {}).get("definitionJson") or {}
+            instructions = definition_json.get("instructions") or {}
+            text = " ".join(str(instructions.get(key) or "") for key in ("executionInstructions", "externalActionPolicy"))
+            text = " ".join([text, *(str(point) for point in definition_json.get("humanDecisionPoints") or [])])
+            text = re.sub(r"\s+", " ", text)
+            # The CRM history import writes no Deal field: only its output maps the document pointer.
+            if slug != CRM_HISTORY_TASK_SLUG and DEAL_FIELD_WRITE_TOOL not in (
+                instructions.get("executionInstructions") or ""
+            ):
+                fail(f"Deal task {slug} must point field fills at {DEAL_FIELD_WRITE_TOOL}")
+            for pattern in UNSCOPED_CRM_WRITE_PATTERNS:
+                if pattern.search(text):
+                    fail(f"Deal task {slug} must scope CRM write prohibitions to an external CRM: {pattern.pattern}")
+            if definition_json.get("recommendedAgentTemplate"):
+                agents.add(definition_json["recommendedAgentTemplate"])
+    for agent in sorted(agents):
+        prompt = re.sub(r"[ \t]+", " ", (read_yaml(templates / f"{agent}.yaml").get("prompt") or {}).get("template") or "")
+        if DEAL_FIELD_WRITE_TOOL not in prompt or DEAL_FIELD_ROUTE_RULE not in prompt:
+            fail(f"Deal agent {agent} prompt must route field writes through {DEAL_FIELD_WRITE_TOOL} only")
+        for pattern in UNSCOPED_CRM_WRITE_PATTERNS:
+            if pattern.search(prompt):
+                fail(f"Deal agent {agent} must scope CRM write prohibitions to an external CRM: {pattern.pattern}")
+    sources = [*templates.glob("*.yaml"), *workflows.glob("*.yaml"), *(ROOT / "skills").glob("*/SKILL.md")]
+    for path in sorted(sources):
+        text = path.read_text(encoding="utf-8")
+        for pattern in LEGACY_FIELD_WRITE_PATTERNS:
+            if pattern.search(text):
+                fail(f"{path.relative_to(ROOT)} teaches a refused agent field write: {pattern.pattern}")
 
 
 def validate_connected_app_agent(template_id: str, template: dict[str, Any]) -> None:
@@ -6091,7 +6149,72 @@ def validate_project_task_mapping_contracts() -> None:
             )
 
 
+PIPELINE_MEETING_TASKS = {
+    "prepare-pipeline-meeting": ("vc.prepare_pipeline_meeting", "meeting_brief_artifact_id", "vc.document.initial_call_brief_template"),
+    "summarize-pipeline-meeting": ("vc.summarize_pipeline_meeting", "meeting_summary_artifact_id", "vc.document.customer_insights_summary_template"),
+}
+
+
+def validate_pipeline_meeting_contract() -> None:
+    """Meetings use the locked Analyst and per-task outputs, not singleton Deal fields."""
+    version = read_json(ROOT / "alludium/project-types/vc_deal_pipeline.json")["initialVersion"]
+    mappings = {m["taskDefinitionSlug"]: m for m in version["projectTaskMappings"]}
+    analyst = read_yaml(ROOT / "alludium/agent-templates/vc_deal_analyst.yaml")
+    manager = read_yaml(ROOT / "alludium/agent-templates/vc_deal_pipeline_manager.yaml")
+    assigned_skills = {s["externalId"] for s in analyst.get("skills", [])}
+    if "meeting-prep-and-summary" not in assigned_skills:
+        fail("Pipeline meeting executor must have the meeting-prep-and-summary skill")
+    if "For every task, apply `generate-or-refresh-living-report`" in analyst["prompt"]["template"]:
+        fail("Pipeline meeting tasks must not inherit the living-report refresh lifecycle")
+    expected_inputs = [
+        {"taskField": "company_name", "source": "project.investmentSubject", "sourcePath": "organisation.displayName", "requiredForActivation": True},
+        {"taskField": "organisation_id", "source": "project.investmentSubject", "sourcePath": "organisation.id", "requiredForActivation": False},
+    ]
+    for slug, (template_id, output_key, document_id) in PIPELINE_MEETING_TASKS.items():
+        # Platform falls back to same-key project fields when outputMappings is empty.
+        if output_key in {field["key"] for field in version["fieldsSchema"]}:
+            fail(f"Pipeline meeting {slug} output must not collide with a Deal field")
+        task = read_yaml(ROOT / "alludium/task-definition-templates/vc-workflows" / f"{slug}.yaml")
+        definition = task["definition"]["definitionJson"]
+        profile = task["runtime"]["executionProfile"]
+        mapping = mappings.get(slug) or {}
+        if task["id"] != template_id or mapping.get("taskDefinitionTemplateId") != template_id:
+            fail(f"Pipeline meeting {slug} must map its installed definition")
+        if definition.get("supportedProjectTypes") != ["vc_deal_pipeline"]:
+            fail(f"Pipeline meeting {slug} must not change legacy Room execution")
+        if definition.get("stageIndependent") is not True or definition.get("stage") is not None or "lifecycleStage" in mapping:
+            fail(f"Pipeline meeting {slug} must be stage-independent")
+        if any(value != "vc_deal_analyst" for value in [definition.get("recommendedAgentTemplate"), definition.get("plannedRecommendedAgentTemplate"), profile.get("preferredAgentType")]):
+            fail(f"Pipeline meeting {slug} must use the locked Deal Analyst")
+        if profile.get("requiresHumanConfirmationToComplete") is not True:
+            fail(f"Pipeline meeting {slug} must retain human completion review")
+        if mapping.get("inputMappings") != expected_inputs:
+            fail(f"Pipeline meeting {slug} must use confirmed Organisation inputs without a deck gate")
+        if mapping.get("outputMappings") != []:
+            fail(f"Pipeline meeting {slug} must preserve per-meeting outputs without overwriting Deal fields")
+        if mapping.get("activationPolicy") != {"mode": "manual_review", "autoStartWhenRequiredInputsAvailable": False, "requiresHumanApproval": True, "createTaskWhenLifecycleStageEntered": False}:
+            fail(f"Pipeline meeting {slug} must not start on stage entry")
+        inputs = {f["key"]: f for f in task["fields"]["input"]}
+        if {key for key, field in inputs.items() if field.get("required")} != {"company_name"}:
+            fail(f"Pipeline meeting {slug} must allow notes-only work with confirmed company identity")
+        if not {"meeting_record_artifact_ids", "meeting_notes", "organisation_id"}.issubset(inputs):
+            fail(f"Pipeline meeting {slug} must accept text or artifact sources")
+        if slug == "prepare-pipeline-meeting" and (inputs.get("pitch_deck_artifact_id") or {}).get("required") is not False:
+            fail("Pipeline meeting preparation must make the pitch deck optional")
+        outputs = task["fields"]["output"]
+        if len(outputs) != 1 or outputs[0].get("key") != output_key or outputs[0].get("required") is not True or outputs[0].get("fieldType") != "file":
+            fail(f"Pipeline meeting {slug} must require its saved file output")
+        if outputs[0].get("config", {}).get("documentRefId") != document_id:
+            fail(f"Pipeline meeting {slug} must use its declared output template")
+        if document_id not in version["documentLibrary"]["documentIds"] or {"documentId": document_id, "usage": "output_template", "outputFieldKey": output_key} not in definition["documentRefs"]:
+            fail(f"Pipeline meeting {slug} must expose its output template in the Deal library")
+        for agent in [analyst, manager]:
+            if slug not in agent["metadata"]["supportedTaskDefinitions"]:
+                fail(f"Pipeline meeting {slug} is missing from {agent['id']}'s task contract")
+
+
 def validate_vc_deal_pipeline_contract() -> None:
+    validate_pipeline_meeting_contract()
     project_type_id = "vc_deal_pipeline"
     project_type = read_json(ROOT / "alludium" / "project-types" / f"{project_type_id}.json")
     initial_version = project_type.get("initialVersion") or {}
@@ -6181,6 +6304,7 @@ def validate_vc_deal_pipeline_contract() -> None:
         "create exactly one project-shared",
         "update that exact artifact in place",
         "Never create a duplicate fallback",
+        "This lifecycle applies to living reports, not to a per-meeting brief or summary.",
     ]:
         if phrase not in living_report_skill:
             fail(f"Living-report skill is missing lifecycle rule: {phrase}")
@@ -6253,10 +6377,13 @@ def validate_vc_deal_pipeline_contract() -> None:
     task_contracts = load_task_template_contracts()
     mappings = initial_version.get("projectTaskMappings") or []
     mappings_by_slug = {mapping.get("taskDefinitionSlug"): mapping for mapping in mappings}
-    # The CRM history import is mapped beside the four reports but keeps its own contract.
-    expected_mapped_slugs = {*expected_tasks, CRM_HISTORY_TASK_SLUG}
-    if set(mappings_by_slug) != expected_mapped_slugs or len(mappings) != len(expected_mapped_slugs):
-        fail("vc_deal_pipeline must map exactly the four durable document tasks and the CRM history import")
+    # The CRM history import is mapped beside the reports and meetings but keeps its own contract.
+    expected_slugs = set(expected_tasks) | set(PIPELINE_MEETING_TASKS) | {CRM_HISTORY_TASK_SLUG}
+    if set(mappings_by_slug) != expected_slugs or len(mappings) != len(expected_slugs):
+        fail(
+            "vc_deal_pipeline must map the four living report tasks, two meeting tasks "
+            "and the CRM history import"
+        )
 
     for slug, (template_id, output_field, existing_input, criteria_id, template_document_id) in expected_tasks.items():
         contract = task_contracts.get(slug)
@@ -6364,6 +6491,8 @@ def validate_vc_deal_pipeline_contract() -> None:
                 fail(f"vc_deal_pipeline mapping for {slug} targets unknown project field {project_field}")
 
     expected_document_ids = {
+        "vc.document.initial_call_brief_template",
+        "vc.document.customer_insights_summary_template",
         "vc.document.evidence_citation_style_guide",
         "vc.document.template_use_guidance",
         "vc.document.deal_pipeline_screening_criteria",
@@ -6382,7 +6511,7 @@ def validate_vc_deal_pipeline_contract() -> None:
     document_ids = set(document_id_list)
     if document_ids != expected_document_ids:
         fail(
-            "vc_deal_pipeline document library must contain the nine stable role documents, "
+            "vc_deal_pipeline document library must contain the report and meeting templates, "
             "the CRM history template and shared guidance"
         )
     if len(document_id_list) != len(document_ids):
@@ -6395,6 +6524,7 @@ def validate_vc_deal_pipeline_contract() -> None:
         fail("vc_deal_pipeline document presentation must explain the customizable library")
 
     expected_presentation_groups = {
+        "meetings": ("Meetings", 60),
         "shared_guidance": ("Shared guidance", 10),
         "screening": ("Screening", 20),
         "evaluation": ("Evaluation", 30),
@@ -6419,6 +6549,12 @@ def validate_vc_deal_pipeline_contract() -> None:
             fail(f"vc_deal_pipeline document presentation group {group_key} needs a description")
 
     expected_presentation_documents = {
+        "vc.document.initial_call_brief_template": (
+            "meeting_brief_template", "meetings", "Meeting Brief template", "output_template", 10,
+        ),
+        "vc.document.customer_insights_summary_template": (
+            "meeting_summary_template", "meetings", "Meeting Summary template", "output_template", 20,
+        ),
         "vc.document.evidence_citation_style_guide": (
             "shared_evidence_citation_guidance", "shared_guidance", "Evidence and citation guidance", "guidance", 10,
         ),
@@ -6641,9 +6777,14 @@ def validate_vc_deal_pipeline_contract() -> None:
         for slug, contract in task_contracts.items()
         if project_type_id in contract.get("supportedProjectTypes", [])
     }
-    if supported_task_slugs != {"create-pipeline-deal", *expected_tasks, CRM_HISTORY_TASK_SLUG}:
+    if supported_task_slugs != {
+        "create-pipeline-deal",
+        *expected_tasks,
+        *PIPELINE_MEETING_TASKS,
+        CRM_HISTORY_TASK_SLUG,
+    }:
         fail(
-            "vc_deal_pipeline must expose only its guided creation task, four durable document tasks "
+            "vc_deal_pipeline must expose guided creation, four living reports, two meeting tasks "
             "and the CRM history import"
         )
     creation_contract = task_contracts.get("create-pipeline-deal") or {}
@@ -6736,7 +6877,8 @@ def validate_vc_deal_pipeline_contract() -> None:
         "`artifact.createTextArtifact`",
         "never overwrite an earlier Decision Record",
         "append the new ID to `decision_record_artifact_ids` without removing or reordering prior IDs",
-        "read back both the artifact and project before reporting success",
+        "use `field-values.setField`, one field at a time",
+        "read back both the artifact and the fields before reporting success",
         "report the exact partial result and do not claim the decision was fully recorded",
     ]:
         if phrase not in manager_prompt:
@@ -6761,6 +6903,7 @@ def validate_vc_deal_pipeline_contract() -> None:
         analyst=analyst,
         manager=manager,
     )
+    validate_deal_field_maintenance_guidance()
 
     relationships = (initial_version.get("extensions") or {}).get("projectRelationships") or []
     if relationships != [{
@@ -6978,7 +7121,7 @@ def validate_crm_history_task_contract(
     if "For every task, apply `generate-or-refresh-living-report`" in analyst_prompt:
         fail("Deal Analyst must scope the living-report method to its four investment reports")
     for phrase in [
-        "For each of the four investment-report tasks, activate and apply `generate-or-refresh-living-report`",
+        "For the four living report tasks, activate and apply `generate-or-refresh-living-report`",
         "The CRM history import does not use the living-report method",
         "activate and apply `import-crm-history`",
     ]:

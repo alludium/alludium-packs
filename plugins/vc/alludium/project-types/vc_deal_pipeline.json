@@ -82,7 +82,7 @@
     "postCreate": {"triggerInitialStateTasks": false}
   },
   "initialVersion": {
-    "version": "1.0.9",
+    "version": "1.0.10",
     "documentLibrary": {
       "catalogPath": "alludium/documents/catalog.v1.json",
       "documentIds": [
@@ -97,6 +97,8 @@
         "vc.document.deal_pipeline_decision_record_template",
         "vc.document.deal_pipeline_term_sheet_review_policy",
         "vc.document.deal_pipeline_term_sheet_review_template",
+        "vc.document.initial_call_brief_template",
+        "vc.document.customer_insights_summary_template",
         "vc.document.deal_pipeline_crm_history_template"
       ],
       "presentation": {
@@ -107,7 +109,13 @@
           {"key":"screening","label":"Screening","description":"Criteria and report format for the first investment screen.","sortOrder":20},
           {"key":"evaluation","label":"Evaluation","description":"Methodology and living report format for deeper evaluation.","sortOrder":30},
           {"key":"decision","label":"Decision","description":"IC preparation, memo, and confirmed decision-record formats.","sortOrder":40},
-          {"key":"term_sheet","label":"Term Sheet","description":"Review policy and output format for supplied term sheets.","sortOrder":50}
+          {"key":"term_sheet","label":"Term Sheet","description":"Review policy and output format for supplied term sheets.","sortOrder":50},
+          {
+            "key": "meetings",
+            "label": "Meetings",
+            "description": "Briefs and summaries for individual Deal meetings.",
+            "sortOrder": 60
+          }
         ],
         "documents": [
           {"documentId":"vc.document.evidence_citation_style_guide","roleKey":"shared_evidence_citation_guidance","groupKey":"shared_guidance","displayName":"Evidence and citation guidance","description":"Citation, assumption, source-authority, and claim-hygiene guidance shared across Deal documents.","kind":"guidance","sortOrder":10},
@@ -121,7 +129,25 @@
           {"documentId":"vc.document.deal_pipeline_ic_memo_template","roleKey":"decision_ic_memo_template","groupKey":"decision","displayName":"IC Memo template","description":"Output structure for the living investment committee memo.","kind":"output_template","sortOrder":20},
           {"documentId":"vc.document.deal_pipeline_decision_record_template","roleKey":"decision_record_template","groupKey":"decision","displayName":"Decision Record template","description":"Output structure for recording each distinct, explicitly confirmed investment decision.","kind":"output_template","sortOrder":30},
           {"documentId":"vc.document.deal_pipeline_term_sheet_review_policy","roleKey":"term_sheet_review_policy","groupKey":"term_sheet","displayName":"Term Sheet Review policy","description":"Policy boundaries and review method for supplied current and previous term sheets.","kind":"policy","sortOrder":10},
-          {"documentId":"vc.document.deal_pipeline_term_sheet_review_template","roleKey":"term_sheet_review_template","groupKey":"term_sheet","displayName":"Term Sheet Review template","description":"Output structure for the living commercial term-sheet review.","kind":"output_template","sortOrder":20}
+          {"documentId":"vc.document.deal_pipeline_term_sheet_review_template","roleKey":"term_sheet_review_template","groupKey":"term_sheet","displayName":"Term Sheet Review template","description":"Output structure for the living commercial term-sheet review.","kind":"output_template","sortOrder":20},
+          {
+            "documentId": "vc.document.initial_call_brief_template",
+            "roleKey": "meeting_brief_template",
+            "groupKey": "meetings",
+            "displayName": "Meeting Brief template",
+            "description": "Output structure for a meeting brief.",
+            "kind": "output_template",
+            "sortOrder": 10
+          },
+          {
+            "documentId": "vc.document.customer_insights_summary_template",
+            "roleKey": "meeting_summary_template",
+            "groupKey": "meetings",
+            "displayName": "Meeting Summary template",
+            "description": "Output structure for a meeting summary.",
+            "kind": "output_template",
+            "sortOrder": 20
+          }
         ]
       }
     },
@@ -625,6 +651,60 @@
         ],
         "outputMappings":[{"taskField":"crm_history_artifact_id","target":"project.field","targetPath":"crm_history_artifact_id","requiredForCompletion":true}],
         "activationPolicy":{"mode":"manual_review","autoStartWhenRequiredInputsAvailable":false,"requiresHumanApproval":true,"createTaskWhenLifecycleStageEntered":false}
+      },
+      {
+        "id": "map-prepare-pipeline-meeting",
+        "taskDefinitionTemplateId": "vc.prepare_pipeline_meeting",
+        "taskDefinitionSlug": "prepare-pipeline-meeting",
+        "projectScope": "project_instance",
+        "inputMappings": [
+          {
+            "taskField": "company_name",
+            "source": "project.investmentSubject",
+            "sourcePath": "organisation.displayName",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "organisation_id",
+            "source": "project.investmentSubject",
+            "sourcePath": "organisation.id",
+            "requiredForActivation": false
+          }
+        ],
+        "outputMappings": [],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
+      },
+      {
+        "id": "map-summarize-pipeline-meeting",
+        "taskDefinitionTemplateId": "vc.summarize_pipeline_meeting",
+        "taskDefinitionSlug": "summarize-pipeline-meeting",
+        "projectScope": "project_instance",
+        "inputMappings": [
+          {
+            "taskField": "company_name",
+            "source": "project.investmentSubject",
+            "sourcePath": "organisation.displayName",
+            "requiredForActivation": true
+          },
+          {
+            "taskField": "organisation_id",
+            "source": "project.investmentSubject",
+            "sourcePath": "organisation.id",
+            "requiredForActivation": false
+          }
+        ],
+        "outputMappings": [],
+        "activationPolicy": {
+          "mode": "manual_review",
+          "autoStartWhenRequiredInputsAvailable": false,
+          "requiresHumanApproval": true,
+          "createTaskWhenLifecycleStageEntered": false
+        }
       }
     ],
     "extensions": {
@@ -696,13 +776,19 @@
       "displayName": "Deal Manager",
       "labels": {"chatTitleSuffix":" Deal Manager","roleNoun":"deal manager","projectNoun":"deal","collectionNoun":"deals"},
       "identity": {
-        "roleDescription":"Evidence-led coordinator for one simplified VC Deal Pipeline.",
-        "tone":"Calm, concise, evidence-led, and approval-aware.",
-        "instructions":["treat stage as status, not as a gate on the four durable document actions","preserve one logical artifact for each living document","create a separate append-only Decision Record artifact only after direct authenticated human confirmation","describe user-visible work by its purpose, expected result, owner, and next decision; keep task definitions, agents, routing, and orchestration internal unless the user asks"],
-        "responsibilities":["coordinate screening, evaluation, IC memo, and term-sheet review work","turn other approved Deal work into specific bounded next steps","keep durable living-document pointers current","start a CRM history import or refresh when the user asks, and use the saved CRM history document as Deal context","preserve explicitly confirmed decisions as append-only artifacts and current projections"],
-        "boundaries":["do not start work or move lifecycle state without explicit approval","do not infer or overwrite an investment decision","do not claim promotion until platform creation and relationship receipts are verified"]
+        "roleDescription": "Evidence-led coordinator for one simplified VC Deal Pipeline.",
+        "tone": "Calm, concise, evidence-led, and approval-aware.",
+        "instructions": ["treat stage as status, not as a gate on the four durable document actions","preserve one logical artifact for each living document","create a separate append-only Decision Record artifact only after direct authenticated human confirmation","describe user-visible work by its purpose, expected result, owner, and next decision; keep task definitions, agents, routing, and orchestration internal unless the user asks"],
+        "responsibilities": [
+          "coordinate screening, evaluation, IC memo, term-sheet review, meeting preparation and summary work",
+          "turn other approved Deal work into specific bounded next steps",
+          "keep durable living-document pointers current",
+          "start a CRM history import or refresh when the user asks, and use the saved CRM history document as Deal context",
+          "preserve explicitly confirmed decisions as append-only artifacts and current projections"
+        ],
+        "boundaries": ["do not start work or move lifecycle state without explicit approval","do not infer or overwrite an investment decision","do not claim promotion until platform creation and relationship receipts are verified"]
       },
-      "greeting":{"message":"I'm your **Deal Manager** for this opportunity. The four durable document actions remain available at every active stage.","starterPrompts":["Summarize the Deal and its durable documents.","Which living document needs a refresh?","Help me confirm and record an IC decision."]}
+      "greeting": {"message":"I'm your **Deal Manager** for this opportunity. The four durable document actions remain available at every active stage.","starterPrompts":["Summarize the Deal and its durable documents.","Which living document needs a refresh?","Help me confirm and record an IC decision."]}
     },
     "taskRouting": {
       "defaultAgentType": "vc_deal_analyst",
@@ -712,20 +798,32 @@
       "requireHumanOwner": true
     },
     "commandView": {
-      "key":"vc-deal-pipeline","typeLabel":"VC Deal Pipeline","collectionLabel":"Deals","overviewTitle":"VC Deal Pipeline overview","overviewAriaLabel":"Open VC deal data","overviewFallback":"Add company and evidence context in Data.","executionTitle":"Alludium is executing",
-      "navigationFieldKeys":["fund_id"],
-      "stageGroups":[
+      "key": "vc-deal-pipeline",
+      "typeLabel": "VC Deal Pipeline",
+      "collectionLabel": "Deals",
+      "overviewTitle": "VC Deal Pipeline overview",
+      "overviewAriaLabel": "Open VC deal data",
+      "overviewFallback": "Add company and evidence context in Data.",
+      "executionTitle": "Alludium is executing",
+      "navigationFieldKeys": ["fund_id"],
+      "stageGroups": [
         {"key":"screening","label":"Screening","navigationRole":"active","states":["screening"]},
         {"key":"evaluation","label":"Evaluation","navigationRole":"active","states":["evaluation"]},
         {"key":"decision","label":"Decision","navigationRole":"active","states":["decision"]},
         {"key":"term_sheet","label":"Term Sheet","navigationRole":"active","states":["term_sheet"]},
         {"key":"outcomes","label":"Outcomes","navigationRole":"portfolio","states":["passed","promoted_to_investment_execution","archived"]}
       ],
-      "fallbackAgents":[{"id":"vc_deal_analyst","name":"Deal Analyst","description":"Screening, evaluation, IC memo, and term-sheet analysis"}],
-      "summaryFields":[{"key":"fund_id","label":"Fund","fieldKey":"fund_id"},{"key":"decision","label":"Decision","fieldKey":"current_decision"}],
-      "scoreField":{"key":"score","label":"Score","contextKey":"score"},
-      "badgeFields":[]
+      "fallbackAgents": [
+        {
+          "id": "vc_deal_analyst",
+          "name": "Deal Analyst",
+          "description": "Report analysis, meeting preparation and summaries"
+        }
+      ],
+      "summaryFields": [{"key":"fund_id","label":"Fund","fieldKey":"fund_id"},{"key":"decision","label":"Decision","fieldKey":"current_decision"}],
+      "scoreField": {"key":"score","label":"Score","contextKey":"score"},
+      "badgeFields": []
     },
-    "instructionTemplate": "Maintain one evidence-led VC Deal from Screening through Evaluation, Decision, and Term Sheet. The workspace's authoritative vc.deals.projectTypeKey binding selects this project type; fail closed if that binding is absent, invalid, or unavailable. Both Deal Pipeline definitions may be installed, but every VC route and mutation must use only the bound type. Stage is status only: the four durable document actions remain manually available at every active stage and never start on creation or stage entry. Update each living document in place. Record each distinct directly confirmed human decision as a separate append-only Decision Record artifact and retain earlier records. Fund thesis stays separate from replaceable role criteria and templates. External actions, starting new work, lifecycle movement, investment decisions, legal decisions, and promotion require explicit human approval."
+    "instructionTemplate": "Maintain one evidence-led VC Deal from Screening through Evaluation, Decision, and Term Sheet. The workspace's authoritative vc.deals.projectTypeKey binding selects this project type; fail closed if that binding is absent, invalid, or unavailable. Both Deal Pipeline definitions may be installed, but every VC route and mutation must use only the bound type. Stage is status only: the four durable document actions remain manually available at every active stage and never start on creation or stage entry. Update each living document in place. Record each distinct directly confirmed human decision as a separate append-only Decision Record artifact and retain earlier records. Fund thesis stays separate from replaceable role criteria and templates. External actions, starting new work, lifecycle movement, investment decisions, legal decisions, and promotion require explicit human approval.\nMeeting preparation and summary are stage-independent tasks executed by the locked Deal Analyst. Each saves a separate HTML task output in Deal files; there is no singleton meeting output field and no change to the four living reports."
   }
 }

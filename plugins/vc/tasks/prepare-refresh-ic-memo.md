@@ -22,7 +22,7 @@ Prepare or refresh the deliberative IC Memo for one Deal at any active stage wit
 
 ## What To Do
 
-Apply `generate-or-refresh-living-report` to discover the current project-linked evidence corpus, include the mapped Evaluation Report, prior Decision Records, Term Sheet Review and any additive focus artifacts, compare the prior evidence basis when refreshing, and preserve the report lifecycle. Use `definitionJson.documentRefs` as the durable criteria, template, style, and operating-guidance contract. Prepare a decision-ready IC Memo that states the decision ask, recommendation, core thesis, evidence, risks, sensitivities, dissent, unresolved questions, and changes since the prior IC round. Render from the IC Memo Template and return the resulting artifact ID as ic memo artifact. The memo is deliberative and must not state or persist the human outcome. The company under review is the Deal's confirmed Organisation. company name carries that Organisation's name as the Platform supplied it to this task, and organisation id, when present, identifies it for tool calls only. Do not ask the user to re-enter or confirm a company name, and do not take the company name from the Deal title, which is the opportunity's own name and may differ.
+Apply `generate-or-refresh-living-report` to discover the current project-linked evidence corpus, include the mapped Evaluation Report, prior Decision Records, Term Sheet Review and any additive focus artifacts, compare the prior evidence basis when refreshing, and preserve the report lifecycle. Use `definitionJson.documentRefs` as the durable criteria, template, style, and operating-guidance contract. Prepare a decision-ready IC Memo that states the decision ask, recommendation, core thesis, evidence, risks, sensitivities, dissent, unresolved questions, and changes since the prior IC round. Render from the IC Memo Template and return the resulting artifact ID as ic memo artifact. The memo is deliberative and must not state or persist the human outcome. The company under review is the Deal's confirmed Organisation. company name carries that Organisation's name as the Platform supplied it to this task, and organisation id, when present, identifies it for tool calls only. Do not ask the user to re-enter or confirm a company name, and do not take the company name from the Deal title, which is the opportunity's own name and may differ. Keep the Deal fields current with the Platform Record Field Maintenance skill: read them with `field-values.getFields`, use `field-values.setField` to fill editable empty Deal fields that the evidence in this task clearly supports, and suggest rather than make any change to a populated field. Leave the Fund, lifecycle stage and decision fields, and all People and Organisation records, to the human and the Deal Manager. In the completion summary, name each field you filled or suggest changing by its label.
 
 ## Available Context
 
@@ -47,7 +47,7 @@ Ask for a readable Evaluation Report when no equivalent evaluation evidence is a
 
 ## Guardrails
 
-Do not record a Decision Record, send messages, mutate CRM, create tasks or projects, or move stage.
+Do not record a Decision Record, send messages, write to an external CRM, create tasks or projects, or move stage.
 
 ## Completion Criteria
 

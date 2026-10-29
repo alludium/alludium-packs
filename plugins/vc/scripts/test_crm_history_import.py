@@ -242,7 +242,7 @@ class CrmHistoryImportContractTests(unittest.TestCase):
         self._assert_rejected(
             self._edit_text(
                 ANALYST,
-                "For each of the four investment-report tasks, activate and apply `generate-or-refresh-living-report`",
+                "For the four living report tasks, activate and apply `generate-or-refresh-living-report`",
                 "For every task, apply `generate-or-refresh-living-report`",
             )
         )

@@ -315,10 +315,12 @@
       "documentType": "template",
       "path": "deal-room/initial-call-brief-template.html",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_deal_room",
+        "vc_deal_pipeline"
       ],
       "relatedTaskDefinitionSlugs": [
-        "prepare-meeting"
+        "prepare-meeting",
+        "prepare-pipeline-meeting"
       ],
       "status": "source"
     },
@@ -329,10 +331,12 @@
       "documentType": "template",
       "path": "deal-room/customer-insights-summary-template.html",
       "supportedProjectTypes": [
-        "vc_deal_room"
+        "vc_deal_room",
+        "vc_deal_pipeline"
       ],
       "relatedTaskDefinitionSlugs": [
-        "summarize-meeting-records"
+        "summarize-meeting-records",
+        "summarize-pipeline-meeting"
       ],
       "status": "source"
     },

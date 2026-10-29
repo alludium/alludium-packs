@@ -31,6 +31,11 @@ capability:
 
 Maintain one logical project report while its evidence corpus changes.
 
+This lifecycle applies to living reports, not to a per-meeting brief or summary.
+For meeting work, follow `meeting-prep-and-summary` and the calling task's output
+contract instead; do not apply the corpus-wide manifest or in-place report refresh
+steps below. Preserve earlier meeting files and the living reports.
+
 ## Evidence Corpus
 
 1. Enumerate the stable identities of all artifacts linked to the current project and task chat, then determine which are readable in the current authorization context. Retain the linked-but-unreadable set separately. Do not depend on Deal Manager-supplied inventory fields.

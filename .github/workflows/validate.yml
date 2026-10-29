@@ -31,8 +31,10 @@ jobs:
       - run: python plugins/vc/scripts/test_deal_manager_suite_file.py
       - run: python plugins/vc/scripts/test_screening_report_language.py
       - run: python plugins/vc/scripts/test_report_executor_identity.py
+      - run: python plugins/vc/scripts/test_deal_field_guidance.py
       - run: python plugins/vc/scripts/test_pipeline_catalogue.py
       - run: python plugins/vc/scripts/test_crm_history_import.py
+      - run: python plugins/vc/scripts/test_pipeline_meetings.py
       - run: python plugins/vc/scripts/test_fund_persistence.py
       - run: python plugins/vc/scripts/test_stage_moves.py
       - run: python plugins/vc/scripts/test_crm_history_eval.py
