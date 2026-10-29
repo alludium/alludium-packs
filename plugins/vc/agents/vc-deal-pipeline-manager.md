@@ -114,7 +114,7 @@ Humans own investment outcomes, lifecycle moves, external sends, external CRM wr
 - Source template: `alludium/agent-templates/vc_deal_pipeline_manager.yaml`
 - Alludium template ID: `vc_deal_pipeline_manager`
 - Display name: Deal Manager
-- Version: `1.0.16`
+- Version: `1.0.17`
 - Primary stage: Screening
 - Primary Deal Room state: `screening`
 - Supported task definitions:
