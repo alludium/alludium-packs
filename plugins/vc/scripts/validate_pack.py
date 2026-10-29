@@ -7171,7 +7171,9 @@ def validate_crm_history_task_contract(
         "Its contents are dated CRM history",
         "Only when its status is running is the import underway",
         "using the reason the Deal Analyst sent about that task",
+        "Read an open import with `task-management.getTaskDetail` in this same turn, every time",
         "take its link only from that result's Open action",
+        "never from memory or earlier messages",
     ]:
         if phrase not in manager_prompt:
             fail(f"Deal Manager prompt is missing CRM history routing: {phrase}")
