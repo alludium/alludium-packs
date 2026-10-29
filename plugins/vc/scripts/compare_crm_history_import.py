@@ -206,6 +206,8 @@ UNSAFE_HTML = re.compile(r"<script\b|<iframe\b|<form\b|<object\b|<embed\b|<link\
 APPENDIX_HEADING = re.compile(r"<h2[^>]*>\s*Source appendix\s*</h2>", re.I)
 # Matched on visible text, so linked citations such as [<a href="#N1">N1</a>] count.
 CITATION = re.compile(r"\[\s*N\d+")
+CITATION_GROUP = re.compile(r"\[([^\[\]]*\bN\d+[^\[\]]*)\]")
+CITATION_REF = re.compile(r"\bN(\d+)(?:\s*[\u2013\u2014-]\s*N?(\d+))?")
 # Identity reads the Deal Manager may call; every other identity.* call is a write and is refused.
 IDENTITY_READS = {
     "identity.lookupCandidates": {"candidates": [], "hasMore": False},
@@ -1244,6 +1246,20 @@ def appendix_refs(document: str) -> dict[int, str]:
     return refs
 
 
+def cited_refs(brief: str) -> set[str]:
+    """Every note reference the brief cites, with ranges such as [N2–N4] expanded."""
+    refs = set()
+    for group in CITATION_GROUP.finditer(visible_text(brief)):
+        for m in CITATION_REF.finditer(group.group(1)):
+            first, last = int(m.group(1)), int(m.group(2) or m.group(1))
+            refs.update(f"N{n}" for n in range(first, max(first, last) + 1))
+    return refs
+
+
+def appendix_anchors(document: str) -> set[str]:
+    return set(re.findall(r"id=\"(N\d+)\"", appendix_part(document)))
+
+
 def final_document(record: dict, documents: dict[str, str], refresh: bool) -> tuple[str | None, str]:
     if refresh:
         return EXISTING_DOCUMENT, documents.get(EXISTING_DOCUMENT, "")
@@ -1289,7 +1305,9 @@ def score(frozen: dict, record: dict, documents: dict[str, str]) -> dict:
             assertions["noPointerSaved"] = not any(s["ok"] for s in record["taskSaves"])
         else:
             if refresh:
-                assertions["oneDocument"] = not record["created"] and bool(ok_updates or ok_edits)
+                # One full-document update of the supplied document, and no piecemeal line edits.
+                assertions["oneDocument"] = not record["created"] and len(ok_updates) == 1 and not ok_edits \
+                    and not any(u["ok"] for u in record["updates"] if u["id"] != EXISTING_DOCUMENT)
             else:
                 # Only a template copy is a PROJECT_SHARED document a refresh can update.
                 assertions["oneDocument"] = len(record["created"]) == 1 and \
@@ -1299,9 +1317,15 @@ def score(frozen: dict, record: dict, documents: dict[str, str]) -> dict:
             assertions["completedWithPointer"] = any(s["ok"] and s["tool"] == "task-management.completeTask"
                                                      and s["output"].get(POINTER) == doc_id for s in record["taskSaves"])
             assertions["safeHtml"] = bool(document) and not UNSAFE_HTML.search(document)
+            # The complete saved HTML must stay refreshable under the platform's update limit.
+            assertions["withinSizeLimit"] = bool(document) and len(document.encode()) <= MAX_TEXT_ARTIFACT_BYTES
             notes = case_notes(case)
             retained = expect.get("notesRetained", [])
             assertions["briefCitesNotes"] = bool(document) and (not retained or bool(CITATION.search(visible_text(brief_part(document)))))
+            # A citation must point at an entry the appendix actually holds.
+            unresolved = sorted(cited_refs(brief_part(document)) - appendix_anchors(document))
+            assertions["citationsResolve"] = bool(document) and not unresolved
+            info["citationsUnresolved"] = unresolved
             overview = OVERVIEW.search(brief_part(document))
             assertions["briefSubstantive"] = bool(overview) and \
                 len(WORD.findall(visible_text(overview.group(1)))) >= MIN_OVERVIEW_WORDS and \

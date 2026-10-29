@@ -168,9 +168,17 @@ created above it could never be refreshed.
    the platform's 100 KB document limit to save safely, with your size estimate and the note
    count. Never shorten notes, drop notes, split the history into a second document, or create a
    document that a refresh could not update.
-3. After saving, read the document's source metadata. If the saved size is above 102,400 bytes,
-   still return its artifact ID so that no second document is ever created, but report a platform
-   blocker instead of a successful import: later refreshes will be refused by the document limit.
+3. An estimate can be wrong, and creating the document is the one save the platform does not
+   size-check. So never create it large: the first save holds the brief and at most ten appendix
+   entries and is itself estimated at no more than 40,000 bytes (use fewer entries if needed).
+   Every later entry is added with an insert, which the platform refuses above 102,400 bytes, so
+   the document can never grow past the limit.
+4. Before each insert, read the document's source metadata for its saved size. If that size plus
+   the next batch's estimate is above 90,000 bytes, or the platform refuses an insert as too large,
+   stop adding entries. The document stays below the limit and refreshable. Mark it **partial
+   import** and name the notes that are not in it, return its artifact ID so that no second
+   document is ever created, and report a platform blocker instead of a successful import, with
+   the saved size and the note count.
 
 ## 7. Save the one document
 
@@ -197,12 +205,13 @@ created above it could never be refreshed.
    reference, the template's revision number and content hash copied character for character from
    the metadata result, a filename such as `<Company> CRM history and context`, and the filled
    content. Keep the returned artifact ID.
-4. With more than ten notes, write the appendix in batches. Create the document with the brief
-   and entries N1–N10. Then read the document's end (`artifact.getSourceMetadata` for the line
-   count and the latest revision and hash, then `artifact.readSourceRange`) and insert the next
-   ten complete entries just before the appendix's closing tag with
-   `artifact.insertTextBeforeLine`. Repeat until every note has its own entry. The number of notes
-   or the length of the writing is never a reason to drop, group or shorten a note, or to call the
+4. With more than ten notes, or a first save that would be estimated above 40,000 bytes, write
+   the appendix in batches. Create the document with the brief and the first entries (at most
+   N1–N10, within the 40,000-byte first save in section 6). Then read the document's end
+   (`artifact.getSourceMetadata` for the line count, saved size and the latest revision and hash,
+   then `artifact.readSourceRange`) and, after the size check in section 6, insert the next ten
+   complete entries just before the appendix's closing tag with `artifact.insertTextBeforeLine`.
+   Repeat until every note has its own entry. The number of notes or the length of the writing is never a reason to drop, group or shorten a note, or to call the
    import partial. Apart from adding entries, do not rewrite or shorten the document after
    creating it.
 5. Before returning, read the saved appendix (`artifact.readSourceRange`) and check that every
@@ -255,9 +264,9 @@ the document was saved and is still being processed.
 
 - Say **complete import** only when every plausible record and every page of notes was read.
   Otherwise say **partial import** and name what is missing. Partial means the CRM did not return
-  something (a failed page or record, or note text it did not return), never that the document
-  was long to write. Never say "all history imported"
-  for a partial import.
+  something (a failed page or record, or note text it did not return), or the platform's 100 KB
+  document limit stopped the save (section 6), never that the document was long to write. Never
+  say "all history imported" for a partial import.
 - If the company cannot be identified, the CRM is not connected, access fails entirely, or the
   document cannot be saved, report that specific blocker and do not claim the task succeeded.
 - When nothing was saved, do not point the reader to a document.

@@ -401,6 +401,19 @@ class ScoringTests(unittest.TestCase):
         result = score(*first_import("fund-and-fields-unchanged", doc))
         self.assertTrue(result["passed"], failed(result))
 
+    def test_citations_must_resolve_to_appendix_entries(self):
+        ids = list(range(9001, 9010))
+        doc = good_document("rebrand-nine-notes", ids).replace("describes the company", "describes Ledgerly, now Corvane,")
+        result = score(*first_import("rebrand-nine-notes", doc.replace("[N1]", "[N999]")))
+        self.assertIn("citationsResolve", failed(result))
+        self.assertEqual(["N999"], result["info"]["citationsUnresolved"])
+        self.assertIn("citationsResolve", failed(score(*first_import("rebrand-nine-notes",
+                                                                      doc.replace("[N1]", "[N1, N10]")))))
+        self.assertIn("citationsResolve", failed(score(*first_import("rebrand-nine-notes",
+                                                                      doc.replace("[N1]", "[N8\u2013N10]")))))
+        result = score(*first_import("rebrand-nine-notes", doc.replace("[N1]", "[N1, N3\u2013N5]")))
+        self.assertTrue(result["passed"], failed(result))
+
     def test_notes_name_the_record_they_came_from(self):
         ids = list(range(9101, 9106))
         doc = good_document("secondary-record-notes", ids)
@@ -509,6 +522,12 @@ class ScoringTests(unittest.TestCase):
         rec, docs = first_import("other-import-running", good_document("other-import-running", [12101, 12102]))
         self.assertIn("noDocument", failed(score(rec, docs)))
 
+    def test_a_saved_document_above_the_update_limit_fails(self):
+        ids = list(range(9001, 9010))
+        doc = good_document("rebrand-nine-notes", ids).replace("describes the company", "describes Ledgerly, now Corvane,")
+        big = doc.replace("</article>", "<p>" + "x" * ch.MAX_TEXT_ARTIFACT_BYTES + "</p></article>")
+        self.assertIn("withinSizeLimit", failed(score(*first_import("rebrand-nine-notes", big))))
+
     def test_unsafe_html_fails(self):
         doc = good_document("no-notes", []).replace("</article>", "<script>alert(1)</script></article>")
         self.assertIn("safeHtml", failed(score(*first_import("no-notes", doc))))
@@ -523,6 +542,15 @@ class ScoringTests(unittest.TestCase):
         self.assertIn("stableRefs", failed(score(rec, {ch.EXISTING_DOCUMENT: renumbered})))
         new_doc = dict(rec, created=[{"id": "new", "tool": "project.instantiateTemplate"}])
         self.assertIn("oneDocument", failed(score(new_doc, {ch.EXISTING_DOCUMENT: doc, "new": doc})))
+        twice = dict(rec, updates=[{"id": ch.EXISTING_DOCUMENT, "ok": True}] * 2)
+        self.assertIn("oneDocument", failed(score(twice, {ch.EXISTING_DOCUMENT: doc})))
+        edited = dict(rec, lineEdits=[{"id": ch.EXISTING_DOCUMENT, "ok": True}])
+        self.assertIn("oneDocument", failed(score(edited, {ch.EXISTING_DOCUMENT: doc})))
+        edits_only = dict(rec, updates=[], lineEdits=[{"id": ch.EXISTING_DOCUMENT, "ok": True}])
+        self.assertIn("oneDocument", failed(score(edits_only, {ch.EXISTING_DOCUMENT: doc})))
+        refused_then_saved = dict(rec, updates=[{"id": ch.EXISTING_DOCUMENT, "ok": False},
+                                                {"id": ch.EXISTING_DOCUMENT, "ok": True}])
+        self.assertTrue(score(refused_then_saved, {ch.EXISTING_DOCUMENT: doc})["passed"])
 
     def test_oversize_must_save_nothing_and_name_the_limit(self):
         rec = record("over-size-limit", reply="Blocked: the full note history does not fit within the 100 KB document limit.")
