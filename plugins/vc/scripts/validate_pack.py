@@ -6956,6 +6956,10 @@ CRM_HISTORY_FORBIDDEN_DEFINITION_TEXT = ("createTextArtifact", "text/html", ".ht
 # John's #4841 scope (comment 6505641852): another open import task alone must not stop an import;
 # only a CRM history document already on the Deal does.
 CRM_HISTORY_OPEN_IMPORT_ALLOWED = "Another open CRM history import task alone is not a reason to stop"
+CRM_HISTORY_OPEN_IMPORT_ALLOWED_PHRASES = (
+    CRM_HISTORY_OPEN_IMPORT_ALLOWED,
+    "Another open import task alone is not a reason to stop",
+)
 CRM_HISTORY_OPEN_IMPORT_STOP_PATTERNS = (
     re.compile(r"\b(?:another|other)\b[^.:;]{0,60}?\bimports?\b[^.:;]{0,60}?\b(?:open|running|in progress|underway)\b", re.I),
     re.compile(r"\b(?:another|other)\s+(?:open|running)\b[^.:;]{0,40}?\bimports?\b", re.I),
@@ -7033,7 +7037,8 @@ def validate_crm_history_task_contract(
         f"`{CRM_HISTORY_SKILL_ID}`",
         "`project.instantiateTemplate`",
         "replace its whole content in one update, keeping the same artifact ID",
-        "Never create a second CRM history document for this Deal",
+        "Do not create a second CRM history document: not to work around a size, revision or update failure",
+        "these checks are not a lock, so two imports that overlap can still each create one",
         "Do not apply the living-report method",
         "Do not write to the CRM, change Deal fields",
         "`task-management.completeTask`",
@@ -7149,7 +7154,9 @@ def validate_crm_history_task_contract(
         ("CRM history task definition", json.dumps(definition_json)),
         ("CRM history task guide", crm_history_task_doc),
     ]:
-        normalized = " ".join(text.split()).replace(CRM_HISTORY_OPEN_IMPORT_ALLOWED, "")
+        normalized = " ".join(text.split())
+        for allowed in CRM_HISTORY_OPEN_IMPORT_ALLOWED_PHRASES:
+            normalized = normalized.replace(allowed, "")
         if any(pattern.search(normalized) for pattern in CRM_HISTORY_OPEN_IMPORT_STOP_PATTERNS):
             fail(f"{label} must not stop an import because another import is open (#4841 scope)")
 

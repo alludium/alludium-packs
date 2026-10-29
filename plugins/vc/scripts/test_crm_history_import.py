@@ -101,7 +101,7 @@ class CrmHistoryImportContractTests(unittest.TestCase):
             ["crm_history_artifact_id"],
         )
         task = read_yaml(SOURCE_ROOT / TASK)
-        self.assertEqual(task["version"], "1.0.3")
+        self.assertEqual(task["version"], "1.0.4")
         self.assertFalse(task["runtime"]["executionProfile"]["requiresHumanConfirmationToComplete"])
 
     # Task definition ------------------------------------------------------------------------
@@ -159,7 +159,12 @@ class CrmHistoryImportContractTests(unittest.TestCase):
 
     def test_rejects_instructions_that_allow_a_second_document(self) -> None:
         self._assert_rejected(
-            self._edit_text(TASK, "Never create a second CRM history document for this Deal.", "")
+            self._edit_text(TASK, "Do not create a second CRM history document: not to work around a size, revision or update failure,", "")
+        )
+
+    def test_rejects_instructions_that_hide_the_overlap_limitation(self) -> None:
+        self._assert_rejected(
+            self._edit_text(TASK, " Another open import task alone is not a reason to stop; these checks are not a lock, so two imports that overlap can still each create one.", "")
         )
 
     # Project type ---------------------------------------------------------------------------
