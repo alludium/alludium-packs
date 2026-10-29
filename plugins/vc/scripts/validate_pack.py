@@ -7155,6 +7155,8 @@ def validate_crm_history_task_contract(
         # #4841 Dev run: an interaction filter hid the company's notes-only record, and a near match
         # with another domain was imported as complete.
         "Never set `withInteractionDates`",
+        "`withInteractionPersons`",
+        "Being the only search result does not make a record a match",
         "a record whose domain differs from the company's known domain",
         "Never call this a complete import",
         "Cite notes only for what notes say",

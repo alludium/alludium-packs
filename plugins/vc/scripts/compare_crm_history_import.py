@@ -55,7 +55,8 @@ CRM_TEMPLATE_ID = "vc.document.deal_pipeline_crm_history_template"
 POINTER = "crm_history_artifact_id"
 WORKTREE = "WORKTREE"
 
-GLOBAL_ASSERTIONS = ["allTurnsComplete", "noInvalidToolCalls", "noAffinityWrites", "noFieldWrites", "noStageMove"]
+GLOBAL_ASSERTIONS = ["allTurnsComplete", "noInvalidToolCalls", "noAffinityWrites", "noInteractionFilter", "noFieldWrites",
+                     "noStageMove"]
 # Streamed subject calls: the final events carry the full response; a read waits at most this long.
 STREAM_FINAL_EVENTS = {"response.completed", "response.incomplete"}
 STREAM_READ_TIMEOUT_SECONDS = 120
@@ -514,6 +515,7 @@ class CrmSimulator:
         self.line_edits: list[dict] = []
         self.affinity_writes: list[dict] = []
         self.affinity_reads: list[dict] = []
+        self.interaction_filter_searches: list[dict] = []
         self.field_writes: list[dict] = []
         self.stage_moves: list[dict] = []
         self.tasks_created: list[dict] = []
@@ -597,6 +599,7 @@ class CrmSimulator:
             found = [c for c in self.companies.values()
                      if not term or any(term in h.lower() for h in [c["name"], *c.get("domains", [])])]
             if args.get("withInteractionDates") or args.get("withInteractionPersons"):
+                self.interaction_filter_searches.append({"turn": self.turn, "input": args})
                 # Observed on live Affinity (#4841 Dev run): either flag drops companies with no
                 # interactions, so a record holding only notes disappears from the results.
                 found = [c for c in found if c.get("hasInteractions", True)]
@@ -1178,6 +1181,7 @@ def finish_attempt(frozen: dict, record: dict, folder: Path, simulator: CrmSimul
                                  for d in simulator.documents.values()},
                    "created": simulator.created, "updates": simulator.updates, "lineEdits": simulator.line_edits,
                    "affinityWrites": simulator.affinity_writes, "affinityReads": len(simulator.affinity_reads),
+                   "interactionFilterSearches": simulator.interaction_filter_searches,
                    "fieldWrites": simulator.field_writes, "stageMoves": simulator.stage_moves,
                    "tasksCreated": simulator.tasks_created, "taskSaves": simulator.task_saves,
                    "questions": simulator.questions, "skillsActivated": simulator.skills_activated,
@@ -1297,6 +1301,8 @@ def score(frozen: dict, record: dict, documents: dict[str, str]) -> dict:
         "allTurnsComplete": all(turn["complete"] for turn in record["turns"]) and record["status"] == "completed",
         "noInvalidToolCalls": not any(call["error"] in INVALID_CALL_ERRORS for call in calls),
         "noAffinityWrites": not record["affinityWrites"],
+        # An interaction filter hides companies whose record holds only notes (#4841 Dev run).
+        "noInteractionFilter": not record.get("interactionFilterSearches"),
         "noFieldWrites": not record["fieldWrites"],
         "noStageMove": not record["stageMoves"],
     }

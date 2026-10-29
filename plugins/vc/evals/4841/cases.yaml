@@ -274,7 +274,8 @@ cases:
           description: Interior design studio for boutique hotels.
           notes:
             - - {id: 12401, author: Ana Lee, date: "2025-04-08T10:00:00Z", html: "<p>Fernway Studio pitched a hotel fit-out marketplace. Not venture-scale.</p>"}
-        - {id: 503202, name: Fern, domain: fern.example, domains: [fern.example], description: Houseplant delivery., notes: [[]]}
+        # Same name, another domain, nothing else to tell them apart: the live orchid.ac decoy.
+        - {id: 503202, name: Fernway, domain: fernwayhq.example, domains: [fernwayhq.example], description: null, notes: [[]]}
 
   - id: domain-as-name-no-interactions
     kind: import

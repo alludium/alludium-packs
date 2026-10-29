@@ -112,7 +112,7 @@ class AffinitySimulatorTests(unittest.TestCase):
     def test_a_similar_name_with_another_domain_is_the_only_search_result(self):
         simulator = sim("similar-name-other-domain")
         data, _ = simulator.handle("affinity_search_companies", {"term": "Fernway"})
-        self.assertEqual([c["id"] for c in json.loads(data)["companies"]], [503201])
+        self.assertEqual([c["id"] for c in json.loads(data)["companies"]], [503201, 503202])
         data, _ = simulator.handle("affinity_search_companies", {"term": "fernway.example"})
         self.assertEqual(json.loads(data)["companies"], [])
 
@@ -465,11 +465,37 @@ class ScoringTests(unittest.TestCase):
         self.assertTrue(score(*first_import("profile-people-labelled", doc))["passed"])
         labelled = doc.replace("</section>", "<p>Affinity's company profile lists Hanna Voss and Jonas Pell.</p></section>", 1)
         self.assertTrue(score(*first_import("profile-people-labelled", labelled))["passed"])
+        separate = doc.replace("</section>", "<p>Affinity's company profile lists Hanna Voss; the notes report "
+                               "30 sites [N1].</p></section>", 1)
+        self.assertTrue(score(*first_import("profile-people-labelled", separate))["passed"])
         for claim in ("<p>The notes name Hanna Voss as a founder.</p>",
                       "<p>The team includes Jonas Pell [N2].</p>"):
             wrong = doc.replace("</section>", claim + "</section>", 1)
             self.assertTrue([k for k in failed(score(*first_import("profile-people-labelled", wrong)))
                              if k.startswith("documentForbidden:")], claim)
+
+    def test_an_interaction_filtered_search_fails_every_case(self):
+        doc = good_document("domain-as-name-no-interactions", [12601])
+        rec, docs = first_import("domain-as-name-no-interactions", doc)
+        self.assertTrue(score(rec, docs)["passed"], failed(score(rec, docs)))
+        rec["interactionFilterSearches"] = [{"turn": 1, "input": {"term": "tallowmere", "withInteractionDates": True}}]
+        self.assertIn("noInteractionFilter", failed(score(rec, docs)))
+
+    def test_profile_regexes_allow_correct_statements(self):
+        doc = good_document("profile-people-labelled", [12501, 12502])
+        for claim in ("<p>No retrieved note mentions Hanna Voss or Jonas Pell; Affinity's company profile lists them.</p>",
+                      "<p>The notes say nothing about the team; Affinity's company profile lists Hanna Voss.</p>"):
+            ok = doc.replace("</section>", claim + "</section>", 1)
+            self.assertTrue(score(*first_import("profile-people-labelled", ok))["passed"], claim)
+        wrong = doc.replace("</section>", "<p>Jonas Pell is CTO [N1, N2].</p></section>", 1)
+        self.assertTrue([k for k in failed(score(*first_import("profile-people-labelled", wrong)))
+                         if k.startswith("documentForbidden:")])
+
+    def test_blocked_reply_phrasings(self):
+        for reply in ("I was unable to find Fernway in Affinity.", "I wasn't able to confidently identify Fernway.",
+                      "None of the Affinity records matches Fernway."):
+            rec = record("similar-name-other-domain", reply=reply)
+            self.assertTrue(score(rec, {})["passed"], reply)
 
     def test_importing_a_near_match_fails_the_blocked_case(self):
         rec = record("similar-name-other-domain",

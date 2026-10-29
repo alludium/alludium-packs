@@ -57,9 +57,10 @@ ID or link is a starting point, not proof that it is the only relevant record.
 
 1. Search the selected CRM by the company's name and, when known, its domain. Read every page of
    every search until it reports no more results: a common name can return many pages, and the
-   company's record may be on a later one. Collect every plausible record across all pages.
-2. If no result has the company's known domain or exactly its name, search a few variants before
-   deciding: the name without a legal suffix such as "Ltd" or "GmbH"; for a name that is a domain,
+   company's record may be on a later one. Collect every plausible record across all pages. If a
+   search page fails, retry it once. If it still fails, the results after it are unread: say so in
+   Import coverage, and do not call the import complete (section 8).
+2. If no result matches as described in step 4, search a few variants before deciding: the name without a legal suffix such as "Ltd" or "GmbH"; for a name that is a domain,
    the name with its dot as a space ("Orchid AI"), without the dot ("orchidai") and the part
    before the dot ("orchid"); and the domain alone. Read every page of each. Stop as soon as a
    record matches as described in step 4.
@@ -68,17 +69,23 @@ ID or link is a starting point, not proof that it is the only relevant record.
 4. Decide record by record whether it describes this company. Use what the search results and
    company records show (domain, known IDs, location, people named on the record) and what the
    notes describe. Do not open person records to decide.
+   Compare domains ignoring case, `www.` and the web address scheme, and check every domain the
+   record lists, not only its main one.
    - **Match:** the record has the company's known domain. Records that share it are the same
      company, even when one has no notes or a slightly different name, unless their notes describe
-     a different business. With no known domain, a record matches when its name is the company's
-     name (ignoring case and legal suffixes) and nothing on it points to another business.
+     a different business. With no known domain, or for a record with no domain, a record matches
+     when its name is the company's name (ignoring case and legal suffixes) and nothing on it
+     points to another business. A record the task supplied as the company's known CRM record
+     matches unless its notes describe a different business.
    - **Not a match:** a record whose domain differs from the company's known domain is another
-     company, unless its own notes say it is this company under an earlier name or domain. A
-     rebrand, an old trading name or an older enrichment entry can explain such a difference only
-     when the records or notes show it.
+     company, unless the records or notes show it is this company under another name or domain,
+     earlier or later, such as a rebrand or an old trading name.
    - A similar name alone never justifies using or combining a record: "Orchid" or "Orchid Studio"
-     is not `orchid.ai` without a matching domain or notes that tie them together. Being the only
-     search result does not make a record a match.
+     is not `orchid.ai` without a matching domain or records or notes that tie them together.
+     Being the only search result does not make a record a match.
+   - When records match by name only and their domains differ from each other, they are not known
+     to be the same company: ask as in step 7. After a match by name only, also search by that
+     record's domain, so a record of the same company under another name is not missed.
 5. Use every record that matches. Record the ones you set aside, with the reason, in Import
    coverage.
 6. If no record matches, the import is **blocked**: the company could not be confidently found in
@@ -287,8 +294,11 @@ the document was saved and is still being processed.
 
 ## 8. Report truthfully
 
-- Say **complete import** only when the company's records were matched as in section 2 and every
-  plausible record and every page of notes was read.
+- Say **complete import** only when the company's records were matched as in section 2, every
+  search page was read, and every plausible record and every page of notes was read. A record
+  matched before a search page failed can still be imported, as a partial import that names the
+  unread search results. If no record matched and a search page could not be read, the import is
+  blocked: say the CRM search could not be completed, not that the company has no record.
   Otherwise say **partial import** and name what is missing. Partial means the CRM did not return
   something (a failed page or record, or note text it did not return), or the platform's 100 KB
   document limit stopped the save (section 6), never that the document was long to write. Never
@@ -299,7 +309,7 @@ the document was saved and is still being processed.
 - When the import is blocked, or waits for an answer to a question you asked, also tell the Deal
   Manager, so the Deal's chat can explain it later: send one `project.sendManagerMessage` with
   purpose `attention_required`, `relatedTaskId` set to this task's ID, and an idempotency key made
-  of `crm-history-blocked`, this task's ID and one word for the blocker, such as `no-record`. In
+  of `crm-history-blocked`, this task's ID and one word for the blocker, such as `no-match`. In
   one or two plain sentences say that the CRM history import stopped, why, and what the person can
   do, for example check the company name or add the record in the CRM and then ask again. Send it
   once per blocker. Never send it for a complete or partial import.
