@@ -101,7 +101,7 @@ class CrmHistoryImportContractTests(unittest.TestCase):
             ["crm_history_artifact_id"],
         )
         task = read_yaml(SOURCE_ROOT / TASK)
-        self.assertEqual(task["version"], "1.0.2")
+        self.assertEqual(task["version"], "1.0.3")
         self.assertFalse(task["runtime"]["executionProfile"]["requiresHumanConfirmationToComplete"])
 
     # Task definition ------------------------------------------------------------------------
@@ -120,9 +120,10 @@ class CrmHistoryImportContractTests(unittest.TestCase):
 
         self._assert_rejected(self._edit_yaml(TASK, change))
 
-    def test_rejects_an_import_without_the_one_open_task_policy(self) -> None:
+    def test_rejects_an_import_with_a_task_instance_policy(self) -> None:
         def change(task: dict[str, Any]) -> None:
-            del task["definition"]["definitionJson"]["activeInstancePolicy"]
+            task["definition"]["definitionJson"]["activeInstancePolicy"] = {
+                "scope": "project", "maxActiveInstances": 1, "onConflict": "return_existing"}
 
         self._assert_rejected(self._edit_yaml(TASK, change))
 

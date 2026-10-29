@@ -7034,12 +7034,8 @@ def validate_crm_history_task_contract(
     ]:
         if phrase not in execution_instructions:
             fail(f"vc_deal_pipeline CRM history task {slug} instructions are missing: {phrase}")
-    if definition_json.get("activeInstancePolicy") != {
-        "scope": "project",
-        "maxActiveInstances": 1,
-        "onConflict": "return_existing",
-    }:
-        fail(f"vc_deal_pipeline CRM history task {slug} must keep one open import per Deal and return it")
+    if "activeInstancePolicy" in definition_json:
+        fail(f"vc_deal_pipeline CRM history task {slug} must not change the task-instance policy (#4841 scope)")
     if instructions.get("humanConfirmationPolicy") != "never":
         fail(f"vc_deal_pipeline CRM history task {slug} must complete without human confirmation")
     execution_profile = (task_template.get("runtime") or {}).get("executionProfile") or {}

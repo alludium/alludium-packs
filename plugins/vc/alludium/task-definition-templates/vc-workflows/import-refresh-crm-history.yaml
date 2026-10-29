@@ -1,7 +1,7 @@
 kind: task-definition-template
 apiVersion: alludium/v1alpha1
 id: vc.import_refresh_crm_history
-version: 1.0.2
+version: 1.0.3
 title: Import or Refresh CRM History
 category: Venture Capital
 visibility: workspace
@@ -24,7 +24,6 @@ definition:
     recommendedAgentTemplate: vc_deal_analyst
     supportedProjectTypes: [vc_deal_pipeline]
     supportedProjectScopes: [project_instance]
-    activeInstancePolicy: {scope: project, maxActiveInstances: 1, onConflict: return_existing}
     instructions:
       executionInstructions: >-
         Activate and apply the `import-crm-history` skill. It owns the method: identifying the company's CRM records, reading every page of notes, preserving each retrieved note's full text, writing the company and relationship brief, checking the document size, and creating or refreshing the one CRM history document. Use the CRM-history template named in `definitionJson.documentRefs` as the document structure, and the citation style guide for references.
