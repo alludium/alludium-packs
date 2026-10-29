@@ -6379,7 +6379,8 @@ def validate_vc_deal_pipeline_contract() -> None:
         "create exactly one new project-shared",
         "Earlier reports are immutable task evidence",
         "never call a text-artifact update tool on it",
-        "earlier versions of that same report",
+        "the role `previous report`",
+        "create one corrected complete report and save that instead",
         "This lifecycle applies to living reports, not to a per-meeting brief or summary.",
     ]:
         if phrase not in living_report_skill:
