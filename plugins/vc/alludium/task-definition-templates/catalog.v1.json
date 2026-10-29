@@ -107,7 +107,9 @@
         "vc-integrations/apify-sync-read.yaml",
         "vc-integrations/companies-house-setup.yaml",
         "vc-integrations/companies-house-discovery.yaml",
-        "vc-integrations/companies-house-sync-read.yaml"
+        "vc-integrations/companies-house-sync-read.yaml",
+        "vc-workflows/prepare-pipeline-meeting.yaml",
+        "vc-workflows/summarize-pipeline-meeting.yaml"
       ],
       "title": "VC Workflows",
       "verticalKeys": [
