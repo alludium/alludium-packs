@@ -321,7 +321,8 @@ cases:
   - id: other-import-running
     kind: import
     # Another import of this Deal is still running and has already created its document, but has not
-    # completed, so the Deal's CRM history field is still empty.
+    # completed, so the Deal's CRM history field is still empty. The import stops because of that
+    # document, not because the other task is open.
     deal: {name: Quillstone, organisation: {name: Quillstone, domain: quillstone.example}, openCrmTask: true,
            otherImportDocument: true}
     affinity:
@@ -334,6 +335,22 @@ cases:
           notes:
             - - {id: 12101, author: Ana Lee, date: "2025-05-06T10:00:00Z", html: "<p>Intro call. Contract analytics for insurance brokers; 4 broker pilots.</p>"}
               - {id: 12102, author: Ana Lee, date: "2025-08-19T10:00:00Z", html: "<p>Two pilots converted to annual contracts.</p>"}
+
+  - id: other-import-open-no-document
+    kind: import
+    # Another import task of this Deal is open but has saved no document. An open task alone is not a
+    # reason to stop (#4841 scope), so this import goes ahead and creates the one document.
+    deal: {name: Tessaline, organisation: {name: Tessaline, domain: tessaline.example}, openCrmTask: true}
+    affinity:
+      companies:
+        - id: 502051
+          name: Tessaline
+          domain: tessaline.example
+          domains: [tessaline.example]
+          description: Shift scheduling for veterinary clinics.
+          notes:
+            - - {id: 12151, author: Ana Lee, date: "2025-04-09T10:00:00Z", html: "<p>First call. Shift scheduling for veterinary clinics; 30 clinics live.</p>"}
+              - {id: 12152, author: Ana Lee, date: "2025-09-02T10:00:00Z", html: "<p>Now 52 clinics; raising a €1.5m seed in Q1 2026.</p>"}
 
   - id: large-history-fits
     kind: import

@@ -516,11 +516,23 @@ class ScoringTests(unittest.TestCase):
         kept = doc.replace("</article>", ch.COLLEAGUE_EDIT + "</article>")
         self.assertTrue(score(rec, {ch.EXISTING_DOCUMENT: kept})["passed"], failed(score(rec, {ch.EXISTING_DOCUMENT: kept})))
 
-    def test_a_second_import_must_not_save_while_another_runs(self):
-        rec = record("other-import-running", reply="Another CRM history import is already running for this Deal.")
+    def test_an_import_stops_when_a_crm_history_document_already_exists(self):
+        rec = record("other-import-running", reply="This Deal already has a CRM history document, so the initial "
+                     "import is blocked. Ask for a refresh to update it.")
         self.assertTrue(score(rec, {})["passed"], failed(score(rec, {})))
         rec, docs = first_import("other-import-running", good_document("other-import-running", [12101, 12102]))
         self.assertIn("noDocument", failed(score(rec, docs)))
+
+    def test_another_open_import_task_alone_does_not_block_an_import(self):
+        blocked = record("other-import-open-no-document", reply="Another CRM history import is already running for this Deal.")
+        self.assertFalse(score(blocked, {})["passed"])
+        rec, docs = first_import("other-import-open-no-document", good_document("other-import-open-no-document", [12151, 12152]))
+        self.assertTrue(score(rec, docs)["passed"], failed(score(rec, docs)))
+
+    def test_an_open_import_task_without_a_document_is_visible(self):
+        context, _ = sim("other-import-open-no-document").handle("project.getAgentContext", {"projectId": ch.PROJECT})
+        self.assertEqual([t["slug"] for t in context["project"]["openTasks"]], [ch.CRM_SLUG])
+        self.assertEqual(context["project"]["documents"], [])
 
     def test_a_saved_document_above_the_update_limit_fails(self):
         ids = list(range(9001, 9010))

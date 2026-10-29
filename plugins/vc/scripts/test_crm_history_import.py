@@ -268,6 +268,16 @@ class CrmHistoryImportContractTests(unittest.TestCase):
             self._edit_text(SKILL, "The one exception is this task's own earlier document", "There is no exception")
         )
 
+    def test_rejects_a_skill_that_stops_because_another_import_is_open(self) -> None:
+        self._assert_rejected(
+            self._edit_text(
+                SKILL,
+                "if the Deal now has a CRM history document set, or if",
+                "if the Deal now has a CRM history document set, if another CRM history import task for this\n"
+                "   Deal is still open, or if",
+            )
+        )
+
     def test_rejects_a_skill_that_hides_a_blocker_from_the_manager(self) -> None:
         self._assert_rejected(
             self._edit_text(

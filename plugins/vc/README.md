@@ -5,7 +5,7 @@
 Public VC workflow plugin and pack seed for [Alludium](https://www.alludium.ai).
 
 Version `0.6.44` adds the Import or Refresh CRM History task (`vc.import_refresh_crm_history`
-1.0.0) and the CRM-neutral `import-crm-history` skill to `vc_deal_pipeline` 1.0.10. When a human
+1.0.3) and the CRM-neutral `import-crm-history` skill to `vc_deal_pipeline` 1.0.10. When a human
 asks the Deal Manager to import or refresh a company's CRM history, the Deal Analyst reads the
 CRM read-only and saves one CRM history and context document: a cited company and relationship
 brief followed by the full text of every retrieved note and an import-coverage table. The new

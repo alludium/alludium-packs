@@ -176,8 +176,8 @@ created above it could never be refreshed.
 4. Before each insert, read the document's source metadata for its saved size. If that size plus
    the next batch's estimate is above 90,000 bytes, or the platform refuses an insert as too large,
    stop adding entries. The document stays below the limit and refreshable. Mark it **partial
-   import** and name the notes that are not in it, return its artifact ID so that no second
-   document is ever created, and report a platform blocker instead of a successful import, with
+   import** and name the notes that are not in it, return its artifact ID so this task does not
+   create another document, and report a platform blocker instead of a successful import, with
    the saved size and the note count.
 
 ## 7. Save the one document
@@ -188,11 +188,13 @@ created above it could never be refreshed.
    number and content hash.
 2. Just before creating, read the Deal's current state again with a tool call
    (`project.getAgentContext`), not the context you started with. Stop without creating anything
-   if the Deal now has a CRM history document set, if another CRM history import task for this
-   Deal is still open, or if the Deal's documents already include a CRM history document. Report
-   that another import is running or has already saved a CRM history document, and suggest a
-   refresh once it has finished. Do not create a second one. This is a blocked result: nothing
-   was imported or refreshed, so do not save task output or say that the history was imported.
+   if the Deal now has a CRM history document set, or if the Deal's documents already include a
+   CRM history document. Report that the Deal already has a CRM history document and that the
+   initial import is blocked, and suggest a refresh, which updates that document. Do not create a
+   second one. This is a blocked result: nothing was imported or refreshed, so do not save task
+   output or say that the history was imported.
+   Another open CRM history import task alone is not a reason to stop: with no CRM history
+   document on the Deal, continue and create it.
    Never update a CRM history document found this way: a refresh may only update the document
    the task supplied as the existing CRM history document.
    The one exception is this task's own earlier document: one named in this task's saved output,

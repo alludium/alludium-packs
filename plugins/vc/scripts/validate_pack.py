@@ -6953,6 +6953,13 @@ CRM_HISTORY_TEMPLATE_SECTIONS = (
 # Platform rejects project.instantiateTemplate for a task whose definition names the text-artifact
 # create tool together with the HTML MIME type and extension, so keep all three out of it.
 CRM_HISTORY_FORBIDDEN_DEFINITION_TEXT = ("createTextArtifact", "text/html", ".html")
+# John's #4841 scope (comment 6505641852): another open import task alone must not stop an import;
+# only a CRM history document already on the Deal does.
+CRM_HISTORY_OPEN_IMPORT_ALLOWED = "Another open CRM history import task alone is not a reason to stop"
+CRM_HISTORY_OPEN_IMPORT_STOP_PATTERNS = (
+    re.compile(r"\b(?:another|other)\b[^.:;]{0,60}?\bimports?\b[^.:;]{0,60}?\b(?:open|running|in progress|underway)\b", re.I),
+    re.compile(r"\b(?:another|other)\s+(?:open|running)\b[^.:;]{0,40}?\bimports?\b", re.I),
+)
 
 
 def validate_crm_history_task_contract(
@@ -7131,9 +7138,20 @@ def validate_crm_history_task_contract(
         "Never use a smaller limit",
         "The one exception is this task's own earlier document",
         "purpose `attention_required`, `relatedTaskId` set to this task's ID",
+        CRM_HISTORY_OPEN_IMPORT_ALLOWED,
     ]:
         if phrase not in skill:
             fail(f"import-crm-history skill is missing rule: {phrase}")
+    # #4841 scope: only an existing CRM history document blocks a first import, never another open task.
+    crm_history_task_doc = (ROOT / "tasks" / "import-refresh-crm-history.md").read_text(encoding="utf-8")
+    for label, text in [
+        ("import-crm-history skill", skill),
+        ("CRM history task definition", json.dumps(definition_json)),
+        ("CRM history task guide", crm_history_task_doc),
+    ]:
+        normalized = " ".join(text.split()).replace(CRM_HISTORY_OPEN_IMPORT_ALLOWED, "")
+        if any(pattern.search(normalized) for pattern in CRM_HISTORY_OPEN_IMPORT_STOP_PATTERNS):
+            fail(f"{label} must not stop an import because another import is open (#4841 scope)")
 
     analyst_metadata = analyst.get("metadata") or {}
     analyst_skills = {entry.get("externalId"): entry.get("activationMode") for entry in analyst.get("skills") or []}
