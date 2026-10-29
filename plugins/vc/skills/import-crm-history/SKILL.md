@@ -66,10 +66,16 @@ ID or link is a starting point, not proof that it is the only relevant record.
    combining two companies.
 4. Use every record that is this company. Record the ones you set aside, with the reason, in
    Import coverage.
-5. If the evidence conflicts and you cannot tell which record is the Deal's company, do not guess.
+5. If no record matches, the import is **blocked**. Search by the company name, by the name
+   without a legal suffix such as "Ltd" or "GmbH", and by the domain when known. If none returns
+   a plausible record, create no document, save no task output and do not request completion.
+   Report that the CRM has no record for this company and suggest checking the company name or
+   adding the record in the CRM. Never list or page through all CRM companies to look for it, and
+   never write a document that only says no record was found.
+6. If the evidence conflicts and you cannot tell which record is the Deal's company, do not guess.
    Ask one focused question that lists the candidates by name, domain and record ID, and save
    nothing until it is answered. Do not ask when the records clearly describe the same company.
-6. Also find the company's opportunity or deal records in the CRM, when the CRM exposes them, and
+7. Also find the company's opportunity or deal records in the CRM, when the CRM exposes them, and
    read their notes too.
 
 ## 3. Read the full history
@@ -77,6 +83,9 @@ ID or link is a starting point, not proof that it is the only relevant record.
 - Read company notes and relevant opportunity notes page by page until the CRM reports no more
   pages. Never stop at the first page.
 - Count a note once, by its CRM note ID, even when it is attached to several records.
+- Right after each notes read, write down the record ID you passed to it and the note IDs it
+  returned. That pairing, not the record you had in mind, is each note's source record. A read
+  that returned no notes gives its record no notes.
 - If a page or record fails, retry it once. If it still fails, keep everything already retrieved,
   continue with the rest, and mark the import **partial**, naming what is missing.
 - If the CRM returns a note without its text (for example because it is too large for the
@@ -184,7 +193,8 @@ created above it could never be refreshed.
    import partial. Apart from adding entries, do not rewrite or shorten the document after
    creating it.
 5. Before returning, read the saved appendix (`artifact.readSourceRange`) and check that every
-   retrieved note ID has one entry with its full text. Add any missing entry. Do not finish while a
+   retrieved note ID has one entry with its full text and the record ID from its notes read.
+   Add any missing entry and correct any wrong record ID. Do not finish while a
    retrieved note has no entry, and make the document's complete/partial label and your reply say
    the same thing.
 
@@ -246,7 +256,7 @@ Use the connected Affinity tools, read-only. Check the tool list and parameters 
 run rather than assuming them; the steps below match the Affinity connector's read tools.
 
 - **Search:** `affinity_search_companies` with `term` set to the company name, then to the domain
-  when known. Set `withOpportunities: true` to get each company's opportunity IDs. While `hasMore`
+  when known. Always pass a `term`: never call it without one to list all companies. Set `withOpportunities: true` to get each company's opportunity IDs. While `hasMore`
   is true, pass the returned page token (`nextPageToken`, or `next_page_token`) back as `pageToken`.
 - **Company record:** `affinity_get_company` with `companyId`. Add `fieldTypes: ["enriched"]`
   when profile context (description, location, funding) is useful.

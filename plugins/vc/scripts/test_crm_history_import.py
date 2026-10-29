@@ -228,6 +228,16 @@ class CrmHistoryImportContractTests(unittest.TestCase):
     def test_rejects_a_skill_without_the_partial_import_rule(self) -> None:
         self._assert_rejected(self._edit_text(SKILL, "mark the import **partial**", "carry on"))
 
+    def test_rejects_a_skill_that_imports_without_a_matching_record(self) -> None:
+        self._assert_rejected(
+            self._edit_text(SKILL, "If no record matches, the import is **blocked**", "If no record matches, carry on")
+        )
+
+    def test_rejects_a_skill_without_the_note_source_pairing(self) -> None:
+        self._assert_rejected(
+            self._edit_text(SKILL, "That pairing, not the record you had in mind, is each note's source record", "")
+        )
+
     # Agents ---------------------------------------------------------------------------------
 
     def test_rejects_an_always_on_living_report_skill(self) -> None:
