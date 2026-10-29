@@ -261,6 +261,13 @@ the document was saved and is still being processed.
 - If the company cannot be identified, the CRM is not connected, access fails entirely, or the
   document cannot be saved, report that specific blocker and do not claim the task succeeded.
 - When nothing was saved, do not point the reader to a document.
+- When the import is blocked, or waits for an answer to a question you asked, also tell the Deal
+  Manager, so the Deal's chat can explain it later: send one `project.sendManagerMessage` with
+  purpose `attention_required`, `relatedTaskId` set to this task's ID, and an idempotency key made
+  of `crm-history-blocked`, this task's ID and one word for the blocker, such as `no-record`. In
+  one or two plain sentences say that the CRM history import stopped, why, and what the person can
+  do, for example check the company name or add the record in the CRM and then ask again. Send it
+  once per blocker. Never send it for a complete or partial import.
 - Use plain investor-facing language. Do not name internal field keys, tools or processing steps.
 
 ## Affinity

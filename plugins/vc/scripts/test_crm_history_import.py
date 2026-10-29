@@ -101,7 +101,7 @@ class CrmHistoryImportContractTests(unittest.TestCase):
             ["crm_history_artifact_id"],
         )
         task = read_yaml(SOURCE_ROOT / TASK)
-        self.assertEqual(task["version"], "1.0.1")
+        self.assertEqual(task["version"], "1.0.2")
         self.assertFalse(task["runtime"]["executionProfile"]["requiresHumanConfirmationToComplete"])
 
     # Task definition ------------------------------------------------------------------------
@@ -265,6 +265,15 @@ class CrmHistoryImportContractTests(unittest.TestCase):
     def test_rejects_a_skill_that_cannot_resume_its_own_document(self) -> None:
         self._assert_rejected(
             self._edit_text(SKILL, "The one exception is this task's own earlier document", "There is no exception")
+        )
+
+    def test_rejects_a_skill_that_hides_a_blocker_from_the_manager(self) -> None:
+        self._assert_rejected(
+            self._edit_text(
+                SKILL,
+                "purpose `attention_required`, `relatedTaskId` set to this task's ID",
+                "purpose `status_update`",
+            )
         )
 
     def test_rejects_a_skill_that_allows_another_create_tool(self) -> None:

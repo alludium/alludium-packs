@@ -7134,6 +7134,7 @@ def validate_crm_history_task_contract(
         "Create the document once, only with `project.instantiateTemplate`",
         "Never use a smaller limit",
         "The one exception is this task's own earlier document",
+        "purpose `attention_required`, `relatedTaskId` set to this task's ID",
     ]:
         if phrase not in skill:
             fail(f"import-crm-history skill is missing rule: {phrase}")
@@ -7169,6 +7170,7 @@ def validate_crm_history_task_contract(
         "stays a read-only answer and does not start an import",
         "Its contents are dated CRM history",
         "Only when its status is running is the import underway",
+        "using the reason the Deal Analyst sent about that task",
     ]:
         if phrase not in manager_prompt:
             fail(f"Deal Manager prompt is missing CRM history routing: {phrase}")
