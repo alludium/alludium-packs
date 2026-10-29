@@ -187,6 +187,10 @@ created above it could never be refreshed.
    was imported or refreshed, so do not save task output or say that the history was imported.
    Never update a CRM history document found this way: a refresh may only update the document
    the task supplied as the existing CRM history document.
+   The one exception is this task's own earlier document: one named in this task's saved output,
+   or one created earlier in this task's own chat, when an earlier run of this same task stopped
+   before finishing. Do not stop or create another: continue with that document as the existing
+   CRM history document, following the Refresh steps below, and return its artifact ID.
 3. Create the document once, only with `project.instantiateTemplate`. Never create it with
    `artifact.createTextArtifact` or any other tool, and never create a second document after one
    was created or saved as this task's output. Use the template's document

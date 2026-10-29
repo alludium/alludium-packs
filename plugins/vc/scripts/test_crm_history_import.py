@@ -130,8 +130,8 @@ class CrmHistoryImportContractTests(unittest.TestCase):
         self._assert_rejected(
             self._edit_text(
                 MANAGER,
-                "start that open task again instead of creating another",
-                "create a new task",
+                "Only when its status is running is the import underway",
+                "Any open import is underway",
             )
         )
 
@@ -260,6 +260,11 @@ class CrmHistoryImportContractTests(unittest.TestCase):
                 "Do not read person records, person notes, lists, list entries or field definitions",
                 "Also read person records and lists",
             )
+        )
+
+    def test_rejects_a_skill_that_cannot_resume_its_own_document(self) -> None:
+        self._assert_rejected(
+            self._edit_text(SKILL, "The one exception is this task's own earlier document", "There is no exception")
         )
 
     def test_rejects_a_skill_that_allows_another_create_tool(self) -> None:
