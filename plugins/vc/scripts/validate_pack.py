@@ -1088,8 +1088,9 @@ UNSCOPED_CRM_WRITE_PATTERNS = (
 
 
 # A refresh creates a new report because task-run report sources are immutable (#5056). Archived
-# Deals admit no new task work and have no reopen path (#4646, #5039). A populated-field suggestion
-# names both values and asks, so a user "yes" is an explicit request (#4394 rule 3).
+# Deals admit no new task work; the Pipeline Manager can restore them (#4646, #5039, #5091). A
+# populated-field suggestion names both values and asks, so a user "yes" is an explicit request
+# (#4394 rule 3).
 PIPELINE_FIELD_SUGGESTION_QUESTION = "Want me to update it?"
 PIPELINE_REFRESH_RULES = {
     "vc_deal_analyst": (
@@ -1104,8 +1105,9 @@ STALE_REFRESH_PHRASES = ("updated in place", "same logical artifact", "keep its 
 ARCHIVED_DEAL_RULES = (
     "An archived Deal admits no new task work.",
     "say plainly that the Deal is archived and new task work isn't allowed on it",
-    "Do not tell the human to reopen, restore or unarchive it.",
-    "create a new Deal for the correct Organisation, or do the work on an active Deal",
+    "You cannot restore it yourself.",
+    "ask the Pipeline Manager in workspace Chat to restore it",
+    "or do the work on an active Deal",
 )
 PIPELINE_SUGGESTION_TASKS = (
     "generate-refresh-screening-report",
@@ -2085,6 +2087,11 @@ def validate_fund_routing_contract() -> None:
         "updatedArtifactCount": 0,
         "createsProjectSharedArtifact": True,
         "writesEvidenceBasisManifest": True,
+        "refusedSaveCorrection": {
+            "maxCorrectedReports": 1,
+            "editsRefusedReport": False,
+            "refusedReportManifestRole": "previous report",
+        },
     }
     if (first_report_fixture.get("expected") or {}) != expected_first_report_contract:
         fail("First-generation living-report fixture must create one report from the full corpus")
@@ -6403,6 +6410,7 @@ def validate_vc_deal_pipeline_contract() -> None:
         "never call a text-artifact update tool on it",
         "the role `previous report`",
         "create one corrected complete report and save that instead",
+        "The refused report is now a linked project file, so the corrected report's manifest must list it",
         "create the new report in one call with the text-artifact create tool",
         "This lifecycle applies to living reports, not to a per-meeting brief or summary.",
     ]:

@@ -685,6 +685,7 @@ livingReportScenarios:
       updatedArtifactCount: 0
       createsProjectSharedArtifact: true
       writesEvidenceBasisManifest: true
+      refusedSaveCorrection: {maxCorrectedReports: 1, editsRefusedReport: false, refusedReportManifestRole: previous report}
 
   - id: refresh-creates-new-report-and-classifies-corpus
     existingReportArtifactId: screening-report
