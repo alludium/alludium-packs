@@ -796,8 +796,9 @@ class CrmSimulator:
                 return {"result": {"activated": False, "code": "INVALID_TOOL_ACTIVATION_INPUT",
                                    "error": "tool_activate requires an authorized toolExternalId, toolName, or toolId"}}, None
             if external_id not in {t["name"] for t in universe}:
-                return {"result": {"activated": False, "toolExternalId": external_id, "code": "TOOL_ACTIVATION_DENIED",
-                                   "error": f"Tool {external_id} is not available to this agent"}}, None
+                return {"result": {"activated": False, **({"toolId": tool_id} if tool_id else {}),
+                                   "toolExternalId": external_id, "code": "TOOL_ACTIVATION_DENIED",
+                                   "error": f"Tool {external_id} is not authorized for activation"}}, None
             self.activated_tools.add(external_id)
             return {"result": {"activated": True, "toolId": f"tool-{external_id}", "toolExternalId": external_id,
                                "safeToolName": external_id, "authorizationMode": "runtime"}}, None
