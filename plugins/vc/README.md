@@ -8,8 +8,9 @@ Version `0.6.49` makes the CRM history import find its Affinity tools reliably (
 Platform's tool search never listed the company-search tool, and one import stopped as "Affinity
 unavailable" before searching. The import skill now turns the five Affinity read tools on in one step
 by their external ID (for Affinity, the tool name), never by `toolName` alone, which a Deal refuses;
-lists the Affinity app's tools if that fails; and calls Affinity unavailable only when both fail or an
-Affinity call itself is refused. The offline evaluation now makes the agent find its Affinity tools
+lists the Affinity app's tools if that fails; stops and says what cannot be read when the list, which
+shows only the tools the run is granted, lacks any of the five; and otherwise calls Affinity
+unavailable only when both fail or an Affinity call itself is refused. The offline evaluation now makes the agent find its Affinity tools
 the same way, including a search that leaves the company-search tool out, the Deal's refusal of a
 `toolName`-only activation, and Platform's limit of three activation-only steps in a row.
 

@@ -170,6 +170,9 @@ left out `affinity_search_companies`). Old `3a9ecda` against new, cases `no-note
   - The new arm never searched. It activated all five read tools by `toolExternalId` first in 10/10.
   - No attempt stopped as unavailable.
 
-The pass rate doesn't separate the arms, because the simulated old skill also recovered every time. The
+The pass rate doesn't separate the arms: this eval did not reproduce the Dev failure. The simulated old
+skill also recovered every time. Its searches all left the tool out (none used a limit of 25 or more),
+but every attempt then activated it by `toolExternalId`, 5 after listing the tools and 5 straight away.
+The Dev run stopped as "unavailable" without trying either. The
 evidence for the fix is how the tools were found, plus 9 real local runs: the tool was found in 7/9, and
 the other 2 never started because the chat lost the message.

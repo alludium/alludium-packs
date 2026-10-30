@@ -6,6 +6,7 @@ import argparse
 import html
 import json
 import os
+import re
 import sys
 import tempfile
 import unittest
@@ -916,6 +917,20 @@ class RunTests(unittest.TestCase):
         direct = {**case("crm-partial-grant"), "affinityToolsInactive": False}
         offered = {t["toolSpec"]["name"] for t in ch.tool_specs(FROZEN, "analyst", direct) if t["toolSpec"]["name"].startswith("affinity_")}
         self.assertEqual(offered, {"affinity_search_companies", "affinity_get_company"})
+
+    def test_a_partial_grant_reply_must_say_what_cannot_be_read(self):
+        # The record matches and has notes, so a no-match or imported reply must not pass for a stop.
+        pattern = FROZEN["expectations"]["cases"]["crm-partial-grant"]["replyMentions"][0]
+        for reply in ("I stopped the import: Corvane's notes and opportunities can't be read with this run's Affinity access.",
+                      "The import stopped because I cannot read company notes in Affinity for this run.",
+                      "I don't have access to the notes tools.", "Notes access is missing for this run.",
+                      "I lack permission to read its notes or opportunities.", "The note tools are not available to me."):
+            with self.subTest(reply=reply):
+                self.assertRegex(reply, re.compile(pattern, re.I))
+        for reply in ("Corvane's Affinity history is unavailable: no notes were found.",
+                      "Imported Corvane's CRM history: 1 note and 1 opportunity note."):
+            with self.subTest(reply=reply):
+                self.assertNotRegex(reply, re.compile(pattern, re.I))
 
     def test_discovery_steps_do_not_use_the_step_budget(self):
         # Platform leaves search, list and activate steps out of the step budget, so a capped turn still

@@ -463,12 +463,28 @@ cases:
     affinity: {companies: []}
 
   # #119 review: the list is permission-scoped. Only search and the company record are granted, so the
-  # list returns them alone, the notes and opportunity tools are refused, and the import must stop.
+  # list returns them alone, the notes and opportunity tools are refused, and the import must stop. The
+  # record matches and has notes, so an agent that imports with only the granted tools writes a document.
   - id: crm-partial-grant
     kind: import
     affinityGrantedTools: [affinity_search_companies, affinity_get_company]
     deal: {name: Corvane seed, organisation: {name: Corvane, domain: corvane.example}}
-    affinity: {companies: []}
+    affinity:
+      companies:
+        - id: 500991
+          name: Corvane
+          domain: corvane.example
+          domains: [corvane.example]
+          description: Freight emissions reporting for mid-size shippers.
+          opportunityIds: [700991]
+          notes:
+            - - {id: 9991, author: Priya Shah, date: "2025-06-03T10:00:00Z", html: "<p>Intro call. Two paying shippers, raising a £2m seed.</p>"}
+      opportunities:
+        - id: 700991
+          name: Corvane - Seed
+          listId: 41
+          notes:
+            - - {id: 9992, author: Tom Becker, date: "2025-07-15T10:00:00Z", html: "<p>Opportunity opened. Seed round, lead sought.</p>"}
 
   - id: screening-still-uses-living-report
     kind: skill-control

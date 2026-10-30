@@ -149,8 +149,8 @@ cases:
 
   crm-partial-grant:
     blocked: true
-    replyMentions: ["(?:not granted|not authori[sz]ed|no access|missing|unavailable|not available|isn't available|cannot access|can't access)",
-                    "(?:notes|opportunit)"]
+    # The reply must say the notes or opportunities cannot be read, not only mention them.
+    replyMentions: ["(?:(?:notes?|opportunit\\w*)\\W+(?:[\\w'()]+\\W+){0,8}?(?:not granted|(?:is|are)n't granted|not authori[sz]ed|unavailable|not available|(?:is|are)n't available|(?:can't|cannot|could not|couldn't) be (?:read|accessed)|not readable|not permitted|(?:is|are)n't permitted|denied|missing|not included)|(?:no access to|(?:don't|do not|doesn't|does not) have (?:access|permission) to|(?:can't|cannot|could not|couldn't|unable to|not allowed to|not able to) (?:access|read)|lacks? (?:the )?(?:permission|access) to|no permission to|not granted access to)\\W+(?:\\w+\\W+){0,5}?(?:notes?|opportunit\\w*))"]
 
   screening-still-uses-living-report:
     # Met when the skill is ALWAYS-on in the arm or the analyst activates it within the step cap.
