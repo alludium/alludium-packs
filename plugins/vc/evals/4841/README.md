@@ -11,7 +11,7 @@ when an import is partial, refuse to save a history too large to refresh, and ch
 Every company, person, note and ID is invented (`.example` domains, plus invented `tallowmere`
 names for the case where the company is named by its domain).
 
-- **Import cases** (26): a rebrand with nine notes, history held on a second record, the record
+- **Import cases** (28): a rebrand with nine notes, history held on a second record, the record
   with the history on the second page of search results, two similarly
   named companies that must not be merged, a company whose only similarly named records have another
   domain (it must stop, not import a near match), a company named by its domain whose record has notes
@@ -24,8 +24,9 @@ names for the case where the company is named by its domain).
   the refresh's read and its write (the edit must survive), a second import while another is still
   running and has created its document (it must stop), another open import with no document yet (it
   must go ahead: an open task alone is not a reason to stop), a large history (about 55 KB of notes) that fits and must be
-  kept in full on first import and on refresh, a refreshed document that is still processing just after the save, and no CRM
-  connection.
+  kept in full on first import and on refresh, a refreshed document that is still processing just after the save, no CRM
+  connection, no Affinity grant for the agent, and a grant for only some of the five read tools (it must
+  stop and name what is missing).
 - **Routing cases** (5): the Deal Manager starts the task for an import or refresh request, answers
   a read-only question without starting it, uses the saved document in a fresh chat, and does not
   start a second import while one is running.
@@ -48,7 +49,8 @@ python plugins/vc/scripts/compare_crm_history_import.py \
   --execute --output /tmp/crm-history-4841 --max-spend-usd 15 --max-wall-minutes 180
 ```
 
-Preflight (2 arms, 35 cases, 3 repetitions): 210 attempts, at most 40 subject calls per turn. `--rescore DIR` re-scores a finished run without spend; `--reconcile DIR`
+Preflight (2 arms, 37 cases, 3 repetitions): 222 attempts, at most 40 counted steps per turn plus 20
+tool-discovery steps. `--rescore DIR` re-scores a finished run without spend; `--reconcile DIR`
 rebuilds spend accounting after a hard stop. `WORKTREE` as a revision reads the working tree, for
 local checks only.
 
@@ -64,6 +66,22 @@ local checks only.
   `withInteractionPersons` drops companies without interactions, as live Affinity did in the #4841 Dev
   run. The connector's list, list-entry, person and field read tools are offered too, as on
   Platform; the import must not call them, and a call is recorded and answered with an empty page.
+- **Tool discovery**: as on Dev, the Affinity tools start inactive. The agent finds them with
+  `tools_search_available` or `tools_list_available` and turns each on with `tool_activate`
+  (descriptions and result shapes copied from Craft `runtime-discovery-tools.ts`); an Affinity tool is
+  callable only from the step after it is activated. Search returns at most 20 summaries (50 on
+  request) and leaves out `affinity_search_companies` unless the limit is at least 25: it was missing
+  from all 11 Affinity searches of the 0.6.46 Dev run, where one import stopped as "unavailable", and a
+  local probe on 0.6.49 found it 25th for its own name, missing at the default limit and present with
+  `limit: 50`. Listing the `affinity-mcp-server` app pages through every tool. An activation by `toolExternalId` (the tool name, for Affinity) or `toolId`
+  works; one by `toolName` alone is refused with `LOCKED_PROJECT_AGENT_SELECTION_FORBIDDEN`, as all 9
+  such activations were in a local Deal. As on Platform, steps that only search, list or activate
+  tools do not use the step budget (up to 20 such steps a turn). A step that activates ends Platform's
+  invocation, and after three invocations in a row with no other tool call `tool_activate` is withdrawn
+  for the rest of the turn. A disconnected CRM's tools can still be listed and activated, and the first
+  Affinity call then fails; without an Affinity grant the list is empty and every activation is refused, and with a partial grant
+  (`affinityGrantedTools`) only the granted tools are listed or activated. Every discovery call is recorded. A case
+  sets `affinityToolsInactive: false` to hand the tools over directly.
 - **Platform**: the agents' capability-bundle guidance as Platform renders it
   (`capability-prompts.json`, from Craft `c69fe008`), the skills catalog with ALWAYS skill bodies,
   `activate_skill`, a task runtime block built from the task definition, reads of the project template and
@@ -74,8 +92,8 @@ local checks only.
   completion, and the manager's frozen tool contract.
 
 Approximations: the task block is a trimmed copy of Platform's template; `task-management.completeTask`
-is offered directly (Platform hydrates it for tasks that complete without human confirmation); the
-analyst gets its tools directly rather than through tool discovery; the manager's tool schemas are
+is offered directly (Platform hydrates it for tasks that complete without human confirmation); Platform
+tools are offered directly, and only the Affinity tools go through tool discovery; the manager's tool schemas are
 the generic contract schemas. Not covered: a document still processing (simulated documents are
 always ready) and a Deal with no Organisation (the task cannot start without one). Two first
 imports started at the same moment can both pass the pre-create check: the Pack re-checks live
@@ -140,3 +158,21 @@ or documents, an accepted limitation of this delivery.
 
 Disposition for the analyst task, skill, template and Deal Manager routing surface (VC Pack
 `v0.6.40`..candidate): `ran-with-evidence` for runs 1 and 2; run 3 pending.
+
+**Tool discovery, 0.6.49** (#4841: on Dev, one import stopped as "Affinity unavailable" when tool search
+left out `affinity_search_companies`). Old `3a9ecda` against new, cases `no-notes` and
+`domain-as-name-no-interactions`, 5 repetitions, with the Affinity tools starting inactive:
+
+- **Run A** (new `c4536e1`), $0.60: both arms' pass counts (2/10 and 1/10) came from a simulator
+  mismatch. It required `taskId` on `completeTask`, which Platform fills in. This was fixed in `22093d4`.
+- **Run B** (new `22093d4`), $0.58: old 10/10, new 10/10.
+  - The old arm searched first in 10/10 attempts.
+  - The new arm never searched. It activated all five read tools by `toolExternalId` first in 10/10.
+  - No attempt stopped as unavailable.
+
+The pass rate doesn't separate the arms: this eval did not reproduce the Dev failure. The simulated old
+skill also recovered every time. Its searches all left the tool out (none used a limit of 25 or more),
+but every attempt then activated it by `toolExternalId`, 5 after listing the tools and 5 straight away.
+The Dev run stopped as "unavailable" without trying either. The
+evidence for the fix is how the tools were found, plus 9 real local runs: the tool was found in 7/9, and
+the other 2 never started because the chat lost the message.

@@ -20,7 +20,7 @@ capability:
       importance: required
       required: true
       note: Requires read-only CRM tools for company search, company records and notes, plus project template read and instantiation, artifact source metadata and range reads, and full-content artifact update tools. For Affinity, see the Affinity section below.
-      gracefulDegradation: Stop and name the unavailable CRM connection or document capability; do not create, update or claim a CRM history document.
+      gracefulDegradation: Stop and name the unavailable CRM connection or document capability, for Affinity only after the Affinity section's steps for getting the tools fail; do not create, update or claim a CRM history document.
   routingHints:
     preferredSurface: skill
     notes:
@@ -309,8 +309,9 @@ the document was saved and is still being processed.
   something (a failed page or record, or note text it did not return), or the platform's 100 KB
   document limit stopped the save (section 6), never that the document was long to write. Never
   say "all history imported" for a partial import.
-- If the company cannot be identified, the CRM is not connected, access fails entirely, or the
-  document cannot be saved, report that specific blocker and do not claim the task succeeded.
+- If the company cannot be identified, the CRM is not connected (for Affinity, only after
+  "Getting the tools" below fails), access fails entirely, or the document cannot be saved,
+  report that specific blocker and do not claim the task succeeded.
 - When nothing was saved, do not point the reader to a document.
 - When the import is blocked, or waits for an answer to a question you asked, also tell the Deal
   Manager, so the Deal's chat can explain it later: send one `project.sendManagerMessage` with
@@ -326,6 +327,24 @@ the document was saved and is still being processed.
 Use the connected Affinity tools, read-only. Check the tool list and parameters available in this
 run rather than assuming them; the steps below match the Affinity connector's read tools.
 
+- **Getting the tools:** the Affinity tools are usually not active when the run starts. Before
+  the first Affinity read, activate the five read tools below in one step: call `tool_activate`
+  once per tool, all in the same step, with `toolExternalId` set to the tool's name (for Affinity
+  the external ID is the tool name), for example `toolExternalId: "affinity_search_companies"`.
+  Never pass only `toolName`: in a Deal, Platform refuses it.
+  If an activation is refused or the tool is not found, list the Affinity tools once with
+  `tools_list_available` (`applicationExternalId: "affinity-mcp-server"`, `limit: 50`, passing
+  `nextCursor` back as `cursor` while one is returned), then activate the missing tools by the
+  `externalId` the list shows, again in one step. These discovery tools are not CRM reads, so the
+  "Nothing else" rule below does not apply to them.
+  Do not rely on `tools_search_available` to find Affinity tools: it returns a short list that can leave out a tool even when you search for its exact name.
+  The list shows only the tools this run is granted. If any of the five read tools is missing from
+  every page of it, stop as section 8 says and say in plain words what cannot be read, such as
+  company notes or opportunities; never import with fewer than
+  all five. Affinity is also unavailable when a tool activated by its listed `externalId` is still
+  refused, or when the first company search still fails with a connection or authorization error
+  after one retry. Only then stop as section 8 says. A failed read after that point is a failed page
+  or record (section 3), not an unavailable CRM.
 - **Search:** `affinity_search_companies` with `term` set to the company name, then to the domain
   when known, then to the variants in section 2 when needed. Always pass a `term`: never call it without one to list all companies. Set `withOpportunities: true` to get each company's opportunity IDs. While `hasMore`
   is true, pass the returned page token (`nextPageToken`, or `next_page_token`) back as `pageToken`,

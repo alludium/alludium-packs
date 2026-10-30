@@ -7275,6 +7275,15 @@ def validate_crm_history_task_contract(
         "Cite notes only for what notes say",
         "`affinity_get_company_list_entries`",
         "Never retype the hash from memory or from an earlier read",
+        # #4841 0.6.46 Dev run: tool search never returned `affinity_search_companies`, and the
+        # Analyst reported Affinity unavailable without listing or activating its tools.
+        "with `toolExternalId` set to the tool's name",
+        "Never pass only `toolName`",
+        "all in the same step",
+        '`applicationExternalId: "affinity-mcp-server"`',
+        "Do not rely on `tools_search_available` to find Affinity tools",
+        # #119 review: the list is permission-scoped, so a partly granted run must stop, not import without notes.
+        "never import with fewer than\n  all five",
     ]:
         if phrase not in skill:
             fail(f"import-crm-history skill is missing rule: {phrase}")

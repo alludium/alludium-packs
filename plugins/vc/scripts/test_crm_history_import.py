@@ -172,6 +172,19 @@ class CrmHistoryImportContractTests(unittest.TestCase):
                                     "You may set `withInteractionDates`")
                 )
 
+    def test_rejects_an_import_skill_without_the_tool_activation_rule(self) -> None:
+        # #4841 0.6.46 Dev run: tool search never returned the company-search tool, and the import
+        # stopped as "unavailable" without listing or activating the Affinity tools.
+        skill = Path("skills") / "import-crm-history" / "SKILL.md"
+        for old, new in (("with `toolExternalId` set to the tool's name", "with `toolName` set to the tool's name"),
+                         ("Never pass only `toolName`", "Prefer `toolName`"),
+                         ("all in the same step", "one per step"),
+                         ("Do not rely on `tools_search_available` to find Affinity tools", "Search for Affinity tools"),
+                         ('`applicationExternalId: "affinity-mcp-server"`', "an application filter"),
+                         ("never import with fewer than\n  all five", "import with what\n  is listed")):
+            with self.subTest(rule=old):
+                self._assert_rejected(self._edit_text(skill, old, new))
+
     def test_rejects_an_analyst_that_promises_one_document_per_deal(self) -> None:
         self._assert_rejected(
             self._edit_text(
