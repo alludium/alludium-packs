@@ -1297,6 +1297,7 @@ def score(frozen: dict, record: dict, documents: dict[str, str]) -> dict:
     reply = record["turns"][-1]["final"] if record["turns"] else ""
     if case["kind"] == "skill-control":
         # Only the first steps run; the report itself is not simulated, so completion is not expected.
+        # The import's search and read-scope rules do not apply: report tasks may read lists or people.
         assertions = {"noAffinityWrites": not record["affinityWrites"], "noFieldWrites": not record["fieldWrites"],
                       "noStageMove": not record["stageMoves"],
                       "livingReportActive": record.get("livingReportMode") == "ALWAYS"
