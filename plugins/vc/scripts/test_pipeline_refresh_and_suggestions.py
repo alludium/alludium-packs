@@ -151,6 +151,14 @@ class PipelineRefreshAndSuggestionTests(unittest.TestCase):
             VALIDATOR.validate_pipeline_refresh_and_suggestion_guidance,
         )
 
+    def test_rejects_a_skill_whose_correction_omits_the_refused_report(self) -> None:
+        self._assert_rejected(
+            LIVING_REPORT_SKILL,
+            "The refused report is now a linked project file, so the corrected report's manifest must list it",
+            "The refused report can be ignored",
+            VALIDATOR.validate_vc_deal_pipeline_contract,
+        )
+
     def test_rejects_a_skill_that_refreshes_in_place(self) -> None:
         self._assert_rejected(
             LIVING_REPORT_SKILL,

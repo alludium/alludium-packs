@@ -2085,6 +2085,11 @@ def validate_fund_routing_contract() -> None:
         "updatedArtifactCount": 0,
         "createsProjectSharedArtifact": True,
         "writesEvidenceBasisManifest": True,
+        "refusedSaveCorrection": {
+            "maxCorrectedReports": 1,
+            "editsRefusedReport": False,
+            "refusedReportManifestRole": "previous report",
+        },
     }
     if (first_report_fixture.get("expected") or {}) != expected_first_report_contract:
         fail("First-generation living-report fixture must create one report from the full corpus")
@@ -6403,6 +6408,7 @@ def validate_vc_deal_pipeline_contract() -> None:
         "never call a text-artifact update tool on it",
         "the role `previous report`",
         "create one corrected complete report and save that instead",
+        "The refused report is now a linked project file, so the corrected report's manifest must list it",
         "create the new report in one call with the text-artifact create tool",
         "This lifecycle applies to living reports, not to a per-meeting brief or summary.",
     ]:
