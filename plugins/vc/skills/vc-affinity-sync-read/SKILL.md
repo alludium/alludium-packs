@@ -42,7 +42,9 @@ Use Affinity tools only within the approved scope:
 
 1. Use `affinity_get_list_entries` or `affinity_list_opportunities` to create the scoped preview set.
 2. Use `affinity_get_opportunity` for opportunity-level fields.
-3. Use `affinity_search_companies` and `affinity_get_company` for company identity resolution.
+3. Use `affinity_search_companies` and `affinity_get_company` for company identity resolution. Read
+   every page of a search. Never set `withInteractionDates` or `withInteractionPersons`: Affinity
+   then returns only companies with recorded interactions, which hides a record that holds only notes.
 4. Use `affinity_search_persons` and `affinity_get_person` for founder/contact context.
 5. Use `affinity_list_company_notes` only when notes are explicitly in scope.
 

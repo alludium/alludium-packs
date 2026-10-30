@@ -49,34 +49,58 @@ what is still unknown.
 
 The company is the Deal's confirmed Organisation, supplied by the task as `company_name` (and
 `organisation_id` for tool calls). Do not take it from the Deal title. Read the Organisation's
-known domain and other identifiers from project context when available. A supplied known record
+known domain and other identifiers from project context when available. If the company name is
+itself a web domain, such as `orchid.ai`, that is also its known domain. A supplied known record
 ID or link is a starting point, not proof that it is the only relevant record.
 
 ## 2. Find the company's CRM records
 
-1. Search the selected CRM by the company's name and, when known, its domain. Read past the
-   first result: collect every plausible record across all returned search pages.
-2. Inspect each plausible record before concluding anything. A record with no notes does not mean
+1. Search the selected CRM by the company's name and, when known, its domain. Read every page of
+   every search until it reports no more results: a common name can return many pages, and the
+   company's record may be on a later one. Collect every plausible record across all pages. If a
+   search page fails, retry it once. If it still fails, the results after it are unread: say so in
+   Import coverage, and do not call the import complete (section 8).
+2. If no result matches as described in step 4, search a few variants before deciding: the name
+   without a legal suffix such as "Ltd" or "GmbH"; for a name that is a domain, the name with its
+   dot as a space ("Orchid AI"), without the dot ("orchidai") and the part before the dot
+   ("orchid"); and the domain alone. Read every page of each. Stop trying variants once a record
+   matches as described in step 4; after a match by name only, still search by that record's
+   domain as step 4 says.
+3. Inspect each plausible record before concluding anything. A record with no notes does not mean
    the company has no history: another matching record may hold it.
-3. Decide record by record whether it describes this company. Use what the search results and
+4. Decide record by record whether it describes this company. Use what the search results and
    company records show (domain, known IDs, location, people named on the record) and what the
-   notes describe. Do not open person records to decide. A rebrand, an old trading name or an older enrichment
-   entry can explain differences between records of the same company. Records that share the
-   company's known domain are the same company, even when one has no notes or a slightly different
-   name, unless their notes describe a different business. A similar name alone never justifies
-   combining two companies.
-4. Use every record that is this company. Record the ones you set aside, with the reason, in
-   Import coverage.
-5. If no record matches, the import is **blocked**. Search by the company name, by the name
-   without a legal suffix such as "Ltd" or "GmbH", and by the domain when known. If none returns
-   a plausible record, create no document, save no task output and do not request completion.
-   Report that the CRM has no record for this company and suggest checking the company name or
-   adding the record in the CRM. Never list or page through all CRM companies to look for it, and
-   never write a document that only says no record was found.
-6. If the evidence conflicts and you cannot tell which record is the Deal's company, do not guess.
+   notes describe. Do not open person records to decide.
+   Compare domains ignoring case, `www.` and the web address scheme, and check every domain the
+   record lists, not only its main one.
+   - **Match:** the record has the company's known domain. Records that share it are the same
+     company, even when one has no notes or a slightly different name, unless their notes describe
+     a different business. With no known domain, or for a record with no domain, a record matches
+     when its name is the company's name (ignoring case and legal suffixes) and nothing on it
+     points to another business. A record the task supplied as the company's known CRM record
+     matches unless its notes describe a different business.
+   - **Not a match:** a record whose domain differs from the company's known domain is another
+     company, unless the records or notes show it is this company under another name or domain,
+     earlier or later, such as a rebrand or an old trading name.
+   - A similar name alone never justifies using or combining a record: "Orchid" or "Orchid Studio"
+     is not `orchid.ai` without a matching domain or records or notes that tie them together.
+     Being the only search result does not make a record a match.
+   - When records match by name only and their domains differ from each other, they are not known
+     to be the same company: ask as in step 7. After a match by name only, also search by that
+     record's domain, so a record of the same company under another name is not missed.
+5. Use every record that matches. Record the ones you set aside, with the reason, in Import
+   coverage.
+6. If no record matches, the import is **blocked**: the company could not be confidently found in
+   the CRM. Do this after the searches in steps 1 and 2. Create no document, save no task output
+   and do not request completion. Report that the company could not be confidently found, name
+   the closest records you set aside with their domain and why, and suggest checking the
+   Organisation's name and website or the record in the CRM. Never call this a complete import
+   and never use a near match instead. Never list or page through all CRM companies to look for
+   it, and never write a document that only says no record was found.
+7. If the evidence conflicts and you cannot tell which record is the Deal's company, do not guess.
    Ask one focused question that lists the candidates by name, domain and record ID, and save
    nothing until it is answered. Do not ask when the records clearly describe the same company.
-7. Also find the company's opportunity or deal records in the CRM, when the CRM exposes them, and
+8. Also find the company's opportunity or deal records in the CRM, when the CRM exposes them, and
    read their notes too.
 
 ## 3. Read the full history
@@ -106,6 +130,13 @@ ID or link is a starting point, not proof that it is the only relevant record.
 
 Follow the CRM-history template's sections. Write prose a partner can use, with citations such as
 [N3] that link to the note in the appendix.
+
+- **Cite notes only for what notes say.** A note reference such as [N3] means that note says it.
+  Facts that come from the CRM company record itself (its description, people, location, funding
+  or other profile fields) are labelled as such, for example "Affinity's company profile lists
+  Jan Novak", and get no note reference. Never write "the notes say" or "the notes name" for
+  something only the record shows. When the profile and a note differ, give both with their
+  sources.
 
 - **Date what notes say.** Write "The March 2025 note says the company planned to raise €3m," not
   "The company is raising €3m." A present-tense claim needs current supporting evidence; a dated
@@ -145,7 +176,8 @@ One entry per retrieved note, with:
 several notes into one entry, and never replace a note's text with a summary, a range ("N3–N45")
 or a promise to add it later. On a first import, write at most ten appendix entries in any one tool
 call: with more than ten notes, follow the batch steps in section 7. Copy each note from the tool
-result exactly, including small words such as "a" and "the".
+result exactly, including small words such as "a" and "the" and every punctuation mark: keep a
+final full stop, and keep straight quotes and apostrophes straight rather than curly.
 
 Number notes in date order, oldest first. On a refresh, keep each note's existing reference from
 the previous document (match by note ID) and give new notes the next free numbers, so citations
@@ -205,9 +237,12 @@ created above it could never be refreshed.
 3. Create the document once, only with `project.instantiateTemplate`. Never create it with
    `artifact.createTextArtifact` or any other tool, and never create a second document after one
    was created or saved as this task's output. Use the template's document
-   reference, the template's revision number and content hash copied character for character from
-   the metadata result, a filename such as `<Company> CRM history and context`, and the filled
-   content. Keep the returned artifact ID.
+   reference, the template's revision number and content hash, a filename such as
+   `<Company> CRM history and context`, and the filled content. Keep the returned artifact ID.
+   Just before this call, read the template's metadata again (`project.getTemplateMetadata`) and
+   copy the revision number and the whole content hash from that result, character by character.
+   Never retype the hash from memory or from an earlier read: a refused creation stops the task
+   and cannot be retried.
 4. With more than ten notes, or a first save that would be estimated above 40,000 bytes, write
    the appendix in batches. Create the document with the brief and the first entries (at most
    N1–N10, within the 40,000-byte first save in section 6). Then read the document's end
@@ -265,7 +300,11 @@ the document was saved and is still being processed.
 
 ## 8. Report truthfully
 
-- Say **complete import** only when every plausible record and every page of notes was read.
+- Say **complete import** only when the company's records were matched as in section 2, every
+  search page was read, and every plausible record and every page of notes was read. A record
+  matched before a search page failed can still be imported, as a partial import that names the
+  unread search results. If no record matched and a search page could not be read, the import is
+  blocked: say the CRM search could not be completed, not that the company has no record.
   Otherwise say **partial import** and name what is missing. Partial means the CRM did not return
   something (a failed page or record, or note text it did not return), or the platform's 100 KB
   document limit stopped the save (section 6), never that the document was long to write. Never
@@ -276,7 +315,7 @@ the document was saved and is still being processed.
 - When the import is blocked, or waits for an answer to a question you asked, also tell the Deal
   Manager, so the Deal's chat can explain it later: send one `project.sendManagerMessage` with
   purpose `attention_required`, `relatedTaskId` set to this task's ID, and an idempotency key made
-  of `crm-history-blocked`, this task's ID and one word for the blocker, such as `no-record`. In
+  of `crm-history-blocked`, this task's ID and one word for the blocker, such as `no-match`. In
   one or two plain sentences say that the CRM history import stopped, why, and what the person can
   do, for example check the company name or add the record in the CRM and then ask again. Send it
   once per blocker. Never send it for a complete or partial import.
@@ -288,10 +327,14 @@ Use the connected Affinity tools, read-only. Check the tool list and parameters 
 run rather than assuming them; the steps below match the Affinity connector's read tools.
 
 - **Search:** `affinity_search_companies` with `term` set to the company name, then to the domain
-  when known. Always pass a `term`: never call it without one to list all companies. Set `withOpportunities: true` to get each company's opportunity IDs. While `hasMore`
-  is true, pass the returned page token (`nextPageToken`, or `next_page_token`) back as `pageToken`.
+  when known, then to the variants in section 2 when needed. Always pass a `term`: never call it without one to list all companies. Set `withOpportunities: true` to get each company's opportunity IDs. While `hasMore`
+  is true, pass the returned page token (`nextPageToken`, or `next_page_token`) back as `pageToken`,
+  for every term: never stop at the first page. Never set `withInteractionDates` or
+  `withInteractionPersons`: Affinity then returns only companies with recorded interactions, which
+  hides a record that holds only notes.
 - **Company record:** `affinity_get_company` with `companyId`. Add `fieldTypes: ["enriched"]`
-  when profile context (description, location, funding) is useful.
+  when profile context (description, location, funding) is useful. Enriched fields, such as
+  People, are company-record facts, not notes: label them as the company profile in the brief.
 - **Company notes:** `affinity_list_company_notes` with `companyId` and `limit: 100`, one company
   per step. Never use a smaller limit. The notes do not carry a company ID: every note a call returns belongs to the
   `companyId` you passed to that call; record that ID with the note. While
@@ -300,6 +343,9 @@ run rather than assuming them; the steps below match the Affinity connector's re
   notes come from meetings or emails and belong in the history too.
 - **Opportunities:** `affinity_get_opportunity` for each opportunity ID, then
   `affinity_list_opportunity_notes` with `opportunityId`, paged with `cursor` the same way.
+- **Nothing else:** use only the read tools above. Do not call list, list-entry, field or person
+  tools, such as `affinity_get_company_list_entries`, `affinity_get_list_entries`,
+  `affinity_search_persons` or `affinity_get_person`: they are outside this import (section 3).
 - **Truncated notes:** a response marked `truncated`, or a note marked `contentTruncated`, means
   the note's text was not returned. Keep its ID and mark the import partial.
 - **Errors:** an error text returned instead of data is a failed read, not an empty result.

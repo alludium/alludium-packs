@@ -261,6 +261,64 @@ cases:
     deal: {name: Zentrava, organisation: {name: Zentrava, domain: zentrava.example}}
     affinity: {companies: []}
 
+  - id: similar-name-other-domain
+    kind: import
+    # Only records with a similar name and another domain exist: none is this company.
+    deal: {name: Fernway, organisation: {name: Fernway, domain: fernway.example}}
+    affinity:
+      companies:
+        - id: 503201
+          name: Fernway Studio
+          domain: fernwaystudio.example
+          domains: [fernwaystudio.example]
+          description: Interior design studio for boutique hotels.
+          notes:
+            - - {id: 12401, author: Ana Lee, date: "2025-04-08T10:00:00Z", html: "<p>Fernway Studio pitched a hotel fit-out marketplace. Not venture-scale.</p>"}
+        # Same name, another domain, nothing else to tell them apart: the live orchid.ac decoy.
+        - {id: 503202, name: Fernway, domain: fernwayhq.example, domains: [fernwayhq.example], description: null, notes: [[]]}
+
+  - id: domain-as-name-no-interactions
+    kind: import
+    # The Organisation's name is its domain and it has no domain field. The company's record has
+    # notes but no interactions, so an interaction filter on the search hides it; similarly named
+    # records with interactions and other domains remain.
+    deal: {name: tallowmere.ai, organisation: {name: tallowmere.ai}}
+    affinity:
+      companies:
+        - id: 503401
+          name: Tallowmere
+          domain: tallowmere.ac
+          domains: [tallowmere.ac]
+          description: Portfolio analytics for asset managers.
+          notes: [[]]
+        - {id: 503402, name: Tallowmere Studio, domain: tallowmerestudio.example, domains: [tallowmerestudio.example], description: Brand design studio., notes: [[]]}
+        - id: 503403
+          name: tallowmere.ai
+          domain: tallowmere.ai
+          domains: [tallowmere.ai]
+          hasInteractions: false
+          description: AI-native email client.
+          notes:
+            - - {id: 12601, author: Ana Lee, date: "2025-08-04T13:20:00Z", html: "<p>Checked in on tallowmere.ai: the company does not seem active. No reply to two emails.</p>"}
+
+  - id: profile-people-labelled
+    kind: import
+    # The company record lists people in an enriched field; no note names them.
+    deal: {name: Hollin, organisation: {name: Hollin, domain: hollin.example}}
+    affinity:
+      companies:
+        - id: 503301
+          name: Hollin
+          domain: hollin.example
+          domains: [hollin.example]
+          description: Payroll compliance software for nurseries.
+          people:
+            - {firstName: Hanna, lastName: Voss, primaryEmailAddress: hanna@hollin.example}
+            - {firstName: Jonas, lastName: Pell, primaryEmailAddress: jonas@hollin.example}
+          notes:
+            - - {id: 12501, author: Sam Ortiz, date: "2025-02-17T10:00:00Z", html: "<p>Inbound from the website. Payroll compliance for nurseries; 30 sites live.</p>"}
+              - {id: 12502, author: Sam Ortiz, date: "2025-05-06T10:00:00Z", html: "<p>Raising an €800k pre-seed. Follow up in Q3 with churn data.</p>"}
+
   - id: refresh-document-missing
     kind: import
     deal:
