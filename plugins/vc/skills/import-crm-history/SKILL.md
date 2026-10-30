@@ -60,10 +60,12 @@ ID or link is a starting point, not proof that it is the only relevant record.
    company's record may be on a later one. Collect every plausible record across all pages. If a
    search page fails, retry it once. If it still fails, the results after it are unread: say so in
    Import coverage, and do not call the import complete (section 8).
-2. If no result matches as described in step 4, search a few variants before deciding: the name without a legal suffix such as "Ltd" or "GmbH"; for a name that is a domain,
-   the name with its dot as a space ("Orchid AI"), without the dot ("orchidai") and the part
-   before the dot ("orchid"); and the domain alone. Read every page of each. Stop as soon as a
-   record matches as described in step 4.
+2. If no result matches as described in step 4, search a few variants before deciding: the name
+   without a legal suffix such as "Ltd" or "GmbH"; for a name that is a domain, the name with its
+   dot as a space ("Orchid AI"), without the dot ("orchidai") and the part before the dot
+   ("orchid"); and the domain alone. Read every page of each. Stop trying variants once a record
+   matches as described in step 4; after a match by name only, still search by that record's
+   domain as step 4 says.
 3. Inspect each plausible record before concluding anything. A record with no notes does not mean
    the company has no history: another matching record may hold it.
 4. Decide record by record whether it describes this company. Use what the search results and

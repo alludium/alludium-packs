@@ -487,9 +487,10 @@ class ScoringTests(unittest.TestCase):
                       "<p>The notes say nothing about the team; Affinity's company profile lists Hanna Voss.</p>"):
             ok = doc.replace("</section>", claim + "</section>", 1)
             self.assertTrue(score(*first_import("profile-people-labelled", ok))["passed"], claim)
-        wrong = doc.replace("</section>", "<p>Jonas Pell is CTO [N1, N2].</p></section>", 1)
-        self.assertTrue([k for k in failed(score(*first_import("profile-people-labelled", wrong)))
-                         if k.startswith("documentForbidden:")])
+        for claim in ("<p>Jonas Pell is CTO [N1, N2].</p>", "<p>According to [N1], Hanna Voss is the CTO.</p>"):
+            wrong = doc.replace("</section>", claim + "</section>", 1)
+            self.assertTrue([k for k in failed(score(*first_import("profile-people-labelled", wrong)))
+                             if k.startswith("documentForbidden:")], claim)
 
     def test_blocked_reply_phrasings(self):
         for reply in ("I was unable to find Fernway in Affinity.", "I wasn't able to confidently identify Fernway.",

@@ -101,7 +101,8 @@ cases:
     importStatus: complete
     # People from the company record's enriched field are profile facts, not note claims.
     documentForbidden: ["(?<!\\bno )(?<!\\bno retrieved )(?<!\\bnone of the )\\bnotes? (?:name|names|mention|mentions|list|lists|say|says|identify|identifies)\\b(?! nothing)[^.;]{0,30}\\b(?:Hanna Voss|Jonas Pell)\\b",
-                        "\\b(?:Hanna Voss|Jonas Pell)\\b[^.;:\\[]{0,25}\\[\\s*N\\d+"]
+                        "\\b(?:Hanna Voss|Jonas Pell)\\b[^.;:\\[]{0,25}\\[\\s*N\\d+",
+                        "\\[\\s*N\\d+[^\\]]*\\][^.;:\\[]{0,15}\\b(?:Hanna Voss|Jonas Pell)\\b"]
 
   refresh-document-missing:
     blocked: true
