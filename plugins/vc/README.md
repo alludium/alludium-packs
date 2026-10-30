@@ -11,7 +11,9 @@ when the name and domain find nothing, and uses a record only when its domain, o
 domain known, matches the Deal's company. A record with a similar name but another domain is set
 aside. When no record matches, the import is blocked and saves nothing, rather than importing a
 near match as complete. The brief cites notes only for what notes say and labels facts from the
-CRM company profile, such as its people or description, as profile facts.
+CRM company profile, such as its people or description, as profile facts. The intake readiness and
+Affinity sync-read skills, which also search Affinity companies, get the same no-filter, every-page
+rule, and validation now requires it of any skill that searches Affinity companies.
 
 Version `0.6.44` adds the Import or Refresh CRM History task (`vc.import_refresh_crm_history`
 1.0.5) and the CRM-neutral `import-crm-history` skill to `vc_deal_pipeline` 1.0.10. When a human

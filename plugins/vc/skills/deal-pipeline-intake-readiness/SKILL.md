@@ -97,7 +97,9 @@ inspected. The presence of a pointer is not the same as reading what it points t
   `.../lists/<id>` or a list-entry path, read it with `affinity_get_list_entries`;
   otherwise treat it as an opportunity and read it with `affinity_get_opportunity`. If
   the URL cannot be parsed or the direct read is empty, confirm the record with
-  `affinity_search_companies` using the confirmed company identity before reading.
+  `affinity_search_companies` using the confirmed company identity before reading. Read every
+  page of that search. Never set `withInteractionDates` or `withInteractionPersons`: Affinity then
+  returns only companies with recorded interactions, which hides a record that holds only notes.
   Hydrate available fields with provenance before deciding readiness or listing fields
   as missing.
 - Do not mark a field missing, set a readiness status, or create an intake artifact
