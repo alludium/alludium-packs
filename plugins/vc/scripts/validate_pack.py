@@ -1088,8 +1088,9 @@ UNSCOPED_CRM_WRITE_PATTERNS = (
 
 
 # A refresh creates a new report because task-run report sources are immutable (#5056). Archived
-# Deals admit no new task work and have no reopen path (#4646, #5039). A populated-field suggestion
-# names both values and asks, so a user "yes" is an explicit request (#4394 rule 3).
+# Deals admit no new task work; the Pipeline Manager can restore them (#4646, #5039, #5091). A
+# populated-field suggestion names both values and asks, so a user "yes" is an explicit request
+# (#4394 rule 3).
 PIPELINE_FIELD_SUGGESTION_QUESTION = "Want me to update it?"
 PIPELINE_REFRESH_RULES = {
     "vc_deal_analyst": (
@@ -1104,8 +1105,9 @@ STALE_REFRESH_PHRASES = ("updated in place", "same logical artifact", "keep its 
 ARCHIVED_DEAL_RULES = (
     "An archived Deal admits no new task work.",
     "say plainly that the Deal is archived and new task work isn't allowed on it",
-    "Do not tell the human to reopen, restore or unarchive it.",
-    "create a new Deal for the correct Organisation, or do the work on an active Deal",
+    "You cannot restore it yourself.",
+    "ask the Pipeline Manager in workspace Chat to restore it",
+    "or do the work on an active Deal",
 )
 PIPELINE_SUGGESTION_TASKS = (
     "generate-refresh-screening-report",

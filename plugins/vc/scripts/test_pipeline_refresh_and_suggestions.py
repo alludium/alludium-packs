@@ -1,8 +1,8 @@
 """Pipeline report refresh, archived-Deal wording and field suggestions (#5056, #5039, #4394).
 
 Task-run report sources are immutable on the Platform, so a refresh reads the existing report as
-its baseline and creates one new complete report. An archived Deal admits no new task work and has
-no reopen path. A suggested change to a populated Deal, Person or Organisation field names both
+its baseline and creates one new complete report. An archived Deal admits no new task work; the
+Pipeline Manager can restore it. A suggested change to a populated Deal, Person or Organisation field names both
 values and asks, so the human's "yes" is an explicit request.
 """
 
@@ -98,18 +98,18 @@ class PipelineRefreshAndSuggestionTests(unittest.TestCase):
             VALIDATOR.validate_pipeline_refresh_and_suggestion_guidance,
         )
 
-    def test_rejects_a_manager_that_suggests_reopening_an_archived_deal(self) -> None:
+    def test_rejects_a_manager_without_the_pipeline_manager_restore_route(self) -> None:
         self._assert_rejected(
             MANAGER,
-            "Do not tell the human to reopen, restore or unarchive it.",
-            "Ask the human to reopen the Deal.",
+            "ask the Pipeline Manager in workspace Chat to restore it",
+            "create a new Deal instead",
             VALIDATOR.validate_pipeline_refresh_and_suggestion_guidance,
         )
 
-    def test_rejects_a_manager_without_the_supported_new_deal_path(self) -> None:
+    def test_rejects_a_manager_without_the_active_deal_path(self) -> None:
         self._assert_rejected(
             MANAGER,
-            "create a new Deal for the correct Organisation, or do the work on an active Deal",
+            "or do the work on an active Deal",
             "wait",
             VALIDATOR.validate_pipeline_refresh_and_suggestion_guidance,
         )

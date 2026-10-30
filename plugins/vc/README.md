@@ -8,9 +8,11 @@ Version `0.6.46` fixes the living-report save correction (#5056). When the Platf
 new Screening, Evaluation, IC Memo or Term Sheet report as task output, the agent creates one
 corrected report. The refused report is then a linked project file, so the corrected report's
 evidence manifest must list it as a `previous report`; before this, the corrected save was refused
-too and the task stopped without output. This applies to a first report and a refresh. Only the
-`generate-or-refresh-living-report` skill changes; agent templates, task definitions and the
-project type (`1.0.10`) are unchanged, so no Deal migration is needed.
+too and the task stopped without output. This applies to a first report and a refresh. The Deal
+Manager (`1.0.25`) now tells the user that an archived Deal takes no new task work and that they
+can ask the Pipeline Manager in workspace Chat to restore it, or do the work on an active Deal
+(#5091); it cannot restore the Deal itself. Task definitions and the project type (`1.0.10`) are
+unchanged, so no Deal migration is needed.
 
 Version `0.6.45` makes a Pipeline report refresh create a new report (#5056). The Platform treats
 task-run report files as immutable, so the old in-place refresh was refused and the Screening
