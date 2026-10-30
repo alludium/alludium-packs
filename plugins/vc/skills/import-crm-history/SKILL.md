@@ -237,9 +237,12 @@ created above it could never be refreshed.
 3. Create the document once, only with `project.instantiateTemplate`. Never create it with
    `artifact.createTextArtifact` or any other tool, and never create a second document after one
    was created or saved as this task's output. Use the template's document
-   reference, the template's revision number and content hash copied character for character from
-   the metadata result, a filename such as `<Company> CRM history and context`, and the filled
-   content. Keep the returned artifact ID.
+   reference, the template's revision number and content hash, a filename such as
+   `<Company> CRM history and context`, and the filled content. Keep the returned artifact ID.
+   Just before this call, read the template's metadata again (`project.getTemplateMetadata`) and
+   copy the revision number and the whole content hash from that result, character by character.
+   Never retype the hash from memory or from an earlier read: a refused creation stops the task
+   and cannot be retried.
 4. With more than ten notes, or a first save that would be estimated above 40,000 bytes, write
    the appendix in batches. Create the document with the brief and the first entries (at most
    N1–N10, within the 40,000-byte first save in section 6). Then read the document's end

@@ -192,6 +192,8 @@ class PlatformSimulatorTests(unittest.TestCase):
                 "content": "<p>x</p>", "expectedTemplateSourceRevisionNumber": meta["sourceRevisionNumber"],
                 "expectedTemplateSourceContentHash": "0" * 64}
         self.assertIsNotNone(simulator.handle("project.instantiateTemplate", args)[1])
+        self.assertEqual(len(simulator.refused_creations), 1)
+        self.assertNotIn("content", simulator.refused_creations[0]["input"])
         args["expectedTemplateSourceContentHash"] = meta["sourceContentHash"]
         data, error = simulator.handle("project.instantiateTemplate", args)
         self.assertIsNone(error)
@@ -494,6 +496,13 @@ class ScoringTests(unittest.TestCase):
         self.assertTrue(score(rec, docs)["passed"], failed(score(rec, docs)))
         rec["outOfScopeReads"] = [{"turn": 1, "tool": "affinity_get_company_list_entries", "input": {"companyId": "503403"}}]
         self.assertIn("noOutOfScopeReads", failed(score(rec, docs)))
+
+    def test_a_refused_template_copy_fails_even_after_a_retry(self):
+        doc = good_document("no-notes", [])
+        rec, docs = first_import("no-notes", doc)
+        self.assertNotIn("oneDocument", failed(score(rec, docs)))
+        rec["refusedCreations"] = [{"turn": 1, "input": {"expectedTemplateSourceContentHash": "0" * 64}}]
+        self.assertIn("oneDocument", failed(score(rec, docs)))
 
     def test_profile_regexes_allow_correct_statements(self):
         doc = good_document("profile-people-labelled", [12501, 12502])

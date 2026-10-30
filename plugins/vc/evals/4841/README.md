@@ -67,7 +67,8 @@ local checks only.
 - **Platform**: the agents' capability-bundle guidance as Platform renders it
   (`capability-prompts.json`, from Craft `c69fe008`), the skills catalog with ALWAYS skill bodies,
   `activate_skill`, a task runtime block built from the task definition, reads of the project template and
-  the two shared guides the task names, template instantiation with revision/hash checks, documents that
+  the two shared guides the task names, template instantiation with revision/hash checks (a refused copy fails the
+  run, because on Platform it stops the task), documents that
   report processing after a save until waited for (in the processing case), artifact metadata, range reads (200 lines), full updates
   (100 KB) and line edits with preconditions, immutable task-run files, task output save and
   completion, and the manager's frozen tool contract.

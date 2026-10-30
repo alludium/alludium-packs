@@ -517,6 +517,7 @@ class CrmSimulator:
         self.affinity_reads: list[dict] = []
         self.interaction_filter_searches: list[dict] = []
         self.out_of_scope_reads: list[dict] = []
+        self.refused_creations: list[dict] = []
         self.field_writes: list[dict] = []
         self.stage_moves: list[dict] = []
         self.tasks_created: list[dict] = []
@@ -838,7 +839,10 @@ class CrmSimulator:
             return None, "Project not found"
         if args.get("expectedTemplateSourceRevisionNumber") != TEMPLATE_REVISION or \
                 args.get("expectedTemplateSourceContentHash") != sha256(self.template):
-            return None, "Template source changed; re-read the template metadata and retry"
+            # On Platform a refused creation is an uncertain external effect: the task stops for good
+            # (#4841 local run, one mistyped hash character). Record it so the run fails.
+            self.refused_creations.append({"turn": self.turn, "input": {k: v for k, v in args.items() if k != "content"}})
+            return None, "Template source changed since it was read"
         if not str(args.get("content") or "").strip():
             return None, "content must not be empty"
         document = self.add_document(f"88888888-8888-4888-8888-{len(self.documents) + 1:012d}", str(args["filename"]),
@@ -1188,6 +1192,7 @@ def finish_attempt(frozen: dict, record: dict, folder: Path, simulator: CrmSimul
                    "affinityWrites": simulator.affinity_writes, "affinityReads": len(simulator.affinity_reads),
                    "interactionFilterSearches": simulator.interaction_filter_searches,
                    "outOfScopeReads": simulator.out_of_scope_reads,
+                   "refusedCreations": simulator.refused_creations,
                    "fieldWrites": simulator.field_writes, "stageMoves": simulator.stage_moves,
                    "tasksCreated": simulator.tasks_created, "taskSaves": simulator.task_saves,
                    "questions": simulator.questions, "skillsActivated": simulator.skills_activated,
@@ -1335,9 +1340,11 @@ def score(frozen: dict, record: dict, documents: dict[str, str]) -> dict:
                 assertions["oneDocument"] = not record["created"] and len(ok_updates) == 1 and not ok_edits \
                     and not any(u["ok"] for u in record["updates"] if u["id"] != EXISTING_DOCUMENT)
             else:
-                # Only a template copy is a PROJECT_SHARED document a refresh can update.
+                # Only a template copy is a PROJECT_SHARED document a refresh can update. A refused copy
+                # would have stopped the task on Platform, so a retry after it does not count.
                 assertions["oneDocument"] = len(record["created"]) == 1 and \
                     record["created"][0]["tool"] == "project.instantiateTemplate" and \
+                    not record.get("refusedCreations") and \
                     not any(u["ok"] for u in record["updates"] if u["id"] != doc_id)
             # The task completes on its own; saving output alone leaves it open and the pointer unwritten.
             assertions["completedWithPointer"] = any(s["ok"] and s["tool"] == "task-management.completeTask"
