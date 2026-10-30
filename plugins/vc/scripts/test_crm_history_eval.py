@@ -902,6 +902,21 @@ class RunTests(unittest.TestCase):
         direct = {**case("crm-not-granted"), "affinityToolsInactive": False}
         self.assertFalse(any(t["toolSpec"]["name"].startswith("affinity_") for t in ch.tool_specs(FROZEN, "analyst", direct)))
 
+    def test_a_partial_grant_lists_and_activates_only_the_granted_tools(self):
+        # #119 review: the list is permission-scoped, so a nonempty list can still leave out a read tool.
+        simulator = sim("crm-partial-grant")
+        listed = simulator.handle("tools_list_available", {"applicationExternalId": "affinity-mcp-server", "limit": 50})[0]
+        self.assertEqual({t["externalId"] for t in listed["result"]["tools"]},
+                         {"affinity_search_companies", "affinity_get_company"})
+        granted = simulator.handle("tool_activate", {"toolExternalId": "affinity_search_companies"})[0]["result"]
+        self.assertTrue(granted["activated"])
+        refused = simulator.handle("tool_activate", {"toolExternalId": "affinity_list_company_notes"})[0]["result"]
+        self.assertEqual((refused["activated"], refused["code"]), (False, "TOOL_ACTIVATION_DENIED"))
+        self.assertEqual([t["name"] for t in simulator.active_affinity_tools()], ["affinity_search_companies"])
+        direct = {**case("crm-partial-grant"), "affinityToolsInactive": False}
+        offered = {t["toolSpec"]["name"] for t in ch.tool_specs(FROZEN, "analyst", direct) if t["toolSpec"]["name"].startswith("affinity_")}
+        self.assertEqual(offered, {"affinity_search_companies", "affinity_get_company"})
+
     def test_discovery_steps_do_not_use_the_step_budget(self):
         # Platform leaves search, list and activate steps out of the step budget, so a capped turn still
         # gets its full number of working steps after finding its tools.

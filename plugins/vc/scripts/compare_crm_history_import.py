@@ -769,7 +769,7 @@ class CrmSimulator:
         self.activation_only_steps, self.invocation_progress = 0, False
 
     def active_affinity_tools(self) -> list[dict]:
-        tools = self.frozen["affinity"]["tools"]
+        tools = granted_affinity_tools(self.frozen, self.case)
         return [t for t in tools if t["name"] in self.activated_tools] if self.affinity_tools_inactive else tools
 
     def discovery(self, name: str, args: dict) -> tuple[object, str | None]:
@@ -777,12 +777,12 @@ class CrmSimulator:
 
         Results use Platform's shapes, and refusals are results, not tool errors. A disconnected CRM's
         tools can still be found and activated and the Affinity call itself then fails; an agent without an
-        Affinity grant lists no Affinity tools and every activation is refused, as on Platform.
+        Affinity grant lists no Affinity tools and every activation is refused, as on Platform. A partial
+        grant (`affinityGrantedTools`) lists and activates only the granted tools.
         """
         self.tool_discovery.append({"turn": self.turn, "tool": name, "input": args})
-        # Without an Affinity grant the agent can neither list nor activate its tools.
-        granted = self.case.get("affinityGranted", True) is not False
-        universe = sorted(self.frozen["affinity"]["tools"] if granted else [], key=lambda t: t["name"])
+        # The list and activation are permission-scoped: only granted tools can be found or activated.
+        universe = sorted(granted_affinity_tools(self.frozen, self.case), key=lambda t: t["name"])
         summary = lambda t: {"id": f"tool-{t['name']}", "externalId": t["name"], "name": t["name"],
                              "description": t["description"],
                              "application": {"id": "app-affinity", "externalId": AFFINITY_APPLICATION, "name": "Affinity"}}
@@ -1176,6 +1176,14 @@ def tools_start_inactive(case: dict) -> bool:
     return case.get("affinityToolsInactive", True) is not False
 
 
+def granted_affinity_tools(frozen: dict, case: dict) -> list[dict]:
+    """The Affinity tools the case grants: none without a grant, or only those named in `affinityGrantedTools`."""
+    if case.get("affinityGranted", True) is False:
+        return []
+    granted = case.get("affinityGrantedTools")
+    return [t for t in frozen["affinity"]["tools"] if granted is None or t["name"] in granted]
+
+
 def tool_specs(frozen: dict, agent: str, case: dict | None = None,
                simulator: "CrmSimulator | None" = None) -> list[dict]:
     names = ANALYST_TOOLS if agent == "analyst" else frozen["managerTools"]
@@ -1196,7 +1204,7 @@ def tool_specs(frozen: dict, agent: str, case: dict | None = None,
     unavailable = (case or {}).get("affinityConnected", True) is False or (case or {}).get("affinityGranted", True) is False
     if unavailable and not tools_start_inactive(case or {}):
         return tools
-    affinity_tools = simulator.active_affinity_tools() if simulator else frozen["affinity"]["tools"]
+    affinity_tools = simulator.active_affinity_tools() if simulator else granted_affinity_tools(frozen, case or {})
     if tools_start_inactive(case or {}) and not simulator:
         affinity_tools = []
     for tool in affinity_tools:

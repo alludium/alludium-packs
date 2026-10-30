@@ -147,6 +147,11 @@ cases:
     blocked: true
     replyMentions: ["(?:not connected|no (?:\\w+ )?connection|unavailable|not available|isn't available|no (?:\\w+ )?access|cannot access|can't access|not granted|no affinity tools|not readable|could not be read|couldn't be read)"]
 
+  crm-partial-grant:
+    blocked: true
+    replyMentions: ["(?:not granted|not authori[sz]ed|no access|missing|unavailable|not available|isn't available|cannot access|can't access)",
+                    "(?:notes|opportunit)"]
+
   screening-still-uses-living-report:
     # Met when the skill is ALWAYS-on in the arm or the analyst activates it within the step cap.
     livingReportActive: true

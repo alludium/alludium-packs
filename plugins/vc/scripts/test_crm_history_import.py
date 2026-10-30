@@ -180,7 +180,8 @@ class CrmHistoryImportContractTests(unittest.TestCase):
                          ("Never pass only `toolName`", "Prefer `toolName`"),
                          ("all in the same step", "one per step"),
                          ("Do not rely on `tools_search_available` to find Affinity tools", "Search for Affinity tools"),
-                         ('`applicationExternalId: "affinity-mcp-server"`', "an application filter")):
+                         ('`applicationExternalId: "affinity-mcp-server"`', "an application filter"),
+                         ("never import with fewer than\n  all five", "import with what\n  is listed")):
             with self.subTest(rule=old):
                 self._assert_rejected(self._edit_text(skill, old, new))
 

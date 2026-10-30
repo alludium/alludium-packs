@@ -7282,6 +7282,8 @@ def validate_crm_history_task_contract(
         "all in the same step",
         '`applicationExternalId: "affinity-mcp-server"`',
         "Do not rely on `tools_search_available` to find Affinity tools",
+        # #119 review: the list is permission-scoped, so a partly granted run must stop, not import without notes.
+        "never import with fewer than\n  all five",
     ]:
         if phrase not in skill:
             fail(f"import-crm-history skill is missing rule: {phrase}")

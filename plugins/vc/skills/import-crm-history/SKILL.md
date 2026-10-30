@@ -338,10 +338,13 @@ run rather than assuming them; the steps below match the Affinity connector's re
   `externalId` the list shows, again in one step. These discovery tools are not CRM reads, so the
   "Nothing else" rule below does not apply to them.
   Do not rely on `tools_search_available` to find Affinity tools: it returns a short list that can leave out a tool even when you search for its exact name.
-  Affinity is unavailable only when that list holds no Affinity tools, a tool activated by its
-  listed `externalId` is still refused, or the first company search still fails with a connection
-  or authorization error after one retry. Only then stop as section 8 says. A failed read after
-  that point is a failed page or record (section 3), not an unavailable CRM.
+  The list shows only the tools this run is granted. If any of the five read tools is missing from
+  every page of it, stop as section 8 says and say in plain words what cannot be read, such as
+  company notes or opportunities; never import with fewer than
+  all five. Affinity is also unavailable when a tool activated by its listed `externalId` is still
+  refused, or when the first company search still fails with a connection or authorization error
+  after one retry. Only then stop as section 8 says. A failed read after that point is a failed page
+  or record (section 3), not an unavailable CRM.
 - **Search:** `affinity_search_companies` with `term` set to the company name, then to the domain
   when known, then to the variants in section 2 when needed. Always pass a `term`: never call it without one to list all companies. Set `withOpportunities: true` to get each company's opportunity IDs. While `hasMore`
   is true, pass the returned page token (`nextPageToken`, or `next_page_token`) back as `pageToken`,

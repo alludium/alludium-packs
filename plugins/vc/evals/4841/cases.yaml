@@ -462,6 +462,14 @@ cases:
     deal: {name: Corvane seed, organisation: {name: Corvane, domain: corvane.example}}
     affinity: {companies: []}
 
+  # #119 review: the list is permission-scoped. Only search and the company record are granted, so the
+  # list returns them alone, the notes and opportunity tools are refused, and the import must stop.
+  - id: crm-partial-grant
+    kind: import
+    affinityGrantedTools: [affinity_search_companies, affinity_get_company]
+    deal: {name: Corvane seed, organisation: {name: Corvane, domain: corvane.example}}
+    affinity: {companies: []}
+
   - id: screening-still-uses-living-report
     kind: skill-control
     taskSlug: generate-refresh-screening-report
