@@ -35,6 +35,7 @@ jobs:
       - run: python plugins/vc/scripts/test_pipeline_catalogue.py
       - run: python plugins/vc/scripts/test_crm_history_import.py
       - run: python plugins/vc/scripts/test_pipeline_meetings.py
+      - run: python plugins/vc/scripts/test_pipeline_refresh_and_suggestions.py
       - run: python plugins/vc/scripts/test_fund_persistence.py
       - run: python plugins/vc/scripts/test_stage_moves.py
       - run: python plugins/vc/scripts/test_crm_history_eval.py
