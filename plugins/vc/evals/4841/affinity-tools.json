@@ -1,0 +1,342 @@
+{
+  "description": "Frozen Affinity connector tool definitions for the #4841 CRM history eval: names, descriptions and input schemas copied verbatim from the published connector package, except one example company name in a description, replaced with a placeholder. Write tools are listed so a run can show whether the agent tries them; Platform refuses them under the agents' read-only connected-app policy, and the simulator returns the same refusal.",
+  "source": {
+    "package": "@alludium/affinity-mcp-server",
+    "version": "1.0.4",
+    "files": [
+      "dist/tools/companies-v1.js",
+      "dist/tools/companies.js",
+      "dist/tools/notes.js",
+      "dist/tools/opportunities.js",
+      "dist/tools/enhanced-details.js",
+      "dist/tools/persons-v1.js"
+    ],
+    "retrievedAt": "2026-10-27"
+  },
+  "responseLimitCharacters": 25000,
+  "readOnlyDenialMessage": "Connected-application tool execution is not permitted by this agent's read-only policy.",
+  "tools": [
+    {
+      "name": "affinity_search_companies",
+      "description": "Search for companies (organizations) in Affinity by name or domain.\n\n**This is a V1 API endpoint - search is NOT available in V2.**\n\nUse this tool to:\n- Find a company by its domain (e.g., \"acme.com\")\n- Search for companies by name\n- List all companies (omit term parameter)\n\n**Search Behavior:**\n- Domain search: Exact and partial matching (e.g., \"acme\" matches \"acme.com\")\n- Name search: Partial matching on organization name\n- Empty term: Returns all organizations (paginated)\n\n**Global vs Custom Organizations:**\n- global=true: Shared record from Affinity's database (cannot modify/delete)\n- global=false: Custom organization you created (can modify/delete)\n\n**Parameters:**\n- term: Company name or domain to search\n- withInteractionDates: Include first/last email and event timestamps\n- pageSize: Results per page (max 500)\n- pageToken: Pagination token for next page\n\n**Returns (JSON):**\n{\n  \"organizations\": [\n    {\n      \"id\": number,           // Use with V2 affinity_get_company\n      \"name\": string,\n      \"domain\": string | null,\n      \"domains\": string[],\n      \"global\": boolean,      // true=shared, false=custom\n      \"interaction_dates\": {} // if requested\n    }\n  ],\n  \"next_page_token\": string | null,\n  \"count\": number,\n  \"hasMore\": boolean\n}\n\n**Example use cases:**\n- Look up company by domain: term=\"acme.com\"\n- Search by name: term=\"Acme Corporation\"\n- Find companies at a TLD: term=\".io\"",
+      "readOnly": true,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "term": {
+            "type": "string",
+            "description": "Search term: company name or domain. Omit to list all companies."
+          },
+          "withInteractionDates": {
+            "type": "boolean",
+            "description": "Include first/last email and event timestamps"
+          },
+          "withInteractionPersons": {
+            "type": "boolean",
+            "description": "Include person IDs from interactions"
+          },
+          "withOpportunities": {
+            "type": "boolean",
+            "description": "Include opportunity IDs"
+          },
+          "pageSize": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 500,
+            "description": "Items per page (default 100, max 500)"
+          },
+          "pageToken": {
+            "type": "string",
+            "description": "Pagination token from previous response (next_page_token)"
+          },
+          "responseFormat": {
+            "type": "string",
+            "enum": [
+              "json",
+              "markdown"
+            ],
+            "description": "Output format: \"json\" or \"markdown\". Default: \"json\""
+          }
+        },
+        "required": []
+      }
+    },
+    {
+      "name": "affinity_get_company",
+      "description": "Get a single company by ID from Affinity CRM.\n\nReturns company details with optional field data. Without fieldTypes/fieldIds, returns only basic info (id, name, domain, domains, isGlobal).\n\n**Field Types:**\n- enriched: Data from Affinity Data and Dealroom (description, employees, funding, location, LinkedIn, etc.)\n- global: Your account's custom company fields\n\n**Returns (JSON):**\n{\n  \"id\": number,           // Company ID\n  \"name\": string,         // Company name\n  \"domain\": string,       // Primary domain\n  \"domains\": string[],    // All domains\n  \"isGlobal\": boolean,    // Is shared record\n  \"fields\": [             // Field data (if requested)\n    {\n      \"id\": string,       // Field ID\n      \"type\": string,     // \"enriched\" or \"global\"\n      \"name\": string,     // Field name\n      \"value\": {\n        \"type\": string,   // Value type\n        \"data\": any       // Field value\n      }\n    }\n  ]\n}\n\n**Example field IDs you can request:**\n- affinity-data-description\n- affinity-data-number-of-employees\n- affinity-data-location\n- affinity-data-total-funding-amount\n- affinity-data-linkedin-url\n- affinity-data-industry",
+      "readOnly": true,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "companyId": {
+            "type": "string",
+            "description": "Company ID (numeric). Get IDs from affinity_list_companies or affinity_get_list_entries."
+          },
+          "fieldTypes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "enriched",
+                "global"
+              ]
+            },
+            "description": "Field categories to include. Options: \"enriched\" (Affinity Data, Dealroom), \"global\" (custom fields)."
+          },
+          "fieldIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Specific field IDs to return. Example: [\"affinity-data-description\", \"affinity-data-location\"]"
+          },
+          "responseFormat": {
+            "type": "string",
+            "enum": [
+              "json",
+              "markdown"
+            ],
+            "description": "Output format: \"json\" for structured data or \"markdown\" for human-readable. Default: \"json\""
+          }
+        },
+        "required": [
+          "companyId"
+        ]
+      }
+    },
+    {
+      "name": "affinity_list_company_notes",
+      "description": "List all notes attached to a specific company in Affinity.\n\n**This is a V2 BETA endpoint - API may change.**\n\nReturns notes with HTML content, creator information, and timestamps.\n\n**Parameters:**\n- companyId: Company ID (required) - get from affinity_search_companies or affinity_get_company\n- cursor: Pagination cursor from previous response\n- limit: Items per page (default 20, max 100)\n\n**Returns (JSON):**\n{\n  \"notes\": [\n    {\n      \"id\": number,\n      \"content\": { \"html\": string },\n      \"creator\": {\n        \"id\": number,\n        \"firstName\": string,\n        \"lastName\": string,\n        \"primaryEmailAddress\": string\n      },\n      \"createdAt\": string,      // ISO 8601\n      \"type\": \"entities\" | \"interaction\"\n    }\n  ],\n  \"count\": number,\n  \"hasMore\": boolean,\n  \"nextCursor\": string | null\n}\n\n**Note Types:**\n- \"entities\": Note attached directly to company/person\n- \"interaction\": Note attached to a meeting or email\n\n**Example:**\nGet notes for Example Company (ID: 100000001)",
+      "readOnly": true,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "companyId": {
+            "type": "string",
+            "description": "Company ID (numeric). Get from affinity_search_companies or affinity_get_company."
+          },
+          "cursor": {
+            "type": "string",
+            "description": "Pagination cursor from previous response"
+          },
+          "limit": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "description": "Items per page (default 20, max 100)"
+          },
+          "responseFormat": {
+            "type": "string",
+            "enum": [
+              "json",
+              "markdown"
+            ],
+            "description": "Output format: \"json\" or \"markdown\". Default: \"json\""
+          }
+        },
+        "required": [
+          "companyId"
+        ]
+      }
+    },
+    {
+      "name": "affinity_get_opportunity",
+      "description": "Get a single opportunity by ID from Affinity CRM.\n\nReturns basic opportunity info only (id, name, listId).\n\n**Returns (JSON):**\n{\n  \"id\": number,       // Opportunity ID\n  \"name\": string,     // Opportunity name\n  \"listId\": number    // The list this opportunity belongs to\n}\n\n**Important:** To get field data (Status, Amount, Owners, etc.), use affinity_get_list_entries with the opportunity's listId and fieldTypes: [\"list\"].",
+      "readOnly": true,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "opportunityId": {
+            "type": "string",
+            "description": "Opportunity ID (numeric). Get IDs from affinity_list_opportunities."
+          },
+          "responseFormat": {
+            "type": "string",
+            "enum": [
+              "json",
+              "markdown"
+            ],
+            "description": "Output format: \"json\" for structured data or \"markdown\" for human-readable. Default: \"json\""
+          }
+        },
+        "required": [
+          "opportunityId"
+        ]
+      }
+    },
+    {
+      "name": "affinity_list_opportunity_notes",
+      "description": "List all notes attached to a specific opportunity in Affinity.\n\n**This is a V2 BETA endpoint - API may change.**\n\nReturns notes with HTML content, creator information, and timestamps.\n\n**Parameters:**\n- opportunityId: Opportunity ID (required) - get from affinity_list_opportunities or affinity_get_opportunity\n- cursor: Pagination cursor from previous response\n- limit: Items per page (default 20, max 100)\n\n**Returns (JSON):**\n{\n  \"notes\": [\n    {\n      \"id\": number,\n      \"content\": { \"html\": string },\n      \"creator\": {\n        \"id\": number,\n        \"firstName\": string,\n        \"lastName\": string,\n        \"primaryEmailAddress\": string\n      },\n      \"createdAt\": string,      // ISO 8601\n      \"type\": \"entities\" | \"interaction\"\n    }\n  ],\n  \"count\": number,\n  \"hasMore\": boolean,\n  \"nextCursor\": string | null\n}\n\n**Note Types:**\n- \"entities\": Note attached directly to opportunity\n- \"interaction\": Note attached to a meeting or email about this opportunity\n\n**Use Cases:**\n- View deal progress notes\n- Export opportunity documentation\n- Review fundraising lead history",
+      "readOnly": true,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "opportunityId": {
+            "type": "string",
+            "description": "Opportunity ID (numeric). Get from affinity_list_opportunities or affinity_get_opportunity."
+          },
+          "cursor": {
+            "type": "string",
+            "description": "Pagination cursor from previous response"
+          },
+          "limit": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "description": "Items per page (default 20, max 100)"
+          },
+          "responseFormat": {
+            "type": "string",
+            "enum": [
+              "json",
+              "markdown"
+            ],
+            "description": "Output format: \"json\" or \"markdown\". Default: \"json\""
+          }
+        },
+        "required": [
+          "opportunityId"
+        ]
+      }
+    },
+    {
+      "name": "affinity_add_note",
+      "description": "Create a new note attached to companies, persons, or opportunities in Affinity.\n\n**This is a V1 API endpoint.**\n\n**IMPORTANT: Notes are add-only. Edit and delete are not supported by this MCP.**\n\n**Required:**\n- content: Note text (plain or HTML)\n- At least ONE of: companyIds, personIds, or opportunityIds\n\n**Optional:**\n- contentType: \"text\" (default) or \"html\" for rich formatting\n\n**HTML Content Examples:**\n- Bold: <strong>important</strong>\n- Italic: <em>emphasis</em>\n- Links: <a href=\"https://drive.google.com/...\">Pitch Deck</a>\n- Lists: <ul><li>Item 1</li><li>Item 2</li></ul>\n\n**Returns (JSON):**\n{\n  \"success\": true,\n  \"note\": {\n    \"id\": number,           // New note ID\n    \"content\": string,\n    \"creator_id\": number,\n    \"organization_ids\": number[],\n    \"person_ids\": number[],\n    \"opportunity_ids\": number[],\n    \"created_at\": string    // ISO 8601\n  }\n}\n\n**Example - Add note with link to company:**\n{\n  \"content\": \"Received pitch deck: <a href='https://drive.google.com/file/xyz'>View Deck</a>\",\n  \"companyIds\": [223449211],\n  \"contentType\": \"html\"\n}\n\n**Use Cases:**\n- Record meeting notes\n- Add document links (Google Drive, Dropbox)\n- Log call summaries\n- Document investment decisions",
+      "readOnly": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Note content (required). Plain text or HTML depending on contentType."
+          },
+          "companyIds": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Company IDs to attach note to. Get IDs from affinity_search_companies."
+          },
+          "personIds": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Person IDs to attach note to. Get IDs from affinity_search_persons."
+          },
+          "opportunityIds": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Opportunity IDs to attach note to. Get IDs from affinity_list_opportunities."
+          },
+          "contentType": {
+            "type": "string",
+            "enum": [
+              "text",
+              "html"
+            ],
+            "description": "Content type: \"text\" (default) or \"html\" for rich formatting with links, bold, etc."
+          },
+          "responseFormat": {
+            "type": "string",
+            "enum": [
+              "json",
+              "markdown"
+            ],
+            "description": "Output format: \"json\" or \"markdown\". Default: \"json\""
+          }
+        },
+        "required": [
+          "content"
+        ]
+      }
+    },
+    {
+      "name": "affinity_create_company",
+      "description": "Create a new company (organization) in Affinity.\n\n**This is a V1 API endpoint - creation is NOT available in V2.**\n\n**Required fields:**\n- name: Company name\n\n**Optional fields:**\n- domain: Primary domain (e.g., \"acme.com\")\n- domains: Additional domains\n\n**Important:**\n- Created companies are always custom (global=false)\n- Global companies from Affinity's shared database cannot be created this way\n- Use affinity_search_companies first to check if company exists\n- Created company can be retrieved via V2 affinity_get_company using returned ID\n\n**Returns (JSON):**\n{\n  \"id\": number,              // Use this ID with other tools\n  \"name\": string,\n  \"domain\": string | null,\n  \"domains\": string[],\n  \"global\": false            // Always false for created companies\n}\n\n**Example workflow:**\n1. Search: affinity_search_companies with term=\"acme.com\"\n2. If not found: affinity_create_company with name, domain\n3. Get full details: affinity_get_company with the returned ID\n4. Add note: affinity_add_note with the returned company ID",
+      "readOnly": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Company name (required)"
+          },
+          "domain": {
+            "type": "string",
+            "description": "Primary domain (e.g., \"acme.com\")"
+          },
+          "domains": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Additional domains"
+          },
+          "responseFormat": {
+            "type": "string",
+            "enum": [
+              "json",
+              "markdown"
+            ],
+            "description": "Output format: \"json\" or \"markdown\". Default: \"json\""
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "affinity_create_person",
+      "description": "Create a new person (contact) in Affinity.\n\n**This is a V1 API endpoint - creation is NOT available in V2.**\n\n**Required fields:**\n- firstName: Person's first name\n- lastName: Person's last name\n\n**Optional fields:**\n- emails: Array of email addresses (first becomes primary)\n- organizationIds: Array of organization IDs to associate\n\n**Important:**\n- Duplicate email addresses will return a 422 error\n- Use affinity_search_persons first to check if person exists\n- Created person can be retrieved via V2 affinity_get_person using returned ID\n\n**Returns (JSON):**\n{\n  \"id\": number,              // Use this ID with other tools\n  \"first_name\": string,\n  \"last_name\": string,\n  \"primary_email\": string | null,\n  \"emails\": string[],\n  \"type\": 0                  // 0 = external contact\n}\n\n**Example workflow:**\n1. Search: affinity_search_persons with term=\"john@example.com\"\n2. If not found: affinity_create_person with firstName, lastName, emails\n3. Add note: affinity_add_note with the returned person ID",
+      "readOnly": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "minLength": 1,
+            "description": "First name (required)"
+          },
+          "lastName": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Last name (required)"
+          },
+          "emails": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "email"
+            },
+            "description": "Email addresses. First email becomes primary_email. Can be empty array."
+          },
+          "organizationIds": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Organization IDs to associate with this person"
+          },
+          "responseFormat": {
+            "type": "string",
+            "enum": [
+              "json",
+              "markdown"
+            ],
+            "description": "Output format: \"json\" or \"markdown\". Default: \"json\""
+          }
+        },
+        "required": [
+          "firstName",
+          "lastName"
+        ]
+      }
+    }
+  ]
+}
