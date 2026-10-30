@@ -455,6 +455,13 @@ cases:
     deal: {name: Corvane seed, organisation: {name: Corvane, domain: corvane.example}}
     affinity: {companies: []}
 
+  # The agent has no Affinity grant: the tool list is empty and every activation is refused.
+  - id: crm-not-granted
+    kind: import
+    affinityGranted: false
+    deal: {name: Corvane seed, organisation: {name: Corvane, domain: corvane.example}}
+    affinity: {companies: []}
+
   - id: screening-still-uses-living-report
     kind: skill-control
     taskSlug: generate-refresh-screening-report

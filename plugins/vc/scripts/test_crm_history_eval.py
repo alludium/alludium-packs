@@ -872,14 +872,32 @@ class RunTests(unittest.TestCase):
         self.assertEqual(late[0]["error"], "Unknown tool")
         self.assertFalse(rec["deterministic"]["passed"])
 
-    def test_a_productive_step_resets_the_activation_restart_count(self):
+    def test_the_restart_limit_counts_activation_only_invocations(self):
+        # A step that activates ends Platform's invocation; one with any other tool call is not activation-only.
         simulator = sim("no-notes")
-        for activated, progress in [(True, False), (True, False), (True, True), (True, False), (True, False)]:
+        steps = [(True, False), (True, False), (False, True), (True, False), (True, False), (True, False)]
+        for activated, progress in steps[:5]:
             simulator.count_activation_step(activated, progress)
+        self.assertEqual(simulator.activation_only_steps, 1)
+        simulator.count_activation_step(*steps[5])
         self.assertEqual(simulator.activation_only_steps, 2)
         simulator.count_activation_step(True, False)
         simulator.count_activation_step(False, True)
+        simulator.count_activation_step(True, False)
         self.assertEqual(simulator.activation_only_steps, ch.ACTIVATION_ONLY_RESTART_LIMIT)
+        simulator.start_turn()
+        self.assertEqual(simulator.activation_only_steps, 0)
+
+    def test_without_an_affinity_grant_nothing_can_be_listed_or_activated(self):
+        simulator = sim("crm-not-granted")
+        listed = simulator.handle("tools_list_available", {"applicationExternalId": "affinity-mcp-server", "limit": 50})[0]
+        self.assertEqual(listed["result"]["tools"], [])
+        self.assertEqual(simulator.handle("tools_search_available", {"query": "affinity"})[0]["result"], [])
+        refused = simulator.handle("tool_activate", {"toolExternalId": "affinity_search_companies"})[0]["result"]
+        self.assertEqual((refused["activated"], refused["code"]), (False, "TOOL_ACTIVATION_DENIED"))
+        self.assertEqual(simulator.active_affinity_tools(), [])
+        direct = {**case("crm-not-granted"), "affinityToolsInactive": False}
+        self.assertFalse(any(t["toolSpec"]["name"].startswith("affinity_") for t in ch.tool_specs(FROZEN, "analyst", direct)))
 
     def test_discovery_steps_do_not_use_the_step_budget(self):
         # Platform leaves search, list and activate steps out of the step budget, so a capped turn still

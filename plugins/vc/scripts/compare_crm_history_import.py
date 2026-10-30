@@ -572,6 +572,7 @@ class CrmSimulator:
         self.activated_tools: set[str] = set()
         self.tool_discovery: list[dict] = []
         self.activation_only_steps = 0
+        self.invocation_progress = False
         self.field_writes: list[dict] = []
         self.stage_moves: list[dict] = []
         self.tasks_created: list[dict] = []
@@ -751,14 +752,18 @@ class CrmSimulator:
     # Platform tools ----------------------------------------------------------------------
 
     def count_activation_step(self, activated: bool, progress: bool) -> None:
-        """Platform restarts the run after an activation step, at most 3 times in a row without other progress;
-        after that `tool_activate` is withdrawn for the rest of the turn."""
+        """Platform runs steps in invocations: a step that calls `tool_activate` ends the invocation and Platform
+        restarts with the activated tools. An invocation with no non-discovery tool call is activation-only, and
+        after 3 of those in a row `tool_activate` is withdrawn for the rest of the turn."""
         if self.activation_only_steps >= ACTIVATION_ONLY_RESTART_LIMIT:
             return
-        if activated and not progress:
-            self.activation_only_steps += 1
-        elif progress:
-            self.activation_only_steps = 0
+        self.invocation_progress = self.invocation_progress or progress
+        if activated:
+            self.activation_only_steps = 0 if self.invocation_progress else self.activation_only_steps + 1
+            self.invocation_progress = False
+
+    def start_turn(self) -> None:
+        self.activation_only_steps, self.invocation_progress = 0, False
 
     def active_affinity_tools(self) -> list[dict]:
         tools = self.frozen["affinity"]["tools"]
@@ -768,10 +773,13 @@ class CrmSimulator:
         """Platform's tools_search_available, tools_list_available and tool_activate for the Affinity tools.
 
         Results use Platform's shapes, and refusals are results, not tool errors. A disconnected CRM's
-        tools can still be found and activated; the Affinity call itself then fails, as on Platform.
+        tools can still be found and activated and the Affinity call itself then fails; an agent without an
+        Affinity grant lists no Affinity tools and every activation is refused, as on Platform.
         """
         self.tool_discovery.append({"turn": self.turn, "tool": name, "input": args})
-        universe = sorted(self.frozen["affinity"]["tools"], key=lambda t: t["name"])
+        # Without an Affinity grant the agent can neither list nor activate its tools.
+        granted = self.case.get("affinityGranted", True) is not False
+        universe = sorted(self.frozen["affinity"]["tools"] if granted else [], key=lambda t: t["name"])
         summary = lambda t: {"id": f"tool-{t['name']}", "externalId": t["name"], "name": t["name"],
                              "description": t["description"],
                              "application": {"id": "app-affinity", "externalId": AFFINITY_APPLICATION, "name": "Affinity"}}
@@ -1181,7 +1189,8 @@ def tool_specs(frozen: dict, agent: str, case: dict | None = None,
                                                                 "required": required, "additionalProperties": True}}}})
         else:
             tools += tool_specs_from_names([platform_name])
-    if (case or {}).get("affinityConnected", True) is False and not tools_start_inactive(case or {}):
+    unavailable = (case or {}).get("affinityConnected", True) is False or (case or {}).get("affinityGranted", True) is False
+    if unavailable and not tools_start_inactive(case or {}):
         return tools
     affinity_tools = simulator.active_affinity_tools() if simulator else frozen["affinity"]["tools"]
     if tools_start_inactive(case or {}) and not simulator:
@@ -1241,7 +1250,7 @@ def run_attempt(frozen: dict, item: dict, output: Path, invoke, ledger, settings
             ledger_turn = {"index": turn_index, "userText": text, "calls": [], "texts": [], "final": "", "complete": False,
                            "stopReason": None}
             record["turns"].append(ledger_turn)
-            simulator.activation_only_steps = 0
+            simulator.start_turn()
             budget, counted = case.get("maxSteps") or limits["maxStepsPerTurn"], 0
             for step in range(budget + DISCOVERY_STEP_ALLOWANCE):
                 if counted >= budget:

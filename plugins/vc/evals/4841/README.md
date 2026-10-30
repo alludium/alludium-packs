@@ -11,7 +11,7 @@ when an import is partial, refuse to save a history too large to refresh, and ch
 Every company, person, note and ID is invented (`.example` domains, plus invented `tallowmere`
 names for the case where the company is named by its domain).
 
-- **Import cases** (26): a rebrand with nine notes, history held on a second record, the record
+- **Import cases** (27): a rebrand with nine notes, history held on a second record, the record
   with the history on the second page of search results, two similarly
   named companies that must not be merged, a company whose only similarly named records have another
   domain (it must stop, not import a near match), a company named by its domain whose record has notes
@@ -24,8 +24,8 @@ names for the case where the company is named by its domain).
   the refresh's read and its write (the edit must survive), a second import while another is still
   running and has created its document (it must stop), another open import with no document yet (it
   must go ahead: an open task alone is not a reason to stop), a large history (about 55 KB of notes) that fits and must be
-  kept in full on first import and on refresh, a refreshed document that is still processing just after the save, and no CRM
-  connection.
+  kept in full on first import and on refresh, a refreshed document that is still processing just after the save, no CRM
+  connection, and no Affinity grant for the agent.
 - **Routing cases** (5): the Deal Manager starts the task for an import or refresh request, answers
   a read-only question without starting it, uses the saved document in a fresh chat, and does not
   start a second import while one is running.
@@ -48,7 +48,7 @@ python plugins/vc/scripts/compare_crm_history_import.py \
   --execute --output /tmp/crm-history-4841 --max-spend-usd 15 --max-wall-minutes 180
 ```
 
-Preflight (2 arms, 35 cases, 3 repetitions): 210 attempts, at most 40 counted steps per turn plus 20
+Preflight (2 arms, 36 cases, 3 repetitions): 216 attempts, at most 40 counted steps per turn plus 20
 tool-discovery steps. `--rescore DIR` re-scores a finished run without spend; `--reconcile DIR`
 rebuilds spend accounting after a hard stop. `WORKTREE` as a revision reads the working tree, for
 local checks only.
@@ -74,9 +74,10 @@ local checks only.
   through every tool. An activation by `toolExternalId` (the tool name, for Affinity) or `toolId`
   works; one by `toolName` alone is refused with `LOCKED_PROJECT_AGENT_SELECTION_FORBIDDEN`, as all 9
   such activations were in a local Deal. As on Platform, steps that only search, list or activate
-  tools do not use the step budget (up to 20 such steps a turn), and after three activation-only steps
-  in a row `tool_activate` is withdrawn for the rest of the turn. A disconnected CRM's tools can still
-  be listed and activated; the first Affinity call then fails. Every discovery call is recorded. A case
+  tools do not use the step budget (up to 20 such steps a turn). A step that activates ends Platform's
+  invocation, and after three invocations in a row with no other tool call `tool_activate` is withdrawn
+  for the rest of the turn. A disconnected CRM's tools can still be listed and activated, and the first
+  Affinity call then fails; without an Affinity grant the list is empty and every activation is refused. Every discovery call is recorded. A case
   sets `affinityToolsInactive: false` to hand the tools over directly.
 - **Platform**: the agents' capability-bundle guidance as Platform renders it
   (`capability-prompts.json`, from Craft `c69fe008`), the skills catalog with ALWAYS skill bodies,
