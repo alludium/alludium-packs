@@ -147,8 +147,19 @@ DISCOVERY_SCHEMAS: dict[str, tuple[str, dict, list[str]]] = {
                       "description": "Tool name when toolExternalId is not available. Prefer toolExternalId when possible."},
          "toolId": {"type": "string", "description": "Internal tool UUID. Prefer toolExternalId when available."}}, []),
 }
-# On Dev (#4841 0.6.46 run) tool search left this tool out of all 11 Affinity searches, even of its exact name.
+# On Dev (#4841 0.6.46 run) tool search left this tool out of all 11 Affinity searches, even of its exact name:
+# Platform matches words, sorts by name and cuts to the limit, and this tool sorts 26th of 28 Affinity tools.
 SEARCH_HIDDEN_TOOLS = {"affinity_search_companies"}
+# Platform leaves discovery-only steps out of the step budget, and after 3 activation-only steps in a row
+# withdraws `tool_activate` for the rest of the turn
+# (runtime-discovery-tools.ts INTERNAL_TOOL_STEP_ACCOUNTING_EXCLUSIONS, agent-executor.ts).
+ACTIVATION_ONLY_RESTART_LIMIT = 3
+# Safety cap on uncounted discovery-only steps in one turn (Platform bounds them by wall clock and tool caps).
+DISCOVERY_STEP_ALLOWANCE = 20
+# A Deal project locks executor assignment, so Platform refuses an MCP tool activated by `toolName` alone.
+LOCKED_PROJECT_DENIAL = {"activated": False, "error": "Execution-agent discovery and selection are not available in "
+                         "this locked project. Platform routes task execution from the project type policy.",
+                         "code": "LOCKED_PROJECT_AGENT_SELECTION_FORBIDDEN"}
 
 # Request schemas approximated from Craft c69fe008 (artifact.transformers.ts, project.transformers.ts,
 # task-management.transformers.ts, skill-runtime-tools.ts). Other tools use the generic contract schema.
@@ -560,6 +571,7 @@ class CrmSimulator:
         self.affinity_tools_inactive = tools_start_inactive(case)
         self.activated_tools: set[str] = set()
         self.tool_discovery: list[dict] = []
+        self.activation_only_steps = 0
         self.field_writes: list[dict] = []
         self.stage_moves: list[dict] = []
         self.tasks_created: list[dict] = []
@@ -634,6 +646,8 @@ class CrmSimulator:
 
     def affinity(self, name: str, args: dict) -> tuple[object, str | None]:
         spec = next(t for t in self.frozen["affinity"]["tools"] if t["name"] == name)
+        if self.case.get("affinityConnected", True) is False:
+            return None, "Error: Affinity is not connected for this workspace. Ask an admin to connect it."
         if not spec["readOnly"]:
             self.affinity_writes.append({"turn": self.turn, "tool": name, "input": args})
             return None, self.frozen["affinity"]["readOnlyDenialMessage"]
@@ -736,36 +750,60 @@ class CrmSimulator:
 
     # Platform tools ----------------------------------------------------------------------
 
+    def count_activation_step(self, activated: bool, progress: bool) -> None:
+        """Platform restarts the run after an activation step, at most 3 times in a row without other progress;
+        after that `tool_activate` is withdrawn for the rest of the turn."""
+        if self.activation_only_steps >= ACTIVATION_ONLY_RESTART_LIMIT:
+            return
+        if activated and not progress:
+            self.activation_only_steps += 1
+        elif progress:
+            self.activation_only_steps = 0
+
     def active_affinity_tools(self) -> list[dict]:
         tools = self.frozen["affinity"]["tools"]
         return [t for t in tools if t["name"] in self.activated_tools] if self.affinity_tools_inactive else tools
 
     def discovery(self, name: str, args: dict) -> tuple[object, str | None]:
+        """Platform's tools_search_available, tools_list_available and tool_activate for the Affinity tools.
+
+        Results use Platform's shapes, and refusals are results, not tool errors. A disconnected CRM's
+        tools can still be found and activated; the Affinity call itself then fails, as on Platform.
+        """
         self.tool_discovery.append({"turn": self.turn, "tool": name, "input": args})
-        # A disconnected CRM has no Affinity tools to discover.
-        universe = self.frozen["affinity"]["tools"] if self.case.get("affinityConnected", True) is not False else []
-        inactive = sorted((t for t in universe if t["name"] not in self.activated_tools), key=lambda t: t["name"])
-        summary = lambda t: {"name": t["name"], "externalId": t["name"], "description": t["description"],
-                             "application": {"externalId": AFFINITY_APPLICATION, "name": "Affinity"}}
+        universe = sorted(self.frozen["affinity"]["tools"], key=lambda t: t["name"])
+        summary = lambda t: {"id": f"tool-{t['name']}", "externalId": t["name"], "name": t["name"],
+                             "description": t["description"],
+                             "application": {"id": "app-affinity", "externalId": AFFINITY_APPLICATION, "name": "Affinity"}}
         limit = args.get("limit") if isinstance(args.get("limit"), (int, float)) else DISCOVERY_DEFAULT_LIMIT
         limit = min(max(int(limit), 1), DISCOVERY_MAX_LIMIT)
         if name == "tool_activate":
-            target = str(args.get("toolExternalId") or args.get("toolName") or "").strip()
-            if target not in {t["name"] for t in universe}:
-                return None, f"Tool {target or '(none)'} is not permitted for this agent"
-            self.activated_tools.add(target)
-            return {"activated": True, "tool": {"name": target, "externalId": target}}, None
+            external_id = str(args.get("toolExternalId") or "").strip()
+            tool_id = str(args.get("toolId") or "").strip()
+            if not external_id and tool_id.startswith("tool-"):
+                external_id = tool_id[len("tool-"):]
+            if not external_id:
+                if str(args.get("toolName") or "").strip():
+                    return {"result": dict(LOCKED_PROJECT_DENIAL)}, None
+                return {"result": {"activated": False, "code": "INVALID_TOOL_ACTIVATION_INPUT",
+                                   "error": "tool_activate requires an authorized toolExternalId, toolName, or toolId"}}, None
+            if external_id not in {t["name"] for t in universe}:
+                return {"result": {"activated": False, "toolExternalId": external_id, "code": "TOOL_ACTIVATION_DENIED",
+                                   "error": f"Tool {external_id} is not available to this agent"}}, None
+            self.activated_tools.add(external_id)
+            return {"result": {"activated": True, "toolId": f"tool-{external_id}", "toolExternalId": external_id,
+                               "safeToolName": external_id, "authorizationMode": "runtime"}}, None
         if name == "tools_search_available":
             words = [w for w in re.findall(r"[a-z0-9]+", str(args.get("query") or "").lower()) if len(w) > 2]
-            found = [t for t in inactive if t["name"] not in SEARCH_HIDDEN_TOOLS and
+            found = [t for t in universe if t["name"] not in SEARCH_HIDDEN_TOOLS and
                      (not words or any(w in f"affinity {t['name']} {t['description']}".lower() for w in words))]
-            return {"tools": [summary(t) for t in found[:limit]], "count": min(len(found), limit)}, None
+            return {"result": [summary(t) for t in found[:limit]]}, None
         app = args.get("applicationExternalId")
-        listed = inactive if app in (None, "", AFFINITY_APPLICATION) else []
+        listed = universe if app in (None, "", AFFINITY_APPLICATION) and not args.get("category") else []
         start = int(args["cursor"]) if str(args.get("cursor") or "").isdigit() else 0
         page = listed[start:start + limit]
-        return {"tools": [summary(t) for t in page], "count": len(page),
-                "nextCursor": str(start + limit) if start + limit < len(listed) else None}, None
+        return {"result": {"tools": [summary(t) for t in page],
+                           **({"nextCursor": str(start + limit)} if start + limit < len(listed) else {})}}, None
 
     def handle(self, name: str, args: dict) -> tuple[object, str | None]:
         if name in DISCOVERY_SCHEMAS:
@@ -1143,7 +1181,7 @@ def tool_specs(frozen: dict, agent: str, case: dict | None = None,
                                                                 "required": required, "additionalProperties": True}}}})
         else:
             tools += tool_specs_from_names([platform_name])
-    if (case or {}).get("affinityConnected", True) is False:
+    if (case or {}).get("affinityConnected", True) is False and not tools_start_inactive(case or {}):
         return tools
     affinity_tools = simulator.active_affinity_tools() if simulator else frozen["affinity"]["tools"]
     if tools_start_inactive(case or {}) and not simulator:
@@ -1157,6 +1195,8 @@ def tool_specs(frozen: dict, agent: str, case: dict | None = None,
 def offered_tools(frozen: dict, agent: str, case: dict, simulator: "CrmSimulator") -> tuple[list, dict, dict]:
     """Tool specs for the next request, each spec name's Platform tool name, and required arguments."""
     tools = tool_specs(frozen, agent, case, simulator)
+    if simulator.activation_only_steps >= ACTIVATION_ONLY_RESTART_LIMIT:
+        tools = [t for t in tools if t["toolSpec"]["name"] != "tool_activate"]
     platform = ANALYST_TOOLS if agent == "analyst" else frozen["managerTools"]
     names = {t["toolSpec"]["name"]: (t["toolSpec"]["name"]
                                      if t["toolSpec"]["name"].startswith("affinity_") or t["toolSpec"]["name"] in DISCOVERY_SCHEMAS
@@ -1201,7 +1241,11 @@ def run_attempt(frozen: dict, item: dict, output: Path, invoke, ledger, settings
             ledger_turn = {"index": turn_index, "userText": text, "calls": [], "texts": [], "final": "", "complete": False,
                            "stopReason": None}
             record["turns"].append(ledger_turn)
-            for step in range(case.get("maxSteps") or limits["maxStepsPerTurn"]):
+            simulator.activation_only_steps = 0
+            budget, counted = case.get("maxSteps") or limits["maxStepsPerTurn"], 0
+            for step in range(budget + DISCOVERY_STEP_ALLOWANCE):
+                if counted >= budget:
+                    break
                 if time.monotonic() - started > limits["attemptWallClockSeconds"]:
                     raise TimeoutError("Attempt wall-clock limit reached")
                 # Rebuilt every step: an activated Affinity tool becomes callable from the next step.
@@ -1246,6 +1290,10 @@ def run_attempt(frozen: dict, item: dict, output: Path, invoke, ledger, settings
                     conversation.append({"type": "function_call_output", "call_id": use["call_id"],
                                          "output": json.dumps({"error": error}) if error else
                                          data if isinstance(data, str) else json.dumps(data)})
+                discovery_only = all(names.get(use["name"]) in DISCOVERY_SCHEMAS for use in uses)
+                counted += 0 if discovery_only else 1
+                simulator.count_activation_step(
+                    any(names.get(use["name"]) == "tool_activate" for use in uses), progress=not discovery_only)
                 base.write_json(folder / "attempt.json", record)
             if not ledger_turn["complete"]:
                 record["status"] = "incomplete"
@@ -1604,7 +1652,8 @@ def preflight(args: argparse.Namespace, frozen: dict) -> dict:
     routes = {a["name"]: a["route"] for a in frozen["arms"]}
     return {"identity": frozen["identity"], "armNames": arms, "armRoutes": routes, "caseIds": [c["id"] for c in selected],
             "repetitions": reps, "attemptPlan": plan, "attempts": len(plan),
-            "maxSubjectCalls": sum(turns[p["case"]] * limits["maxStepsPerTurn"] for p in plan), "limits": limits,
+            "maxSubjectCalls": sum(turns[p["case"]] * (limits["maxStepsPerTurn"] + DISCOVERY_STEP_ALLOWANCE)
+                                   for p in plan), "limits": limits,
             "proposedCeilingUsd": cases["run"]["proposedCeilingUsd"], "maxWallMinutes": args.max_wall_minutes,
             "blockingProblems": problems, "ready": not problems}
 

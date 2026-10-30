@@ -20,7 +20,7 @@ capability:
       importance: required
       required: true
       note: Requires read-only CRM tools for company search, company records and notes, plus project template read and instantiation, artifact source metadata and range reads, and full-content artifact update tools. For Affinity, see the Affinity section below.
-      gracefulDegradation: Stop and name the unavailable CRM connection or document capability; do not create, update or claim a CRM history document.
+      gracefulDegradation: Stop and name the unavailable CRM connection or document capability, for Affinity only after the Affinity section's steps for getting the tools fail; do not create, update or claim a CRM history document.
   routingHints:
     preferredSurface: skill
     notes:
@@ -327,15 +327,21 @@ the document was saved and is still being processed.
 Use the connected Affinity tools, read-only. Check the tool list and parameters available in this
 run rather than assuming them; the steps below match the Affinity connector's read tools.
 
-- **Getting the tools:** the Affinity tools may not be active when the run starts. Activate each
-  read tool below by name with `tool_activate` (`toolName`, such as `affinity_search_companies`)
-  before its first use. If a name cannot be activated, list the Affinity tools with
-  `tools_list_available` (`applicationExternalId: "affinity-mcp-server"`, `limit: 50`, following
-  `cursor` while one is returned) and activate from that list.
+- **Getting the tools:** the Affinity tools are usually not active when the run starts. Before
+  the first Affinity read, activate the five read tools below in one step: call `tool_activate`
+  once per tool, all in the same step, with `toolExternalId` set to the tool's name (for Affinity
+  the external ID is the tool name), for example `toolExternalId: "affinity_search_companies"`.
+  Never pass only `toolName`: in a Deal, Platform refuses it.
+  If an activation is refused or the tool is not found, list the Affinity tools once with
+  `tools_list_available` (`applicationExternalId: "affinity-mcp-server"`, `limit: 50`, passing
+  `nextCursor` back as `cursor` while one is returned), then activate the missing tools by the
+  `externalId` the list shows, again in one step. These discovery tools are not CRM reads, so the
+  "Nothing else" rule below does not apply to them.
   Do not rely on `tools_search_available` to find Affinity tools: it returns a short list that can leave out a tool even when you search for its exact name.
-  Affinity is unavailable only when activation and the full Affinity tool list both fail, or an
-  Affinity call itself returns a connection or authorization error; only then stop as section 8
-  says.
+  Affinity is unavailable only when that list holds no Affinity tools, a tool activated by its
+  listed `externalId` is still refused, or the first company search still fails with a connection
+  or authorization error after one retry. Only then stop as section 8 says. A failed read after
+  that point is a failed page or record (section 3), not an unavailable CRM.
 - **Search:** `affinity_search_companies` with `term` set to the company name, then to the domain
   when known, then to the variants in section 2 when needed. Always pass a `term`: never call it without one to list all companies. Set `withOpportunities: true` to get each company's opportunity IDs. While `hasMore`
   is true, pass the returned page token (`nextPageToken`, or `next_page_token`) back as `pageToken`,

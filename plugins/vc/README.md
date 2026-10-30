@@ -6,10 +6,12 @@ Public VC workflow plugin and pack seed for [Alludium](https://www.alludium.ai).
 
 Version `0.6.49` makes the CRM history import find its Affinity tools reliably (#4841). On Dev, the
 Platform's tool search never listed the company-search tool, and one import stopped as "Affinity
-unavailable" before searching. The import skill now turns each Affinity read tool on by name, lists
-the Affinity app's tools if that fails, and calls Affinity unavailable only when both fail or an
+unavailable" before searching. The import skill now turns the five Affinity read tools on in one step
+by their external ID (for Affinity, the tool name), never by `toolName` alone, which a Deal refuses;
+lists the Affinity app's tools if that fails; and calls Affinity unavailable only when both fail or an
 Affinity call itself is refused. The offline evaluation now makes the agent find its Affinity tools
-the same way, including a search that leaves the company-search tool out.
+the same way, including a search that leaves the company-search tool out, the Deal's refusal of a
+`toolName`-only activation, and Platform's limit of three activation-only steps in a row.
 
 Version `0.6.48` is validation-only (Packs #117 review). The refresh fixture now carries the same
 refused-save correction contract as first generation, and validation rejects the pre-#5091 "do not

@@ -48,7 +48,8 @@ python plugins/vc/scripts/compare_crm_history_import.py \
   --execute --output /tmp/crm-history-4841 --max-spend-usd 15 --max-wall-minutes 180
 ```
 
-Preflight (2 arms, 35 cases, 3 repetitions): 210 attempts, at most 40 subject calls per turn. `--rescore DIR` re-scores a finished run without spend; `--reconcile DIR`
+Preflight (2 arms, 35 cases, 3 repetitions): 210 attempts, at most 40 counted steps per turn plus 20
+tool-discovery steps. `--rescore DIR` re-scores a finished run without spend; `--reconcile DIR`
 rebuilds spend accounting after a hard stop. `WORKTREE` as a revision reads the working tree, for
 local checks only.
 
@@ -66,11 +67,17 @@ local checks only.
   Platform; the import must not call them, and a call is recorded and answered with an empty page.
 - **Tool discovery**: as on Dev, the Affinity tools start inactive. The agent finds them with
   `tools_search_available` or `tools_list_available` and turns each on with `tool_activate`
-  (descriptions copied from Craft `runtime-discovery-tools.ts`); an Affinity tool is callable only from
-  the step after it is activated. Search returns at most 20 summaries (50 on request) and never returns
-  `affinity_search_companies`, as in all 11 Affinity searches of the 0.6.46 Dev run, where one import
-  stopped as "unavailable"; listing the `affinity-mcp-server` app returns every tool. Every discovery
-  call is recorded. A case sets `affinityToolsInactive: false` to hand the tools over directly.
+  (descriptions and result shapes copied from Craft `runtime-discovery-tools.ts`); an Affinity tool is
+  callable only from the step after it is activated. Search returns at most 20 summaries (50 on
+  request) and never returns `affinity_search_companies`, as in all 11 Affinity searches of the 0.6.46
+  Dev run, where one import stopped as "unavailable"; listing the `affinity-mcp-server` app pages
+  through every tool. An activation by `toolExternalId` (the tool name, for Affinity) or `toolId`
+  works; one by `toolName` alone is refused with `LOCKED_PROJECT_AGENT_SELECTION_FORBIDDEN`, as all 9
+  such activations were in a local Deal. As on Platform, steps that only search, list or activate
+  tools do not use the step budget (up to 20 such steps a turn), and after three activation-only steps
+  in a row `tool_activate` is withdrawn for the rest of the turn. A disconnected CRM's tools can still
+  be listed and activated; the first Affinity call then fails. Every discovery call is recorded. A case
+  sets `affinityToolsInactive: false` to hand the tools over directly.
 - **Platform**: the agents' capability-bundle guidance as Platform renders it
   (`capability-prompts.json`, from Craft `c69fe008`), the skills catalog with ALWAYS skill bodies,
   `activate_skill`, a task runtime block built from the task definition, reads of the project template and

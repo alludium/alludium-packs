@@ -176,7 +176,9 @@ class CrmHistoryImportContractTests(unittest.TestCase):
         # #4841 0.6.46 Dev run: tool search never returned the company-search tool, and the import
         # stopped as "unavailable" without listing or activating the Affinity tools.
         skill = Path("skills") / "import-crm-history" / "SKILL.md"
-        for old, new in (("by name with `tool_activate`", "with `tools_search_available`"),
+        for old, new in (("with `toolExternalId` set to the tool's name", "with `toolName` set to the tool's name"),
+                         ("Never pass only `toolName`", "Prefer `toolName`"),
+                         ("all in the same step", "one per step"),
                          ("Do not rely on `tools_search_available` to find Affinity tools", "Search for Affinity tools"),
                          ('`applicationExternalId: "affinity-mcp-server"`', "an application filter")):
             with self.subTest(rule=old):
