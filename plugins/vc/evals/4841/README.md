@@ -156,3 +156,18 @@ or documents, an accepted limitation of this delivery.
 
 Disposition for the analyst task, skill, template and Deal Manager routing surface (VC Pack
 `v0.6.40`..candidate): `ran-with-evidence` for runs 1 and 2; run 3 pending.
+
+**Tool discovery, 0.6.49** (#4841: on Dev, one import stopped as "Affinity unavailable" when tool search
+left out `affinity_search_companies`). Old `3a9ecda` against new, cases `no-notes` and
+`domain-as-name-no-interactions`, 5 repetitions, with the Affinity tools starting inactive:
+
+- **Run A** (new `c4536e1`), $0.60: both arms' pass counts (2/10 and 1/10) came from a simulator
+  mismatch. It required `taskId` on `completeTask`, which Platform fills in. This was fixed in `22093d4`.
+- **Run B** (new `22093d4`), $0.58: old 10/10, new 10/10.
+  - The old arm searched first in 10/10 attempts.
+  - The new arm never searched. It activated all five read tools by `toolExternalId` first in 10/10.
+  - No attempt stopped as unavailable.
+
+The pass rate doesn't separate the arms, because the simulated old skill also recovered every time. The
+evidence for the fix is how the tools were found, plus 9 real local runs: the tool was found in 7/9, and
+the other 2 never started because the chat lost the message.
