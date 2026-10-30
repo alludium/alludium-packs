@@ -66,6 +66,30 @@ class PipelineRefreshAndSuggestionTests(unittest.TestCase):
             VALIDATOR.validate_pipeline_refresh_and_suggestion_guidance,
         )
 
+    def test_rejects_an_ad_hoc_refresh_without_the_complete_create_path(self) -> None:
+        self._assert_rejected(
+            ANALYST,
+            "create the complete new report once with `artifact.createTextArtifact`",
+            "create the new report",
+            VALIDATOR.validate_pipeline_refresh_and_suggestion_guidance,
+        )
+
+    def test_rejects_an_ad_hoc_refresh_that_may_instantiate_a_template(self) -> None:
+        self._assert_rejected(
+            ANALYST,
+            "A refresh never uses `project.instantiateTemplate`",
+            "A refresh may use `project.instantiateTemplate`",
+            VALIDATOR.validate_pipeline_refresh_and_suggestion_guidance,
+        )
+
+    def test_rejects_a_refresh_fixture_without_the_previous_report_manifest_entry(self) -> None:
+        self._assert_rejected(
+            Path("alludium") / "fixtures" / "deal-pipeline-management.yaml",
+            "role: previous report",
+            "role: project evidence",
+            VALIDATOR.validate_fund_routing_contract,
+        )
+
     def test_rejects_a_manager_that_keeps_one_logical_artifact(self) -> None:
         self._assert_rejected(
             MANAGER,

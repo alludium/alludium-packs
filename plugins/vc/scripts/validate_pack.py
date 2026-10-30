@@ -1095,6 +1095,8 @@ PIPELINE_REFRESH_RULES = {
     "vc_deal_analyst": (
         "creates one new complete report",
         "Never edit or overwrite an earlier report",
+        "create the complete new report once with `artifact.createTextArtifact`",
+        "A refresh never uses `project.instantiateTemplate`",
     ),
     "vc_deal_pipeline_manager": ("creates one new complete report",),
 }
@@ -2114,6 +2116,21 @@ def validate_fund_routing_contract() -> None:
         "baselineUsesObservedRevisionAndHash": True,
         "existingReportEditAllowed": False,
         "outputArtifactIsNewReport": True,
+        "previousReportManifestEntry": {
+            "artifactId": "screening-report",
+            "observedRevision": "4",
+            "contentHash": "report-v4",
+            "role": "previous report",
+        },
+        "outputManifestSourceIds": [
+            "customer-reference",
+            "deck",
+            "financial-model",
+            "founder-call",
+            "screening-report",
+            "screening-upstream",
+        ],
+        "createdReportCreationTool": "artifact.createTextArtifact",
     }
     if (refresh_report_fixture.get("expected") or {}) != expected_refresh_report_contract:
         fail("Refresh living-report fixture must create one new report and classify corpus changes")
@@ -6386,6 +6403,7 @@ def validate_vc_deal_pipeline_contract() -> None:
         "never call a text-artifact update tool on it",
         "the role `previous report`",
         "create one corrected complete report and save that instead",
+        "create the new report in one call with the text-artifact create tool",
         "This lifecycle applies to living reports, not to a per-meeting brief or summary.",
     ]:
         if phrase not in living_report_skill:

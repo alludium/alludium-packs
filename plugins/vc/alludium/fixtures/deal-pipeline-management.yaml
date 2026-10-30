@@ -721,3 +721,6 @@ livingReportScenarios:
       baselineUsesObservedRevisionAndHash: true
       existingReportEditAllowed: false
       outputArtifactIsNewReport: true
+      previousReportManifestEntry: {artifactId: screening-report, observedRevision: "4", contentHash: report-v4, role: previous report}
+      outputManifestSourceIds: [customer-reference, deck, financial-model, founder-call, screening-report, screening-upstream]
+      createdReportCreationTool: artifact.createTextArtifact
