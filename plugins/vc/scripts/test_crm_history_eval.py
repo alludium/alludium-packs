@@ -481,6 +481,20 @@ class ScoringTests(unittest.TestCase):
         rec["interactionFilterSearches"] = [{"turn": 1, "input": {"term": "tallowmere", "withInteractionDates": True}}]
         self.assertIn("noInteractionFilter", failed(score(rec, docs)))
 
+    def test_list_people_and_field_reads_are_recorded_and_fail_every_case(self):
+        simulator = sim("domain-as-name-no-interactions")
+        for tool in FROZEN["affinity"]["outOfScopeReadTools"]:
+            data, error = simulator.handle(tool, {"companyId": "503403"})
+            self.assertIsNone(error)
+            self.assertEqual(json.loads(data)["data"], [])
+        self.assertEqual([r["tool"] for r in simulator.out_of_scope_reads], FROZEN["affinity"]["outOfScopeReadTools"])
+        self.assertIn("affinity_get_company_list_entries", FROZEN["affinity"]["outOfScopeReadTools"])
+        doc = good_document("domain-as-name-no-interactions", [12601])
+        rec, docs = first_import("domain-as-name-no-interactions", doc)
+        self.assertTrue(score(rec, docs)["passed"], failed(score(rec, docs)))
+        rec["outOfScopeReads"] = [{"turn": 1, "tool": "affinity_get_company_list_entries", "input": {"companyId": "503403"}}]
+        self.assertIn("noOutOfScopeReads", failed(score(rec, docs)))
+
     def test_profile_regexes_allow_correct_statements(self):
         doc = good_document("profile-people-labelled", [12501, 12502])
         for claim in ("<p>No retrieved note mentions Hanna Voss or Jonas Pell; Affinity's company profile lists them.</p>",

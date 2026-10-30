@@ -7160,6 +7160,7 @@ def validate_crm_history_task_contract(
         "a record whose domain differs from the company's known domain",
         "Never call this a complete import",
         "Cite notes only for what notes say",
+        "`affinity_get_company_list_entries`",
     ]:
         if phrase not in skill:
             fail(f"import-crm-history skill is missing rule: {phrase}")

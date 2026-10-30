@@ -339,6 +339,9 @@ run rather than assuming them; the steps below match the Affinity connector's re
   notes come from meetings or emails and belong in the history too.
 - **Opportunities:** `affinity_get_opportunity` for each opportunity ID, then
   `affinity_list_opportunity_notes` with `opportunityId`, paged with `cursor` the same way.
+- **Nothing else:** use only the read tools above. Do not call list, list-entry, field or person
+  tools, such as `affinity_get_company_list_entries`, `affinity_get_list_entries`,
+  `affinity_search_persons` or `affinity_get_person`: they are outside this import (section 3).
 - **Truncated notes:** a response marked `truncated`, or a note marked `contentTruncated`, means
   the note's text was not returned. Keep its ID and mark the import partial.
 - **Errors:** an error text returned instead of data is a failed read, not an empty result.

@@ -55,8 +55,8 @@ CRM_TEMPLATE_ID = "vc.document.deal_pipeline_crm_history_template"
 POINTER = "crm_history_artifact_id"
 WORKTREE = "WORKTREE"
 
-GLOBAL_ASSERTIONS = ["allTurnsComplete", "noInvalidToolCalls", "noAffinityWrites", "noInteractionFilter", "noFieldWrites",
-                     "noStageMove"]
+GLOBAL_ASSERTIONS = ["allTurnsComplete", "noInvalidToolCalls", "noAffinityWrites", "noInteractionFilter",
+                     "noOutOfScopeReads", "noFieldWrites", "noStageMove"]
 # Streamed subject calls: the final events carry the full response; a read waits at most this long.
 STREAM_FINAL_EVENTS = {"response.completed", "response.incomplete"}
 STREAM_READ_TIMEOUT_SECONDS = 120
@@ -516,6 +516,7 @@ class CrmSimulator:
         self.affinity_writes: list[dict] = []
         self.affinity_reads: list[dict] = []
         self.interaction_filter_searches: list[dict] = []
+        self.out_of_scope_reads: list[dict] = []
         self.field_writes: list[dict] = []
         self.stage_moves: list[dict] = []
         self.tasks_created: list[dict] = []
@@ -594,6 +595,10 @@ class CrmSimulator:
             self.affinity_writes.append({"turn": self.turn, "tool": name, "input": args})
             return None, self.frozen["affinity"]["readOnlyDenialMessage"]
         self.affinity_reads.append({"turn": self.turn, "tool": name, "input": args})
+        if name in self.frozen["affinity"].get("outOfScopeReadTools", []):
+            # Lists, list entries, people and fields are outside the import (#4841 Dev run read list entries).
+            self.out_of_scope_reads.append({"turn": self.turn, "tool": name, "input": args})
+            return json.dumps({"data": [], "hasMore": False, "nextCursor": None}, indent=2), None
         if name == "affinity_search_companies":
             term = str(args.get("term") or "").strip().lower()
             found = [c for c in self.companies.values()
@@ -1182,6 +1187,7 @@ def finish_attempt(frozen: dict, record: dict, folder: Path, simulator: CrmSimul
                    "created": simulator.created, "updates": simulator.updates, "lineEdits": simulator.line_edits,
                    "affinityWrites": simulator.affinity_writes, "affinityReads": len(simulator.affinity_reads),
                    "interactionFilterSearches": simulator.interaction_filter_searches,
+                   "outOfScopeReads": simulator.out_of_scope_reads,
                    "fieldWrites": simulator.field_writes, "stageMoves": simulator.stage_moves,
                    "tasksCreated": simulator.tasks_created, "taskSaves": simulator.task_saves,
                    "questions": simulator.questions, "skillsActivated": simulator.skills_activated,
@@ -1303,6 +1309,7 @@ def score(frozen: dict, record: dict, documents: dict[str, str]) -> dict:
         "noAffinityWrites": not record["affinityWrites"],
         # An interaction filter hides companies whose record holds only notes (#4841 Dev run).
         "noInteractionFilter": not record.get("interactionFilterSearches"),
+        "noOutOfScopeReads": not record.get("outOfScopeReads"),
         "noFieldWrites": not record["fieldWrites"],
         "noStageMove": not record["stageMoves"],
     }

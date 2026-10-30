@@ -6,7 +6,8 @@ description: >-
   documents and replies as well.
 
 # Applied to every attempt.
-global: [allTurnsComplete, noInvalidToolCalls, noAffinityWrites, noInteractionFilter, noFieldWrites, noStageMove]
+global: [allTurnsComplete, noInvalidToolCalls, noAffinityWrites, noInteractionFilter, noOutOfScopeReads, noFieldWrites,
+         noStageMove]
 
 # Applied to every import case (kind: import) on top of the case's own checks.
 importGlobal: [oneDocument, completedWithPointer, safeHtml, briefCitesNotes, briefSubstantive, notesAttributed]

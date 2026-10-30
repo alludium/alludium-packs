@@ -62,7 +62,8 @@ local checks only.
   refusal and are recorded. Case `pageSize` caps a page so paging is exercised. With `fieldTypes: ["enriched"]`, a company record returns its
   Description and People fields inline, as the connector does. A search with `withInteractionDates` or
   `withInteractionPersons` drops companies without interactions, as live Affinity did in the #4841 Dev
-  run.
+  run. The connector's list, list-entry, person and field read tools are offered too, as on
+  Platform; the import must not call them, and a call is recorded and answered with an empty page.
 - **Platform**: the agents' capability-bundle guidance as Platform renders it
   (`capability-prompts.json`, from Craft `c69fe008`), the skills catalog with ALWAYS skill bodies,
   `activate_skill`, a task runtime block built from the task definition, reads of the project template and
@@ -88,8 +89,8 @@ at it, safe static HTML, a filled company overview with citations and no templat
 left, case facts present in the brief itself, every expected note's words present in order and
 unbroken inside the source appendix with its links kept, the wrong company's notes absent, a colleague's edit kept,
 the complete/partial label, stable references on refresh, mentions and forbidden present-tense or
-"the deck shows" claims, and no Affinity, field (including `field-values.setField`) or stage
-writes.
+"the deck shows" claims, no Affinity search with an interaction filter, no list, list-entry, person
+or field reads, and no Affinity, field (including `field-values.setField`) or stage writes.
 Routing checks look at which task was created and its provider, document reads and the reply.
 There is no judge; read the saved documents and replies too. Offline scorer and simulator tests:
 `plugins/vc/scripts/test_crm_history_eval.py`.
