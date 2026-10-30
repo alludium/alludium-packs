@@ -6,7 +6,8 @@ description: >-
   documents and replies as well.
 
 # Applied to every attempt.
-global: [allTurnsComplete, noInvalidToolCalls, noAffinityWrites, noFieldWrites, noStageMove]
+global: [allTurnsComplete, noInvalidToolCalls, noAffinityWrites, noInteractionFilter, noOutOfScopeReads, noFieldWrites,
+         noStageMove]
 
 # Applied to every import case (kind: import) on top of the case's own checks.
 importGlobal: [oneDocument, completedWithPointer, safeHtml, briefCitesNotes, briefSubstantive, notesAttributed]
@@ -86,6 +87,23 @@ cases:
   company-not-found:
     blocked: true
     replyMentions: ["(?:not find|couldn't find|could not find|no matching|not found|no (?:\\w+ )?records?)"]
+
+  similar-name-other-domain:
+    blocked: true
+    notesAbsent: [12401]
+    replyMentions: ["(?:not (?:be )?(?:confidently )?(?:find|found|identif|match)|(?:couldn't|could not|cannot|can't|unable to|wasn't able to|was not able to) (?:confidently )?(?:find|identify|match)|no (?:matching|confident)|no (?:\\w+ )?records? (?:for|matches|matching)|none of the .{0,40}match)"]
+
+  domain-as-name-no-interactions:
+    notesRetained: [12601]
+    importStatus: complete
+
+  profile-people-labelled:
+    notesRetained: [12501, 12502]
+    importStatus: complete
+    # People from the company record's enriched field are profile facts, not note claims.
+    documentForbidden: ["(?<!\\bno )(?<!\\bno retrieved )(?<!\\bnone of the )\\bnotes? (?:name|names|mention|mentions|list|lists|say|says|identify|identifies)\\b(?! nothing)[^.;]{0,30}\\b(?:Hanna Voss|Jonas Pell)\\b",
+                        "\\b(?:Hanna Voss|Jonas Pell)\\b[^.;:\\[]{0,25}\\[\\s*N\\d+",
+                        "\\[\\s*N\\d+[^\\]]*\\][^.;:\\[]{0,15}\\b(?:Hanna Voss|Jonas Pell)\\b"]
 
   refresh-document-missing:
     blocked: true

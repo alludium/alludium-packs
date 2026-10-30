@@ -7252,9 +7252,26 @@ def validate_crm_history_task_contract(
         "The one exception is this task's own earlier document",
         "purpose `attention_required`, `relatedTaskId` set to this task's ID",
         CRM_HISTORY_OPEN_IMPORT_ALLOWED,
+        # #4841 Dev run: an interaction filter hid the company's notes-only record, and a near match
+        # with another domain was imported as complete.
+        "Never set `withInteractionDates`",
+        "`withInteractionPersons`",
+        "Being the only search result does not make a record a match",
+        "a record whose domain differs from the company's known domain",
+        "Never call this a complete import",
+        "Cite notes only for what notes say",
+        "`affinity_get_company_list_entries`",
+        "Never retype the hash from memory or from an earlier read",
     ]:
         if phrase not in skill:
             fail(f"import-crm-history skill is missing rule: {phrase}")
+    # Every skill that searches Affinity companies must forbid the interaction filters, which hide
+    # companies whose record holds only notes (#4841 Dev run).
+    for skill_path in sorted((ROOT / "skills").glob("*/SKILL.md")):
+        normalized_skill = " ".join(skill_path.read_text(encoding="utf-8").split())
+        if "affinity_search_companies" in normalized_skill and \
+                "Never set `withInteractionDates` or `withInteractionPersons`" not in normalized_skill:
+            fail(f"{skill_path.parent.name} skill searches Affinity companies without forbidding the interaction filters")
     # #4841 scope: only an existing CRM history document blocks a first import, never another open task.
     crm_history_task_doc = (ROOT / "tasks" / "import-refresh-crm-history.md").read_text(encoding="utf-8")
     for label, text in [

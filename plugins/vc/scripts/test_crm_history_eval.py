@@ -99,6 +99,33 @@ class AffinitySimulatorTests(unittest.TestCase):
         data, _ = sim("rebrand-nine-notes").handle("affinity_search_companies", {"term": "ledgerly.example"})
         self.assertEqual([c["id"] for c in json.loads(data)["companies"]], [500001])
 
+    def test_enriched_people_come_inline_on_the_company_record(self):
+        data, error = sim("profile-people-labelled").handle(
+            "affinity_get_company", {"companyId": "503301", "fieldTypes": ["enriched"]})
+        self.assertIsNone(error)
+        fields = {f["name"]: f for f in json.loads(data)["fields"]}
+        self.assertEqual(fields["People"]["value"]["type"], "person-multi")
+        self.assertEqual([p["lastName"] for p in fields["People"]["value"]["data"]], ["Voss", "Pell"])
+        plain, _ = sim("profile-people-labelled").handle("affinity_get_company", {"companyId": "503301"})
+        self.assertNotIn("fields", json.loads(plain))
+
+    def test_a_similar_name_with_another_domain_is_the_only_search_result(self):
+        simulator = sim("similar-name-other-domain")
+        data, _ = simulator.handle("affinity_search_companies", {"term": "Fernway"})
+        self.assertEqual([c["id"] for c in json.loads(data)["companies"]], [503201, 503202])
+        data, _ = simulator.handle("affinity_search_companies", {"term": "fernway.example"})
+        self.assertEqual(json.loads(data)["companies"], [])
+
+    def test_an_interaction_filter_hides_a_notes_only_record(self):
+        simulator = sim("domain-as-name-no-interactions")
+        data, _ = simulator.handle("affinity_search_companies", {"term": "tallowmere.ai"})
+        self.assertEqual([c["id"] for c in json.loads(data)["companies"]], [503403])
+        for flag in ("withInteractionDates", "withInteractionPersons"):
+            data, _ = simulator.handle("affinity_search_companies", {"term": "tallowmere.ai", flag: True})
+            self.assertEqual(json.loads(data)["companies"], [])
+            data, _ = simulator.handle("affinity_search_companies", {"term": "tallowmere", flag: True})
+            self.assertEqual([c["id"] for c in json.loads(data)["companies"]], [503401, 503402])
+
     def test_search_pages_by_token(self):
         simulator = sim("search-second-page")
         first = json.loads(simulator.handle("affinity_search_companies", {"term": "Tarnwell"})[0])
@@ -165,6 +192,8 @@ class PlatformSimulatorTests(unittest.TestCase):
                 "content": "<p>x</p>", "expectedTemplateSourceRevisionNumber": meta["sourceRevisionNumber"],
                 "expectedTemplateSourceContentHash": "0" * 64}
         self.assertIsNotNone(simulator.handle("project.instantiateTemplate", args)[1])
+        self.assertEqual(len(simulator.refused_creations), 1)
+        self.assertNotIn("content", simulator.refused_creations[0]["input"])
         args["expectedTemplateSourceContentHash"] = meta["sourceContentHash"]
         data, error = simulator.handle("project.instantiateTemplate", args)
         self.assertIsNone(error)
@@ -432,6 +461,73 @@ class ScoringTests(unittest.TestCase):
         self.assertTrue(score(*first_import("fund-and-fields-unchanged", placeholder))["passed"])
         placeholder = doc.replace("</section>", "<p>as far as the retrieved records support it</p></section>", 1)
         self.assertIn("briefSubstantive", failed(score(*first_import("fund-and-fields-unchanged", placeholder))))
+
+    def test_profile_people_must_not_be_credited_to_notes(self):
+        doc = good_document("profile-people-labelled", [12501, 12502])
+        self.assertTrue(score(*first_import("profile-people-labelled", doc))["passed"])
+        labelled = doc.replace("</section>", "<p>Affinity's company profile lists Hanna Voss and Jonas Pell.</p></section>", 1)
+        self.assertTrue(score(*first_import("profile-people-labelled", labelled))["passed"])
+        separate = doc.replace("</section>", "<p>Affinity's company profile lists Hanna Voss; the notes report "
+                               "30 sites [N1].</p></section>", 1)
+        self.assertTrue(score(*first_import("profile-people-labelled", separate))["passed"])
+        for claim in ("<p>The notes name Hanna Voss as a founder.</p>",
+                      "<p>The team includes Jonas Pell [N2].</p>"):
+            wrong = doc.replace("</section>", claim + "</section>", 1)
+            self.assertTrue([k for k in failed(score(*first_import("profile-people-labelled", wrong)))
+                             if k.startswith("documentForbidden:")], claim)
+
+    def test_an_interaction_filtered_search_fails_every_case(self):
+        doc = good_document("domain-as-name-no-interactions", [12601])
+        rec, docs = first_import("domain-as-name-no-interactions", doc)
+        self.assertTrue(score(rec, docs)["passed"], failed(score(rec, docs)))
+        rec["interactionFilterSearches"] = [{"turn": 1, "input": {"term": "tallowmere", "withInteractionDates": True}}]
+        self.assertIn("noInteractionFilter", failed(score(rec, docs)))
+
+    def test_list_people_and_field_reads_are_recorded_and_fail_every_case(self):
+        simulator = sim("domain-as-name-no-interactions")
+        for tool in FROZEN["affinity"]["outOfScopeReadTools"]:
+            data, error = simulator.handle(tool, {"companyId": "503403"})
+            self.assertIsNone(error)
+            self.assertEqual(json.loads(data)["data"], [])
+        self.assertEqual([r["tool"] for r in simulator.out_of_scope_reads], FROZEN["affinity"]["outOfScopeReadTools"])
+        self.assertIn("affinity_get_company_list_entries", FROZEN["affinity"]["outOfScopeReadTools"])
+        doc = good_document("domain-as-name-no-interactions", [12601])
+        rec, docs = first_import("domain-as-name-no-interactions", doc)
+        self.assertTrue(score(rec, docs)["passed"], failed(score(rec, docs)))
+        rec["outOfScopeReads"] = [{"turn": 1, "tool": "affinity_get_company_list_entries", "input": {"companyId": "503403"}}]
+        self.assertIn("noOutOfScopeReads", failed(score(rec, docs)))
+
+    def test_a_refused_template_copy_fails_even_after_a_retry(self):
+        doc = good_document("no-notes", [])
+        rec, docs = first_import("no-notes", doc)
+        self.assertNotIn("oneDocument", failed(score(rec, docs)))
+        rec["refusedCreations"] = [{"turn": 1, "input": {"expectedTemplateSourceContentHash": "0" * 64}}]
+        self.assertIn("oneDocument", failed(score(rec, docs)))
+
+    def test_profile_regexes_allow_correct_statements(self):
+        doc = good_document("profile-people-labelled", [12501, 12502])
+        for claim in ("<p>No retrieved note mentions Hanna Voss or Jonas Pell; Affinity's company profile lists them.</p>",
+                      "<p>The notes say nothing about the team; Affinity's company profile lists Hanna Voss.</p>"):
+            ok = doc.replace("</section>", claim + "</section>", 1)
+            self.assertTrue(score(*first_import("profile-people-labelled", ok))["passed"], claim)
+        for claim in ("<p>Jonas Pell is CTO [N1, N2].</p>", "<p>According to [N1], Hanna Voss is the CTO.</p>"):
+            wrong = doc.replace("</section>", claim + "</section>", 1)
+            self.assertTrue([k for k in failed(score(*first_import("profile-people-labelled", wrong)))
+                             if k.startswith("documentForbidden:")], claim)
+
+    def test_blocked_reply_phrasings(self):
+        for reply in ("I was unable to find Fernway in Affinity.", "I wasn't able to confidently identify Fernway.",
+                      "None of the Affinity records matches Fernway."):
+            rec = record("similar-name-other-domain", reply=reply)
+            self.assertTrue(score(rec, {})["passed"], reply)
+
+    def test_importing_a_near_match_fails_the_blocked_case(self):
+        rec = record("similar-name-other-domain",
+                     reply="I could not confidently find Fernway in Affinity: the closest record, Fernway Studio "
+                           "(fernwaystudio.example), has another domain. Nothing was saved.")
+        self.assertTrue(score(rec, {})["passed"], failed(score(rec, {})))
+        doc = good_document("similar-name-other-domain", [12401])
+        self.assertIn("noDocument", failed(score(*first_import("similar-name-other-domain", doc))))
 
     def test_case_facts_must_be_in_the_brief(self):
         ids = list(range(9001, 9010))

@@ -101,7 +101,7 @@ class CrmHistoryImportContractTests(unittest.TestCase):
             ["crm_history_artifact_id"],
         )
         task = read_yaml(SOURCE_ROOT / TASK)
-        self.assertEqual(task["version"], "1.0.5")
+        self.assertEqual(task["version"], "1.0.6")
         self.assertFalse(task["runtime"]["executionProfile"]["requiresHumanConfirmationToComplete"])
 
     # Task definition ------------------------------------------------------------------------
@@ -161,6 +161,16 @@ class CrmHistoryImportContractTests(unittest.TestCase):
         self._assert_rejected(
             self._edit_text(TASK, "Do not create a second CRM history document: not to work around a size, revision or update failure,", "")
         )
+
+    def test_rejects_an_affinity_search_without_the_interaction_filter_rule(self) -> None:
+        # #4841 Dev run: an interaction filter hid a notes-only company. Every skill that searches
+        # Affinity companies must forbid it, not only the CRM history import.
+        for skill in ("deal-pipeline-intake-readiness", "vc-affinity-sync-read", "import-crm-history"):
+            with self.subTest(skill=skill):
+                self._assert_rejected(
+                    self._edit_text(Path("skills") / skill / "SKILL.md", "Never set `withInteractionDates`",
+                                    "You may set `withInteractionDates`")
+                )
 
     def test_rejects_an_analyst_that_promises_one_document_per_deal(self) -> None:
         self._assert_rejected(

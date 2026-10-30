@@ -55,7 +55,8 @@ CRM_TEMPLATE_ID = "vc.document.deal_pipeline_crm_history_template"
 POINTER = "crm_history_artifact_id"
 WORKTREE = "WORKTREE"
 
-GLOBAL_ASSERTIONS = ["allTurnsComplete", "noInvalidToolCalls", "noAffinityWrites", "noFieldWrites", "noStageMove"]
+GLOBAL_ASSERTIONS = ["allTurnsComplete", "noInvalidToolCalls", "noAffinityWrites", "noInteractionFilter",
+                     "noOutOfScopeReads", "noFieldWrites", "noStageMove"]
 # Streamed subject calls: the final events carry the full response; a read waits at most this long.
 STREAM_FINAL_EVENTS = {"response.completed", "response.incomplete"}
 STREAM_READ_TIMEOUT_SECONDS = 120
@@ -514,6 +515,9 @@ class CrmSimulator:
         self.line_edits: list[dict] = []
         self.affinity_writes: list[dict] = []
         self.affinity_reads: list[dict] = []
+        self.interaction_filter_searches: list[dict] = []
+        self.out_of_scope_reads: list[dict] = []
+        self.refused_creations: list[dict] = []
         self.field_writes: list[dict] = []
         self.stage_moves: list[dict] = []
         self.tasks_created: list[dict] = []
@@ -592,10 +596,19 @@ class CrmSimulator:
             self.affinity_writes.append({"turn": self.turn, "tool": name, "input": args})
             return None, self.frozen["affinity"]["readOnlyDenialMessage"]
         self.affinity_reads.append({"turn": self.turn, "tool": name, "input": args})
+        if name in self.frozen["affinity"].get("outOfScopeReadTools", []):
+            # Lists, list entries, people and fields are outside the import (#4841 Dev run read list entries).
+            self.out_of_scope_reads.append({"turn": self.turn, "tool": name, "input": args})
+            return json.dumps({"data": [], "hasMore": False, "nextCursor": None}, indent=2), None
         if name == "affinity_search_companies":
             term = str(args.get("term") or "").strip().lower()
             found = [c for c in self.companies.values()
                      if not term or any(term in h.lower() for h in [c["name"], *c.get("domains", [])])]
+            if args.get("withInteractionDates") or args.get("withInteractionPersons"):
+                self.interaction_filter_searches.append({"turn": self.turn, "input": args})
+                # Observed on live Affinity (#4841 Dev run): either flag drops companies with no
+                # interactions, so a record holding only notes disappears from the results.
+                found = [c for c in found if c.get("hasInteractions", True)]
             rows = [{"id": c["id"], "name": c["name"], "domain": c.get("domain"), "domains": c.get("domains", []),
                      "global": False, **({"opportunity_ids": c.get("opportunityIds", [])}
                                          if args.get("withOpportunities") else {})} for c in found]
@@ -614,9 +627,17 @@ class CrmSimulator:
                 return "Error: Not Found: The requested resource does not exist.", None
             result = {"id": company["id"], "name": company["name"], "domain": company.get("domain"),
                       "domains": company.get("domains", []), "isGlobal": False}
-            if "enriched" in (args.get("fieldTypes") or []) and company.get("description"):
-                result["fields"] = [{"id": "affinity-data-description", "type": "enriched", "name": "Description",
-                                     "value": {"type": "text", "data": company["description"]}}]
+            if "enriched" in (args.get("fieldTypes") or []):
+                fields = []
+                if company.get("description"):
+                    fields.append({"id": "affinity-data-description", "type": "enriched", "name": "Description",
+                                   "value": {"type": "text", "data": company["description"]}})
+                if company.get("people"):
+                    # The connector returns the enriched People field inline on the company record.
+                    fields.append({"id": "persons", "type": "enriched", "name": "People",
+                                   "value": {"type": "person-multi", "data": company["people"]}})
+                if fields:
+                    result["fields"] = fields
             return json.dumps(result, indent=2), None
         if name == "affinity_get_opportunity":
             opportunity = self.opportunities.get(self.numeric(args.get("opportunityId")))
@@ -818,7 +839,10 @@ class CrmSimulator:
             return None, "Project not found"
         if args.get("expectedTemplateSourceRevisionNumber") != TEMPLATE_REVISION or \
                 args.get("expectedTemplateSourceContentHash") != sha256(self.template):
-            return None, "Template source changed; re-read the template metadata and retry"
+            # On Platform a refused creation is an uncertain external effect: the task stops for good
+            # (#4841 local run, one mistyped hash character). Record it so the run fails.
+            self.refused_creations.append({"turn": self.turn, "input": {k: v for k, v in args.items() if k != "content"}})
+            return None, "Template source changed since it was read"
         if not str(args.get("content") or "").strip():
             return None, "content must not be empty"
         document = self.add_document(f"88888888-8888-4888-8888-{len(self.documents) + 1:012d}", str(args["filename"]),
@@ -1166,6 +1190,9 @@ def finish_attempt(frozen: dict, record: dict, folder: Path, simulator: CrmSimul
                                  for d in simulator.documents.values()},
                    "created": simulator.created, "updates": simulator.updates, "lineEdits": simulator.line_edits,
                    "affinityWrites": simulator.affinity_writes, "affinityReads": len(simulator.affinity_reads),
+                   "interactionFilterSearches": simulator.interaction_filter_searches,
+                   "outOfScopeReads": simulator.out_of_scope_reads,
+                   "refusedCreations": simulator.refused_creations,
                    "fieldWrites": simulator.field_writes, "stageMoves": simulator.stage_moves,
                    "tasksCreated": simulator.tasks_created, "taskSaves": simulator.task_saves,
                    "questions": simulator.questions, "skillsActivated": simulator.skills_activated,
@@ -1275,6 +1302,7 @@ def score(frozen: dict, record: dict, documents: dict[str, str]) -> dict:
     reply = record["turns"][-1]["final"] if record["turns"] else ""
     if case["kind"] == "skill-control":
         # Only the first steps run; the report itself is not simulated, so completion is not expected.
+        # The import's search and read-scope rules do not apply: report tasks may read lists or people.
         assertions = {"noAffinityWrites": not record["affinityWrites"], "noFieldWrites": not record["fieldWrites"],
                       "noStageMove": not record["stageMoves"],
                       "livingReportActive": record.get("livingReportMode") == "ALWAYS"
@@ -1285,6 +1313,9 @@ def score(frozen: dict, record: dict, documents: dict[str, str]) -> dict:
         "allTurnsComplete": all(turn["complete"] for turn in record["turns"]) and record["status"] == "completed",
         "noInvalidToolCalls": not any(call["error"] in INVALID_CALL_ERRORS for call in calls),
         "noAffinityWrites": not record["affinityWrites"],
+        # An interaction filter hides companies whose record holds only notes (#4841 Dev run).
+        "noInteractionFilter": not record.get("interactionFilterSearches"),
+        "noOutOfScopeReads": not record.get("outOfScopeReads"),
         "noFieldWrites": not record["fieldWrites"],
         "noStageMove": not record["stageMoves"],
     }
@@ -1309,9 +1340,11 @@ def score(frozen: dict, record: dict, documents: dict[str, str]) -> dict:
                 assertions["oneDocument"] = not record["created"] and len(ok_updates) == 1 and not ok_edits \
                     and not any(u["ok"] for u in record["updates"] if u["id"] != EXISTING_DOCUMENT)
             else:
-                # Only a template copy is a PROJECT_SHARED document a refresh can update.
+                # Only a template copy is a PROJECT_SHARED document a refresh can update. A refused copy
+                # would have stopped the task on Platform, so a retry after it does not count.
                 assertions["oneDocument"] = len(record["created"]) == 1 and \
                     record["created"][0]["tool"] == "project.instantiateTemplate" and \
+                    not record.get("refusedCreations") and \
                     not any(u["ok"] for u in record["updates"] if u["id"] != doc_id)
             # The task completes on its own; saving output alone leaves it open and the pointer unwritten.
             assertions["completedWithPointer"] = any(s["ok"] and s["tool"] == "task-management.completeTask"
