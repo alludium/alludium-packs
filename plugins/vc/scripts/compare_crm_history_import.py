@@ -148,8 +148,10 @@ DISCOVERY_SCHEMAS: dict[str, tuple[str, dict, list[str]]] = {
          "toolId": {"type": "string", "description": "Internal tool UUID. Prefer toolExternalId when available."}}, []),
 }
 # On Dev (#4841 0.6.46 run) tool search left this tool out of all 11 Affinity searches, even of its exact name:
-# Platform matches words, sorts by name and cuts to the limit, and this tool sorts 26th of 28 Affinity tools.
-SEARCH_HIDDEN_TOOLS = {"affinity_search_companies"}
+# Platform matches words, sorts by name and cuts to the limit. The live connector has more tools than the
+# frozen copy, and a local probe on 0.6.49 found it 25th for its own name: missing at the default limit of 20,
+# present with `limit: 50`. Below that position the simulator leaves it out of search results.
+SEARCH_CUT_TOOLS = {"affinity_search_companies": 25}
 # Platform leaves discovery-only steps out of the step budget, and after 3 activation-only steps in a row
 # withdraws `tool_activate` for the rest of the turn
 # (runtime-discovery-tools.ts INTERNAL_TOOL_STEP_ACCOUNTING_EXCLUSIONS, agent-executor.ts).
@@ -804,7 +806,7 @@ class CrmSimulator:
                                "safeToolName": external_id, "authorizationMode": "runtime"}}, None
         if name == "tools_search_available":
             words = [w for w in re.findall(r"[a-z0-9]+", str(args.get("query") or "").lower()) if len(w) > 2]
-            found = [t for t in universe if t["name"] not in SEARCH_HIDDEN_TOOLS and
+            found = [t for t in universe if limit >= SEARCH_CUT_TOOLS.get(t["name"], 0) and
                      (not words or any(w in f"affinity {t['name']} {t['description']}".lower() for w in words))]
             return {"result": [summary(t) for t in found[:limit]]}, None
         app = args.get("applicationExternalId")

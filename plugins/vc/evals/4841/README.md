@@ -69,9 +69,10 @@ local checks only.
   `tools_search_available` or `tools_list_available` and turns each on with `tool_activate`
   (descriptions and result shapes copied from Craft `runtime-discovery-tools.ts`); an Affinity tool is
   callable only from the step after it is activated. Search returns at most 20 summaries (50 on
-  request) and never returns `affinity_search_companies`, as in all 11 Affinity searches of the 0.6.46
-  Dev run, where one import stopped as "unavailable"; listing the `affinity-mcp-server` app pages
-  through every tool. An activation by `toolExternalId` (the tool name, for Affinity) or `toolId`
+  request) and leaves out `affinity_search_companies` unless the limit is at least 25: it was missing
+  from all 11 Affinity searches of the 0.6.46 Dev run, where one import stopped as "unavailable", and a
+  local probe on 0.6.49 found it 25th for its own name, missing at the default limit and present with
+  `limit: 50`. Listing the `affinity-mcp-server` app pages through every tool. An activation by `toolExternalId` (the tool name, for Affinity) or `toolId`
   works; one by `toolName` alone is refused with `LOCKED_PROJECT_AGENT_SELECTION_FORBIDDEN`, as all 9
   such activations were in a local Deal. As on Platform, steps that only search, list or activate
   tools do not use the step budget (up to 20 such steps a turn). A step that activates ends Platform's

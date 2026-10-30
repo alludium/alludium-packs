@@ -426,15 +426,18 @@ class ContextTests(unittest.TestCase):
 
 
 class ToolDiscoveryTests(unittest.TestCase):
-    def test_search_never_returns_the_company_search_tool(self):
+    def test_search_cuts_the_company_search_tool_below_its_live_position(self):
+        # #4841: missing from all 11 Dev searches and at the default limit locally; found with `limit: 50`.
         simulator = sim("no-notes")
         for query in ["affinity_search_companies", "Affinity search companies", "affinity", None]:
-            data, error = simulator.handle("tools_search_available", {"query": query, "limit": 50} if query else {})
-            self.assertIsNone(error)
-            names = [t["name"] for t in data["result"]]
-            self.assertNotIn("affinity_search_companies", names, query)
-        self.assertIn("affinity_list_company_notes", names)
-        self.assertEqual(len(simulator.tool_discovery), 4)
+            for limit, present in [(None, False), (20, False), (24, False), (25, True), (50, True)]:
+                arguments = {**({"query": query} if query else {}), **({"limit": limit} if limit else {})}
+                data, error = simulator.handle("tools_search_available", arguments)
+                self.assertIsNone(error)
+                names = [t["name"] for t in data["result"]]
+                self.assertEqual("affinity_search_companies" in names, present, (query, limit))
+                self.assertIn("affinity_list_company_notes", names)
+        self.assertEqual(len(simulator.tool_discovery), 20)
 
     def test_listing_the_affinity_app_pages_through_every_tool(self):
         simulator = sim("no-notes")
