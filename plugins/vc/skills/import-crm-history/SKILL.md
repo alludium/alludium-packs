@@ -176,7 +176,8 @@ One entry per retrieved note, with:
 several notes into one entry, and never replace a note's text with a summary, a range ("N3–N45")
 or a promise to add it later. On a first import, write at most ten appendix entries in any one tool
 call: with more than ten notes, follow the batch steps in section 7. Copy each note from the tool
-result exactly, including small words such as "a" and "the".
+result exactly, including small words such as "a" and "the" and every punctuation mark: keep a
+final full stop, and keep straight quotes and apostrophes straight rather than curly.
 
 Number notes in date order, oldest first. On a refresh, keep each note's existing reference from
 the previous document (match by note ID) and give new notes the next free numbers, so citations
