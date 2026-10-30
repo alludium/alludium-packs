@@ -1109,6 +1109,11 @@ ARCHIVED_DEAL_RULES = (
     "ask the Pipeline Manager in workspace Chat to restore it",
     "or do the work on an active Deal",
 )
+# The pre-#5091 rule forbade mentioning restore; it must not return alongside the restore route.
+STALE_ARCHIVED_DEAL_PHRASES = (
+    "Do not tell the human to reopen, restore or unarchive it",
+    "Suggest the supported path instead: create a new Deal",
+)
 PIPELINE_SUGGESTION_TASKS = (
     "generate-refresh-screening-report",
     "generate-refresh-evaluation-report",
@@ -1143,6 +1148,9 @@ def validate_pipeline_refresh_and_suggestion_guidance() -> None:
     for phrase in ARCHIVED_DEAL_RULES:
         if phrase not in manager:
             fail(f"Deal Manager archived-Deal guidance is missing: {phrase}")
+    for phrase in STALE_ARCHIVED_DEAL_PHRASES:
+        if phrase in manager:
+            fail(f"Deal Manager archived-Deal guidance contradicts Pipeline Manager restore: {phrase}")
     for phrase in ("Deal, Person or Organisation field", "If the human replies yes, that is an explicit request"):
         if phrase not in manager:
             fail(f"Deal Manager field suggestion guidance is missing: {phrase}")
@@ -2138,6 +2146,11 @@ def validate_fund_routing_contract() -> None:
             "screening-upstream",
         ],
         "createdReportCreationTool": "artifact.createTextArtifact",
+        "refusedSaveCorrection": {
+            "maxCorrectedReports": 1,
+            "editsRefusedReport": False,
+            "refusedReportManifestRole": "previous report",
+        },
     }
     if (refresh_report_fixture.get("expected") or {}) != expected_refresh_report_contract:
         fail("Refresh living-report fixture must create one new report and classify corpus changes")
