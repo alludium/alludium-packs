@@ -309,8 +309,9 @@ the document was saved and is still being processed.
   something (a failed page or record, or note text it did not return), or the platform's 100 KB
   document limit stopped the save (section 6), never that the document was long to write. Never
   say "all history imported" for a partial import.
-- If the company cannot be identified, the CRM is not connected, access fails entirely, or the
-  document cannot be saved, report that specific blocker and do not claim the task succeeded.
+- If the company cannot be identified, the CRM is not connected (for Affinity, only after
+  "Getting the tools" below fails), access fails entirely, or the document cannot be saved,
+  report that specific blocker and do not claim the task succeeded.
 - When nothing was saved, do not point the reader to a document.
 - When the import is blocked, or waits for an answer to a question you asked, also tell the Deal
   Manager, so the Deal's chat can explain it later: send one `project.sendManagerMessage` with
@@ -326,6 +327,15 @@ the document was saved and is still being processed.
 Use the connected Affinity tools, read-only. Check the tool list and parameters available in this
 run rather than assuming them; the steps below match the Affinity connector's read tools.
 
+- **Getting the tools:** the Affinity tools may not be active when the run starts. Activate each
+  read tool below by name with `tool_activate` (`toolName`, such as `affinity_search_companies`)
+  before its first use. If a name cannot be activated, list the Affinity tools with
+  `tools_list_available` (`applicationExternalId: "affinity-mcp-server"`, `limit: 50`, following
+  `cursor` while one is returned) and activate from that list.
+  Do not rely on `tools_search_available` to find Affinity tools: it returns a short list that can leave out a tool even when you search for its exact name.
+  Affinity is unavailable only when activation and the full Affinity tool list both fail, or an
+  Affinity call itself returns a connection or authorization error; only then stop as section 8
+  says.
 - **Search:** `affinity_search_companies` with `term` set to the company name, then to the domain
   when known, then to the variants in section 2 when needed. Always pass a `term`: never call it without one to list all companies. Set `withOpportunities: true` to get each company's opportunity IDs. While `hasMore`
   is true, pass the returned page token (`nextPageToken`, or `next_page_token`) back as `pageToken`,

@@ -64,6 +64,13 @@ local checks only.
   `withInteractionPersons` drops companies without interactions, as live Affinity did in the #4841 Dev
   run. The connector's list, list-entry, person and field read tools are offered too, as on
   Platform; the import must not call them, and a call is recorded and answered with an empty page.
+- **Tool discovery**: as on Dev, the Affinity tools start inactive. The agent finds them with
+  `tools_search_available` or `tools_list_available` and turns each on with `tool_activate`
+  (descriptions copied from Craft `runtime-discovery-tools.ts`); an Affinity tool is callable only from
+  the step after it is activated. Search returns at most 20 summaries (50 on request) and never returns
+  `affinity_search_companies`, as in all 11 Affinity searches of the 0.6.46 Dev run, where one import
+  stopped as "unavailable"; listing the `affinity-mcp-server` app returns every tool. Every discovery
+  call is recorded. A case sets `affinityToolsInactive: false` to hand the tools over directly.
 - **Platform**: the agents' capability-bundle guidance as Platform renders it
   (`capability-prompts.json`, from Craft `c69fe008`), the skills catalog with ALWAYS skill bodies,
   `activate_skill`, a task runtime block built from the task definition, reads of the project template and
@@ -74,8 +81,8 @@ local checks only.
   completion, and the manager's frozen tool contract.
 
 Approximations: the task block is a trimmed copy of Platform's template; `task-management.completeTask`
-is offered directly (Platform hydrates it for tasks that complete without human confirmation); the
-analyst gets its tools directly rather than through tool discovery; the manager's tool schemas are
+is offered directly (Platform hydrates it for tasks that complete without human confirmation); Platform
+tools are offered directly, and only the Affinity tools go through tool discovery; the manager's tool schemas are
 the generic contract schemas. Not covered: a document still processing (simulated documents are
 always ready) and a Deal with no Organisation (the task cannot start without one). Two first
 imports started at the same moment can both pass the pre-create check: the Pack re-checks live

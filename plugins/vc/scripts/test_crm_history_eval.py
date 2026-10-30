@@ -297,10 +297,15 @@ class PlatformSimulatorTests(unittest.TestCase):
         self.assertIn("field-values_setField", names)
 
     def test_a_disconnected_crm_offers_no_affinity_tools(self):
-        names = {t["toolSpec"]["name"] for t in ch.tool_specs(FROZEN, "analyst", case("crm-not-connected"))}
+        simulator = sim("crm-not-connected")
+        names = {t["toolSpec"]["name"] for t in ch.tool_specs(FROZEN, "analyst", case("crm-not-connected"), simulator)}
         self.assertFalse(any(n.startswith("affinity_") for n in names))
+        self.assertEqual(simulator.handle("tools_list_available", {"applicationExternalId": "affinity-mcp-server"})[0]["tools"], [])
+        self.assertIsNotNone(simulator.handle("tool_activate", {"toolName": "affinity_search_companies"})[1])
+        connected = sim("no-notes")
+        connected.handle("tool_activate", {"toolName": "affinity_search_companies"})
         self.assertIn("affinity_search_companies",
-                      {t["toolSpec"]["name"] for t in ch.tool_specs(FROZEN, "analyst", case("no-notes"))})
+                      {t["toolSpec"]["name"] for t in ch.tool_specs(FROZEN, "analyst", case("no-notes"), connected)})
 
     def test_another_running_import_and_its_document_are_visible(self):
         context, _ = sim("other-import-running").handle("project.getAgentContext", {"projectId": ch.PROJECT})
@@ -406,11 +411,52 @@ class ContextTests(unittest.TestCase):
         self.assertIn(ch.EXISTING_DOCUMENT, text)
         self.assertNotIn("{{", text)
 
-    def test_tool_specs_expose_affinity_and_named_platform_tools(self):
-        names = {t["toolSpec"]["name"] for t in ch.tool_specs(FROZEN, "analyst")}
-        self.assertTrue({"affinity_list_company_notes", "project_instantiateTemplate", "activate_skill",
-                         "task-management_completeTask"} <= names)
+    def test_tool_specs_expose_discovery_and_named_platform_tools(self):
+        names = {t["toolSpec"]["name"] for t in ch.tool_specs(FROZEN, "analyst", case("no-notes"), sim("no-notes"))}
+        self.assertTrue({"tools_search_available", "tools_list_available", "tool_activate",
+                         "project_instantiateTemplate", "activate_skill", "task-management_completeTask"} <= names)
         self.assertNotIn("task-management_createTask", names)
+        # As on Dev, the Affinity tools start inactive and must be found and activated.
+        self.assertFalse(any(n.startswith("affinity_") for n in names))
+
+
+class ToolDiscoveryTests(unittest.TestCase):
+    def test_search_never_returns_the_company_search_tool(self):
+        simulator = sim("no-notes")
+        for query in ["affinity_search_companies", "Affinity search companies", "affinity", None]:
+            data, error = simulator.handle("tools_search_available", {"query": query, "limit": 50} if query else {})
+            self.assertIsNone(error)
+            names = [t["name"] for t in data["tools"]]
+            self.assertNotIn("affinity_search_companies", names, query)
+        self.assertIn("affinity_list_company_notes", names)
+        self.assertEqual(len(simulator.tool_discovery), 4)
+
+    def test_listing_the_affinity_app_pages_through_every_tool(self):
+        simulator = sim("no-notes")
+        seen, cursor = [], None
+        while True:
+            data, _ = simulator.handle("tools_list_available", {"applicationExternalId": "affinity-mcp-server",
+                                                                 "limit": 10, **({"cursor": cursor} if cursor else {})})
+            seen += [t["name"] for t in data["tools"]]
+            cursor = data["nextCursor"]
+            if not cursor:
+                break
+        self.assertEqual(sorted(seen), sorted(t["name"] for t in FROZEN["affinity"]["tools"]))
+        self.assertEqual(simulator.handle("tools_list_available", {"applicationExternalId": "slack_v2"})[0]["tools"], [])
+
+    def test_activation_by_name_makes_a_tool_callable(self):
+        simulator = sim("no-notes")
+        self.assertEqual(simulator.active_affinity_tools(), [])
+        data, error = simulator.handle("tool_activate", {"toolName": "affinity_search_companies"})
+        self.assertIsNone(error)
+        self.assertEqual([t["name"] for t in simulator.active_affinity_tools()], ["affinity_search_companies"])
+        self.assertIsNotNone(simulator.handle("tool_activate", {"toolName": "affinity_made_up"})[1])
+
+    def test_a_case_can_hand_the_tools_over_directly(self):
+        direct = {**case("no-notes"), "affinityToolsInactive": False}
+        names = {t["toolSpec"]["name"] for t in ch.tool_specs(FROZEN, "analyst", direct)}
+        self.assertIn("affinity_search_companies", names)
+        self.assertNotIn("tool_activate", names)
 
 
 class ScoringTests(unittest.TestCase):
@@ -732,6 +778,8 @@ class RunTests(unittest.TestCase):
         doc_id = "88888888-8888-4888-8888-000000000001"
         script = iter([
             response([call("activate_skill", {"skillId": "import-crm-history"}, "a")]),
+            response([call("tool_activate", {"toolName": "affinity_search_companies"}, "a1"),
+                      call("tool_activate", {"toolName": "affinity_list_company_notes"}, "a2")]),
             response([call("affinity_search_companies", {"term": "Pellucid"}, "b")]),
             response([call("affinity_list_company_notes", {"companyId": "500601", "limit": 100}, "c")]),
             response([call("project_instantiateTemplate", {
@@ -751,6 +799,36 @@ class RunTests(unittest.TestCase):
             self.assertEqual(saved.read_text(), content)
             rescored = ch.rescore(Path(tmp) / "run")
             self.assertEqual(rescored["totals"]["candidate"], {"passed": 1, "scored": 1})
+
+    def test_the_dev_search_only_path_ends_without_an_import_and_fails(self):
+        # #4841 0.6.46 Dev run: four tool searches, no company-search tool, "unavailable", nothing saved.
+        queries = ["Affinity search companies get company list company notes", "Affinity CRM companies notes",
+                   "affinity_search_companies", "search company Affinity CRM"]
+        script = iter([response([call("activate_skill", {"skillId": "import-crm-history"}, "a")]),
+                       *[response([call("tools_search_available", {"query": q}, f"q{i}")]) for i, q in enumerate(queries)],
+                       response([call("affinity_search_companies", {"term": "Pellucid"}, "x")]),
+                       response([message("The task is blocked: the required Affinity company-search capability is "
+                                         "unavailable.")])])
+        with tempfile.TemporaryDirectory() as tmp:
+            rec = ch.execute(self.args(Path(tmp) / "run", ["no-notes"]), invoke=lambda *_: next(script))["records"][0]
+            self.assertEqual([c["tool"] for c in rec["toolDiscovery"]], ["tools_search_available"] * 4)
+            self.assertEqual(rec["activatedTools"], [])
+            self.assertFalse(rec["deterministic"]["passed"])
+            self.assertTrue({"noInvalidToolCalls", "oneDocument", "completedWithPointer"} <=
+                            set(failed(rec["deterministic"])))
+
+    def test_listing_then_activating_reaches_affinity(self):
+        script = iter([
+            response([call("tools_list_available", {"applicationExternalId": "affinity-mcp-server", "limit": 50}, "l")]),
+            response([call("tool_activate", {"toolName": "affinity_search_companies"}, "a")]),
+            response([call("affinity_search_companies", {"term": "Pellucid"}, "b")]),
+            response([message("Stopping here.")])])
+        with tempfile.TemporaryDirectory() as tmp:
+            rec = ch.execute(self.args(Path(tmp) / "run", ["no-notes"]), invoke=lambda *_: next(script))["records"][0]
+            search = [c for t in rec["turns"] for c in t["calls"] if c["name"] == "affinity_search_companies"]
+            self.assertEqual(len(search), 1)
+            self.assertIsNone(search[0]["error"])
+            self.assertEqual(rec["activatedTools"], ["affinity_search_companies"])
 
     def test_the_step_capped_control_does_not_mark_the_run_incomplete(self):
         script = iter([response([call("activate_skill", {"skillId": ch.LIVING_REPORT_SKILL}, f"s{i}")]) for i in range(4)])
