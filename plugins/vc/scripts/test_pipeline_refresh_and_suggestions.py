@@ -106,6 +106,32 @@ class PipelineRefreshAndSuggestionTests(unittest.TestCase):
             VALIDATOR.validate_pipeline_refresh_and_suggestion_guidance,
         )
 
+    def test_rejects_a_manager_that_reintroduces_the_old_no_restore_rule(self) -> None:
+        self._assert_rejected(
+            MANAGER,
+            "You cannot restore it yourself.",
+            "You cannot restore it yourself. Do not tell the human to reopen, restore or unarchive it.",
+            VALIDATOR.validate_pipeline_refresh_and_suggestion_guidance,
+        )
+
+    def test_rejects_a_refresh_fixture_without_the_refused_save_correction(self) -> None:
+        fixture = Path("alludium") / "fixtures" / "deal-pipeline-management.yaml"
+        text = (SOURCE_ROOT / fixture).read_text(encoding="utf-8")
+        refresh = text.index("refresh-creates-new-report-and-classifies-corpus")
+        old = "refusedSaveCorrection: {maxCorrectedReports: 1, editsRefusedReport: false, refusedReportManifestRole: previous report}"
+        self.assertGreater(text.index(old, refresh), refresh)
+        with tempfile.TemporaryDirectory() as temporary_root:
+            pack_root = Path(temporary_root) / "repository" / "plugins" / "vc"
+            shutil.copytree(SOURCE_ROOT, pack_root)
+            target = pack_root / fixture
+            target.write_text(text[:refresh] + text[refresh:].replace(old, "refusedSaveCorrection: {}", 1), encoding="utf-8")
+            VALIDATOR.ROOT = pack_root.resolve()
+            try:
+                with self.assertRaises(SystemExit):
+                    VALIDATOR.validate_fund_routing_contract()
+            finally:
+                VALIDATOR.ROOT = SOURCE_ROOT.resolve()
+
     def test_rejects_a_manager_without_the_active_deal_path(self) -> None:
         self._assert_rejected(
             MANAGER,
