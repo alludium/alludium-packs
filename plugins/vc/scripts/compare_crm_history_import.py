@@ -219,8 +219,9 @@ SCHEMAS: dict[str, tuple[str, dict, list[str]]] = {
                                      ["id", "expectedSourceRevisionNumber", "expectedSourceContentHash", "line", "text"]),
     "task-management.saveTaskOutput": ("Save structured output on the current task without completing it.",
                                        {"taskId": {"type": "string"}, "output": _OUTPUT}, ["output"]),
+    # Platform fills the current task in a task run, and the task text says to call it without a task ID.
     "task-management.completeTask": ("Complete the current task with its structured output.",
-                                     {"taskId": {"type": "string"}, "output": _OUTPUT}, ["taskId"]),
+                                     {"taskId": {"type": "string"}, "output": _OUTPUT}, []),
     "task-management.askTaskQuestion": ("Open one structured question on the current task.",
                                         {"taskId": {"type": "string"}, "label": {"type": "string"},
                                          "description": {"type": "string"}}, ["label"]),

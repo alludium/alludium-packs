@@ -810,7 +810,7 @@ class RunTests(unittest.TestCase):
                 "projectId": ch.PROJECT, "documentRefId": ch.CRM_TEMPLATE_ID, "filename": "Pellucid CRM history",
                 "content": content, "expectedTemplateSourceRevisionNumber": meta["sourceRevisionNumber"],
                 "expectedTemplateSourceContentHash": meta["sourceContentHash"]}, "d")]),
-            response([call("task-management_completeTask", {"taskId": ch.TASK, "output": {ch.POINTER: doc_id}}, "e")]),
+            response([call("task-management_completeTask", {"output": {ch.POINTER: doc_id}}, "e")]),
             response([message("Affinity has no notes for Pellucid. Complete import. Open the CRM history and context file.")]),
         ])
         with tempfile.TemporaryDirectory() as tmp:
