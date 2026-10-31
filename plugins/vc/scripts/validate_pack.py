@@ -1104,6 +1104,8 @@ PIPELINE_REFRESH_RULES = {
 STALE_REFRESH_PHRASES = ("updated in place", "same logical artifact", "keep its identity")
 ARCHIVED_DEAL_RULES = (
     "An archived Deal admits no new task work.",
+    "Before you refuse or answer on archived grounds, call `project_data` with `{ \"action\": \"read\" }` in this turn",
+    "If the Deal is no longer archived, act on the request normally",
     "say plainly that the Deal is archived and new task work isn't allowed on it",
     "You cannot restore it yourself.",
     "ask the Pipeline Manager in workspace Chat to restore it",
@@ -2021,6 +2023,8 @@ def validate_fund_routing_contract() -> None:
             "predefined-task-match",
             "approved-custom-financial-verification",
             "report-questions-require-review",
+            "restored-deal-rechecks-live-status",
+            "still-archived-deal-rechecks-and-refuses",
         },
         "dealAnalystScenarios": {
             "bounded-task-recommendation-to-deal-manager",
@@ -2072,6 +2076,32 @@ def validate_fund_routing_contract() -> None:
                 f"{management_fixture_path.relative_to(ROOT)} {section} is missing "
                 f"scenarios: {missing_ids}"
             )
+
+    # A Pipeline Manager restore can change archive status mid-chat (#5129).
+    archive_recheck_expected = {
+        "restored-deal-rechecks-live-status": {
+            "readsLiveStatusBeforeArchiveAnswer": True,
+            "liveReadToolAction": "project_data.read",
+            "mayCreateTasks": True,
+            "createsRequestedTaskOnFirstAsk": True,
+            "refusesAsArchived": False,
+        },
+        "still-archived-deal-rechecks-and-refuses": {
+            "readsLiveStatusBeforeArchiveAnswer": True,
+            "liveReadToolAction": "project_data.read",
+            "mayCreateTasks": False,
+            "refusesAsArchived": True,
+            "pointsToPipelineManagerRestore": True,
+        },
+    }
+    for scenario_id, expected in archive_recheck_expected.items():
+        scenario = next(
+            item
+            for item in management_fixture["dealManagerScenarios"]
+            if item.get("id") == scenario_id
+        )
+        if (scenario.get("expected") or {}) != expected:
+            fail(f"Archived-Deal fixture {scenario_id} must re-read live status before an archive answer")
 
     report_review_fixture = next(
         scenario

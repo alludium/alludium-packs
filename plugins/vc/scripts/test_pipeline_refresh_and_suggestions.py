@@ -132,6 +132,23 @@ class PipelineRefreshAndSuggestionTests(unittest.TestCase):
             finally:
                 VALIDATOR.ROOT = SOURCE_ROOT.resolve()
 
+    def test_rejects_a_manager_that_refuses_from_chat_history(self) -> None:
+        self._assert_rejected(
+            MANAGER,
+            "Before you refuse or answer on archived grounds, call `project_data` with `{ \"action\": \"read\" }` in this turn",
+            "Answer from the conversation",
+            VALIDATOR.validate_pipeline_refresh_and_suggestion_guidance,
+        )
+
+    def test_rejects_a_restored_deal_fixture_that_refuses(self) -> None:
+        fixture = Path("alludium") / "fixtures" / "deal-pipeline-management.yaml"
+        self._assert_rejected(
+            fixture,
+            "      createsRequestedTaskOnFirstAsk: true\n      refusesAsArchived: false",
+            "      createsRequestedTaskOnFirstAsk: false\n      refusesAsArchived: true",
+            VALIDATOR.validate_fund_routing_contract,
+        )
+
     def test_rejects_a_manager_without_the_active_deal_path(self) -> None:
         self._assert_rejected(
             MANAGER,

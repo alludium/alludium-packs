@@ -160,6 +160,33 @@ dealManagerScenarios:
       mayCreateTasks: false
       mayAssignTasks: false
 
+  - id: restored-deal-rechecks-live-status
+    agentTemplateId: vc_deal_pipeline_manager
+    userRequest: Prepare a Screening Report for this Deal.
+    chatHistory:
+      - {role: assistant, summary: Archived this Deal at the human's request.}
+      - {role: assistant, summary: Refused a Screening because the Deal was archived.}
+    liveProjectState: {stage: evaluation, status: active, lastHistoryEvent: Restored from the deal archive}
+    expected:
+      readsLiveStatusBeforeArchiveAnswer: true
+      liveReadToolAction: project_data.read
+      mayCreateTasks: true
+      createsRequestedTaskOnFirstAsk: true
+      refusesAsArchived: false
+
+  - id: still-archived-deal-rechecks-and-refuses
+    agentTemplateId: vc_deal_pipeline_manager
+    userRequest: Prepare a Screening Report for this Deal.
+    chatHistory:
+      - {role: assistant, summary: Archived this Deal at the human's request.}
+    liveProjectState: {stage: archived, status: active}
+    expected:
+      readsLiveStatusBeforeArchiveAnswer: true
+      liveReadToolAction: project_data.read
+      mayCreateTasks: false
+      refusesAsArchived: true
+      pointsToPipelineManagerRestore: true
+
 dealAnalystScenarios:
   - id: bounded-task-recommendation-to-deal-manager
     sourceTask:
